@@ -1,0 +1,31 @@
+//===== Global Chile ======
+//=== https://www.facebook.com/IntegralesGlobal ===
+
+-	script	Bienvenida	-1,{
+OnPCLoginEvent:
+if (getgmlevel() > 1) end;
+
+	set @Sexo$, "Bienvenido ";
+	if(Sex==0) set @Sexo$,"Bienvenido ";
+	
+
+        If(#newcont >= 1) goto Nomsg;
+
+	set #newcont,#newcont + 1;
+	getitem 12210,1;     //Items Are costume you can change them 
+	getitem 12208,1;     //Battle Manual x1 
+	getitem 504,100;     //White Potion x100
+ 	getitem 12016,10;     //Speed Potion  x10
+
+	//getitem 30017,1;     //satan Hat
+	//getitem 30417,1;     //dark angel Wings
+ 	//getitem 30421,1;     //Rainbow Ring
+	set zeny, zeny + 1000;
+	Announce "Recién llegado "+strcharinfo(0)+" Nuestro Server. "+@Sexo$,16; 
+	End;
+	
+
+Nomsg:
+	announce @Sexo$ + " " + strcharinfo(0)+ " A Nuestro server ..::AresRO::..",16;
+}
+

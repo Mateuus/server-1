@@ -1,0 +1,302 @@
+//===== rAthena Script =======================================
+//= Euphy's Quest Shop
+//===== By: ==================================================
+//= Euphy
+//===== Current Version: =====================================
+//= 1.6c
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= A dynamic quest shop based on Lunar's, with easier config.
+//= Includes support for multiple shops & cashpoints.
+//= Item Preview script by ToastOfDoom.
+//===== Additional Comments: =================================
+//= 1.0 Initial script.
+//= 1.2 Added category support.
+//= 1.3 More options and fixes.
+//= 1.4 Added debug settings.
+//= 1.5 Replaced categories with shop IDs.
+//= 1.6 Added support for purchasing stackables.
+//= 1.6a Added support for previewing costumes and robes.
+//= 1.6b Added 'disable_items' command.
+//= 1.6c Replaced function 'A_An' with "F_InsertArticle".
+//============================================================
+
+// Shop NPCs -- supplying no argument displays entire menu.
+//	callfunc "qshop"{,<shop ID>{,<shop ID>{,...}}};
+//============================================================
+prontera,165,160,3	script	Quest Costumes#1	10192,{ 
+
+mes "[^339900 Master Costume ^000000]"; 
+mes "" + (Sex?"Bienvenido ":"Bienvenida ") + " [^ff0000 "+ strcharinfo(0) +" ^000000].";
+mes "nuestro espectacular";
+mes "Sistema de quests dinámicas";
+mes "Que quest te gustaría hacer?";
+
+callfunc "qshop"; 
+OnInit:
+OnTimer0900:
+	setarray .@RoomDisplay$,"Quest Shop";
+	delwaitingroom;
+	waitingroom .@RoomDisplay$[rand(0,1)],0;
+	initnpctimer;
+
+}
+
+
+// Script Core
+//============================================================
+-	script	quest_shop	-1,{ 
+function Add; function Chk; function Slot;
+OnInit:
+	
+	
+	freeloop(1);
+
+// -----------------------------------------------------------
+//  Basic shop settings.
+// -----------------------------------------------------------
+
+	set .Announce,1;	// Announce quest completion? (1: yes / 0: no)
+	set .ShowSlot,1;	// Show item slots? (2: all equipment / 1: if slots > 0 / 0: never)
+	set .ShowID,0;  	// Show item IDs? (1: yes / 0: no)
+	set .ShowZeny,0;	// Show Zeny cost, if any? (1: yes / 0: no)
+	set .MaxStack,100;	// Max number of quest items purchased at one time.
+	
+	
+
+// -----------------------------------------------------------
+//  Points variable -- optional quest requirement.
+//	setarray .Points$[0],"<variable name>","<display name>";
+// -----------------------------------------------------------
+
+	setarray .Points$[0],"#CASHPOINTS","Cash Points";
+	
+	
+	
+	
+// -----------------------------------------------------------
+//  Shop IDs -- to add shops, copy dummy data at bottom of file.
+//	setarray .Shops$[1],"<Shop 1>","<Shop 2>"{,...};
+// -----------------------------------------------------------
+
+	setarray .Shops$[1],"^008888Headgears^000000","Costumes","^339900Costume Auras^000000","^ff0000Costume animated^000000";
+
+// -----------------------------------------------------------
+//  Quest items -- do NOT use a reward item more than once!
+//	Add(<shop ID>,<reward ID>,<reward amount>,
+//	    <Zeny cost>,<point cost>,
+//	    <required item ID>,<required item amount>{,...});
+// -----------------------------------------------------------
+
+	Add (1,5210,1,1000,0,2254,1,7063,100,929,100);	// Flapping Angel Wing [0]
+	Add (1,5580,1,0,0,2211,1,975,1,7003,300);	// Red Beret [0]
+	Add (1,5773,1,50000,0,2243,1,7446,100,7441,25,978,1);	// Navy Beret [0] 
+	Add (1,18550,1,50000,0,604,300,916,100);	// bird
+	Add (1,5040,1,0,10,7047,100,7539,500);	// blush
+	Add (1,5102,1,0,10,2239,2,982,20,7321,200,7568,300,7021,2);	// blank eyes
+	Add (1,18561,1,50000,0,10015,1,10007,1,5023,1,975,1);	// bonnet
+	Add (1,5016,1,0,0,1030,10);	// boy
+	Add (1,5110,1,0,0,526,2,7270,1,941,1,10004,1);	// bpack
+	Add (1,5191,1,0,0,2208,1,983,1);	// bribbon
+	Add (1,5169,1,0,0,706,1,1019,500,7200,10,1049,20,7165,500,1054,2,1024,100);	// bride
+	Add (1,5034,1,0,0,2233,1,746,20);	// bulb
+	Add (1,5300,1,500000,60,7106,2,2246,1,7263,1);	// bullock
+	Add (1,5378,1,0,0,2214,1,5045,1,975,1,740,100);	// bunnyth
+	Add (1,2214,1,0,0,949,100,706,1,722,1,2213,1);	// bunbun
+	Add (1,5024,1,0,0,529,10,530,5,539,20,999,10,538,15);	// cake
+	Add (1,18662,1,0,0,2279,1,7035,50,526,100);	// candle
+	Add (1,5389,1,200000,0,5016,1,981,1,7317,150,7539,200);	// cappola
+	Add (1,5184,1,0,0,5120,5,995,50,983,1,720,50);	// captain
+	Add (1,5175,1,100000,0,7111,100,938,99,983,1);	// Censor Bar
+	Add (1,5026,1,0,0,1036,450,949,330,539,120,982,1);	// chef
+	Add (1,5142,1,0,90,5017,1,2229,1,5014,1,7209,150,7123,120,1036,130,979,3);	// chelm
+	Add (1,5283,1,0,50,949,250,916,200,7063,60,925,1);	// chick
+	Add (1,5431,1,0,30,5283,1,916,250,2717,1);	// chicken
+	Add (1,5243,1,0,0,975,1,976,1,914,100,7441,150,7065,25,2283,1);	// chullos
+	Add (1,5260,1,0,0,4293,1,538,100,530,100,529,50);	// cookie
+	Add (1,5075,1,0,0,2248,1,7030,108,7194,108,7120,4);	// cow
+	Add (1,5048,1,0,0,5041,1,999,10);	// cpin
+	Add (1,5036,1,0,0,2608,1,7069,500);	// cross
+	Add (1,5080,1,0,0,10006,1,714,1,969,3);	// aqueen
+
+
+
+	Add(2,2765,1,5000,0,7773,50);	//(Novice_Figure)
+	Add(2,2766,1,5000,0,7773,50);	//(Swordman_Figure)
+	Add(2,2767,1,5000,0,7773,50);	//(Acolyte_Figure)
+	Add(2,2766,1,5000,0,2768,50);	//(Mage_Figure)
+	Add(2,2769,1,5000,0,7773,50);	//(Archer_Figure)
+	Add(2,2770,1,5000,0,7773,50);	//(Thief_Figure)
+	Add(2,2771,1,5000,0,7773,50);	//(Merchant_Figure)
+
+	Add(3,2202,1,500000,0,730,3,2201,1,949,100);
+	Add(3,18611,1,500000,0,730,3,2201,1,949,100);
+	Add(3,30034,1,500000,0,730,3,2201,1,5006,1,949,100,994,50,7097,25);
+	Add(3,18664,1,500000,0,730,3,2201,1,949,100);
+	Add(3,5288,1,500000,0,730,3,2201,1,949,100);
+
+	Add(4,20502,1,0,0,2254,1,7006,300);	// Costume Little Devil Wings
+	Add(4,20746,1,0,0,2254,1,975,3,949,300);	// Costume Rudra Wings [0]
+	Add(4,20761,1,0,0,2254,1,7101,200,949,150);	// Costume Happiness Wings [0]
+	Add(4,2573,1,0,0,2254,1,949,300);	// Costume Happiness Wings [0]
+
+	Add(4,30149,1,0,0,2254,1,949,300);	// Costume Happiness Wings [0]
+	Add(4,2573,1,0,0,2254,1,949,300);	// Costume Happiness Wings [0]
+	Add(4,2573,1,0,0,2254,1,949,300);	// Costume Happiness Wings [0]
+	Add(4,2573,1,0,0,2254,1,949,300);	// Costume Happiness Wings [0]
+	Add(4,2573,1,0,0,2254,1,949,300);	// Costume Happiness Wings [0]
+	Add(4,2573,1,0,0,2254,1,949,300);	// Costume Happiness Wings [0]
+	Add(4,2573,1,0,0,2254,1,949,300);	// Costume Happiness Wings [0]
+
+
+//7169,3,7219,50,7101,200,
+//Add(4,20737,1,0,0,2254,1,969,10,7210,10,7322,200,949,300);	// Costume Kirin Wing [0]
+//Add(4,20504,1,0,0,2254,1,969,3,722,100,916,200,949,300);	// Costume Cupid's Pink Wings
+//2254,1,7048,3,917,200,910,200,
+// -----------------------------------------------------------
+
+	freeloop(0);
+	set .menu$,"";
+	for(set .@i,1; .@i<=getarraysize(.Shops$); set .@i,.@i+1) {
+		set .menu$, .menu$+.Shops$[.@i]+":";
+		npcshopdelitem "qshop"+.@i,909;
+	}
+	end;
+
+OnMenu:
+	set .@size, getarraysize(@i);
+	if (!.@size) set @shop_index, select(.menu$);
+	else if (.@size == 1) set @shop_index, @i[0];
+	else {
+		for(set .@j,0; .@j<.@size; set .@j,.@j+1)
+			set .@menu$, .@menu$+.Shops$[@i[.@j]]+":";
+		set @shop_index, @i[select(.@menu$)-1];
+	}
+	deletearray @i[0],getarraysize(@i);
+	if (.Shops$[@shop_index] == "") {
+		message strcharinfo(0),"An error has occurred.";
+		end;
+	}
+	dispbottom "Select one item at a time.";
+	callshop "qshop"+@shop_index,1;
+	npcshopattach "qshop"+@shop_index;
+	end;
+
+OnBuyItem:
+	// .@q[] : RewardID, BoughtAmt, RewardAmt, BaseAmt, ReqZeny, ReqPts, { ReqItem, ReqAmt, ... }
+	setarray .@q[0],@bought_nameid[0],((@bought_quantity[0] > .MaxStack)?.MaxStack:@bought_quantity[0]);
+	copyarray .@q[3],getd(".q_"+@shop_index+"_"+.@q[0]+"[0]"),getarraysize(getd(".q_"+@shop_index+"_"+.@q[0]));
+	set .@q[2],.@q[1]*.@q[3];
+	if (!.@q[2] || .@q[2] > 30000) {
+		message strcharinfo(0),"You can't purchase that many "+getitemname(.@q[0])+".";
+		end;
+	}
+	mes "[Quest Shop]";
+	mes "Reward: ^0055FF"+((.@q[2] > 1)?.@q[2]+"x ":"")+Slot(.@q[0])+"^000000";
+	mes "Requirements:";
+	disable_items;
+	if (.@q[4]) mes " > "+Chk(Zeny,.@q[4]*.@q[1])+(.@q[4]*.@q[1])+" Zeny^000000";
+	if (.@q[5]) mes " > "+Chk(getd(.Points$[0]),.@q[5]*.@q[1])+(.@q[5]*.@q[1])+" "+.Points$[1]+" ("+getd(.Points$[0])+"/"+(.@q[5]*.@q[1])+")^000000";
+	if (.@q[6]) for(set .@i,6; .@i<getarraysize(.@q); set .@i,.@i+2)
+		mes " > "+Chk(countitem(.@q[.@i]),.@q[.@i+1]*.@q[1])+((.ShowID)?"{"+.@q[.@i]+"} ":"")+Slot(.@q[.@i])+" ("+countitem(.@q[.@i])+"/"+(.@q[.@i+1]*.@q[1])+")^000000";
+	next;
+	setarray @qe[1], getiteminfo(.@q[0],5), getiteminfo(.@q[0],11);
+	if (@qe[2] > 0 && ((@qe[1] & 1) || (@qe[1] & 256) || (@qe[1] & 512) || (@qe[1] & 1024) || (@qe[1] & 2048) || (@qe[1] & 4096) || (@qe[1] & 4) || (@qe[1] & 8192)))
+		set .@preview,1;
+	addtimer 1000, strnpcinfo(0)+"::OnEnd";
+	while(1) {
+		switch(select(" ~ Purchase ^0055FF"+getitemname(.@q[0])+"^000000:"+((.@preview && !@qe[7])?" ~ Preview...":"")+": ~ ^777777Cancel^000000")) {
+		case 1:
+			if (@qe[0]) { 
+				mes "[Quest Shop]";
+				mes "Te estás perdiendo uno o más requisitos de misión.";
+				end;
+			}
+			if (!checkweight(.@q[0],.@q[2])) {
+				mes "[Quest Shop]";
+				mes "^FF0000You need "+(((.@q[2]*getiteminfo(.@q[0],6))+Weight-MaxWeight)/10)+" additional weight capacity to complete this trade.^000000";
+				close;
+			}
+			if (.@q[4]) set Zeny, Zeny-(.@q[4]*.@q[1]);
+			if (.@q[5]) setd .Points$[0], getd(.Points$[0])-(.@q[5]*.@q[1]);
+			if (.@q[6]) for(set .@i,6; .@i<getarraysize(.@q); set .@i,.@i+2)
+				delitem .@q[.@i],.@q[.@i+1]*.@q[1];
+			getitem .@q[0],.@q[2];
+			if (.Announce) announce strcharinfo(0)+" has created "+((.@q[2] > 1)?.@q[2]+"x "+getitemname(.@q[0]):callfunc("F_InsertArticle",getitemname(.@q[0])))+"!",0;
+			specialeffect2 EF_FLOWERLEAF;
+			close;
+		case 2:
+			setarray @qe[3], getlook(LOOK_HEAD_BOTTOM), getlook(LOOK_HEAD_TOP), getlook(LOOK_HEAD_MID), getlook(LOOK_ROBE), 1;
+			if ((@qe[1] & 1) || (@qe[1] & 4096)) changelook LOOK_HEAD_BOTTOM, @qe[2];
+			else if ((@qe[1] & 256) || (@qe[1] & 1024)) changelook LOOK_HEAD_TOP, @qe[2];
+			else if ((@qe[1] & 512) || (@qe[1] & 2048)) changelook LOOK_HEAD_MID, @qe[2];
+			else if ((@qe[1] & 4) || (@qe[1] & 8192)) changelook LOOK_ROBE, @qe[2];
+			break;
+		case 3:
+			close;
+		}
+	}
+
+OnEnd:
+	if (@qe[7]) {
+		changelook LOOK_HEAD_BOTTOM, @qe[3];
+		changelook LOOK_HEAD_TOP, @qe[4];
+		changelook LOOK_HEAD_MID, @qe[5];
+		changelook LOOK_ROBE, @qe[6];
+	}
+	deletearray @qe[0],8;
+	end;
+
+function Add {
+	if (getitemname(getarg(1)) == "null") {
+		debugmes "Quest reward #"+getarg(1)+" invalid (skipped).";
+		return;
+	}
+	setarray .@j[0],getarg(2),getarg(3),getarg(4);
+	for(set .@i,5; .@i<getargcount(); set .@i,.@i+2) {
+		if (getitemname(getarg(.@i)) == "null") {
+			debugmes "Quest requirement #"+getarg(.@i)+" invalid (skipped).";
+			return;
+		} else
+			setarray .@j[.@i-2],getarg(.@i),getarg(.@i+1);
+	}
+	copyarray getd(".q_"+getarg(0)+"_"+getarg(1)+"[0]"),.@j[0],getarraysize(.@j);
+	npcshopadditem "qshop"+getarg(0),getarg(1),((.ShowZeny)?getarg(3):0);
+	return;
+}
+
+function Chk {
+	if (getarg(0) < getarg(1)) {
+		set @qe[0],1;
+		return "^FF0000";
+	} else
+		return "^00FF00";
+}
+
+function Slot {
+	set .@s$,getitemname(getarg(0));
+	switch(.ShowSlot) {
+		case 1: if (!getitemslots(getarg(0))) return .@s$;
+		case 2: if (getiteminfo(getarg(0),2) == 4 || getiteminfo(getarg(0),2) == 5) return .@s$+" ["+getitemslots(getarg(0))+"]";
+		default: return .@s$;
+	}
+}
+}
+
+function	script	qshop	{
+	deletearray @i[0],getarraysize(@i);
+	for(set .@i,0; .@i<getargcount(); set .@i,.@i+1)
+		set @i[.@i],getarg(.@i);
+	doevent "quest_shop::OnMenu";
+	end;
+}
+
+
+// Dummy shop data -- copy as needed.
+//============================================================
+-	shop	qshop1	-1,909:-1
+-	shop	qshop2	-1,909:-1
+-	shop	qshop3	-1,909:-1
+-	shop	qshop4	-1,909:-1
+-	shop	qshop5	-1,909:-1

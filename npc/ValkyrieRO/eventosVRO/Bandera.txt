@@ -1,0 +1,486 @@
+// Script de Capturar la Bandera 
+// Simulación del Juego Caprutar la Bandera
+// Copyright 2006 © Eternal Rising Project
+// Programado por [Lance]
+// Traducido por EmperiumRO para DivineRO
+
+guild_vs4.gat	mapflag	nomemo
+guild_vs4.gat	mapflag	pvp
+guild_vs4.gat	mapflag	noreturn
+
+guild_vs4.gat,0,0,0	script	ctf_sys	-1,{
+	end;
+
+OnBlueScore:
+	soundeffectall "DominationWin.wav", 0, ALL_SAMEMAP;
+	mapannounce "guild_vs4.gat", "Puntuación del Equipo Azul!",bc_map,0x0000FF;
+	if(.team[2] == .team[1])
+		soundeffectall "BlueTeamTakesTheLead.wav", 0, ALL_SAMEMAP;
+	else if(.team[2] > .team[1])
+		soundeffectall "BlueTeamIncreases.wav", 0, ALL_SAMEMAP;
+	else
+		soundeffectall "BlueTeamScores.wav", 0, ALL_SAMEMAP;
+	set .team[2], .team[2] + 1;
+	goto OnStart;
+
+OnRedScore:
+	soundeffectall "DominationWin.wav", 0, ALL_SAMEMAP;
+	mapannounce "guild_vs4.gat", "Puntuación del Equipo Rojo!",bc_map,0xFF0000;
+	if(.team[1] == .team[2])
+		soundeffectall "RedTeamTakesTheLead.wav", 0, ALL_SAMEMAP;
+	else if(.team[1] > .team[2])
+		soundeffectall "RedTeamIncreases.wav", 0, ALL_SAMEMAP;
+	else
+		soundeffectall "RedTeamScores.wav", 0, ALL_SAMEMAP;
+	set .team[1], .team[1] + 1;
+
+OnStart:
+	if($@ctfevent_start >= $@ctf_rnd && .team[2] != .team[1]) goto L_Stop;
+	set $@ctfevent_start, $@ctfevent_start + 1;
+	set $@ctf_fb, 0;
+	set .@total, getarraysize($@ctf_db_1);
+	enablenpc "ctf_rflag";
+	enablenpc "ctf_bflag";
+	movenpc "ctf_bflag", 91, 49;
+	movenpc "ctf_rflag", 7, 49;
+	set $@ctf_rtaken, 0;
+	set $@ctf_btaken, 0;
+	for(set .@i, 0; .@i < .@total; set .@i, .@i + 1){
+		attachrid getelementofarray($@ctf_db_1, .@i);
+		//pcblockmove 0,1;
+		dispbottom "El juego comenzará en breve. Tu perteneces al Equipo Rojo.";
+		dispbottom "La bandera del Equipo Azul esta en el Este.";
+		warp "guild_vs4.gat",49,91;
+		savepoint "guild_vs4.gat",49,91;
+		detachrid;
+	}
+	set .@total, getarraysize($@ctf_db_2);
+	for(set .@i, 0; .@i < .@total; set .@i, .@i + 1){
+		attachrid getelementofarray($@ctf_db_2, .@i);
+		//pcblockmove 0,1;
+		dispbottom "El juego comenzará en breve. Tu perteneces al Equipo Azul.";
+		dispbottom "La bandera del Equipo Azul esta en el Oeste.";
+		warp "guild_vs4.gat",50,7;
+		savepoint "guild_vs4.gat",50,7;
+		detachrid;
+	}
+	sleep 5000;
+	soundeffectall "NewRound.wav", 0, ALL_SAMEMAP;
+	mapannounce "guild_vs4.gat", "[Rounda " + $@ctfevent_start + "] Empieza ...", 16;
+	initnpctimer;
+	end;
+
+L_Stop:
+	if(.team[1] > .team[2]){
+		mapannounce "guild_vs4.gat", "Punto de Juego! El Equipo Rojo ha ganado el juego!", bc_map,0xFF0000;
+		set .@total, getarraysize($@ctf_db_1);
+		for(set .@i, 0; .@i < .@total; set .@i, .@i + 1){
+			attachrid getelementofarray($@ctf_db_1, .@i);
+			soundeffect "YouHaveWonTheMatch.wav", 0;
+			set Zeny, Zeny + $@ctf_rew;
+			set @ctf, 0;
+			set @ctf_com, 0;
+			set @ctf_kill, 0;
+			set @ctf_time, 0;
+			set @ctf_taker, 0;
+			savepoint "prontera.gat",180,200;
+			detachrid;
+		}
+		set .@total, getarraysize($@ctf_db_2);
+		for(set .@i, 0; .@i < .@total; set .@i, .@i + 1){
+			attachrid getelementofarray($@ctf_db_2, .@i);
+			soundeffect "YouHaveLostTheMatch.wav", 0;
+			set @ctf, 0;
+			set @ctf_com, 0;
+			set @ctf_kill, 0;
+			set @ctf_time, 0;
+			set @ctf_taker, 0;
+			savepoint "prontera.gat",180,200;
+			detachrid;
+		}
+	}else{
+		mapannounce "guild_vs4.gat", "Punto de Juego! El Equipo Azul ha ganado el juego!",bc_map,0x0000FF;
+		set .@total, getarraysize($@ctf_db_1);
+		for(set .@i, 0; .@i < .@total; set .@i, .@i + 1){
+			attachrid getelementofarray($@ctf_db_1, .@i);
+			set @ctf, 0;
+			set @ctf_com, 0;
+			set @ctf_kill, 0;
+			soundeffect "YouHaveLostTheMatch.wav", 0;
+			set @ctf_time, 0;
+			set @ctf_taker, 0;
+			savepoint "prontera.gat",180,200;
+			detachrid;
+		}
+		set .@total, getarraysize($@ctf_db_2);
+		for(set .@i, 0; .@i < .@total; set .@i, .@i + 1){
+			attachrid getelementofarray($@ctf_db_2, .@i);
+			set @ctf, 0;
+			set @ctf_com, 0;
+			set @ctf_kill, 0;
+			soundeffect "YouHaveWonTheMatch.wav", 0;
+			set Zeny, Zeny + $@ctf_rew;
+			set @ctf_time, 0;
+			savepoint "prontera.gat",180,200;
+			set @ctf_taker, 0;
+			detachrid;
+		}
+	}
+L_Clean:
+	set $@ctfevent_start, 0;
+	deletearray $@ctf_db_1, getarraysize($@ctf_db_1);
+	deletearray $@ctf_db_2, getarraysize($@ctf_db_2);
+	deletearray .team, getarraysize(.team);
+	set $@ctf_fb, 0;
+	sleep 5000;
+	mapwarp "guild_vs4.gat", "prontera.gat", 180, 200;
+	end;
+
+OnTimer4000:
+	mapannounce "guild_vs4.gat", "5!",16;
+	soundeffectall "5.wav", 0, ALL_SAMEMAP;
+	end;
+OnTimer5000:
+	mapannounce "guild_vs4.gat", "4!",16;
+	soundeffectall "4.wav", 0, ALL_SAMEMAP;
+	end;
+OnTimer6000:
+	mapannounce "guild_vs4.gat", "3!",16;
+	soundeffectall "3.wav", 0, ALL_SAMEMAP;
+	end;
+OnTimer7000:
+	mapannounce "guild_vs4.gat", "2!",16;
+	soundeffectall "2.wav", 0, ALL_SAMEMAP;
+	end;
+OnTimer8000:
+	mapannounce "guild_vs4.gat", "1!",16;
+	soundeffectall "1.wav", 0, ALL_SAMEMAP;
+	end;
+OnTimer9000:
+	set .@total, getarraysize($@ctf_db_1);
+	for(set .@i, 0; .@i < .@total; set .@i, .@i + 1){
+		//pcblockmove getelementofarray($@ctf_db_1, .@i),0;
+	}
+	set .@total, getarraysize($@ctf_db_2);
+	for(set .@i, 0; .@i < .@total; set .@i, .@i + 1){
+		//pcblockmove getelementofarray($@ctf_db_2, .@i),0;
+	}
+	soundeffectall "Play.wav", 0, ALL_SAMEMAP;
+	end;
+
+OnInit:
+	set $@ctf_max, 5;
+	set $@ctf_rnd, 3;
+	set $@ctf_rew, 10000;
+	end;
+
+OnPCKillEvent:
+	if(@ctf && $@ctfevent_start){
+		if($@ctf_fb == 0){
+			set $@ctf_fb, 1;
+			mapannounce "guild_vs4.gat", strcharinfo(0) + " ha matado el primero!", 16;
+			soundeffectall "FirstBlood.wav", 0, ALL_SAMEMAP;
+		}
+		set @ctf_kill, @ctf_kill + 1;
+		if(gettimetick(2) - @ctf_time < 10){
+			set @ctf_time, gettimetick(2);
+			set @ctf_com, @ctf_com + 1;
+			switch(@ctf_com){
+				case 1: // 2 kills
+					announce "Doble Muerte!", bc_self;
+					soundeffect "DoubleKill.wav",  0;
+					break;
+				case 2:
+					announce "Triple Muerte!", bc_self;
+					soundeffect "TripleKill.wav", 0;
+					break;
+				case 3:
+					announce "Varios Muertos!", bc_self;
+					soundeffect "MultiKill.wav", 0;
+					break;
+				case 4:
+					announce "Ultra Muerte!", bc_self;
+					soundeffect "UltraKill.wav", 0;
+					break;
+				case 5:
+					announce "Mega Muerte!", bc_self;
+					soundeffect "MegaKill.wav", 0;
+					break;
+				case 6:
+					announce "Matanzaaaaaaaaaa!", bc_self;
+					soundeffect "MonsterKill.wav", 0;
+					break;
+				case 7:
+					announce "Increible, no hay quien lo pare!", bc_self;
+					soundeffect "LudricousKill.wav", 0;
+					break;
+				default: // Holy shit!
+					announce "Mierda!", bc_self;
+					soundeffect "HolyShit.wav", 0;
+					break;
+			}
+			sleep2 3000;
+		} else {
+			set @ctf_time, gettimetick(2);
+			set @ctf_com, 0;
+		}
+		if(@ctf_kill > 30){
+			announce "Travieso!", bc_self;
+			soundeffect "WickedSick.wav", 0;
+		} else if(@ctf_kill > 25){
+			announce "Suerte!", bc_self;
+			soundeffect "Godlike.wav", 0;
+		} else if(@ctf_kill > 20){
+			announce "Dominando!", bc_self;
+			soundeffect "Dominating.wav", 0;
+		} else if(@ctf_kill > 15){
+			announce "Imparable!", bc_self;
+			soundeffect "Unstoppable.wav", 0;
+		} else if(@ctf_kill > 10){
+			announce "Alborotooo!", bc_self;
+			soundeffect "Rampage.wav", 0;
+		} else if(@ctf_kill > 5){
+			mapannounce "guild_vs4.gat", strcharinfo(0) + " ha sido humillado " + rid2name(killedid) + " es ahora el mejor!",16;
+			soundeffect "KillingSpree.wav", 0;
+		}
+	}
+	end;
+
+OnPCDieEvent:
+	if(@ctf && $@ctfevent_start){
+		set @ctf_com, 0;
+		set @ctf_time, 0;
+		if(@ctf_kill> 5){
+			mapannounce "guild_vs4.gat", rid2name(killerrid) + " ha muerto" + strcharinfo(0) + " lo mató!",16;
+		}
+		set @ctf_kill,0;
+		if(@ctf_taker){
+			if(getmapxy(.@m$,.@x,.@y,0) != 0)
+				end;
+			if(@ctf == 1){
+				enablenpc "ctf_bflag";
+				movenpc "ctf_bflag", .@x, .@y;
+				mapannounce "guild_vs4.gat",  "La Bandera Azul se cayó!",bc_map,0x0000FF;
+				soundeffectall "BlueFlagDropped.wav", 0, ALL_SAMEMAP;
+			}else{
+				enablenpc "ctf_rflag";
+				movenpc "ctf_rflag", .@x, .@y;
+				mapannounce "guild_vs4.gat", "La Bandera Roja se cayó!",bc_map,0xFF0000;
+				soundeffectall "RedFlagDropped.wav", 0, ALL_SAMEMAP;
+			}
+			set @ctf_taker, 0;
+		}
+	}
+	end;
+
+
+OnPCLogoutEvent:
+	if(@ctf){
+		set ctf_li, 1;
+		savepoint "prontera.gat",180,200;
+		callfunc "ctf_rem", getd("$@ctf_db_" + @ctf), playerattached();
+		if(@ctf_taker){
+			if(getmapxy(.@m$,.@x,.@y,0) != 0)
+				end;
+			if(@ctf == 1){
+				enablenpc "ctf_bflag";
+				movenpc "ctf_bflag", .@x, .@y;
+				mapannounce "guild_vs4.gat",  "La Bandera Azul se cayó!",bc_map,0x0000FF;
+				soundeffectall "BlueFlagDropped.wav", 0, ALL_SAMEMAP;
+			}else{
+				enablenpc "ctf_rflag";
+				movenpc "ctf_rflag", .@x, .@y;
+				mapannounce "guild_vs4.gat", "La Bandera Roja se cayó!",bc_map,0xFF0000;
+				soundeffectall "RedFlagDropped.wav", 0, ALL_SAMEMAP;
+			}
+		}
+		if(getarraysize($@ctf_db_1) == 0 && getarraysize($@ctf_db_2) == 0) goto L_Clean;
+	}
+	end;
+
+OnPCLoadMapEvent:
+	if(ctf_li){
+		set ctf_li, 0;
+		warp "prontera.gat",180,200;
+	}
+	end;
+}
+
+function	script	ctf_rem	{
+	set .@total, getarraysize(getarg(0));
+	for(set .@i, 0; .@i < .@total; set .@i, .@i + 1){
+		if(getelementofarray(getarg(0), .@i) == getarg(1))
+			break;
+	}
+	if(.@i < .@total)
+		deletearray getelementofarray(getarg(0), .@i), 1;
+	return;
+}
+
+
+guild_vs4,7,49,4	script	Red Flag::ctf_rflag	722,2,2,{
+end;
+OnTouch:
+	if(@ctf && $@ctfevent_start){
+		if(@ctf == 1){
+			if($@ctf_rtaken != 0){
+				movenpc "ctf_rflag", 7, 49;
+				mapannounce "guild_vs4.gat",  "La Bandera Roja regresa!",bc_map,0xFF0000;
+				soundeffectall "RedFlagReturned.wav", 0, ALL_SAMEMAP;
+				set $@ctf_rtaken, 0;
+			}
+			end;
+		}
+		set $@ctf_rtaken, 1;
+		set @ctf_taker, 1;
+		mapannounce "guild_vs4.gat", "La Bandera Roja ha sido Capturada!",bc_map,0xFF0000;
+		soundeffectall "RedFlagTaken.wav", 0, ALL_SAMEMAP;
+		disablenpc "ctf_rflag";
+	}
+	end;
+}
+
+guild_vs4,91,49,4	script	Blue Flag::ctf_bflag	722,2,2,{
+end;
+OnTouch:
+	if(@ctf && $@ctfevent_start){
+		if(@ctf == 2){
+			if($@ctf_btaken != 0){
+				movenpc "ctf_bflag", 91, 49;
+				mapannounce "guild_vs4.gat",  "La Bandera Azul regresa!",bc_map,0x0000FF;
+				soundeffectall "BlueFlagReturned.wav", 0, ALL_SAMEMAP;
+				set $@ctf_btaken, 0;
+			}
+			end;
+		}
+		set $@ctf_btaken, 1;
+		set @ctf_taker, 1;
+		mapannounce "guild_vs4.gat",  "La Bandera Azul ha sido Capturada!",bc_map,0x0000FF;
+		soundeffectall "BlueFlagTaken.wav", 0, ALL_SAMEMAP;
+		disablenpc "ctf_bflag";
+	}
+	end;
+}
+
+guild_vs4,50,91,4	script	Red Base::ctf_rbase	45,2,2,{
+	end;
+OnTouch:
+	if(@ctf && $@ctfevent_start){
+		if(@ctf == 1){
+			percentheal 100,100;
+			end;
+		}
+		if(@ctf_taker && $@ctf_btaken == 0){
+			set @ctf_taker, 0;
+			donpcevent "ctf_sys::OnBlueScore";
+		}
+	}
+	end;
+}
+
+guild_vs4,49,8,4,	script	Blue Base::ctf_bbase	45,2,2,{
+	end;
+OnTouch:
+	if(@ctf && $@ctfevent_start){
+		if(@ctf == 2){
+			percentheal 100,100;
+			end;
+		}
+		if(@ctf_taker && $@ctf_rtaken == 0){
+			set @ctf_taker, 0;
+			donpcevent "ctf_sys::OnRedScore";
+		}
+	}
+	end;
+}
+
+function	script	ctf_reg	{
+if(getgmlevel() == 99){
+	switch(select("Configurar","Continuar")){
+		case 1:
+			mes "Numero De Jugadores:";
+			input $@ctf_max;
+			mes "Número De Rondas:";
+			input $@ctf_rnd;
+			mes "Número de Puntos:";
+			input $@ctf_rew;
+			next;
+		default:
+			break;
+	}
+}
+L_menu:
+	mes "[Capturar La Bandera]";
+	mes "^FF0000Equipo Rojo^000000 - " + getarraysize($@ctf_db_1) + " / " + $@ctf_max;
+	mes "^0000FFEquipo Azul^000000 - " + getarraysize($@ctf_db_2) + " / " + $@ctf_max;
+	switch(select("Registrarse","Ver los Miebros de cada Equipo","Información")){
+		case 1:
+			next;
+			if(Zeny < ($@ctf_rew/2)){
+				mes "[Capturar La Bandera]";
+				mes "Lo siento pero no tienes dinero.";
+				close;
+			}
+			if(@ctf || @ddomination){
+				mes "[Capturar La Bandera]";
+				mes "No te puedes unir dos veces al juego.";
+				close;
+			}
+			set .@size1, getarraysize($@ctf_db_1);
+			set .@size2, getarraysize($@ctf_db_2);
+			if($@ctf_max > .@size1){
+				if(.@size1 < .@size2){
+					callfunc "ctf_sign", 1, playerattached();
+				} else {
+					callfunc "ctf_sign", 2, playerattached();
+				}
+			} else {
+				if($@ctf_max > .@size2){
+					callfunc "ctf_sign", 2, playerattached();
+				} else {
+					mes "[Capturar La Bandera]";
+					mes "Lo siento, ya están los equipos al completo.";
+					close;
+				}
+			}
+			break;
+		case 2:
+			select "^FF0000Equipo Rojo^000000","^0000FFEquipo Azul^000000";
+			next;
+            set .@total, getarraysize(getd("$@ctf_db_" + @menu));
+			for(set .@i, 0; .@i < .@total; set .@i, .@i + 1){
+				mes rid2name(getelementofarray(getd("$@ctf_db_" + @menu), .@i));
+			}
+			next;
+			goto L_menu;
+		case 3:
+			next;
+			mes "[Capturar La Bandera]";
+			mes "Capturar la bandera necesita dos equipos (Rojo y Azul). Consisite en robar la bandera del equipo contrario para así sumar puntos y ganar el juego.";
+			next;
+			goto L_menu;
+	}
+	close;
+}
+
+function	script	ctf_sign	{
+	set Zeny, Zeny - ($@ctf_rew/2);
+	set getd("$@ctf_db_" + getarg(0) + "[" + getarraysize(getd("$@ctf_db_" + getarg(0))) + "]"), getarg(1);
+	set @ctf, getarg(0);
+	mes "[Capturar La Bandera]";
+	if(@ctf == 1)
+		mes "Has sido unido al ^FF0000Equipo Rojo^000000.";
+	else
+		mes "Has sido unido al ^0000FFEquipo Azul^000000.";
+	close2;
+	debugmes getarraysize($@ctf_db_1) + " " + getarraysize($@ctf_db_2);
+	set .@size, getarraysize($@ctf_db_1);
+	if(.@size == getarraysize($@ctf_db_2) && .@size == $@ctf_max && $@ctfevent_start == 0)
+		donpcevent "ctf_sys::OnStart";
+	end;
+}
+
+prontera.gat,145,174,4	script	Capturar La Bandera	107,{
+	callfunc "ctf_reg";
+	end;
+}

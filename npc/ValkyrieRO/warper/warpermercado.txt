@@ -1,0 +1,51 @@
+//===== Global Chile ======
+//=== https://www.facebook.com/IntegralesGlobal ===
+
+prontera,166,164,3	script	Warper Mercado	828,{
+mes "[Warper Mercado~TRO~]";
+mes "Hola, Yo puedo llevar a zonas donde podras poner a vender a tu merchant";
+mes "y tambien donde están todos los NPC´s vendiendo";
+next;
+menu 
+"Zona Mechant",mercadomerchant,
+"Salir",L_sal;
+
+mercadomerchant:
+	mes "Ok, vamos a la zona merchant";
+	next;
+	warp "mall01",100,112;	close;
+
+L_sal:
+	mes "No pierdas mi tiempo";
+	close;
+
+OnInit:
+	setarray .@m0$[0], "¡","Z","o","n","a"," ","M","e","r","c","h","a","n","t","!";
+	setarray .@m1$[0], "¡","V","e","n","d","e"," ","A","q","u","í","!";
+	do {
+		if (.@i == 2)
+			set .@i, 0;
+		// Efecto nº 1 - Añadir una palabra nueva a la anterior
+		for (set .@c, 0; .@c < getarraysize(getd(".@m" + .@i + "$")); set .@c, .@c + 1) {
+			set .@f$, .@f$ + getd(".@m" + .@i + "$[" + .@c + "]");
+			waitingroom .@f$,0;
+			sleep 350;
+			delwaitingroom;
+		} // End loop
+		// Efecto nº 2 - Hacer una animación de aparición y vacío
+		for (set .@c, 0; .@c < 6; set .@c, .@c + 1) {
+			waitingroom "",0;
+			sleep 250;
+			delwaitingroom;
+			waitingroom .@f$,0;
+			sleep 250;
+			delwaitingroom;
+		} // End loop
+		waitingroom .@f$,0;
+		sleep 3000; // 3 segundos cambio de mensaje
+		set .@f$, "";
+		delwaitingroom;
+		set .@i, .@i + 1;
+	} while(1); // End loop
+end;
+} // End Script

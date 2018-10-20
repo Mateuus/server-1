@@ -1,0 +1,45 @@
+//===== Global Chile ======
+//=== https://www.facebook.com/IntegralesGlobal ===
+
+vip_lounge,143,140,4	script	Zona de Combates	467,{
+
+	mes "[^FFA500Zona de Combates^000000]";
+	mes "¡Hola! ^0000FF" + strcharinfo(0) + "^000000.";
+	mes "Te puedo llevar a combatir por tú honor y el de tu gremio.";
+	next;
+	switch( select("Campo de batallas","Prefiero no ir") )
+	{
+	
+		Case 1:
+		mes "[^FFA500Zona de Combates^000000]";
+		mes "En esta zona puedes librar terribles combates en los que dejarás tu alma en el campo de batalla";
+		mes " ";
+		mes "¿Tienes la suficiente determinación?";
+		switch( select("Sí, soy un tipo duro:No, soy muy debil")){	
+			Case 1:
+				dispbottom "[Zona de Combates] Suerte, regresa con vida.";
+		close2;
+		warp "final_dest",0,0;
+		end;
+		break;
+			Case 2:
+				next;
+				mes "[^FFA500Zona de Combates^000000]";
+				mes "Ve a entrenar como es debído y regresa cuando seas fuerte";
+				next;
+				unitskilluseid getcharid(3),"NPC_SELFDESTRUCTION",1;
+				close;
+	}
+		Case 2:
+		mes "[^FFA500Zona de Combates^000000]";
+		mes "Regresa cuando estés dispuesto a dar tu vida en combate";
+			close;
+		
+	}
+		
+	
+	OnInit:
+	waitingroom "Zona de Combates",0;
+	end;
+
+}

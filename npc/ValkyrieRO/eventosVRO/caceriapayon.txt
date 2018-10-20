@@ -1,0 +1,1402 @@
+//===== Global Chile ======
+//=== https://www.facebook.com/IntegralesGlobal ===
+
+-	script	grancazeria	-1,{
+
+OnInit:
+set $CazeriaPayon,0;
+inicio:
+sleep2 5000;
+sleep2 rand(43200000,259200000);
+	monster "quiz_02",314,57,"Caceria de Payon",2260,1;
+	announce "Organizador Cacería: ¡Preparaos todos, la Cacería de Payon va a empezar en breve!",bc_all,0xACFA58;
+sleep2 3000;
+	announce "Organizador Cacería: ¡Todos los que quieran concursar acudan a la ciudad de Payon!",bc_all,0xACFA58;
+sleep2 3000;
+	announce "Organizador Cacería: ¡Los monstruos serán liberados cuando acaben los preparativos!",bc_all,0xACFA58;
+sleep2 300000;
+	mapannounce "payon","Organizador Cacería: ¡Empieza la Cacería de Payon!",bc_yellow;
+	set $mobcazeria,695;
+	set $CazeriaPayon,1;
+sleep2 5000;
+	enablenpc "CazeriaPayon01";
+	donpcevent "CazeriaPayon01::OnEnable";
+	enablenpc "CazeriaPayon02";
+	donpcevent "CazeriaPayon02::OnEnable";
+	enablenpc "CazeriaPayon03";
+	donpcevent "CazeriaPayon03::OnEnable";
+	enablenpc "CazeriaPayon04";
+	donpcevent "CazeriaPayon04::OnEnable";
+	enablenpc "CazeriaPayon05";
+	donpcevent "CazeriaPayon05::OnEnable";
+	enablenpc "CazeriaPayon06";
+	donpcevent "CazeriaPayon06::OnEnable";
+	enablenpc "CazeriaPayon07";
+	donpcevent "CazeriaPayon07::OnEnable";
+	enablenpc "CazeriaPayon08";
+	donpcevent "CazeriaPayon08::OnEnable";
+	enablenpc "CazeriaPayon09";
+	donpcevent "CazeriaPayon09::OnEnable";
+	enablenpc "CazeriaPayon10";
+	donpcevent "CazeriaPayon10::OnEnable";
+	enablenpc "CazeriaPayon11";
+	donpcevent "CazeriaPayon11::OnEnable";
+	enablenpc "CazeriaPayon12";
+	donpcevent "CazeriaPayon12::OnEnable";
+	enablenpc "CazeriaPayon13";
+	donpcevent "CazeriaPayon13::OnEnable";
+	enablenpc "CazeriaPayon14";
+	donpcevent "CazeriaPayon14::OnEnable";
+	enablenpc "CazeriaPayon15";
+	donpcevent "CazeriaPayon15::OnEnable";
+	enablenpc "CazeriaPayon16";
+	donpcevent "CazeriaPayon16::OnEnable";
+	enablenpc "CazeriaPayon17";
+	donpcevent "CazeriaPayon17::OnEnable";
+	enablenpc "CazeriaPayon18";
+	donpcevent "CazeriaPayon18::OnEnable";
+	enablenpc "CazeriaPayon19";
+	donpcevent "CazeriaPayon19::OnEnable";
+	enablenpc "CazeriaPayon20";
+	donpcevent "CazeriaPayon20::OnEnable";
+	enablenpc "CazeriaPayon21";
+	donpcevent "CazeriaPayon21::OnEnable";
+	enablenpc "CazeriaPayon22";
+	donpcevent "CazeriaPayon22::OnEnable";
+	enablenpc "CazeriaPayon23";
+	donpcevent "CazeriaPayon23::OnEnable";
+	enablenpc "CazeriaPayon24";
+	donpcevent "CazeriaPayon24::OnEnable";
+end;}
+
+
+// ---------- Lanzador de Mob (Snake) -------------------------------
+// ------------------------------------------------------------------
+payon,1,1,1	script	CazeriaPayon01	66,{
+
+OnInit:
+	disablenpc "CazeriaPayon01";
+	end;
+
+OnEnable:
+monster "payon",0,0,"Snake",1025,85,"CazeriaPayon01::OnMyMobDead";
+end;
+
+OnMyMobDead:
+	set $mobcazeria,$mobcazeria-1;
+	set @puntoscazeria,@puntoscazeria+1;
+	dispbottom "Recibes 1 Punto de Cacería";
+	dispbottom "Tienes un total de "+@puntoscazeria+" Punto/s de Cacería";
+	if ($mobcazeria < 1)goto fincaza;
+end;
+
+fincaza:
+	mapannounce "payon","Organizador Cacería: ¡Fin de la Cacería!",bc_yellow;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Teneis 30 minutos para venir a recoger vuestros premios!",bc_yellow;
+	sleep2 3000;
+	mapannounce "payon","Organizador Cacería: ¡Podreis encontrarme cerca del Tool Dealer, al sur de Payon!",bc_yellow;
+	set $CazeriaPayon,2;
+	sleep2 1800000;
+	mapannounce "payon","Organizador Cacería: ¡El tiempo para cambiar vuestros puntos ha terminado!",bc_yellow;
+	set $CazeriaPayon,0;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Espero ver vuestras caras de nuevo en la próxima cacería!",bc_yellow;
+	goto inicio;
+end;}
+
+
+// ---------- Lanzador de Mob (Peco Peco) -----------------------
+// ------------------------------------------------------------------
+payon,1,1,1	script	CazeriaPayon02	66,{
+
+OnInit:
+	disablenpc "CazeriaPayon02";
+	end;
+
+OnEnable:
+monster "payon",0,0,"Peco Peco",1019,70,"CazeriaPayon02::OnMyMobDead";
+end;
+
+OnMyMobDead:
+	set $mobcazeria,$mobcazeria-1;
+	set @puntoscazeria,@puntoscazeria+2;
+	dispbottom "Recibes 2 Puntos de Cacería";
+	dispbottom "Tienes un total de "+@puntoscazeria+" Punto/s de Cacería";
+	if ($mobcazeria < 1)goto fincaza;
+end;
+
+fincaza:
+	mapannounce "payon","Organizador Cacería: ¡Fin de la Cacería!",bc_yellow;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Teneis 30 minutos para venir a recoger vuestros premios!",bc_yellow;
+	sleep2 3000;
+	mapannounce "payon","Organizador Cacería: ¡Podreis encontrarme cerca del Tool Dealer, al sur de Payon!",bc_yellow;
+	set $CazeriaPayon,2;
+	sleep2 1800000;
+	mapannounce "payon","Organizador Cacería: ¡El tiempo para cambiar vuestros puntos ha terminado!",bc_yellow;
+	set $CazeriaPayon,0;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Espero ver vuestras caras de nuevo en la próxima cacería!",bc_yellow;
+	goto inicio;
+end;}
+
+
+// ---------- Lanzador de Mob (Savage) -----------------------
+// ------------------------------------------------------------------
+payon,1,1,1	script	CazeriaPayon03	66,{
+
+OnInit:
+	disablenpc "CazeriaPayon03";
+	end;
+
+OnEnable:
+monster "payon",0,0,"Savage",1166,60,"CazeriaPayon03::OnMyMobDead";
+end;
+
+OnMyMobDead:
+	set $mobcazeria,$mobcazeria-1;
+	set @puntoscazeria,@puntoscazeria+3;
+	dispbottom "Recibes 3 Puntos de Cacería";
+	dispbottom "Tienes un total de "+@puntoscazeria+" Punto/s de Cacería";
+	if ($mobcazeria < 1)goto fincaza;
+end;
+
+fincaza:
+	mapannounce "payon","Organizador Cacería: ¡Fin de la Cacería!",bc_yellow;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Teneis 30 minutos para venir a recoger vuestros premios!",bc_yellow;
+	sleep2 3000;
+	mapannounce "payon","Organizador Cacería: ¡Podreis encontrarme cerca del Tool Dealer, al sur de Payon!",bc_yellow;
+	set $CazeriaPayon,2;
+	sleep2 1800000;
+	mapannounce "payon","Organizador Cacería: ¡El tiempo para cambiar vuestros puntos ha terminado!",bc_yellow;
+	set $CazeriaPayon,0;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Espero ver vuestras caras de nuevo en la próxima cacería!",bc_yellow;
+	goto inicio;
+end;}
+
+
+// ---------- Lanzador de Mob (Mantis) ------------------------------
+// ------------------------------------------------------------------
+payon,1,1,1	script	CazeriaPayon04	66,{
+
+OnInit:
+	disablenpc "CazeriaPayon04";
+	end;
+
+OnEnable:
+monster "payon",0,0,"Mantis",1139,70,"CazeriaPayon04::OnMyMobDead";
+end;
+
+OnMyMobDead:
+	set $mobcazeria,$mobcazeria-1;
+	set @puntoscazeria,@puntoscazeria+4;
+	dispbottom "Recibes 4 Puntos de Cacería";
+	dispbottom "Tienes un total de "+@puntoscazeria+" Punto/s de Cacería";
+	if ($mobcazeria < 1)goto fincaza;
+end;
+
+fincaza:
+	mapannounce "payon","Organizador Cacería: ¡Fin de la Cacería!",bc_yellow;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Teneis 30 minutos para venir a recoger vuestros premios!",bc_yellow;
+	sleep2 3000;
+	mapannounce "payon","Organizador Cacería: ¡Podreis encontrarme cerca del Tool Dealer, al sur de Payon!",bc_yellow;
+	set $CazeriaPayon,2;
+	sleep2 1800000;
+	mapannounce "payon","Organizador Cacería: ¡El tiempo para cambiar vuestros puntos ha terminado!",bc_yellow;
+	set $CazeriaPayon,0;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Espero ver vuestras caras de nuevo en la próxima cacería!",bc_yellow;
+	goto inicio;
+end;}
+
+
+// ---------- Lanzador de Mob (Jaguar) ------------------------------
+// ------------------------------------------------------------------
+payon,1,1,1	script	CazeriaPayon05	66,{
+
+OnInit:
+	disablenpc "CazeriaPayon05";
+	end;
+
+OnEnable:
+monster "payon",0,0,"Jaguar",2072,60,"CazeriaPayon05::OnMyMobDead";
+end;
+
+OnMyMobDead:
+	set $mobcazeria,$mobcazeria-1;
+	set @puntoscazeria,@puntoscazeria+7;
+	dispbottom "Recibes 7 Puntos de Cacería";
+	dispbottom "Tienes un total de "+@puntoscazeria+" Punto/s de Cacería";
+	if ($mobcazeria < 1)goto fincaza;
+end;
+
+fincaza:
+	mapannounce "payon","Organizador Cacería: ¡Fin de la Cacería!",bc_yellow;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Teneis 30 minutos para venir a recoger vuestros premios!",bc_yellow;
+	sleep2 3000;
+	mapannounce "payon","Organizador Cacería: ¡Podreis encontrarme cerca del Tool Dealer, al sur de Payon!",bc_yellow;
+	set $CazeriaPayon,2;
+	sleep2 1800000;
+	mapannounce "payon","Organizador Cacería: ¡El tiempo para cambiar vuestros puntos ha terminado!",bc_yellow;
+	set $CazeriaPayon,0;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Espero ver vuestras caras de nuevo en la próxima cacería!",bc_yellow;
+	goto inicio;
+end;}
+
+
+// ---------- Lanzador de Mob (Wild Ginseng) ------------------------
+// ------------------------------------------------------------------
+payon,1,1,1	script	CazeriaPayon06	66,{
+
+OnInit:
+	disablenpc "CazeriaPayon06";
+	end;
+
+OnEnable:
+monster "payon",0,0,"Wild Ginseng",1413,30,"CazeriaPayon06::OnMyMobDead";
+end;
+
+OnMyMobDead:
+	set $mobcazeria,$mobcazeria-1;
+	set @puntoscazeria,@puntoscazeria+8;
+	dispbottom "Recibes 8 Puntos de Cacería";
+	dispbottom "Tienes un total de "+@puntoscazeria+" Punto/s de Cacería";
+	if ($mobcazeria < 1)goto fincaza;
+end;
+
+fincaza:
+	mapannounce "payon","Organizador Cacería: ¡Fin de la Cacería!",bc_yellow;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Teneis 30 minutos para venir a recoger vuestros premios!",bc_yellow;
+	sleep2 3000;
+	mapannounce "payon","Organizador Cacería: ¡Podreis encontrarme cerca del Tool Dealer, al sur de Payon!",bc_yellow;
+	set $CazeriaPayon,2;
+	sleep2 1800000;
+	mapannounce "payon","Organizador Cacería: ¡El tiempo para cambiar vuestros puntos ha terminado!",bc_yellow;
+	set $CazeriaPayon,0;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Espero ver vuestras caras de nuevo en la próxima cacería!",bc_yellow;
+	goto inicio;
+end;}
+
+
+// ---------- Lanzador de Mob (Grand Peco) --------------------------
+// ------------------------------------------------------------------
+payon,1,1,1	script	CazeriaPayon07	66,{
+
+OnInit:
+	disablenpc "CazeriaPayon07";
+	end;
+
+OnEnable:
+monster "payon",0,0,"Grand Peco",1369,50,"CazeriaPayon07::OnMyMobDead";
+end;
+
+OnMyMobDead:
+	set $mobcazeria,$mobcazeria-1;
+	set @puntoscazeria,@puntoscazeria+9;
+	dispbottom "Recibes 9 Puntos de Cacería";
+	dispbottom "Tienes un total de "+@puntoscazeria+" Punto/s de Cacería";
+	if ($mobcazeria < 1)goto fincaza;
+end;
+
+fincaza:
+	mapannounce "payon","Organizador Cacería: ¡Fin de la Cacería!",bc_yellow;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Teneis 30 minutos para venir a recoger vuestros premios!",bc_yellow;
+	sleep2 3000;
+	mapannounce "payon","Organizador Cacería: ¡Podreis encontrarme cerca del Tool Dealer, al sur de Payon!",bc_yellow;
+	set $CazeriaPayon,2;
+	sleep2 1800000;
+	mapannounce "payon","Organizador Cacería: ¡El tiempo para cambiar vuestros puntos ha terminado!",bc_yellow;
+	set $CazeriaPayon,0;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Espero ver vuestras caras de nuevo en la próxima cacería!",bc_yellow;
+	goto inicio;
+end;}
+
+
+// ---------- Lanzador de Mob (Alligator) ---------------------------
+// ------------------------------------------------------------------
+payon,1,1,1	script	CazeriaPayon08	66,{
+
+OnInit:
+	disablenpc "CazeriaPayon08";
+	end;
+
+OnEnable:
+monster "payon",0,0,"Alligator",1271,40,"CazeriaPayon08::OnMyMobDead";
+end;
+
+OnMyMobDead:
+	set $mobcazeria,$mobcazeria-1;
+	set @puntoscazeria,@puntoscazeria+10;
+	dispbottom "Recibes 10 Puntos de Cacería";
+	dispbottom "Tienes un total de "+@puntoscazeria+" Punto/s de Cacería";
+	if ($mobcazeria < 1)goto fincaza;
+end;
+
+fincaza:
+	mapannounce "payon","Organizador Cacería: ¡Fin de la Cacería!",bc_yellow;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Teneis 30 minutos para venir a recoger vuestros premios!",bc_yellow;
+	sleep2 3000;
+	mapannounce "payon","Organizador Cacería: ¡Podreis encontrarme cerca del Tool Dealer, al sur de Payon!",bc_yellow;
+	set $CazeriaPayon,2;
+	sleep2 1800000;
+	mapannounce "payon","Organizador Cacería: ¡El tiempo para cambiar vuestros puntos ha terminado!",bc_yellow;
+	set $CazeriaPayon,0;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Espero ver vuestras caras de nuevo en la próxima cacería!",bc_yellow;
+	goto inicio;
+end;}
+
+
+// ---------- Lanzador de Mob (Goat) --------------------------------
+// ------------------------------------------------------------------
+payon,1,1,1	script	CazeriaPayon09	66,{
+
+OnInit:
+	disablenpc "CazeriaPayon09";
+	end;
+
+OnEnable:
+monster "payon",0,0,"Goat",1372,55,"CazeriaPayon09::OnMyMobDead";
+end;
+
+OnMyMobDead:
+	set $mobcazeria,$mobcazeria-1;
+	set @puntoscazeria,@puntoscazeria+12;
+	dispbottom "Recibes 12 Puntos de Cacería";
+	dispbottom "Tienes un total de "+@puntoscazeria+" Punto/s de Cacería";
+	if ($mobcazeria < 1)goto fincaza;
+end;
+
+fincaza:
+	mapannounce "payon","Organizador Cacería: ¡Fin de la Cacería!",bc_yellow;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Teneis 30 minutos para venir a recoger vuestros premios!",bc_yellow;
+	sleep2 3000;
+	mapannounce "payon","Organizador Cacería: ¡Podreis encontrarme cerca del Tool Dealer, al sur de Payon!",bc_yellow;
+	set $CazeriaPayon,2;
+	sleep2 1800000;
+	mapannounce "payon","Organizador Cacería: ¡El tiempo para cambiar vuestros puntos ha terminado!",bc_yellow;
+	set $CazeriaPayon,0;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Espero ver vuestras caras de nuevo en la próxima cacería!",bc_yellow;
+	goto inicio;
+end;}
+
+
+// ---------- Lanzador de Mob (Grizzly) -----------------------------
+// ------------------------------------------------------------------
+payon,1,1,1	script	CazeriaPayon10	66,{
+
+OnInit:
+	disablenpc "CazeriaPayon10";
+	end;
+
+OnEnable:
+monster "payon",0,0,"Grizzly",1381,30,"CazeriaPayon10::OnMyMobDead";
+end;
+
+OnMyMobDead:
+	set $mobcazeria,$mobcazeria-1;
+	set @puntoscazeria,@puntoscazeria+13;
+	dispbottom "Recibes 13 Puntos de Cacería";
+	dispbottom "Tienes un total de "+@puntoscazeria+" Punto/s de Cacería";
+	if ($mobcazeria < 1)goto fincaza;
+end;
+
+fincaza:
+	mapannounce "payon","Organizador Cacería: ¡Fin de la Cacería!",bc_yellow;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Teneis 30 minutos para venir a recoger vuestros premios!",bc_yellow;
+	sleep2 3000;
+	mapannounce "payon","Organizador Cacería: ¡Podreis encontrarme cerca del Tool Dealer, al sur de Payon!",bc_yellow;
+	set $CazeriaPayon,2;
+	sleep2 1800000;
+	mapannounce "payon","Organizador Cacería: ¡El tiempo para cambiar vuestros puntos ha terminado!",bc_yellow;
+	set $CazeriaPayon,0;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Espero ver vuestras caras de nuevo en la próxima cacería!",bc_yellow;
+	goto inicio;
+end;}
+
+
+// ---------- Lanzador de Mob (Novus) -------------------------------
+// ------------------------------------------------------------------
+payon,1,1,1	script	CazeriaPayon11	66,{
+
+OnInit:
+	disablenpc "CazeriaPayon11";
+	end;
+
+OnEnable:
+monster "payon",0,0,"Novus",1718,25,"CazeriaPayon11::OnMyMobDead";
+end;
+
+OnMyMobDead:
+	set $mobcazeria,$mobcazeria-1;
+	set @puntoscazeria,@puntoscazeria+15;
+	dispbottom "Recibes 15 Puntos de Cacería";
+	dispbottom "Tienes un total de "+@puntoscazeria+" Punto/s de Cacería";
+	if ($mobcazeria < 1)goto fincaza;
+end;
+
+fincaza:
+	mapannounce "payon","Organizador Cacería: ¡Fin de la Cacería!",bc_yellow;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Teneis 30 minutos para venir a recoger vuestros premios!",bc_yellow;
+	sleep2 3000;
+	mapannounce "payon","Organizador Cacería: ¡Podreis encontrarme cerca del Tool Dealer, al sur de Payon!",bc_yellow;
+	set $CazeriaPayon,2;
+	sleep2 1800000;
+	mapannounce "payon","Organizador Cacería: ¡El tiempo para cambiar vuestros puntos ha terminado!",bc_yellow;
+	set $CazeriaPayon,0;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Espero ver vuestras caras de nuevo en la próxima cacería!",bc_yellow;
+	goto inicio;
+end;}
+
+
+// ---------- Lanzador de Mob (Garm Baby) ---------------------------
+// ------------------------------------------------------------------
+payon,1,1,1	script	CazeriaPayon12	66,{
+
+OnInit:
+	disablenpc "CazeriaPayon12";
+	end;
+
+OnEnable:
+monster "payon",0,0,"Garm Baby",1515,10,"CazeriaPayon12::OnMyMobDead";
+end;
+
+OnMyMobDead:
+	set $mobcazeria,$mobcazeria-1;
+	set @puntoscazeria,@puntoscazeria+17;
+	dispbottom "Recibes 17 Puntos de Cacería";
+	dispbottom "Tienes un total de "+@puntoscazeria+" Punto/s de Cacería";
+	if ($mobcazeria < 1)goto fincaza;
+end;
+
+fincaza:
+	mapannounce "payon","Organizador Cacería: ¡Fin de la Cacería!",bc_yellow;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Teneis 30 minutos para venir a recoger vuestros premios!",bc_yellow;
+	sleep2 3000;
+	mapannounce "payon","Organizador Cacería: ¡Podreis encontrarme cerca del Tool Dealer, al sur de Payon!",bc_yellow;
+	set $CazeriaPayon,2;
+	sleep2 1800000;
+	mapannounce "payon","Organizador Cacería: ¡El tiempo para cambiar vuestros puntos ha terminado!",bc_yellow;
+	set $CazeriaPayon,0;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Espero ver vuestras caras de nuevo en la próxima cacería!",bc_yellow;
+	goto inicio;
+end;}
+
+
+// ---------- Lanzador de Mob (Vagabond Wolf*) ----------------------
+// ------------------------------------------------------------------
+payon,1,1,1	script	CazeriaPayon13	66,{
+
+OnInit:
+	disablenpc "CazeriaPayon13";
+	end;
+
+OnEnable:
+monster "payon",0,0,"Vagabond Wolf",1092,1,"CazeriaPayon13::OnMyMobDead";
+end;
+
+OnMyMobDead:
+	set $mobcazeria,$mobcazeria-1;
+	set @puntoscazeria,@puntoscazeria+12;
+	dispbottom "Recibes 12 Puntos de Cacería";
+	set @puntoscazeriaex,rand(1,10);
+	set @puntoscazeria,@puntoscazeria+@puntoscazeriaex;
+	dispbottom "Obtienes "+@puntoscazeriaex+" Puntos de Cacería extra por monstruo especial.";
+	dispbottom "Tienes un total de "+@puntoscazeria+" Punto/s de Cacería";
+	mapannounce "payon","Gran Cazador: "+strcharinfo(0)+" con "+@puntoscazeria+" Punto/s en la cacería ha acabado con Vagabond Wolf.",bc_yellow;
+	if ($mobcazeria < 1)goto fincaza;
+end;
+
+fincaza:
+	mapannounce "payon","Organizador Cacería: ¡Fin de la Cacería!",bc_yellow;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Teneis 30 minutos para venir a recoger vuestros premios!",bc_yellow;
+	sleep2 3000;
+	mapannounce "payon","Organizador Cacería: ¡Podreis encontrarme cerca del Tool Dealer, al sur de Payon!",bc_yellow;
+	set $CazeriaPayon,2;
+	sleep2 1800000;
+	mapannounce "payon","Organizador Cacería: ¡El tiempo para cambiar vuestros puntos ha terminado!",bc_yellow;
+	set $CazeriaPayon,0;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Espero ver vuestras caras de nuevo en la próxima cacería!",bc_yellow;
+	goto inicio;
+end;}
+
+
+// ---------- Lanzador de Mob (Majoruros*) --------------------------
+// ------------------------------------------------------------------
+payon,1,1,1	script	CazeriaPayon14	66,{
+
+OnInit:
+	disablenpc "CazeriaPayon14";
+	end;
+
+OnEnable:
+monster "payon",0,0,"Majoruros",1310,1,"CazeriaPayon14::OnMyMobDead";
+end;
+
+OnMyMobDead:
+	set $mobcazeria,$mobcazeria-1;
+	set @puntoscazeria,@puntoscazeria+18;
+	dispbottom "Recibes 18 Puntos de Cacería";
+	set @puntoscazeriaex,rand(1,10);
+	set @puntoscazeria,@puntoscazeria+@puntoscazeriaex;
+	dispbottom "Obtienes "+@puntoscazeriaex+" Puntos de Cacería extra por monstruo especial.";
+	dispbottom "Tienes un total de "+@puntoscazeria+" Punto/s de Cacería";
+	mapannounce "payon","Gran Cazador: "+strcharinfo(0)+" con "+@puntoscazeria+" Punto/s en la cacería ha acabado con Majoruros.",bc_yellow;
+	if ($mobcazeria < 1)goto fincaza;
+end;
+
+fincaza:
+	mapannounce "payon","Organizador Cacería: ¡Fin de la Cacería!",bc_yellow;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Teneis 30 minutos para venir a recoger vuestros premios!",bc_yellow;
+	sleep2 3000;
+	mapannounce "payon","Organizador Cacería: ¡Podreis encontrarme cerca del Tool Dealer, al sur de Payon!",bc_yellow;
+	set $CazeriaPayon,2;
+	sleep2 1800000;
+	mapannounce "payon","Organizador Cacería: ¡El tiempo para cambiar vuestros puntos ha terminado!",bc_yellow;
+	set $CazeriaPayon,0;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Espero ver vuestras caras de nuevo en la próxima cacería!",bc_yellow;
+	goto inicio;
+end;}
+
+
+// ---------- Lanzador de Mob (Killer Mantis*) ----------------------
+// ------------------------------------------------------------------
+payon,1,1,1	script	CazeriaPayon15	66,{
+
+OnInit:
+	disablenpc "CazeriaPayon15";
+	end;
+
+OnEnable:
+monster "payon",0,0,"Killer Mantis",1294,1,"CazeriaPayon15::OnMyMobDead";
+end;
+
+OnMyMobDead:
+	set $mobcazeria,$mobcazeria-1;
+	set @puntoscazeria,@puntoscazeria+24;
+	dispbottom "Recibes 24 Puntos de Cacería";
+	set @puntoscazeriaex,rand(1,10);
+	set @puntoscazeria,@puntoscazeria+@puntoscazeriaex;
+	dispbottom "Obtienes "+@puntoscazeriaex+" Puntos de Cacería extra por monstruo especial.";
+	dispbottom "Tienes un total de "+@puntoscazeria+" Punto/s de Cacería";
+	mapannounce "payon","Gran Cazador: "+strcharinfo(0)+" con "+@puntoscazeria+" Punto/s en la cacería ha acabado con Killer Mantis.",bc_yellow;
+	if ($mobcazeria < 1)goto fincaza;
+end;
+
+fincaza:
+	mapannounce "payon","Organizador Cacería: ¡Fin de la Cacería!",bc_yellow;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Teneis 30 minutos para venir a recoger vuestros premios!",bc_yellow;
+	sleep2 3000;
+	mapannounce "payon","Organizador Cacería: ¡Podreis encontrarme cerca del Tool Dealer, al sur de Payon!",bc_yellow;
+	set $CazeriaPayon,2;
+	sleep2 1800000;
+	mapannounce "payon","Organizador Cacería: ¡El tiempo para cambiar vuestros puntos ha terminado!",bc_yellow;
+	set $CazeriaPayon,0;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Espero ver vuestras caras de nuevo en la próxima cacería!",bc_yellow;
+	goto inicio;
+end;}
+
+
+// ---------- Lanzador de Mob (Leib Olmai*) ----------------------
+// ------------------------------------------------------------------
+payon,1,1,1	script	CazeriaPayon16	66,{
+
+OnInit:
+	disablenpc "CazeriaPayon16";
+	end;
+
+OnEnable:
+monster "payon",0,0,"Leib Olmai",1306,1,"CazeriaPayon16::OnMyMobDead";
+end;
+
+OnMyMobDead:
+	set $mobcazeria,$mobcazeria-1;
+	set @puntoscazeria,@puntoscazeria+26;
+	dispbottom "Recibes 26 Puntos de Cacería";
+	set @puntoscazeriaex,rand(1,10);
+	set @puntoscazeria,@puntoscazeria+@puntoscazeriaex;
+	dispbottom "Obtienes "+@puntoscazeriaex+" Puntos de Cacería extra por monstruo especial.";
+	dispbottom "Tienes un total de "+@puntoscazeria+" Punto/s de Cacería";
+	mapannounce "payon","Gran Cazador: "+strcharinfo(0)+" con "+@puntoscazeria+" Punto/s en la cacería ha acabado con Leib Olmai.",bc_yellow;
+	if ($mobcazeria < 1)goto fincaza;
+end;
+
+fincaza:
+	mapannounce "payon","Organizador Cacería: ¡Fin de la Cacería!",bc_yellow;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Teneis 30 minutos para venir a recoger vuestros premios!",bc_yellow;
+	sleep2 3000;
+	mapannounce "payon","Organizador Cacería: ¡Podreis encontrarme cerca del Tool Dealer, al sur de Payon!",bc_yellow;
+	set $CazeriaPayon,2;
+	sleep2 1800000;
+	mapannounce "payon","Organizador Cacería: ¡El tiempo para cambiar vuestros puntos ha terminado!",bc_yellow;
+	set $CazeriaPayon,0;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Espero ver vuestras caras de nuevo en la próxima cacería!",bc_yellow;
+	goto inicio;
+end;}
+
+
+// ---------- Lanzador de Mob (Caterpillar*) -----------------------
+// ------------------------------------------------------------------
+payon,1,1,1	script	CazeriaPayon17	66,{
+
+OnInit:
+	disablenpc "CazeriaPayon17";
+	end;
+
+OnEnable:
+monster "payon",0,0,"Caterpillar",1300,1,"CazeriaPayon17::OnMyMobDead";
+end;
+
+OnMyMobDead:
+	set $mobcazeria,$mobcazeria-1;
+	set @puntoscazeria,@puntoscazeria+32;
+	dispbottom "Recibes 32 Puntos de Cacería";
+	set @puntoscazeriaex,rand(1,10);
+	set @puntoscazeria,@puntoscazeria+@puntoscazeriaex;
+	dispbottom "Obtienes "+@puntoscazeriaex+" Puntos de Cacería extra por monstruo especial.";
+	dispbottom "Tienes un total de "+@puntoscazeria+" Punto/s de Cacería";
+	mapannounce "payon","Gran Cazador: "+strcharinfo(0)+" con "+@puntoscazeria+" Punto/s en la cacería ha acabado con Caterpillar.",bc_yellow;
+	if ($mobcazeria < 1)goto fincaza;
+end;
+
+fincaza:
+	mapannounce "payon","Organizador Cacería: ¡Fin de la Cacería!",bc_yellow;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Teneis 30 minutos para venir a recoger vuestros premios!",bc_yellow;
+	sleep2 3000;
+	mapannounce "payon","Organizador Cacería: ¡Podreis encontrarme cerca del Tool Dealer, al sur de Payon!",bc_yellow;
+	set $CazeriaPayon,2;
+	sleep2 1800000;
+	mapannounce "payon","Organizador Cacería: ¡El tiempo para cambiar vuestros puntos ha terminado!",bc_yellow;
+	set $CazeriaPayon,0;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Espero ver vuestras caras de nuevo en la próxima cacería!",bc_yellow;
+	goto inicio;
+end;}
+
+
+// ---------- Lanzador de Mob (Gullinbursti*) -----------------------
+// ------------------------------------------------------------------
+payon,1,1,1	script	CazeriaPayon18	66,{
+
+OnInit:
+	disablenpc "CazeriaPayon18";
+	end;
+
+OnEnable:
+monster "payon",0,0,"Gullinbursti",1311,1,"CazeriaPayon18::OnMyMobDead";
+end;
+
+OnMyMobDead:
+	set $mobcazeria,$mobcazeria-1;
+	set @puntoscazeria,@puntoscazeria+36;
+	dispbottom "Recibes 36 Puntos de Cacería";
+	set @puntoscazeriaex,rand(1,10);
+	set @puntoscazeria,@puntoscazeria+@puntoscazeriaex;
+	dispbottom "Obtienes "+@puntoscazeriaex+" Puntos de Cacería extra por monstruo especial.";
+	dispbottom "Tienes un total de "+@puntoscazeria+" Punto/s de Cacería";
+	mapannounce "payon","Gran Cazador: "+strcharinfo(0)+" con "+@puntoscazeria+" Punto/s en la cacería ha acabado con Gullinbursti.",bc_yellow;
+	if ($mobcazeria < 1)goto fincaza;
+end;
+
+fincaza:
+	mapannounce "payon","Organizador Cacería: ¡Fin de la Cacería!",bc_yellow;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Teneis 30 minutos para venir a recoger vuestros premios!",bc_yellow;
+	sleep2 3000;
+	mapannounce "payon","Organizador Cacería: ¡Podreis encontrarme cerca del Tool Dealer, al sur de Payon!",bc_yellow;
+	set $CazeriaPayon,2;
+	sleep2 1800000;
+	mapannounce "payon","Organizador Cacería: ¡El tiempo para cambiar vuestros puntos ha terminado!",bc_yellow;
+	set $CazeriaPayon,0;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Espero ver vuestras caras de nuevo en la próxima cacería!",bc_yellow;
+	goto inicio;
+end;}
+
+
+// ---------- Lanzador de Mob (Chimera*) -----------------------
+// ------------------------------------------------------------------
+payon,1,1,1	script	CazeriaPayon19	66,{
+
+OnInit:
+	disablenpc "CazeriaPayon19";
+	end;
+
+OnEnable:
+monster "payon",0,0,"Chimera",1283,1,"CazeriaPayon19::OnMyMobDead";
+end;
+
+OnMyMobDead:
+	set $mobcazeria,$mobcazeria-1;
+	set @puntoscazeria,@puntoscazeria+40;
+	dispbottom "Recibes 40 Puntos de Cacería";
+	set @puntoscazeriaex,rand(1,10);
+	set @puntoscazeria,@puntoscazeria+@puntoscazeriaex;
+	dispbottom "Obtienes "+@puntoscazeriaex+" Puntos de Cacería extra por monstruo especial.";
+	dispbottom "Tienes un total de "+@puntoscazeria+" Punto/s de Cacería";
+	mapannounce "payon","Gran Cazador: "+strcharinfo(0)+" con "+@puntoscazeria+" Punto/s en la cacería ha acabado con Chimera.",bc_yellow;
+	if ($mobcazeria < 1)goto fincaza;
+end;
+
+fincaza:
+	mapannounce "payon","Organizador Cacería: ¡Fin de la Cacería!",bc_yellow;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Teneis 30 minutos para venir a recoger vuestros premios!",bc_yellow;
+	sleep2 3000;
+	mapannounce "payon","Organizador Cacería: ¡Podreis encontrarme cerca del Tool Dealer, al sur de Payon!",bc_yellow;
+	set $CazeriaPayon,2;
+	sleep2 1800000;
+	mapannounce "payon","Organizador Cacería: ¡El tiempo para cambiar vuestros puntos ha terminado!",bc_yellow;
+	set $CazeriaPayon,0;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Espero ver vuestras caras de nuevo en la próxima cacería!",bc_yellow;
+	goto inicio;
+end;}
+
+
+// ---------- Lanzador de Mob (Galion*) -----------------------
+// ------------------------------------------------------------------
+payon,1,1,1	script	CazeriaPayon20	66,{
+
+OnInit:
+	disablenpc "CazeriaPayon20";
+	end;
+
+OnEnable:
+monster "payon",0,0,"Galion",1783,1,"CazeriaPayon20::OnMyMobDead";
+end;
+
+OnMyMobDead:
+	set $mobcazeria,$mobcazeria-1;
+	set @puntoscazeria,@puntoscazeria+42;
+	dispbottom "Recibes 42 Puntos de Cacería";
+	set @puntoscazeriaex,rand(1,10);
+	set @puntoscazeria,@puntoscazeria+@puntoscazeriaex;
+	dispbottom "Obtienes "+@puntoscazeriaex+" Puntos de Cacería extra por monstruo especial.";
+	dispbottom "Tienes un total de "+@puntoscazeria+" Punto/s de Cacería";
+	mapannounce "payon","Gran Cazador: "+strcharinfo(0)+" con "+@puntoscazeria+" Punto/s en la cacería ha acabado con Galion.",bc_yellow;
+	if ($mobcazeria < 1)goto fincaza;
+end;
+
+fincaza:
+	mapannounce "payon","Organizador Cacería: ¡Fin de la Cacería!",bc_yellow;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Teneis 30 minutos para venir a recoger vuestros premios!",bc_yellow;
+	sleep2 3000;
+	mapannounce "payon","Organizador Cacería: ¡Podreis encontrarme cerca del Tool Dealer, al sur de Payon!",bc_yellow;
+	set $CazeriaPayon,2;
+	sleep2 1800000;
+	mapannounce "payon","Organizador Cacería: ¡El tiempo para cambiar vuestros puntos ha terminado!",bc_yellow;
+	set $CazeriaPayon,0;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Espero ver vuestras caras de nuevo en la próxima cacería!",bc_yellow;
+	goto inicio;
+end;}
+
+
+// ---------- Lanzador de Mob (Ungoliant*) -----------------------
+// ------------------------------------------------------------------
+payon,1,1,1	script	CazeriaPayon21	66,{
+
+OnInit:
+	disablenpc "CazeriaPayon21";
+	end;
+
+OnEnable:
+monster "payon",0,0,"Ungoliant",1618,1,"CazeriaPayon21::OnMyMobDead";
+end;
+
+OnMyMobDead:
+	set $mobcazeria,$mobcazeria-1;
+	set @puntoscazeria,@puntoscazeria+45;
+	dispbottom "Recibes 45 Puntos de Cacería";
+	set @puntoscazeriaex,rand(1,10);
+	set @puntoscazeria,@puntoscazeria+@puntoscazeriaex;
+	dispbottom "Obtienes "+@puntoscazeriaex+" Puntos de Cacería extra por monstruo especial.";
+	dispbottom "Tienes un total de "+@puntoscazeria+" Punto/s de Cacería";
+	mapannounce "payon","Gran Cazador: "+strcharinfo(0)+" con "+@puntoscazeria+" Punto/s en la cacería ha acabado con Ungoliant.",bc_yellow;
+	if ($mobcazeria < 1)goto fincaza;
+end;
+
+fincaza:
+	mapannounce "payon","Organizador Cacería: ¡Fin de la Cacería!",bc_yellow;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Teneis 30 minutos para venir a recoger vuestros premios!",bc_yellow;
+	sleep2 3000;
+	mapannounce "payon","Organizador Cacería: ¡Podreis encontrarme cerca del Tool Dealer, al sur de Payon!",bc_yellow;
+	set $CazeriaPayon,2;
+	sleep2 1800000;
+	mapannounce "payon","Organizador Cacería: ¡El tiempo para cambiar vuestros puntos ha terminado!",bc_yellow;
+	set $CazeriaPayon,0;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Espero ver vuestras caras de nuevo en la próxima cacería!",bc_yellow;
+	goto inicio;
+end;}
+
+
+// ---------- Lanzador de Mob (Gryphon*) -----------------------
+// ------------------------------------------------------------------
+payon,1,1,1	script	CazeriaPayon22	66,{
+
+OnInit:
+	disablenpc "CazeriaPayon22";
+	end;
+
+OnEnable:
+monster "payon",0,0,"Gryphon",1259,1,"CazeriaPayon22::OnMyMobDead";
+end;
+
+OnMyMobDead:
+	set $mobcazeria,$mobcazeria-1;
+	set @puntoscazeria,@puntoscazeria+50;
+	dispbottom "Recibes 50 Puntos de Cacería";
+	set @puntoscazeriaex,rand(1,10);
+	set @puntoscazeria,@puntoscazeria+@puntoscazeriaex;
+	dispbottom "Obtienes "+@puntoscazeriaex+" Puntos de Cacería extra por monstruo especial.";
+	dispbottom "Tienes un total de "+@puntoscazeria+" Punto/s de Cacería";
+	mapannounce "payon","Gran Cazador: "+strcharinfo(0)+" con "+@puntoscazeria+" Punto/s en la cacería ha acabado con Gryphon.",bc_yellow;
+	if ($mobcazeria < 1)goto fincaza;
+end;
+
+fincaza:
+	mapannounce "payon","Organizador Cacería: ¡Fin de la Cacería!",bc_yellow;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Teneis 30 minutos para venir a recoger vuestros premios!",bc_yellow;
+	sleep2 3000;
+	mapannounce "payon","Organizador Cacería: ¡Podreis encontrarme cerca del Tool Dealer, al sur de Payon!",bc_yellow;
+	set $CazeriaPayon,2;
+	sleep2 1800000;
+	mapannounce "payon","Organizador Cacería: ¡El tiempo para cambiar vuestros puntos ha terminado!",bc_yellow;
+	set $CazeriaPayon,0;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Espero ver vuestras caras de nuevo en la próxima cacería!",bc_yellow;
+	goto inicio;
+end;}
+
+
+// ---------- Lanzador de Mob (Driller) -----------------------------
+// ------------------------------------------------------------------
+payon,1,1,1	script	CazeriaPayon23	66,{
+
+OnInit:
+	disablenpc "CazeriaPayon23";
+	end;
+
+OnEnable:
+monster "payon",0,0,"Driller",1380,50,"CazeriaPayon23::OnMyMobDead";
+end;
+
+OnMyMobDead:
+	set $mobcazeria,$mobcazeria-1;
+	set @puntoscazeria,@puntoscazeria+14;
+	dispbottom "Recibes 14 Puntos de Cacería";
+	dispbottom "Tienes un total de "+@puntoscazeria+" Punto/s de Cacería";
+	if ($mobcazeria < 1)goto fincaza;
+end;
+
+fincaza:
+	mapannounce "payon","Organizador Cacería: ¡Fin de la Cacería!",bc_yellow;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Teneis 30 minutos para venir a recoger vuestros premios!",bc_yellow;
+	sleep2 3000;
+	mapannounce "payon","Organizador Cacería: ¡Podreis encontrarme cerca del Tool Dealer, al sur de Payon!",bc_yellow;
+	set $CazeriaPayon,2;
+	sleep2 1800000;
+	mapannounce "payon","Organizador Cacería: ¡El tiempo para cambiar vuestros puntos ha terminado!",bc_yellow;
+	set $CazeriaPayon,0;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Espero ver vuestras caras de nuevo en la próxima cacería!",bc_yellow;
+	goto inicio;
+end;}
+
+
+// ---------- Lanzador de Mob (Bloody Butterfly) --------------------
+// ------------------------------------------------------------------
+payon,1,1,1	script	CazeriaPayon24	66,{
+
+OnInit:
+	disablenpc "CazeriaPayon24";
+	end;
+
+OnEnable:
+monster "payon",0,0,"Bloody Butterfly",1408,50,"CazeriaPayon24::OnMyMobDead";
+end;
+
+OnMyMobDead:
+	set $mobcazeria,$mobcazeria-1;
+	set @puntoscazeria,@puntoscazeria+14;
+	dispbottom "Recibes 14 Puntos de Cacería";
+	dispbottom "Tienes un total de "+@puntoscazeria+" Punto/s de Cacería";
+	if ($mobcazeria < 1)goto fincaza;
+end;
+
+fincaza:
+	mapannounce "payon","Organizador Cacería: ¡Fin de la Cacería!",bc_yellow;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Teneis 30 minutos para venir a recoger vuestros premios!",bc_yellow;
+	sleep2 3000;
+	mapannounce "payon","Organizador Cacería: ¡Podreis encontrarme cerca del Tool Dealer, al sur de Payon!",bc_yellow;
+	set $CazeriaPayon,2;
+	sleep2 1800000;
+	mapannounce "payon","Organizador Cacería: ¡El tiempo para cambiar vuestros puntos ha terminado!",bc_yellow;
+	set $CazeriaPayon,0;
+	sleep2 2000;
+	mapannounce "payon","Organizador Cacería: ¡Espero ver vuestras caras de nuevo en la próxima cacería!",bc_yellow;
+	goto inicio;
+end;}
+
+
+
+
+// ---------- Organizador Cazeria ---------------------------
+// ------------------------------------------------------------------
+payon.gat,148,87,5	script	Organizador Caceria	106,{
+
+if ($CazeriaPayon == 1)goto empezada;
+if ($CazeriaPayon == 2)goto premios;
+mes "[^CC0000Organizador Cazeria^000000]";
+mes "Disculpe...¿Desea algo?";
+next;
+menu "Informarme sobre la Cazeria de Payon",info,"Solo pasaba por aquí",salir;
+end;
+
+salir:
+mes "[^CC0000"+strcharinfo(0)+"^000000]";
+mes "No, solo pasaba por aqui...";
+close;
+
+info:
+mes "[^CC0000Organizador Cazeria^000000]";
+mes "Asi que te interesa la Cazería de Payon...está bien, te explicaré como funciona.";
+next;
+mes "[^CC0000Organizador Cazeria^000000]";
+mes "Aproximadamente entre 1 a 10 dias de diferencia, organizo una cazería en la que puede participar todo el que quiera.";
+next;
+mes "[^CC0000Organizador Cazeria^000000]";
+mes "Cuando se organiza una cazería podrás leer mi mensaje de aviso.";
+next;
+preguntas:
+menu "¿Que debo hacer en la cazería?",hacer,"¿Que gano yo en la cazería?",ganar,"No me interesa",nointeresa;
+
+hacer:
+mes "[^CC0000Organizador Cazeria^000000]";
+mes "El funcionamiento de la cazería es realmente fácil, soltaremos unos cuantos monstruos salvajes en la ciudad y tendréis que darles caza.";
+next;
+mes "[^CC0000Organizador Cazeria^000000]";
+mes "Cada vez que elimineis a un monstruo esa persona recibirá puntos dependiendo del monstruo.";
+next;
+mes "[^CC0000Organizador Cazeria^000000]";
+mes "Existen algunos monstruos algo más dificiles que te darán más puntos.";
+next;
+goto preguntas;
+
+ganar:
+mes "[^CC0000Organizador Cazeria^000000]";
+mes "En la cazería ganarás algunos puntos según vayas eliminando monstruos.";
+next;
+mes "[^CC0000Organizador Cazeria^000000]";
+mes "Estos puntos te servirán para recibir un solo premio cuando la cazería termine.";
+next;
+mes "[^CC0000Organizador Cazeria^000000]";
+mes "Ten en cuenta que estos puntos solo te servirán para esa cazería y no para ninguna más.";
+next;
+goto preguntas;
+
+nointeresa:
+close;
+
+empezada:
+mes "[^CC0000Organizador Cazeria^000000]";
+mes "¿Que haces aqui?¡La cacería ya ha empezado!";
+next;
+mes "[^CC0000Organizador Cazeria^000000]";
+mes "Hasta que Payon no esté bien limpio no repartire ningún premio y aun os quedan "+$mobcazeria+" monstruos.";
+close;
+
+premios:
+mes "[^CC0000Organizador Cazeria^000000]";
+mes "Veamos...";
+mes ""+strcharinfo(0)+" con "+@puntoscazeria+" Puntos en esta caceria.";
+next;
+mes "[^CC0000Organizador Cazeria^000000]";
+mes "Con tus puntos actuales puedes recibir alguno de los siguientes premios.";
+next;
+if (@puntoscazeria > 1000) goto premi7;
+if (@puntoscazeria > 900) goto premi6;
+if (@puntoscazeria > 750) goto premi5;
+if (@puntoscazeria > 600) goto premi4;
+if (@puntoscazeria > 450) goto premi3;
+if (@puntoscazeria > 300) goto premi2;
+if (@puntoscazeria > 150) goto premi1;
+if (@puntoscazeria > 0) goto pack0;
+mes "[^CC0000Organizador Cazeria^000000]";
+mes "No te voy a dar ningún premio si no tienes Puntos de Cacería.";
+close;
+
+premi1:
+menu "Taming Set",pack0,"Pergaminos Mágicos",pack1;
+premi2:
+menu "Taming Set",pack0,"Pergaminos Mágicos",pack1,"Pociones Curativas",pack2;
+premi3:
+menu "Taming Set",pack0,"Pergaminos Mágicos",pack1,"Pociones Curativas",pack2,"Cajas de Regalo",pack3;
+premi4:
+menu "Taming Set",pack0,"Pergaminos Mágicos",pack1,"Pociones Curativas",pack2,"Cajas de Regalo",pack3,"Pociones Especiales",pack4;
+premi5:
+menu "Taming Set",pack0,"Pergaminos Mágicos",pack1,"Pociones Curativas",pack2,"Cajas de Regalo",pack3,"Pociones Especiales",pack4,"Comidas Variadas",pack5;
+premi6:
+menu "Taming Set",pack0,"Pergaminos Mágicos",pack1,"Pociones Curativas",pack2,"Cajas de Regalo",pack3,"Pociones Especiales",pack4,"Comidas Variadas",pack5,"Cajas Mágicas",pack6;
+premi7:
+menu "Taming Set",pack0,"Pergaminos Mágicos",pack1,"Pociones Curativas",pack2,"Cajas de Regalo",pack3,"Pociones Especiales",pack4,"Comidas Variadas",pack5,"Cajas Mágicas",pack6,"Pack Sorpresa",pack7;
+
+pack0:
+getitem 12105,1;
+set @puntoscazeria,0;
+mes "[^CC0000Organizador Cazeria^000000]";
+mes "Con menos de 120 Puntos no podrás elegir premio, espero que vuelvas a la próxima cacería.";
+close;
+
+
+pack1:
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 696,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 698,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 700,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 688,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 686,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 690,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 692,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 694,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 689,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 687,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 697,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 691,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 699,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 12000,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 693,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 695,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 14519,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 14517,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 14518,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 14520,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 14515,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 14514,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 12216,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 12215,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 12219,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 12220,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 12217,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 12218,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 14516,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 14512,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 14593,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 14594,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 14521,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 14513,rand(1,5);
+set @puntoscazeria,0;
+mes "[^CC0000Organizador Cazeria^000000]";
+mes "Aqui tienes tu premio, espero que vuelvas a la próxima cacería.";
+close;
+
+
+pack2:
+getitem 545,rand(1,100);
+getitem 546,rand(1,100);
+getitem 547,rand(1,100);
+getitem 505,rand(1,30);
+set @puntoscazeria,0;
+mes "[^CC0000Organizador Cazeria^000000]";
+mes "Aqui tienes tu premio, espero que vuelvas a la próxima cacería.";
+close;
+
+
+pack3:
+getitem 644,rand(1,15);
+getitem 603,rand(1,10);
+getitem 617,rand(1,5);
+set @puntoscazeria,0;
+mes "[^CC0000Organizador Cazeria^000000]";
+mes "Aqui tienes tu premio, espero que vuelvas a la próxima cacería.";
+close;
+
+
+pack4:
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 656,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 657,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 12119,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 645,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 12120,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 12118,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 14534,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 12185,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 12184,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 14541,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 14543,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 12298,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 12016,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 40) getitem 12121,rand(1,5);
+set @puntoscazeria,0;
+mes "[^CC0000Organizador Cazeria^000000]";
+mes "Aqui tienes tu premio, espero que vuelvas a la próxima cacería.";
+close;
+
+
+pack5:
+getitem 12050,rand(1,10);
+getitem 12045,rand(1,10);
+getitem 12065,rand(1,10);
+getitem 12060,rand(1,10);
+getitem 12055,rand(1,10);
+getitem 12070,rand(1,10);
+set @puntoscazeria,0;
+mes "[^CC0000Organizador Cazeria^000000]";
+mes "Aqui tienes tu premio, espero que vuelvas a la próxima cacería.";
+close;
+
+
+pack6:
+getitem 12031,rand(1,10);
+getitem 12029,rand(1,10);
+getitem 12034,rand(1,10);
+getitem 12030,rand(1,10);
+getitem 12032,rand(1,10);
+getitem 12033,rand(1,10);
+getitem 12028,rand(1,10);
+set @puntoscazeria,0;
+mes "[^CC0000Organizador Cazeria^000000]";
+mes "Aqui tienes tu premio, espero que vuelvas a la próxima cacería.";
+close;
+
+
+pack7:
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 12105,1;
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 696,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 698,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 700,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 688,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 686,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 690,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 692,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 694,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 689,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 687,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 697,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 691,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 699,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 12000,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 693,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 695,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 14519,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 14517,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 14518,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 14520,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 14515,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 14514,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 12216,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 12215,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 12219,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 12220,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 12217,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 12218,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 14516,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 14512,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 14593,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 14594,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 14521,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 14513,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 545,rand(1,100);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 545,rand(1,100);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 547,rand(1,100);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 505,rand(1,30);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 644,rand(1,15);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 603,rand(1,10);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 617,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 656,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 657,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 12119,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 645,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 12120,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 12118,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 14534,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 12185,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 12184,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 14541,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 14543,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 12298,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 12016,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 12121,rand(1,5);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 12050,rand(1,10);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 12045,rand(1,10);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 12065,rand(1,10);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 12060,rand(1,10);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 12055,rand(1,10);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 12070,rand(1,10);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 12031,rand(1,10);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 12029,rand(1,10);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 12034,rand(1,10);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 12030,rand(1,10);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 12032,rand(1,10);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 12033,rand(1,10);
+set @premcazpay,rand(0,100);
+if (@premcazpay <= 25) getitem 12028,rand(1,10);
+set @premcazpay,rand(10,100);
+if (@premcazpay >= 95) {getitem 5183,1; goto contprem;}
+if (@premcazpay >= 90) {getitem 969,rand(1,5); goto contprem;}
+if (@premcazpay >= 80) {getitem 604,rand(1,50); getitem 12103,rand(0,1); goto contprem;}
+if (@premcazpay >= 70) {getitem 12114,rand(1,15); getitem 12115,rand(1,15); getitem 12116,rand(1,15); getitem 12117,rand(1,15); goto contprem;}
+if (@premcazpay >= 60) {getitem 985,rand(1,30); getitem 984,rand(1,30); goto contprem;}
+if (@premcazpay >= 50) {getitem 717,rand(1,50); getitem 716,rand(1,50); getitem 715,rand(1,50); goto contprem;}
+if (@premcazpay >= 40) {getitem 1025,rand(1,50); goto contprem;}
+if (@premcazpay >= 30) {getitem 7828,rand(1,25); getitem 7829,rand(1,25); getitem 7773,rand(1,25); goto contprem;}
+if (@premcazpay >= 20) {getitem 7135,rand(1,15); goto contprem;}
+if (@premcazpay >= 15) {getitem 7136,rand(1,15); goto contprem;}
+if (@premcazpay >= 10) {getitem 678,rand(1,15); goto contprem;}
+
+contprem:
+set @puntoscazeria,0;
+mes "[^CC0000Organizador Cazeria^000000]";
+mes "Aqui tienes tu premio, espero que vuelvas a la próxima cacería.";
+close;
+}

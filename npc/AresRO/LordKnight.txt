@@ -1,0 +1,99 @@
+//===== Script eAthena ======================================= 
+//= Knight Card Quest
+//===== por: ================================================== 
+//= Creador de Quests Ragnarok World
+//= v1.0
+//===== Compatible Con: ===================================== 
+//= eAthena SVN
+//===== Descripción: ========================================= 
+//  Quest Creada por el Script Creador de Quests Online de
+//  http://www.ragnarokworld.net
+//============================================================ 
+
+poring_w02,51,79,5	script	Knight Card	796,{
+ 	set @NPCName$, "[^000033Knight Card^000000]";
+	mes @NPCName$;
+	mes "Hola te gustaria tener el verdadero poder del lord knight su alma esta en esta carta,";
+	next;
+	mes @NPCName$;
+	mes "^009900[Job Knight]^000000";
+	mes "Efecto: ";
+	mes "• Bash Lv. 15.";
+	mes "• Pierce + 40%.";
+	mes "• Bowling Bash + 47%.";
+	mes "• Charge Atack + 20%.";
+	next;
+	mes @NPCName$;
+	mes "Quieres Obtener este Item?";
+	next;
+	switch(select("Si:No:Cancelar")) {
+ 	case 1:
+	mes @NPCName$;
+	mes "Estos son Los Items Necesarios.";
+	mes "  ^990099Lord Knight Card^000000 [2]";
+	mes "  ^990099Aron cheques^000000 [12]";
+	mes "  ^990099Edge^000000 [1]";
+	mes "  ^990099Eye of Hellion^000000 [12]";
+	mes "  ^990099Osiris Doll^000000 [5]";
+	mes "  ^990099Piece of Shield^000000 [25]";
+	next;
+	if (countitem(4357) < 2) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(7160) < 12) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(1132) < 1) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(7337) < 12) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(751) < 5) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(7108) < 25) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	mes @NPCName$;
+	mes "Bien! Tienes todos los Items! Felicidades !";
+	mes "el Objeto es Tuyo";
+	delitem 4357,2;
+	delitem 7160,12;
+	delitem 1132,1;
+	delitem 7337,12;
+	delitem 751,5;
+	delitem 7108,25;
+	getitem 30010,1;
+	close;
+	case 2:
+	mes @NPCName$;
+	mes "de acuerdo, vuelve pronto !";
+	close;
+	case 3:
+	close;
+	}
+
+}
+
+//============================================================
+//===== Creador de Quests Ragnarok World ===========================
+//============================================================

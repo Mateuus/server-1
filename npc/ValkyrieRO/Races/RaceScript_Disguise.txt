@@ -1,0 +1,378 @@
+//===== *Athena Script =======================================
+//= Disguise Race Script
+//===== By: ==================================================
+//= KamiShi
+//===== Current Version: =====================================
+//= 1.3
+//===== Compatible With: =====================================
+//= *Athena SVN
+//===== Description: =========================================
+//= Race Master related stuff
+//= We use permanent char variables to define races:
+
+//= race_id = 0 // Human
+//= race_id = 1 // Dark Elf
+//= race_id = 2 // Light Elf
+//= race_id = 3 // Merman
+//= race_id = 4 // Orc
+//= race_id = 5 // Vampire
+//= race_id = 6 // Lycan
+//= race_id = 7 // Dragoon
+//= race_id = 8 // Demon
+//= race_id = 9 // Dark Soul
+//= race_id = 10 // Light Soul
+//= race_id = 11 // Earth Element
+//= race_id = 12 // Wind Element
+//= race_id = 13 // Water Element
+//= race_id = 14 // Fire Element
+//= race_id = 15 // Electric Element
+//= race_id = 16 // Shadow Element
+//= race_id = 17 // Ghost Element
+//= race_id = 18 // Poison Element
+//= race_id = 19 // Holy Element
+//= race_id = 20 // Undead Element
+
+//=========================================================
+// You should not use this following NPC if you don't want to 
+// use the *disguise* system, but the *item* system.
+//=========================================================
+
+prontera,161,195,5	script	Race Master	897,{
+	mes "[^008B00Race Master^000000]";
+	if(race_id)
+	{
+		mes "I see that you got a race choose!";
+		next;
+		mes "[^008B00Race Master^000000]";
+		mes "Do you want to become human again?";
+		next;
+		switch(select("No:Yes"))
+		{
+			case 1:
+				mes "[^008B00Race Master^000000]";
+				mes "I'll be here if you change your mind...";
+				close;
+
+			case 2:
+				mes "[^008B00Race Master^000000]";
+				mes "Done!";
+				callfunc "unsetRaceHat";
+				set race_id,0;
+				callfunc("resetSavedSets");
+				callfunc("setlook2", 6, 1);
+				callfunc("setlook2", 7, 1);
+				announce "[Race Master]: ["+strcharinfo(0)+"] has became a human again...",bc_all,"0xFFEBCD";
+				close;
+		}
+	}
+	mes "I can help you to change your Human essence.";
+	mes "Which race are you interested in?";
+	next;
+	switch(select("Night Elf:Light Elf:Merman:Orc:Vampire:Lycan:Dragoon:Demon:Dark Soul:Light Soul:Earth Element:Wind Element:Water Element:Fire Element:Electric Element:Shadow Element:Ghost Element:Poison Element:Holy Element:Undead Element"))
+	{
+		case 1: //Dark Elf
+				callfunc "BecomeRace", 1;
+				break;
+				
+		case 2: //Light Elf
+				callfunc "BecomeRace", 2;
+				break;
+			
+		case 3: //Merman
+				callfunc "BecomeRace", 3;
+				break;
+			
+		case 4: //Orc
+				callfunc "BecomeRace", 4;
+				break;
+			
+		case 5: //Vampire
+				callfunc "BecomeRace", 5;
+				break;
+			
+		case 6: //Beast
+				callfunc "BecomeRace", 6;
+				break;
+
+		case 7: //Dragon
+				callfunc "BecomeRace", 7;
+				break;
+
+		case 8: //Demon
+				callfunc "BecomeRace", 8;
+				break;
+			
+		case 9: //Light Soul
+				callfunc "BecomeRace", 9;
+				break;
+
+		case 10: //Dark Soul
+				callfunc "BecomeRace", 10;
+				break;
+			
+		case 11: //Earth
+				callfunc "BecomeRace", 11;
+				break;
+				
+		case 12: //Wind
+				callfunc "BecomeRace", 12;
+				break;
+		
+		case 13: //Water
+				callfunc "BecomeRace", 13;
+				break;
+				
+		case 14: //Fire
+				callfunc "BecomeRace", 14;
+				break;
+				
+		case 15: //Electric
+				callfunc "BecomeRace", 15;
+				break;
+				
+		case 16: //Shadow
+				callfunc "BecomeRace", 16;
+				break;
+				
+		case 17: //Ghost
+				callfunc "BecomeRace", 17;
+				break;
+				
+		case 18: //Poison
+				callfunc "BecomeRace", 18;
+				break;
+			
+		case 19: //Holy
+				callfunc "BecomeRace", 19;
+				break;
+				
+		case 20: //Undead
+				callfunc "BecomeRace", 20;
+				break;
+
+				
+	}
+	
+	mes "[^008B00Race Master^000000]";
+	mes "Now you are a ^008B00"+$RaceNames$[race_id]+"^000000!";
+	announce "[Race Master]: ["+strcharinfo(0)+"] has became a "+$RaceNames$[race_id]+"",bc_all,"0xFFEBCD"; 
+	
+	close;
+	
+
+	
+//=========== *DISGUISE SYSTEM* ==================
+//= When the player log in, shows its race's ears.
+//================================================
+
+OnPCLoginEvent:
+	callfunc "setRaceHat";
+	end;
+}
+
+//=========== *DISGUISE SYSTEM* ==================
+//==== callfunc ("BecomeRace", <id>); ============
+//================================================
+
+function	script	BecomeRace	{		
+	
+	set race_id,getarg(0);	// Race ID 
+	callfunc("setlook2", 6, $RacePals[race_id*4+2]);	// Number of the first race hair dye
+	callfunc("setlook2", 7, $RacePals[race_id*4]);	// Number of the first race clothes dye
+	callfunc "setRaceHat";
+	specialeffect2 248;	// Some fancy effect
+	return;
+	
+}
+
+
+
+//============= *DISGUISE SYSTEM* ================
+//=== Set the hat view ID of a race char =========
+//================================================
+
+function	script	setRaceHat	{	
+	set .@off, 0; // Change this value to increase / decrease hat view ID
+	switch(race_id)
+	{
+		case 1: // Dark Elf
+			setlook 5,937+.@off;	
+			break;
+
+		case 2: // Light Elf
+			setlook 5,936+.@off;	
+			break;
+
+		case 3: // Merman
+			setlook 5,940+.@off;	
+			break;
+		
+		case 4: // Orc
+			setlook 5,941+.@off;	
+			break;
+			
+		case 5: // Vampire
+			setlook 5,938+.@off;	
+			break;
+		
+		case 6: // Beast
+			setlook 4,939+.@off;	
+			break;
+			
+		case 7: // Dragoon
+			setlook 4,942+.@off;	
+			break;
+			
+		case 8: // Demon
+			setlook 5,943+.@off;	
+			break;
+		
+		case 9: // DarkSoul
+			setlook 3,944+.@off;	
+			break;
+			
+		case 10: // LightSoul
+			setlook 3,945+.@off;	
+			break;
+			
+		case 11: // Earth
+			setlook 5,946+.@off;	
+			break;
+
+		case 12: // Wind
+			setlook 5,947+.@off;	
+			break;
+
+		case 13: // Fire
+			setlook 5,948+.@off;	
+			break;
+		
+		case 14: // Water
+			setlook 5,949+.@off;	
+			break;
+			
+		case 15: // Electric
+			setlook 5,950+.@off;	
+			break;
+		
+		case 16: // Shadow
+			setlook 4,951+.@off;	
+			break;
+			
+		case 17: // Ghost
+			setlook 4,952+.@off;	
+			break;
+			
+		case 18: // Holy
+			setlook 5,953+.@off;	
+			break;
+		
+		case 19: // Poison
+			setlook 3,954+.@off;	
+			break;
+			
+		case 20: // Undead
+			setlook 3,955+.@off;	
+			break;
+
+		default: //Human
+			break;
+	}
+	return;
+
+}
+
+
+//============= *DISGUISE SYSTEM* ================
+//=== Unset the hat view ID of a race char =========
+//================================================
+
+function	script	unsetRaceHat	{	
+	switch(race_id)
+	{
+		case 1: // Dark Elf
+			setlook 5,0;	
+			break;
+
+		case 2: // Light Elf
+			setlook 5,0;	
+			break;
+
+		case 3: // Merman
+			setlook 5,0;	
+			break;
+		
+		case 4: // Orc
+			setlook 5,0;	
+			break;
+			
+		case 5: // Vampire
+			setlook 5,0;	
+			break;
+		
+		case 6: // Beast
+			setlook 4,0;	
+			break;
+			
+		case 7: // Dragoon
+			setlook 4,0;	
+			break;
+			
+		case 8: // Demon
+			setlook 5,0;	
+			break;
+		
+		case 9: // DarkSoul
+			setlook 3,0;	
+			break;
+			
+		case 10: // LightSoul
+			setlook 3,0;	
+			break;
+			
+		case 11: // Earth
+			setlook 5,0;	
+			break;
+
+		case 12: // Wind
+			setlook 5,0;	
+			break;
+
+		case 13: // Fire
+			setlook 5,0;	
+			break;
+		
+		case 14: // Water
+			setlook 5,0;	
+			break;
+			
+		case 15: // Electric
+			setlook 5,0;	
+			break;
+		
+		case 16: // Shadow
+			setlook 4,0;	
+			break;
+			
+		case 17: // Ghost
+			setlook 4,0;	
+			break;
+			
+		case 18: // Holy
+			setlook 5,0;	
+			break;
+		
+		case 19: // Poison
+			setlook 3,0;	
+			break;
+			
+		case 20: // Undead
+			setlook 3,0;	
+			break;
+
+		default: //Human
+			break;
+	}
+	return;
+
+}

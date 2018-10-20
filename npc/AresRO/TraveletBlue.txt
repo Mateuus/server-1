@@ -1,0 +1,75 @@
+//===== Script eAthena ======================================= 
+//= Travel Blue Quest
+//===== por: ================================================== 
+//= Creador de Quests Ragnarok World
+//= v1.0
+//===== Compatible Con: ===================================== 
+//= eAthena SVN
+//===== Descripción: ========================================= 
+//  Quest Creada por el Script Creador de Quests Online de
+//  http://www.ragnarokworld.net
+//============================================================ 
+
+poring_w02,70,47,4	script	Travel Blue	862,{
+ 	set @NPCName$, "[^LiliaTravel Blue^000000]";
+	mes @NPCName$;
+	mes "Hola, te gustaria tener este hat Azul de 30 All stats..!!";
+	next;
+	mes @NPCName$;
+	mes "Quieres Obtener este Item?";
+	next;
+	switch(select("Si:No:Cancelar")) {
+ 	case 1:
+	mes @NPCName$;
+	mes "Estos son Los Items Necesarios.";
+	mes "  ^00CCFFBlue Hair^000000 [150]";
+	mes "  ^00CCFFBlue Herb^000000 [200]";
+	mes "  ^00CCFFBlue tinted Feather^000000 [60]";
+	mes "  ^00CCFFCobaltblue Dyestuff^000000 [5]";
+	next;
+	if (countitem(1034) < 150) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(510) < 200) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(7441) < 60) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(978) < 5) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	mes @NPCName$;
+	mes "Bien! Tienes todos los Items! Felicidades !";
+	mes "el Objeto es Tuyo";
+	delitem 1034,150;
+	delitem 510,200;
+	delitem 7441,60;
+	delitem 978,5;
+	getitem 20132,1;
+	close;
+	case 2:
+	mes @NPCName$;
+	mes "de acuerdo, vuelve pronto !";
+	close;
+	case 3:
+	close;
+	}
+
+}
+
+//============================================================
+//===== Creador de Quests Ragnarok World ===========================
+//============================================================

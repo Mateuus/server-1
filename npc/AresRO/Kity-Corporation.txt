@@ -1,0 +1,1187 @@
+//===== eAthena Script =======================================
+//= Script de Teleport Personalizable a Ciudades, Dungeons y Woe
+//===== By: ==================================================
+//= Anderson Peñaloza (Omega)
+//===== Current Version: =====================================
+//= 3.6
+//===== Compatible With: =====================================
+//= eAthena SVN
+//===== Description: =============================================================================
+//= Warper Que Cobra Una Cantidad ajustable de Zenys Ecepto a Los Novices
+//= La variable @Level Permite activar y desactivar La selección de Niveles en Los Dungeons
+//= La Variable @PriceT establece El Precio de warp a ciudades
+//= La Variable @PriceD establece El Precio de warp a Dungeons
+//= La Variable @PriceG establece El Precio de warp a Woe
+//= La Variable @PricePVP establece El Precio de warp a PvP
+//= Las variables Han Sido Modificadas Para ser Variables Fijas Y Asi Poder Implementar Un Menú
+//= Para Personalizar LosPrecios Dentro Del Juego
+//= La Variable $Nivel Especifica El Nivel De Fm Que Puede Modificar Los Precios
+//===== Version Info: ============================================================================
+//= 2.0 Añadidas Variables Para Personalizar Los Precios de Viaje
+//= 2.1 Añadida Variable Para Personalizar selección de Nivel de dungeon o NO
+//= 2.2 Añadida Opcion Para Ir A PVP Con Opcion A Personalizar Precio
+//= 3.1 Añadido Menú Para Que Los GM Puedan Cambiar Los Precios
+//= 3.2 Arreglado Pequeño error en El Menu de GM. 
+//=     Añadida Ciudad Juperos y Dungeon Ligthalzen Bio Lab
+//=     Arreglado Pequeños Errores en el Codigo
+//= 3.3 Optimizado El Codigo
+//= 3.4 Bautizada La Warper Como Kity
+//=     Agregada Opcion Para Activar / Desactivar Cobros
+//= 3.5 Agregados Nuevos Dungeons
+//=	Corregidos Algunos Pequeños Errores de Codigo
+//= 3.6 Corregido error en el script ReLacionado Con Los cambios en El scripting del Emulador
+//= 3.6a ReBautizada La Warper Como [Kity-Corporation] y en prontera se movio a las cordenadas 56,46
+//======================================================================================================
+
+-	script	Kity	721,{
+	if ($Cobar == 0) set $Cobar, 1;		// Activado o Desactivado Cobro 1 = Activo 2 = Desactivo
+	if ($Nivel == 0) set $Nivel, 99;	// Nivel de GM Para Poder Editar Precios
+	if ($Level == 0) set $Level, 1; 	// 1 = No selecciona Lvl de dungeon, 2 = Si
+	if ($priceT == 0) set $priceT, 1000;	// Precio de Warp Para Ciudades
+	if ($priceD == 0) set $priceD, 1500;	// Precio de warp Para Dungeons
+	if ($priceG == 0) set $priceG, 2500;	// Precio de warp Para Woe
+	if ($priceH == 0) set $priceH, 1000;	// Precio Por Curar
+	if ($pricePVP == 0) set $pricePVP, 100;	// Precio de PVP
+	cutin "kafra_07",2;
+
+L_Admin:
+	mes "^5555FF[Kity-Corporation]^000000";
+	mes "Hola ^5555FF" + strcharinfo(0) + "^000000!... Bienvenido a [Kity]-Corporation.";
+	mes "Somos una nueva Corporacion, (la copetencia de Kafra ademas somos mas lindas ^^)como Kafra Corporation, pero nosotros no tenemos limites!.";
+	mes "Te podemos llevar a donde tu quieras.";
+	mes "Adonde quieres ir?";
+	next;
+	if (getgmlevel() < $Nivel) goto L_Menu;
+	set @item, select("Curar", "Viajar", "Modificar Precios", "Nivel de Acceso", "Elegir Niveles", "Activar/Desactivar Cobro", "Nada");
+	switch (@item)
+	{
+		case 1: goto Mheal;
+		case 2: goto MTravel;
+		case 3: goto Modificar;
+		case 4: goto Acceso;
+		case 5: goto Niveles;
+		case 6: goto Cobro;
+		case 7: goto Msalir;
+	}	
+
+Modificar:
+	mes "^5555FF[Kity-Corporation]^000000";
+	mes "He Aqui La Lista de Precios";
+	mes "curar : ^5555FF " + $priceH + " ^000000 Zenys";
+	mes "Viajar a Ciudades : ^5555FF" + $priceT + "^000000 Zenys";
+	mes "Viajar a Dungeons : ^5555FF" + $priceD + "^000000 Zenys";
+	mes "Viajar a Woe: ^5555FF" + $priceG + "^000000 Zenys";
+	mes "Viajar a PvP: ^5555FF" + $pricePVP + "^000000 Zenys";
+	mes "Cual Deseas Modificar?";
+	next;
+	set @item, select("Curar", "Ciudades", "Dungeons", "Woe", "PvP", "Volver");
+	switch (@item)
+	{
+		case 1: goto MCurar;
+		case 2: goto MCiudades;
+		case 3: goto MDungeons;
+		case 4: goto MWoe;
+		case 5: goto MPvp;
+		case 6: goto L_Admin;
+	}
+
+MCurar:
+	mes "^5555FF[Kity-Corporation]^000000";
+	mes "Por Favor Indica El Nuevo Precio :";
+	input @tempchangevar;
+	next;
+	if (@tempchangevar < 0) goto PError;
+	mes "^5555FF[Kity-Corporation]^000000";
+	mes "EL Precio será Modificado Por ^5555FF" + @tempchangevar + "^000000";
+	mes "Estas Seguro?";
+	next;
+	menu "Si", -, "No", MCurar;
+	mes "^5555FF[Kity-Corporation]^000000";
+	mes "Como Desees...";
+	set $priceH, @tempchangevar;
+	next;
+	goto Modificar;
+
+MCiudades:
+	mes "^5555FF[Kity-Corporation]^000000";
+	mes "Por Favor Indica El Nuevo Precio :";
+	input @tempchangevar;
+	next;
+	if (@tempchangevar < 0) goto PError;
+	mes "^5555FF[Kity-Corporation]^000000";
+	mes "EL Precio será Modificado Por ^5555FF" + @tempchangevar + "^000000";
+	mes "Estas Seguro?";
+	next;
+	menu "Si", -, "No", MCiudades;
+	mes "^5555FF[Kity-Corporation]^000000";
+	mes "Como Desees...";
+	set $priceT, @tempchangevar;
+	next;
+	goto Modificar;
+
+MDungeons:
+	mes "^5555FF[Kity-Corporation]^000000";
+	mes "Por Favor Indica El Nuevo Precio :";
+	input @tempchangevar;
+	next;
+	if (@tempchangevar < 0) goto PError;
+	mes "^5555FF[Kity-Corporation]^000000";
+	mes "EL Precio será Modificado Por ^5555FF" + @tempchangevar + "^000000";
+	mes "Estas Seguro?";
+	next;
+	menu "Si", -, "No", MDungeons;
+	mes "^5555FF[Kity-Corporation]^000000";
+	mes "Como Desees...";
+	set $priceD, @tempchangevar;
+	next;
+	goto Modificar;
+
+MWoe:
+	mes "^5555FF[Kity-Corporation]^000000";
+	mes "Por Favor Indica El Nuevo Precio :";
+	input @tempchangevar;
+	next;
+	if (@tempchangevar < 0) goto PError;
+	mes "^5555FF[Kity-Corporation]^000000";
+	mes "EL Precio será Modificado Por ^5555FF" + @tempchangevar + "^000000";
+	mes "Estas Seguro?";
+	next;
+	menu "Si", -, "No", MWoe;
+	mes "^5555FF[Kity-Corporation]^000000";
+	mes "Como Desees...";
+	set $priceG, @tempchangevar;
+	next;
+	goto Modificar;
+
+MPvp:
+	mes "^5555FF[Kity-Corporation]^000000";
+	mes "Por Favor Indica El Nuevo Precio :";
+	input @tempchangevar;
+	next;
+	if (@tempchangevar < 0) goto PError;
+	mes "^5555FF[Kity-Corporation]^000000";
+	mes "EL Precio será Modificado Por ^5555FF" + @tempchangevar + "^000000";
+	mes "Estas Seguro?";
+	next;
+	menu "Si", -, "No", MPvp;
+	mes "^5555FF[Kity-Corporation]^000000";
+	mes "Como Desees...";
+	set $pricePVP, @tempchangevar;
+	next;
+	goto Modificar;
+
+Acceso:
+	mes "^5555FF[Kity-Corporation]^000000";
+	mes "El Nivel De Acceso Para Modificar Precios";
+	mes "Es de : ^5555FF " + $Nivel + "^000000";
+	mes "Deseas Modificarlo?";
+	next;
+	menu "Si", -, "No", L_Admin;
+	mes "^5555FF[Kity-Corporation]^000000";
+	mes "Por Favor Indica El Nuevo Nivel De Acceso :";
+	input @tempchangevar;
+	next;
+	if ((@tempchangevar < 1) || (@tempchangevar > 99)) goto PError;
+	mes "^5555FF[Kity-Corporation]^000000";
+	mes "EL Nivel De Acceso será Modificado Por ^5555FF" + @tempchangevar + "^000000";
+	mes "Estas Seguro?";
+	next;
+	menu "Si", -, "No", Acceso;
+	mes "^5555FF[Kity-Corporation]^000000";
+	mes "Como Desees...";
+	set $Nivel, @tempchangevar;
+	next;
+	goto L_Admin;
+
+Niveles:
+	mes "^5555FF[Kity-Corporation]^000000";
+	mes "La Configuración de Niveles Es :";
+	if ($Level == 1) mes "^5555FFLos Usuarios No Eligen Nivel^000000";
+	if ($Level == 2) mes "^5555FFLos Usuarios Si Eligen Nivel^000000";
+	mes "Desea Modificar La Configuración?";
+	next;
+	menu "Si", -, "No", L_Admin;
+	mes "^5555FF[Kity-Corporation]^000000";
+	mes "Como Desees...";
+	if ($Level == 1) set @new, 2;
+	if ($Level == 2) set @new, 1;
+	set $Level, @new;
+	next;
+	goto L_Admin;
+
+Cobro:
+	mes "^5555FF[Kity-Corporation]^000000";
+	mes "El Estado de Cobro Por servicio Esta :";
+	if ($Cobar == 1) mes "^5555FFActivada^000000";
+	if ($Cobar == 2) mes "^5555FFDesactivada^000000";
+	mes "Desea Modificar La Configuración?";
+	next;
+	menu "Si", -, "No", L_Admin;
+	mes "^5555FF[Kity-Corporation]^000000";
+	mes "Como Desees...";
+	if ($Cobar == 1) set @new, 2;
+	if ($Cobar == 2) set @new, 1;
+	set $Cobar, @new;
+	next;
+	goto L_Admin;
+
+PError:
+	mes "^5555FF[Kity-Corporation]^000000";
+	mes "Has Indicado Un Valor Incorrecto";
+	next;
+	goto L_Admin;
+	
+L_Menu:	
+	set @item, select("Curar", "Viajar", "Nada");
+	switch (@item)
+	{
+		case 1: goto Mheal;
+		case 2: goto MTravel;
+		case 3: goto Msalir;
+	}
+
+Mheal:
+	if ($Cobar == 2) goto MhealF;
+	if ((Class==Job_Baby) || (Class==Job_Novice)) goto MhealF;
+	if ((Class==Job_SuperNovice) || (Class==Job_Super_Baby)) goto MhealF;
+	mes "^5555FF[Kity-Corporation]^000000";
+	mes "Por El servicio de Curar Seran ^5555FF"+ $priceH +"^000000";
+	mes "Deseas Continuar?";
+	next;
+	menu "Si",MhealP,"No", Msalir;
+
+MhealP:
+	if (zeny < $priceH) goto nozeny;
+	set zeny,zeny - $priceH;
+	goto MhealF;
+
+MhealF:
+	mes "^5555FF[Kity-Corporation]^000000";
+	percentheal 100,100;
+	mes "Listo ya Estas Totalmente curado";
+	goto L_end;
+
+MTravel:
+	if ($Cobar == 2) goto MtraveF;
+	if ((Class==Job_Baby) || (Class==Job_Novice)) goto MtraveF;
+	if ((Class==Job_SuperNovice) || (Class==Job_Super_Baby)) goto MtraveF;
+	mes "^5555FF[Kity]^000000";
+	mes "Para Poder Prestarte El Servicio de Warp debes Pagar Una Pequeña Tarifa";
+	mes "^5555FF" + $priceT + "^000000 Para Ciudades";
+	mes "^5555FF" + $priceD + "^000000 Para Dungeons";
+	mes "^5555FF" + $priceG + "^000000 Para Guild Wars";
+	mes "^5555FF" + $pricePVP + "^000000 Para PVP";
+	next;
+	mes "^5555FF[Kity-Corporation]^000000";
+	mes "Deseas Viajar?";
+	next;
+	menu "si",MTravelc, "No", Msalir;
+
+MtraveF:
+	mes "^5555FF[Kity-Corporation]^000000";
+	mes "Selecciona Una Ubicación";
+	next;
+	menu "Ciudades", town, "Dungeons", dungeon, "Guild Wars", guildwar, "PVP", PVPF;
+
+MTravelc:
+	mes "^5555FF[Kity-Corporation]^000000";
+	mes "Selecciona Una Ubicación";
+	next;
+	menu "Ciudades [^5555FF "+ $priceT +" Zenys^000000]", town, "Dungeons [^5555FF "+ $priceD +" Zenys^000000]", dungeon, "Guild Wars[^5555FF"+ $priceG +" Zenys^000000]", guildwar, "PVP [^5555FF"+ $pricePVP +" Zenys^000000 ]", PVPP;
+
+PVPF:
+	mes "^5555FF[Kity-Corporation]^000000";
+	mes "Selecciona Una Ubicación";
+	next;
+	menu "PVP Yoro", PVPY,"PVP Nigthmare",PVPN;
+
+PVPP:
+	if (zeny < $pricePVP) goto nozeny;
+	set zeny,zeny - $pricePVP;
+	mes "^5555FF[Kity]^000000";
+	mes "Selecciona Una Ubicación";
+	next;
+	menu "PVP Yoro [^5555FF "+ $pricePVP +" Zenys^000000 ]",PVPY,
+	"PVP Nigthmare[^5555FF "+ $pricePVP +" Zenys^000000 ]",PVPN;
+
+Msalir:
+	mes "^5555FF[Kity-Corporation]^000000";
+	mes "Que Tengas Un Buen Día";
+	goto L_end;
+
+town:
+	next;
+	if ((Class==Job_Baby) || (Class==Job_Novice)) goto menuT;
+	if ((Class==Job_SuperNovice) || (Class==Job_Super_Baby)) goto menuT;
+	if (zeny < $priceT) goto nozeny;
+	set zeny,zeny - $priceT;
+	goto menuT;
+
+menuT:
+	set @item, select("Prontera", "Lighthalzen", "Hugel", "Rachel", "Alberta", "Aldebaran", "Ayothana", "Amatsu", "Comodo", "Einbroch", "Einbech", "Geffen", "Gonryun", "Izlude", "Louyang", "Lutie", "Morroc", "Niflheim", "Payon", "Umbala", "Yuno");
+	switch (@item)
+	{
+		case  1: warp "prontera.gat",	56,	46;	goto L_end;
+		case  2: warp "lighthalzen.gat",158,	 92;	goto L_end;
+		case  3: warp "hugel.gat",	 96,	145;	goto L_end;
+		case  4: warp "rachel.gat",	130,	114;	goto L_end;
+		case  5: warp "alberta.gat",	 27,	236;	goto L_end;
+		case  6: warp "aldebaran.gat",	145,	120;	goto L_end;
+		case  7: warp "ayothaya.gat",	149,	118;	goto L_end;
+		case  8: warp "amatsu.gat",	197,	 86;	goto L_end;
+		case  9: warp "comodo.gat",	188,	161;	goto L_end;
+		case 10: warp "einbroch.gat",	 64,	200;	goto L_end;
+		case 11: warp "einbech.gat",	 61,	 35;	goto L_end;
+		case 12: warp "geffen.gat",	119,	 66;	goto L_end;
+		case 13: warp "gonryun.gat",	150, 	130; 	goto L_end;
+		case 14: warp "izlude.gat",	128,	111;	goto L_end;
+		case 15: warp "louyang.gat",	210,	108;	goto L_end;
+		case 16: warp "xmas.gat",	148,	131;	goto L_end;
+		case 17: warp "morocc.gat",	159,	 93;	goto L_end;
+		case 18: warp "niflheim.gat",	193, 	186;	goto L_end;
+		case 19: warp "payon.gat",	176,	 105;	goto L_end;
+		case 20: warp "umbala.gat",	130, 	130; 	goto L_end;
+		case 21: warp "yuno.gat",	160,	168;	goto L_end;
+	}
+
+dungeon:
+	next;
+	if ((Class==Job_Baby) || (Class==Job_Novice)) goto dungeonF;
+	if ((Class==Job_SuperNovice) || (Class==Job_Super_Baby)) goto dungeonF;
+	if (zeny < $priceD) goto nozeny;
+	set zeny,zeny - $priceD;
+	goto dungeonF;
+
+dungeonF:
+	set @item, select("Abyss Lake","Amatsu Dungeon", "Anthell", "Ayothana", "Beach Dungeon", "Byalan Dungeon", "Clock Tower", "Coal Mines (Dead Pit)", "Culvert", "Einbech Dungeon", "Gefenia", "Geffen Dungeon", "Glast Heim", "Gonryun Dungeon", "Hidden Dungeon", "Ice Dungeon", "Juperos", "Kiel Dungeon", "Lighthalzen Bio Lab", "Louyang Dungeon","Magma Dungeon", "Odin Temple","Orc Dungeon", "Payon Dungeon", "Pyramids", "Sphinx", "Sunken Ship", "Toy Factory", "Sanctuary Dungeon", "Torre de Thanatos", "Turtle Island", "Umbala Dungeon");
+	switch (@item)
+	{
+		case  1: goto dabyss0;
+		case  2: goto ama;
+		case  3: goto ant;
+		case  4: goto dayo;
+		case  5: goto beach;
+		case  6: goto byalan;
+		case  7: goto clock;
+		case  8: goto coal;
+		case  9: goto culvert;
+		case 10: goto dein;
+		case 11: goto gefenia;
+		case 12: goto geffen;
+		case 13: goto glast;
+		case 14: goto gon;
+		case 15: goto hidden;
+		case 16: goto dice;
+		case 17: goto djupe;
+		case 18: goto dkiel;
+		case 19: goto Lighdun;
+		case 20: goto Loudung;
+		case 21: goto magma;
+		case 22: goto odin;
+		case 23: goto orc;
+		case 24: goto payon;
+		case 25: goto pyramids;
+		case 26: goto sphinx;
+		case 27: goto sunken;
+		case 28: goto toy;
+		case 29: goto dsant;
+		case 30: goto dthat;
+		case 31: goto turtle;
+		case 32: goto Umbala;
+	}
+
+guildwar:
+	next;
+	if ((Class==Job_Baby) || (Class==Job_Novice)) goto guildwarF;
+	if ((Class==Job_SuperNovice) || (Class==Job_Super_Baby)) goto guildwarF;
+	if (zeny < $priceG) goto nozeny;
+	set zeny,zeny - $priceG;
+	goto guildwarF;
+
+guildwarF:	
+	set @item, select("Prontera Guild War", "Al De Baran Guild War", "Payon Guild War", "Geffen Guild War");
+	switch (@item)
+	{
+		case 1: warp "prt_gld",		159,	 98;	goto L_end;
+		case 2: warp "alde_gld",	189,	142;	goto L_end;
+		case 3: warp "pay_gld",		145,	175;	goto L_end;
+		case 4: warp "gef_fild13",	280,	235;	goto L_end;
+	}
+
+nozeny:
+	mes "^5555FF[Kity]^000000";
+	mes "Lo Siento Pero No Tienes suficiente dinero";
+	goto L_end;
+
+dabyss0:
+	if ($Level == 1) goto dabys0;
+	mes "^5555FF[Kity]^000000";
+	mes "selecciona El nivel al cual Quieres Ser llevado";
+	next;
+	set @item, select("Entrada", "Nivel 1", "Nivel 2", "Nivel 3");
+	switch (@item)
+	{
+		case 1: goto dabys0;
+		case 2: goto dabys1;
+		case 3: goto dabys2;
+		case 4: goto dabys3;
+	}	
+	
+
+ama:
+	if ($Level == 1) goto dama1;
+	mes "^5555FF[Kity]^000000";
+	mes "selecciona El nivel al cual Quieres Ser llevado";
+	next;
+	set @item, select("Nivel 1", "Nivel 2", "Nivel 3");
+	switch (@item)
+	{
+		case 1: goto dama1;
+		case 2: goto dama2;
+		case 3: goto dama3;
+	}
+
+ant:
+	if ($Level == 1) goto danthell0;
+	mes "^5555FF[Kity]^000000";
+	mes "selecciona El nivel al cual Quieres Ser llevado";
+	next;
+	set @item, select("Entada", "Nivel 1", "Nivel 2");
+	switch (@item)
+	{
+		case 1: goto danthell0;
+		case 2: goto danthell1;
+		case 3: goto danthell2;
+	}
+
+dayo:	
+	if ($Level == 1) goto dayo0;
+	mes "^5555FF[Kity]^000000";
+	mes "selecciona El nivel al cual Quieres Ser llevado";
+	next;
+	set @item, select("Entrada", "Nivel 1", "Nivel 2");
+	switch (@item)
+	{
+		case 1: goto dayo0;
+		case 2: goto dayo1;
+		case 3: goto dayo2;
+	}
+
+beach:
+	if ($Level == 1) goto dbeach0;
+	mes "^5555FF[Kity]^000000";
+	mes "selecciona El nivel al cual Quieres Ser llevado";
+	next;
+	set @item, select("Entrada", "Nivel 1", "Nivel 2", "Nivel 3");
+	switch (@item)
+	{
+		case 1: goto dbeach0;
+		case 2: goto dbeach1;
+		case 3: goto dbeach2;
+		case 4: goto dbeach3;
+	}
+
+byalan:
+	if ($Level == 1) goto dbyalan0;
+	mes "^5555FF[Kity]^000000";
+	mes "selecciona El nivel al cual Quieres Ser llevado";
+	next;
+	set @item, select("Entrada", "Nivel 1", "Nivel 2", "Nivel 3", "Nivel 4", "Nivel 5");
+	switch (@item)
+	{
+		case 1: goto dbyalan0;
+		case 2: goto dbyalan1;
+		case 3: goto dbyalan2;
+		case 4: goto dbyalan3;
+		case 5: goto dbyalan4;
+		case 6: goto dbyalan5;
+	}
+
+clock:
+	if ($Level == 1) goto dclock0;
+	mes "^5555FF[Kity]^000000";
+	mes "selecciona El nivel al cual Quieres Ser llevado";
+	next;
+	set @item, select("Entrada", "Nivel 1", "Nivel 2", "Nivel 3", "Nivel 4", "Basement 1", "Basement 2", "Basement 3", "Basement 4");
+	switch (@item)
+	{
+		case 1: goto dclock0;
+		case 2: goto dclock1;
+		case 3: goto dclock2;
+		case 4: goto dclock3;
+		case 5: goto dclock4;
+		case 6: goto dalde1;
+		case 7: goto dalde2;
+		case 8: goto dalde3;
+		case 9: goto dalde4;
+	}
+
+coal:
+	if ($Level == 1) goto dcoal0;
+	mes "^5555FF[Kity]^000000";
+	mes "selecciona El nivel al cual Quieres Ser llevado";
+	next;
+	set @item, select("Entrada", "Nivel 1", "Nivel 2", "Nivel 3");
+	switch (@item)
+	{
+		case 1: goto dcoal0;
+		case 2: goto dcoal1;
+		case 3: goto dcoal2;
+		case 4: goto dcoal3;
+	}
+
+culvert:
+	if ($Level == 1) goto dculvert0;
+	mes "^5555FF[Kity]^000000";
+	mes "selecciona El nivel al cual Quieres Ser llevado";
+	next;
+	set @item, select("Entrada", "Nivel 1", "Nivel 2", "Nivel 3", "Nivel 4");
+	switch (@item)
+	{
+		case 1: goto dculvert0;
+		case 2: goto dculvert1;
+		case 3: goto dculvert2;
+		case 4: goto dculvert3;
+		case 5: goto dculvert4;
+	}
+	
+dein:
+	if ($Level == 1) goto dein0;
+	mes "^5555FF[Kity]^000000";
+	mes "selecciona El nivel al cual Quieres Ser llevado";
+	next;
+	set @item, select("Entrada", "Nivel 1", "Nivel 2");
+	switch (@item)
+	{
+		case 1: goto dein0;
+		case 2: goto dein1;
+		case 3: goto dein2;
+	}
+
+geffen:
+	if ($Level == 1) goto dgeffen0;
+	mes "^5555FF[Kity]^000000";
+	mes "selecciona El nivel al cual Quieres Ser llevado";
+	next;
+	set @item, select("Entrada", "Nivel 1", "Nivel 2", "Nivel 3", "Nivel 4");
+	switch (@item)
+	{
+		case 1: goto dgeffen0;
+		case 2: goto dgeffen1;
+		case 3: goto dgeffen2;
+		case 4: goto dgeffen3;
+		case 5: goto dgeffen4;
+	}
+
+gefenia:
+	if ($Level == 1) goto dgefenia1;
+	mes "^5555FF[Kity]^000000";
+	mes "selecciona El nivel al cual Quieres Ser llevado";
+	next;
+	set @item, select("Nivel 1", "Nivel 2", "Nivel 3", "Nivel 4");
+	switch (@item)
+	{
+		case 1: goto dgefenia1;
+		case 2: goto dgefenia2;
+		case 3: goto dgefenia3;
+		case 4: goto dgefenia4;
+	}
+
+glast:
+	if ($Level == 1) goto dglastent;
+	mes "^5555FF[Kity]^000000";
+	mes "selecciona El nivel al cual Quieres Ser llevado";
+	next;
+	set @item, select("Entrada", "Castle 1", "Castle 2", "Chivalry 1", "Chivalry 2", "Churchyard", "Culvert 1", "Culvert 2", "Culvert 3", "Culvert 4", "St.Abbey", "Staircase Dungeon", "Underground Cave 1", "Underground Cave 2", "Underground Prison 1", "Underground Prison 2");
+	switch (@item)
+	{
+		case  1: goto dglastent;
+		case  2: goto dglastcast1;
+		case  3: goto dglastcast2;
+		case  4: goto dglastchiv1;
+		case  5: goto dglastchiv2;
+		case  6: goto dglastyard;
+		case  7: goto dglastcul1;
+		case  8: goto dglastcul2;
+		case  9: goto dglastcul3;
+		case 10: goto dglastcul4;
+		case 11: goto dglastchur;
+		case 12: goto dglaststep;
+		case 13: goto dglastcave1;
+		case 14: goto dglastcave2;
+		case 15: goto dglastpris1;
+		case 16: goto dglastpris2;
+	}
+
+gon:
+	if ($Level == 1) goto dgon0;
+	mes "^5555FF[Kity]^000000";
+	mes "selecciona El nivel al cual Quieres Ser llevado";
+	next;
+	set @item, select("Entrada", "Nivel 1", "Nivel 2", "Nivel 3");
+	switch (@item)
+	{
+		case 1: goto dgon0;
+		case 2: goto dgon1;
+		case 3: goto dgon2;
+		case 4: goto dgon3;
+	}
+
+hidden:
+	if ($Level == 1) goto dhidden0;
+	mes "^5555FF[Kity]^000000";
+	mes "selecciona El nivel al cual Quieres Ser llevado";
+	next;
+	set @item, select("Entrada", "Nivel 1", "Nivel 2", "Nivel 3");
+	switch (@item)
+	{
+		case 1: goto dhidden0;
+		case 2: goto dhidden1;
+		case 3: goto dhidden2;
+		case 4: goto dhidden3;
+	}
+
+dice:
+	if ($Level == 1) goto dice0;
+	mes "^5555FF[Kity]^000000";
+	mes "selecciona El nivel al cual Quieres Ser llevado";
+	next;
+	set @item, select("Entrada", "Nivel 1", "Nivel 2", "Nivel 3");
+	switch (@item)
+	{
+		case 1: goto dice0;
+		case 2: goto dice1;
+		case 3: goto dice2;
+		case 4: goto dice3;
+	}
+
+djupe:
+	if ($Level == 1) goto jupe0;
+	mes "^5555FF[Kity]^000000";
+	mes "selecciona El nivel al cual Quieres Ser llevado";
+	next;
+	set @item, select("Entrada", "Nivel 1", "Nivel 2", "Nivel 3", "Nivel 4", "Nivel 5", "Nivel 6");
+	switch (@item)
+	{
+		case 1: goto jupe0;
+		case 2: goto jupe1;
+		case 3: goto jupe2;
+		case 4: goto jupe3;
+		case 5: goto jupe4;
+		case 6: goto jupe5;
+		case 7: goto jupe6;
+	}
+
+dkiel:
+	if ($Level == 1) goto dkiel0;
+	mes "^5555FF[Kity]^000000";
+	mes "selecciona El nivel al cual Quieres Ser llevado";
+	next;
+	set @item, select("Entrada", "Nivel 1", "Nivel 2");
+	switch (@item)
+	{
+		case 1: goto dkiel0;
+		case 2: goto dkiel1;
+		case 3: goto dkiel2;
+	}
+
+
+Lighdun:
+	if ($Level == 1) goto Lighdun0;
+	mes "^5555FF[Warper]^000000";
+	mes "selecciona El nivel al cual Quieres Ser llevado";
+	next;
+	set @item, select("Entrada", "Nivel 1", "Nivel 2", "Nivel 3");
+	switch (@item)
+	{
+		case 1: goto Lighdun0;
+		case 2: goto Lighdun1;
+		case 3: goto Lighdun2;
+		case 4: goto Lighdun3;
+	}
+
+Loudung:
+	if ($Level == 1) goto loudun0;
+	mes "^5555FF[Warper]^000000";
+	mes "selecciona El nivel al cual Quieres Ser llevado";
+	next;
+	set @item, select("Entrada", "Nivel 1", "Nivel 2", "Nivel 3");
+	switch (@item)
+	{
+		case 1: goto loudun0;
+		case 2: goto loudun1;
+		case 3: goto loudun2;
+		case 4: goto loudun3;
+	}
+
+magma:
+	if ($Level == 1) goto dmagma0;
+	mes "^5555FF[Kity]^000000";
+	mes "selecciona El nivel al cual Quieres Ser llevado";
+	next;
+	set @item, select("Entrada", "Nivel 1", "Nivel 2");
+	switch (@item)
+	{
+		case 1: goto dmagma0;
+		case 2: goto dmagma1;
+		case 3: goto dmagma2;
+	}
+
+odin:
+	if ($Level == 1) goto dodin0;
+	mes "^5555FF[Kity]^000000";
+	mes "selecciona El nivel al cual Quieres Ser llevado";
+	next;
+	set @item, select("Entrada", "Nivel 1", "Nivel 2","Nivle 3");
+	switch (@item)
+	{
+		case 1: goto dodin0;
+		case 2: goto dodin1;
+		case 3: goto dodin2;
+		case 4: goto dodin3;
+	}
+
+
+orc:
+	if ($Level == 1) goto dorc0;
+	mes "^5555FF[Kity]^000000";
+	mes "selecciona El nivel al cual Quieres Ser llevado";
+	next;
+	set @item, select("Entrada", "Nivel 1", "Nivel 2");
+	switch (@item)
+	{
+		case 1: goto dorc0;
+		case 2: goto dorc1;
+		case 3: goto dorc2;
+	}
+
+payon:
+	if ($Level == 1) goto dpayon0;
+	mes "^5555FF[Kity]^000000";
+	mes "selecciona El nivel al cual Quieres Ser llevado";
+	next;
+	set @item, select("Entrada", "Nivel 1", "Nivel 2", "Nivel 3", "Nivel 4", "Nivel 5");
+	switch (@item)
+	{
+		case 1: goto dpayon0;
+		case 1: goto dpayon1;
+		case 2: goto dpayon2;
+		case 3: goto dpayon3;
+		case 4: goto dpayon4;
+		case 5: goto dpayon5;
+	}
+
+pyramids:
+	if ($Level == 1) goto dpyramids0;
+	mes "^5555FF[Kity]^000000";
+	mes "selecciona El nivel al cual Quieres Ser llevado";
+	next;
+	set @item, select("Entrada", "Nivel 1", "Nivel 2", "Nivel 3", "Nivel 4", "Basement 1", "Basement 2");
+	switch (@item)
+	{
+		case 1: goto dpyramids0;
+		case 1: goto dpyramids1;
+		case 2: goto dpyramids2;
+		case 3: goto dpyramids3;
+		case 4: goto dpyramids4;
+		case 5: goto dpyramidsb1;
+		case 6: goto dpyramidsb2;
+	}
+
+sphinx:
+	if ($Level == 1) goto dsphinx0;
+	mes "^5555FF[Kity]^000000";
+	mes "selecciona El nivel al cual Quieres Ser llevado";
+	next;
+	set @item, select("Entrada", "Nivel 1", "Nivel 2", "Nivel 3", "Nivel 4", "Nivel 5");
+	switch (@item)
+	{
+		case 1: goto dsphinx0;
+		case 2: goto dsphinx1;
+		case 3: goto dsphinx2;
+		case 4: goto dsphinx3;
+		case 5: goto dsphinx4;
+		case 6: goto dsphinx5;
+	}
+
+sunken:
+	if ($Level == 1) goto dsunken0;
+	mes "^5555FF[Kity]^000000";
+	mes "selecciona El nivel al cual Quieres Ser llevado";
+	next;
+	set @item, select("Entrada", "Nivel 1", "Nivel 2");
+	switch (@item)
+	{
+		case 1: goto dsunken0;
+		case 2: goto dsunken1;
+		case 3: goto dsunken2;
+	}
+
+dsant:
+	if ($Level == 1) goto dsant0;
+	mes "^5555FF[Kity]^000000";
+	mes "selecciona El nivel al cual Quieres Ser llevado";
+	next;
+	set @item, select("Entrada", "Nivel 1", "Nivel 2", "Nivel 3", "Nivel 4");
+	switch (@item)
+	{
+		case 1: goto dsant0;
+		case 2: goto dsant1;
+		case 3: goto dsant2;
+		case 4: goto dsant3;
+		case 5: goto dsant4;
+	}
+
+toy:
+	if ($Level == 1) goto dtoy0;
+	mes "^5555FF[Kity]^000000";
+	mes "selecciona El nivel al cual Quieres Ser llevado";
+	next;
+	set @item, select("Entrada", "Nivel 1", "Nivel 2");
+	switch (@item)
+	{
+		case 1: goto dtoy0;
+		case 2: goto dtoy1;
+		case 3: goto dtoy2;
+	}
+
+dthat:
+	if ($Level == 1) goto dthat0;
+	mes "^5555FF[Warper]^000000";
+	mes "Select Nivel";
+	next;
+	set @item, select("Entrance", "Nivel 1", "Nivel 2", "Nivel 3", "Nivel 4", "Nivel 5", "Nivel 6", "Nivel 7", "Nivel 8", "Nivel 9", "Nivel 10", "Nivel 11", "Nivel 12", "Thanatos step", "Thanatos Boss");
+	switch (@item)
+	{
+		case  1: goto dthat0;
+		case  2: goto dthat1;
+		case  3: goto dthat2;
+		case  4: goto dthat3;
+		case  5: goto dthat4;
+		case  6: goto dthat5;
+		case  7: goto dthat6;
+		case  8: goto dthat7;
+		case  9: goto dthat8;
+		case 10: goto dthat9;
+		case 11: goto dthat10;
+		case 12: goto dthat11;
+		case 13: goto dthat12;
+		case 14: goto dthatst;
+		case 15: goto dthatbo;
+	}
+
+turtle:
+	if ($Level == 1) goto dturtleent;
+	mes "^5555FF[Kity]^000000";
+	mes "selecciona El nivel al cual Quieres Ser llevado";
+	next;
+	set @item, select("Entrance","Nivel 1", "Nivel 2", "Nivel 3");
+	switch (@item)
+	{
+		case 1: goto dturtleent;
+		case 2: goto dturtle1;
+		case 3: goto dturtle2;
+		case 4: goto dturtle3;
+	}
+
+Umbala:
+	if ($Level == 1) goto umba0;
+	mes "^5555FF[Kity]^000000";
+	mes "selecciona El nivel al cual Quieres Ser llevado";
+	next;
+	set @item, select("Entrance","Nivel 1", "Nivel 2");
+	switch (@item)
+	{
+		case 1: goto umba0;
+		case 2: goto umba1;
+		case 3: goto umba2;
+	}
+
+//----------------Guild Dungeons-------------\\
+grrenwood:		warp "gld_dun01",119,52;	goto L_end;
+uina:			warp "gld_dun02",173,113;	goto L_end;
+valkdung:		warp "gld_dun03",237,266;	goto L_end;
+britdung:		warp "gld_dun04",110,26;	goto L_end;
+
+//----------------PVP----------------\\
+PVPY:			warp "pvp_y_room.gat",51,23;	goto L_end;
+PVPN:			warp "pvp_n_room.gat",51,23;	goto L_end;
+
+//----------------Dungeons----------------\\
+
+//Abys Lake
+dabys0: 		warp "hu_fild05.gat",168,301;;	goto L_end;
+dabys1: 		warp "abyss_01.gat",264,271;	goto L_end;
+dabys2: 		warp "abyss_02.gat",275,270;	goto L_end;
+dabys3: 		warp "abyss_03.gat",116,27;	goto L_end;
+
+//amatsu Dungeon
+dama0:			warp "ama_dun01.gat",228,11;	goto L_end;
+dama1:			warp "ama_dun01.gat",228,11;	goto L_end;
+dama2:			warp "ama_dun02.gat",34,41;	goto L_end;
+dama3:			warp "ama_dun03.gat",119,14;	goto L_end;
+
+//Anthel
+danthell0:		warp "moc_fild04.gat",213,327;	goto L_end;
+danthell1:		warp "anthell01.gat",35,262;	goto L_end;
+danthell2:		warp "anthell02.gat",168,170;	goto L_end;
+
+//Ayothana Dungeon
+dayo0:			warp "ayo_fild02.gat",282,150;	goto L_end;
+dayo1:			warp "ayo_dun01.gat",288,149;	goto L_end;
+dayo2:			warp "ayo_dun02.gat",24,26;	goto L_end;
+
+//Beach Dungeon
+dbeach0:		warp "comodo.gat",31,215;	goto L_end;
+dbeach1:		warp "beach_dun.gat",266,67;	goto L_end;
+dbeach2:		warp "beach_dun2.gat",255,244;	goto L_end;
+dbeach3:		warp "beach_dun3.gat",23,260;	goto L_end;
+
+//Undersea Cave
+dbyalan0:		warp "izlu2dun.gat",108,88;	goto L_end;
+dbyalan1:		warp "iz_dun00.gat",168,168;	goto L_end;
+dbyalan2:		warp "iz_dun01.gat",253,252;	goto L_end;
+dbyalan3:		warp "iz_dun02.gat",236,204;	goto L_end;
+dbyalan4:		warp "iz_dun03.gat",32,63;	goto L_end;
+dbyalan5:		warp "iz_dun04.gat",26,27;	goto L_end;
+
+//Comodo Dungeon
+beach0:			warp "cmd_fild01.gat",34,325;	goto L_end;
+beach1:			warp "cmd_fild01.gat",34,325;	goto L_end;
+beach2:			warp "comodo.gat",32,209;	goto L_end;
+beach3:			warp "comodo.gat",180,352;	goto L_end;
+
+//Clock tower
+dclock0:		warp "aldebaran.gat",139,131;	goto L_end;
+dclock1:		warp "c_tower1.gat",199,159;	goto L_end;
+dclock2:		warp "c_tower2.gat",148,283;	goto L_end;
+dclock3:		warp "c_tower3.gat",65,147;	goto L_end;
+dclock4:		warp "c_tower4.gat",56,155;	goto L_end;
+dalde1:			warp "alde_dun01.gat",297,25;	goto L_end;
+dalde2:			warp "alde_dun02.gat",127,169;	goto L_end;
+dalde3:			warp "alde_dun03.gat",277,178;	goto L_end;
+dalde4:			warp "alde_dun04.gat",268,74;	goto L_end;
+
+//Coal Mines
+dcoal0:			warp "mjolnir_02.gat",79,35;	goto L_end;
+dcoal1:			warp "mjo_dun01.gat",52,17;	goto L_end;
+dcoal2:			warp "mjo_dun02.gat",381,343;	goto L_end;
+dcoal3:			warp "mjo_dun03.gat",302,262;	goto L_end;
+
+//Culvert
+dculvert0:		warp "prt_fild05.gat",274,208;	goto L_end;
+dculvert1:		warp "prt_sewb1.gat",131,247;	goto L_end;
+dculvert2:		warp "prt_sewb2.gat",19,19;	goto L_end;
+dculvert3:		warp "prt_sewb3.gat",180,169;	goto L_end;
+dculvert4:		warp "prt_sewb4.gat",100,92;	goto L_end;
+
+//Einbroch Dungeon
+dein0:			warp "einbech.gat",138,249;	goto L_end;
+dein1:			warp "ein_dun01.gat",262,258;	goto L_end;
+dein2:			warp "ein_dun02.gat",290,286;	goto L_end;
+
+//Geffen Dungeon
+dgeffen0:		warp "gef_tower.gat",153,31;	goto L_end;
+dgeffen1:		warp "gef_dun00.gat",104,99;	goto L_end;
+dgeffen2:		warp "gef_dun01.gat",115,236;	goto L_end;
+dgeffen3:		warp "gef_dun02.gat",106,132;	goto L_end;
+dgeffen4:		warp "gef_dun03.gat",203,200;	goto L_end;
+
+//Gefenia
+dgefenia1:		warp "gefenia01.gat",40,103;	goto L_end;
+dgefenia2:		warp "gefenia02.gat",203,34;	goto L_end;
+dgefenia3:		warp "gefenia03.gat",266,168;	goto L_end;
+dgefenia4:		warp "gefenia04.gat",130,272;	goto L_end;
+
+//Glast Heim
+dglastent:		warp "glast_01.gat",370,304;	goto L_end;
+dglastcast1:		warp "gl_cas01.gat",199,29;	goto L_end;
+dglastcast2:		warp "gl_cas02.gat",104,25;	goto L_end;
+dglastchiv1:		warp "gl_knt01.gat",150,15;	goto L_end;
+dglastchiv2:		warp "gl_knt02.gat",157,287;	goto L_end;
+dglastyard:		warp "gl_chyard.gat",147,15;	goto L_end;
+dglastcul1:		warp "gl_sew01.gat",258,255;	goto L_end;
+dglastcul2:		warp "gl_sew02.gat",108,291;	goto L_end;
+dglastcul3:		warp "gl_sew03.gat",171,283;	goto L_end;
+dglastcul4:		warp "gl_sew04.gat",68,277;	goto L_end;
+dglastchur:		warp "gl_church.gat",156,7;	goto L_end;
+dglaststep:		warp "gl_step.gat",12,7;	goto L_end;
+dglastcave1:		warp "gl_dun01.gat",133,271;	goto L_end;
+dglastcave2:		warp "gl_dun02.gat",224,274;	goto L_end;
+dglastpris1:		warp "gl_prison.gat",14,70;	goto L_end;
+dglastpris2:		warp "gl_prison1.gat",150,14;	goto L_end;
+
+//Gonriu Dungeon
+dgon0:			warp "gonryun.gat",159,198;	goto L_end;
+dgon1:			warp "gon_dun01.gat",153,53;	goto L_end;
+dgon2:			warp "gon_dun02.gat",28,113;	goto L_end;
+dgon3:			warp "gon_dun03.gat",68,16;	goto L_end;
+
+//Hiden temple
+dhidden0:		warp "prt_fild01.gat",136,361;	goto L_end;
+dhidden1:		warp "prt_maze01.gat",176,7;	goto L_end;
+dhidden2:		warp "prt_maze02.gat",94,9;	goto L_end;
+dhidden3:		warp "prt_maze03.gat",23,8;	goto L_end;
+
+//Ice Dungeon
+dice0:			warp "ra_fild01.gat",233,330;	goto L_end;
+dice1:			warp "ice_dun01.gat",157,14;	goto L_end;
+dice2:			warp "ice_dun02.gat",151,155;	goto L_end;
+dice3:			warp "ice_dun03.gat",149,22;	goto L_end;
+
+//Juperos Dungeon
+jupe0:			warp "yuno_fild07.gat",212,175; goto L_end;
+jupe1:			warp "jupe_cave.gat",143,52;	goto L_end;
+jupe2:			warp "juperos_01.gat",53,247;	goto L_end;
+jupe3:			warp "jupe_gate.gat",49,162;	goto L_end;
+jupe4:			warp "juperos_02.gat",128,278;	goto L_end;
+jupe5:			warp "jupe_ele_r",50,94;	goto L_end;
+jupe6:			warp "jupe_core.gat",150,20;	goto L_end;
+
+//Kiel Dungeon
+dkiel0:			warp "yuno_fild08.gat",69,170;	goto L_end;
+dkiel1:			warp "kh_dun01.gat",4,229;	goto L_end;
+dkiel2:			warp "kh_dun02.gat",42,197;	goto L_end;
+
+//Lighthalzen Bio Lab
+Lighdun0:		warp "lhz_cube.gat",231,17;	goto L_end;
+Lighdun1:		warp "lhz_dun01.gat",150,288;	goto L_end;
+Lighdun2:		warp "lhz_dun02.gat",220,6;	goto L_end;
+Lighdun3:		warp "lhz_dun03.gat",140,137;	goto L_end;
+
+//Lou Yang Dungeon
+loudun0:		warp "louyang.gat",41,270;	goto L_end;
+loudun1:		warp "lou_dun01.gat",218,196;	goto L_end;
+loudun2:		warp "lou_dun02.gat",282,20;	goto L_end;
+loudun3:		warp "lou_dun03.gat",165,38;	goto L_end;
+
+//Magma Dungeon
+dmagma0:		warp "yuno_fild03.gat",34,139;	goto L_end;
+dmagma1:		warp "mag_dun01.gat",126,68;	goto L_end;
+dmagma2:		warp "mag_dun02.gat",47,30;	goto L_end;
+
+//Orc Dungeon
+dorc0:			warp "in_orcs01.gat",30,180;	goto L_end;
+dorc1:			warp "orcsdun01.gat",32,170;	goto L_end;
+dorc2:			warp "orcsdun02.gat",21,185;	goto L_end;
+
+//Odin Temple
+dodin0:			warp "hugel.gat",205,108;	goto L_end;
+dodin1:			warp "odin_tem01.gat",376,181;	goto L_end;
+dodin2:			warp "odin_tem02.gat",22,181;	goto L_end;
+dodin3:			warp "odin_tem03.gat",121,51;	goto L_end;
+
+//Payon Dungeon
+dpayon0:		warp "pay_arche.gat",39,131;	goto L_end;
+dpayon1:		warp "pay_dun00.gat",21,183;	goto L_end;
+dpayon2:		warp "pay_dun01.gat",19,33;	goto L_end;
+dpayon3:		warp "pay_dun02.gat",19,63;	goto L_end;
+dpayon4:		warp "pay_dun03.gat",155,159;	goto L_end;
+dpayon5:		warp "pay_dun04.gat",201,204;	goto L_end;
+
+//Pyramyds
+dpyramids0:		warp "moc_ruins.gat",60,161;	goto L_end;
+dpyramids1:		warp "moc_pryd01.gat",192,9;	goto L_end;
+dpyramids2:		warp "moc_pryd02.gat",10,192;	goto L_end;
+dpyramids3:		warp "moc_pryd03.gat",100,92;	goto L_end;
+dpyramids4:		warp "moc_pryd04.gat",181,11;	goto L_end;
+dpyramidsb1:		warp "moc_pryd05.gat",94,96;	goto L_end;
+dpyramidsb2:		warp "moc_pryd06.gat",192,8;	goto L_end;
+
+//Sphinx
+dsphinx0:		warp "moc_fild19.gat",100,99;	goto L_end;
+dsphinx1:		warp "in_sphinx1.gat",288,9;	goto L_end;
+dsphinx2:		warp "in_sphinx2.gat",149,81;	goto L_end;
+dsphinx3:		warp "in_sphinx3.gat",210,54;	goto L_end;
+dsphinx4:		warp "in_sphinx4.gat",10,222;	goto L_end;
+dsphinx5:		warp "in_sphinx5.gat",100,99;	goto L_end;
+dsunken1:		warp "treasure01.gat",69,24;	goto L_end;
+dsunken2:		warp "treasure02.gat",102,27;	goto L_end;
+
+//Sanctuary Dungeon
+dsant0:			warp "ra_temin.gat",276,318;	goto L_end;
+dsant1:			warp "ra_san01",139,14;		goto L_end;
+dsant2:			warp "ra_san03.gat",85,19;	goto L_end;
+dsant3:			warp "ra_san04.gat",119,43;	goto L_end;
+dsant4:			warp "ra_san05.gat",149,12;	goto L_end;
+
+//Thanatos Tower
+dthat0:			warp "tha_scene01.gat",131,224;	goto L_end;
+dthat1:			warp "tha_t01.gat",150,39;	goto L_end;
+dthat2:			warp "tha_t02.gat",150,136;	goto L_end;
+dthat3:			warp "tha_t03.gat",220,158;	goto L_end;
+dthat4:			warp "tha_t04.gat",59,143;	goto L_end;
+dthat5:			warp "tha_t05.gat",62,11;	goto L_end;
+dthat6:			warp "tha_t06.gat",206,8;	goto L_end;
+dthat7:			warp "tha_t07.gat",35,166;	goto L_end;
+dthat8:			warp "tha_t08.gat",105,44;	goto L_end;
+dthat9:			warp "tha_t09.gat",88,145;	goto L_end;
+dthat10:		warp "tha_t10.gat",167,138;	goto L_end;
+dthat11:		warp "tha_t11.gat",90,36;	goto L_end;
+dthat12:		warp "tha_t12.gat",126,51;	goto L_end;
+dthatst:		warp "thana_step.gat",9,73;	goto L_end;
+dthatbo:		warp "thana_boss.gat",85,76;	goto L_end;
+
+//Toy Factory
+dtoy0:			warp "xmas.gat",143,308;	goto L_end;
+dtoy1:			warp "xmas_dun01.gat",205,15;	goto L_end;
+dtoy2:			warp "xmas_dun02.gat",129,133;	goto L_end;
+
+//Turtle Island
+dturtleent:		warp "tur_dun01.gat",154,49;	goto L_end;
+dturtle1:		warp "tur_dun02.gat",148,261;	goto L_end;
+dturtle2:		warp "tur_dun03.gat",132,189;	goto L_end;
+dturtle3:		warp "tur_dun04.gat",100,192;	goto L_end;
+
+//Umbala Dungeon
+umba0:			warp "umbala.gat",111,283;	goto L_end;
+umba1:			warp "um_dun01.gat",42,31;	goto L_end;
+umba2:			warp "um_dun02.gat",48,30;	goto L_end;
+
+L_end:
+	cutin "kafra_07",255;
+	close;
+}
+// Ciudades
+alberta.gat,31,240,4		duplicate(Kity)	Kity Corporation	721
+aldebaran.gat,143,122,4		duplicate(Kity)	Kity Corporation	721
+amatsu.gat,200,78,4		duplicate(Kity)	Kity Corporation	721
+ayothaya.gat,146,119,4		duplicate(Kity)	Kity Corporation	721
+comodo.gat,194,158,4		duplicate(Kity)	Kity Corporation	721
+einbroch.gat,70,205,4		duplicate(Kity)	Kity Corporation	721
+einbech.gat,60,38,4		duplicate(Kity)	Kity Corporation	721
+geffen.gat,115,66,4		duplicate(Kity)	Kity Corporation	721
+hugel.gat,93,155,4		duplicate(Kity)	Kity Corporation	721
+izlude.gat,123,115,4		duplicate(Kity)	Kity Corporation	721
+lighthalzen.gat,151,101,4	duplicate(Kity)	Kity Corporation	721
+louyang.gat,210,106,4		duplicate(Kity)	Kity Corporation	721
+morocc.gat,156,99,4		duplicate(Kity)	Kity Corporation	721
+niflheim.gat,192,192,4		duplicate(Kity)	Kity Corporation	721
+payon.gat,182,110,4		duplicate(Kity)	Kity Corporation	721
+prontera.gat,60,42,1		duplicate(Kity)	Kity Corporation	721
+rachel.gat,127,117,4		duplicate(Kity)	Kity Corporation	721
+umbala.gat,132,130,4		duplicate(Kity)	Kity Corporation	721
+xmas.gat,150,136,4		duplicate(Kity)	Kity Corporation	721
+yuno.gat,137,162,4		duplicate(Kity)	Kity Corporation	721
+
+//Guild Wars
+alde_gld.gat,186,145,4		duplicate(Kity)	Kity Corporation	721
+gef_fild13.gat,278,233,4	duplicate(Kity)	Kity Corporation	721
+pay_gld.gat,142,172,4		duplicate(Kity)	Kity Corporation	721
+prt_gld.gat,157,94,4		duplicate(Kity)	Kity Corporation	721
+
+//Dungeons y Lugares Especiales
+alb2trea.gat,73,101,4		duplicate(Kity)	Kity Corporation	721
+gef_fild10.gat,71,339,4		duplicate(Kity)	Kity Corporation	721
+glast_01.gat,370,308,4		duplicate(Kity)	Kity Corporation	721
+gonryun.gat,151,130,4		duplicate(Kity)	Kity Corporation	721
+izlu2dun.gat,104,82,4		duplicate(Kity)	Kity Corporation	721
+moc_fild04.gat,207,331,4	duplicate(Kity)	Kity Corporation	721
+mjolnir_02.gat,85,363,4		duplicate(Kity)	Kity Corporation	721
+moc_ruins.gat,64,166,4		duplicate(Kity)	Kity Corporation	721
+moc_fild19.gat,106,97,4		duplicate(Kity)	Kity Corporation	721
+pay_arche.gat,39,135,4		duplicate(Kity)	Kity Corporation	721
+prt_fild05.gat,273,215,4	duplicate(Kity)	Kity Corporation	721
+prt_fild01.gat,139,368,4	duplicate(Kity)	Kity Corporation	721
+tur_dun01.gat,148,239,4		duplicate(Kity)	Kity Corporation	721
+yuno_fild03.gat,37,135,4	duplicate(Kity)	Kity Corporation	721

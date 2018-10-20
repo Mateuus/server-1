@@ -1,0 +1,48 @@
+npc_in,20,42,5	script	Lealtad	4_F_JP_OZ,{
+
+set .esp$,"[^FF8000 Lealtad^000000]";
+
+mes .esp$;
+mes "Gracias, "+strcharinfo(0)+" por ser parte de Ares-RO.";
+mes "Los leales siempre serán recompensados de alguna forma, es por.";
+mes "eso que fui creado.";
+mes "Mi función es intercambiar tus ^FF8000Ticket(s) Lealtad^000000 por algunos objetos que serán de tu ayuda.";
+close2;
+			openshop "SysLeal";
+			end;
+
+	}
+
+
+-	script	SysLeal	4_TREASURE_BOX,{
+
+OnInit:
+	.loyalty = 30006;
+	tradertype(NST_CUSTOM);
+
+		sellitem HE_Bubble_Gum,90;
+		sellitem Boarding_Halter_Box,100;
+		sellitem Chick_Hat_,200;
+		sellitem C_Deviruchi_Balloon,250;
+		sellitem Bear_Balloon,250;
+		sellitem Pink_Angeling_Bubble,300;
+		sellitem Little_Feather_Hat,320;
+
+	end;
+
+OnCountFunds:
+
+	dispbottom "Sistema de Compras: "+getitemname( .loyalty )+".";
+	setcurrency( countitem( .loyalty ) );
+	end;
+
+OnPayFunds:
+	//dispbottom "Hi: price="+@price+" and points="+@points;
+	if( countitem(.loyalty) < @points )
+		end;
+	delitem .loyalty,@points;
+	delitem .loyalty,( @price - @points );
+	purchaseok();
+end;
+
+		}

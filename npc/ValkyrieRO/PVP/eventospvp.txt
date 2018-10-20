@@ -1,0 +1,535 @@
+//===== Global Chile ======
+//=== https://www.facebook.com/IntegralesGlobal ===
+
+-	script	eventospvp	-1,{
+
+OnInit:
+monster "guild_vs2-1",0,0,"Cofre",1346,5,"eventospvp::OnMyMobDead";
+monster "pvp_n_1-3",0,0,"Cofre",1346,5,"eventospvp::OnMyMobDead2";
+end;
+
+OnMyMobDead:
+goto beneficios;
+end;
+
+
+OnMyMobDead2:
+goto beneficiosnov;
+end;
+
+// ----------------------------
+// ------- Modo PVP -----------
+// ----------------------------
+
+OnPCDieEvent:
+if (EspiritualActivo == 1) {set EspiritualActivo,0; set @PVPLiberacion,0; undisguise; cutin "contesp00",2;}
+if ((@PVPRachMod == 1) || (@PVPSorMod == 1) || (@PVPClonMod == 1) || (@PVPLibMod == 1) || (@PVPIncMod == 1)) {sleep2 1000; warp "Save",0,0;}
+if (@PVPRachMod == 1) {set @PVPRachas,0; set @PVPRachMod,0;}
+if (@PVPClonMod == 1) {set @PVPClonMod,0;}
+if (@PVPSorMod == 1) {set @PVPSorMod,0; sleep2 500; killmonsterall "prontera";}
+if (@PVPLibMod == 1) {set @PVPLibMod,0;}
+if (@PVPIncMod == 1) {atcommand "@fakename "; undisguise; set @PVPIncMod,0;}
+end;
+
+
+// ---------------------------------------------
+// ---- Sala Rachas, Liberación y Clones -------
+// ---------------------------------------------
+
+OnPCKillEvent:
+if (@PVPClonMod == 1) {
+set @Jugadordie$,rid2name(killedrid);
+atcommand "@slaveclone "+@Jugadordie$+"";}
+if (EspiritualActivo == 1) {dispbottom "Espiritual Activo"; end;}
+if (@PVPLibMod == 1) {set @PVPLiberacion,@PVPLiberacion+10;
+if (@PVPLiberacion == 100) {cutin "contesp100",2; goto liberar;}
+if (@PVPLiberacion == 90) cutin "contesp90",2;
+if (@PVPLiberacion == 80) cutin "contesp80",2;
+if (@PVPLiberacion == 70) cutin "contesp70",2;
+if (@PVPLiberacion == 60) cutin "contesp60",2;
+if (@PVPLiberacion == 50) cutin "contesp50",2;
+if (@PVPLiberacion == 40) cutin "contesp40",2;
+if (@PVPLiberacion == 30) cutin "contesp30",2;
+if (@PVPLiberacion == 20) cutin "contesp20",2;
+if (@PVPLiberacion == 10) cutin "contesp10",2;
+}
+if (@PVPRachMod == 1){
+set @PVPRachas,@PVPRachas+1;
+if (@PVPRachas == 0) cutin "rachas00",2;
+if (@PVPRachas == 1) cutin "rachas01",2;
+if (@PVPRachas == 2) cutin "rachas02",2;
+if (@PVPRachas == 3) {cutin "rachas03",2; mapannounce "guild_vs2","* "+strcharinfo(0)+" ha conseguido una racha de "+@PVPRachas+" victorias *",bc_yellow;}
+if (@PVPRachas == 4) {cutin "rachas04",2; mapannounce "guild_vs2","* "+strcharinfo(0)+" ha conseguido una racha de "+@PVPRachas+" victorias *",bc_yellow;}
+if (@PVPRachas == 5) {cutin "rachas05",2; mapannounce "guild_vs2","* "+strcharinfo(0)+" ha conseguido una racha de "+@PVPRachas+" victorias *",bc_yellow;}
+if (@PVPRachas >= 6) {cutin "rachas06",2; mapannounce "guild_vs2","* "+strcharinfo(0)+" ha conseguido una racha de "+@PVPRachas+" victorias *",bc_yellow;}
+dispbottom "Número de Rachas: "+@PVPRachas+"";
+if (@PVPRachas >= 3){
+set @BonosdeRachas,2;
+bonos:
+set RuedaEstados,rand(1,60);
+	if (RuedaEstados == 1) { dispbottom "Nuevo Estado: Endure.";sc_start SC_ENDURE,99000,10;skilleffect 8,10;}
+	if (RuedaEstados == 2) { dispbottom "Nuevo Estado: Provoque.";sc_start SC_PROVOKE,99000,10;skilleffect 6,10;}
+	if (RuedaEstados == 3) { dispbottom "Nuevo Estado: Auto Guard.";sc_start SC_AUTOGUARD,99000,10;skilleffect 249,10;}
+	if (RuedaEstados == 4) { dispbottom "Nuevo Estado: Aura Blade.";sc_start SC_AURABLADE,99000,5;skilleffect 355,5;}
+	if (RuedaEstados == 5) { dispbottom "Nuevo Estado: Concentration.";sc_start SC_CONCENTRATION,99000,5;skilleffect 357,5;}
+	if (RuedaEstados == 6) { dispbottom "Nuevo Estado: Reflect Shield.";sc_start SC_REFLECTSHIELD,99000,10;skilleffect 252,10;}
+	if (RuedaEstados == 7) { dispbottom "Nuevo Estado: Providence.";sc_start SC_PROVIDENCE,99000,5;skilleffect 256,5;}
+	if (RuedaEstados == 8) { dispbottom "Nuevo Estado: Poison React.";sc_start SC_POISONREACT,99000,10;skilleffect 139,10;}
+	if (RuedaEstados == 9) { dispbottom "Nuevo Estado: Wind Walk.";sc_start SC_WINDWALK,99000,10;skilleffect 383,10;}
+	if (RuedaEstados == 10) { dispbottom "Nuevo Estado: Sight.";sc_start SC_SIGHT,99000,1;skilleffect 10,1;}
+	if (RuedaEstados == 11) { dispbottom "Nuevo Estado: Energy Coat.";sc_start SC_ENERGYCOAT,99000,1;skilleffect 157,1;}
+	if (RuedaEstados == 12) { dispbottom "Nuevo Estado: Amplify Magic Power.";sc_start SC_MAGICPOWER,99000,10;skilleffect 366,10;}
+	if (RuedaEstados == 13) { dispbottom "Nuevo Estado: Loud Exclamation.";sc_start SC_LOUD,99000,1;skilleffect 155,1;}
+	if (RuedaEstados == 14) { dispbottom "Nuevo Estado: Chemical Protection Weapon.";sc_start SC_CP_WEAPON,99000,5;skilleffect 234,5;}
+	if (RuedaEstados == 15) { dispbottom "Nuevo Estado: Chemical Protection Shield.";sc_start SC_CP_SHIELD,99000,5;
+skilleffect 235,5;}
+	if (RuedaEstados == 16) { dispbottom "Nuevo Estado: Chemical Protection Armor.";sc_start SC_CP_ARMOR,99000,5;skilleffect 236,5;}
+	if (RuedaEstados == 17) { dispbottom "Nuevo Estado: Chemical Protection Helm.";sc_start SC_CP_HELM,99000,5;skilleffect 237,5;}
+	if (RuedaEstados == 18) { dispbottom "Nuevo Estado: Adrenaline Rush.";sc_start SC_ADRENALINE,99000,5;skilleffect 111,5;}
+	if (RuedaEstados == 19) { dispbottom "Nuevo Estado: Weapon Perfection.";sc_start SC_WEAPONPERFECTION,99000,5;skilleffect 112,5;}
+	if (RuedaEstados == 20) { dispbottom "Nuevo Estado: Over Thrust.";sc_start SC_OVERTHRUST,99000,5;skilleffect 113,5;}
+	if (RuedaEstados == 21) { dispbottom "Nuevo Estado: True Sight.";sc_start SC_TRUESIGHT,99000,10;skilleffect 380,10;}
+	if (RuedaEstados == 22) { dispbottom "Nuevo Estado: Double Casting.";sc_start SC_DOUBLECAST,99000,5;skilleffect 482,5;}
+	if (RuedaEstados == 23) { dispbottom "Nuevo Estado: Improve Concentration.";sc_start SC_CONCENTRATE,99000,10;skilleffect 45,10;}
+	if (RuedaEstados == 24) { dispbottom "Nuevo Estado: Blessing.";sc_start SC_BLESSING,99000,10;skilleffect 34,10;}
+	if (RuedaEstados == 25) { dispbottom "Nuevo Estado: Increase Agility.";sc_start SC_INCREASEAGI,99000,10;skilleffect 29,10;}
+	if (RuedaEstados == 26) { dispbottom "Nuevo Estado: Angelus.";sc_start SC_ANGELUS,99000,10;skilleffect 33,5;}
+	if (RuedaEstados == 27) { dispbottom "Nuevo Estado: Ruwach.";sc_start SC_RUWACH,99000,1;skilleffect 24,1;}
+	if (RuedaEstados == 28) { dispbottom "Nuevo Estado: Kyrie Eleison.";sc_start SC_KYRIE,99000,10;skilleffect 73,10;}
+	if (RuedaEstados == 29) { dispbottom "Nuevo Estado: Magnificat.";sc_start SC_MAGNIFICAT,99000,10;skilleffect 74,10;}
+	if (RuedaEstados == 30) { dispbottom "Nuevo Estado: Impositu Manus.";sc_start SC_IMPOSITIO,99000,5;skilleffect 66,10;}
+	if (RuedaEstados == 31) { dispbottom "Nuevo Estado: Gloria.";sc_start SC_GLORIA,99000,5;skilleffect 75,10;}
+	if (RuedaEstados == 32) { dispbottom "Nuevo Estado: Suffragium.";sc_start SC_SUFFRAGIUM,99000,5;skilleffect 67,5;}
+	if (RuedaEstados == 33) { dispbottom "Nuevo Estado: Assumptio.";sc_start SC_ASSUMPTIO,99000,5;skilleffect 361,5;}
+	if (RuedaEstados == 34) { dispbottom "Nuevo Estado: Ciceda Shell.";sc_start SC_UTSUSEMI,99000,5;skilleffect 531,5;}
+	if (RuedaEstados == 35) { dispbottom "Nuevo Estado: Illusionary Shadow.";sc_start SC_BUNSINJYUTSU,99000,10;skilleffect 532,10;}
+	if (RuedaEstados == 36) { dispbottom "Nuevo Estado: Increasing Accuracy.";sc_start SC_INCREASING,99000,1;skilleffect 506,1;}
+	if (RuedaEstados == 37) { dispbottom "Nuevo Estado: Adjustment.";sc_start SC_ADJUSTMENT,99000,1;skilleffect 505,1;}
+	if (RuedaEstados == 38) { dispbottom "Nuevo Estado: Kaupe.";sc_start SC_KAUPE,99000,3;skilleffect 464,3;}
+	if (RuedaEstados == 39) { dispbottom "Nuevo Estado: Kaahi.";sc_start SC_KAAHI,99000,3;skilleffect 463,3;}
+	if (RuedaEstados == 40) { dispbottom "Nuevo Estado: Sight.";sc_start SC_SIGHT,99000,1;skilleffect 10,1;}
+	if (RuedaEstados == 41) { dispbottom "Nuevo Estado: STR +10.";sc_start SC_STRFOOD,99000,10;}
+	if (RuedaEstados == 42) { dispbottom "Nuevo Estado: AGI +10.";sc_start SC_AGIFOOD,99000,10;}
+	if (RuedaEstados == 43) { dispbottom "Nuevo Estado: VIT +10.";sc_start SC_VITFOOD,99000,10;}
+	if (RuedaEstados == 44) { dispbottom "Nuevo Estado: INT +10.";sc_start SC_INTFOOD,99000,10;}
+	if (RuedaEstados == 45) { dispbottom "Nuevo Estado: DEX +10.";sc_start SC_DEXFOOD,99000,10;}
+	if (RuedaEstados == 46) { dispbottom "Nuevo Estado: LUK +10.";sc_start SC_LUKFOOD,99000,10;}
+	if (RuedaEstados == 47) { dispbottom "Nuevo Estado: Aspersio.";sc_start SC_ASPERSIO,99000,5;skilleffect 86,5;}
+	if (RuedaEstados == 48) { dispbottom "Nuevo Estado: Auto Berserk.";sc_start SC_AUTOBERSERK,99000,1;skilleffect 53,1;}
+	if (RuedaEstados == 49) { dispbottom "Nuevo Estado: Defender.";sc_start SC_DEFENDER,99000,5;skilleffect 222,5;}
+	if (RuedaEstados == 50) { dispbottom "Nuevo Estado: Reject Sword.";sc_start SC_REJECTSWORD,99000,5;skilleffect 390,5;}
+	if (RuedaEstados == 51) { dispbottom "Nuevo Estado: Sight Blaster.";sc_start SC_SIGHTBLASTER,99000,10;}
+	if (RuedaEstados == 52) { dispbottom "Nuevo Estado: Mind Breaker.";sc_start SC_MINDBREAKER,99000,5;skilleffect 403,5;}
+	if (RuedaEstados == 53) { dispbottom "Nuevo Estado: Maximize Power.";sc_start SC_MAXIMIZEPOWER,99000,5;skilleffect 114,5;}
+	if (RuedaEstados == 54) { dispbottom "Nuevo Estado: Meltdown.";sc_start SC_MELTDOWN,99000,10;skilleffect 384,10;}
+	if (RuedaEstados == 55) { dispbottom "Nuevo Estado: Soul.";sc_start SC_NEN,99000,5;}
+	if (RuedaEstados == 56) { dispbottom "Nuevo Estado: HP +10%.";sc_start SC_INCMHPRATE,99000,10;}
+	if (RuedaEstados == 57) { dispbottom "Nuevo Estado: Critical +12.";sc_start SC_INCCRI,99000,12;}
+	if (RuedaEstados == 58) { dispbottom "Nuevo Estado: Evasión +30.";sc_start SC_FleeFood,99000,30;}
+	if (RuedaEstados == 59) { dispbottom "Nuevo Estado: Precisión +30.";sc_start SC_INCHIT,99000,30;}
+	if (RuedaEstados == 60) { dispbottom "Nuevo Estado: SP +10%.";sc_start SC_INCMSPRATE,99000,10;}
+	if (@BonosdeRachas >= 1) { set RuedaEstados,0; set @BonosdeRachas,@BonosdeRachas-1; goto bonos;}}}
+end;
+
+liberar:
+if ((Class == 4030) || (Class == 4096) || (Class == 7) || (Class == 4008) || (Class == 4054)|| (Class == 4060)) goto LiberaKnight;
+if ((Class == 4037) || (Class == 4102) || (Class == 14) || (Class == 4015) || (Class == 4066)|| (Class == 4073)) goto LiberaCrusader;
+if ((Class == 4035) || (Class == 4101) || (Class == 12) || (Class == 4013) || (Class == 4059)|| (Class == 4065)) goto LiberaAssassin;
+if ((Class == 4040) || (Class == 4108) || (Class == 17) || (Class == 4018) || (Class == 4072)|| (Class == 4079)) goto LiberaRogue;
+if ((Class == 4034) || (Class == 4098) || (Class == 11) || (Class == 4012) || (Class == 4056)|| (Class == 4062)) goto LiberaHunter;
+if ((Class == 4042) || (Class == 4104) || (Class == 19) || (Class == 4020) || (Class == 4068)|| (Class == 4075)) goto LiberaBard;
+if ((Class == 4043) || (Class == 4105) || (Class == 20) || (Class == 4021) || (Class == 4069)|| (Class == 4076)) goto LiberaDancer;
+if ((Class == 4032) || (Class == 4097) || (Class == 9) || (Class == 4010) || (Class == 4055)|| (Class == 4061)) goto LiberaWizard;
+if ((Class == 4039) || (Class == 4103) || (Class == 16) || (Class == 4017) || (Class == 4067)|| (Class == 4074)) goto LiberaSage;
+if ((Class == 4041) || (Class == 4107) || (Class == 18) || (Class == 4019) || (Class == 4071)|| (Class == 4078)) goto LiberaAlchemist;
+if ((Class == 4033) || (Class == 4100) || (Class == 10) || (Class == 4011) || (Class == 4058)|| (Class == 4064)) goto LiberaBlacksmith;
+if ((Class == 4031) || (Class == 4099) || (Class == 8) || (Class == 4009) || (Class == 4057)|| (Class == 4063)) goto LiberaPriest;
+if ((Class == 4038) || (Class == 4106) || (Class == 15) || (Class == 4016) || (Class == 4070)|| (Class == 4077)) goto LiberaMonk;
+if (Class == 4047) goto LiberaStargladi;
+if (Class == 4049) goto LiberaSoullinker;
+if (Class == 24) goto LiberaGunslinger;
+if (Class == 25) goto LiberaNinja;
+if ((Class == 23) || (Class == 4045)) goto LiberaSN;
+end;
+
+LiberaKnight:
+set EspiritualActivo,1; specialeffect2 488; sleep2 2000; specialeffect2 537; specialeffect2 261; specialeffect2 203; specialeffect2 203; specialeffect2 419; specialeffect2 418; specialeffect2 418; atcommand "@useskill 665 10 "+strcharinfo(0)+""; sc_start SC_INCMHPRATE,660000,15; sc_start SC_MAGNIFICAT,660000,10; sc_start SC_CONCENTRATION,660000,10; sc_start SC_SPCOST_RATE,660000,25; sc_start SC_COMMONSC_RESIST,660000,20; sc_start SC_REFLECTSHIELD,660000,10; sc_start SC_AUTOGUARD,660000,10; sc_start SC_STRFOOD,660000,10; sc_start SC_AGIFOOD,660000,10; bonus2 bHPDrainRate,1000,2; bonus3 bSPDrainRate,1000,2,0; bonus bCastrate,-25; bonus bDelayRate,-25; autobonus "{bonus3 bAutoSpell,6774,1,200;}",2000,BF_WEAPON|BF_MISC; end;
+
+LiberaCrusader:
+set EspiritualActivo,1; specialeffect2 488; sleep2 2000; specialeffect2 537; specialeffect2 261; specialeffect2 203; specialeffect2 203; specialeffect2 419; specialeffect2 418; specialeffect2 418; atcommand "@useskill 668 10 "+strcharinfo(0)+""; sc_start SC_INCMHPRATE,660000,15; sc_start SC_MAGNIFICAT,660000,10; sc_start SC_CONCENTRATION,660000,10; sc_start SC_SPCOST_RATE,660000,25; sc_start SC_COMMONSC_RESIST,660000,20; sc_start SC_REFLECTSHIELD,660000,10; sc_start SC_AUTOGUARD,660000,10; sc_start SC_STRFOOD,660000,10; sc_start SC_VITFOOD,660000,10; bonus2 bHPDrainRate,1000,2; bonus3 bSPDrainRate,1000,2,0; bonus bCastrate,-25; bonus bDelayRate,-25; disguise 1268; autobonus "{bonus3 bAutoSpell,57,1,200;}",2000,BF_WEAPON|BF_MISC; end;
+
+LiberaAssassin:
+set EspiritualActivo,1; specialeffect2 488; sleep2 2000; specialeffect2 537; specialeffect2 261; specialeffect2 203; specialeffect2 203; specialeffect2 419; specialeffect2 418; specialeffect2 418; atcommand "@useskill 665 10 "+strcharinfo(0)+""; sc_start SC_INCMHPRATE,660000,15; sc_start SC_MAGNIFICAT,660000,10; sc_start SC_CONCENTRATION,660000,10; sc_start SC_SPCOST_RATE,660000,25; sc_start SC_COMMONSC_RESIST,660000,20; sc_start SC_REFLECTSHIELD,660000,10; sc_start SC_AUTOGUARD,660000,10; sc_start SC_STRFOOD,660000,10; sc_start SC_AGIFOOD,660000,10; bonus2 bHPDrainRate,1000,2; bonus3 bSPDrainRate,1000,2,0; bonus bCastrate,-25; bonus bDelayRate,-25; autobonus "{bonus3 bAutoSpell,398,1,200;}",2000,BF_WEAPON|BF_MISC; bonus bFlee,10; sc_start SC_SpeedUp1,660000,0; bonus bAspdRate,10; end;
+
+LiberaRogue:
+set EspiritualActivo,1; specialeffect2 488; sleep2 2000; specialeffect2 537; specialeffect2 261; specialeffect2 203; specialeffect2 203; specialeffect2 419; specialeffect2 418; specialeffect2 418; atcommand "@useskill 677 10 "+strcharinfo(0)+""; sc_start SC_INCMHPRATE,660000,15; sc_start SC_MAGNIFICAT,660000,10; sc_start SC_CONCENTRATION,660000,10; sc_start SC_SPCOST_RATE,660000,25; sc_start SC_COMMONSC_RESIST,660000,20; sc_start SC_REFLECTSHIELD,660000,10; sc_start SC_AUTOGUARD,660000,10; sc_start SC_STRFOOD,660000,10; sc_start SC_DEXFOOD,660000,10; bonus2 bHPDrainRate,1000,2; bonus3 bSPDrainRate,1000,2,0; bonus bCastrate,-25; bonus bDelayRate,-25; disguise 1839; autobonus "{bonus3 bAutoSpell,399,5,200;}",2000,BF_WEAPON|BF_MISC; summon "Bandido",1851,660; summon "Bandido",1851,660; summon "Bandido",1851,660; summon "Bandido",1851,660; summon "Bandido",1851,660; end;
+
+LiberaHunter:
+set EspiritualActivo,1; specialeffect2 488; sleep2 2000; specialeffect2 537; specialeffect2 261; specialeffect2 203; specialeffect2 203; specialeffect2 419; specialeffect2 418; specialeffect2 418; atcommand "@useskill 678 10 "+strcharinfo(0)+""; sc_start SC_INCMHPRATE,660000,15; sc_start SC_MAGNIFICAT,660000,10; sc_start SC_CONCENTRATION,660000,10; sc_start SC_SPCOST_RATE,660000,25; sc_start SC_COMMONSC_RESIST,660000,20; sc_start SC_REFLECTSHIELD,660000,10; sc_start SC_AUTOGUARD,660000,10; sc_start SC_DEXFOOD,660000,10; sc_start SC_AGIFOOD,660000,10; bonus2 bHPDrainRate,1000,2; bonus3 bSPDrainRate,1000,2,0; bonus bCastrate,-25; bonus bDelayRate,-25; autobonus "{bonus3 bAutoSpell,382,2,200;}",2000,BF_WEAPON|BF_MISC; summon "Desert Wolf",1821,660; summon "Desert Wolf",1821,660; summon "Desert Wolf",1821,660; summon "Desert Wolf",1821,660; summon "Desert Wolf",1821,660; end;
+
+LiberaBard:
+set EspiritualActivo,1; specialeffect2 488; sleep2 2000; specialeffect2 537; specialeffect2 261; specialeffect2 203; specialeffect2 203; specialeffect2 419; specialeffect2 418; specialeffect2 418; atcommand "@useskill 678 10 "+strcharinfo(0)+""; sc_start SC_INCMHPRATE,660000,15; sc_start SC_MAGNIFICAT,660000,10; sc_start SC_CONCENTRATION,660000,10; sc_start SC_SPCOST_RATE,660000,25; sc_start SC_COMMONSC_RESIST,660000,20; sc_start SC_REFLECTSHIELD,660000,10; sc_start SC_AUTOGUARD,660000,10; sc_start SC_DEXFOOD,660000,10; sc_start SC_VITFOOD,660000,10; bonus2 bHPDrainRate,1000,2; bonus3 bSPDrainRate,1000,2,0; bonus bCastrate,-25; bonus bDelayRate,-25; disguise 1267; autobonus "{bonus3 bAutoSpell,489,5,200;}",2000,BF_WEAPON|BF_MISC; summon "Myst Case",1249,660; summon "Myst Case",1249,660; summon "Myst Case",1249,660; summon "Myst Case",1249,660; summon "Myst Case",1249,660; end;
+
+LiberaDancer:
+set EspiritualActivo,1; specialeffect2 488; sleep2 2000; specialeffect2 537; specialeffect2 261; specialeffect2 203; specialeffect2 203; specialeffect2 419; specialeffect2 418; specialeffect2 418; atcommand "@useskill 677 10 "+strcharinfo(0)+""; sc_start SC_INCMHPRATE,660000,15; sc_start SC_MAGNIFICAT,660000,10; sc_start SC_CONCENTRATION,660000,10; sc_start SC_SPCOST_RATE,660000,25; sc_start SC_COMMONSC_RESIST,660000,20; sc_start SC_REFLECTSHIELD,660000,10; sc_start SC_AUTOGUARD,660000,10; sc_start SC_DEXFOOD,660000,10; sc_start SC_VITFOOD,660000,10; bonus2 bHPDrainRate,1000,2; bonus3 bSPDrainRate,1000,2,0; bonus bCastrate,-25; bonus bDelayRate,-25; disguise 1370; autobonus "{bonus3 bAutoSpell,670,1,200;}",2000,BF_WEAPON|BF_MISC; summon "Nightmare",1061,660; summon "Nightmare",1061,660; summon "Nightmare",1061,660; summon "Nightmare",1061,660; summon "Nightmare",1061,660; end;
+
+LiberaWizard:
+set EspiritualActivo,1; specialeffect2 488; sleep2 2000; specialeffect2 537; specialeffect2 261; specialeffect2 203; specialeffect2 203; specialeffect2 419; specialeffect2 418; specialeffect2 418; atcommand "@useskill 677 10 "+strcharinfo(0)+""; sc_start SC_INCMHPRATE,660000,15; sc_start SC_MAGNIFICAT,660000,10; sc_start SC_CONCENTRATION,660000,10; sc_start SC_SPCOST_RATE,660000,25; sc_start SC_COMMONSC_RESIST,660000,20; sc_start SC_REFLECTSHIELD,660000,10; sc_start SC_AUTOGUARD,660000,10; sc_start SC_INTFOOD,660000,10; sc_start SC_DEXFOOD,660000,10; bonus2 bHPDrainRate,1000,2; bonus3 bSPDrainRate,1000,2,0; bonus bCastrate,-25; bonus bDelayRate,-25; disguise 1870; autobonus "{bonus3 bAutoSpell,677,5,200;}",2000,BF_WEAPON|BF_MISC; end;
+
+LiberaSage:
+set EspiritualActivo,1; specialeffect2 488; sleep2 2000; specialeffect2 537; specialeffect2 261; specialeffect2 203; specialeffect2 203; specialeffect2 419; specialeffect2 418; specialeffect2 418; atcommand "@useskill 677 10 "+strcharinfo(0)+""; sc_start SC_INCMHPRATE,660000,15; sc_start SC_MAGNIFICAT,660000,10; sc_start SC_CONCENTRATION,660000,10; sc_start SC_SPCOST_RATE,660000,25; sc_start SC_COMMONSC_RESIST,660000,20; sc_start SC_REFLECTSHIELD,660000,10; sc_start SC_AUTOGUARD,660000,10; sc_start SC_INTFOOD,660000,10; sc_start SC_DEXFOOD,660000,10; bonus2 bHPDrainRate,1000,2; bonus3 bSPDrainRate,1000,2,0; bonus bCastrate,-25; bonus bDelayRate,-25; disguise 1198; autobonus "{bonus3 bAutoSpell,199,2,200;}",2000,BF_WEAPON|BF_MISC; end;
+
+LiberaAlchemist:
+set EspiritualActivo,1; specialeffect2 488; sleep2 2000; specialeffect2 537; specialeffect2 261; specialeffect2 203; specialeffect2 203; specialeffect2 419; specialeffect2 418; specialeffect2 418; atcommand "@useskill 668 10 "+strcharinfo(0)+""; sc_start SC_INCMHPRATE,660000,15; sc_start SC_MAGNIFICAT,660000,10; sc_start SC_CONCENTRATION,660000,10; sc_start SC_SPCOST_RATE,660000,25; sc_start SC_COMMONSC_RESIST,660000,20; sc_start SC_REFLECTSHIELD,660000,10; sc_start SC_AUTOGUARD,660000,10; sc_start SC_INTFOOD,660000,10; sc_start SC_DEXFOOD,660000,10; bonus2 bHPDrainRate,1000,2; bonus3 bSPDrainRate,1000,2,0; bonus bCastrate,-25; bonus bDelayRate,-25; disguise 2019; autobonus "{bonus3 bAutoSpell,90,3,200;}",2000,BF_WEAPON|BF_MISC; end;
+
+LiberaBlacksmith:
+set EspiritualActivo,1; specialeffect2 488; sleep2 2000; specialeffect2 537; specialeffect2 261; specialeffect2 203; specialeffect2 203; specialeffect2 419; specialeffect2 418; specialeffect2 418; atcommand "@useskill 677 10 "+strcharinfo(0)+""; sc_start SC_INCMHPRATE,660000,15; sc_start SC_MAGNIFICAT,660000,10; sc_start SC_CONCENTRATION,660000,10; sc_start SC_SPCOST_RATE,660000,25; sc_start SC_COMMONSC_RESIST,660000,20; sc_start SC_REFLECTSHIELD,660000,10; sc_start SC_AUTOGUARD,660000,10; sc_start SC_STRFOOD,660000,10; sc_start SC_DEXFOOD,660000,10; bonus2 bHPDrainRate,1000,2; bonus3 bSPDrainRate,1000,2,0; bonus bCastrate,-25; bonus bDelayRate,-25; disguise 1365; autobonus "{bonus3 bAutoSpell,273,3,200;}",2000,BF_WEAPON|BF_MISC; end;
+
+LiberaPriest:
+set EspiritualActivo,1; specialeffect2 488; sleep2 2000; specialeffect2 537; specialeffect2 261; specialeffect2 203; specialeffect2 203; specialeffect2 419; specialeffect2 418; specialeffect2 418; atcommand "@useskill 677 10 "+strcharinfo(0)+""; sc_start SC_INCMHPRATE,660000,15; sc_start SC_MAGNIFICAT,660000,10; sc_start SC_CONCENTRATION,660000,10; sc_start SC_SPCOST_RATE,660000,25; sc_start SC_COMMONSC_RESIST,660000,20; sc_start SC_REFLECTSHIELD,660000,10; sc_start SC_AUTOGUARD,660000,10; sc_start SC_INTFOOD,660000,10; sc_start SC_VITFOOD,660000,10; bonus2 bHPDrainRate,1000,2; bonus3 bSPDrainRate,1000,2,0; bonus bCastrate,-25; bonus bDelayRate,-25; disguise 1701; autobonus "{bonus3 bAutoSpell,8014,3,200;}",2000,BF_WEAPON|BF_MISC; summon "Chepet",1250,660; summon "Chepet",1250,660; summon "Chepet",1250,660; summon "Chepet",1250,660; summon "Chepet",1250,660; bonus2 bSkillHeal,"AL_HEAL",50; end;
+
+LiberaMonk:
+set EspiritualActivo,1; specialeffect2 488; sleep2 2000; specialeffect2 537; specialeffect2 261; specialeffect2 203; specialeffect2 203; specialeffect2 419; specialeffect2 418; specialeffect2 418; atcommand "@useskill 678 10 "+strcharinfo(0)+""; sc_start SC_INCMHPRATE,660000,15; sc_start SC_MAGNIFICAT,660000,10; sc_start SC_CONCENTRATION,660000,10; sc_start SC_SPCOST_RATE,660000,25; sc_start SC_COMMONSC_RESIST,660000,20; sc_start SC_REFLECTSHIELD,660000,10; sc_start SC_AUTOGUARD,660000,10; sc_start SC_STRFOOD,660000,10; sc_start SC_INTFOOD,660000,10; bonus2 bHPDrainRate,1000,2; bonus3 bSPDrainRate,1000,2,0; bonus bCastrate,-25; bonus bDelayRate,-25; autobonus "{bonus3 bAutoSpell,536,3,200;}",2000,BF_WEAPON|BF_MISC; bonus bFlee,20; sc_start SC_SpeedUp1,660000,0; end;
+
+LiberaStarGladi:
+set EspiritualActivo,1; specialeffect2 488; sleep2 2000; specialeffect2 537; specialeffect2 261; specialeffect2 203; specialeffect2 203; specialeffect2 419; specialeffect2 418; specialeffect2 418; atcommand "@useskill 678 10 "+strcharinfo(0)+""; sc_start SC_INCMHPRATE,660000,15; sc_start SC_MAGNIFICAT,660000,10; sc_start SC_CONCENTRATION,660000,10; sc_start SC_SPCOST_RATE,660000,25; sc_start SC_COMMONSC_RESIST,660000,20; sc_start SC_REFLECTSHIELD,660000,10; sc_start SC_AUTOGUARD,660000,10; sc_start SC_STRFOOD,660000,10; sc_start SC_DEXFOOD,660000,10; bonus2 bHPDrainRate,1000,2; bonus3 bSPDrainRate,1000,2,0; bonus bCastrate,-25; bonus bDelayRate,-25; autobonus "{bonus3 bAutoSpell,372,1,200;}",2000,BF_WEAPON|BF_MISC; bonus bFlee,20; sc_start SC_SpeedUp1,660000,0; end;
+
+LiberaSoullinker:
+set EspiritualActivo,1; specialeffect2 488; sleep2 2000; specialeffect2 537; specialeffect2 261; specialeffect2 203; specialeffect2 203; specialeffect2 419; specialeffect2 418; specialeffect2 418; atcommand "@useskill 677 10 "+strcharinfo(0)+""; sc_start SC_INCMHPRATE,660000,15; sc_start SC_MAGNIFICAT,660000,10; sc_start SC_CONCENTRATION,660000,10; sc_start SC_SPCOST_RATE,660000,25; sc_start SC_COMMONSC_RESIST,660000,20; sc_start SC_REFLECTSHIELD,660000,10; sc_start SC_AUTOGUARD,660000,10; sc_start SC_INTFOOD,660000,10; sc_start SC_DEXFOOD,660000,10; bonus2 bHPDrainRate,1000,2; bonus3 bSPDrainRate,1000,2,0; bonus bCastrate,-25; bonus bDelayRate,-25; disguise 1921; autobonus "{bonus3 bAutoSpell,518,5,200;}",2000,BF_WEAPON|BF_MISC; summon "Alma",1129,660; summon "Alma",1129,660; summon "Alma",1129,660; summon "Alma",1129,660; summon "Alma",1129,660; end;
+
+LiberaGunslinger:
+set EspiritualActivo,1; specialeffect2 488; sleep2 2000; specialeffect2 537; specialeffect2 261; specialeffect2 203; specialeffect2 203; specialeffect2 419; specialeffect2 418; specialeffect2 418; atcommand "@useskill 668 10 "+strcharinfo(0)+""; sc_start SC_INCMHPRATE,660000,15; sc_start SC_MAGNIFICAT,660000,10; sc_start SC_CONCENTRATION,660000,10; sc_start SC_SPCOST_RATE,660000,25; sc_start SC_COMMONSC_RESIST,660000,20; sc_start SC_REFLECTSHIELD,660000,10; sc_start SC_AUTOGUARD,660000,10; sc_start SC_DEXFOOD,660000,10; sc_start SC_VITFOOD,660000,10; bonus2 bHPDrainRate,1000,2; bonus3 bSPDrainRate,1000,2,0; bonus bCastrate,-25; bonus bDelayRate,-25; disguise 1403; autobonus "{bonus3 bAutoSpell,266,1,200;}",2000,BF_WEAPON|BF_MISC; bonus bSplashRange,1; end;
+
+LiberaNinja:
+set EspiritualActivo,1; specialeffect2 488; sleep2 2000; specialeffect2 537; specialeffect2 261; specialeffect2 203; specialeffect2 203; specialeffect2 419; specialeffect2 418; specialeffect2 418; atcommand "@useskill 677 10 "+strcharinfo(0)+""; sc_start SC_INCMHPRATE,660000,15; sc_start SC_MAGNIFICAT,660000,10; sc_start SC_CONCENTRATION,660000,10; sc_start SC_SPCOST_RATE,660000,25; sc_start SC_COMMONSC_RESIST,660000,20; sc_start SC_REFLECTSHIELD,660000,10; sc_start SC_AUTOGUARD,660000,10; sc_start SC_DEXFOOD,660000,10; sc_start SC_INTFOOD,660000,10; bonus2 bHPDrainRate,1000,2; bonus3 bSPDrainRate,1000,2,0; bonus bCastrate,-25; bonus bDelayRate,-25; disguise 1401; autobonus2 "{bonus3 bAutoSpellWhenHit,541,1,200;}",2000,BF_WEAPON|BF_MISC; bonus bFlee,20; sc_start SC_SpeedUp1,660000,0; end;
+
+LiberaSN:
+set EspiritualActivo,1; specialeffect2 488; sleep2 2000; specialeffect2 537; specialeffect2 261; specialeffect2 203; specialeffect2 203; specialeffect2 419; specialeffect2 418; specialeffect2 418; atcommand "@useskill 664 10 "+strcharinfo(0)+""; sc_start SC_INCMHPRATE,660000,15; sc_start SC_MAGNIFICAT,660000,10; sc_start SC_CONCENTRATION,660000,10; sc_start SC_SPCOST_RATE,660000,25; sc_start SC_COMMONSC_RESIST,660000,20; sc_start SC_REFLECTSHIELD,660000,10; sc_start SC_AUTOGUARD,660000,10; sc_start SC_STRFOOD,660000,10; sc_start SC_INTFOOD,660000,10; bonus2 bHPDrainRate,1000,2; bonus3 bSPDrainRate,1000,2,0; bonus bCastrate,-25; bonus bDelayRate,-25; disguise 1388; autobonus "{bonus3 bAutoSpell,13,5,200;}",2000,BF_WEAPON|BF_MISC; summon "Angeling",1096,660; summon "Deviling",1582,660; summon "Ghostring",1120,660; summon "Angeling",1096,660; summon "Deviling",1582,660; end;
+
+
+// ----------------------------
+// ------ Sala Sorpresa -------
+// ----------------------------
+beneficios:
+set @PVPModoSorp,rand(1,10);
+if (@PVPModoSorp == 1) goto modsor1;
+if (@PVPModoSorp == 2) goto modsor1;
+if (@PVPModoSorp == 3) goto modsor1;
+if (@PVPModoSorp == 4) goto modsor1;
+if (@PVPModoSorp == 5) goto modsor1;
+if (@PVPModoSorp == 6) goto modsor1;
+if (@PVPModoSorp == 7) goto modsor2;
+if (@PVPModoSorp == 8) goto modsor2;
+if (@PVPModoSorp == 9) goto modsor2;
+if (@PVPModoSorp == 10) goto modsor3;
+end;
+
+modsor1:
+set RuedaEstados,rand(1,60);
+	if (RuedaEstados == 1) { dispbottom "Nuevo Estado: Endure.";sc_start SC_ENDURE,99000,10;skilleffect 8,10;}
+	if (RuedaEstados == 2) { dispbottom "Nuevo Estado: Provoque.";sc_start SC_PROVOKE,99000,10;skilleffect 6,10;}
+	if (RuedaEstados == 3) { dispbottom "Nuevo Estado: Auto Guard.";sc_start SC_AUTOGUARD,99000,10;skilleffect 249,10;}
+	if (RuedaEstados == 4) { dispbottom "Nuevo Estado: Aura Blade.";sc_start SC_AURABLADE,99000,5;skilleffect 355,5;}
+	if (RuedaEstados == 5) { dispbottom "Nuevo Estado: Concentration.";sc_start SC_CONCENTRATION,99000,5;skilleffect 357,5;}
+	if (RuedaEstados == 6) { dispbottom "Nuevo Estado: Reflect Shield.";sc_start SC_REFLECTSHIELD,99000,10;skilleffect 252,10;}
+	if (RuedaEstados == 7) { dispbottom "Nuevo Estado: Providence.";sc_start SC_PROVIDENCE,99000,5;skilleffect 256,5;}
+	if (RuedaEstados == 8) { dispbottom "Nuevo Estado: Poison React.";sc_start SC_POISONREACT,99000,10;skilleffect 139,10;}
+	if (RuedaEstados == 9) { dispbottom "Nuevo Estado: Wind Walk.";sc_start SC_WINDWALK,99000,10;skilleffect 383,10;}
+	if (RuedaEstados == 10) { dispbottom "Nuevo Estado: Sight.";sc_start SC_SIGHT,99000,1;skilleffect 10,1;}
+	if (RuedaEstados == 11) { dispbottom "Nuevo Estado: Energy Coat.";sc_start SC_ENERGYCOAT,99000,1;skilleffect 157,1;}
+	if (RuedaEstados == 12) { dispbottom "Nuevo Estado: Amplify Magic Power.";sc_start SC_MAGICPOWER,99000,10;skilleffect 366,10;}
+	if (RuedaEstados == 13) { dispbottom "Nuevo Estado: Loud Exclamation.";sc_start SC_LOUD,99000,1;skilleffect 155,1;}
+	if (RuedaEstados == 14) { dispbottom "Nuevo Estado: Chemical Protection Weapon.";sc_start SC_CP_WEAPON,99000,5;skilleffect 234,5;}
+	if (RuedaEstados == 15) { dispbottom "Nuevo Estado: Chemical Protection Shield.";sc_start SC_CP_SHIELD,99000,5;
+skilleffect 235,5;}
+	if (RuedaEstados == 16) { dispbottom "Nuevo Estado: Chemical Protection Armor.";sc_start SC_CP_ARMOR,99000,5;skilleffect 236,5;}
+	if (RuedaEstados == 17) { dispbottom "Nuevo Estado: Chemical Protection Helm.";sc_start SC_CP_HELM,99000,5;skilleffect 237,5;}
+	if (RuedaEstados == 18) { dispbottom "Nuevo Estado: Adrenaline Rush.";sc_start SC_ADRENALINE,99000,5;skilleffect 111,5;}
+	if (RuedaEstados == 19) { dispbottom "Nuevo Estado: Weapon Perfection.";sc_start SC_WEAPONPERFECTION,99000,5;skilleffect 112,5;}
+	if (RuedaEstados == 20) { dispbottom "Nuevo Estado: Over Thrust.";sc_start SC_OVERTHRUST,99000,5;skilleffect 113,5;}
+	if (RuedaEstados == 21) { dispbottom "Nuevo Estado: True Sight.";sc_start SC_TRUESIGHT,99000,10;skilleffect 380,10;}
+	if (RuedaEstados == 22) { dispbottom "Nuevo Estado: Double Casting.";sc_start SC_DOUBLECAST,99000,5;skilleffect 482,5;}
+	if (RuedaEstados == 23) { dispbottom "Nuevo Estado: Improve Concentration.";sc_start SC_CONCENTRATE,99000,10;skilleffect 45,10;}
+	if (RuedaEstados == 24) { dispbottom "Nuevo Estado: Blessing.";sc_start SC_BLESSING,99000,10;skilleffect 34,10;}
+	if (RuedaEstados == 25) { dispbottom "Nuevo Estado: Increase Agility.";sc_start SC_INCREASEAGI,99000,10;skilleffect 29,10;}
+	if (RuedaEstados == 26) { dispbottom "Nuevo Estado: Angelus.";sc_start SC_ANGELUS,99000,10;skilleffect 33,5;}
+	if (RuedaEstados == 27) { dispbottom "Nuevo Estado: Ruwach.";sc_start SC_RUWACH,99000,1;skilleffect 24,1;}
+	if (RuedaEstados == 28) { dispbottom "Nuevo Estado: Kyrie Eleison.";sc_start SC_KYRIE,99000,10;skilleffect 73,10;}
+	if (RuedaEstados == 29) { dispbottom "Nuevo Estado: Magnificat.";sc_start SC_MAGNIFICAT,99000,10;skilleffect 74,10;}
+	if (RuedaEstados == 30) { dispbottom "Nuevo Estado: Impositu Manus.";sc_start SC_IMPOSITIO,99000,5;skilleffect 66,10;}
+	if (RuedaEstados == 31) { dispbottom "Nuevo Estado: Gloria.";sc_start SC_GLORIA,99000,5;skilleffect 75,10;}
+	if (RuedaEstados == 32) { dispbottom "Nuevo Estado: Suffragium.";sc_start SC_SUFFRAGIUM,99000,5;skilleffect 67,5;}
+	if (RuedaEstados == 33) { dispbottom "Nuevo Estado: Assumptio.";sc_start SC_ASSUMPTIO,99000,5;skilleffect 361,5;}
+	if (RuedaEstados == 34) { dispbottom "Nuevo Estado: Ciceda Shell.";sc_start SC_UTSUSEMI,99000,5;skilleffect 531,5;}
+	if (RuedaEstados == 35) { dispbottom "Nuevo Estado: Illusionary Shadow.";sc_start SC_BUNSINJYUTSU,99000,10;skilleffect 532,10;}
+	if (RuedaEstados == 36) { dispbottom "Nuevo Estado: Increasing Accuracy.";sc_start SC_INCREASING,99000,1;skilleffect 506,1;}
+	if (RuedaEstados == 37) { dispbottom "Nuevo Estado: Adjustment.";sc_start SC_ADJUSTMENT,99000,1;skilleffect 505,1;}
+	if (RuedaEstados == 38) { dispbottom "Nuevo Estado: Kaupe.";sc_start SC_KAUPE,99000,3;skilleffect 464,3;}
+	if (RuedaEstados == 39) { dispbottom "Nuevo Estado: Kaahi.";sc_start SC_KAAHI,99000,3;skilleffect 463,3;}
+	if (RuedaEstados == 40) { dispbottom "Nuevo Estado: Sight.";sc_start SC_SIGHT,99000,1;skilleffect 10,1;}
+	if (RuedaEstados == 41) { dispbottom "Nuevo Estado: STR +10.";sc_start SC_STRFOOD,99000,10;}
+	if (RuedaEstados == 42) { dispbottom "Nuevo Estado: AGI +10.";sc_start SC_AGIFOOD,99000,10;}
+	if (RuedaEstados == 43) { dispbottom "Nuevo Estado: VIT +10.";sc_start SC_VITFOOD,99000,10;}
+	if (RuedaEstados == 44) { dispbottom "Nuevo Estado: INT +10.";sc_start SC_INTFOOD,99000,10;}
+	if (RuedaEstados == 45) { dispbottom "Nuevo Estado: DEX +10.";sc_start SC_DEXFOOD,99000,10;}
+	if (RuedaEstados == 46) { dispbottom "Nuevo Estado: LUK +10.";sc_start SC_LUKFOOD,99000,10;}
+	if (RuedaEstados == 47) { dispbottom "Nuevo Estado: Aspersio.";sc_start SC_ASPERSIO,99000,5;skilleffect 86,5;}
+	if (RuedaEstados == 48) { dispbottom "Nuevo Estado: Auto Berserk.";sc_start SC_AUTOBERSERK,99000,1;skilleffect 53,1;}
+	if (RuedaEstados == 49) { dispbottom "Nuevo Estado: Defender.";sc_start SC_DEFENDER,99000,5;skilleffect 222,5;}
+	if (RuedaEstados == 50) { dispbottom "Nuevo Estado: Reject Sword.";sc_start SC_REJECTSWORD,99000,5;skilleffect 390,5;}
+	if (RuedaEstados == 51) { dispbottom "Nuevo Estado: Sight Blaster.";sc_start SC_SIGHTBLASTER,99000,10;}
+	if (RuedaEstados == 52) { dispbottom "Nuevo Estado: Mind Breaker.";sc_start SC_MINDBREAKER,99000,5;skilleffect 403,5;}
+	if (RuedaEstados == 53) { dispbottom "Nuevo Estado: Maximize Power.";sc_start SC_MAXIMIZEPOWER,99000,5;skilleffect 114,5;}
+	if (RuedaEstados == 54) { dispbottom "Nuevo Estado: Meltdown.";sc_start SC_MELTDOWN,99000,10;skilleffect 384,10;}
+	if (RuedaEstados == 55) { dispbottom "Nuevo Estado: Soul.";sc_start SC_NEN,99000,5;}
+	if (RuedaEstados == 56) { dispbottom "Nuevo Estado: HP +10%.";sc_start SC_INCMHPRATE,99000,10;}
+	if (RuedaEstados == 57) { dispbottom "Nuevo Estado: Critical +12.";sc_start SC_INCCRI,99000,12;}
+	if (RuedaEstados == 58) { dispbottom "Nuevo Estado: Evasión +30.";sc_start SC_FleeFood,99000,30;}
+	if (RuedaEstados == 59) { dispbottom "Nuevo Estado: Precisión +30.";sc_start SC_INCHIT,99000,30;}
+	if (RuedaEstados == 60) { dispbottom "Nuevo Estado: SP +10%.";sc_start SC_INCMSPRATE,99000,10;}
+sleep2 5000;
+monster "guild_vs2-1",0,0,"Cofre",1346,1,"eventospvp::OnMyMobDead";
+end;
+
+modsor2:
+dispbottom "Especial: Nuevo Aliado.";
+summon "Aliado",rand(1001,2024),40;
+summon "Aliado",rand(1001,2024),40;
+sleep2 5000;
+monster "guild_vs2-1",0,0,"Cofre",1346,1,"eventospvp::OnMyMobDead";
+end;
+
+modsor3:
+dispbottom "Especial: Gigantizacion.";
+sc_start SC_STRFOOD,99000,20;
+sc_start SC_AGIFOOD,99000,20;
+sc_start SC_VITFOOD,99000,20;
+sc_start SC_INTFOOD,99000,20;
+sc_start SC_DEXFOOD,99000,20;
+sc_start SC_LUKFOOD,99000,20;
+atcommand "@size 2";
+sleep2 5000;
+monster "guild_vs2-1",0,0,"Cofre",1346,1,"eventospvp::OnMyMobDead";
+sleep2 91000;
+atcommand "@size 3";
+end;
+
+
+beneficiosnov:
+set @PVPModoNov,rand(1,100);
+if (@PVPModoNov >= 50) goto modnov1;
+if (@PVPModoNov >= 35) goto modnov2;
+if (@PVPModoNov >= 25) goto modnov3;
+if (@PVPModoNov >= 15) goto modnov4;
+if (@PVPModoNov >= 1) goto modnov5;
+
+modnov1:
+set @RuedaEstados,rand(1,60);
+	if (@RuedaEstados == 1) { dispbottom "Nuevo Estado: Endure.";sc_start SC_ENDURE,99000,10;skilleffect 8,10;}
+	if (@RuedaEstados == 2) { dispbottom "Nuevo Estado: Provoque.";sc_start SC_PROVOKE,99000,10;skilleffect 6,10;}
+	if (@RuedaEstados == 3) { dispbottom "Nuevo Estado: Auto Guard.";sc_start SC_AUTOGUARD,99000,10;skilleffect 249,10;}
+	if (@RuedaEstados == 4) { dispbottom "Nuevo Estado: Aura Blade.";sc_start SC_AURABLADE,99000,5;skilleffect 355,5;}
+	if (@RuedaEstados == 5) { dispbottom "Nuevo Estado: Concentration.";sc_start SC_CONCENTRATION,99000,5;skilleffect 357,5;}
+	if (@RuedaEstados == 6) { dispbottom "Nuevo Estado: Reflect Shield.";sc_start SC_REFLECTSHIELD,99000,10;skilleffect 252,10;}
+	if (@RuedaEstados == 7) { dispbottom "Nuevo Estado: Providence.";sc_start SC_PROVIDENCE,99000,5;skilleffect 256,5;}
+	if (@RuedaEstados == 8) { dispbottom "Nuevo Estado: Poison React.";sc_start SC_POISONREACT,99000,10;skilleffect 139,10;}
+	if (@RuedaEstados == 9) { dispbottom "Nuevo Estado: Wind Walk.";sc_start SC_WINDWALK,99000,10;skilleffect 383,10;}
+	if (@RuedaEstados == 10) { dispbottom "Nuevo Estado: Sight.";sc_start SC_SIGHT,99000,1;skilleffect 10,1;}
+	if (@RuedaEstados == 11) { dispbottom "Nuevo Estado: Energy Coat.";sc_start SC_ENERGYCOAT,99000,1;skilleffect 157,1;}
+	if (@RuedaEstados == 12) { dispbottom "Nuevo Estado: Amplify Magic Power.";sc_start SC_MAGICPOWER,99000,10;skilleffect 366,10;}
+	if (@RuedaEstados == 13) { dispbottom "Nuevo Estado: Loud Exclamation.";sc_start SC_LOUD,99000,1;skilleffect 155,1;}
+	if (@RuedaEstados == 14) { dispbottom "Nuevo Estado: Chemical Protection Weapon.";sc_start SC_CP_WEAPON,99000,5;skilleffect 234,5;}
+	if (@RuedaEstados == 15) { dispbottom "Nuevo Estado: Chemical Protection Shield.";sc_start SC_CP_SHIELD,99000,5;
+skilleffect 235,5;}
+	if (@RuedaEstados == 16) { dispbottom "Nuevo Estado: Chemical Protection Armor.";sc_start SC_CP_ARMOR,99000,5;skilleffect 236,5;}
+	if (@RuedaEstados == 17) { dispbottom "Nuevo Estado: Chemical Protection Helm.";sc_start SC_CP_HELM,99000,5;skilleffect 237,5;}
+	if (@RuedaEstados == 18) { dispbottom "Nuevo Estado: Adrenaline Rush.";sc_start SC_ADRENALINE,99000,5;skilleffect 111,5;}
+	if (@RuedaEstados == 19) { dispbottom "Nuevo Estado: Weapon Perfection.";sc_start SC_WEAPONPERFECTION,99000,5;skilleffect 112,5;}
+	if (@RuedaEstados == 20) { dispbottom "Nuevo Estado: Over Thrust.";sc_start SC_OVERTHRUST,99000,5;skilleffect 113,5;}
+	if (@RuedaEstados == 21) { dispbottom "Nuevo Estado: True Sight.";sc_start SC_TRUESIGHT,99000,10;skilleffect 380,10;}
+	if (@RuedaEstados == 22) { dispbottom "Nuevo Estado: Double Casting.";sc_start SC_DOUBLECAST,99000,5;skilleffect 482,5;}
+	if (@RuedaEstados == 23) { dispbottom "Nuevo Estado: Improve Concentration.";sc_start SC_CONCENTRATE,99000,10;skilleffect 45,10;}
+	if (@RuedaEstados == 24) { dispbottom "Nuevo Estado: Blessing.";sc_start SC_BLESSING,99000,10;skilleffect 34,10;}
+	if (@RuedaEstados == 25) { dispbottom "Nuevo Estado: Increase Agility.";sc_start SC_INCREASEAGI,99000,10;skilleffect 29,10;}
+	if (@RuedaEstados == 26) { dispbottom "Nuevo Estado: Angelus.";sc_start SC_ANGELUS,99000,10;skilleffect 33,5;}
+	if (@RuedaEstados == 27) { dispbottom "Nuevo Estado: Ruwach.";sc_start SC_RUWACH,99000,1;skilleffect 24,1;}
+	if (@RuedaEstados == 28) { dispbottom "Nuevo Estado: Kyrie Eleison.";sc_start SC_KYRIE,99000,10;skilleffect 73,10;}
+	if (@RuedaEstados == 29) { dispbottom "Nuevo Estado: Magnificat.";sc_start SC_MAGNIFICAT,99000,10;skilleffect 74,10;}
+	if (@RuedaEstados == 30) { dispbottom "Nuevo Estado: Impositu Manus.";sc_start SC_IMPOSITIO,99000,5;skilleffect 66,10;}
+	if (@RuedaEstados == 31) { dispbottom "Nuevo Estado: Gloria.";sc_start SC_GLORIA,99000,5;skilleffect 75,10;}
+	if (@RuedaEstados == 32) { dispbottom "Nuevo Estado: Suffragium.";sc_start SC_SUFFRAGIUM,99000,5;skilleffect 67,5;}
+	if (@RuedaEstados == 33) { dispbottom "Nuevo Estado: Assumptio.";sc_start SC_ASSUMPTIO,99000,5;skilleffect 361,5;}
+	if (@RuedaEstados == 34) { dispbottom "Nuevo Estado: Ciceda Shell.";sc_start SC_UTSUSEMI,99000,5;skilleffect 531,5;}
+	if (@RuedaEstados == 35) { dispbottom "Nuevo Estado: Illusionary Shadow.";sc_start SC_BUNSINJYUTSU,99000,10;skilleffect 532,10;}
+	if (@RuedaEstados == 36) { dispbottom "Nuevo Estado: Increasing Accuracy.";sc_start SC_INCREASING,99000,1;skilleffect 506,1;}
+	if (@RuedaEstados == 37) { dispbottom "Nuevo Estado: Adjustment.";sc_start SC_ADJUSTMENT,99000,1;skilleffect 505,1;}
+	if (@RuedaEstados == 38) { dispbottom "Nuevo Estado: Kaupe.";sc_start SC_KAUPE,99000,3;skilleffect 464,3;}
+	if (@RuedaEstados == 39) { dispbottom "Nuevo Estado: Kaahi.";sc_start SC_KAAHI,99000,3;skilleffect 463,3;}
+	if (@RuedaEstados == 40) { dispbottom "Nuevo Estado: Sight.";sc_start SC_SIGHT,99000,1;skilleffect 10,1;}
+	if (@RuedaEstados == 41) { dispbottom "Nuevo Estado: STR +10.";sc_start SC_STRFOOD,99000,10;}
+	if (@RuedaEstados == 42) { dispbottom "Nuevo Estado: AGI +10.";sc_start SC_AGIFOOD,99000,10;}
+	if (@RuedaEstados == 43) { dispbottom "Nuevo Estado: VIT +10.";sc_start SC_VITFOOD,99000,10;}
+	if (@RuedaEstados == 44) { dispbottom "Nuevo Estado: INT +10.";sc_start SC_INTFOOD,99000,10;}
+	if (@RuedaEstados == 45) { dispbottom "Nuevo Estado: DEX +10.";sc_start SC_DEXFOOD,99000,10;}
+	if (@RuedaEstados == 46) { dispbottom "Nuevo Estado: LUK +10.";sc_start SC_LUKFOOD,99000,10;}
+	if (@RuedaEstados == 47) { dispbottom "Nuevo Estado: Aspersio.";sc_start SC_ASPERSIO,99000,5;skilleffect 86,5;}
+	if (@RuedaEstados == 48) { dispbottom "Nuevo Estado: Auto Berserk.";sc_start SC_AUTOBERSERK,99000,1;skilleffect 53,1;}
+	if (@RuedaEstados == 49) { dispbottom "Nuevo Estado: Defender.";sc_start SC_DEFENDER,99000,5;skilleffect 222,5;}
+	if (@RuedaEstados == 50) { dispbottom "Nuevo Estado: Reject Sword.";sc_start SC_REJECTSWORD,99000,5;skilleffect 390,5;}
+	if (@RuedaEstados == 51) { dispbottom "Nuevo Estado: Sight Blaster.";sc_start SC_SIGHTBLASTER,99000,10;}
+	if (@RuedaEstados == 52) { dispbottom "Nuevo Estado: Mind Breaker.";sc_start SC_MINDBREAKER,99000,5;skilleffect 403,5;}
+	if (@RuedaEstados == 53) { dispbottom "Nuevo Estado: Maximize Power.";sc_start SC_MAXIMIZEPOWER,99000,5;skilleffect 114,5;}
+	if (@RuedaEstados == 54) { dispbottom "Nuevo Estado: Meltdown.";sc_start SC_MELTDOWN,99000,10;skilleffect 384,10;}
+	if (@RuedaEstados == 55) { dispbottom "Nuevo Estado: Soul.";sc_start SC_NEN,99000,5;}
+	if (@RuedaEstados == 56) { dispbottom "Nuevo Estado: HP +10%.";sc_start SC_INCMHPRATE,99000,10;}
+	if (@RuedaEstados == 57) { dispbottom "Nuevo Estado: Critical +12.";sc_start SC_INCCRI,99000,12;}
+	if (@RuedaEstados == 58) { dispbottom "Nuevo Estado: Evasión +30.";sc_start SC_FleeFood,99000,30;}
+	if (@RuedaEstados == 59) { dispbottom "Nuevo Estado: Precisión +30.";sc_start SC_INCHIT,99000,30;}
+	if (@RuedaEstados == 60) { dispbottom "Nuevo Estado: SP +10%.";sc_start SC_INCMSPRATE,99000,10;}
+sleep2 5000;
+monster "pvp_n_1-3",0,0,"Cofre",1346,1,"eventospvp::OnMyMobDead2";
+end;
+
+modnov2:
+dispbottom "Especial: Nuevo Aliado.";
+summon "Aliado",rand(1001,2024),40;
+summon "Aliado",rand(1001,2024),40;
+sleep2 5000;
+monster "pvp_n_1-3",0,0,"Cofre",1346,1,"eventospvp::OnMyMobDead2";
+end;
+
+modnov3:
+dispbottom "Especial: Gigantizacion.";
+sc_start SC_STRFOOD,99000,90;
+sc_start SC_AGIFOOD,99000,90;
+sc_start SC_VITFOOD,99000,90;
+sc_start SC_INTFOOD,99000,90;
+sc_start SC_DEXFOOD,99000,90;
+sc_start SC_LUKFOOD,99000,90;
+atcommand "@size 2";
+sleep2 5000;
+monster "pvp_n_1-3",0,0,"Cofre",1346,1,"eventospvp::OnMyMobDead2";
+sleep2 91000;
+atcommand "@size 3";
+end;
+
+modnov4:
+dispbottom "Especial: Enfermedad.";
+set @NovEnfermedad,rand(1,8);
+if (@NovEnfermedad == 1) atcommand "@useskill 663 10 "+strcharinfo(0)+"";
+if (@NovEnfermedad == 2) atcommand "@useskill 664 10 "+strcharinfo(0)+"";
+if (@NovEnfermedad == 3) atcommand "@useskill 665 10 "+strcharinfo(0)+"";
+if (@NovEnfermedad == 4) atcommand "@useskill 666 10 "+strcharinfo(0)+"";
+if (@NovEnfermedad == 5) atcommand "@useskill 667 10 "+strcharinfo(0)+"";
+if (@NovEnfermedad == 6) atcommand "@useskill 668 10 "+strcharinfo(0)+"";
+if (@NovEnfermedad == 7) atcommand "@useskill 677 10 "+strcharinfo(0)+"";
+if (@NovEnfermedad == 8) atcommand "@useskill 678 10 "+strcharinfo(0)+"";
+monster "pvp_n_1-3",0,0,"Cofre",1346,1,"eventospvp::OnMyMobDead2";
+end;
+
+
+modnov5:
+dispbottom "Especial: Lluvia de Meteoritos.";
+sc_start SC_DEXFOOD,1000,250;
+atcommand "@useskill 83 11 "+strcharinfo(0)+"";
+sleep2 1000;
+sc_start SC_DEXFOOD,1000,250;
+atcommand "@useskill 83 11 "+strcharinfo(0)+"";
+sleep2 1000;
+sc_start SC_DEXFOOD,1000,250;
+atcommand "@useskill 83 11 "+strcharinfo(0)+"";
+sleep2 1000;
+sc_start SC_DEXFOOD,1000,250;
+atcommand "@useskill 83 11 "+strcharinfo(0)+"";
+sleep2 1000;
+sc_start SC_DEXFOOD,1000,250;
+atcommand "@useskill 83 11 "+strcharinfo(0)+"";
+sleep2 1000;
+sc_start SC_DEXFOOD,1000,250;
+atcommand "@useskill 83 11 "+strcharinfo(0)+"";
+sleep2 1000;
+sc_start SC_DEXFOOD,1000,250;
+atcommand "@useskill 83 11 "+strcharinfo(0)+"";
+sleep2 1000;
+sc_start SC_DEXFOOD,1000,250;
+atcommand "@useskill 83 11 "+strcharinfo(0)+"";
+sleep2 1000;
+monster "pvp_n_1-3",0,0,"Cofre",1346,1,"eventospvp::OnMyMobDead2";
+end;
+
+// ----------------------------
+// --------- Deslogeo ---------
+// ----------------------------
+
+OnPCLogoutEvent:
+if (EspiritualActivo == 1) {set EspiritualActivo,0; sc_end SC_STRFOOD; sc_end SC_AGIFOOD; sc_end SC_VITFOOD; sc_end SC_INTFOOD; sc_end SC_DEXFOOD; sc_end SC_LUKFOOD; sc_end SC_COMMONSC_RESIST; sc_end SC_SPCOST_RATE; sc_end SC_CONCENTRATION; sc_end SC_REFLECTSHIELD; sc_end SC_AUTOGUARD; sc_end SC_MAGNIFICAT; sc_end SC_INCMHPRATE;}
+if ((@PVPRachMod == 1) || (@PVPSorMod == 1)) goto disipar;
+end;
+
+disipar:
+sc_end SC_ENDURE;
+sc_end SC_PROVOKE;
+sc_end SC_AUTOGUARD;
+sc_end SC_AURABLADE;
+sc_end SC_CONCENTRATION;
+sc_end SC_REFLECTSHIELD;
+sc_end SC_PROVIDENCE;
+sc_end SC_POISONREACT;
+sc_end SC_WINDWALK;
+sc_end SC_SIGHT;
+sc_end SC_ENERGYCOAT;
+sc_end SC_MAGICPOWER;
+sc_end SC_LOUD;
+sc_end SC_CP_WEAPON;
+sc_end SC_CP_SHIELD;
+sc_end SC_CP_ARMOR;
+sc_end SC_CP_HELM;
+sc_end SC_ADRENALINE;
+sc_end SC_WEAPONPERFECTION;
+sc_end SC_OVERTHRUST;
+sc_end SC_TRUESIGHT;
+sc_end SC_DOUBLECAST;
+sc_end SC_CONCENTRATE;
+sc_end SC_BLESSING;
+sc_end SC_INCREASEAGI;
+sc_end SC_ANGELUS;
+sc_end SC_RUWACH;
+sc_end SC_KYRIE;
+sc_end SC_MAGNIFICAT;
+sc_end SC_IMPOSITIO;
+sc_end SC_GLORIA;
+sc_end SC_SUFFRAGIUM;
+sc_end SC_ASSUMPTIO;
+sc_end SC_UTSUSEMI;
+sc_end SC_BUNSINJYUTSU;
+sc_end SC_INCREASING;
+sc_end SC_ADJUSTMENT;
+sc_end SC_KAUPE;
+sc_end SC_KAAHI;
+sc_end SC_KAIZEL;
+sc_end SC_EDP;
+sc_end SC_BERSERK;
+sc_end SC_STRFOOD;
+sc_end SC_AGIFOOD;
+sc_end SC_INTFOOD;
+sc_end SC_DEXFOOD;
+sc_end SC_VITFOOD;
+sc_end SC_LUKFOOD;
+sc_end SC_ASPERSIO;
+sc_end SC_AUTOBERSERK;
+sc_end SC_DEFENDER;
+sc_end SC_REJECTSWORD;
+sc_end SC_SIGHTBLASTER;
+sc_end SC_MINDBREAKER;
+sc_end SC_MAXIMIZEPOWER;
+sc_end SC_MELTDOWN;
+sc_end SC_NEN;
+sc_end SC_INCMHPRATE;
+sc_end SC_INCCRI;
+sc_end SC_FleeFood;
+sc_end SC_COMMONSC_RESIST;
+sc_end SC_INCHIT;
+sc_end SC_SPCOST_RATE;
+sc_end SC_INCMSPRATE;
+end;
+}

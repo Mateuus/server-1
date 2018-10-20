@@ -1,0 +1,169 @@
+//========Script Cambiador======
+//=======By yaasu para la comunidad======
+//======= Gracias EnteMalo por ayudar n_n =======
+//========vERSION 1.0============
+//========Chagelog==========
+//----v 1.0 Lanzado el script=======
+//=======Compatibilidad=======
+//======Ultima Version SVN Trunk======
+
+
+poring_w02,112,91,8	script	Cambiador	51,{
+
+	cutin "bard_eland01",0;
+	mes "[Cambiador]";
+	mes "Hola Viajero n_n";
+	next;
+	cutin "bard_eland01",0;
+	mes "[Cambiador]";
+	mes "";
+	mes "Por lo visto te llamas " + strcharinfo(0) + "";
+	mes "Bueno, yo puedo cambiarte de ropa";
+	menu "Enserio?",si1,"No te creo ¬¬",no1;
+
+si1:
+	cutin "bard_eland02",0;
+	mes "[Cambiador]";
+	mes "";
+	mes "Bueno, de quieres vestir?";
+	next;
+	cutin "bard_eland02",0;
+	menu "De navidad =D",xmas,"De Boda ",boda,"De Verano",summer,"Quitarme el traje que tengo",quit;
+	cutin "bard_eland02",255;
+	close;
+
+	xmas:
+	cutin "bard_eland03",0;
+	mes "[Cambiador]";
+	mes "";
+	mes "Que bien :D ese es el espiritu n_n pero una cosa...";
+	next;
+	cutin "bard_eland03",0;
+	mes "[Cambiador]";
+	mes "";
+	mes "Seguro quieres este traje?";
+	menu "si",si2,"No",no2;
+
+		si2:
+		cutin "bard_eland02",0;
+		mes "[Cambiador]";
+		mes "";
+		mes "Bueno aqui lo tienes";
+		setoption Option_Xmas,1;
+		mes "listo solo dime cuando quieras quitartelo =P";
+		cutin "bard_eland02",255;
+		close;
+		
+		no2:
+		cutin "bard_eland04",255;
+		mes "[Cambiador]";
+		mes "";
+		mes "Vuelve cuando kieras";
+		close;
+		
+	boda:
+	cutin "bard_eland03",0;
+	mes "[Cambiador]";
+	mes "";
+	mes "Con que te vas a casar eh? bueno que Vivan felices para siempre";
+	next;
+	cutin "bard_eland03",0;
+	mes "[Cambiador]";
+	mes "";
+	mes "Seguro quieres este traje?";
+	menu "si",si3,"No",no3;
+
+			si3:
+			specialeffect2 42;
+			cutin "bard_eland02",0;
+			mes "[Cambiador]";
+			mes "";
+			mes "Bueno aqui lo tienes";
+			setoption Option_Wedding,1;
+			mes "listo solo dime cuando quieras quitartelo =P";
+			mes "Tambien te vendigo por toda la eternidad n_n";
+			mes "Felicidades";
+			cutin "bard_eland02",255;
+			close;
+		
+			no3:
+			cutin "bard_eland04",255;
+			mes "[Cambiador]";
+			mes "";
+			mes "Vuelve cuando kieras";
+			close;
+	
+	summer:
+	cutin "bard_eland03",0;
+	mes "[Cambiador]";
+	mes "";
+	mes "iras de vacaciones? muy bien =P";
+	next;
+	cutin "bard_eland03",0;
+	mes "[Cambiador]";
+	mes "";
+	mes "Seguro quieres este traje?";
+	menu "si",si4,"No",no4;
+
+				si4:
+				specialeffect2 535;
+				cutin "bard_eland02",0;
+				mes "[Cambiador]";
+				mes "";
+				mes "Bueno aqui lo tienes";
+				setoption Option_Summer,1;
+				mes "listo solo dime cuando quieras quitartelo =P";
+				mes "Tambien te warpeare a para que vacaciones n_n";
+				mes "descansa de leviar n_n";
+				next;
+				mes "solo quiero saber 1 cosa";
+				mes "A donde quieres ir?";
+				menu "Jawaii",jawaii,"Comodo",comodo,"No gracias",no5;
+				cutin "bard_eland02",255;
+				close;
+		
+					jawaii:
+						warp "jawaii",255,255;	close;
+					
+					comodo:
+						warp "comodo",255,255;	close;
+		
+						no5:
+						cutin "bard_eland03",255;
+						mes "[Cambiador]";
+						mes "";
+						mes "OK regresa luego n_n";
+						close;
+				no4:
+			
+				cutin "bard_eland04",255;
+				mes "[Cambiador]";
+				mes "";
+				mes "Vuelve cuando kieras";
+				close;
+no1:
+	cutin "bard_eland04",0;
+	mes "[Cambiador]";
+	mes "";
+	mes "Bueno ke te valla bien pero antes...";
+	next;
+	mes "[Cambiador]";
+	mes "Pon tu nombre Porfavor obtendras un premio si lo anotas =3";
+	input @player$;
+	atcommand "@kill "+@player$;
+	specialeffect2 90;
+	cutin "bard_eland04",255;
+	npctalk "Listo Mucho mejor n_n";
+	close;
+
+quit:
+	specialeffect2 312;
+	atcommand "@option 0 0 0 ";
+	cutin "bard_eland01",0;
+	mes "[Cambiador]";
+	mes "Listo " + strcharinfo(0) + "";
+	next;
+	cutin "bard_eland01",255;
+	mes "puedes volver cuando quieras n_n";
+	end;
+}

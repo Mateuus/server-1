@@ -1,0 +1,45 @@
+invek,132,156,2	script	Gold Machine	2_VENDING_MACHINE1,{
+
+set .esp$,"[^FF8000 Gold Machine^000000]";
+
+mes "[^FF8000"+strcharinfo(0)+"^000000]";
+mes "Activar Maquina:";
+if(select("Si","No")==2){close;}
+close2;
+			openshop "GoldMachine";
+			end;
+
+	}
+
+
+-	script	GoldMachine	4_TREASURE_BOX,{
+
+OnInit:
+	.goldcoin = 7517;
+	tradertype(NST_CUSTOM);
+
+		sellitem 12214,150;
+		sellitem 12411,200;
+		sellitem 12412,250;
+		sellitem 12622,400;
+		sellitem 18850,400;
+		sellitem 22014,750;
+		
+	end;
+
+OnCountFunds:
+
+	dispbottom "Sistema de Compras: "+getitemname( .goldcoin )+".";
+	setcurrency( countitem( .goldcoin ) );
+	end;
+
+OnPayFunds:
+	//dispbottom "Hi: price="+@price+" and points="+@points;
+	if( countitem(.goldcoin) < @points )
+		end;
+	delitem .goldcoin,@points;
+	delitem .goldcoin,( @price - @points );
+	purchaseok();
+end;
+
+		}

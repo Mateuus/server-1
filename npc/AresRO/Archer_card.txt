@@ -1,0 +1,54 @@
+//===== Script eAthena ======================================= 
+//= Archer_Card Quest
+//===== por: ================================================== 
+//= Creador de Quests Ragnarok World
+//= v1.0
+//===== Compatible Con: ===================================== 
+//= eAthena SVN
+//===== Descripción: ========================================= 
+//  Quest Creada por el Script Creador de Quests Online de
+//  http://www.ragnarokworld.net
+//============================================================ 
+
+poring_w02,78,92,5	script	Archer_Card	832,{
+ 	set @NPCName$, "[^Archer_Card^000000]";
+	mes @NPCName$;
+	mes "Quieres Obtener este Item?";
+	next;
+	switch(select("si:no:cancelar")) {
+ 	case 1:
+	mes @NPCName$;
+	mes "Estos son Los Items Necesarios.	[Shining Scale]x200";
+	mes "[Green Bijou]x200";
+	mes "[Sniper Card]x1";
+	mes "[Gemstone]x3";
+	mes "[Soft Feather]x100";
+	mes "[Binoculars]x1";
+	mes "[Rudra Bow]x1";
+	mes "  ^^000000 [1]";
+	next;
+	if (countitem(30009) < 1) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	mes @NPCName$;
+	mes "Bien! Tienes todos los Items! Felicidades !";
+	mes "el Objeto es Tuyo";
+	delitem 30009,1;
+	getitem 30009,1;
+	close;
+	case 2:
+	mes @NPCName$;
+	mes "de acuerdo, vuelve pronto !";
+	close;
+	case 3:
+	close;
+	}
+
+}
+
+//============================================================
+//===== Creador de Quests Ragnarok World ===========================
+//============================================================

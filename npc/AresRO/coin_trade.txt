@@ -1,0 +1,70 @@
+// Coin dealer by Sairyou
+poring_w01,102,111,5	script	Cambiador de Mithril Coin	57,{
+
+mes "[ Coin Master ]";
+mes "Hey I'm the Coin Master.";
+next;
+menu "yes, please.",L_YES,"No, thanks",L_CANCEL;
+
+L_YES:
+mes "[ Coin Master ]";
+mes "1 coin is worth 10000000 zeny.";
+mes "Would you like coins for zeny or zeny for coins?";
+next;
+menu "My Coins for Zeny",L_COINS,"My Zeny for Coins",L_ZENY;
+
+L_COINS:
+mes "[ Coin Master ]";
+mes "How many Coins do you have?";
+next;
+input @coinshave;
+if (@coinshave > 0) goto L_COINS2;
+mes "Please insert a higher amount than 0.";
+close;
+
+L_ZENY:
+mes "[ Coin Master ]";
+mes "How many coins would you like?";
+input @coinswant;
+if (@coinswant > 0) goto L_ZENY2;
+mes "Please insert a higher amount than 0.";
+close;
+
+L_COINS2:
+mes "Allright... let's see...";
+next;
+if(countitem(674)<@coinshave) goto L_NOCOINS;
+mes "[ Coin Master ]";
+mes "very well, here's you zeny.";
+delitem 674,@coinshave;
+set Zeny,Zeny + @coinshave * 10000000;
+close;
+
+L_ZENY2:
+mes "Allright... let's see...";
+next;
+if (@coinswant * 10000000 < Zeny) goto L_NOZENY;
+mes "[ Coin Master ]";
+mes "Very well, here are your coins.";
+set Zeny,Zeny - @coinswant * 10000000;
+getitem 674,@coinswant;
+close;
+
+L_CANCEL:
+
+mes "[ Coin Master ]";
+mes "Very well.";
+close;
+
+L_NOCOINS:
+mes "[ Coin Master ]";
+mes "You don't seem to have enough Coins";
+close;
+
+L_NOZENY:
+mes "[ Coin Master ]";
+mes "You don't seem to have enough Zeny";
+close;
+
+}
+ 

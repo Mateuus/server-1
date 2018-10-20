@@ -1,0 +1,98 @@
+//===== CandyRO Script =======================================
+//= VanillaInfo
+//===== By: ==================================================
+//= Candy Master // Ducky
+//===== Current Version: =====================================
+//= 2.0
+//===== Description: =========================================
+//= Information NPCs, Bulletins, and Talking NPCs
+//============================================================
+arena_4,147,105,5	script	Information	828,{
+	set @npcname$, "[ Seyren ]";
+	mes @npcname$;
+	mes "Bienvenido al PvP Arena, ánimo guerrero! Qué es lo que quieres saber?";
+	menu "Mi Estado",status,"Nada",-;
+	next;
+	mes @npcname$;
+	mes "Ok. vuelve cuando quieras información.";
+	close;
+status:
+	next;
+	mes @npcname$;
+	callfunc "profile_information";
+	close;
+}
+
+// ----- Random People -----
+
+-	script	Warrior::pvp_citizen	-1,{
+
+L_start:
+end;
+
+OnTouch:
+set @talk,rand(1,26);
+goto L_talk;
+
+L_talk:
+if (@talk == 1) { npctalk "Estoy listo para cualquier desafio!"; end; }
+if (@talk == 2) { npctalk "Oh por favor, no tienes suficiente poder!"; end; }
+if (@talk == 3) { npctalk "Porque no me lo das?"; end; }
+if (@talk == 4) { npctalk "Deseas salir al exterior?!"; end; }
+if (@talk == 5) { npctalk "Entrené solo para este día… el día que te gané."; end; }
+if (@talk == 6) { npctalk "¡Ese asesino me pone enfermo! Es bueno que haya cuartos de restricción del nivel"; end; }
+if (@talk == 7) { npctalk "Yo encontré una carta en el suelo!"; end; }
+if (@talk == 8) { npctalk "El Baphomet murió?"; end; }
+if (@talk == 9) { npctalk "Vas abajo!"; end; }
+if (@talk == 10) { npctalk "No tienes ni idea de como me hecho tan fuerte"; end; }
+if (@talk == 11) { npctalk "Qué pasa contigo?"; end; }
+if (@talk == 12) { npctalk "Yo peleo en nombre de Odin!"; end; }
+if (@talk == 13) { npctalk "Necesitas qué te preste zenys?"; end; }
+if (@talk == 14) { }
+if (@talk == 15) { npctalk ". . ."; end; }
+if (@talk == 16) { npctalk "Hah!"; end; }
+if (@talk == 17) { }
+if (@talk == 18) { npctalk "Te quieres unir a mi guild?"; end; }
+if (@talk == 19) { npctalk "Tengo sobrepeso. ._."; end; }
+if (@talk == 20) { npctalk "Yo dropee mi Old Card Album por error. ;_;"; end; }
+if (@talk == 21) { npctalk "Yo tengo insta-cast! :D"; end; }
+if (@talk == 22) { npctalk "Mi arma fue hecha por un poderoso Forjador..."; end; }
+if (@talk == 23) { }
+if (@talk == 24) { }
+if (@talk == 25) { }
+if (@talk == 26) { }
+}
+
+arena_room.gat,95,102,3	duplicate(pvp_citizen)	Crusader	751,5,5
+arena_room.gat,92,101,6	duplicate(pvp_citizen)	Bard	741,5,5
+arena_room.gat,113,84,4	duplicate(pvp_citizen)	Monk	753,5,5
+arena_room.gat,113,81,6	duplicate(pvp_citizen)	Knight	733,5,5
+arena_room.gat,89,83,4	duplicate(pvp_citizen)	Knight	728,5,5
+arena_room.gat,89,80,8	duplicate(pvp_citizen)	Alchemist	744,5,5
+
+// ----- Bulletin -----
+
+arena_room.gat,85,90,5	script	Weapons	857,{
+	mes "Armas y amaduras";
+	close;
+}
+arena_room.gat,110,102,4	script	Job	857,{
+	mes "Cambiar Job, Reset de Stats , y Profesor de Skills";
+	close;
+}
+arena_room.gat,90,101,4	script	Adjustments	857,{
+	mes "Refinar, Reparador, Skill Master, Estilista, y Weight Master";
+	close;
+}
+arena_room.gat,114,90,3	script	Equipment	857,{
+	mes "Armaduras, Escudos, Anillos, Acesorios, y Cacos";
+	close;
+}
+arena_room.gat,113,78,5	script	Special	857,{
+	mes "Items Especiales, Forging Items, y Potas";
+	close;
+}
+arena_room.gat,89,74,3	script	Items	857,{
+	mes "Tienda de Items y Mascotas";
+	close;
+}

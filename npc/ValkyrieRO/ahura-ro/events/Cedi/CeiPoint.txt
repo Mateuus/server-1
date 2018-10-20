@@ -1,0 +1,87 @@
+louyang,218,121,5	script	Marcos	1_M_SIGN1,{
+
+mes "["+ strnpcinfo(0) +"]";
+ 	
+	if ( !.start ) {
+		mes "En estos momentos no estoy en busca de ninguna carta.";
+		close;
+	}
+       
+    mes "Carta: ^8A0829"+getitemname( .look4card )+"^000000 .";
+    mes "Recompensa:  ^8A08295 puntos^000000  por cada carta normal.";
+    mes "Recompensa:  ^8A082910 puntos^000000  por cada carta catalogada como Boss.";
+    mes "Recompensa:  ^8A082925 puntos^000000  por cada carta catalogada como MvP.";
+    .@countitem = countitem( .look4card );
+	
+	if ( !.@countitem ) {
+		next;
+		mes "["+ strnpcinfo(0) +"]";
+		mes "Desafortunadamente, no tienes la carta que estoy buscando.";
+		close;
+	}
+
+		input .@give, 0, .@countitem;
+
+            if( !.@give ){
+			mes "No me entregarás la carta :( ";
+			close;
+		}
+                next;
+                if( select( "Intercambiar Carta","Cancelar" ) == 2 ){ close;}
+	
+			delitem .look4card, .@give;
+			if ( .checkboss == 0 ) #cedi_point = #cedi_point + 5 * .@give; // 5 poring coins given for every normal card
+			if ( .checkboss == 1 ) #cedi_point = #cedi_point +  10 * .@give; // 10 poring coins given for every miniboss card
+			if ( .checkboss == 2 ) #cedi_point = #cedi_point +  20 * .@give; // 20 poring coins given for every MVP card
+				close;
+ 
+OnStart:
+OnClock0000:
+OnClock0200:
+OnClock0400:
+OnClock0600:
+OnClock0800:
+OnClock1000:
+OnClock1200:
+OnClock1400:
+OnClock1600:
+OnClock1800:
+OnClock2000:
+OnClock2200:
+	.look4card = .allcardid[ rand( .allcards ) ];
+	announce "["+ strnpcinfo(0) +"]: Estoy en busca de "+ getitemname( .look4card ) +".", bc_all;
+	sleep 5000;
+	announce "["+ strnpcinfo(0) +"]: Visitame en louyang,218,121 .", bc_all;
+	.checkboss = 0;
+	while ( .bosscardid[.@i] != .look4card && .@i < .bosscards ) .@i++;
+	if ( .@i < .bosscards ) {
+		while ( .mvpcardid[.@j] != .look4card && .@j < .mvpcards ) .@j++;
+		.checkboss = ( .@j < .mvpcards )? 2 : 1;
+	}
+	.start = true;
+	sleep 6600000; // last 30 seconds
+	.start = false;
+	announce "["+ strnpcinfo(0) +"]: Gracias a todos por las cartas. En 10~20 minutos estaré en busca de una nueva carta.", bc_all;
+	end;
+	
+OnInit:
+	.allcards = query_sql("select item_db.id from item_db right join mob_db on item_db.id = mob_db.dropcardid where type = 6 group by name_japanese", .allcardid);
+	.mvpcards = query_sql("select item_db.id from item_db right join mob_db on item_db.id = mob_db.dropcardid where mexp > 0 and type = 6 group by name_japanese;", .mvpcardid);
+	.bosscards = query_sql("select item_db.id from item_db right join mob_db on item_db.id = mob_db.dropcardid where mode & 32 and type = 6 group by name_japanese;", .bosscardid);
+	
+
+	bindatcmd "Marcos", strnpcinfo(0)+"::OnStart", 99, 100;
+	bindatcmd "Maroff", strnpcinfo(0)+"::OnTerminar", 99, 100;
+	bindatcmd "MID", strnpcinfo(0)+"::OnValue", 99, 100;
+	end;
+	
+OnTerminar:
+	.start = false;
+end;
+
+OnValue:
+	if ( .start )
+		dispbottom "Estoy buscando la siguiente carta: "+ .look4card +" de tipo "+.checkboss;
+	end;
+
+}

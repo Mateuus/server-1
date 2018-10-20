@@ -1,0 +1,12 @@
+vip_lounge,192,131,0	warp	Guild1	2,5,vip_lounge,144,225
+vip_lounge,144,219,0	warp	Guild2	2,5,vip_lounge,152,121
+
+vip_lounge,92,130,0	warp	Guild3	2,5,vip_lounge,136,130
+vip_lounge,132,130,0	warp	Guild4	2,5,vip_lounge,89,130
+
+vip_lounge,151,141,0	warp	Guild5	2,5,vip_lounge,154,66
+vip_lounge,153,72,0	warp	Guild6	2,5,vip_lounge,151,134
+
+vip_lounge,152,114,0	warp	Guild7	2,5,vip_lounge,144,225
+vip_lounge,171,129,0	warp	Guild8	2,5,prontera,155,177
+vip_lounge,144,219,0	warp	Guild9	2,5,vip_lounge,195,130

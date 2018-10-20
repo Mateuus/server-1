@@ -1,0 +1,416 @@
+//===== eAthena Script ========================================================
+//= Evento de los Elementos
+//===== By: ===================================================================
+//= Fatally
+//===== Current Version: ======================================================
+//= Final
+//===== Compatible With: ======================================================
+//= Any eAthena Version;
+//===== Description: ==========================================================
+//= Evento para pasar el rato viajando por Midgar.
+//=============================================================================
+//= Un evento basado en los cuatro elementos, tu mision es reunir las cuatro piedras
+//= elementales y conseguir forjar la piedra suprema para eliminar la energia maligna de los elementos
+//=============================================================================
+mag_dun02.gat,183,201,5	script	Espiritu del Fuego	1397,{
+set @name$, "[Espiritu del Fuego]";
+
+if (eventoelem >= 8) {
+	mes	@name$;
+	mes	"Gracias por tu ayuda "+strcharinfo(0)+".";
+	close;
+	} else {
+if (eventoelem >= 1) {
+	mes	@name$;
+	mes	"Debes darte prisa en encontrar a mi antagonista, el te dira donde encontrar a su antagonista y una vez reunidas las cuatro piedras elementales podras llevarselas al gran alquimista para que te diga como forjar la piedra de los elementos.";
+	close;
+	} else {
+	mes	@name$;
+	mes	"Bienvenido extranjero, ¿que te trae por lo mas profundo de este mundo?";
+switch(select("¿Que eres?", "Solo voy conocimiendo mundo")) {
+case 1:
+next;
+	mes	@name$;
+	mes	"Que no, quien. Soy el espiritu del fuego y desde aqui controlo a los que utilizan mi elemento. Aunque debo pedirte algo aventurero ya que has llegado tan lejos.";
+next;
+	mes	@name$;
+	mes	"Ultimamente los cuatro elementos estan inquietos por el gran caos que rige este mundo. Muchos nos usan para el mal y pocos para el bien. Lo unico que quiero pedirte es que encuentres a mi antagonista.";
+next;
+	mes	"Como sabras mi antagonista es el agua, se haya en lo mas profundo de la mazmorra de hielo. Pero es un cabezota y no habla con los aventureros a no ser que tengan prueba de que estan haciendo el bien y no el mal.";
+next;
+	mes	"Lleva esto contigo, es la piedra elemental del fuego, es una de las cuatro piedras elementales que existen.";
+	next;
+getitem 15581,1;
+set eventoelem,1;
+	mes	@name$;
+	mes	"Que tengas buena suerte.";
+	close;
+case 2:
+	mes	@name$;
+	mes	"Bueno, pues continua tu viaje.";
+	close;
+}	
+	}
+}	}
+ice_dun03.gat,197,189,5	script	Espiritu del Agua	1398,{
+set @name$, "[Espiritu del Agua]";
+
+if (eventoelem >= 8) {
+	mes	@name$;
+	mes	"Gracias por tu ayuda "+strcharinfo(0)+".";
+	close;
+	} else {
+if (eventoelem >= 2) {
+	mes	@name$;
+	mes	"Contamos contigo.";
+	close;
+	} else {
+if (countitem(15581) <= 0) {
+	mes	@name$;
+	mes	"Largo de aqui, me estas molestando.";
+	close;
+	} else if(countitem(15581) >= 1) {
+	mes	@name$;
+	mes	"¿Que es eso que brilla en tu bolsa maldito humano?";
+switch(select("Enseñarle la Piedra del Fuego", "No deseo molestar")) {
+case 1:	
+next;
+	mes	@name$;
+	mes	"Vaya, perdona por ser tan rudo pero ultimamente todo el mundo intenta reunir el poder de los cuatro elementos. Asi que vas buscando el modo de encontrar una solucion al problema del mal uso de los cuatro elementos.";
+	mes	"En ese caso te puedo ayudar.";
+	next;
+	mes	@name$;
+	mes	"Deberas encontrar a mi amigo, el espiritu del viento, el cual no tengo ni idea de donde se haya. Creo que podras encontrarlo en lo mas profundo de la mazmorra de Payon pero debes demostrarle tu valia.";
+next;
+getitem 15582,1;
+set eventoelem,2;
+	mes	@name$;
+	mes	"Que tengas un buen viaje, confio en que podras salvarnos.";
+	close;
+case 2:
+	mes	@name$;
+	mes	"¿Molestar? Maldito insecto.";
+	close;
+		}	}
+	}	}
+}
+
+pay_dun04.gat,149,190,3	script	Espiritu del Viento	1395,{
+set @name$, "[Espiritu del Viento]";
+
+if (eventoelem >= 8) {
+	mes	@name$;
+	mes	"Gracias por tu ayuda "+strcharinfo(0)+".";
+	close;
+	} else {
+if (eventoelem >= 3) {
+	mes	@name$;
+	mes	"Animo aventurero, estas cerca de tu meta.";
+	close;
+	} else {
+if (countitem(15581) <= 0 || countitem(15582) <= 0) {
+	mes	@name$;
+	mes	"No tengo nada que decirte.";
+	close;
+	} else if(countitem(15581) >= 1 || countitem(15582) >= 1) {
+	mes	@name$;
+	mes	"Percibo que en ti residen dos energias elementales, dejame adivinar, llevas dos de las cuatro piedras elementales y por el poder que emanan son la del fuego y la del agua.";
+switch(select("Asi es", "Te estas equivocando de persona")) {
+case 1:
+next;
+	mes	@name$;
+	mes	"Vaya, vaya por fin alguien esta intentando poner remedio a los males que atañen este mundo por el mal uso de los elementos. Como ya te diria el espiritu del agua yo controlo el viento.";
+	next;
+	mes	@name$;
+	mes	"Al ver esas dos piedras en tu mochila me veo obligado a ayudarte y pedirte que busques a mi antagonista, la tierra. Ella es muy agradable y accedera a ayudarte a cambio de que lleves contigo mi elemento.";
+	next;
+	mes	@name$;
+	mes	"Bien, La espiritu de la tierra se encuentra en lo mas profundo del hormiguero (Ant Hell). Alli podras encontrarla y enseñarle tus progresos.";
+next;
+getitem 15583,1;
+set eventoelem,3;
+	mes	@name$;
+	mes	"Buena suerte, que los elementos te guien.";
+	close;
+case 2:
+	mes	@name$;
+	mes	"Disculpa mi osadia entonces.";
+	close;
+		}	}
+	}	}
+}
+anthell02.gat,110,57,5	script	Espiritu de la Tierra	1396,{
+set @name$, "[Espiritu de la Tierra]";
+
+if (eventoelem >= 8) {
+	mes	@name$;
+	mes	"Gracias por tu ayuda "+strcharinfo(0)+".";
+	close;
+	} else {
+if (eventoelem >= 4) {
+	mes	@name$;
+	mes	"Yo sere tu guia, buena suerte.";
+	close;
+	} else {
+if (countitem(15581) <= 0 || countitem(15582) <= 0 || countitem(15583) <= 0) {
+	mes	@name$;
+	mes	"Mucho me temo que no reunas los requisitos para esta gran mision.";
+	close;
+	} else if(countitem(15581) >= 1 || countitem(15582) >= 1 || countitem(15583) >= 1) {
+	mes	@name$;
+	mes	"Noble aventurero, el brillo de tus ojos me dice que eres una buena persona y que estas ayudando a los cuatro elementos para que vuelvan a ser utilizados unicamente para el bien.";
+switch(select("Me dijeron que te enseñara esto", "No, aun no me creo capaz")) {
+case 1:
+next;
+	mes	@name$;
+	mes	"Me encanta ver que los humanos aun os preocupais por el equilibrio de Midgar, te daria algo material pero como puedes ver todo lo que tengo es espiritual, algo fuera de vuestro alcance.";
+next;
+	mes	@name$;
+	mes	"Bueno ahora que estas apunto de reunir las cuatro piedras elementales debo hablarte sobre tres misteriosos personajes, uno de ellos es un gran alquimista y otro un gran forjador.";
+next;
+	mes	@name$;
+	mes	"Por el momento el mas importante que debes encontrar es el gran alquimista en Prontera que te dira como unir las cuatro piedras elementales en un flujo elemental continuo que podra ser forjado.";
+next;
+	mes	@name$;
+	mes	"Una vez consigas este flujo elemental deberas visitar al gran forjador en Geffen que forjara la piedra de los elementos y aqui entra en juego la ultima persona a la que debes visitar.";
+next;
+	mes	@name$;
+	mes	"Escucha con atencion, en lo mas tenebroso del mundo, donde residen las valkirias malignas, el templo que fue profanado por Loki, en el gran templo de odin podras encontrar a una mujer.";
+next;
+	mes	@name$;
+	mes	"Esta mujer restaurara el flujo elemental utilizando la piedra de los elementos y te dara una recompensa por haber ayudado a salvar a los cuatro elementos.";
+next;
+getitem 15584,1;
+set eventoelem,4;
+	mes	@name$;
+	mes	"Ve en paz aventurero y que los elementos te protejan.";
+close;
+case 2:
+	mes	@name$;
+	mes	"Sniff...";
+	close;
+		}	}
+	}	}
+}
+
+prontera.gat,129,167,5	script	Gran Alquimista	749,{
+set @name$, "[Gran Alquimista Ryan]";
+
+if (eventoelem >= 8) {
+	mes	@name$;
+	mes	"Gracias por tu ayuda "+strcharinfo(0)+".";
+	close;
+	} else {
+if (eventoelem >= 5) {
+	mes	@name$;
+	mes	"Ya he cumplido mi parte. Busca al forjador y dejame en paz.";
+	close;
+	} else {
+if (countitem(15581) <= 0 || countitem(15582) <= 0 || countitem(15583) <= 0 || countitem(15584) <= 0) {
+	mes	@name$;
+	mes	"¿Y que buscas de mi?.";
+	close;
+	} else if(countitem(15581) >= 1 || countitem(15582) >= 1 || countitem(15583) >= 1 || countitem(15584) >= 1) {
+	mes	@name$;
+	mes	"Muchos me han llamado loco pero no lo estoy, veo que quieres crear un flujo elemental a raiz de las cuatro piedras elementales. Hay un problema, me he olvidado la formula, vete a mi casa en Aldebaran y apunta la formula que hay apuntada. Mi casa es la de abajo a la derecha.";
+	next;
+	mes	@name$;
+	mes	"No intentes crearla sin la formula porque conseguiras un flujo inestable que te matara ademas de perder las cuatro piedras elementales.";
+switch(select("Carbonato 10Mg + Las 4 Piedras", "Calcio y Hierro 15Mg + Las 4 Piedras", "Acero y Nitrogeno 1g + Las 4 Piedras", "Helio y Carbon 5g + Las 4 Piedras", "Voy a por la formula", "Es demasiado dificil para mi")) {
+case 1:
+next;
+	mes	@name$;
+	mes	"Asi que eran 10mg de Carbonato y las 4 piedras. Comenzare a hacer la mezcla.";
+next;
+	mes	"...";
+next;
+	mes	@name$;
+	mes	"Waaaaaah!!!!";
+delitem 15581,1;
+delitem 15582,1;
+delitem 15583,1;
+delitem 15584,1;
+atcommand "@nuke "+strcharinfo(0)+"";
+set eventoelem,0;
+close;
+case 2:
+	mes	@name$;
+	mes	"Si, esta parece la formula correcta! Vamos al trabajo.";
+next;
+	mes	"...";
+next;
+	mes	@name$;
+	mes	"Parece que no pasa nada. *Golpes al bol de mixturas*.";
+delitem 15581,1;
+delitem 15582,1;
+delitem 15583,1;
+delitem 15584,1;
+atcommand "@nuke "+strcharinfo(0)+"";
+set eventoelem,0;
+close;
+case 3:
+	mes	@name$;
+	mes	"Suena bien la formula. Dejame las piedras por favor.";
+next;
+delitem 15581,1;
+delitem 15582,1;
+delitem 15583,1;
+delitem 15584,1;
+getitem 15585,1;
+set eventoelem,5;
+	mes	@name$;
+	mes	"Perfecto, ahora busca al forjador en geffen, el podra fabricar para ti el ultimo ingrediente para completar la mision.";
+close;
+case 4:
+	mes	@name$;
+	mes	"No me suena que fuera asi pero, tu has sido quien la vio.";
+next;
+	mes	"...";
+next;
+	mes	@name$;
+	mes	"Pero que demonios!!!!";
+delitem 15581,1;
+delitem 15582,1;
+delitem 15583,1;
+delitem 15584,1;
+atcommand "@nuke "+strcharinfo(0)+"";
+set eventoelem,0;
+close;
+case 5:
+	mes	@name$;
+	mes	"Aqui te espero amigo!";
+	close;
+case 6:
+	mes	@name$;
+	mes	"Si no quieres fabricar el flujo para que me molestas!";
+	close;
+		}	}
+	}	}
+}
+
+aldeba_in.gat,167,187,5	script	Pizarra	857,{
+set @name$, "[Pizarra de Ryan]";
+
+if (countitem(15581) <= 0 || countitem(15582) <= 0 || countitem(15583) <= 0 || countitem(15584) <= 0) {
+	mes	@name$;
+	mes	"Miras la pizarra y solo ves formulas ilegibles.";
+	close;
+	} else if(countitem(15581) >= 1 || countitem(15582) >= 1 || countitem(15583) >= 1 || countitem(15584) >= 1) {
+	mes	@name$;
+	mes	"Al mirar la pizarra lees formulas ilegibles y entre una de ellas lees:";
+	next;
+	mes	@name$;
+	mes	"Para hacer un flujo elemental estable debes mezclar Acero y Nitrogeno en una proporcion de 1g y acto seguido las piedras elementales.";
+	close;
+}	}	}
+
+geffen.gat,177,55,2	script	Forjador Elemental	813,{
+set @name$, "[Forjador Elemental Kevin]";
+
+if (eventoelem >= 8) {
+	mes	@name$;
+	mes	"Gracias por tu ayuda "+strcharinfo(0)+".";
+	close;
+	} else {
+if (eventoelem >= 6) {
+	mes	@name$;
+	mes	"Busca a la Diosa de los Elementos y haz que restaure el orden.";
+	close;
+	} else {
+if (countitem(15585) <= 0 ) {
+	mes	@name$;
+	mes	"Yo solo trabajo con flujos elementales.";
+	close;
+	} else if(countitem(15585) >= 1) {
+	mes	@name$;
+	mes	"Vienes a que transforme tu flujo elemental en la piedra suprema ¿verdad?.";
+switch(select("¿Como lo sabes?", "No, solo pasaba por aqui")) {
+case 1:
+next;
+	mes	@name$;
+	mes	"No es muy dificil saberlo, ademas de herrero soy uno de los guardianes elementales. Solo hablan conmigo aquellos que poseen flujos elementales. Bueno no nos entretengamos.";
+next;
+	mes	@name$;
+	mes	"Dame unos segundos para crearlo y podras ir a ver a la Diosa de los Elementos en el templo de Odin.";
+next;
+delitem 15585,1;
+getitem 15586,1;
+set eventoelem,6;
+	mes	@name$;
+	mes	"Buena suerte en tu aventura.";
+	close;
+case 2:
+	mes	@name$;
+	mes	"Entonces por favor no me molestes.";
+	close;
+		}	}
+	}	}
+}
+odin_tem03.gat,342,275,4	script	Diosa Elemental	792,{
+set @name$, "[Diosa Elemental]";
+
+if (eventoelem >= 8) {
+	mes	@name$;
+	mes	"Gracias por tu ayuda "+strcharinfo(0)+".";
+	close;
+	} else {
+if (eventoelem >= 7) {
+	mes	@name$;
+	mes	"Gracias por todo aventurero. Ahora el mundo esta a salvo.";
+	close;
+	} else {
+if (countitem(15586) <= 0 ) {
+	mes	@name$;
+	mes	"...";
+	close;
+	} else if(countitem(15586) >= 1) {
+	mes	@name$;
+	mes	"¿Me has traido la piedra suprema elemental?";
+switch(select("Si aqui esta", "No se ni que es eso")) {
+case 1:
+next;
+	mes	@name$;
+	mes	"Bien, debemos darnos prisa, ya hemos tardado bastante en reunir la piedra como para ponernos a charlar ahora.";
+next;
+	mes	@name$;
+	mes	"Ahora canalizare la piedra suprema en energia pura y limpiare la energia maligna de los cuatro elementos.";
+next;
+	mes	"...";
+next;
+	mes	@name$;
+	mes	"Gracias por esperar, ahora ve a la torre de geffen y busca a Tyson en el piso mas alto.";
+	delitem 15586,1;
+	set eventoelem,7;
+	close;
+case 2:
+	mes	@name$;
+	mes	"Humano ignorante...";
+	close;
+		}	}
+	}	}
+}
+
+gef_tower.gat,103,35,5	script	Tyson	795,{
+set @name$, "[Tyson]";
+
+if (eventoelem >= 8) {
+	mes	@name$;
+	mes	"Gracias por tu ayuda "+strcharinfo(0)+".";
+	close;
+	} else {
+if (eventoelem >= 7) {
+	mes	@name$;
+	mes	"Gracias "+strcharinfo(0)+" ahora el mundo esta a salvo de la corrupcion. Aqui tienes tu recompensa.";
+	next;
+getitem 15587,1;
+set eventoelem,8;
+	mes	@name$;
+	mes	"Que los elementos iluminen tu camino.";
+	close;
+	} else {
+	mes	@name$;
+	mes	"Soy Tyson el gran espiritu elemental.";
+	close;
+		}
+	}	
+}

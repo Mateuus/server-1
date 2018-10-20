@@ -1,0 +1,163 @@
+prontera.gat,182,215,5	script	Super Priest	750,{
+
+set @paket,350000000;
+
+menu "Buffer", L_PAKET;
+
+L_PAKET:
+        mes "[Holy Priest]";
+        mes "¿Quieres algunos Buffeo? El precio es "+@paket+"z. They are worth it =D";
+        menu "Yes", L_yes, "No", CANCEL;
+L_yes:
+        if (Zeny >= @paket) goto L_PAKET2;
+        if (Zeny < @paket) goto NO_ZENYS;
+
+L_PAKET2:
+        set Zeny,Zeny-@paket;
+skilleffect 384,0; sc_start SC_MELTDOWN,360000,5;
+skilleffect 383,0; sc_start SC_WINDWALK,360000,5;
+skilleffect 465,0; sc_start SC_KAITE,360000,7;
+skilleffect 464,0; sc_start SC_KAUPE,360000,3;
+skilleffect 463,0; sc_start SC_KAAHI,360000,7;
+skilleffect 462,0; sc_start SC_KAIZEL,360000,7;
+skilleffect 8,0; sc_start SC_ENDURE,360000,10;
+skilleffect 33,0; sc_start SC_ANGELUS,360000,10;
+skilleffect 45,0; sc_start SC_CONCENTRATE,360000,10;
+skilleffect 74,0; sc_start SC_MAGNIFICAT,360000,5;
+skilleffect 75,0; sc_start SC_GLORIA,360000,5;
+skilleffect 459,0; sc_start SC_ADRENALINE2,360000,1;
+skilleffect 66,0; sc_start SC_IMPOSITIO,360000,5;
+skilleffect 67,0; sc_start SC_SUFFRAGIUM,360000,3;
+skilleffect 34,0; sc_start SC_BLESSING,360000,10;
+skilleffect 29,0; sc_start SC_INCREASEAGI,360000,10;
+skilleffect 112,0; sc_start SC_WEAPONPERFECTION,360000,10;
+skilleffect 113,0; sc_start SC_OVERTHRUST,360000,5;
+skilleffect 114,0; sc_start SC_MAXIMIZEPOWER,360000,5;
+skilleffect 357,0; sc_start SC_CONCENTRATION,360000,5;
+skilleffect 355,0; sc_start SC_AURABLADE,360000,5;
+skilleffect 155,0; sc_start SC_LOUD,360000,1;
+skilleffect 157,0; sc_start SC_ENERGYCOAT,360000,1;
+skilleffect 380,0; sc_start SC_TRUESIGHT,360000,5;
+skilleffect 361,0; sc_start SC_ASSUMPTIO,360000,5;
+close;
+	CANCEL:
+		mes "[Holy Priest]";
+		mes "Está bien. Por favor, venga de nuevo, si necesitas algo";
+		close;
+	NO_ZENYS:
+                mes "[Super Priest]";
+                mes "¡Dios mío, que no se parecen tener suficiente zeny.";
+                mes "Lo siento, no puedo ayudarte.";
+                close;
+}
+
+// Script creado por: VicThor
+// Arena de Clones
+// Versión 1.0
+prontera.gat,165,140,4	script	Arena de Clones	739,{
+set .@npcName$,"[Arena de Clones]";
+	mes .@npcName$;
+	mes "Hola, "+strcharinfo(0)+".";
+	mes "La Arena de Clones es ";
+	mes "un lugar en el que puedes";
+	mes "probar tu fuerza contra ti mismo";
+	mes "o simplemente pasar el rato.";
+	next;
+	mes .@npcName$;
+	mes "¿Deseas ir?";
+	next;
+	switch ( select( "Sí:No, quizá en otro momento" ) )
+	{
+		case 1:	// Si
+			mes .@npcName$;
+			mes "Muy bien, te llevaré allá.";
+			mes "Aparecerás en un sitio al azar,";
+			mes "Podrás pedir tu clon en el centro";
+			mes "de la arena.";
+			close2;
+			warp "pvp_n_7-2",0,0;
+			end;
+		case 2:
+			mes .@npcName$;
+			mes "Ya veo, hasta luego.";
+			close;
+	}
+
+}
+
+pvp_n_7-2.gat,99,106,4	script	Clonador Magico	930,{
+set .@npcName$,"[Clonador Mágico]";
+
+	mes .@npcName$;
+	if (	Sex == 1 )
+	{
+		mes "¡Hola y bienvenido, noble caballero!";
+	}
+	else
+	{
+		mes "¡Hola y bienvenida, hermosa dama!";
+	}
+	next;
+	if ( RMX_clones == 0 )
+	{
+		mes .@npcName$;
+		mes "He comprado esta arena para";
+		mes "realizar mis experimentos con";
+		mes "clones humanos.";
+		next;
+		mes .@npcName$;
+		mes "Muchos me han llamado 'loco'";
+		mes "otros 'desviado'. Pero esos";
+		mes "ataques los han sufrido todos";
+		mes "los pioneros en la ciencia...";
+		next;
+		mes .@npcName$;
+		mes "¿Deseas probar mis artes de";
+		mes "clonción? Si es así también";
+		mes "tu podrías beneficarte.";
+		next;
+		mes .@npcName$;
+		mes "Podrías probar tu poder de";
+		mes "ataque contra un clon tuyo.";
+		mes "O simplemente para pasar";
+		mes "el rato si estás aburrido.";
+		next;
+		mes .@npcName$;
+		mes "Te puedo crear los clones";
+		mes "que desees. Pero ten cuidado";
+		mes "de pedirme sólo los que creas";
+		mes "que puedas matar, o durarás";
+		mes "muy poco.";
+		set RMX_clones,1;
+		next;
+		goto L_clones;
+	}
+	else
+	{
+L_clones:
+		mes .@npcName$;
+		mes "¿Deseas que haga un clon tuyo?";
+		next;
+		switch ( select( "Sí:No:Salir" ) )
+		{
+			case 1:	// Si
+				mes .@npcName$;
+				mes "Muy bien.";
+				close2;
+				atcommand "@evilclone "+strcharinfo(0)+"";
+				mapannounce "pvp_n_7-2","¡El clon de "+strcharinfo(0)+" ha sido creado!",0;
+				end;
+			case 2:	// No
+				mes .@npcName$;
+				mes "Muy bien, hasta luego.";
+				close;
+			case 3:	// Salir
+				mes .@npcName$;
+				mes "Seguro, te llevaré a Prontera en";
+				mes "10 segundos.";
+				close2;
+				sleep2 10000;
+				warp "prontera",181,172;
+		}
+	}
+}

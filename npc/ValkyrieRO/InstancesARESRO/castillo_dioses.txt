@@ -1,0 +1,1544 @@
+//===== eAthena Script =======================================
+//= Invasión Al Castillo Del Rey Qlipoth
+//===== By: ==================================================
+//= Ziu	
+//===== Current Version: =====================================
+//= 1.5
+//===== Compatible With: =====================================
+//= eAthena TRUNK 14068+ (client up time 2009) data Ver. 116+
+//===== Additional Comments: =================================
+//= 1.0 Pre-released TEST Version (NO Test) [Ziu]
+//= 1.1 Fix Various Bug's [Ziu]
+//= 1.2 Add Random Event [Ziu]
+//= 1.3 Add Magic Warper [Ziu]
+//= 1.4 Add system renward for GM. [Ziu]
+//= 1.5 Add change's compatible versions 1.4/1.5 [_NiN_]
+//============================================================
+-	script	castlgod_Config	-1,{
+	end;
+OnInit:
+	disablenpc "inicio1";
+	disablenpc "inicio";
+	disablenpc "bloqueo2";
+	disablenpc "bloqueo3";
+	disablenpc "bloqueo4";
+	disablenpc "bloqueo5";
+	disablenpc "bloqueo6";
+	disablenpc "bloqueo7";
+	disablenpc "help2";
+	disablenpc "help1";
+	disablenpc "warpend";
+	disablenpc "warpend2";
+	disablenpc "warpend3";
+	disablenpc "warpend4";
+	disablenpc "warpend5";
+	disablenpc "warpend6";
+	disablenpc "adarve";
+	disablenpc "accesosub";
+	disablenpc "reyql";
+	disablenpc "sjm";
+	disablenpc "estb2";
+	disablenpc "estb1";
+	disablenpc "teo4";
+	disablenpc "teo3";
+	disablenpc "teo2";
+	disablenpc "teo1";
+	disablenpc "Teodoro";
+	disablenpc "Esteban";
+	disablenpc "Sejem";
+	disablenpc "magic00";
+	disablenpc "magic01";
+	disablenpc "magic02";
+	disablenpc "magic03";
+	disablenpc "reyql2";
+	disablenpc "reyql1";
+	end;
+}
+
+darkmall,96,75,6	script	Desconocida::inicio2	10192,{
+	if(getgmlevel()>75){
+		mes "[Desconocida]";
+		mes " Buenas, miembro del staff de AresRO";
+		mes "¿Que Podría yo hacer por ti?";
+		next;
+		switch( Select("Iniciar Evento Normal","No Hacer nada.","Evento Aleatorio" ) )
+		{
+			Case 1:
+				mes "[Desconocida]";
+				mes "Ok, Vamos con ello";
+				enablenpc "Teodoro";
+				enablenpc "Esteban";
+				disablenpc "inicio2";
+				enablenpc "inicio1";
+				enablenpc "magic00";
+				close;
+			case 2:
+				close;
+			case 3:
+				switch(rand(2)) {
+					case 1:
+						enablenpc "Teodoro";
+						disablenpc "inicio2";
+						enablenpc "inicio1";
+						enablenpc "magic00";
+						close;
+					case 2:
+						disablenpc "inicio2";
+						enablenpc "inicio1";
+						enablenpc "Esteban";
+						enablenpc "magic00";
+						close;
+				}
+		}
+	}
+	if (icrq == 0) {
+		mes "[Elisa]";
+		mes ".............................";
+		close;
+	}
+	if (icrq == 1) {
+		mes "[Elisa]";
+		mes "Gracias Por Participar, aquí tienes tu recompensa....";
+		set icrq,0;
+		close;
+	}
+}
+darkmall,96,75,6	script	Desconocida::inicio	10192,{
+	if(getgmlevel()>75){
+		mes "[Desconocida]";
+		mes " Buenas, miembro del staff de AresRO";
+		mes "¿Que Podría yo hacer por ti?";
+		next;
+		switch( Select("Iniciar Evento Normal","No Hacer nada.","Evento Aleatorio" ) )
+		{
+			Case 1:
+				mes "[Desconocida]";
+				mes "Ok, Vamos con ello";
+				enablenpc "Teodoro";
+				enablenpc "Esteban";
+				disablenpc "inicio";
+				enablenpc "inicio1";
+				enablenpc "magic00";
+				close;
+			case 2:
+				close;
+			case 3:
+				switch(rand(1,2)) {
+					case 1:
+						enablenpc "Teodoro";
+						disablenpc "inicio";
+						enablenpc "inicio1";
+						enablenpc "magic00";
+						close;
+					case 2:
+						disablenpc "inicio";
+						enablenpc "inicio1";
+						enablenpc "Esteban";
+						enablenpc "magic00";
+						close;
+				}
+		}
+	}
+	if (icrq == 0) {
+		mes "[Elisa]";
+		mes ".............................";
+		close;
+	}
+	if (icrq == 1) {
+		mes "[Elisa]";
+		mes "Gracias Por Participar, aquí tienes tu recompensa....";
+		set icrq,0;
+		next;
+		switch(rand(1,5)) {
+			case 1:
+				mes "[Elisa]";
+				mes "Aqui tienes "+strcharinfo(0)+"..";
+				getitem 5076,1; //Beanie
+				close;
+			case 2:
+				mes "[Elisa]";
+				mes "Aqui tienes "+strcharinfo(0)+"..";
+				getitem 5191,1;//Black Ribbon
+				close;
+			case 3:
+				mes "[Elisa]";
+				mes "mmm podria ser que.....";
+				next;
+				switch(rand(1,3)) {
+					case 1:
+						mes "[Elisa]";
+						mes "Lo siento fallaste...";
+						close;
+					case 2:
+						mes "[Elisa]";
+						mes "Aqui tienes "+strcharinfo(0)+"..";
+						getitem 5233,1;	// Blue Drooping Cat
+						close;
+					case 3:
+						mes "[Elisa]";
+						mes "Lo siento fallaste...";
+						close;
+				}
+			case 4:
+				mes "[Elisa]";
+				mes "Aqui tienes "+strcharinfo(0)+"..";
+				getitem 5252,1; //Drooping NineTails
+				close;
+			case 5:
+				mes "[Elisa]";
+				mes "Aqui tienes "+strcharinfo(0)+"..";
+				getitem 5056,1;	//Fruit of Love
+				close;
+			}
+		}
+}
+darkmall,96,75,6	script	Desconocida::inicio1	10192,{
+	if(getgmlevel()>75){
+		mes "[Desconocida]";
+		mes " Buenas, miembro del staff de AresRO";
+		mes "¿Que Podría yo hacer por ti?";
+		next;
+		switch( Select("Terminar Evento Con Premio.","No Hacer nada.","Llevarme Con Ellos","Terminar el evento." ) )
+		{
+			Case 1:
+				mes "[Desconocida]";
+				mes "Ok, Vamos con ello";
+				close2;
+				disablenpc "inicio1";
+				disablenpc "bloqueo2";
+				disablenpc "bloqueo3";
+				disablenpc "bloqueo4";
+				disablenpc "bloqueo5";
+				disablenpc "bloqueo6";
+				disablenpc "bloqueo7";
+				disablenpc "help2";
+				disablenpc "help1";
+				disablenpc "warpend";
+				disablenpc "warpend2";
+				disablenpc "warpend3";
+				disablenpc "warpend4";
+				disablenpc "warpend5";
+				disablenpc "warpend6";
+				disablenpc "adarve";
+				disablenpc "accesosub";
+				disablenpc "reyql";
+				disablenpc "sjm";
+				disablenpc "Sejem";
+				disablenpc "estb2";
+				disablenpc "estb1";
+				disablenpc "teo4";
+				disablenpc "teo3";
+				disablenpc "teo2";
+				disablenpc "teo1";
+				disablenpc "Teodoro";
+				disablenpc "Esteban";
+				killmonsterall "castl_god00";
+				killmonsterall "castl_god01";
+				killmonsterall "castl_god02";
+				killmonsterall "castl_god03";
+				killmonsterall "castl_god04";
+				killmonsterall "castl_god05";
+				killmonsterall "castl_god06";
+				donpcevent "salidaicrq::OnEnable";
+				donpcevent "salidaicrq1::OnEnable";
+				donpcevent "salidaicrq2::OnEnable";
+				donpcevent "salidaicrq3::OnEnable";
+				donpcevent "salidaicrq4::OnEnable";
+				donpcevent "salidaicrq5::OnEnable";
+				donpcevent "salidaicrq6::OnEnable";
+				enablenpc"inicio";
+				disablenpc "magic00";
+				disablenpc "magic01";
+				disablenpc "magic02";
+				disablenpc "magic03";
+				disablenpc "reyql2";
+				disablenpc "reyql1";
+				end;
+			case 2:
+				close;
+			case 3:
+				close2;
+				warp "castl_god00",94,157;
+				end;
+			Case 4:
+				mes "[Desconocida]";
+				mes "Ok, Vamos con ello";
+				close2;
+				disablenpc "inicio1";
+				disablenpc "bloqueo2";
+				disablenpc "bloqueo3";
+				disablenpc "bloqueo4";
+				disablenpc "bloqueo5";
+				disablenpc "bloqueo6";
+				disablenpc "bloqueo7";
+				disablenpc "help2";
+				disablenpc "help1";
+				disablenpc "warpend";
+				disablenpc "warpend2";
+				disablenpc "warpend3";
+				disablenpc "warpend4";
+				disablenpc "warpend5";
+				disablenpc "warpend6";
+				disablenpc "adarve";
+				disablenpc "accesosub";
+				disablenpc "reyql";
+				disablenpc "sjm";
+				disablenpc "Sejem";
+				disablenpc "estb2";
+				disablenpc "estb1";
+				disablenpc "teo4";
+				disablenpc "teo3";
+				disablenpc "teo2";
+				disablenpc "teo1";
+				disablenpc "Teodoro";
+				disablenpc "Esteban";
+				killmonsterall "castl_god00";
+				killmonsterall "castl_god01";
+				killmonsterall "castl_god02";
+				killmonsterall "castl_god03";
+				killmonsterall "castl_god04";
+				killmonsterall "castl_god05";
+				killmonsterall "castl_god06";
+				donpcevent "salidaicrq::OnEnable";
+				donpcevent "salidaicrq1::OnEnable";
+				donpcevent "salidaicrq2::OnEnable";
+				donpcevent "salidaicrq3::OnEnable";
+				donpcevent "salidaicrq4::OnEnable";
+				donpcevent "salidaicrq5::OnEnable";
+				donpcevent "salidaicrq6::OnEnable";
+				enablenpc"inicio2";
+				disablenpc "magic00";
+				disablenpc "magic01";
+				disablenpc "magic02";
+				disablenpc "magic03";
+				disablenpc "reyql2";
+				disablenpc "reyql1";
+				end;
+		}
+	}
+	if ((icrq == 0) && (BaseLevel > 84)) {
+		mes "[Desconocida]";
+		mes "Hola viajero, soy la persona que estabas buscando...";
+		next;
+		mes "[Desconocida]";
+		mes "Mi nombre es ^FF0000Elisa^000000 y soy la encargada de acompañarte al castillo del rey qlipoth";
+		next;
+		mes "[Elisa]";
+		mes "La historia es conocida por todos";
+		mes "Cuentan, que hace siglos";
+		mes "Los sages más poderosos encontrarón";
+		next;
+		mes "[Elisa]";
+		mes "En las tierras más lejanas un extraño objeto";
+		mes "Este tenia guardado en su interior un gran poder";
+		next;
+		mes "[Elisa]";
+		mes "Alimentado todo este tiempo por la maldad que ser humano tiene capacidad de creear";
+		next;
+		mes "[Elisa]";
+		mes "Ante la imposibilidad de destruir ese poder oscuro, la pierda fue enterrada en lo más profundo del mundo terrenal";
+		next;
+		mes "[Elisa]";
+		mes "Ahora el rey qlipoth se ha echo con esta pierda";
+		next;
+		mes "[Elisa]";
+		mes "necesito que recuperes ese objeto antes que el rey pueda obtener el poder de ella y destruya todo midgard";
+		next;
+		mes "[Elisa]";
+		mes "¿estas dispuesto arriesgar tu vida?";
+		next;
+		switch( Select("Por Supuesto!!.","Es demasiado peligroso, mejor no." ) )
+		{
+			case 1:
+				mes "[Elisa]";
+				mes "Perfecto ahora te llevaré a su mundo, mucha suerte";
+				percentheal 100,100;
+				set icrq,1;
+				close2;
+				warp "castl_god00",94,157;
+				end;
+		
+			case 2:
+				mes "[Elisa]";
+				mes "Pensaba que eras un heroe...que equivocada estaba";
+				close;
+		}
+	}
+	else if ((icrq == 0) && (BaseLevel < 85)) {
+		mes "[Desconocida]";
+		mes "No cumples los requisitos para poder acceder, vuelve cuando seas más fuerte";
+		close;
+	}
+	
+	if (icrq == 1) {
+		mes "[Elisa]";
+		mes "Te Veo cansado";
+		mes "Yo te curaré tus heridas....";
+		percentheal 100,100;
+		close2;
+		warp "castl_god00",94,157;
+		end;
+	}
+}
+castl_god00,84,163,5	script	Magic Warper::magic00	896,{
+			mes "[Magic Warper]";
+			mes "¿Que deseas hacer?";
+			next;
+			switch( Select("Hacer Teleport.","Doparme." ) )
+			{
+				case 1:
+					mes "[Magic Warper]";
+					mes "¿Estas de broma?";
+					mes "¿...donde te voy a teleportar?";
+					mes "..ahora por gracioso toma dispell...";
+					emotion e_omg;
+					sc_end SC_ALL;
+					close;
+				case 2:
+					mes "[Magic Warper]";
+					mes "Yo te bendigo";
+					sc_start SC_BLESSING,240000,10;
+					sc_start SC_INCREASEAGI,240000,10;
+					sc_start SC_ASSUMPTIO,120000,1;
+					specialeffect2 91;
+					close;
+			}
+}
+castl_god00,84,163,5	script	Magic Warper::magic01	896,{
+			mes "[Magic Warper]";
+			mes "¿Que deseas hacer?";
+			next;
+			switch( Select("Hacer Teleport.","Doparme." ) )
+			{
+				case 1:
+					mes "[Magic Warper]";
+					mes "Recuerda que el costo de warpearte es quitarte todos los dopes";
+					sc_end SC_ALL;
+					close2;
+					Warp "castl_god02",180,169;
+					end;
+				case 2:
+					mes "[Magic Warper]";
+					mes "Yo te bendigo";
+					sc_start SC_BLESSING,240000,10;
+					sc_start SC_INCREASEAGI,240000,10;
+					sc_start SC_ASSUMPTIO,120000,1;
+					specialeffect2 91;
+					close;
+			}
+}
+castl_god00,84,163,5	script	Magic Warper::magic02	896,{
+			mes "[Magic Warper]";
+			mes "¿Que deseas hacer?";
+			next;
+			switch( Select("Hacer Teleport.","Doparme." ) )
+			{
+				case 1:
+					mes "[Magic Warper]";
+					mes "Recuerda que el costo de warpearte es quitarte todos los dopes";
+					sc_end SC_ALL;
+					close2;
+					Warp "castl_god03",297,26;
+					end;
+				case 2:
+					mes "[Magic Warper]";
+					mes "Yo te bendigo";
+					sc_start SC_BLESSING,240000,10;
+					sc_start SC_INCREASEAGI,240000,10;
+					sc_start SC_ASSUMPTIO,120000,1;
+					specialeffect2 91;
+					close;
+			}
+}
+castl_god00,84,163,5	script	Magic Warper::magic03	896,{
+			mes "[Magic Warper]";
+			mes "¿Que deseas hacer?";
+			next;
+			switch( Select("Hacer Teleport.","Doparme." ) )
+			{
+				case 1:
+					mes "[Magic Warper]";
+					mes "Recuerda que el costo de warpearte es quitarte todos los dopes";
+					sc_end SC_ALL;
+					close2;
+					Warp "castl_god06",149,26;
+					end;
+				case 2:
+					mes "[Magic Warper]";
+					mes "Yo te bendigo";
+					sc_start SC_BLESSING,240000,10;
+					sc_start SC_INCREASEAGI,240000,10;
+					sc_start SC_ASSUMPTIO,120000,1;
+					specialeffect2 91;
+					close;
+			}
+}
+					
+			
+castl_god00,54,287,4	script	Teodoro	615,{
+	cutin "v_breid01.bmp",2;
+	mes "[Teodoro]";
+	mes "Buenas, ¿eres el cabecilla de este ataque a esta fortaleza?";
+	next;
+	mes "[Teodoro]";
+	mes "Veo que necesitais mi ayuda para poder seguir y os voy ayudar..";
+	next;
+	mes "[Teodoro]";
+	mes "Puedo llevaros por la parte exterior del castillo, aúnque es más corto el camino, este es mucho más complicado porque está más defendido";
+	next;
+	mes "[Teodoro]";
+	mes "¿estas dispuesto a ir por la parte superior?";
+	next;
+	switch( Select("Si.","No." ) )
+	{
+		Case 1:
+			mes "[Teodoro]";
+			mes "Suerte para ti y tus compañeros...";
+			mes "Recuerda ir en grupo, ya que estareis expuestos alli arriba, mucha suerte...";
+			enablenpc "adarve";
+			disablenpc "Esteban";
+			disablenpc "Teodoro";
+			enablenpc "teo1";
+			specialeffect 16;
+			cutin "",255;
+			close;
+		Case 2:
+			mes "[Esteban]";
+			mes "Si cambiais de opinion, ya sabeis donde encontrarme";
+			enablenpc "Teodoro";
+			cutin "",255;
+			close;
+	}
+}
+
+castl_god01,328,232,4	script	Teodoro::teo1	419,{
+	cutin "v_breid01.bmp",2;
+	disablenpc "teo1";
+	mes "[Teodoro]";
+	mes "Has conseguido llegar aqui con tus compañeros y veo que no puedes continuar";
+	next;
+	mes "[Teodoro]";
+	mes "Os ayudare...";
+	next;
+	mes "[Teodoro]";
+	mes "...........";
+	specialeffect 99;
+	next;
+	mes "[Teodoro]";
+	mes "Ahora puedeis dañarle...suerte";
+	mes "Si necesitas mi ayuda de nuevo buscame";
+	mapannounce "castl_god01","Kai-n-Tiku Ahora puede ser dañado...",bc_map,0x0000FF;
+	disablenpc "kai1";
+	enablenpc "teo2";
+	cutin "",255;
+	monster "castl_god01",329,129,"Kai-n-Tiku",1960,1,"kain::OnMobDead";
+	close;
+}
+castl_god01,231,59,5	script	Teodoro::teo2	419,{
+	cutin "v_breid01.bmp",2;
+	disablenpc "teo2";
+	mes "[Teodoro]";
+	mes "Has conseguido llegar aqui con tus compañeros y veo que no puedes continuar";
+	next;
+	mes "[Teodoro]";
+	mes "Os ayudare...";
+	next;
+	mes "[Teodoro]";
+	mes "...........";
+	specialeffect 99;
+	next;
+	mes "[Teodoro]";
+	mes "Ahora puedeis dañarle...suerte";
+	mes "Si necesitas mi ayuda de nuevo buscame";
+	mapannounce "castl_god01","Kai-n-Tiku Ahora puede ser dañado...",bc_map,0x0000FF;
+	disablenpc "teo2";
+	enablenpc "teo3";
+	disablenpc "kai2";
+	disablenpc "kai3";
+	disablenpc "kai4";
+	disablenpc "kai5";
+	disablenpc "kai6";
+	disablenpc "kai7";
+	disablenpc "kai8";
+	cutin "",255;
+	monster "castl_god01",289,98,"Kai-n-Tiku",1958,1,"kain::OnMobDead";
+	monster "castl_god01",289,100,"Kai-n-Tiku",1960,1,"kain::OnMobDead";
+	monster "castl_god01",289,102,"Kai-n-Tiku",1959,1,"kain::OnMobDead";
+	monster "castl_god01",289,104,"Kai-n-Tiku",1961,1,"kain::OnMobDead";
+	close;
+}
+
+castl_god01,163,194,5	script	Teodoro::teo3	419,{
+	mes "[Teodoro]";
+	cutin "v_breid01.bmp",2;
+	mes "Te estado esperando, ahora podré llevaros hacia los aposentos del rey ^FF0000Qlipoth^000000";
+	next;
+	mes "[Teodoro]";
+	mes "Arg.....me duele";
+	mes "me duele mucho el pecho....";
+	next;
+	mes "[Teodoro]";
+	mes "noooooooooooooooooo";
+	mes "es mi fin.....";
+	next;
+	specialeffect 730;
+	disablenpc "teo3";
+	enablenpc "teo4";
+	donpcevent "reyql2::OnEnable";
+	cutin "",255;
+	close;
+}
+
+castl_god06,149,273,4	script	Teodoro::teo4	796,{
+	mes "[Teodoro]";
+	mes "Ahora que el rey está muerto, puedo controlarlo todo";
+	disablenpc "teo4";
+	next;
+	mes "[Teodoro]";
+	mes "Ahora será facil acabar con todos vosotros...";
+	donpcevent "mvpsub6::OnEnable";
+	close;
+}
+
+
+castl_god00,66,223,5	script	Esteban	418,{
+	cutin "lhz_kaz02.bmp",2;
+	mes "[Esteban]";
+	mes "Veo, que has conseguido llegar lejos...impresionante, conozco un pasadizo subterraneo donde podrías esquivar a todos estos guardianes";
+	next;
+	mes "[Esteban]";
+	mes "Si no te importa mancharte la ropa con aguas residuales esta es tú opción";
+	next;
+	mes "[Esteban]";
+	mes "Que elijes";
+	next;
+	switch( Select("Si.","No." ) )
+	{
+		Case 1:
+			mes "[Esteban]";
+			mes "Suerte para ti y tus compañeros...";
+			mes "Tengo un compañero trabajando en ese infierno de abajo, si necesitas su ayuda dile que vas de mi parte";
+			enablenpc "accesosub";
+			disablenpc "Esteban";
+			disablenpc "Teodoro";
+			enablenpc "help1";
+			disablenpc "magic00";
+			enablenpc "magic01";
+			specialeffect 16;
+			cutin "",255;
+			close;
+		Case 2:
+			mes "[Esteban]";
+			mes "Si cambiais de opinion, ya sabeis donde encontrarme";
+			enablenpc "Esteban";
+			cutin "",255;
+			close;
+	}
+}
+
+castl_god03,167,158,6	script	Esteban::estb1	418,{
+	mes "[Esteban]";
+	cutin "lhz_kaz02.bmp",2;
+	mes "Te estado esperando, ahora podré guiaros por estas mazmorras interminables, hacia los aposentos del rey ^FF0000Qlipoth^000000";
+	next;
+	mes "[Esteban]";
+	mes "Arg.....me duele";
+	mes "me duele mucho el pecho....";
+	next;
+	mes "[Esteban]";
+	mes "noooooooooooooooooo";
+	mes "es mi fin.....";
+	next;
+	specialeffect 730;
+	disablenpc "estb1";
+	enablenpc "estb2";
+	donpcevent "reyql::OnEnable";
+	cutin "",255;
+	close;
+}
+
+castl_god06,149,273,4	script	Esteban::estb2	796,{
+	mes "[Esteban]";
+	mes "Ahora que el rey está muerto, puedo controlarlo todo";
+	disablenpc "estb2";
+	next;
+	mes "[Esteban]";
+	mes "Ahora será facil acabar con todos vosotros...";
+	donpcevent "mvpsub5::OnEnable";
+	close;
+}
+
+castl_god02,142,181,5	script	Limpiador Cloacas::help1	48,{
+	mes "[Limpiador Cloacas]";
+	mes "Te envia Esteban, ¿verdad?";
+	next;
+	switch( Select("Si.","No." ) )
+	{
+		Case 1:
+			mes "[Limpiador Cloacas]";
+			mes "Perfecto, yo me encargaré de ese bicho que no te deja pasar.....deja que me concentre";
+			next;
+			mes "[Limpiador Cloacas]";
+			mes "KYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+			specialeffect 99;
+			next;
+			mes "[Limpiador Cloacas]";
+			mes "ya está con esta luz se cego y ahora puedes rematarle, ya que esta luz le dejo desconcertado";
+			next;
+			mes "[Limpiador Cloacas]";
+			mes "ahora, sigue tu camino, búscame si necesitas de nuevo mi ayuda...";
+			specialeffect 16;
+			disablenpc "bloqueo1";
+			enablenpc "bloqueo2";
+			disablenpc "help1";
+			enablenpc "help2";
+			close;
+	}
+}
+
+castl_god02,68,182,5	script	Limpiador Cloacas::help2	48,{
+	mes "[Limpiador Cloacas]";
+	mes "Nos Volvemos a encontrar...hehehe, ¿necesitas mi ayuda?";
+	next;
+	switch( Select("Si.","No." ) )
+	{
+		Case 1:
+			mes "[Limpiador Cloacas]";
+			mes "Perfecto, yo me encargaré de ese bicho que no te deja pasar.....deja que me concentre";
+			next;
+			mes "[Limpiador Cloacas]";
+			mes "KYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+			specialeffect 99;
+			next;
+			mes "[Limpiador Cloacas]";
+			mes "ya está con esta luz se cego y ahora puedes rematarle, ya que esta luz le dejo desconcertado";
+			next;
+			mes "[Limpiador Cloacas]";
+			mes "ahora, sigue tu camino, no puedo ayudarte más.....";
+			specialeffect 16;
+			disablenpc "help2";
+			disablenpc "bloqueo3";
+			disablenpc "bloqueo5";
+			enablenpc "bloqueo4";
+			enablenpc "bloqueo6";
+			close;
+		Case 2:
+			mes "[Limpiador Cloacas]";
+			mes "Si tan sobrado vas, ¿por que me molestas?";
+			close;
+	}
+}
+
+castl_god02,140,99,6	script	Chupasangre::bloqueo1	799,1,6,{
+OnTouch:
+	mes "[Chupasangre]";
+	mes "No puedes pasar humano";
+	mes "Tu sangre será pago suficiente por intentar el paso";
+	next;
+	mes "[Chupasangre]";
+	mes "Que rica, mmmm, ahora fuera";
+	percentheal -25,0;
+	close2;
+	warp "castl_god02",180,169;
+	end;
+}
+
+castl_god02,140,99,6	script	Chupasangre::bloqueo2	799,1,6,{
+OnTouch:
+	mes "[Chupasangre]";
+	mes "No puedo ver....";
+	next;
+	mes "Una luz cegadora hace que el chupasangre salga huyendo...";
+	mapannounce "castl_god02","Conseguisteis espantar al chupasangre.",bc_blue|bc_map;
+	specialeffect 34;
+	disablenpc "bloqueo2";
+	enablenpc "bloqueo3";
+	enablenpc "bloqueo5";
+	close;
+}
+
+castl_god02,60,67,6	script	Chupasangre::bloqueo3	799,1,6,{
+OnTouch:
+	mes "[Chupasangre]";
+	mes "No puedes pasar humano";
+	mes "Tu sangre será pago suficiente por intentar el paso";
+	next;
+	mes "[Chupasangre]";
+	mes "Que rica, mmmm, ahora fuera";
+	percentheal -25,0;
+	close2;
+	warp "castl_god02",180,169;
+	end;
+}
+
+castl_god02,60,67,6	script	Chupasangre::bloqueo4	799,1,6,{
+OnTouch:
+	mes "[Chupasangre]";
+	mes "No puedo ver....";
+	next;
+	mes "Una luz cegadora hace que el chupasangre salga huyendo...";
+	mapannounce "castl_god02","Conseguisteis espantar al chupasangre.",bc_blue|bc_map;
+	specialeffect 34;
+	disablenpc "bloqueo4";
+	disablenpc "bloqueo6";
+	enablenpc "bloqueo7";
+	close;
+}
+
+castl_god02,60,131,6	script	Chupasangre::bloqueo5	799,1,6,{
+OnTouch:
+	mes "[Chupasangre]";
+	mes "No puedes pasar humano";
+	mes "Tu sangre será pago suficiente por intentar el paso";
+	next;
+	mes "[Chupasangre]";
+	mes "Que rica, mmmm, ahora fuera";
+	percentheal -25,0;
+	close2;
+	warp "castl_god02",180,169;
+	end;
+}
+
+castl_god02,60,131,6	script	Chupasangre::bloqueo6	799,1,6,{
+OnTouch:
+	mes "[Chupasangre]";
+	mes "No puedo ver....";
+	next;
+	mes "Una luz cegadora hace que el chupasangre salga huyendo...";
+	mapannounce "castl_god02","Conseguisteis espantar al chupasangre.",bc_blue|bc_map;
+	specialeffect 34;
+	disablenpc "bloqueo4";
+	disablenpc "bloqueo6";
+	enablenpc "bloqueo7";
+	close;
+}
+
+castl_god02,19,140,6	script	Chupasangre::bloqueo7	799,3,6,{
+OnTouch:
+	mapannounce "castl_god02","Chupasangre: Ahora conocereis mi verdadera forma y todos morireis.....",bc_blue|bc_map;
+	disablenpc "bloqueo7";
+	specialeffect 99;
+	donpcevent "mvpsub::OnEnable";
+	close;
+}
+
+castl_god04,112,23,4	script	Sejem	795,{
+	mes "[Sejem]";
+	mes "Os habeis atrevido a pisar estas tierras sagradas";
+	mes "Ahora morireis todos";
+	next;
+	mes "[Sejem]";
+	mes "Conocer el verdadero terror de mi amo....";
+	specialeffect 16;
+	disablenpc "Sejem";
+	donpcevent "mvpsub2::OnEnable";
+	close;
+}
+
+castl_god04,40,230,6	script	Sejem::sjm	795,{
+	mes "[Sejem]";
+	mes "Habeis sido muy buenos, ahora descubrireis mi verdadero ser, es el punto y final de vuestra aventura";
+	next;
+	mes "[Sejem]";
+	donpcevent "mvpsub3::OnEnable";
+	disablenpc "sjm";
+	specialeffect 99;
+	close;
+}
+
+castl_god06,149,149,6	script	Rey De Qlipoth::reyql1	1268,2,2,{
+OnTouch:
+	disablenpc "reyql1";
+	specialeffect 16;
+	donpcevent "mvpsub4::OnEnable";
+	end;
+}
+
+castl_god01,329,129,6	script	Kai-n-Tiku::kai1	1958,3,3,{
+OnTouch:
+	mes "[Kai-n-Tiku]";
+	mes "Comida...Comida..";
+	percentheal -25,-25;
+	close2;
+	Warp "castl_god01",341,130;
+	end;	
+}
+
+castl_god01,289,98,6	script	Kai-n-Tiku::kai2	1958,1,3,{
+OnTouch:
+	mes "[Kai-n-Tiku]";
+	mes "Comida...Comida..";
+	percentheal -25,-25;
+	close2;
+	Warp "castl_god01",302,104;
+	end;	
+}
+
+castl_god01,289,99,6	script	Kai-n-Tiku::kai3	1958,1,1,{
+OnTouch:
+	mes "[Kai-n-Tiku]";
+	mes "Comida...Comida..";
+	percentheal -25,-25;
+	close2;
+	Warp "castl_god01",302,104;
+	end;	
+}
+
+castl_god01,289,100,6	script	Kai-n-Tiku::kai4	1958,1,3,{
+OnTouch:
+	mes "[Kai-n-Tiku]";
+	mes "Comida...Comida..";
+	percentheal -25,-25;
+	close2;
+	Warp "castl_god01",302,104;
+	end;	
+}
+
+castl_god01,289,101,6	script	Kai-n-Tiku::kai5	1958,1,1,{
+OnTouch:
+	mes "[Kai-n-Tiku]";
+	mes "Comida...Comida..";
+	percentheal -25,-25;
+	close2;
+	Warp "castl_god01",302,104;
+	end;	
+}
+
+castl_god01,289,102,6	script	Kai-n-Tiku::kai6	1958,1,3,{
+OnTouch:
+	mes "[Kai-n-Tiku]";
+	mes "Comida...Comida..";
+	percentheal -25,-25;
+	close2;
+	Warp "castl_god01",302,104;
+	end;	
+}
+
+castl_god01,289,103,6	script	Kai-n-Tiku::kai7	1958,1,1,{
+OnTouch:
+	mes "[Kai-n-Tiku]";
+	mes "Comida...Comida..";
+	percentheal -25,-25;
+	close2;
+	Warp "castl_god01",302,104;
+	end;	
+}
+
+castl_god01,289,104,6	script	Kai-n-Tiku::kai8	1958,1,3,{
+OnTouch:
+	mes "[Kai-n-Tiku]";
+	mes "Comida...Comida..";
+	percentheal -25,-25;
+	close2;
+	Warp "castl_god01",302,104;
+	end;	
+}
+
+castl_god02,1,1,1	script	mvpsub	-1,{
+OnInit:
+	disablenpc "mvpsub";
+	end;
+OnEnable:
+	enablenpc "mvpsub";
+	set .Mymobs,1;
+	monster "castl_god02",19,140,"Chupasangre",3975,1,"mvpsub::OnMyMobDead";
+	end;
+OnMyMobDead:
+	set .MyMobs,.MyMobs-1;
+	if (.MyMobs < 1) {		
+		enablenpc "warpend";
+		enablenpc "estb1";
+		enablenpc "magic02";
+		disablenpc "magic01";
+		disablenpc "mvpsub";
+		mapannounce "castl_god02","Chupasangre: AAAAAAAAA me vencisteis, ahora podeis pasar....",bc_map,0xFF0000;
+	}
+	end;
+}
+castl_god03,1,1,1	script	kain	-1,{
+OnInit:
+	disablenpc "kain";
+	end;
+OnMobDead:
+	enablenpc "Kain";
+	mapannounce "castl_god03","Kai-n-Tiku: Ahhhh....",bc_map,0xFF0000;
+	end;
+}
+castl_god04,1,1,1	script	mvpsub2	-1,{
+OnInit:
+	disablenpc "mvpsub2";
+	end;
+OnEnable:
+	enablenpc "mvpsub2";
+	set .Mymobs,255;
+	monster "castl_god04",0,0,"Soldado De Sejem",1864,30,"mvpsub2::OnMyMobDead";
+	monster "castl_god04",0,0,"Soldado De Sejem",1298,30,"mvpsub2::OnMyMobDead";
+	monster "castl_god04",0,0,"Soldado De Sejem",1778,30,"mvpsub2::OnMyMobDead";
+	monster "castl_god04",0,0,"Soldado De Sejem",1297,30,"mvpsub2::OnMyMobDead";
+	monster "castl_god04",0,0,"Soldado De Sejem",1291,30,"mvpsub2::OnMyMobDead";
+	monster "castl_god04",0,0,"Soldado De Sejem",1626,15,"mvpsub2::OnMyMobDead";
+	monster "castl_god04",0,0,"Soldado De Sejem",1919,30,"mvpsub2::OnMyMobDead";
+	monster "castl_god04",0,0,"Soldado De Sejem",1774,30,"mvpsub2::OnMyMobDead";
+	monster "castl_god04",0,0,"Soldado De Sejem",1979,30,"mvpsub2::OnMyMobDead";
+	end;
+OnMyMobDead:
+	set .MyMobs,.MyMobs-1;
+	if (.MyMobs < 1) {		
+		enablenpc "sjm";
+		disablenpc "mvpsub2";
+		mapannounce "castl_god04","Sejem: Veo que habeis vencido a mis tropas, ahora ¿me vencereis ami?, os espero en la salida",bc_map,0xFF0000;
+	}
+	end;	
+}
+
+
+castl_god04,40,230,1	script	mvpsub3	-1,{
+OnInit:
+	disablenpc "mvpsub3";
+	end;
+OnEnable:
+	enablenpc "mvpsub3";
+	initnpctimer;
+	mapannounce "castl_god04","Sejem: .........................",bc_map,0xFF0000;
+	end;
+OnTimer15000:
+	set .Mymobs,1;
+	specialeffect 16;
+	monster "castl_god04",40,230,"Sejem",3971,1,"mvpsub3::OnMyMobDead";
+	stopnpctimer;
+	end;
+OnMyMobDead:
+	set .MyMobs,.MyMobs-1;
+	if (.MyMobs < 1) {		
+		disablenpc "mvpsub3";
+		enablenpc "warpend3";
+		enablenpc "estb2";
+		disablenpc "magic02";
+		enablenpc "magic03";
+		enablenpc "reyql1";
+		mapannounce "castl_god04","Sejem: Me Habeis vencido...ahora os espera mi amo, el me vengará....arg....",bc_map,0xFF0000;
+	}
+	end;	
+}
+
+castl_god03,167,158,6	script	Rey De Qlipoth::reyql	-1,{
+
+OnEnable:
+	enablenpc "reyql";
+	initnpctimer;
+	mapannounce "castl_god03","Rey Qlipoth: Esteban a tenido que ser retirado para siempre....",bc_map,0xFF0000;
+	end;
+OnTimer10000:
+	mapannounce "castl_god03","Rey Qlipoth: Todos pagarán el precio de su traición, con la vida...",bc_map,0xFF0000;
+	end;
+OnTimer20000:
+	mapannounce "castl_god03","Rey Qlipoth: Ahora vosortros sereis los siguientes en perecer por invadir mi territorio..vuestra sangre será suficiente pago....",bc_map,0xFF0000;
+	end;
+OnTimer30000:
+	mapannounce "castl_god03","Rey Qlipoth: Hija puedes jugar con ellos...alimentate de sus entrañas.....",bc_map,0xFF0000;
+	end;
+OnTimer40000:
+	mapannounce "castl_god03","Hija Del Rey: Quiero Jugar...¿Jugamos?...",bc_blue|bc_map;
+	end;
+OnTimer50000:
+	set .Mymobs,1;
+	monster	"castl_god03",167,158,"Hija Del Rey",1947,1,"reyql::OnMyMobDead";
+	stopnpctimer;
+	end;
+OnMyMobDead:
+	set .MyMobs,.MyMobs-1;
+	if (.MyMobs < 1) {		
+	enablenpc "warpend2";
+	enablenpc "Sejem";
+	mapannounce "castl_god03","Hija Del Rey: ..Buaaaaa Eso Me Dolio..la próxima vez vendre con mi hermana mayor.., ahora podeis salir de aquí si encontrais el camino..",bc_blue|bc_map;
+	disablenpc "reyql";
+	}
+	end;
+}
+
+castl_god01,163,194,6	script	Rey De Qlipoth::reyql2	-1,{
+
+OnEnable:
+	enablenpc "reyql2";
+	initnpctimer;
+	mapannounce "castl_god01","Rey Qlipoth: Teodoro a tenido que ser retirado para siempre....",bc_map,0xFF0000;
+	end;
+OnTimer10000:
+	mapannounce "castl_god01","Rey Qlipoth: Todos pagarán el precio de su traición, con la vida...",bc_map,0xFF0000;
+	end;
+OnTimer20000:
+	mapannounce "castl_god01","Rey Qlipoth: Ahora vosortros sereis los siguientes en perecer por invadir mi territorio..vuestra sangre será suficiente pago....",bc_map,0xFF0000;
+	end;
+OnTimer30000:
+	mapannounce "castl_god01","Rey Qlipoth: Hija puedes jugar con ellos...alimentate de sus entrañas.....",bc_map,0xFF0000;
+	end;
+OnTimer40000:
+	mapannounce "castl_god01","Hija Del Rey: Quiero Jugar...¿Jugamos?...",bc_blue|bc_map;
+	end;
+OnTimer50000:
+	set .Mymobs,1;
+	monster	"castl_god01",163,194,"Hija Del Rey",1930,1,"reyql2::OnMyMobDead";
+	stopnpctimer;
+	end;
+OnMyMobDead:
+	set .MyMobs,.MyMobs-1;
+	if (.MyMobs < 1) {		
+	enablenpc "warpend6";
+	mapannounce "castl_god01","Hija Del Rey: ..Buaaaaa Eso Me Dolio......Papa..!!",bc_blue|bc_map;
+	enablenpc "reyql1";
+	disablenpc "reyql2";	
+	}
+	end;
+}
+
+castl_god06,149,149,1	script	mvpsub4	-1,{
+OnInit:
+	disablenpc "mvpsub4";
+	end;
+OnEnable:
+	enablenpc "mvpsub4";
+	mapannounce "castl_god06","Rey Qlipoth: GRRR..Os atreveis a estar ante mi presencia..",bc_map,0xFF0000;
+	initnpctimer;
+	end;
+OnTimer10000:
+	mapannounce "castl_god06","Rey Qlipoth: Ahora conocereis mi verdadero poder..",bc_map,0xFF0000;
+	end;
+OnTimer15000:
+	mapannounce "castl_god06","Rey Qlipoth: .....",bc_map,0xFF0000;
+	end;
+OnTimer25000:
+	set .Mymobs,1;
+	specialeffect 99;
+	monster	"castl_god06",149,149,"Rey Qlipoth",3599,1,"mvpsub4::OnMyMobDead";
+	stopnpctimer;
+	end;
+OnMyMobDead:
+	set .MyMobs,.MyMobs-1;
+	if (.MyMobs < 1) {		
+	enablenpc "warpend4";
+	mapannounce "castl_god06","Rey Qlipoth:IMPOSIBLE!!!...fui vencido......",bc_map,0xFF0000;
+	disablenpc "mvpsub4";	
+	}
+	end;
+}
+
+castl_god06,149,273,1	script	mvpsub5	-1,{
+OnInit:
+	disablenpc "mvpsub5";
+	end;
+OnEnable:
+	enablenpc "mvpsub5";
+	mapannounce "castl_god06","Esteban:Ahora os toca el turno a vosotros",bc_map,0xFF0000;
+	initnpctimer;
+	end;
+OnTimer10000:
+	set .Mymobs,1;
+	specialeffect 99;
+	monster	"castl_god06",149,273,"Esteban",1640,1,"mvpsub5::OnMyMobDead";
+	stopnpctimer;
+	end;
+OnMyMobDead:
+	set .MyMobs,.MyMobs-1;
+	if (.MyMobs < 1) {		
+	enablenpc "warpend5";
+	mapannounce "castl_god06","Esteban:Todo mi esfuerzo no valio la pena....yo os maldigo",bc_map,0xFF0000;
+	disablenpc "mvpsub5";	
+	}
+	end;
+}
+
+castl_god06,149,273,1	script	mvpsub6	-1,{
+OnInit:
+	disablenpc "mvpsub6";
+	end;
+OnEnable:
+	enablenpc "mvpsub6";
+	mapannounce "castl_god06","Teodoro:Ahora os toca el turno a vosotros",bc_map,0xFF0000;
+	initnpctimer;
+	end;
+OnTimer10000:
+	set .Mymobs,1;
+	specialeffect 99;
+	monster	"castl_god06",149,273,"Teodoro",1640,1,"mvpsub5::OnMyMobDead";
+	stopnpctimer;
+	end;
+OnMyMobDead:
+	set .MyMobs,.MyMobs-1;
+	if (.MyMobs < 1) {		
+	enablenpc "warpend5";
+	mapannounce "castl_god06","Teodoro:Todo mi esfuerzo no valio la pena....yo os maldigo",bc_map,0xFF0000;
+	disablenpc "mvpsub5";	
+	}
+	end;
+}
+castl_god02,19,184,1	script	warpend	45,1,1,{
+	Warp "castl_god03",297,26;
+	end;	
+}
+castl_god03,292,303,1	script	warpend2	45,1,1,{
+	Warp "castl_god04",110,26;
+	end;	
+}
+castl_god04,40,230,1	script	warpend3	45,1,1,{
+	Warp "castl_god06",149,26;
+	end;	
+}
+castl_god06,148,176,1	script	warpend4	45,1,1,{
+	Warp "castl_god06",149,204;
+	end;	
+}
+castl_god06,149,273,1	script	warpend5	45,1,1,{
+	Warp "mid_camp",0,0;
+	end;	
+}
+castl_god01,163,194,1	script	warpend6	45,1,1,{
+	Warp "castl_god05",274,22;
+	end;	
+}
+castl_god00,67,223,1	script	accesosub	45,1,1,{
+	Warp "castl_god02",180,169;
+	end;	
+}
+castl_god00,54,287,1	script	adarve	45,1,1,{
+	Warp "castl_god01",339,78;
+	end;	
+}
+//trampas (subterraneos)
+
+castl_god02,180,146,0	script	#trap1	-1,5,5,{
+
+OnTouch:
+	sc_start SC_QUAGMIRE,20000,5;
+	end;
+}
+castl_god02,180,99,0	script	#trap2	-1,5,5,{
+
+OnTouch:
+	sc_start SC_DECREASEAGI,20000,10;
+	end;
+}
+castl_god02,164,107,0	script	#trap3	-1,5,5,{
+
+OnTouch:
+	sc_start SC_HALLUCINATION,20000,1;
+	end;
+}
+castl_god02,147,68,0	script	#trap4	-1,5,5,{
+
+OnTouch:
+	sc_start SC_STONE,10000,1;
+	end;
+}
+castl_god02,68,158,0	script	#trap5	-1,5,5,{
+
+OnTouch:
+	sc_start SC_STEELBODY,20000,1;
+	end;
+}
+castl_god02,51,42,0	script	#trap6	-1,5,5,{
+
+OnTouch:
+	sc_start SC_COMA,1000,1;
+	end;
+}
+castl_god02,51,87,0	script	#trap7	-1,5,5,{
+
+OnTouch:
+	sc_start SC_SILENCE,20000,5;
+	end;
+}
+castl_god02,20,70,0	script	#trap8	-1,5,5,{
+
+OnTouch:
+	sc_start SC_CURSE,20000,5;
+	end;
+}
+castl_god03,266,33,0	script	#trap9	-1,5,5,{
+
+OnTouch:
+	sc_start SC_STONE,10000,5;
+	end;
+}
+castl_god03,203,57,0	script	#trap10	-1,5,5,{
+
+OnTouch:
+	sc_start SC_DECREASEAGI,20000,10;
+	end;
+}
+castl_god03,271,73,0	script	#trap11	-1,5,5,{
+
+OnTouch:
+	sc_start SC_HALLUCINATION,20000,1;
+	end;
+}
+castl_god03,204,146,0	script	#trap12	-1,5,5,{
+
+OnTouch:
+	sc_start SC_COMA,1000,1;
+	end;
+}
+castl_god03,164,121,0	script	#trap13	-1,5,5,{
+
+OnTouch:
+	sc_start SC_ANKLE,20000,5;
+	end;
+}
+castl_god03,84,159,0	script	#trap14	-1,5,5,{
+
+OnTouch:
+	sc_start SC_STEELBODY,60000,1;
+	end;
+}
+castl_god03,43,70,0	script	#trap15	-1,5,5,{
+
+OnTouch:
+	sc_start SC_ANKLE,20000,5;
+	end;
+}
+castl_god03,44,264,0	script	#trap16	-1,5,5,{
+
+OnTouch:
+	sc_start SC_STONE,15000,1;
+	end;
+}
+castl_god03,131,225,0	script	#trap17	-1,5,5,{
+
+OnTouch:
+	sc_start SC_CONFUSION,20000,5;
+	end;
+}
+
+castl_god03,251,193,0	script	#trap18	-1,5,5,{
+
+OnTouch:
+	sc_start SC_DONTFORGETME,20000,5;
+	end;
+}
+castl_god03,212,250,0	script	#trap19	-1,5,5,{
+
+OnTouch:
+	sc_start SC_SILENCE,20000,5;
+	end;
+}
+
+castl_god03,156,281,0	script	#trap20	-1,5,5,{
+
+OnTouch:
+	sc_start SC_ANKLE,20000,5;
+	end;
+
+}
+castl_god03,291,244,0	script	#trap21	-1,5,5,{
+
+OnTouch:
+	sc_start SC_CONFUSION,20000,1;
+	end;
+
+}
+castl_god01,260,114,0	script	#tramp22	-1,2,2,{
+
+OnTouch:
+	sc_start SC_COMA,1000,1;
+	end;
+}
+castl_god01,177,116,0	script	#tramp23	-1,3,3,{
+
+OnTouch:
+	sc_start SC_STEELBODY,30000,1;
+	end;
+}
+castl_god01,209,149,0	script	#tramp24	-1,4,4,{
+
+OnTouch:
+	sc_start SC_DONTFORGETME,60000,1;
+	end;
+}
+castl_god01,221,199,0	script	#tramp25	-1,4,4,{
+
+OnTouch:
+	sc_start SC_SILENCE,50000,5;
+	end;
+}
+castl_god01,230,215,0	script	#tramp26	-1,2,2,{
+
+OnTouch:
+	sc_start SC_DONTFORGETME,30000,5;
+	end;
+}
+castl_god01,254,168,0	script	#tramp27	-1,2,2,{
+
+OnTouch:
+	sc_start SC_HALLUCINATION,30000,5;
+	end;
+}
+castl_god01,241,138,0	script	#tramp28	-1,5,5,{
+
+OnTouch:
+	sc_start SC_CURSE,40000,1;
+	end;
+}
+castl_god01,338,154,0	script	#tramp29	-1,4,4,{
+
+OnTouch:
+	sc_start SC_ANKLE,10000,5;
+	end;
+}
+castl_god01,329,218,0	script	#tramp30	-1,4,4,{
+
+OnTouch:
+	sc_start SC_CONFUSION,20000,1;
+	end;
+}
+
+//warps
+castl_god05,289,129,0	warp	arvadesb1		1,1,castl_god05,129,193
+castl_god05,143,273,0	warp	arvadesb2	1,1,castl_god05,153,135
+castl_god05,154,154,0	warp	arvadesb3	1,1,castl_god06,149,26	
+castl_god06,100,150,0	warp	icrq11-1	1,1,castl_god06,128,150
+castl_god06,123,150,0	warp	icrq11-2	1,1,castl_god06,95,150
+castl_god06,114,183,0	warp	icrq11-3	1,1,castl_god06,135,163
+castl_god06,130,168,0	warp	icrq11-4	1,1,castl_god06,109,188
+castl_god06,115,115,0	warp	icrq11-5	1,1,castl_god06,136,136
+castl_god06,131,131,0	warp	icrq11-6	1,1,castl_god06,110,110
+castl_god06,149,199,0	warp	icrq11-8	1,1,castl_god06,148,171
+castl_god06,149,99,0	warp	icrq11-9	1,1,castl_god06,151,129
+castl_god06,151,124,0	warp	icrq11-10	1,1,castl_god06,151,94
+castl_god06,168,168,0	warp	icrq11-11	1,1,castl_god06,189,189
+castl_god06,184,184,0	warp	icrq11-12	1,1,castl_god06,163,163
+castl_god06,169,131,0	warp	icrq11-13	1,1,castl_god06,188,111
+castl_god06,183,116,0	warp	icrq11-14	1,1,castl_god06,164,136
+castl_god06,176,150,0	warp	icrq11-15	1,1,castl_god06,204,150
+castl_god06,199,150,0	warp	icrq11-16	1,1,castl_god06,171,150
+
+castl_god00,1,1,0	script	salidaicrq	-1,{
+OnInit:
+	disablenpc "salidaicrq";
+	end;
+
+OnEnable:
+	if (getmapusers("castl_god00") > 0)
+	mapwarp "castl_god00","mid_camp",0,0;
+	end;
+}
+
+castl_god01,1,1,0	script	salidaicrq1	-1,{
+OnInit:
+	disablenpc "salidaicrq1";
+	end;
+
+OnEnable:
+	if (getmapusers("castl_god01") > 0)
+	mapwarp "castl_god01","mid_camp",0,0;
+	end;
+}
+
+castl_god02,1,1,0	script	salidaicrq2	-1,{
+OnInit:
+	disablenpc "salidaicrq2";
+	end;
+
+OnEnable:
+	if (getmapusers("castl_god02") > 0)
+	mapwarp "castl_god02","mid_camp",0,0;
+	end;
+}
+
+castl_god03,1,1,0	script	salidaicrq3	-1,{
+OnInit:
+	disablenpc "salidaicrq3";
+	end;
+
+OnEnable:
+	if (getmapusers("castl_god03") > 0)
+	mapwarp "castl_god03","mid_camp",0,0;
+	end;
+}
+
+castl_god04,1,1,0	script	salidaicrq4	-1,{
+OnInit:
+	disablenpc "salidaicrq4";
+	end;
+
+OnEnable:
+	if (getmapusers("castl_god04") > 0)
+	mapwarp "castl_god04","mid_camp",0,0;
+	end;
+}
+
+castl_god05,1,1,0	script	salidaicrq5	-1,{
+OnInit:
+	disablenpc "salidaicrq5";
+	end;
+
+OnEnable:
+	if (getmapusers("castl_god05") > 0)
+	mapwarp "castl_god05","mid_camp",0,0;
+	end;
+}
+
+castl_god06,1,1,0	script	salidaicrq6	-1,{
+OnInit:
+	disablenpc "salidaicrq6";
+	end;
+
+OnEnable:
+	if (getmapusers("castl_god06") > 0)
+	mapwarp "castl_god06","mid_camp",0,0;
+	end;
+}
+
+//mapflag.
+castl_god01	mapflag	noicewall
+castl_god00	mapflag	nomemo
+castl_god00	mapflag	noteleport
+castl_god00	mapflag	nosave
+castl_god00	mapflag	nowarp
+castl_god00	mapflag	nopenalty
+castl_god00	mapflag	monster_noteleport
+
+castl_god01	mapflag	nobranch
+castl_god01	mapflag	nomemo
+castl_god01	mapflag	noteleport
+castl_god01	mapflag	nosave
+castl_god01	mapflag	noicewall
+castl_god01	mapflag	nowarp
+castl_god01	mapflag	nopenalty
+castl_god01	mapflag	monster_noteleport
+
+castl_god02	mapflag	nobranch
+castl_god02	mapflag	nomemo
+castl_god02	mapflag	noteleport
+castl_god02	mapflag	nosave
+castl_god02	mapflag	noicewall
+castl_god02	mapflag	nowarp
+castl_god02	mapflag	nopenalty
+
+castl_god03	mapflag	nobranch
+castl_god03	mapflag	nomemo
+castl_god03	mapflag	noteleport
+castl_god03	mapflag	nosave
+castl_god03	mapflag	noicewall
+castl_god03	mapflag	nowarp
+castl_god03	mapflag	nopenalty
+
+castl_god04	mapflag	nobranch
+castl_god04	mapflag	nomemo
+castl_god04	mapflag	nosave
+castl_god04	mapflag	noicewall
+castl_god04	mapflag	nowarp
+castl_god04	mapflag	nopenalty
+
+castl_god05	mapflag	nobranch
+castl_god05	mapflag	nomemo
+castl_god05	mapflag	noteleport
+castl_god05	mapflag	nosave
+castl_god05	mapflag	noicewall
+castl_god05	mapflag	nowarp
+castl_god05	mapflag	nopenalty
+
+castl_god06	mapflag	nobranch
+castl_god06	mapflag	nomemo
+castl_god06	mapflag	nosave
+castl_god06	mapflag	nowarp
+castl_god06	mapflag	nopenalty
+castl_god06	mapflag	noteleport

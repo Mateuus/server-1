@@ -1,0 +1,86 @@
+///===== Script eAthena ======================================= 
+//= Little Moonlight Quest
+//===== por: ================================================== 
+//= Creador de Quests Ragnarok World
+//= v1.0
+//===== Compatible Con: ===================================== 
+//= eAthena SVN
+//===== Descripción: ========================================= 
+//  Quest Creada por el Script Creador de Quests Online de
+//  http://www.ragnarokworld.net
+//============================================================ 
+
+poring_w02,51,77,5	script	Little Moonlight	941,{
+ 	set @NPCName$, "[^Little Moonlight^000000]";
+	mes @NPCName$;
+	mes "Hola soy la hermanita de Moonlight,";
+	mes "te gustaria ser rapido como ella, pues traime este numero de item.";
+	next;
+	mes @NPCName$;
+	mes "Quieres Obtener este Item? si o no";
+	next;
+	switch(select("si:no:Cancelar")) {
+ 	case 1:
+	mes @NPCName$;
+	mes "Estos son Los Items Necesarios.";
+	mes "  ^ff00ffTopaz^000000 [500]";
+	mes "  ^ff00ffMoonlight Flower Card^000000 [20]";
+	mes "  ^ff00ffGold Coin^000000 [300]";
+	mes "  ^ff00ffNine Tails^000000 [3000]";
+	next;
+	if (countitem(728) < 500) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(4131) < 20) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(671) < 300) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(1022) < 3000) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	mes @NPCName$;
+	mes "Bien! Tienes todos los Items! Felicidades !";
+	mes "el Objeto es Tuyo";
+	delitem 728,500;
+	delitem 4131,20;
+	delitem 671,300;
+	delitem 1022,3000;
+	getitem 30002,1;
+	close;
+	case 2:
+	mes @NPCName$;
+	mes "de acuerdo, vuelve pronto !";
+	close;
+	case 3:
+	close;
+	}
+
+}
+
+//============================================================
+//===== Creador de Quests Ragnarok World ===========================
+//============================================================
+
+
+  
+  
+
+
+
+
+
+

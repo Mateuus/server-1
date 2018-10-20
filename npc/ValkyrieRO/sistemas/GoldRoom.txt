@@ -1,0 +1,87 @@
+// Gold Room Ordeal by Rokimoki v1.0
+// Request by: InsanityProductionsR (eAthena Forum)
+// ---
+ 
+// Gold Room Warper v1.0
+prontera,166,164,3	script	[Cofre Dorado]	10005,{
+	set .@nombre$, "[^0000FFCofre^000000]";
+	mes .@nombre$;
+	mes "Hi, do you want to join the Gold Room?!¡¡!";
+	next;
+	if (select("Login !!:Later.") == 2) close;
+	close2;
+	warp "ordeal_3-2",154,154;
+	end;
+} // End Script
+ 
+// Script Gold v1.0
+-	script	GoldRoom	-1,{
+	OnNPCKillEvent:
+	if (strcharinfo(3) != "ordeal_3-2") end;
+	if (killedrid != 2248) end;
+	switch (rand(3)) {
+        case 0:
+                set .@g, 1;
+		set zeny, zeny + 100000;
+                break;
+               
+        case 1:
+                set .@g, 2;
+		set zeny, zeny + 150000;
+                break;
+               
+        case 2:
+                set .@g, 3;
+		set zeny, zeny + 175000;
+                break;
+} // End switch
+dispbottom "Has ganado 100000 Zenys.";
+end;
+ 
+} // End Script
+ 
+// Warps a prontera v1.0
+-	script	Retorno::Retorno	45,2,2,{
+end;
+OnTouch:
+warp "prontera",153,193;
+end;
+} // End Script
+ 
+// Duplicados Warps v1.0
+ordeal_3-2,24,228,0	duplicate(Retorno)	Retorno#r1	45
+ordeal_3-2,25,58,0	duplicate(Retorno)	Retorno#r2	45
+ordeal_3-2,289,130,0	duplicate(Retorno)	Retorno#r3	45
+ordeal_3-2,283,230,0	duplicate(Retorno)	Retorno#r4	45
+ordeal_3-2,210,203,0	duplicate(Retorno)	Retorno#r5	45
+ 
+// Natural Monsters v1.0
+ordeal_3-2,154,154,0,0	monster	Golden Poring	2248,5,0,0,0
+ordeal_3-2,0,0,0,0	monster	Golden Poring	2248,50,0,0,0
+ordeal_3-2,0,0,0,0	monster	Golden Poring	2248,50,0,0,0
+ordeal_3-2,0,0,0,0	monster	Golden Poring	2248,50,0,0,0
+ordeal_3-2,0,0,0,0	monster	Golden Poring	2248,50,0,0,0
+
+ordeal_3-2,0,0,0,0	monster	Gold Guardian	2224,30,0,0,0
+ordeal_3-2,0,0,0,0	monster	Gold Guardian	2225,30,0,0,0
+
+
+//=============Cofres quest
+//ordeal_3-2,0,0,0,0	monster	Treasure Chest	1333,8,3600000,3000000,0
+//ordeal_3-2,0,0,0,0	monster	Treasure Chest	1349,8,3600000,3000000,0
+//ordeal_3-2,0,0,0,0	monster	Treasure Chest	1355,8,3600000,3000000,0
+//ordeal_3-2,0,0,0,0	monster	Treasure Chest	1357,8,3600000,3000000,0
+//ordeal_3-2,0,0,0,0	monster	Treasure Chest	1361,8,3600000,3000000,0
+//ordeal_3-2,0,0,0,0	monster	Treasure Chest	1359,8,3600000,3000000,0
+//ordeal_3-2,0,0,0,0	monster	Treasure Chest	1335,8,3600000,3000000,0
+//ordeal_3-2,0,0,0,0	monster	Treasure Chest	1351,8,3600000,3000000,0
+//ordeal_3-2,0,0,0,0	monster	Treasure Chest	1337,8,3600000,3000000,0
+
+
+// Map Flags v1.0
+//ordeal_3-2	mapflag	nobranch
+ordeal_3-2	mapflag	nomemo
+ordeal_3-2	mapflag	nopenalty
+ordeal_3-2	mapflag	pvp_noparty
+ordeal_3-2	mapflag	pvp
+

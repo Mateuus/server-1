@@ -1,0 +1,30 @@
+//===== eAthena Script =======================================
+//= Market Place
+//===== By ===================================================
+//= Lupus
+//===== Version ==============================================
+//= 1.0
+//===== Compatible With ======================================
+//= eAthena 5760+
+//===== Description ==========================================
+//= This script should move vending crowds from Prontera
+//= streets to a suitable market place. Save your traffic 8)
+//===== Comments =============================================
+// No comments yet
+//============================================================
+
+prontera,164,172,3	script	Mercado	837,{
+
+
+mes "[Zona Quest]";
+	
+                    		
+                          mes "Hola te gustaria ir a la zona de Ventas ?...";
+
+	if (select("Si!","No graciass.") == 2)
+		close;
+
+	close2;	
+                  warp "poring_w01",98,105;		
+                          end;	
+              } else { 

@@ -1,0 +1,30 @@
+invek,136,128,5	script	Thanatos Runes	4_M_YOUNGKNIGHT,{
+			openshop "ThanatosRsystem";
+			end;
+
+}
+
+-	script	ThanatosRsystem	4_TREASURE_BOX,{
+
+OnInit:
+	.credito = 30003;
+	tradertype(NST_CUSTOM);
+
+		sellitem Dark_Thanatos_Rune,15;
+	end;
+
+OnCountFunds:
+
+	dispbottom "Sistema de Compras: "+getitemname( .credito )+".";
+	setcurrency( countitem( .credito ) );
+	end;
+
+OnPayFunds:
+	//dispbottom "Hi: price="+@price+" and points="+@points;
+	if( countitem(.credito) < @points )
+		end;
+	delitem Orange_Potion,@points;
+	purchaseok();
+end;
+
+		}

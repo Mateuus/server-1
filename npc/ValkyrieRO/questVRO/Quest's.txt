@@ -1,0 +1,206 @@
+//===== Global Chile ======
+//=== https://www.facebook.com/IntegralesGlobal ===
+
+/* [ ======================= ] QUEST A [ ========================== ] */
+sky_quest,42,40,5	script	TRO Hats::CustomQuestA	900,{
+	
+mes "[^008888 "+ .nm$ +"^000000]";
+mes "Hola "+ strcharinfo(0) +", selecciona el objeto que quieras hacer.";
+set .@size, getarraysize(.ID);
+for (set .@i, 1; .@i < .@size; set .@i, .@i +1)
+	if( .@i < 1 )	set .@menu$, "- "+ getitemname(.ID[.@i]);
+	else	set .@menu$, .@menu$ +":- "+ getitemname(.ID[.@i]);
+set .@j, select(.@menu$) -1;
+next;
+mes "[^008888 "+ .nm$ +"^000000]";
+deletearray .@aux[0],100;
+copyarray .@aux[0],getd(".list_"+ .@j +"[0]"),getarraysize(getd(".list_"+ .@j));
+mes "Para un ^0000FF"+ getitemname(.ID[.@j]) +"^000000, necesito que me traigas.";
+set .@size, getarraysize(.@aux);
+for (set .@i, 1; .@i < .@size; set .@i, .@i +2)
+	mes "- ^FF4000"+ .@aux[.@i +1]  +"^000000 "+ getitemname(.@aux[.@i]);
+mes "- ^FF4000"+ .@aux[0] +"^000000 zeny.";
+mes " ";
+mes "¿Tienes lo necesario?";
+if (select("No:Si") == 1)
+{
+	next;
+	mes "[^008888 "+ .nm$ +"^000000]";
+	mes "Te veo luego...";
+	close2;
+	emotion 21;
+	end;
+}
+set .@size, getarraysize(.@aux);
+for (set .@i, 1; .@i < .@size; set .@i, .@i +2)
+	if (countitem(.@aux[.@i]) < .@aux[.@i +1])
+	{
+		next;
+		mes "[^008888 "+ .nm$ +"^000000]";
+		mes "Aun te faltan ^FF4000"+ (.@aux[.@i +1] - countitem(.@aux[.@i])) +" "+ getitemname(.@aux[.@i]) +"^000000.";
+		mes "Vuelve cuando tengas todo lo necesario.";
+		close2;
+		emotion 17;
+		end;
+	}
+if (Zeny < .@aux[0])
+{
+	next;
+	mes "[^008888 "+ .nm$ +"^000000]";
+	mes "No tienes ^FF4000"+ .@aux[0] +"^000000 z. Te falta dinero por juntar.";
+	close2;
+	emotion 17;
+	end;
+}
+next;
+mes "[^008888 "+ .nm$ +"^000000]";
+set Zeny, Zeny - .@aux[0];
+set .@size, getarraysize(.@aux);
+for (set .@i, 1; .@i < .@size; set .@i, .@i +2)
+	delitem .@aux[.@i], .@aux[.@i +1];
+specialeffect 101;
+mes "Feliciataciones "+ strcharinfo(0) +", conseguiste un ^0000FF"+ getitemname(.ID[.@j]) +"^000000, usalo con sabiduria.";
+getitem .ID[.@j] ,1;
+close2;
+mapannounce strcharinfo(3),.nm$ +": "+ strcharinfo(0) +" obtuvo "+ getitemname(.ID[.@j])+ ". Felicitaciones!",0,0xA4A4A4;
+emotion 21;
+end;
+
+OnInit:
+	set .nm$, "TRO Hats Trader"; // Nombre del NPC
+	setarray .ID[1],5278,5137,5293,5325; // Items de la quest.
+//	setarray .list_1[0],<Valor>,<ID1>,<Cant1>,<ID2>,<Cant2>,<ID3>,<Cant3>,...,<ID n>,<Cant n>;
+	setarray .list_1[0],200000,2244,50,1038,50,976,20,731,20,992,20,5017,15,1385,15; // ITEM 1
+	setarray .list_2[0],100000,7047,200,661,100,5141,20,4253,5,4400,5; // ITEM 2
+	setarray .list_3[0],150000,579,200,1097,200,2520,5,7211,1; // ITEM 3
+	setarray .list_4[0],100000,7356,200,7357,200,7358,200,7359,200,7093,100; // ITEM 4
+	end;
+}
+
+/* [ ======================= ] QUEST B [ ========================== ] */
+izlude,72,215,4	script	Devil TRO::CustomQuestB	799,{
+	
+mes "[^008888 "+ .nm$ +"^000000]";
+mes "Hola "+ strcharinfo(0) +", ¿estas seguro que quieres hacer un ^0000FF"+ getitemname(.ID) +"^000000?.";
+if (select("Si:No") == 2)
+{
+	mes " ";
+	mes "Te veo luego...";
+	close2;
+	emotion 21;
+	end;
+}
+next;
+mes "[^008888 "+ .nm$ +"^000000]";
+mes "Para un ^0000FF"+ getitemname(.ID) +"^000000, necesito que me traigas.";
+set .@size, getarraysize(.list);
+for (set .@i, 1; .@i < .@size; set .@i, .@i +2)
+	mes "- ^FF4000"+ .list[.@i +1]  +"^000000 "+ getitemname(.list[.@i]);
+mes "- ^FF4000"+ .list[0] +"^000000 zeny.";
+mes " ";
+mes "¿Tienes lo necesario?";
+set .@size, getarraysize(.list);
+for (set .@i, 1; .@i < .@size; set .@i, .@i +2)
+	if (countitem(.list[.@i]) < .list[.@i +1])
+	{
+		next;
+		mes "[^008888 "+ .nm$ +"^000000]";
+		mes "Aun te faltan ^FF4000"+ (.list[.@i +1] - countitem(.list[.@i])) +" "+ getitemname(.list[.@i]) +"^000000.";
+		mes "Vuelve cuando tengas todo lo necesario.";
+		close2;
+		emotion 17;
+		end;
+	}
+if (Zeny < .list[0])
+{
+	next;
+	mes "[^008888 "+ .nm$ +"^000000]";
+	mes "No tienes ^FF4000"+ .list[0] +"^000000 z. Te falta dinero por juntar.";
+	close2;
+	emotion 17;
+	end;
+}
+next;
+mes "[^008888 "+ .nm$ +"^000000]";
+set Zeny, Zeny - .list[0];
+set .@size, getarraysize(.list);
+for (set .@i, 1; .@i < .@size; set .@i, .@i +2)
+	delitem .list[.@i], .list[.@i +1];
+specialeffect 101;
+mes "Feliciataciones "+ strcharinfo(0) +", conseguiste un ^0000FF"+ getitemname(.ID) +"^000000, usalo con sabiduria.";
+getitem .ID,1;
+close2;
+mapannounce strcharinfo(3),.nm$ +": "+ strcharinfo(0) +" obtuvo "+ getitemname(.ID)+ ". Felicitaciones!",0,0xA4A4A4;
+emotion 21;
+end;
+
+OnInit:
+	set .nm$, "Devil vRO Trader"; // Nombre del NPC
+	set .ID, 5376; // Items de la quest.
+	setarray .list[0],500000,1039,400,983,10,2255,10; // ITEM 1
+	end;
+}
+
+/* [ ======================= ] QUEST C [ ========================== ] */
+izlude,67,215,4	script	Angel TRO::CustomQuestC	897,{
+	
+mes "[^008888 "+ .nm$ +"^000000]";
+mes "Hola "+ strcharinfo(0) +", ¿estas seguro que quieres hacer un ^0000FF"+ getitemname(.ID) +"^000000?.";
+if (select("Si:No") == 2)
+{
+	mes " ";
+	mes "Te veo luego...";
+	close2;
+	emotion 21;
+	end;
+}
+next;
+mes "[^008888 "+ .nm$ +"^000000]";
+mes "Para un ^0000FF"+ getitemname(.ID) +"^000000, necesito que me traigas.";
+set .@size, getarraysize(.list);
+for (set .@i, 1; .@i < .@size; set .@i, .@i +2)
+	mes "- ^FF4000"+ .list[.@i +1]  +"^000000 "+ getitemname(.list[.@i]);
+mes "- ^FF4000"+ .list[0] +"^000000 zeny.";
+mes " ";
+mes "¿Tienes lo necesario?";
+set .@size, getarraysize(.list);
+for (set .@i, 1; .@i < .@size; set .@i, .@i +2)
+	if (countitem(.list[.@i]) < .list[.@i +1])
+	{
+		next;
+		mes "[^008888 "+ .nm$ +"^000000]";
+		mes "Aun te faltan ^FF4000"+ (.list[.@i +1] - countitem(.list[.@i])) +" "+ getitemname(.list[.@i]) +"^000000.";
+		mes "Vuelve cuando tengas todo lo necesario.";
+		close2;
+		emotion 17;
+		end;
+	}
+if (Zeny < .list[0])
+{
+	next;
+	mes "[^008888 "+ .nm$ +"^000000]";
+	mes "No tienes ^FF4000"+ .list[0] +"^000000 z. Te falta dinero por juntar.";
+	close2;
+	emotion 17;
+	end;
+}
+next;
+mes "[^008888 "+ .nm$ +"^000000]";
+set Zeny, Zeny - .list[0];
+set .@size, getarraysize(.list);
+for (set .@i, 1; .@i < .@size; set .@i, .@i +2)
+	delitem .list[.@i], .list[.@i +1];
+specialeffect 101;
+mes "Feliciataciones "+ strcharinfo(0) +", conseguiste un ^0000FF"+ getitemname(.ID) +"^000000, usalo con sabiduria.";
+getitem .ID,1;
+close2;
+mapannounce strcharinfo(3),.nm$ +": "+ strcharinfo(0) +" obtuvo "+ getitemname(.ID)+ ". Felicitaciones!",0,0xA4A4A4;
+emotion 21;
+end;
+
+OnInit:
+	set .nm$, "Angel vRO Trader"; // Nombre del NPC
+	set .ID, 5210; // Items de la quest.
+	setarray .list[0],500000,509,200,949,200,982,10,2254,10; // ITEM 1
+	end;
+}

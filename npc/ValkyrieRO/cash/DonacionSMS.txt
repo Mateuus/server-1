@@ -1,0 +1,273 @@
+prt_in,136,34,3	script	Donación SMS#1	833,{
+/*********************** [ VARIABLES ] **********************************************************/
+set .@n$,"^008888[ Contadora SMS ]^000000"; //Nombre del NPC
+set @servi$,"[ ^99cc00 Ares Ragnarök ^000000 ]"; //Nombre del servidor
+set .@web$, " ^ff0000 http://www.ares-ro.com/ ^000000 ";
+/************************************************************************************************/
+
+/*  MENU DE ADMINISTRADOR */
+/* ************************************************************* */
+ if (getgmlevel() > 90) {
+	mes " [^99cc00 Panel de control Donacion SMS ^000000]";
+    mes " " + (Sex?"Bienvenido ":"Bienvenida ") + " ^ff6600 GM "+strcharinfo(0)+"^000000";
+	mes "> ^cc9900Seleccione lo que desea realizar^000000";
+	mes "^99cc00 -=--=--=--=--=--=--=--=--=-=-=- ^000000";
+	mes "^99cc00MOD^000000: Se podra modificar";
+	mes "^99cc00NO MOD^000000: No podra modificar";
+	mes "^99cc00INFO^000000: Informacion";
+	
+	menu ">^ff6600 Crear tablas SQL^000000 ^99cc00MOD^000000",CreacionTablas,">^ff6600 Activar seguridad tablas SQL^000000 ^99cc00NO MOD^000000",OnSeguridadTablas,">^ff6600Cash point en cuentas^000000 ^99cc00INFO^000000",CashTotal;
+	
+	
+CashTotal:
+ next;
+query_sql "SELECT `global_reg_value`.`value`, `char`.`name` FROM `global_reg_value` left join `char` on `global_reg_value`.`account_id` = `char`.`account_id` "+
+				"WHERE `global_reg_value`.`str`= '#CASHPOINTS'  ORDER BY ABS(value) DESC LIMIT 1000000000000", .@pontos_mvp, .@char_name$;
+				
+	mes "^99cc00C^000000^ff6600A^000000^99cc00S^000000^ff6600H^000000 ^ff6600P^000000^99cc00O^000000^ff6600I^000000^99cc00N^000000^ff6600T^000000 ^99cc00T^000000^ff6600O^000000^99cc00T^000000^ff6600A^000000^99cc00L^000000 ^ff6600E^000000^99cc00N^000000 ^ff6600C^000000^99cc00U^000000^ff6600E^000000^99cc00N^000000^ff6600T^000000^99cc00A^000000^ff6600S^000000 ";
+	if( !getarraysize( .@char_name$ ) )
+		mes "  *Sin Cashpoints en el servidor*  ";
+	else
+			mes "^99cc00 -=--=--=--=--=--=--=--=--=-=-=- ^000000";
+			for( set .@i,0; .@i < getarraysize( .@char_name$ ) ; set .@i, .@i +1 )
+			
+			mes "Nombre: ^ff6600"+ .@char_name$[.@i] +"^000000                                           Cash Points: ^99cc00"+ .@pontos_mvp[.@i] +"^000000 ";
+			mes "^99cc00 -=--=--=--=--=--=--=--=--=-=-=- ^000000";
+	close;
+	
+	
+	
+	
+CreacionTablas:
+	next;
+	mes "[^99cc00CREACION TABLAS SQL ^000000]";
+	mes "Tablas de sql ya fueron creadas";
+	// Tabla de codigos de donacion
+	query_sql("create table if not exists `sms_donacion`(`id_sms_donacion` int not null auto_increment,`id_sms_stado` int not null,`sms_message` int not null,`sms_message_id` int not null,`sms_service_id` int not null,`sms_custom` int not null,`sms_price` int not null,`sms_country` varchar(10) not null,`sms_currency` varchar(10) not null,`sms_operator` varchar(30) not null,`sms_sender` varchar(50) not null,primary key (`id_sms_donacion`),key `id_sms_stado` (`id_sms_stado`) )ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;");
+	
+	// Tabla de estados de codigos de donacion
+	query_sql("create table if not exists `sms_stado`(`id_sms_stado` int not null auto_increment,`sms_stado` varchar(25) not null,primary key (`id_sms_stado`))ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;");
+	
+	// Escritura de tabla de estado de codigos
+	query_sql("INSERT INTO  `sms_stado` ( `id_sms_stado` ,`sms_stado`) VALUES (NULL , 'Pendiente'), (NULL , 'Cobrado');");
+
+	// registro de Codigos cobrados
+	query_sql("create table if not exists `sms_donacion_log`(`id_sms_donacion_log` int not null auto_increment,`id_sms_donacion` int not null,`sms_donacion_fecha_cobro` datetime not null,`sms_donacion_cuenta` int not null,primary key (`id_sms_donacion_log`),key `id_sms_donacion` (`id_sms_donacion`) )ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;");
+	
+	announce "" + (Sex?"Administrador ":"Administradora ") + " : [ >> Donacion SMS: [ TABLAS SQL CREADAS ] << ]",bc_self,0x66cc00;
+	close;
+	
+OnSeguridadTablas:
+		next;
+		mes "[^99cc00SEGURIDAD TABLAS SQL ^000000]";
+		mes "Las SQL estan protegidas";
+		mes "^FF0000 -=--=--=--=--=--=--=--=--=-=-=- ^000000";
+		mes "[^cc0000 sms_donacion ^000000]";
+		mes "[^cc0000 sms_stado ^000000]";
+		mes "[^cc0000 sms_donacion_log ^000000]";
+		mes "^FF0000 -=--=--=--=--=--=--=--=--=-=-=- ^000000";
+		mes "No se podra [^cc0000 Delete,Update^000000]";
+		mes "AVISO: funciona en algunas MYSQL";
+	// RESTICCIONES DE TABLAS SQL`S ( SEGURIDAD ) ANTI HACKEO
+	// NO BORRAR TABBLA SQL , NO ACTUALIZAR TABLA SQL ( sms_donacion )
+	query_sql("ALTER TABLE `sms_donacion`  ADD CONSTRAINT `sms_donacion_ibfk_1` FOREIGN KEY (`id_sms_stado`) REFERENCES `sms_stado` (`id_sms_stado`) ON DELETE NO ACTION ON UPDATE NO ACTION;");
+	
+	// NO BORRAR TABBLA SQL , NO ACTUALIZAR TABLA SQL ( sms_donacion_log )
+	query_sql("ALTER TABLE `sms_donacion_log`  ADD CONSTRAINT `sms_donacion_log_ibfk_1` FOREIGN KEY (`id_sms_donacion`) REFERENCES `sms_donacion` (`id_sms_donacion`) ON DELETE NO ACTION ON UPDATE NO ACTION;");
+	
+	announce "" + (Sex?"Administrador ":"Administradora ") + " : [ >> Donacion SMS: [ SEGURIDAD DE TABLAS SQL ACTIVADA ] << ]",bc_self,0x66cc00;
+	close;
+
+
+	}
+
+
+	/*  MENU DE USUARIOS NORMALES */
+	/* ************************************************************* */
+	mes .@n$;
+	mes "Saludos, Bienvenido al sistema de Donaciones SMS";
+	mes "   "+ @servi$+" ";
+	next;
+	soundeffect "siroma_move.wav",0;
+	mes .@n$;
+	mes "¿En que puedo  ayudarte?";
+	next;
+	soundeffect "siroma_move.wav",0;
+   
+  	
+	
+   
+   menu "^ff0000 ¡Validar Codigo SMS! ^000000",vali,"¿^99cc00Cuanto Cash Point tengo ^000000?",total_cashpoint,"¿^0000cc Como dono via SMS ^000000?",COMO,"¿^660000 Que cosa Gano ^000000?",GANAS,"^cc9933 ------> Salir <------^000000",salir;
+    
+GANAS:
+	next;
+	soundeffect "siroma_move.wav",0;
+	mes .@n$;
+	
+	mes "Ganas  [ ^ff0000 6500 ^000000 ]  Cash point para gastarlos en lo que mas gustes en el Cash mall ";
+	next;
+			mes "¿Validar un Codigo de SMS ?";
+			if (select("Si:No") == 2)	goto salir;
+			goto vali;
+ 
+vali:
+
+next;
+soundeffect "siroma_move.wav",0;
+mes .@n$;
+mes "Por favor, Introduce el código que has recibido por SMS:";
+next;
+
+soundeffect "siroma_move.wav",0;
+input @sms_message$;
+
+next;
+soundeffect "siroma_move.wav",0;
+//Revisa si el codigo esta activo
+query_sql("SELECT COUNT(*) FROM sms_donacion WHERE sms_message = '" + @sms_message$ + "' AND id_sms_stado = '1'", @producto);
+if (@producto == 0) {
+		//Revisa si el codigo esta Usado
+		query_sql("SELECT COUNT(*) FROM sms_donacion WHERE sms_message = '" + @sms_message$ + "' AND id_sms_stado = '2'", @producto);
+		if (@producto == 1) {
+			mes .@n$;
+			soundeffect "eggyra_die.wav",0;
+			mes "El código de donación sms: ^ff0000"+@sms_message$+"^000000";
+			mes "Ya fue usado.";
+			next;
+			mes "¿Validar un Codigo Correcto de SMS ?";
+			if (select("Si:No") == 2)	goto salir;
+			goto vali;
+		}
+        mes .@n$;
+		soundeffect "eggyra_die.wav",0;
+        mes "El código de donación sms: ^ff0000"+@sms_message$+"^000000";
+        mes "No es válido.";
+        next;
+			mes "¿Validar un Codigo Correcto de SMS ?";
+			if (select("Si:No") == 2)	goto salir;
+			goto vali;
+}
+
+// Trae punto de donacion para pasarlos a cashpoint
+query_sql("SELECT `sms_custom`  FROM sms_donacion WHERE sms_message = '" + @sms_message$ + "' AND id_sms_stado = '1'", @cashpoint);
+
+// actualiza el estado de la donacion para que llege a cobrado
+query_sql("UPDATE `sms_donacion` SET  `id_sms_stado` =  '2' WHERE  `sms_message` ='" + @sms_message$ + "'");
+
+// Trae punto de donacion para pasarlos a cashpoint
+query_sql("SELECT `id_sms_donacion`  FROM sms_donacion WHERE sms_message = '" + @sms_message$ + "'", @id_donacion);
+
+//inserta cash a la cuenta del usuario
+set #CASHPOINTS,#CASHPOINTS + @cashpoint;
+// puntos de donacion para dar el bonus de donacion sms ^^
+set #Puntossms,#Puntossms + 1;
+
+//inserta log donacion
+query_sql("INSERT INTO `sms_donacion_log` (`id_sms_donacion_log`, `id_sms_donacion`, `sms_donacion_fecha_cobro`, `sms_donacion_cuenta`) VALUES (NULL, '"+ @id_donacion +"', '" + gettimestr("%Y-%m-%d %H:%M:%S",21) + "', '" + getcharid(3) + "')");
+
+next;
+soundeffect "siroma_move.wav",0;
+mes .@n$;
+mes "El código de donación SMS: [ ^ff0000 "+@sms_message$+" ^000000 ]";
+mes "Es correcto, gracias por donar a nuestro servidor  "+ @servi$+" ";
+
+// Aviso a los usuarios que X usuario Dono
+announce "~ " + (Sex?"El ":"La ") + " [ "+ strcharinfo(0) +" ]  acaba de donar vía SMS. Obtiene  [" + @cashpoint + "]  Cash Point a su cuenta . Gracias ~",bc_all,0xFF6633;
+soundeffect "dying.wav",0;
+
+next;
+soundeffect "siroma_move.wav",0;
+dispbottom "[>> Ahora tienes tus "+@cashpoint+" Cash point en tu cuenta <<]";
+dispbottom "[>> Ahora Tienes 1 Punto de donacionSMS <<]";
+next;
+soundeffect "siroma_move.wav",0;
+mes .@n$;
+mes "Se han añadido: [ ^ff0000 "+@cashpoint+" ^000000 ] Cash Points a tu Personaje.";
+
+next;
+soundeffect "siroma_move.wav",0;
+mes .@n$;
+mes "Actualmente dispones de :";
+mes " Tu Cash point total es [ ^0000FF "+#CASHPOINTS+" ^000000 ]";
+next;
+			mes "¿Validar otro codigo ?";
+			if (select("Si:No") == 2)	goto salir;
+			goto vali;
+
+COMO:
+soundeffect "siroma_move.wav",0;
+mes .@n$;
+mes "Para donar por Via SMS es super Facil";
+
+next;
+soundeffect "siroma_move.wav",0;
+mes .@n$;
+mes "Entra al panel de control que es";
+mes .@web$;
+
+next;
+soundeffect "siroma_move.wav",0;
+mes .@n$;
+mes "Pincha donde dice Donacion SMS ";
+
+next;
+soundeffect "siroma_move.wav",0;
+mes .@n$;
+mes "Apreta continuar";
+
+next;
+soundeffect "siroma_move.wav",0;
+mes .@n$;
+mes "Te saldra la ventana de Paygol ";
+mes "ahora escoje tu pais";
+
+next;
+soundeffect "siroma_move.wav",0;
+mes .@n$;
+mes "Recuerda Respeta las mayusculas GOL ";
+mes "^336699 Ho no te servira de nada aver enviado el SMS con la palabra GOL en minusculas ^000000";
+
+next;
+soundeffect "siroma_move.wav",0;
+mes .@n$;
+mes "Resiviras un SMS con un codigo";
+mes "Ahora ponle OK en la ventana de donacion Paygol";
+
+next;
+soundeffect "siroma_move.wav",0;
+mes .@n$;
+mes "Ahora ve aprontera y introduce el codigo en este misno npc en ^5533ff¡Validar Codigo SMS!^000000";
+next;
+			mes "¿Validar un codigo sms ?";
+			if (select("Si:No") == 2)	goto salir;
+			goto vali;
+
+ 
+salir:
+soundeffect "siroma_move.wav",0;
+mes .@n$;
+mes "Vuelva cuando nesesite mi ayuda";
+mes "Te estare esperando";
+close;
+
+total_cashpoint:
+soundeffect "siroma_move.wav",0;
+mes .@n$;
+mes "Usted tiene un total de:";
+mes "Tienes ^0000FF[ "+#CASHPOINTS+" ]  ^000000 Cash Points ";
+next;
+			mes "¿Validar un codigo sms ?";
+			if (select("Si:No") == 2)	goto salir;
+			goto vali;
+OnInit:
+	do {
+		delwaitingroom;
+		waitingroom "[Donaciónes SmS]",0;
+	sleep 50; // Evites super infinity loop
+	} while(1); // End Loop
+end;
+} // End Script
+
+
+prontera,165,166,0	warp	premium1-1	1,1,prt_in,128,38
+prt_in,128,44,0	warp	premium1-2	1,1,prontera,159,166

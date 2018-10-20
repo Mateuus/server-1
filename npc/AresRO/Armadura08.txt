@@ -1,0 +1,1905 @@
+//==============================================
+//========= Neoner's quest by stark ============
+//==============================================
+
+//==============================================
+//====================SOMBRA====================
+//==============================================
+
+//Localizacion original: X
+//Localizacion de prueva: pvp_n_2-5,114,90,5
+
+prontera,140,125,5	script	Sombra	844,{
+cutin "ep13_shadow_edq",2;	
+	if(terminandoalma == 6) goto almafinish;
+	if(lirefinaldialogo == 5) goto sinlrefinal;
+	if(lrerepeticion == 4) goto repeticionlre;
+	if(almacontinuacion == 3) goto almalre;
+	if(Alma_2 == 2) goto sinlrefinal;
+		if(Squest == 1) goto questS;
+	
+	mes "[" + strcharinfo(0) + "]";
+	mes "¿Que es eso?";
+		next;
+	menu "Hablarle",-,"Ignorarlo",MA1_no;
+
+	setnpcdisplay "Sombra",802;
+	mes "[" + strcharinfo(0) + "]";
+	mes "Un alma?, que haces aqui?";
+	next;
+	mes "[Alma]";
+		mes "No ahy tiempo para explicaciones!";
+		mes "ella ya esta actuando!,";
+		mes "aun te puedes salvar!,";
+	mes "deves...";
+	next;
+	specialeffect 87;
+	mes "[Alma]";
+	mes "...";
+	mes "......";
+	mes ".........";
+	next;
+		mes "[??????]";
+	mes "SILENCIO!!...";
+	mes "No rebeles el secreto!";
+	next;
+	mes "[Alma]";
+	mes "Escuchame con atencion " + strcharinfo(0) + "";
+	mes "ve al subsuelo de la torre de geffen, encuentra a ^000080Maria^000000 y...";
+	next;
+	mes "[??????]";
+	mes "Se acabo!";
+	specialeffect 87;
+	next;
+	mes "[Alma]";
+	mes "Espera ^FF0000Neon^000000...!";
+	emotion e_wah;
+	next;
+	setnpcdisplay "Sombra",111;
+	specialeffect 183;
+	specialeffect 225;
+		next;
+	mes "[??????]";
+	mes "Nadie se escapa tan facilmente.";	
+	emotion e_gg;
+cutin "",255;
+	next;
+		mes "[" + strcharinfo(0) + "]";
+	mes "...";
+	mes "......";
+	mes ".........";
+	next;
+	mes "[" + strcharinfo(0) + "]";
+		mes "Que habra sido todo eso,";
+		mes "siento escalofrios.";
+cutin "",255;
+	close2;
+		sc_start SC_Curse,6000,0;
+	setnpcdisplay "Sombra",844;
+	set Squest, 1;
+	end;
+
+MA1_no:
+	Close;
+
+questS:
+	mes "[" + strcharinfo(0) + "]";
+	mes "Me dijo algo sobre ir al subsuelo de la torre de geffen y encontrar a ^000080Maria^000000.";
+cutin "",255;
+	Close;
+
+almalre:
+	if(countitem(7621) < 1) goto L_noItems;
+
+	mes "[L.R.E]";
+	mes "Comenzando busqueda.";
+	delitem 7621, 1;
+	next;
+	mes "[L.R.E]";
+	mes "Buscando...";
+	specialeffect 8;
+	next;
+	specialeffect 8;
+	mes "[L.R.E]";
+	mes "Buscando......";
+	specialeffect 8;
+	next;
+	mes "[L.R.E]";
+	mes "Buscando.........";
+	specialeffect 8;
+	next;
+	mes "[L.R.E]";
+	mes "Cargando...";
+	specialeffect 9;
+	next;
+	mes "[L.R.E]";
+	mes "Cargando......";
+	specialeffect 9;
+	next;
+	mes "[L.R.E]";
+	mes "Cargando.........";
+	specialeffect 9;
+	next;
+	mes "[L.R.E]";
+	mes "Espectro localizado.";
+	specialeffect 259;
+	next;
+	mes "[L.R.E]";
+	mes "^000080Espectro	   : Alma^000000";
+	mes "^000080Tipo				: Viva^000000";
+	mes "^000080Elemento	  : Ghost^000000";
+	mes "^000080Tamaño		: Pequeño^000000";
+	mes "^FF0000Localizacion : Geffen tower -03^000000";
+	set lrerepeticion, 4;
+	set almalremaeros, 4;
+	close;
+
+repeticionlre:
+	mes "[L.R.E]";
+	mes "^000080Espectro	   : Alma^000000";
+	mes "^000080Tipo				: Viva^000000";
+	mes "^000080Elemento	  : Ghost^000000";
+	mes "^000080Tamaño		: Pequeño^000000";
+	mes "^FF0000Localizacion : Geffen tower -03^000000";
+cutin "",255;
+	close;
+
+sinlrefinal:
+	mes "[Sombra]";
+	mes "...";
+	close;
+
+L_noItems:
+	mes "[" + strcharinfo(0) + "]";
+	mes "...";
+	close;
+
+almafinish:
+	mes "[Sombra]";
+	mes "Te agradezco mucho averme salvado...";
+set #quest,100;
+cutin "",255;
+	close;
+}
+
+
+//==============================================
+//====================MAEROS====================
+//==============================================
+
+//Localizacion original: gef_tower,169,74,5
+//Localizacion de prueva: pvp_n_2-5,111,88,3
+
+gef_tower,169,74,5	script	Maria	73,{
+	
+	if(maerosnona == 7) goto nonamaeros;
+	if(terminandomaeros == 6) goto maerosfinish;
+		if(maerossinalmafinal == 5) goto maerossinalmaend;
+	if(almalremaeros == 4) goto maerossinalma;
+		if(Mquest == 3) goto Mlisto;
+	if(Squest == 2) goto maeros_done;
+		if(Squest == 1) goto alma_done;
+		
+	mes "[Maria]";
+	mes "La vida va mas alla de nuestras manos";
+	close;
+
+alma_done:
+	mes "[Maria]";
+cutin "hu_laura01",2;
+	mes "¿¡Que buscas!?";
+	next;
+	menu "Busco a una tal Maria",-,"Solo pasaba por aqui",MM1_no;
+
+	mes "[Maria]";
+	mes "Si, yo soy, ¿en que te puedo ayudar?.";
+	next;
+	menu "Explicar lo susedido.",-;
+
+	mes "[" + strcharinfo(0) + "]";
+cutin "hu_laura02",2;
+	mes "....";
+	emotion e_wah;
+	next;
+	mes "[" + strcharinfo(0) + "]";
+	mes "....";
+	mes "........";
+	emotion e_dum;
+	next;
+	mes "[" + strcharinfo(0) + "]";
+	mes "....";
+	mes "........";
+	mes "............";
+	emotion e_omg;
+	next;
+	mes "[Maria]";
+	mes "Hmm...";
+	next;
+	mes "[Maria]";
+cutin "hu_laura04",2;
+	mes "No se mucho acerca del tema pero,";
+	mes "mira, solo te puedo decir que cuando un alma es destruida no explota, solo desaparece asique probablemente alla sido teletransportado a otro lugar,";
+	emotion e_hmm;
+	next;
+	mes "[Maria]";
+	mes "Conosco a una persona que te puede explicar mas detalladamente del tema, pero antes de que te diga donde vive nesesito algunos instrumentos de trabajo.";
+	next;
+	mes "[Maria]";
+	mes "¿Estas dispuesto a traermelos?.";
+	next;
+	menu "Si",-,"No",BIM_no;
+	
+	mes "[Maria]";
+	mes "Traeme los siguientes items:";
+	mes "1 ^000080Hammer of blacksmith^000000";
+	mes "1 ^000080Heart of mermaid^000000";
+	mes "1 ^000080Immortal heart^000000";
+	mes "1 ^000080Burning heart^000000";
+	mes "1 ^000080Ice heart^000000";
+	mes "1 ^000080Stone heart^000000";
+	mes "y 5 ^000080Holy water^000000";
+	next;
+
+	mes "[Maria]";
+cutin "",255;
+	mes "Aqui te espero.";
+	set Alma_2, 2;
+	set Squest, 2;
+		close;
+
+maeros_done:	
+	mes "[Maria]";	
+	mes "¿Trajiste los items que te pedi?.";
+		next;
+	menu "Si, tengo todo.",-,"¿Que items eran?.",items,"No, todavia no.",Bim_no;
+	
+	mes "[Maria]";
+	mes "Veamos...";
+	next;
+		if(countitem(1005) < 1) goto L_noItems;
+		if(countitem(950) < 1) goto L_noItems;
+		if(countitem(929) < 1) goto L_noItems;
+		if(countitem(7097) < 1) goto L_noItems;
+		if(countitem(7561) < 1) goto L_noItems;
+		if(countitem(953) < 1) goto L_noItems;
+		if(countitem(523) < 5) goto L_noItems;
+		delitem 1005, 1;
+		delitem 950, 1;
+		delitem 929, 1;
+		delitem 7097, 1;
+		delitem 7561, 1;
+		delitem 953, 1;
+		delitem 523, 5;
+	mes "[Maria]";
+cutin "hu_laura03",2;
+	mes "Bien, cumpliste tu parte,";
+	mes "el profesor ^000080Lix^000000 vive en Al De Baran, en el subsuelo de alchemist guild, dile que yo te mande para que te cuente sobre el alma.";
+cutin "hu_laura01",2;
+	emotion e_heh;
+	next;
+	mes "[Maria]";
+	mes "Suerte en tu viaje";
+cutin "",2;
+		emotion e_no1;
+		set Mquest, 3;
+	close;
+
+
+maerossinalma:
+	mes "[Maria]";
+	mes "Un gusto en verte denuevo " + strcharinfo(0) + " en que te puedo ayu...";
+	next;
+	specialeffect 260;
+	mes "[Maria]";
+	mes "...";
+	specialeffect 87;
+	next;
+	mes "[??????]";	
+	mes "Shhh... Maria, tu tiempo se ha terminado.";
+	next;
+	mes "[Maria]";
+cutin "hu_laura03",2;
+	mes "¡¡Espera ^FF0000Neon Beelzebub^000000!!";
+	specialeffect 260;
+	specialeffect 118;
+	set maerossinalmafinal, 5;
+cutin "",255;
+	close;
+
+maerossinalmaend:
+	mes "[Maria]";
+	mes "...";
+	set lirefinaldialogo, 5;
+	set lixwarp, 6;
+	close;
+
+L_noItems:
+	mes "[Maria]";
+	mes "Aun te faltan items.";
+	emotion e_wah;
+	close;
+
+BIM_no:	
+	mes "[Maria]";
+	mes "Bueno, cuidate.";
+	close;
+	
+MM1_no:
+	mes "[Maria]";
+	mes "Suerte.";
+	close;
+
+items:
+	mes "[Maria]";
+	mes "Estos son los items que nesesito:";
+	mes "1 ^000080Hammer of blacksmith^000000";
+	mes "1 ^000080Heart of mermaid^000000";
+	mes "1 ^000080Inmortal heart^000000";
+	mes "1 ^000080Burning heart^000000";
+	mes "1 ^000080Glaciar heart^000000";
+	mes "1 ^000080Stone heart^000000";
+	mes "y 5 ^000080Holy water^000000";
+		close;	 
+
+Mlisto:	
+	mes "[Maria]";
+	mes "El profesor ^000080Lix^000000 vive en Al De Baran, en el subsuelo de alchemist guild, dile que yo te mande para que te cuente sobre el alma.";
+	emotion e_heh;
+	next;
+	mes "[Maria]";
+	mes "Suerte en tu viaje.";
+	emotion e_no1;
+	close;
+
+maerosfinish:
+	mes "[Maria]";
+	mes "Gracias por salvarme.. como recompenza te dare un pequeño obsequio.";
+	next;
+		getitem 12016, 10;
+		getitem 12017, 10;
+		getitem 617, 10;
+		getitem 644, 50;
+		getitem 603, 30;
+		getitem 19314, 1;
+		getexp 700000,300000;
+	set #quest,100;
+	next;
+	mes "[Maria]";
+	mes "Adios.";
+	set maerosnona,7;
+	close;
+
+nonamaeros:
+	mes "[Maria]";
+	mes "Me alegra verte " + strcharinfo(0) + ".";
+	close;
+}
+
+
+//==============================================
+//=====================LIX======================
+//==============================================
+
+//Localizacion original: alde_alche,156,25,5
+//Localizacion de prueva: pvp_n_2-5,108,86,4
+
+alde_alche,156,25,5	script	Lix	405,{
+
+	if(lixnona == 9) goto nonalix;
+	if(terminandolix == 8) goto lixfinish;
+	if(lixwarpeando == 7) goto lixwarpeandoplayer;	
+		if(lixwarp == 6) goto lixwarpend;
+		if(Lfinal == 5) goto lixfinal;
+	if(Lquest == 4) goto Lix_done;
+	if(Mquest == 3) goto Lix_start;
+	if(lixfinish == 1) goto hecho;
+
+	mes "[Lix]";
+	mes "Con un espiritu puro puedes ser mas poderoso que los mismos dioses.";
+	close;
+
+Lix_start:
+		mes "[" + strcharinfo(0) + "]";
+		mes "¿Profesor Lix?";
+	next;
+	mes "[Lix]";
+cutin "orleans_1",2;	
+	mes "amm??... Si, ¿quien eres tu?";
+	emotion e_dum;
+	next;
+	mes "[" + strcharinfo(0) + "]";
+	mes "Hola, soy " + strcharinfo(0) + " y nesesito de su ayuda porfavor.";
+	next;
+	mes "[Lix]";
+	mes "¿Y porque crees que te ayudare?";
+	next;
+	menu "Me envio Maria.",-,"¡Porque quiero que me ayudes!",M_lix_no;
+	
+	mes "[Lix]";
+	mes "M.. Mari.. ¿!¿!Maria?!?!";
+cutin "orleans_3",2;
+	mes "la creia muerta desde hace tiempo,";
+	mes "bueno... si ella te envio, entonses te ayudare.";
+	emotion e_omg;
+	next;
+	mes "[Lix]";
+	mes "¿Que nesesitas?";
+cutin "orleans_2",2;
+	next;
+	menu "Informacion sobre las almas",-;
+	
+	mes "[Lix]";
+	mes "Las almas son seres tipo ghost que habitan en lugares inospitos, existen 2 tipos de almas:";
+cutin "orleans_6",2;
+	emotion e_32;
+	next;
+	mes "[Lix]";
+	mes "La primera son las almas muertas, se pueden mover pero nada mas, son las mas comunes.";
+	next;
+	mes "[Lix]";
+	mes "La segunda son las almas vivas, son almas con la capacidad de hablar, pueden sentir, pueden ver y contienen extrañas capacidades y poderes.";
+	next;
+	mes "[" + strcharinfo(0) + "]";
+	mes "Hmm..";
+	next;
+	mes "[Lix]";
+	mes "¿Quieres saber algo mas?";
+	next;
+	menu "¿Quien es Maria?",-;
+
+	mes "[Lix]";
+cutin "orleans_1",2;
+	mes "Maria fue una compañera de estudios mia de hace varias decadas, nosotros estudiabamos en el area de Almas y Espectros en la universidad de Yuno,";
+	next;
+	mes "[Lix]";
+	mes "ella siempre fue la mas inteligente de nosotros dos, pero llego un dia, estaba lloviendo, estabamos experimentando con nuevas Almas Vivas que habian llegado recientemente,";
+	next;
+	mes "[Lix]";
+	mes "mientras experimentabamos una de las Almas muestra colapso y desato un poder indescriptible en el laboratorio entonses todo exploto, no recuerdo que mas ocurrio, yo me desmalle y desperte en el hospital.";
+	next;
+	mes "[Lix]";
+	mes "desde ese entonses que no veo a Maria, nunca se supo que le ocurrio, solo desaparecio.";
+	next;
+	mes "[" + strcharinfo(0) + "]";
+	mes "hmm..";
+	next;
+	menu "Contarle sobre el alma.",-;
+	
+	mes "[" + strcharinfo(0) + "]";
+	mes "....";
+cutin "orleans_6",2;
+	emotion e_wah;
+	next;
+	mes "[" + strcharinfo(0) + "]";
+	mes "....";
+	mes "........";
+	emotion e_dum;
+	next;
+	mes "[" + strcharinfo(0) + "]";
+	mes "....";
+	mes "........";
+	mes "............";
+	emotion e_omg;
+	next;
+	mes "[Lix]";
+	mes "Hmm..";
+	mes "Es realmente extraño, no te puedo ayudar mucho con eso, pero...";
+	next;
+	mes "[Lix]";
+cutin "orleans_2",2;
+	mes "pero si realmente lo nesesitas te ayudare como pueda, te puedo crear un ^FF0000Localizador de residuos espectrales (L.R.E)^000000.";
+	next;
+	mes "[" + strcharinfo(0) + "]";
+	mes "¿Localiza que?";
+	next;
+	mes "[Lix]";
+	mes "Localizador de residuos espectrales, veraz, cuando un alma abandona un lugar esta deja un rastro de macroplasta, se puede parecer a una sombra o algo por el estilo.";
+	next;	
+	mes "[" + strcharinfo(0) + "]";
+	mes "La sombra!";
+	emotion e_omg;
+	next;
+	mes "[Lix]";
+	mes "¿¿Como??";
+	next;
+	mes "[" + strcharinfo(0) + "]";
+	mes "Cuando el Alma exploto aparecio una sombra en su lugar.";
+	next;
+	mes "[Lix]";
+	mes "Ahy deves buscar con el ^FF0000L.R.E^000000";
+	next;
+	mes "[Lix]";
+	mes "Ahora traeme los materiales nesesarios para crearlo, nesesito estos materiales:";
+	mes "100 ^000080Ectoplasm^000000.";
+	mes "5 ^000080Immaterial arrow quivern^000000.";
+	mes "3 ^000080Emperiums^000000.";
+	next;
+	mes "[Lix]";
+	mes "Aqui te esperare.";
+cutin "",255;
+	set Lquest, 4;
+	close;
+
+Lix_done:
+	mes "[Lix]";
+	mes "¿Que nesesitas?";
+	next;
+	menu "Traje los materiales.",Aquimateriales,"¿Que materiales eran?.",infomateriales,"Informacion sobre las almas.",infoalmas,"Informacion sobre Maria.",infomaeros,"Informacion sobre el ^FF0000L.R.E^000000.",infolre,"Salir",lixsalir;
+	
+Aquimateriales:
+	mes "[Lix]";
+	mes "Aver pasamelos.";
+	next;
+		if(countitem(7220) < 100) goto Lnoitems;
+		if(countitem(12014) < 5) goto Lnoitems;
+		if(countitem(714) < 3) goto Lnoitems;
+		delitem 7220, 100;
+		delitem 12014, 5;
+		delitem 714, 3;
+		getitem 602, 1;
+		getitem 7621, 1;
+	specialeffect 101;
+	next;
+	mes "[Lix]";
+	mes "Bien, suerte en tu mision joven amigo, si ves a Maria dale saludos de mi parte.";
+	set Lfinal,5;
+	set almacontinuacion, 3;
+	close;
+
+Lnoitems:
+	mes "[Lix]";
+	mes "Aun te faltan materiales por entregar.";
+	close;
+
+infoalmas:
+	mes "[Lix]";
+	mes "Las almas son seres tipo ghost que habitan en lugares inospitos, existen 2 tipos de almas:";
+	emotion e_32;
+	next;
+	mes "[Lix]";
+	mes "La primera son las almas muertas, se pueden mover pero nada mas, son las mas comunes.";
+	next;
+	mes "[Lix]";
+	mes "La segunda son las almas vivas, son almas con la capacidad de hablar, pueden sentir, pueden ver y contienen extrañas capacidades y poderes.";
+	close;
+
+infomaeros:
+	mes "[Lix]";
+	mes "Maria fue una compañera de estudios mia de hace varias decadas, nosotros estudiabamos en el area de Almas y Espectros en la universidad de Yuno,";
+	next;
+	mes "[Lix]";
+	mes "ella siempre fue la mas inteligente de nosotros dos, pero llego un dia, estaba lloviendo, estabamos experimentando con nuevas Almas Vivas que habian llegado recientemente,";
+	next;
+	mes "[Lix]";
+	mes "mientras experimentabamos una de las Almas muestra colapso y desato un poder indescriptible en el laboratorio entonses todo exploto, no recuerdo que mas ocurrio, yo me desmalle y desperte en el hospital.";
+	next;
+	mes "[Lix]";
+	mes "desde ese entonses que no veo a Maeros, nunca se supo que le ocurrio, solo desaparecio.";
+	close;
+
+infolre:
+	mes "[Lix]";
+	mes "El ^FF0000L.E.R^000000 es un dispositivo para localizar almas que se han ido de algun lugar, solo funciona si se usa en el lugar correcto, para que funcione es nesesario un rastro de macroplasma en cual puede ser una sombra o algo parecido.";
+	close;
+
+lixsalir:
+	mes "[Lix]";
+	mes "Aqui estare.";
+	close;
+
+infomateriales:
+	mes "[Lix]";
+	mes "Nesesito estos materiales:";
+	mes "100 ^000080Ectoplasm^000000.";
+	mes "5 ^000080Immaterial arrow quivern^000000.";
+	mes "3 ^000080Emperiums^000000.";
+	close;
+
+M_lix_no:
+	mes "[Lix]";
+	mes "Si tu me respetas yo te respeto.";
+	mes "Adios.";
+	close;
+
+lixfinal:
+	mes "[Lix]";
+	mes "Ve donde exploto el alma y usa el ^FF0000L.R.E^000000 para localizar su posicion actual.";
+	close;
+
+lixwarpend:
+	mes "[" + strcharinfo(0) + "]";
+	mes "¡¡ LIX NESESITO TU AYUDA !!.";
+cutin "orleans_3",2;
+	emotion e_omg;
+	next;
+	mes "[Lix]";
+	mes "¿Que ocurre " + strcharinfo(0) + "?";
+	next;
+	mes "[" + strcharinfo(0) + "]";
+	mes "¡ A Maria le han robado su alma !.";
+	next;
+	mes "[Lix]";
+cutin "orleans_3",2;
+	mes "¿!COMO!?, ¿!QUIEN?!.";
+	next;
+	mes "[" + strcharinfo(0) + "]";
+	mes "Maria mensiono a una tal ^FF0000Neon Beelzebub^000000 antes de que se la arrancaran.";
+	next;
+	mes "[Lix]";
+cutin "orleans_6",2;
+	mes "hmm... ya entiendo todo,";
+	next;
+	mes "[Lix]";
+	mes "Esa noche en el laboratorio, cuando experimentabamos con las almas vivas, antes de la explosion esa alma se quiso fucionar con Maria, pero una fusion de almas no es tan sencilla...";
+	next;
+	mes "[Lix]";
+	mes "...para su completa fusion se requiere un circulo Neoprismatico lo suficientemente grande, ocho almas vivas y un corazon de alta resistencia para poder completarse...";
+	next;
+	mes "[Lix]";
+	mes "...asi quedo como ^FF0000Neon^000000, seguramente todo este tiempo ^FF0000Neon Beelzebub^000000 la utilizo para poder crear todos los requerimientos y fusionarse con su alma...";
+	next;
+	mes "[Lix]";
+cutin "",255;
+	mes "...tal parece ya es demaciado tarde, se podra fusionar completamente, Maria morira y seguramente ^FF0000Neon Beelzebub^000000 nos matara.";
+	next;
+	mes "[" + strcharinfo(0) + "]";
+	mes "COMO PUEDES DECIR ESO!!";
+	next;
+	mes "[" + strcharinfo(0) + "]";
+	mes "Ella fue tu amiga, compañera y dejaras que muera!!.";
+	next;
+	mes "[Lix]";	
+	mes "Es demaciado arriesgado ir donde esta Neon Beelzebub!...";
+	mes "almenos aqui tenemos posibilidades de vivir.";
+	next;
+	mes "[" + strcharinfo(0) + "]";
+	mes "Entonses ire yo a rescatarla!.";
+	next;
+	mes "[Lix]";
+	mes "¡Pero...!";
+	next;
+	mes "[Lix]";
+	mes "...";
+	next;
+	mes "[Lix]";
+	mes "Esta bien... te abrire un portal hacia donde esta maria.";
+	next;
+	mes "[Lix]";
+	mes "Regresa aqui cuando estes listo y allas comprado suministros, los nesesitaras.";
+	next;
+	mes "[" + strcharinfo(0) + "]";
+	mes "ok, regresare pronto.";
+	next;
+	mes "[Lix]";
+	mes "Aqui te espero.";
+	set lixwarpeando, 7;
+	close;
+
+lixwarpeandoplayer:
+	mes "[Lix]";
+	mes "¿Estas listo?";
+	next;
+	menu "Si, salvare a Maria. ^880000["+getmapusers("06guild_08")+"/1]^000000",warpeo,"No, todavia no estoy listo.",nosalvar;
+
+warpeo: 
+	if (getmapusers("06guild_08") > 0) goto Lsorry;
+	mes "[Lix]";
+	mes "Ok, Buena suerte!.";
+	next;
+	warp "06guild_08",49,8;
+	close;
+
+
+	enablenpc "Neon Beelzebub";
+
+	disablenpc "Full Neon Beelzebub";
+
+	disablenpc "Alma#01";
+	disablenpc "Alma#1";
+	disablenpc "Alma#2";
+	disablenpc "Alma#3";
+	disablenpc "Alma#4";
+	disablenpc "Alma#5";
+	disablenpc "Alma#6";
+	disablenpc "Alma#7";
+	disablenpc "Alma#8";
+
+
+
+	disablenpc "Effecter1";
+	disablenpc "Effecter2";
+	disablenpc "Effecter3";
+	disablenpc "Effecter4";
+	disablenpc "Effecter5";
+	disablenpc "Effecter6";
+	disablenpc "Effecter7";
+	disablenpc "Effecter8";
+	disablenpc "Effecter9";
+	disablenpc "Effecter10";
+	disablenpc "Effecter11";
+	disablenpc "Effecter12";
+	disablenpc "Effecter13";
+
+	hideonnpc "summoner1";
+	hideonnpc "summoner2";
+	hideonnpc "summoner3";
+	hideonnpc "summoner4";
+	hideonnpc "Lixending";
+
+	donpcevent "summoner1::OnStop";
+	donpcevent "summoner2::OnStop";
+	donpcevent "summoner3::OnStop";
+	donpcevent "summoner4::OnStop";
+
+	killmonsterall "06guild_08";
+
+	set @neonmaerossiete,0;
+	set @neonmaerosseis,0;
+	set @neonmaeroscinco,0;
+	set @neonmaeroscuatro,0;
+	set @neonmaerostres,0;
+	set @neonmaerosdos,0;
+		end;
+
+nosalvar:
+	mes "[Lix]";
+	mes "Aqui te estare esperando.";
+	close;
+Lsorry:
+	mes "[Lix]";
+	mes "El portal a la dimension de Neon Beelzebub aun no esta completo, deves esperar un poco más.";
+	close;
+
+lixfinish:
+	mes "[Lix]";
+cutin "orleans_7",2;
+	mes "Estoy impresionado que allas derrotado a Neon Beelzebub...";
+	next;
+	mes "[Lix]";
+	mes "Deveras te lo agradezco..";
+	next;
+	mes "[Lix]";
+	mes "Te regalo mi coleccion de Pociones como muestra de mi agradecimiento.";
+	next;
+		getitem 14511, 5;
+		getitem 14510, 5;
+		getitem 14509, 5;
+		getexp 500000,200000;
+	next;
+	mes "[Lix]";
+	mes "Si ves a Maria dale mis saludos, gracias.";
+	set lixnona,9;
+cutin "",255;
+	close;
+
+nonalix:
+	mes "[Lix]";
+	mes "Gusto en verte " + strcharinfo(0) + ".";
+	close;
+hecho:
+	mes "ya hiciste esta quest una vez, vete de aqui .__.";
+close;
+
+}
+
+
+//==============================================
+//======================ALMA====================
+//==============================================
+
+06guild_08,49,49,1	script	Alma#01	802,{
+
+	mes "[Alma]";
+	mes "Gracias por salvarnos a todos, enrealidad estamos muy agradecidos";
+	mes "Vuelve con el profesor Lix y Maria ellos tambien estaran muy agradecidos adios^^";
+	set terminandolix,8;
+	set terminandomaeros,6;
+	set terminandoalma,6;
+	set terminandoalmaeros,2;
+	close2;
+	specialeffect 183;
+	specialeffect 225;
+	warp "alde_alche",156,21;
+	disablenpc "Alma#01";
+	end;
+}
+
+
+//==============================================
+//====================NEON-MAEROS===============
+//==============================================
+
+06guild_08,49,49,5	script	Neon Beelzebub	3015,{
+
+	if(@neonmaerossiete == 7) goto maerosneonsiete;
+	if(@neonmaerosseis == 6) goto maerosneonseis;
+	if(@neonmaeroscinco ==5) goto maerosneoncinco;
+	if(@neonmaeroscuatro == 4) goto maerosneoncuatro;	
+	if(@neonmaerostres == 3) goto maerosneontres;
+	if(@neonmaerosdos == 2) goto maerosneondos;
+
+	mes "[Neon Beelzebub]";
+	cutin "ep13_shadow_edq",2;
+	mes "Alfin te conozco " + strcharinfo(0) + "";
+	mes "has llegado muy lejos para solo morir.";
+	specialeffect 247;
+	emotion e_gg;
+	next;
+	mes "[Neon Beelzebub]";
+	mes "Use a Maria todo este tiempo para que juntes los materiales nesesarios para la fusion de almas y alfin completar mi cuerpo.";
+	next;
+	mes "[Neon Beelzebub]";
+	mes "cuando obtenga mi cuerpo recuperare todo mi poder, y la ilusa de Maria morira gracias a ti.";
+	next;
+	mes "[" + strcharinfo(0) + "]";
+	mes "No lo permitire!!";
+	next;
+	mes "[Neon Beelzebub]";
+	mes "JA! y que planeas hacer contra mi?";
+	emotion e_meh;
+	next;
+	mes "[" + strcharinfo(0) + "]";
+	mes "TE MATARE!";
+	next;
+	mes "[Neon Beelzebub]";
+	mes "Un humano?, como tu?, JA!, No me agas reir.";
+	next;
+	mes "[" + strcharinfo(0) + "]";
+	mes "ARRRRRGGGG...!!!";
+	emotion e_pif,1;
+	next;
+	mes "[Neon Beelzebub]";
+	mes "Ahora mira, aprecia mi supremo poder!";
+	cutin "",255;
+	specialeffect 247;
+	set @neonmaerosdos,2;
+	close;
+
+maerosneondos:
+	mapannounce "06guild_08","**Circulo Neoprismatico Activado**",1;
+	specialeffect 237;
+	specialeffect 687;
+	set @neonmaerostres,3;
+	end;
+
+maerosneontres:
+	mapannounce "06guild_08","**Invocando Almas**",1;
+	initnpctimer;
+	set @neonmaeroscuatro,4;
+	end;
+
+OnTimer250:
+	donpcevent "Alma#1::Onexploaura";
+	enablenpc "Alma#1";
+	end;
+
+OnTimer500:
+	donpcevent "Alma#2::Onexploaura";
+	enablenpc "Alma#2";
+	end;
+
+OnTimer750:
+	donpcevent "Alma#3::Onexploaura";
+	enablenpc "Alma#3";
+	end;
+
+OnTimer1000:
+	donpcevent "Alma#4::Onexploaura";
+	enablenpc "Alma#4";
+	end;
+
+OnTimer1250:
+	donpcevent "Alma#5::Onexploaura";
+	enablenpc "Alma#5";
+	end;
+
+OnTimer1500:
+	donpcevent "Alma#6::Onexploaura";
+	enablenpc "Alma#6";
+	end;
+
+OnTimer1750:
+	donpcevent "Alma#7::Onexploaura";
+	enablenpc "Alma#7";
+	end;
+
+OnTimer2000:
+	mapannounce "06guild_08","**Invocacion De Almas Completa**",1;	
+	donpcevent "Alma#8::Onexploaura";
+	enablenpc "Alma#8";
+	stopnpctimer;
+	set @neonmaeroscuatro,4;
+	end;
+
+maerosneoncuatro:
+	mapannounce "06guild_08","**Preparando Fusion De Almas**",1;
+	donpcevent "Alma#1::OnGanbanteinverde";
+	donpcevent "Alma#2::OnGanbanteinverde";
+	donpcevent "Alma#3::OnGanbanteinverde";
+	donpcevent "Alma#4::OnGanbanteinverde";
+	donpcevent "Alma#5::OnGanbanteinverde";
+	donpcevent "Alma#6::OnGanbanteinverde";
+	donpcevent "Alma#7::OnGanbanteinverde";
+	donpcevent "Alma#8::OnGanbanteinverde";
+	set @neonmaeroscinco,5;
+	end;
+
+maerosneoncinco:
+	mapannounce "06guild_08","**Comienza Fusion Fase 1**",1;
+	specialeffect 514;
+	specialeffect 418;
+	donpcevent "Alma#1::Onauraroja";
+	donpcevent "Alma#2::Onauraroja";
+	donpcevent "Alma#3::Onauraroja";
+	donpcevent "Alma#4::Onauraroja";
+	donpcevent "Alma#5::Onauraroja";
+	donpcevent "Alma#6::Onauraroja";
+	donpcevent "Alma#7::Onauraroja";
+	donpcevent "Alma#8::Onauraroja";
+	set @neonmaerosseis,6;
+	end;
+
+maerosneonseis:
+	specialeffect 346;
+	mapannounce "06guild_08","**Comienza Fusion Fase 2**",1;
+	donpcevent "Alma#1::OnfusionI";
+	donpcevent "Alma#2::OnfusionI";
+	donpcevent "Alma#3::OnfusionI";
+	donpcevent "Alma#4::OnfusionI";
+	donpcevent "Alma#5::OnfusionI";
+	donpcevent "Alma#6::OnfusionI";
+	donpcevent "Alma#7::OnfusionI";
+	donpcevent "Alma#8::OnfusionI";
+	set @neonmaerossiete,7;
+	end;
+
+maerosneonsiete:
+	specialeffect 432;
+	mapannounce "06guild_08","**Fusion Completa**",1;
+	specialeffect 563;
+	specialeffect 183;
+	donpcevent "Alma#1::OnfusionII";
+	donpcevent "Alma#2::OnfusionII";
+	donpcevent "Alma#3::OnfusionII";
+	donpcevent "Alma#4::OnfusionII";
+	donpcevent "Alma#5::OnfusionII";
+	donpcevent "Alma#6::OnfusionII";
+	donpcevent "Alma#7::OnfusionII";
+	donpcevent "Alma#8::OnfusionII";
+	disablenpc "Alma#1";
+	disablenpc "Alma#2";
+	disablenpc "Alma#3";
+	disablenpc "Alma#4";
+	disablenpc "Alma#5";
+	disablenpc "Alma#6";
+	disablenpc "Alma#7";
+	disablenpc "Alma#8";
+	disablenpc "Neon Beelzebub";
+	enablenpc "Full Neon Beelzebub";
+	specialeffect 260;
+	specialeffect 668;
+	emotion e_omg,1;
+	end;
+}
+
+
+//==============================================
+//===============FULL-NEON-MAEROS===============
+//==============================================
+
+06guild_08,49,49,5	script	Full Neon Beelzebub	1874,{
+
+	mes "[Full Neon Beelzebub]";
+cutin "moc2_dan01",2;
+	mes "Despues de tanto tiempo,";
+	mes "alfin estoy completa.";
+	specialeffect 260;
+	emotion e_gg;
+	next;
+	mes "[Full Neon Beelzebub]";
+	mes "!Con poderes nuevos!";
+	next;
+	mes "[Full Neon Beelzebub]";
+	mes "TODOS MORIRAN!!";
+	specialeffect 124;
+	emotion e_gg;
+	next;
+	mes "[" + strcharinfo(0) + "]";
+	mes "No si puedo evitarlo!";
+	next;	
+	mes "[Full Neon Beelzebub]";
+	mes "...";
+	next;
+	mes "[Full Neon Beelzebub]";
+cutin "moc2_dan02",2;
+	mes "jaja, y que puedes hacer contra mi!?";
+	next;
+	mes "[" + strcharinfo(0) + "]";
+	mes "Te Destruire y dejare a Maria libre!";
+	next;
+	mes "[Full Neon Beelzebub]";
+	mes "Intentalo...";
+	next;
+	mes "[Full Neon Beelzebub]";
+	mes "...solo si puedes matar a mis esbirros.";
+cutin "",255;
+	emotion e_gg;
+	close2;
+	mapannounce "06guild_08","**Esclavos invocados**",1;
+	hideonnpc "Full Neon Beelzebub";
+	donpcevent "Effecter1::Onfulleffect1";
+	donpcevent "Effecter2::Onfulleffect2";
+	monster "06guild_08",0,0,"Neon Slave",1015,10,"Full Neon Beelzebub::OnPoringKilled";
+	end;
+
+OnPoringKilled:
+		set @PoringKilled,@PoringKilled+1;
+		if (@PoringKilled==10) goto L_AllDead;
+		end;
+
+L_AllDead:
+	donpcevent "summoner1::OnSummon1";
+		set @PoringKilled,0;
+		end;
+}
+
+
+//==============================================
+//==================SUMMONER's==================
+//==============================================
+
+06guild_08,70,57,1	script	summoner1	-1,{
+
+OnSummon1:
+		mapannounce "06guild_08","Jajaja has derrotado a mis esclavos mas deviles",1;
+	initnpctimer;
+	end;
+
+OnTimer3000:
+		mapannounce "06guild_08","Veamos como te va con estos",1;
+	end;
+
+OnTimer6000:
+		mapannounce "06guild_08","**Esclavos invocados**",1;
+	donpcevent "Effecter1::Onfulleffect1";
+	donpcevent "Effecter2::Onfulleffect2";
+	stopnpctimer;
+	monster "06guild_08",0,0,"Neon Slave",1015,10,"summoner1::OnPoringKilled";
+	monster "06guild_08",0,0,"Neon Slave",1016,3,"summoner1::OnPoringKilled";
+	monster "06guild_08",0,0,"Neon Slave",1028,3,"summoner1::OnPoringKilled";
+	end;
+
+
+OnPoringKilled:
+		set @PoringKilled,@PoringKilled+1;
+		if (@PoringKilled==16) goto L_AllDead;
+		end;
+
+L_AllDead:
+	donpcevent "summoner2::OnSummon2";
+		set @PoringKilled,0;
+		end;
+
+OnStop:
+	stopnpctimer;
+	end;
+}
+ 
+
+06guild_08,70,42,1	script	summoner2	-1,{
+
+OnSummon2:
+	mapannounce "06guild_08","¡ Arrrgggggggggg......!",1;
+	initnpctimer;
+	end;
+
+OnTimer3000:
+		mapannounce "06guild_08","¡ Esclavos inutiles !",1;
+	end;
+
+OnTimer6000:
+		mapannounce "06guild_08","**Esclavos invocados**",1;
+	donpcevent "Effecter1::Onfulleffect1";
+	donpcevent "Effecter2::Onfulleffect2";
+	stopnpctimer;
+	monster "06guild_08",0,0,"Neon Slave",1015,10,"summoner2::OnPoringKilled";
+	monster "06guild_08",0,0,"Neon Slave",1016,10,"summoner2::OnPoringKilled";
+	monster "06guild_08",0,0,"Neon Slave",1028,10,"summoner2::OnPoringKilled";
+	monster "06guild_08",0,0,"Neon Slave",1036,10,"summoner2::OnPoringKilled";
+	end;
+
+
+OnPoringKilled:
+		set @PoringKilled,@PoringKilled+1;
+		if (@PoringKilled==40) goto L_AllDead;
+		end;
+
+L_AllDead:
+	donpcevent "summoner3::OnSummon3";
+		set @PoringKilled,0;
+		end;
+
+OnStop:
+	stopnpctimer;
+	end;
+}
+
+
+06guild_08,43,70,1	script	summoner3	-1,{
+
+OnSummon3:
+	mapannounce "06guild_08","Hmmmm...",1;
+	initnpctimer;
+	end;
+
+OnTimer3000:
+		mapannounce "06guild_08","Como que no pueden matar a un simple humano",1;
+	end;
+
+OnTimer6000:
+		mapannounce "06guild_08","Veamos si puedes con mis esclavos mas fuertes",1;
+	end;
+
+OnTimer9000:
+		mapannounce "06guild_08","**Esclavos invocados**",1;
+	donpcevent "Effecter1::Onfulleffect1";
+	donpcevent "Effecter2::Onfulleffect2";
+	stopnpctimer;
+	monster "06guild_08",0,0,"Neon Slave",1866,10,"summoner3::OnPoringKilled";
+	monster "06guild_08",0,0,"Neon Slave",1867,10,"summoner3::OnPoringKilled";
+	monster "06guild_08",0,0,"Neon Slave",1028,10,"summoner3::OnPoringKilled";
+	monster "06guild_08",0,0,"Neon Slave",1870,10,"summoner3::OnPoringKilled";
+	monster "06guild_08",0,0,"Neon Slave",3047,1,"summoner3::OnPoringKilled";
+	monster "06guild_08",0,0,"Neon Slave",3047,1,"summoner3::OnPoringKilled";
+	monster "06guild_08",0,0,"Neon Slave",3047,1,"summoner3::OnPoringKilled";
+	monster "06guild_08",0,0,"Neon Slave",3047,1,"summoner3::OnPoringKilled";
+	end;
+
+
+OnPoringKilled:
+		set @PoringKilled,@PoringKilled+1;
+		if (@PoringKilled==44) goto L_AllDead;
+		end;
+
+L_AllDead:
+	donpcevent "summoner4::OnSummon4";
+		set @PoringKilled,0;
+		end;
+
+OnStop:
+	stopnpctimer;
+	end;
+}
+
+
+06guild_08,43,70,1	script	summoner4	-1,{
+
+OnSummon4:
+		mapannounce "06guild_08","¡ Se acabo !",1;
+	initnpctimer;
+	end;
+	
+OnTimer3000:
+		mapannounce "06guild_08","Me encargare personalmente",1;
+	end;
+
+OnTimer6000:
+		mapannounce "06guild_08","**Comienza Transmutacion**",1;
+	end;
+	
+OnTimer10000:
+		mapannounce "06guild_08","Rapido! tienes 1 minuto para prepararte.",18;
+	close;
+
+OnTimer70000:
+		mapannounce "06guild_08","**Transmutacion Completa**",1;
+	end;
+
+OnTimer73000:
+		mapannounce "06guild_08","GRrrrraaaaaaaaaaag",1;
+	end;
+
+OnTimer76000:
+		mapannounce "06guild_08","¡ Ven a mi mortal !",1;
+	stopnpctimer;
+	monster "06guild_08",155,149,"Full Neon Beelzebub",1974,1,"Lixending::OnFullmurio";
+	end;
+
+OnStop:
+	stopnpctimer;
+	end;
+}
+
+
+//==============================================
+//===================LIXENDING==================
+//==============================================
+
+06guild_08,62,60,1	script	Lixending	-1,{
+
+OnFullmurio:
+	mapannounce "06guild_08","AAAAAAAHhhhhhhhh...",1;
+	donpcevent "Effecter1::OnEffectTimer";
+	donpcevent "Effecter2::OnEffectTimer";
+	donpcevent "Effecter3::OnEffectTimer";
+	donpcevent "Effecter4::OnEffectTimer";
+	donpcevent "Effecter5::OnEffectTimer";
+	donpcevent "Effecter6::OnEffectTimer";
+	donpcevent "Effecter7::OnEffectTimer";
+	donpcevent "Effecter8::OnEffectTimer";
+	donpcevent "Effecter9::OnEffectTimer";
+	donpcevent "Effecter10::OnEffectTimer";
+	donpcevent "Effecter11::OnEffectTimer";
+	donpcevent "Effecter12::OnEffectTimer";
+	donpcevent "Effecter13::OnEffectTimer";
+	initnpctimer;
+	end;
+
+OnTimer11000:
+		mapannounce "06guild_08","Bien echo",18;
+	end;
+
+OnTimer14000:
+		mapannounce "06guild_08","Las almas que fueron esclavisadas ya se han liberado,",18;
+	end;
+
+OnTimer17000:
+		mapannounce "06guild_08","Felicidades.",18;
+
+	enablenpc "Alma#01";
+	stopnpctimer;
+	end;
+
+}
+
+
+//==============================================
+//===================EFFECTER's=================
+//==============================================
+
+06guild_08,49,49,1	script	Effecter1	-1,{
+
+OnEffectTimer:
+	initnpctimer;
+	end;
+
+OnTimer1800:
+	specialeffect 668;
+	specialeffect 563;
+	specialeffect 124;
+	end;
+
+OnTimer4200:
+	specialeffect 124;
+	end;
+
+OnTimer6500:
+	specialeffect 668;
+	specialeffect 563;
+	specialeffect 124;
+	end;
+
+OnTimer8900:
+	specialeffect 124;
+	end;
+
+OnTimer10000:
+		specialeffect 225;
+	stopnpctimer;
+	end;
+}
+
+06guild_08,49,49,1	script	Effecter2	-1,{
+
+OnEffectTimer:
+	initnpctimer;
+	end;
+
+OnTimer1800:
+	specialeffect 668;
+	specialeffect 563;
+	specialeffect 124;
+	end;
+
+OnTimer4200:
+	specialeffect 124;
+	end;
+
+OnTimer6500:
+	specialeffect 124;
+	end;
+
+OnTimer8900:
+	specialeffect 668;
+	specialeffect 563;
+	specialeffect 124;
+	end;
+
+OnTimer10000:
+		specialeffect 225;
+	stopnpctimer;
+	end;
+}
+
+06guild_08,49,49,1	script	Effecter3	-1,{
+
+OnEffectTimer:
+	initnpctimer;
+	end;
+
+OnTimer300:
+	specialeffect 124;
+	end;
+
+OnTimer3600:
+	specialeffect 124;
+	end;
+
+OnTimer5100:
+	specialeffect 668;
+	specialeffect 563;
+	specialeffect 124;
+	end;
+
+OnTimer8300:
+	specialeffect 668;
+	specialeffect 563;
+	specialeffect 124;
+	end;
+
+OnTimer10000:
+		specialeffect 225;
+	stopnpctimer;
+	end;
+}
+
+06guild_08,49,49,1	script	Effecter4	-1,{
+
+OnEffectTimer:
+	initnpctimer;
+	end;
+
+OnTimer1200:
+	specialeffect 124;
+	end;
+
+OnTimer2700:
+	specialeffect 124;
+	end;
+
+OnTimer5900:
+	specialeffect 668;
+	specialeffect 563;
+	specialeffect 124;
+	end;
+
+OnTimer7400:
+	specialeffect 124;
+	end;
+
+OnTimer10000:
+		specialeffect 225;
+	stopnpctimer;
+	end;
+}
+
+06guild_08,49,49,1	script	Effecter5	-1,{
+
+OnEffectTimer:
+	initnpctimer;
+	end;
+
+OnTimer2100:
+	specialeffect 124;
+	end;
+
+OnTimer4500:
+	specialeffect 124;
+	end;
+
+OnTimer6800:
+	specialeffect 668;
+	specialeffect 563;
+	specialeffect 124;
+	end;
+
+OnTimer9200:
+	specialeffect 124;
+	end;
+
+OnTimer10000:
+		specialeffect 225;
+	end;
+
+OnTimer12000:
+	specialeffect 307;
+	stopnpctimer;
+	end;
+}
+
+06guild_08,49,49,1	script	Effecter6	-1,{
+
+OnEffectTimer:
+	initnpctimer;
+	end;
+
+OnTimer1500:
+	specialeffect 668;
+	specialeffect 563;
+	specialeffect 124;
+	end;
+
+OnTimer2400:
+	specialeffect 124;
+	end;
+
+OnTimer6200:
+	specialeffect 124;
+	end;
+
+OnTimer7100:
+	specialeffect 124;
+	end;
+
+OnTimer10000:
+		specialeffect 225;
+	stopnpctimer;
+	end;
+}
+
+06guild_08,49,49,1	script	Effecter7	-1,{
+
+OnEffectTimer:
+	initnpctimer;
+	end;
+
+OnTimer900:
+	specialeffect 124;
+	end;
+
+OnTimer3000:
+	specialeffect 124;
+	end;
+
+OnTimer5700:
+	specialeffect 668;
+	specialeffect 563;
+	specialeffect 124;
+	end;
+
+OnTimer7700:
+	specialeffect 124;
+	end;
+
+OnTimer10000:
+		specialeffect 225;
+	stopnpctimer;
+	end;
+}
+
+06guild_08,49,49,1	script	Effecter8	-1,{
+
+OnEffectTimer:
+	specialeffect 668;
+	specialeffect 563;
+	specialeffect 124;
+	initnpctimer;
+	end;
+
+OnTimer3900:
+	specialeffect 668;
+	specialeffect 563;
+	specialeffect 124;
+	end;
+
+OnTimer4800:
+	specialeffect 124;
+	end;
+
+OnTimer8600:
+	specialeffect 124;
+	end;
+
+OnTimer10000:
+		specialeffect 225;
+	stopnpctimer;
+	end;
+}
+
+06guild_08,49,49,1	script	Effecter9	-1,{
+
+OnEffectTimer:
+	initnpctimer;
+	end;
+
+OnTimer600:
+	specialeffect 124;
+	end;
+
+OnTimer3300:
+	specialeffect 124;
+	end;
+
+OnTimer5400:
+	specialeffect 668;
+	specialeffect 563;
+	specialeffect 124;
+	end;
+
+OnTimer8000:
+	specialeffect 124;
+	end;
+
+OnTimer10000:
+		specialeffect 225;
+	stopnpctimer;
+	end;
+}
+
+06guild_08,49,49,1	script	Effecter10	-1,{
+
+OnEffectTimer:
+	initnpctimer;
+	end;
+
+OnTimer600:
+	specialeffect 124;
+	end;
+
+OnTimer3300:
+	specialeffect 124;
+	end;
+
+OnTimer5400:
+	specialeffect 668;
+	specialeffect 563;
+	specialeffect 124;
+	end;
+
+OnTimer8000:
+	specialeffect 124;
+	end;
+
+OnTimer10000:
+		specialeffect 225;
+	stopnpctimer;
+	end;
+}
+
+06guild_08,49,49,1	script	Effecter11	-1,{
+
+OnEffectTimer:
+	specialeffect 668;
+	specialeffect 563;
+	specialeffect 124;
+	initnpctimer;
+	end;
+
+OnTimer3900:
+	specialeffect 668;
+	specialeffect 563;
+	specialeffect 124;
+	end;
+
+OnTimer4800:
+	specialeffect 124;
+	end;
+
+OnTimer8600:
+	specialeffect 124;
+	end;
+
+OnTimer10000:
+		specialeffect 225;
+	stopnpctimer;
+	end;
+}
+
+06guild_08,49,49,1	script	Effecter12	-1,{
+
+OnEffectTimer:
+	initnpctimer;
+	end;
+
+OnTimer300:
+	specialeffect 124;
+	end;
+
+OnTimer3600:
+	specialeffect 124;
+	end;
+
+OnTimer5100:
+	specialeffect 668;
+	specialeffect 563;
+	specialeffect 124;
+	end;
+
+OnTimer8300:
+	specialeffect 668;
+	specialeffect 563;
+	specialeffect 124;
+	end;
+
+OnTimer10000:
+		specialeffect 225;
+	stopnpctimer;
+	end;
+}
+
+06guild_08,49,49,1	script	Effecter13	-1,{
+
+OnEffectTimer:
+	initnpctimer;
+	end;
+
+OnTimer1500:
+	specialeffect 668;
+	specialeffect 563;
+	specialeffect 124;
+	end;
+
+OnTimer2400:
+	specialeffect 124;
+	end;
+
+OnTimer6200:
+	specialeffect 124;
+	end;
+
+OnTimer7100:
+	specialeffect 124;
+	end;
+
+OnTimer10000:
+		specialeffect 225;
+	stopnpctimer;
+	end;
+}
+
+
+//==============================================
+//====================Alma's====================
+//==============================================
+
+06guild_08,49,43,1	script	Alma#1	802,{
+
+Onexploaura:
+		specialeffect 225;
+	specialeffect 183;
+	end;
+
+OnGanbanteinverde:
+	specialeffect 259;
+	specialeffect 223;
+	end;
+
+Onauraroja:
+	specialeffect 260;
+	specialeffect 223;
+	end;
+
+OnfusionI:
+	specialeffect 60;
+	specialeffect 561;
+	end;
+
+OnfusionII:
+	specialeffect 220;
+		specialeffect 225;
+	specialeffect 451;
+	end;
+
+}
+
+
+06guild_08,55,45,5	script	Alma#2	802,{
+
+Onexploaura:
+		specialeffect 225;
+	specialeffect 183;
+	end;
+
+OnGanbanteinverde:
+	specialeffect 259;
+	specialeffect 223;
+	end;
+
+Onauraroja:
+	specialeffect 260;
+	specialeffect 223;
+	end;
+
+OnfusionI:
+	specialeffect 60;
+	specialeffect 561;
+	end;
+
+OnfusionII:
+	specialeffect 220;
+		specialeffect 225;
+	specialeffect 451;
+	end;
+}
+
+
+
+06guild_08,56,49,1	script	Alma#3	802,{
+
+Onexploaura:
+		specialeffect 225;
+	specialeffect 183;
+	end;
+
+OnGanbanteinverde:
+	specialeffect 259;
+	specialeffect 223;
+	end;
+
+Onauraroja:
+	specialeffect 260;
+	specialeffect 223;
+	end;
+
+OnfusionI:
+	specialeffect 60;
+	specialeffect 561;
+	end;
+
+OnfusionII:
+	specialeffect 220;
+		specialeffect 225;
+	specialeffect 451;
+	end;
+}
+
+
+06guild_08,54,55,5	script	Alma#4	802,{
+
+Onexploaura:
+		specialeffect 225;
+	specialeffect 183;
+	end;
+
+OnGanbanteinverde:
+	specialeffect 259;
+	specialeffect 223;
+	end;
+
+Onauraroja:
+	specialeffect 260;
+	specialeffect 223;
+	end;
+
+OnfusionI:
+	specialeffect 60;
+	specialeffect 561;
+	end;
+
+OnfusionII:
+	specialeffect 220;
+		specialeffect 225;
+	specialeffect 451;
+	end;
+}
+
+
+06guild_08,49,57,1	script	Alma#5	802,{
+
+Onexploaura:
+		specialeffect 225;
+	specialeffect 183;
+	end;
+
+OnGanbanteinverde:
+	specialeffect 259;
+	specialeffect 223;
+	end;
+
+Onauraroja:
+	specialeffect 260;
+	specialeffect 223;
+	end;
+
+OnfusionI:
+	specialeffect 60;
+	specialeffect 561;
+	end;
+
+OnfusionII:
+	specialeffect 220;
+		specialeffect 225;
+	specialeffect 451;
+	end;
+}
+
+
+06guild_08,45,55,5	script	Alma#6	802,{
+
+Onexploaura:
+		specialeffect 225;
+	specialeffect 183;
+	end;
+
+OnGanbanteinverde:
+	specialeffect 259;
+	specialeffect 223;
+	end;
+
+Onauraroja:
+	specialeffect 260;
+	specialeffect 223;
+	end;
+
+OnfusionI:
+	specialeffect 60;
+	specialeffect 561;
+	end;
+
+OnfusionII:
+	specialeffect 220;
+		specialeffect 225;
+	specialeffect 451;
+	end;
+}
+
+
+06guild_08,43,50,1	script	Alma#7	802,{
+
+Onexploaura:
+		specialeffect 225;
+	specialeffect 183;
+	end;
+
+OnGanbanteinverde:
+	specialeffect 259;
+	specialeffect 223;
+	end;
+
+Onauraroja:
+	specialeffect 260;
+	specialeffect 223;
+	end;
+
+OnfusionI:
+	specialeffect 60;
+	specialeffect 561;
+	end;
+
+OnfusionII:
+	specialeffect 220;
+		specialeffect 225;
+	specialeffect 451;
+	end;
+}
+
+
+06guild_08,44,45,5	script	Alma#8	802,{
+
+Onexploaura:
+		specialeffect 225;
+	specialeffect 183;
+	end;
+
+OnGanbanteinverde:
+	specialeffect 259;
+	specialeffect 223;
+	end;
+
+Onauraroja:
+	specialeffect 260;
+	specialeffect 223;
+	end;
+
+OnfusionI:
+	specialeffect 60;
+	specialeffect 561;
+	end;
+
+OnfusionII:
+	specialeffect 220;
+		specialeffect 225;
+	specialeffect 451;
+	end;
+
+}

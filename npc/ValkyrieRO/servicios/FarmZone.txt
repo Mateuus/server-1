@@ -1,0 +1,116 @@
+//===== Global Chile ======
+//=== https://www.facebook.com/IntegralesGlobal ===
+
+prontera,146,202,3	script	Farm Zone	757,{
+function	RandomizeItem;
+
+while( 1 ){
+mes "[^FFA500Farm Zone^000000]";
+mes "¿En qué te puedo ayudar?";
+next;
+switch( select( "Información:Farmear Items" )){
+Case 1:
+	mes "[^FFA500Farm Zone^000000]";
+	mes "En este lugar podras sacar los items necesarios para poder crear: ";
+	mes "^2EFE9AYggdrasil Berry^000000";
+	mes "^FFA500Poison Bottle's^000000";
+	mes "^2E9AFEFalse Angel Wing^000000";
+	mes "^64FE2EBottle Grenade's^000000";
+	mes "^A4A4A4Glistening Coat's^000000";
+	mes "^8000FFRose Quartz^000000";
+	next;
+	mes "[^FFA500Farm Zone^000000]";
+	mes "Pero sólo hay una condición..";
+	mes "Solamente puedes entrar ^FF0000cada "+.RoomCleanMin+" minutos.^000000";
+	mes "Un máximo de ^FF0000"+.MaxPlayers+" jugadores por cada "+.RoomCleanMin+" minutos.^000000";
+	mes " ";
+	mes "^FF0000Se limpiará el cuarto de Farmeo^000000 esto quiere decir que todos los jugadores";
+	mes "Serán expulsados cada 30 minutos. Sería una mala suerte si te toca esto.";
+	next;
+	break;
+
+Case 2:
+
+	if( #HuntRoomDelay > gettimetick(2) ){
+		set .last,#HuntRoomDelay - gettimetick(2);
+		set .@min,  .last % ( 24 * 3600 ) % 3600 / (60);
+		mes "Espera ^FF0000"+.@min+" Minutos^000000.";
+		close;
+	}else if( getarraysize( .Hunter ) >= .MaxPlayers ){
+		mes "[^FFA500Farm Zone^000000]";
+		mes "La zona está llena. Vuelve pronto.";
+		close;
+	}else{
+		warp .Map$,0,0;
+		set .Hunter[getarraysize( .Hunter )],strcharinfo(0);
+		set #HuntRoomDelay,gettimetick(2) + ( .DelayMin * 60 );
+		set #FarmHunt,0;
+		end;
+		}
+	}
+
+}
+
+OnInit:
+waitingroom "Farm Zone",0;;
+// Maximum Player can join per X Minutes.
+set .MaxPlayers,6;
+// Adding X Minutes of Delay before can go in again.
+set .DelayMin,15;
+// Maximum Hunt Limit per round inside the Zone.
+set .MaxItemLimit,900000000;
+// Map that will be used in thos Zone.
+set .Map$,"1@mir";
+// Clear Map Every X Minutes.
+set .RoomCleanMin,30;
+// Mapflag Initialization
+setmapflag .Map$,mf_nogo;
+setmapflag .Map$,mf_nomobloot;
+setmapflag .Map$,mf_nomvploot;
+setmapflag .Map$,mf_nowarpto;
+setmapflag .Map$,mf_nochat;
+setmapflag .Map$,mf_novending;
+setmapflag .Map$,mf_nocommand,60;
+setmapflag .Map$,mf_nogo;
+setmapflag .Map$,mf_nojobexp;
+setmapflag .Map$,mf_nobaseexp;
+
+while( 1 ){
+	killmonster .Map$,"All";
+	mapwarp .Map$,"prontera",155,181;
+	monster .Map$,0,0,"[ Farm Zone ] Resident",-1,80,strnpcinfo(0)+"::OnNormalKill";
+	deletearray .Hunter,getarraysize( .Hunter );
+	announce "[ Farm Zone ] : La Zona de Farmeo se ha vacíado. Otros 6 Jugadores pueden entrar.",bc_blue;
+	sleep ( .RoomCleanMin * 60000 );
+	mapannounce .Map$,"[ Farm Zone ] : La sala se limpiará. Todos serán teletransportados.",0;
+	killmonster .Map$,"All";
+	sleep 3000;
+	}
+	
+end;
+
+OnNormalKill:
+RandomizeItem( 0,rand(1,5) );
+monster .Map$,0,0,"--ja--",-1,1,strnpcinfo(0)+"::OnNormalKill";
+end;
+
+
+// Function that used to Generate Random Items
+
+function	RandomizeItem	{
+set #FarmHunt,#FarmHunt + getarg(1);
+
+// Normal Monster in Zone Drops Lists
+if( getarg(0) == 0 ) setarray .ItemList[0],657,713,937,939,952,972,7294,7033,7024,1059,929,1051,950,970,1044,607,7104,7179,7293,7451;
+
+for( set .@i,1; .@i <= getarg(1); set .@i,.@i + 1 ){
+	getitem .ItemList[ rand( getarraysize( .ItemList ) ) ],1;
+	}
+deletearray .ItemList,getarraysize( .ItemList );
+return;
+}
+}
+	
+	
+	
+	

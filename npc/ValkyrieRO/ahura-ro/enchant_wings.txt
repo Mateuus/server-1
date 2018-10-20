@@ -1,0 +1,523 @@
+prontera,193,171,5	script	Mileya	4_M_FAIRYAVANT,{
+//jupe_ele,40,44,0	script	Mileya	4_F_VALKYRIE,{
+	if (checkweight(Knife,1) == 0) {
+		mes "Debes armar algo de espacio en tu inventario para continuar.";
+		close;
+	}
+	if (MaxWeight - Weight < 1000) {
+		mes "Estas llevando demasiado peso.";
+		close;
+	}
+	disable_items;
+	mes "^FF0000[Mileya]^000000";
+	mes "Bienvenido, gusto en conocerte.";
+	mes "Me encuentro en prontera debido a que ultimamente la magia y la ingenieria está avanzando a pasos agigantados. Por lo cual estoy ofreciendo mi fino arte del encantamiento sobre Alas";
+	next;
+	switch(select("Cuentame mas...", "Encantar Alas.", "Reiniciar Encantamiento.")) {
+	case 1:
+		mes "^FF0000[Mileya]^000000";
+		mes "Las alas son un importante accesorio que te ayudarán a desempeñarte en tus batallas. ¿Has oido alguna vez sobre ellas?-";
+		next;
+		mes "^FF0000[Mileya]^000000";
+		mes "Si logras tener alguna de ellas, puede despertar el poder oculto que llevan.";
+		next;
+		mes "^FF0000[Mileya]^000000";
+		mes "Sin embargo, para lograr despertar su magia interna, solo reaccionan con Thanatos Fragments...";
+		next;
+		mes "^FF0000[Mileya]^000000";
+		mes "Cuyo fragmento contiene magia oculta que despierta el interés de estas Alas. Estoy ofreciendo mis servicios por tan solo 1,5000,000 Zeny, y por supuesto tu deberás traer el fragmento correspondiente.";
+		next;
+		mes "^FF0000[Mileya]^000000";
+		mes "Bien, en resumen. Mis servicios cuestan 1,5000,000 y 2 Thanatos Fragments. No te preocupes no suelo romper las Wings equipadas.";
+		close;
+	case 2:
+		@mora_enchant_select = 1;
+		break;
+	case 3:
+		@mora_enchant_select = 2;
+		break;
+	}
+	if (Zeny < 1500000 || countitem(Thanato_Rune) == 0) {
+		mes "^FF0000[Mileya]^000000";
+		mes "No estoy ofreciendo estos servicios por caridad. Si deseas encantar tus Wings, deberás pagar. El costo es de 1,5000,000 y 2 Thanatos Fragments.";
+		close;
+	}
+	mes "^FF0000[Mileya]^000000";
+	mes "Bien, antes de comenzar. Necesito tu confirmación. ¿Deseas proceder?.";
+	next;
+	.@i = select("No tengo las Wings equipadas.", "Encantar Wings.")-2;
+	if (.@i == -1) {
+		mes "^FF0000[Mileya]^000000";
+		mes "Asegurate de tener las Wings equipadas.";
+		close;
+	}
+	setarray .@parts[0], EQI_HEAD_LOW;
+	.@part = .@parts[.@i];
+	if (!getequipisequiped(.@part)) {
+		mes "^FF0000[Mileya]^000000";
+		mes "Asegurate de tener las Wings equipadas.";
+		close;
+	}
+	.@equip_id = getequipid(.@part);
+	@mora_equip_part = .@part;
+
+	//callsub L_Socket,<enchant type>,<bonus enchant type>,<4-x enchants possible>;
+	// Enchant types:
+	//   [1]ATK [2]CRIT [3]EVA [4]Healer [5]Spell 1 [6]Assist 1 [7]Assist 2 [8]STR [9]Range [10]Physical [11]Spell 2
+	switch(.@part) {
+	case 10: //EQI_HEAD_LOW
+		switch(.@equip_id) {
+			case 32001: callsub L_Socket,1,0,2;  //Devil Wings
+			case 32002: callsub L_Socket,6,0,2; //Angel Wings
+			case 32003: callsub L_Socket,5,0,2; //Fallen Wings
+			case 32004: callsub L_Socket,2,0,2; //Angeling Wings
+			case 32010: callsub L_Socket,6,5,2; //BB Wings
+			case 32011: callsub L_Socket,2,1,2; //WB Wings
+			case 32005: callsub L_Socket,5,11,1; //Artic Wings
+			case 32006: callsub L_Socket,1,8,1; //Demon Wings
+			case 32007: callsub L_Socket,6,7,1; //Phoenix Wings
+			case 32008: callsub L_Socket,9,3,1; //Gargoyle Wings
+			case 32009: callsub L_Socket,3,0,1; //Torn Wings
+			case 32012: callsub L_Socket,4,7,1; //Icarus Wings
+		}
+		break;
+
+	}
+	mes "^FF0000[Mileya]^000000";
+	mes "^990099"+getequipname(.@part)+"^000000??";
+	mes "Uhm, realmente me gustaria conocer sobre esa clase de equipamiento..";
+	@mora_equip_part = 0;
+	close;
+
+L_Socket:
+	.@select = @mora_enchant_select;
+	.@enchant_type = getarg(0);
+	.@part = @mora_equip_part;
+	.@equip_id = getequipid(.@part);
+	.@equip_name$ = getitemname(.@equip_id);
+	.@equip_refine = getequiprefinerycnt(.@part);
+	setarray .@equip_card[0], getequipcardid(.@part,0),getequipcardid(.@part,1),getequipcardid(.@part,2),getequipcardid(.@part,3);
+	@mora_equip_part = 0;
+	@mora_enchant_select = 0;
+
+	if (.@select == 1) {
+		// If refine is +9 or higher, unlock bonus enchant type.
+		if (.@equip_refine >= 9 && getarg(1) > 0) {
+			if (.@enchant_type < 1 || .@enchant_type > 11 || getarg(1) > 11) {
+				mes "^FF0000[Mileya]^000000";
+				mes "Mm-hmm algo está mal.";
+				close;
+			}
+			setarray .@enchant_type$[1],"ATK Type","Critical Type","Evasion Type","Healer Type","Spell Ability 1","Assist Ability 1","Assist Ability 2","Strength","Range Type","Physical Type","Spell Ability 2";
+			mes "^FF0000[Mileya]^000000";
+			mes "Es reconfortable siempre entregar poder a aquellos que son preocupados de su armamento. Dime, ¿Qué encantamiento deseas?.";
+			next;
+			switch(select(.@enchant_type$[.@enchant_type],.@enchant_type$[getarg(1)])) {
+			case 1:
+				break;
+			case 2:
+				.@enchant_type = getarg(1);
+				break;
+			}
+		}
+		if (.@equip_card[3] == 0 && getarg(2) < 4) {
+			.@slot = 4;
+			mes "^FF0000[Mileya]^000000";
+			mes "Intentando fortalecer tu equipamiento. Primer intento de encantamiento. Reforzamientos anteriores no serán afectados. ¿Deseas continuar?";
+		} else if (.@equip_card[2] == 0 && getarg(2) < 3) {
+			.@slot = 3;
+			mes "^FF0000[Mileya]^000000";
+			mes "Intentando fortalecer tu equipamiento. Segundo intento de encantamiento. Reforzamientos anteriores no serán afectados. ¿Deseas continuar?";
+			next;
+			mes "^FF0000[Mileya]^000000";
+			mes "Esta vez, existe una probabilidad de falla. ¿Deaseas continuar?";
+		} else if (.@equip_card[1] == 0 && getarg(2) < 2) {
+			.@slot = 2;
+			mes "^FF0000[Mileya]^000000";
+			mes "Que comience el tercer encantamiento, pero recuerda ^990000existe un riesgo de perder tus alas y los encantamientos aplicados^000000. ¿Deseas continuar?";
+		} else {
+			mes "^FF0000[Mileya]^000000";
+			mes "Esta Wing ha alcanzado su máximo encantamiento. Realizar mas encantamientos no es posible.";
+			close;
+		}
+		next;
+		if(select("Volveré despues.", "¡Por favor continua!") == 1) {
+			mes "^FF0000[Mileya]^000000";
+			mes "Si cambias de parecer, aquí estaré.";
+			close;
+		}
+		switch(.@enchant_type) {
+		case 1: //Attack
+			     if (.@slot == 4) .@i = rand(1,525);
+			else if (.@slot == 3) .@i = rand(301,655);
+			else if (.@slot == 2) .@i = rand(451,750);
+			else {
+				mes "^FF0000[Mileya]^000000";
+				mes "Error desconocido. Contacta al grupo de Staff.";
+				close;
+			}
+			     if (.@i < 101) .@enchant = 4700; //Strength1
+			else if (.@i < 201) .@enchant = 4809; //Fighting_Spirit3
+			else if (.@i < 301) .@enchant = 4819; //Atk1
+			else if (.@i < 351) .@enchant = 4701; //Strength2
+			else if (.@i < 401) .@enchant = 4808; //Fighting_Spirit4
+			else if (.@i < 451) .@enchant = 4766; //Atk2
+			else if (.@i < 476) .@enchant = 4702; //Strength3
+			else if (.@i < 501) .@enchant = 4820; //Fighting_Spirit5
+			else if (.@i < 526) .@enchant = 4767; //Atk3
+			else if (.@i < 626) .@enchant = 0;
+			else if (.@i < 641) .@enchant = 4705; //Strength6
+			else if (.@i < 656) .@enchant = 4821; //Fighting_Spirit6
+			else if (.@i < 661) .@enchant = 4706; //Strength7
+			else if (.@i < 666) .@enchant = 4822; //Fighting_Spirit7
+			else if (.@i < 668) .@enchant = 4707; //Strength8
+			else if (.@i < 670) .@enchant = 4823; //Fighting_Spirit8
+			else .@enchant = 9;
+			break;
+		case 2: //Critical
+			     if (.@slot == 4) .@i = rand(1,470);
+			else if (.@slot == 3) .@i = rand(201,610);
+			else if (.@slot == 2) .@i = rand(381,750);
+			else {
+				mes "^FF0000[Mileya]^000000";
+				mes "Error desconocido. Contacta al grupo de Staff.";
+				close;
+			}
+			     if (.@i < 101) .@enchant = 4750; //Luck1
+			else if (.@i < 201) .@enchant = 4700; //Strength1
+			else if (.@i < 261) .@enchant = 4751; //Luck2
+			else if (.@i < 321) .@enchant = 4701; //Strength2
+			else if (.@i < 351) .@enchant = 4752; //Luck3
+			else if (.@i < 381) .@enchant = 4702; //Strength3
+			else if (.@i < 411) .@enchant = 4764; //Critical5
+			else if (.@i < 441) .@enchant = 4818; //Sharp1
+			else if (.@i < 471) .@enchant = 4752; //Luck3
+			else if (.@i < 571) .@enchant = 0;
+			else if (.@i < 586) .@enchant = 4753; //Luck4
+			else if (.@i < 601) .@enchant = 4754; //Luck5
+			else if (.@i < 606) .@enchant = 4765; //Critical7
+			else if (.@i < 611) .@enchant = 4817; //Sharp2
+			else if (.@i < 616) .@enchant = 4703; //Strength4
+			else if (.@i < 618) .@enchant = 4816; //Sharp3
+			else .@enchant = 9;
+			break;
+		case 3: //Evasion
+			     if (.@slot == 4) .@i = rand(1,525);
+			else if (.@slot == 3) .@i = rand(301,670);
+			else if (.@slot == 2) .@i = rand(451,800);
+			else {
+				mes "^FF0000[Mileya]^000000";
+				mes "Error desconocido. Contacta al grupo de Staff.";
+				close;
+			}
+			     if (.@i < 101) .@enchant = 4859; //Evasion1
+			else if (.@i < 201) .@enchant = 4750; //Luck1
+			else if (.@i < 301) .@enchant = 4730; //Agility1
+			else if (.@i < 351) .@enchant = 4860; //Evasion3
+			else if (.@i < 401) .@enchant = 4751; //Luck2
+			else if (.@i < 451) .@enchant = 4731; //Agility2
+			else if (.@i < 476) .@enchant = 4731; //Agility2
+			else if (.@i < 501) .@enchant = 4752; //Luck3
+			else if (.@i < 526) .@enchant = 4732; //Agility3
+			else if (.@i < 626) .@enchant = 0;
+			else if (.@i < 641) .@enchant = 4762; //Evasion6
+			else if (.@i < 656) .@enchant = 4753; //Luck4
+			else if (.@i < 671) .@enchant = 4733; //Agility4
+			else if (.@i < 676) .@enchant = 4763; //Evasion12
+			else if (.@i < 681) .@enchant = 4754; //Luck5
+			else if (.@i < 683) .@enchant = 4734; //Agility5
+			else .@enchant = 9;
+			break;
+		case 4: //Healer
+			     if (.@slot == 4) .@i = rand(1,375);
+			else if (.@slot == 3) .@i = rand(201,535);
+			else if (.@slot == 2) .@i = rand(301,650);
+			else {
+				mes "^FF0000[Mileya]^000000";
+				mes "Error desconocido. Contacta al grupo de Staff.";
+				close;
+			}
+			     if (.@i < 101) .@enchant = 4710; //Inteligence1
+			else if (.@i < 201) .@enchant = 4720; //Dexterity1
+			else if (.@i < 251) .@enchant = 4711; //Inteligence2
+			else if (.@i < 301) .@enchant = 4721; //Dexterity2
+			else if (.@i < 326) .@enchant = 4805; //Heal_Amount2
+			else if (.@i < 351) .@enchant = 4712; //Inteligence3
+			else if (.@i < 376) .@enchant = 4722; //Dexterity3
+			else if (.@i < 476) .@enchant = 0;
+			else if (.@i < 491) .@enchant = 4760; //Matk1
+			else if (.@i < 506) .@enchant = 4850; //Heal_Amount3
+			else if (.@i < 521) .@enchant = 4713; //Inteligence4
+			else if (.@i < 536) .@enchant = 4723; //Dexterity4
+			else if (.@i < 541) .@enchant = 4761; //Matk2
+			else if (.@i < 546) .@enchant = 4851; //Heal_Amount4
+			else if (.@i < 548) .@enchant = 4806; //Matk3
+			else if (.@i < 550) .@enchant = 4852; //Heal_Amount5
+			else .@enchant = 9;
+			break;
+		case 5: //Spell 1
+			     if (.@slot == 4) .@i = rand(1,600);
+			else if (.@slot == 3) .@i = rand(401,760);
+			else if (.@slot == 2) .@i = rand(401,766);
+			else {
+				mes "^FF0000[Mileya]^000000";
+				mes "Error desconocido. Contacta al grupo de Staff.";
+				close;
+			}
+			     if (.@i < 101) .@enchant = 4710; //Inteligence1
+			else if (.@i < 201) .@enchant = 4720; //Dexterity1
+			else if (.@i < 301) .@enchant = 4795; //HP100
+			else if (.@i < 401) .@enchant = 4815; //Spell1
+			else if (.@i < 451) .@enchant = 4711; //Inteligence2
+			else if (.@i < 501) .@enchant = 4721; //Dexterity2
+			else if (.@i < 551) .@enchant = 4796; //HP200
+			else if (.@i < 601) .@enchant = 4814; //Spell2
+			else if (.@i < 701) .@enchant = 0;
+			else if (.@i < 716) .@enchant = 4712; //Inteligence3
+			else if (.@i < 731) .@enchant = 4722; //Dexterity3
+			else if (.@i < 746) .@enchant = 4797; //HP300
+			else if (.@i < 761) .@enchant = 4813; //Spell3
+			else if (.@i < 763) .@enchant = 4713; //Inteligence4
+			else if (.@i < 765) .@enchant = 4723; //Dexterity4
+			else if (.@i < 767) .@enchant = 4812; //Spell4
+			else .@enchant = 9;
+			break;
+		case 6: //Assist 1
+			     if (.@slot == 4) .@i = rand(1,520);
+			else if (.@slot == 3) .@i = rand(321,720);
+			else if (.@slot == 2) .@i = rand(521,850);
+			else {
+				mes "^FF0000[Mileya]^000000";
+				mes "Error desconocido. Contacta al grupo de Staff.";
+				close;
+			}
+			     if (.@i < 81)  .@enchant = 4792; //Def6
+			else if (.@i < 161) .@enchant = 4787; //Mdef4
+			else if (.@i < 241) .@enchant = 4801; //SP100
+			else if (.@i < 321) .@enchant = 4796; //HP200
+			else if (.@i < 371) .@enchant = 4700; //Strength1
+			else if (.@i < 421) .@enchant = 4720; //Dexterity1
+			else if (.@i < 471) .@enchant = 4730; //Agility1
+			else if (.@i < 521) .@enchant = 4740; //Vitality1
+			else if (.@i < 621) .@enchant = 0;
+			else if (.@i < 646) .@enchant = 4793; //Def9
+			else if (.@i < 671) .@enchant = 4788; //Mdef6
+			else if (.@i < 696) .@enchant = 4802; //SP150
+			else if (.@i < 721) .@enchant = 4797; //HP300
+			else if (.@i < 731) .@enchant = 4701; //Strength2
+			else if (.@i < 741) .@enchant = 4721; //Dexterity2
+			else if (.@i < 751) .@enchant = 4731; //Agility2
+			else .@enchant = 9;
+			break;
+		case 7: //Assist 2
+			     if (.@slot == 4) .@i = rand(1,520);
+			else if (.@slot == 3) .@i = rand(321,720);
+			else if (.@slot == 2) .@i = rand(521,850);
+			else {
+				mes "^FF0000[Mileya]^000000";
+				mes "Error desconocido. Contacta al grupo de Staff.";
+				close;
+			}
+			     if (.@i < 81)  .@enchant = 4792; //Def6
+			else if (.@i < 161) .@enchant = 4787; //Mdef4
+			else if (.@i < 241) .@enchant = 4801; //SP100
+			else if (.@i < 321) .@enchant = 4796; //HP200
+			else if (.@i < 371) .@enchant = 4710; //Inteligence1
+			else if (.@i < 421) .@enchant = 4720; //Dexterity1
+			else if (.@i < 471) .@enchant = 4730; //Agility1
+			else if (.@i < 521) .@enchant = 4740; //Vitality1
+			else if (.@i < 621) .@enchant = 0;
+			else if (.@i < 646) .@enchant = 4793; //Def9
+			else if (.@i < 671) .@enchant = 4788; //Mdef6
+			else if (.@i < 696) .@enchant = 4802; //SP150
+			else if (.@i < 721) .@enchant = 4797; //HP300
+			else if (.@i < 731) .@enchant = 4711; //Inteligence2
+			else if (.@i < 741) .@enchant = 4721; //Dexterity2
+			else if (.@i < 751) .@enchant = 4741; //Vitality2
+			else .@enchant = 9;
+			break;
+		case 8: //Strength
+			     if (.@slot == 4) .@i = rand(1,525);
+			else if (.@slot == 3) .@i = rand(301,685);
+			else if (.@slot == 2) .@i = rand(451,800);
+			else {
+				mes "^FF0000[Mileya]^000000";
+				mes "Error desconocido. Contacta al grupo de Staff.";
+				close;
+			}
+			     if (.@i < 101) .@enchant = 4740; //Vitality1
+			else if (.@i < 201) .@enchant = 4797; //HP300
+			else if (.@i < 301) .@enchant = 4791; //Def3
+			else if (.@i < 351) .@enchant = 4741; //Vitality2
+			else if (.@i < 401) .@enchant = 4798; //HP400
+			else if (.@i < 451) .@enchant = 4792; //Def6
+			else if (.@i < 476) .@enchant = 4742; //Vitality3
+			else if (.@i < 501) .@enchant = 4793; //Def9
+			else if (.@i < 526) .@enchant = 4799; //HP500
+			else if (.@i < 626) .@enchant = 0;
+			else if (.@i < 641) .@enchant = 4742; //Vitality3
+			else if (.@i < 656) .@enchant = 4743; //Vitality4
+			else if (.@i < 671) .@enchant = 4794; //Def12
+			//else if (.@i < 686) .@enchant = 01; // ??
+			else if (.@i < 688) .@enchant = 4744; //Vitality5
+			//else if (.@i < 690) .@enchant = 02; // ??
+			else .@enchant = 9;
+			break;
+		case 9: //Range
+			     if (.@slot == 4) .@i = rand(1,470);
+			else if (.@slot == 3) .@i = rand(201,610);
+			else if (.@slot == 2) .@i = rand(321,750);
+			else {
+				mes "^FF0000[Mileya]^000000";
+				mes "Error desconocido. Contacta al grupo de Staff.";
+				close;
+			}
+			     if (.@i < 101) .@enchant = 4750; //Luck1
+			else if (.@i < 201) .@enchant = 4720; //Dexterity1
+			else if (.@i < 261) .@enchant = 4751; //Luck2
+			else if (.@i < 321) .@enchant = 4721; //Dexterity2
+			else if (.@i < 351) .@enchant = 4752; //Luck3
+			else if (.@i < 381) .@enchant = 4722; //Dexterity3
+			else if (.@i < 411) .@enchant = 4764; //Critical5
+			else if (.@i < 441) .@enchant = 4832; //Expert_Archer1
+			else if (.@i < 471) .@enchant = 4753; //Luck4
+			else if (.@i < 571) .@enchant = 0;
+			else if (.@i < 586) .@enchant = 4723; //Dexterity4
+			else if (.@i < 601) .@enchant = 4833; //Expert_Archer2
+			else if (.@i < 606) .@enchant = 4765; //Critical7
+			else if (.@i < 611) .@enchant = 4834; //Expert_Archer3
+			else if (.@i < 616) .@enchant = 4724; //Dexterity5
+			else if (.@i < 618) .@enchant = 4835; //Expert_Archer4
+			else .@enchant = 9;
+			break;
+		case 10: //Physical
+			     if (.@slot == 4) .@i = rand(1,600);
+			else if (.@slot == 3) .@i = rand(401,800);
+			else if (.@slot == 2) .@i = rand(601,930);
+			else {
+				mes "^FF0000[Mileya]^000000";
+				mes "Error desconocido. Contacta al grupo de Staff.";
+				close;
+			}
+			     if (.@i < 101) .@enchant = 4791; //Def3
+			else if (.@i < 201) .@enchant = 4730; //Agility1
+			else if (.@i < 301) .@enchant = 4750; //Luck1
+			else if (.@i < 401) .@enchant = 4795; //HP100
+			else if (.@i < 451) .@enchant = 4792; //Def6
+			else if (.@i < 501) .@enchant = 4731; //Agility2
+			else if (.@i < 551) .@enchant = 4751; //Luck2
+			else if (.@i < 601) .@enchant = 4796; //HP200
+			else if (.@i < 701) .@enchant = 0;
+			else if (.@i < 726) .@enchant = 4793; //Def9
+			else if (.@i < 751) .@enchant = 4732; //Agility3
+			else if (.@i < 776) .@enchant = 4752; //Luck3
+			else if (.@i < 801) .@enchant = 4797; //HP300
+			else if (.@i < 816) .@enchant = 4733; //Agility4
+			else if (.@i < 831) .@enchant = 4753; //Luck4
+			else if (.@i < 833) .@enchant = 4807; //Atk_Speed1
+			else .@enchant = 9;
+			break;
+		case 11: //Spell 2
+			     if (.@slot == 4) .@i = rand(1,600);
+			else if (.@slot == 3) .@i = rand(401,760);
+			else if (.@slot == 2) .@i = rand(401,766);
+			else {
+				mes "^FF0000[Mileya]^000000";
+				mes "Error desconocido. Contacta al grupo de Staff.";
+				close;
+			}
+			     if (.@i < 101) .@enchant = 4711; //Inteligence2
+			else if (.@i < 201) .@enchant = 4721; //Dexterity2
+			else if (.@i < 301) .@enchant = 4796; //HP200
+			else if (.@i < 401) .@enchant = 4814; //Spell2
+			else if (.@i < 451) .@enchant = 4712; //Inteligence3
+			else if (.@i < 501) .@enchant = 4722; //Dexterity3
+			else if (.@i < 551) .@enchant = 4815; //Spell1
+			else if (.@i < 601) .@enchant = 4813; //Spell3
+			else if (.@i < 701) .@enchant = 0;
+			else if (.@i < 716) .@enchant = 4713; //Inteligence4
+			else if (.@i < 731) .@enchant = 4723; //Dexterity4
+			else if (.@i < 746) .@enchant = 4761; //Matk2
+			else if (.@i < 761) .@enchant = 4812; //Spell4
+			else if (.@i < 763) .@enchant = 4714; //Inteligence5
+			else if (.@i < 765) .@enchant = 4815; //Spell1
+			else if (.@i < 767) .@enchant = 4806; //Matk3
+			else .@enchant = 9;
+			break;
+		default:
+			mes "^FF0000[Mileya]^000000";
+			mes "Bueno, creo que he fallado...";
+			close;
+		}
+		if (.@equip_card[3] == 0 && getarg(2) < 4) {
+			.@equip_card[3] = .@enchant;
+		} else if (.@equip_card[2] == 0 && getarg(2) < 3) {
+			.@equip_card[2] = .@enchant;
+			if (.@enchant == 0) {
+				.@equip_card[3] = 0;
+			}
+		} else if (.@equip_card[1] == 0 && getarg(2) < 2) {
+			.@equip_card[1] = .@enchant;
+			if (.@enchant == 0) {
+				.@equip_card[2] = 0;
+				.@equip_card[3] = 0;
+			}
+		} else {
+			mes "^FF0000[Mileya]^000000";
+			mes "Existe un límite de encantamiento.";
+			close;
+		}
+		if (Zeny < 1500000 || countitem(Thanato_Rune) == 0) {
+			mes "^FF0000[Mileya]^000000";
+			mes "No voy hacer esto por caridad. Por favor, debes traer lo solicitado.";
+			close;
+		}
+		delitem Thanato_Rune,2;
+		Zeny -= 1500000;
+		delequip .@part;
+		if (.@enchant == 9) {
+			specialeffect2 EF_SUI_EXPLOSION;
+			mes "^FF0000[Mileya]^000000";
+			mes "!AaHh!";
+			mes "No... lo lamento... el equipamiento ha sido destruido.";
+			close;
+		}
+		if (.@enchant == 0) {
+			specialeffect2 EF_SHIELDCHARGE;
+			mes "^FF0000[Mileya]^000000";
+			mes "Dado que el balance de poderes no ha coincidiendo, el encantamiento anterior ha sido destruido. Por favor intentalo nuevamente";
+		} else {
+			specialeffect2 EF_REPAIRWEAPON;
+			mes "^FF0000[Mileya]^000000";
+			// Replacing original dialogue since it doesn't make sense.
+			//mes "The artifact ^990000"+.@slot+" will have the first enhancement retained.";
+			mes "He encantado la Wings ^990000"+.@equip_name$+"^000000 en la ranura "+.@slot+".";
+		}
+
+		// GetNonSlotItemSock2 .@equip_refine .@equip_id .@equip_card[0] .@equip_card[1] .@equip_card[2] .@equip_card[3]
+		getitem2 .@equip_id,1,1,.@equip_refine,0,.@equip_card[0],.@equip_card[1],.@equip_card[2],.@equip_card[3];
+
+		close;
+	} else if (.@select == 2) {
+		if (Zeny < 1500000 || countitem(Thanato_Rune) == 0) {
+			mes "^FF0000[Mileya]^000000";
+			mes "Debes pagar si deseas mis servicios.";
+			close;
+		}
+		specialeffect2 EF_REPAIRWEAPON;
+		mes "^FF0000[Mileya]^000000";
+		mes "La habilidad del encantamiento ha sido reiniciado.";
+		delitem Thanato_Rune,2;
+		Zeny -= 1500000;
+		delequip .@part;
+
+		// GetNonSlotItemSock2 .@equip_refine .@equip_id .@equip_card[0] .@equip_card[1] .@equip_card[2] .@equip_card[3]
+		for(.@i = 0; .@i<4; ++.@i) {
+			if (.@equip_card[.@i] >= 4700) // Armor Enchant System
+				.@equip_card[.@i] = 0;
+		}
+		getitem2 .@equip_id,1,1,.@equip_refine,0,.@equip_card[0],.@equip_card[1],.@equip_card[2],.@equip_card[3];
+
+		close;
+	}
+}

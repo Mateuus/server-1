@@ -1,0 +1,82 @@
+//===== rAthena Script =======================================
+//= PvP log
+//===== By: ================================================== 
+//= Vietlubu
+//===== Description: =========================================
+//= Simple SQL PvP log
+//= Notes:
+//= - Create table `pvplog` when start script.
+//= - Add new record when has OnPCKillEvent
+//= - Remove NCP PvP Ranking if you don't want to use.
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Changelogs: ==========================================
+//= 1.0 First version.
+//============================================================
+
+prontera,155,181,5	script	PvP Ranking	430,{
+	.@limitRanking = 3;
+	.@limitEnemies = 3;
+
+	mes "[PvP Ranking]";
+	//menu "Ranking of month", L_RankMonth, "Ranking of week", L_RankWeek, "Ranking of day", L_RankDay;
+
+	select "Ranking of month", "Ranking of week", "Ranking of day", "My enemies";
+	if (@menu < 4) {
+		// Ranking
+		switch(@menu) {
+			case 1:
+				.@ranking$ = "MONTH";
+				.@message$ = "Ranking of month";
+				break;
+			case 2:
+				.@ranking$ = "WEEK";
+				.@message$ = "Ranking of week";
+				break;
+			case 3:
+				.@ranking$ = "DAY";
+				.@message$ = "Ranking of day";
+				break;
+		}
+
+		query_sql("SELECT `char`.`name`, COUNT(`char`.`name`) AS count_kill FROM `pvplog` INNER JOIN `char` ON `char`.`char_id` = `pvplog`.`killer_id` WHERE " + .@ranking$ + "(`pvplog`.`pvp_date`) = " + .@ranking$ + "(CURRENT_DATE()) GROUP BY `char`.`name` ORDER BY count_kill DESC LIMIT " + .@limitRanking, .@name$, .@count_kill);
+		
+		mes .@message$;
+		for( @i = 0; @i < getarraysize(.@name$); @i++ ) {
+			mes "Top " + (@i+1) + ": ^2ecc71" + .@name$[@i] + "^000000 kills times: ^e74c3c" + .@count_kill[@i] + "^000000";
+		}
+
+	} else if (@menu == 4) {
+		query_sql("SELECT `char`.`name`, COUNT(`char`.`name`) AS count_kill FROM `pvplog` INNER JOIN `char` ON `char`.`char_id` = `pvplog`.`killer_id` WHERE `pvplog`.`victim_id` = " + getcharid(0) + " GROUP BY `char`.`name` ORDER BY count_kill DESC LIMIT " + .@limitEnemies, .@name$, .@count_kill);
+		
+		mes "Top your enemies:";
+		for( @i = 0; @i < getarraysize(.@name$); @i++ ) {
+			mes "Top 1: ^e74c3c" + .@name$[0] + "^000000 kill you ^2ecc71" + .@count_kill[0] + "^000000 times" + "^000000";
+		}
+	}
+	close;
+
+	L_RankMonth:
+		mes "Ranking of month";
+		close;
+	
+	L_RankWeek:
+		mes "Ranking of week";
+		close;
+
+	L_RankDay:
+		mes "Ranking of day";
+		close;
+
+	end;
+}
+
+-	script	pvplog	-1,{
+	OnInit:
+		query_sql("CREATE TABLE IF NOT EXISTS `pvplog` (`pvp_id` mediumint(9) unsigned NOT NULL auto_increment, `pvp_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP, `killer_id` int(11) NOT NULL default '0', `victim_id` int(11) NOT NULL default '0', `map` varchar(11) NOT NULL default '', PRIMARY KEY  (`pvp_id`)) ENGINE=MyISAM AUTO_INCREMENT=1;");
+		end;
+
+	OnPCKillEvent:
+		query_sql("INSERT INTO `pvplog` (`killer_id`, `victim_id`, `map`) VALUES ('" + getcharid(0) + "', (SELECT `char_id` FROM `char` WHERE `name` = '" + rid2name(killedrid) + "'), '" + strcharinfo(3) + "');");
+		end;
+}

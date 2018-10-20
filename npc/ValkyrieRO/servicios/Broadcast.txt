@@ -1,0 +1,118 @@
+//===== Global Chile ======
+//=== https://www.facebook.com/IntegralesGlobal ===
+
+prontera,182,214,4	script	Broadcast	725,{
+
+	set .@Price, 50000;
+	set .@Delay, 60;
+	set .@n$,"[ ^008888Broadcast^000000 ]";
+
+if ( .Broad > gettimetick(2) ){
+	mes .@n$;
+	mes "Faltan: " + callfunc("Time2Str",.Broad) + ". Para Hacer otro Anuncio.";
+	close;
+}
+	cutin "job_black_hucke01",2;
+mes .@n$;
+mes "Bienvenido " + strcharinfo(0) + ", soy la encargada de hacer anuncios";
+mes "Cada anuncio costará [^0000FF " + .@Price + " z ^000000 ].";
+next;
+switch ( select("^880000Salir^000000:Anunciar:Leer Reglas") ){
+	
+	case 1:
+cutin "",255;
+		close;
+	case 2:
+
+		mes .@n$;
+
+		if ( Zeny < .@Price )
+		{
+			mes "No tienes [^0000FF " + .@Price + " z ^000000], da el anuncio cuando lo tengas...";
+cutin "job_black_hucke03",2;			
+next;
+mes "Miauuuuuuuuuuu, Adios";
+cutin "",255;
+close;
+		}
+cutin "job_black_hucke02",2;
+		mes .nm$;
+		mes "Perfecto, escribe tu anuncio";
+		mes " ";
+		mes "^FF00000 para cancelar^000000";
+		input .@a$;
+		if ( .@a$ == "0" )	close;
+		next;
+		mes .@n$;
+		set .@size , getarraysize( .Filtro$ ) ;
+		for ( set .@i , 0 ; .@i < .@size ; set .@i , .@i + 1 )
+			if( compare( .@a$, .Filtro$[ .@i ] ) )
+			{
+				mes "No podré mandar tu anuncio, estas usando malas palabras como ^FF0000" + .Filtro$[ .@i ] + "^000000.";
+				mes "Vuelve cuando cambies tu vocabulario.";
+				close;
+			}
+		mes "Está correcto tu anuncio:";
+		mes "^000088[user] " + strcharinfo(0) + " : " + .@a$ + "^000000";
+		if(select("Si:^880000No^000000") == 2) close;
+		next;
+cutin "",255;
+		mes .@n$;
+		mes "Ahora, elije el color para dar tu anuncio.";
+		set .@size , getarraysize(.ColNam$) ;
+		for ( set .@i , 0 ; .@i < .@size ; set .@i , .@i + 1 )
+			{
+			if ( .@i < 1 )
+				set .@menu$ , "^" + .Colors$[ .@i ] + .ColNam$[ .@i ] + "^000000";
+			else
+				set .@menu$, .@menu$ + ":" + "^" + .Colors$[ .@i ] + .ColNam$[ .@i ] + "^000000";
+			}
+		set .@z , select( .@menu$ ) - 1 ;
+		set .@Color$,"0x"+.Colors$[.@z];
+		next;
+		mes .@n$;
+		mes "Tu anuncio se verá así : ";
+		mes "[Usuario] " + strcharinfo(0) + " " + .@a$ +" ";
+		if ( select("Anunciar:^880000Salir^000000") == 2 )	close;
+		mes "...";
+		close2;
+		set Zeny , Zeny - .@Price ;
+		announce "[Usuario] " + strcharinfo(0) + " : " + .@a$ , bc_all , .@Color$ ;
+		set .Broad, gettimetick(2) + .@Delay;
+		goto Delay;
+
+	case 3:
+		next;
+		mes .@n$;
+		mes "Estas son las reglas de los anuncios, espero que no las rompas.";
+		mes "^8800001.^000000 No uses malas palabras.";
+		mes "^8800002.^000000 Anuncia solo cosas importantes.";
+		mes "^8800003.^000000 Define tu anuncio:";
+		mes "^008800     V >^000000 Vender.";
+		mes "^008800     C >^000000 Comprar.";
+		mes "^008800     T >^000000 Tradear.";
+		mes "^8800004.^000000 No anuncies falsas ofertas.";
+cutin "",255;
+		close;
+}
+Delay:  
+	delwaitingroom strnpcinfo(0);  
+	do{
+        	waitingroom " [ Espera: " + callfunc("Time2Str",.Broad) + " ]",0;
+		sleep2 1000;
+		delwaitingroom strnpcinfo(0);
+	}while(.Broad > gettimetick(2));
+        	delwaitingroom strnpcinfo(0);
+        	waitingroom " [ -Broadcast- ]",0;
+		close;
+
+OnInit:
+	waitingroom " [ -Broadcast- ]",0;
+/* [ ============================ CONFIGURACIONES GENERALES ============================ ] */
+	setarray .Colors$[0],"9AFE2E","FF8000","00FF00"; // Codigo colores hexadecimales.
+	setarray .ColNam$[0], "Oliva","Naranjo","Verde"; // Nombres colores.
+	setarray .Filtro$[0],"ragnarok","RO","Ro","Server","server","Fuck","tonto","mierda","Ass","idiot","noob","estupido","pendejo",
+						"idiota","stupid","joto","jota","perra","puto","puta","marica","maricon",
+						"gay","homo","culo","pwned","mmg","owned","ql","ctm","csm","maraco",
+						"manco","weko","weco","qlo","maraca"; // Palabras prohibidas.
+}

@@ -1,0 +1,72 @@
+//===== Script eAthena ======================================= 
+//= Elite wings Quest
+//===== por: ================================================== 
+//= Creador de Quests Ragnarok World
+//= v1.0
+//===== Compatible Con: ===================================== 
+//= eAthena SVN
+//===== Descripción: ========================================= 
+//  Quest Creada por el Script Creador de Quests Online de
+//  http://www.ragnarokworld.net
+//============================================================ 
+poring_w02,70,47,3	script Valkirie Hat Brow	879,{
+ 	set @NPCName$, "[^Valkirie Hat Brow^000000]";
+	set @cost, 5000000;
+	mes @NPCName$;
+	mes "Quieres Obtener este Item? Bonus Item: 20 All Stats..!!";
+	next;
+	switch(select("Si:No:No, grasias")) {
+ 	case 1:
+	mes @NPCName$;
+	mes "Estos son Los Items Necesarios.";
+	mes "  ^Jellopy^000000 [200]";
+	mes "  ^Scell^000000 [200]";
+	mes "  ^Fluff^000000 [150]";
+	mes "  ^5000000 Zeny^000000";
+	next;
+	if (countitem(909) < 200) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(911) < 200) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(914) < 150) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (Zeny < @cost) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	mes @NPCName$;
+	mes "Bien! Tienes todos los Items! Felicidades !";
+	mes "el Objeto es Tuyo";
+	delitem 909,200;
+	delitem 911,200;
+	delitem 914,150;
+	set Zeny,Zeny-@cost;
+	getitem 20014,1;
+	close;
+	case 2:
+	mes @NPCName$;
+	mes "de acuerdo, vuelve pronto !";
+	close;
+	case 3:
+	close;
+	}
+
+}
+
+//============================================================
+//===== Creador de Quests Ragnarok World ===========================
+//============================================================

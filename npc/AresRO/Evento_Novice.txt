@@ -1,0 +1,126 @@
+This event is constructed on a basis on RFYL by aN00B1s
+ZvN mod by Sanasol
+[Spanish] by Rpizer
+-	script	announce_nvz	-1,{
+
+ beginning Time
+
+OnClock0000
+
+
+announce El evento Novice Vs. Zombie comenzara en 3 minutos,0;
+killmonsterall quiz_01;
+sleep 5000;
+announce En Prontera a aparecido el Npc ' Novice Vs. Zombie '!,0;
+enablenpc Novice vs. Zombie;
+sleep 55000;
+announce El evento Novice Vs. Zombie comenzara en 2 minutos!,0;
+sleep 60000;
+announce El evento Novice Vs. Zombie comenzara en 1 minutos!,0;
+sleep 30000;
+mapannounce quiz_01,El evento comenzara en 30 segundos!,0;
+sleep 25000;
+announce El evento Novice Vs. Zombie comenzara en ~5~,0;
+sleep 1000;
+announce El evento Novice Vs. Zombie comenzara en ~4~,0;
+sleep 1000;
+announce El evento Novice Vs. Zombie comenzara en ~3~,0;
+sleep 1000;
+announce El evento Novice Vs. Zombie comenzara en ~2~,0;
+sleep 1000;
+announce El evento Novice Vs. Zombie comenzara en ~1~,0;
+sleep 1000;
+announce El evento Novice Vs. Zombie ya comenzo!!,0,0x00FF00;
+monster quiz_01,42,369,Zombie,1015,1;
+disablenpc Novice vs. Zombie;
+sleep 10000;
+monster quiz_01,42,369,Zombie-2,1015,1;
+sleep 10000;
+monster quiz_01,42,369,Zombie-3,1015,1;
+sleep 10000;
+monster quiz_01,42,369,Zombie-4,1015,1;
+initnpctimer;
+end;
+
+OnTimer5000
+if ( getmapusers(quiz_01) == 0 )
+{
+killmonsterall quiz_01;
+announce El evento Novice Vs. Zombie a terminado, todos los Novice murieron,0;
+disablenpc Prize;
+stopnpctimer;
+end;
+}
+else if ( getmapusers(quiz_01)  1 )
+{
+mapannounce quiz_01,getmapusers(quiz_01) +El jugador sigue en el evento.,0,0x00FF00;;
+initnpctimer;
+end;
+}
+initnpctimer;
+end;
+
+OnPCDieEvent
+getmapxy .@mapnvz$,.@xnvz,.@ynvz,0;
+if ( .@mapnvz$ == quiz_01) {
+sleep2 1;
+warp prontera,156,223;
+atcommand @alive + strcharinfo(0);
+dispbottom Perdistes...;
+}
+sleep2 1000;
+if ( .@mapnvz$ == quiz_01 && getmapusers(quiz_01) == 1 ) {
+killmonsterall quiz_01;
+mapannounce quiz_01,Ganastes, acercate al Npc Prize.,0;
+enablenpc Prize;
+stopnpctimer;
+end;
+}
+end;
+}
+
+quiz_01,42,369,3	script	Prize	72,{
+if (sex == 1) {
+announce El jugador + strcharinfo (0) + a ganado el evento Novice Vs. Zombie, Felicidades!,0;
+}
+else {
+announce La jugadora + strcharinfo (0) + a ganado el evento Novice Vs. Zombie, Felicidades!,0;
+};
+getitem 7227,1;
+warp prontera,156,223;
+sleep2 250;
+disablenpc Prize;
+end;
+}
+
+prontera,157,197,3	script	Novice vs. Zombie	1015,{
+if (BaseLevel  1) goto NO;
+if (class == 0) goto event;
+if (class  0) goto NO;
+event
+mes [^0000FFZombie Vs. Novice^000000];
+mes Quieres entrar en el evento Novice Vs. Zombie;
+next;
+switch(select(Si,No)) {
+case 1
+sc_end SC_ALL;
+sc_start SC_DECREASEAGI,300000,10;
+percentheal 100,100;
+warp quiz_01,42,369;
+end;
+break;
+case 2
+mes [^0000FFZombie Vs. Novice^000000];
+mes Esta bien, vuelve cuando quieras.;
+close;
+break;
+NO
+mes [^0000FFZombie Vs. Novice^000000];
+mes Tu no eres un Novice lvl 1;
+close;
+}
+OnInit
+disablenpc Novice vs. Zombie;
+disablenpc Prize;
+end;
+}

@@ -1,0 +1,82 @@
+//===== Global Chile ======
+//=== https://www.facebook.com/IntegralesGlobal ===
+
+-	script	dispell	-1,{
+
+OnPCLogoutEvent:
+OnPCDieEvent:
+	atcommand "@fakename ";
+	undisguise;
+	for ( .@i = 0 ; .@i < getarraysize(.Maps$); .@i++ )
+	{
+		if ( strcharinfo(3) == .Maps$[.@i] )
+		{
+			sc_end SC_ENDURE;
+			sc_end SC_PROVOKE;
+			sc_end SC_AUTOGUARD;
+			sc_end SC_AURABLADE;
+			sc_end SC_CONCENTRATION;
+			sc_end SC_REFLECTSHIELD;
+			sc_end SC_PROVIDENCE;
+			sc_end SC_POISONREACT;
+			sc_end SC_WINDWALK;
+			sc_end SC_SIGHT;
+			sc_end SC_ENERGYCOAT;
+			sc_end SC_MAGICPOWER;
+			sc_end SC_LOUD;
+			sc_end SC_CP_WEAPON;
+			sc_end SC_CP_SHIELD;
+			sc_end SC_CP_ARMOR;
+			sc_end SC_CP_HELM;
+			sc_end SC_ADRENALINE;
+			sc_end SC_WEAPONPERFECTION;
+			sc_end SC_OVERTHRUST;
+			sc_end SC_TRUESIGHT;
+			sc_end SC_DOUBLECAST;
+			sc_end SC_CONCENTRATE;
+			sc_end SC_BLESSING;
+			sc_end SC_INCREASEAGI;
+			sc_end SC_ANGELUS;
+			sc_end SC_RUWACH;
+			sc_end SC_KYRIE;
+			sc_end SC_MAGNIFICAT;
+			sc_end SC_IMPOSITIO;
+			sc_end SC_GLORIA;
+			sc_end SC_SUFFRAGIUM;
+			sc_end SC_ASSUMPTIO;
+			sc_end SC_UTSUSEMI;
+			sc_end SC_BUNSINJYUTSU;
+			sc_end SC_INCREASING;
+			sc_end SC_ADJUSTMENT;
+			sc_end SC_KAUPE;
+			sc_end SC_KAAHI;
+			sc_end SC_SIGHT;
+			sc_end SC_STRFOOD;
+			sc_end SC_AGIFOOD;
+			sc_end SC_VITFOOD;
+			sc_end SC_INTFOOD;
+			sc_end SC_DEXFOOD;
+			sc_end SC_LUKFOOD;
+			sc_end SC_ASPERSIO;
+			sc_end SC_AUTOBERSERK;
+			sc_end SC_DEFENDER;
+			sc_end SC_REJECTSWORD;
+			sc_end SC_SIGHTBLASTER;
+			sc_end SC_MINDBREAKER;
+			sc_end SC_MAXIMIZEPOWER;
+			sc_end SC_MELTDOWN;
+			sc_end SC_NEN;
+			sc_end SC_INCMHPRATE;
+			sc_end SC_INCCRI;
+			sc_end SC_FleeFood;
+			sc_end SC_INCHIT;
+			sc_end SC_INCMSPRATE;
+			warp "arena_4",148,102;
+		}
+	}
+end;
+
+OnInit:	
+	setarray .Maps$[0],"guild_vs2","pvp_n_1-5","guild_vs2-1","pvp_n_1-1","pvp_n_1-3","pvp_n_2-3","pvp_n_3-3","prtg_cas02","prtg_cas03","payg_cas02","payg_cas03";
+	end;
+}

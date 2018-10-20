@@ -1,0 +1,217 @@
+prontera,147,175,4	script	Ronald#ZephAnuncio	4W_M_01,{
+	if (getgmlevel() < 1) {
+		mes "[Ronald]";
+		mes "Hola amigo, buen día para jugar!";
+		mes "Recuerda no compartir tu cuenta con nadie.";
+		close;
+	}
+lMenu:
+	mes "[Ronald]";
+	mes "Hola maestro, esperando ordenes.";
+	next;
+	set @opt, select("Establecer intervalo","Agregar Anuncio","Editar Anuncio","Quitar Anuncio","Cancelar");
+	if (@opt == 5) close;
+	if (@opt == 1) {
+		mes "[Ronald]";
+		mes "Seleccione el modo de intervalo:";
+		next;
+		set @tinterval, select("Minutos","Horas","Cancelar");
+		if (@tinterval == 3) goto lMenu;
+		mes "[Ronald]";
+		mes "Ingresa el internalo nuevo (0 para cancelar):";
+		mes " > Actual: " + $TInterval + " minuto(s)";
+		next;
+		input @tinterval2;
+		if (@tinterval2 == 0) goto lMenu;
+		mes "[Ronald]";
+		mes "Confirmando el nuevo intervalo:";
+		if (@tinterval == 1) {
+			mes " -> " + @tinterval2 + " minuto(s)";
+		} else {
+			mes " -> " + @tinterval2 + " hora(s)";
+		}
+		next;
+		if (select("Aceptar","Cancelar") == 1) {
+			if (@tinterval == 1) {
+				set $TInterval, @tinterval2;
+			} else {
+				set $TInterval, @tinterval2 * 60;
+			}
+			mes "[Ronald]";
+			mes "El nuevo intervalo es:";
+			if (@tinterval == 1) {
+				mes " " + @tinterval2 + " minuto(s)";
+			} else {
+				mes " " + @tinterval2 + " hora(s)";
+			}
+			next;
+			set $TIntervalCnt,0;
+		}
+		goto lMenu;
+	}
+	if (@opt == 2 && getarraysize($TMessages$) >= 127) {
+		mes "[Ronald]";
+		mes "Disculpa, no puedo agregar mas anuncios.";
+		next;
+		goto lMenu;
+	}
+	if (@opt > 2 && getarraysize($TMessages$) == 0) {
+		mes "[Ronald]";
+		mes "No hay anuncios en la lista.";
+		next;
+		goto lMenu;
+	}
+	if (@opt == 2) {
+		set @Sel, getarraysize($TMessages$);
+	} else  if (getarraysize($TMessages$) == 1) {
+		set @Sel, getarraysize($TMessages$) - 1;
+	} else {
+		mes "[Ronald]";
+		mes "Seleccione el anuncio para proceder:";
+		next;
+		set @Idx,0;
+		set @direction,0;
+		set @Sel,128;
+		set @TotDisp, getarraysize($TMessages$) - 1;
+		while (@Sel == 128) {
+			set @IdxDisp, @Idx + 1;
+			mes "[Anuncio #" + @IdxDisp + " / " + getarraysize($TMessages$) + "]";
+			mes ">^0000FF" + $TMessages$[@Idx] + "^000000<";
+			next;
+			if (@direction == 0) {
+				set @IdxTmp, select("Siguiente ->","<- Anterior","Seleccionar!","Cancelar");
+			} else {
+				set @IdxTmp, select("<- Anterior","Siguiente ->","Seleccionar!","Cancelar");
+			}
+			if ((@IdxTmp == 1 && @direction == 0) || (@IdxTmp == 2 && @direction == 1)) {
+				if (@Idx >= @TotDisp) {
+					set @Idx, 0;
+				} else {
+					set @Idx, @Idx + 1;
+				}
+			}
+			if ((@IdxTmp == 2 && @direction == 0) || (@IdxTmp == 1 && @direction == 1)) {
+				if (@Idx < 1) {
+					set @Idx, @TotDisp;
+				} else {
+					set @Idx, @Idx - 1;
+				}
+			}
+			if (@IdxTmp == 2) {
+				if (@direction == 0) {
+					set @direction,1;
+				} else {
+					set @direction,0;
+				}
+			}
+			if (@IdxTmp == 3) set @Sel, @Idx;
+			if (@IdxTmp == 4) goto lMenu;
+		}
+	}
+lEdit:
+	if (@opt < 4) {
+		mes "[Ronald]";
+		mes "Por favor, indica el anuncio:";
+		mes " (minimo 3 letras.)";
+		if (getstrlen($TMessages$[@Sel]) > 0) mes "Actual: >^0000FF" + $TMessages$[@Sel] + "^000000<";
+		next;
+		input @AnnTmp$;
+		if (getstrlen(@AnnTmp$) < 3) {
+			mes "[Ronald]";
+			mes "Tu mensaje es muy pequeño.";
+			next;
+			goto lEdit;
+		}
+		mes "[Ronald]";
+		mes "¿Es correcto?";
+		mes " ";
+		mes ">^0000FF" + @AnnTmp$ + "^000000<";
+		next;
+		set @IdxTmp, select("Si","Editar","Cancelar");
+		switch (@IdxTmp) {
+			case 1:
+				set $TMessages$[@Sel], @AnnTmp$;
+				mes "[Ronald]";
+				mes "Esta hecho!";
+				next;
+				break;
+			case 2:
+				goto lEdit;
+		}
+	} else {
+		mes "[Ronald]";
+		mes "Borrar este anuncio?";
+		mes " ";
+		mes ">^0000FF" + $TMessages$[@Sel] + "^000000<";
+		next;
+		if (select("Si","No") == 2) goto lMenu;
+		deletearray $TMessages$[@Sel],1;
+	}
+	goto lMenu;
+OnMinute00:	
+OnMinute01:
+OnMinute02:
+OnMinute03:
+OnMinute04:
+OnMinute05:
+OnMinute06:
+OnMinute07:
+OnMinute08:
+OnMinute09:
+OnMinute10:
+OnMinute11:
+OnMinute12:
+OnMinute13:
+OnMinute14:
+OnMinute15:
+OnMinute16:
+OnMinute17:
+OnMinute18:
+OnMinute19:
+OnMinute20:
+OnMinute21:
+OnMinute22:
+OnMinute23:
+OnMinute24:
+OnMinute25:
+OnMinute26:
+OnMinute27:
+OnMinute28:
+OnMinute29:
+OnMinute30:
+OnMinute31:
+OnMinute32:
+OnMinute33:
+OnMinute34:
+OnMinute35:
+OnMinute36:
+OnMinute37:
+OnMinute38:
+OnMinute39:
+OnMinute40:
+OnMinute41:
+OnMinute42:
+OnMinute43:
+OnMinute44:
+OnMinute45:
+OnMinute46:
+OnMinute47:
+OnMinute48:
+OnMinute49:
+OnMinute50:
+OnMinute51:
+OnMinute52:
+OnMinute53:
+OnMinute54:
+OnMinute55:
+OnMinute56:
+OnMinute57:
+OnMinute58:
+OnMinute59:
+	set $TIntervalCnt,$TIntervalCnt + 1;
+	if ($TIntervalCnt >= $TInterval && getarraysize($TMessages$) > 0 && $TInterval > 0) {
+		set $TIntervalCnt,0;
+		announce "Anuncio: " + $TMessages$[rand(getarraysize($TMessages$))],0,0xCC9900;
+	}
+}
+

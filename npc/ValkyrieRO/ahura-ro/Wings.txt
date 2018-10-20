@@ -1,0 +1,928 @@
+lou_dun03,133,145,6	script	White Wing	AQUA_ELEMENTAL,{
+
+.@wb$ = "[^FF0000 White Wing ^000000]";
+
+mes .@wb$;
+
+mes "Mi tiempo ha llegado.";
+mes "Pues no el tuyo...";
+next;
+mes "[^FF0000"+strcharinfo(0)+"^000000]";
+mes "¿De qué hablas?...";
+mes "¿De todas formas, tienes algo para mi?";
+next;
+mes .@wb$;
+mes "... ¿Algo para tí?.";
+mes "Oh.. si... tengo para ofrecer la velocidad,";
+mes "que necesitas en tus batallas.";
+next;
+mes .@wb$;
+if(select("Obtener Receta","Salir")==2){close;}
+
+	mes "No tengo cuerpo para recorrer el mundo..";
+	mes "Sin embargo tu si...";
+	mes "Por lo cual te pediré los siguientes materiales para que puedas utilizar mi obra de arte.";
+	next;
+	mes .@wb$;
+	
+		while (.@i < getarraysize(.required_items)){
+    mes "^c70f3f"+ getitemname(.required_items[.@i]) +"^000000 ^00587cx"+ .required_amount[.@i] +"^000000";
+    ++.@i;
+			}
+			if (select("Completar", "¡No, gracias!") == 2) {
+				
+   				 close;
+					}
+
+if ((countitem(.required_items[0]) < .required_amount[0]) ||
+    (countitem(.required_items[1]) < .required_amount[1]) ||
+    (countitem(.required_items[2]) < .required_amount[2]) ||
+    (countitem(.required_items[3]) < .required_amount[3]) ||
+    (countitem(.required_items[4]) < .required_amount[4]) ||
+    (countitem(.required_items[5]) < .required_amount[5]) ||
+    (countitem(.required_items[6]) < .required_amount[6]) ||
+    (countitem(.required_items[7]) < .required_amount[7]) ){
+	next;
+	mes .@wb$;
+	mes "¡No tienes todo los requerimientos!";
+	close;
+				}
+if (!checkweight(.reward_item, .reward_amount)){
+	next;
+	mes .@wb$;
+    mes "No tienes suficiente espacio en tu inventario.";
+    close;
+		}
+while (.@j < getarraysize(.required_items)){
+    delitem .required_items[.@j], .required_amount[.@j];
+    ++.@j;
+		}
+getitem .reward_item, .reward_amount;
+close;
+
+
+OnInit:
+    .reward_item = Wb_Wings;
+    .reward_amount = 1;
+    setarray .required_items[0], Great_Wing, Cyfar, Soft_Feather, White_Dyestuffs, Rough_Wind, Penetration, Angeling_Card, Gold;
+    setarray .required_amount[0], 100, 50, 20, 10, 5, 1, 1, 50;
+    end;
+
+		}
+
+yuno_fild03,297,247,6	script	Black Wing	MOROCC_2,{
+
+.@bb$ = "[^FF0000 Black Wing ^000000]";
+
+mes .@bb$;
+
+mes "La ira y el odio gobiernan todo.";
+mes "En mi, vive la oscuridad...";
+next;
+mes "[^FF0000"+strcharinfo(0)+"^000000]";
+mes "Creo que está un poco loco...";
+mes "¿De todas formas, tienes algo para mi?";
+next;
+mes .@bb$;
+mes "... ¿Algo para tí?.";
+mes "Oh.. si... tengo para ofrecer la oscuridad,";
+mes "que necesitas en tus batallas.";
+next;
+mes .@bb$;
+if(select("Obtener Receta","Salir")==2){close;}
+
+	mes "No tengo el tiempo para ir a buscar los materiales..";
+	mes "Sin embargo tu si...";
+	mes "Por lo cual te pediré los siguientes materiales para que puedas utilizar mi obra de arte.";
+	next;
+	mes .@bb$;
+		while (.@i < getarraysize(.required_items2)){
+    mes "^c70f3f"+ getitemname(.required_items2[.@i]) +"^000000 ^00587cx"+ .required_amount2[.@i] +"^000000";
+    ++.@i;
+			}
+			if (select("Completar", "¡No, gracias!") == 2) {
+				
+   				 close;
+					}
+
+if ((countitem(.required_items2[0]) < .required_amount2[0]) ||
+    (countitem(.required_items2[1]) < .required_amount2[1]) ||
+    (countitem(.required_items2[2]) < .required_amount2[2]) ||
+    (countitem(.required_items2[3]) < .required_amount2[3]) ||
+    (countitem(.required_items2[4]) < .required_amount2[4]) ||
+    (countitem(.required_items2[5]) < .required_amount2[5]) ||
+    (countitem(.required_items2[6]) < .required_amount2[6]) ||
+    (countitem(.required_items2[7]) < .required_amount2[7]) ){
+	next;
+	mes .@bb$;
+	mes "¡No tienes todo los requerimientos!";
+	close;
+				}
+if (!checkweight(.reward_item2, .reward_amount2)){
+	next;
+	mes .@bb$;
+    mes "No tienes suficiente espacio en tu inventario.";
+    close;
+		}
+while (.@j < getarraysize(.required_items2)){
+    delitem .required_items2[.@j], .required_amount2[.@j];
+    ++.@j;
+		}
+getitem .reward_item2, .reward_amount2;
+close;
+
+
+OnInit:
+    .reward_item2 = Bb_Wings;
+    .reward_amount2 = 1;
+    setarray .required_items2[0], Great_Wing, Cyfar, Wing_Of_Moth, Black_Dyestuffs, Rough_Wind, Frozen_Heart, Deviling_Card, Gold;
+    setarray .required_amount2[0], 100, 50, 75, 10, 5, 1, 1, 50;
+    end;
+
+		}
+
+// DEVIL WINGS
+
+gon_dun03,116,255,6	script	Evil Wing	G_RANDGRIS_,{
+
+.@ew$ = "[^FF0000 Devil Wing ^000000]";
+
+mes .@ew$;
+
+mes "Los angeles caídos reinaran.";
+mes "Nadie puede contra nosotros...";
+next;
+mes "[^FF0000"+strcharinfo(0)+"^000000]";
+mes "Si, lo que tu digas...";
+mes "¿De todas formas, tienes algo para mi?";
+next;
+mes .@ew$;
+mes "... ¿Algo para tí?.";
+mes "Oh.. si... tengo para ofrecer a los angeles caidos,";
+mes "que necesitan nuestra ayuda en batallas.";
+next;
+mes .@ew$;
+if(select("Obtener Receta","Salir")==2){close;}
+
+	mes "No tengo el tiempo para ir a buscar los materiales..";
+	mes "Sin embargo tu si...";
+	mes "Por lo cual te pediré los siguientes materiales para que puedas utilizar mi obra de arte.";
+	next;
+	mes .@ew$;
+		while (.@i < getarraysize(.required_items3)){
+    mes "^c70f3f"+ getitemname(.required_items3[.@i]) +"^000000 ^00587cx"+ .required_amount3[.@i] +"^000000";
+    ++.@i;
+			}
+	mes "10,000,000 Zeny";
+			if (select("Completar", "¡No, gracias!") == 2) {
+				
+   				 close;
+					}
+
+if ((countitem(.required_items3[0]) < .required_amount3[0]) ||
+    (countitem(.required_items3[1]) < .required_amount3[1]) ||
+    (countitem(.required_items3[2]) < .required_amount3[2]) ||
+    (countitem(.required_items3[3]) < .required_amount3[3]) ||
+    (countitem(.required_items3[4]) < .required_amount3[4]) ||
+			(Zeny < 10000000)) {
+next;
+	mes .@ew$;
+	mes "¡No tienes todo los requerimientos!";
+	close;
+				}
+if (!checkweight(.reward_item3, .reward_amount3)){
+	next;
+	mes .@ew$;
+    mes "No tienes suficiente espacio en tu inventario.";
+    close;
+		}
+while (.@j < getarraysize(.required_items3)){
+    delitem .required_items3[.@j], .required_amount3[.@j];
+    ++.@j;
+		}
+Zeny-=10000000;
+getitem .reward_item3, .reward_amount3;
+close;
+
+
+OnInit:
+    .reward_item3 = Devil_Wings;
+    .reward_amount3 = 1;
+    setarray .required_items3[0], Petite_DiablOfs_Horn, Dragon_Scale, Evil_Horn, Petite_DiablOfs_Wing, Dragon_Fly_Wing;
+    setarray .required_amount3[0], 100, 20, 20, 20, 20;
+    end;
+
+		}
+
+// ANGEL WINGS
+
+gefenia03,36,36,6	script	Angel Wing	4_F_RANGER,{
+
+.@aw$ = "[^FF0000 Angel Wing ^000000]";
+
+mes .@aw$;
+
+mes "Uff... por poco me salvo.";
+mes "Esos angeles están algo locos...";
+next;
+mes "[^FF0000"+strcharinfo(0)+"^000000]";
+mes "¿Qué te han hecho?...";
+mes "¿De todas formas, tienes algo para mi?";
+next;
+mes .@aw$;
+mes "... ¿Algo para tí?.";
+mes "Oh.. si... he logrado quitarle las alas,";
+mes "a una de esas cosas voladoras.";
+mes "¿Te interesan?";
+next;
+mes .@aw$;
+if(select("Obtener Receta","Salir")==2){close;}
+
+	mes "Estoy aterrada...";
+	mes "No puedo salir a buscar lo necesario...";
+	mes "Por lo cual te pediré los siguientes materiales para que puedas utilizar mi obra de arte.";
+	next;
+	mes .@aw$;
+		while (.@i < getarraysize(.required_items4)){
+    mes "^c70f3f"+ getitemname(.required_items4[.@i]) +"^000000 ^00587cx"+ .required_amount4[.@i] +"^000000";
+    ++.@i;
+			}
+	mes "10,000,000 Zeny";
+			if (select("Completar", "¡No, gracias!") == 2) {
+				
+   				 close;
+					}
+
+if ((countitem(.required_items4[0]) < .required_amount4[0]) ||
+    (countitem(.required_items4[1]) < .required_amount4[1]) ||
+    (countitem(.required_items4[2]) < .required_amount4[2]) ||
+    (countitem(.required_items4[3]) < .required_amount4[3]) ||
+    (countitem(.required_items4[4]) < .required_amount4[4]) ||
+			(Zeny < 10000000)) {
+next;
+mes .@aw$;
+	mes "¡No tienes todo los requerimientos!";
+	close;
+				}
+if (!checkweight(.reward_item4, .reward_amount4)){
+	next;
+	mes .@aw$;
+    mes "No tienes suficiente espacio en tu inventario.";
+    close;
+		}
+while (.@j < getarraysize(.required_items4)){
+    delitem .required_items4[.@j], .required_amount4[.@j];
+    ++.@j;
+		}
+Zeny-=10000000;
+getitem .reward_item4, .reward_amount4;
+close;
+
+
+OnInit:
+    .reward_item4 = Angel_Wings;
+    .reward_amount4 = 1;
+    setarray .required_items4[0], Fake_Angel_Wing, Soft_Feather, Feather_Of_Birds, Flame_Heart;
+    setarray .required_amount4[0], 20, 20, 30, 25;
+    end;
+
+		}
+
+// Fallen Angel Wings
+
+invek,113,44,6	script	Fallen Wing	4_M_OLDFRIAR,{
+
+.@fb$ = "[^FF0000 Fallen Wing ^000000]";
+
+mes .@fb$;
+
+mes "Rezo por estos guerreros caídos en batalla.";
+mes "Angeles caídos que no han podido viajar al etereo...";
+next;
+mes "[^FF0000"+strcharinfo(0)+"^000000]";
+mes "** Rezando **";
+mes "¿ Tienes algo interesante para poder evocar mi lucha contra Thanatos?";
+next;
+mes .@fb$;
+mes "... ¿Algo para tí?.";
+mes "Puedo juntar almas de estos guerreros caídos y poder crear un conjunto de alas,";
+mes "las cuales pueden ser útiles en tu viaje.";
+mes "¿Te interesan?";
+next;
+mes .@fb$;
+if(select("Obtener Receta","Salir")==2){close;}
+
+	mes "Muy bien...";
+	mes "No puedo salir a buscar lo necesario...";
+	mes "Por lo cual te pediré los siguientes materiales para que puedas utilizar mi obra de arte.";
+	next;
+	mes .@fb$;
+		while (.@i < getarraysize(.required_items5)){
+    mes "^c70f3f"+ getitemname(.required_items5[.@i]) +"^000000 ^00587cx"+ .required_amount5[.@i] +"^000000";
+    ++.@i;
+			}
+	mes "10,000,000 Zeny";
+			if (select("Completar", "¡No, gracias!") == 2) {
+				
+   				 close;
+					}
+
+if ((countitem(.required_items5[0]) < .required_amount5[0]) ||
+    (countitem(.required_items5[1]) < .required_amount5[1]) ||
+    (countitem(.required_items5[2]) < .required_amount5[2]) ||
+    (countitem(.required_items5[3]) < .required_amount5[3]) ||
+    (countitem(.required_items5[4]) < .required_amount5[4]) ||
+			(Zeny < 10000000)) {
+next;
+mes .@fb$;
+	mes "¡No tienes todo los requerimientos!";
+	close;
+				}
+if (!checkweight(.reward_item5, .reward_amount5)){
+	next;
+	mes .@fb$;
+    mes "No tienes suficiente espacio en tu inventario.";
+    close;
+		}
+while (.@j < getarraysize(.required_items5)){
+    delitem .required_items5[.@j], .required_amount5[.@j];
+    ++.@j;
+		}
+Zeny-=10000000;
+getitem .reward_item5, .reward_amount5;
+close;
+
+
+OnInit:
+    .reward_item5 = fallen_Wings;
+    .reward_amount5 = 1;
+    setarray .required_items5[0], Frozen_Rose, Harpys_Feather, Peco_Wing_Feather, Cloud_Piece;
+    setarray .required_amount5[0], 20, 20, 30, 25;
+    end;
+
+		}
+
+// ANGELING WINGS
+
+pay_fild04,205,124,6	script	Angeling Wing	ANGELING,{
+
+.@angw$ = "[^FF0000 Angeling Wing ^000000]";
+
+mes .@angw$;
+
+mes "¡Hey!, ¡¡tranquilo!!";
+mes "Soy de los buenos.";
+next;
+mes "[^FF0000"+strcharinfo(0)+"^000000]";
+mes "Yo pensaba en cazarte.";
+mes "Aprovechando tu presencia, ¿me concederías tus alas?";
+next;
+mes .@angw$;
+mes "Hmm...";
+mes "Si, creo que no tendré problema.";
+mes "Ya no las utilizo mucho ultimamente, creo que tú les darás mejor uso.";
+next;
+mes .@angw$;
+if(select("Obtener Receta","Salir")==2){close;}
+
+	mes "No puedo salir a buscar lo necesario...";
+	mes "Por lo cual te pediré los siguientes materiales para que puedas utilizar mi obra de arte.";
+	next;
+	mes .@angw$;
+		while (.@i < getarraysize(.required_items6)){
+    mes "^c70f3f"+ getitemname(.required_items6[.@i]) +"^000000 ^00587cx"+ .required_amount6[.@i] +"^000000";
+    ++.@i;
+			}
+	mes "10,000,000 Zeny";
+			if (select("Completar", "¡No, gracias!") == 2) {
+				
+   				 close;
+					}
+
+if ((countitem(.required_items6[0]) < .required_amount6[0]) ||
+    (countitem(.required_items6[1]) < .required_amount6[1]) ||
+    (countitem(.required_items6[2]) < .required_amount6[2]) ||
+			(Zeny < 10000000)) {
+next;
+mes .@angw$;
+	mes "¡No tienes todo los requerimientos!";
+	close;
+				}
+if (!checkweight(.reward_item6, .reward_amount6)){
+	next;
+	mes .@fb$;
+    mes "No tienes suficiente espacio en tu inventario.";
+    close;
+		}
+while (.@j < getarraysize(.required_items6)){
+    delitem .required_items6[.@j], .required_amount6[.@j];
+    ++.@j;
+		}
+Zeny-=10000000;
+getitem .reward_item6, .reward_amount6;
+close;
+
+
+OnInit:
+    .reward_item6 = angeling_wings;
+    .reward_amount6 = 1;
+    setarray .required_items6[0], Wing_Of_Moth, Sharp_Leaf, Snails_Shell;
+    setarray .required_amount6[0], 50, 35, 50;
+    end;
+
+		}
+
+// Artic Wings
+ice_dun03,114,201,5	script	Artic Wing	SNOWIER,{
+
+.@arcw$ = "[^FF0000 Artic Wing ^000000]";
+
+mes .@arcw$;
+
+mes "................";
+mes ".......";
+next;
+mes "[^FF0000"+strcharinfo(0)+"^000000]";
+mes "¡¿?!.";
+next;
+mes .@arcw$;
+mes "Hmm...";
+mes "waghinhewah uh..";
+mes "¿Imha hindra nih pi re na?";
+next;
+mes .@arcw$;
+if(select("Obtener Receta","Salir")==2){close;}
+
+	mes "¿yhuna lohi mi na?";
+	mes "Praktyczna analiza materialów uzytych przez nas jest uzyteczna w odniesieniu do sztuki.";
+	next;
+	mes .@arcw$;
+		while (.@i < getarraysize(.required_items7)){
+    mes "^c70f3f"+ getitemname(.required_items7[.@i]) +"^000000 ^00587cx"+ .required_amount7[.@i] +"^000000";
+    ++.@i;
+			}
+			if (select("Completar", "¡No, gracias!") == 2) {
+				
+   				 close;
+					}
+
+if ((countitem(.required_items7[0]) < .required_amount7[0]) ||
+    (countitem(.required_items7[1]) < .required_amount7[1]) ||
+    (countitem(.required_items7[2]) < .required_amount7[2]) ||
+    (countitem(.required_items7[3]) < .required_amount7[3]) ) {
+next;
+mes .@arcw$;
+	mes "¡No tienes todo los requerimientos!";
+	close;
+				}
+if (!checkweight(.reward_item7, .reward_amount7)){
+	next;
+	mes .@arcw$;
+    mes "No tienes suficiente espacio en tu inventario.";
+    close;
+		}
+while (.@j < getarraysize(.required_items7)){
+    delitem .required_items7[.@j], .required_amount7[.@j];
+    ++.@j;
+		}
+getitem .reward_item7, .reward_amount7;
+close;
+
+
+OnInit:
+    .reward_item7 = 32005;
+    .reward_amount7 = 1;
+    setarray .required_items7[0], Angel_Wings, Mistic_Frozen, Ice_Piece, Gold;
+    setarray .required_amount7[0], 1, 25, 10, 50, 100;
+    end;
+
+		}
+
+// Demon Wings
+lhz_fild03,279,156,5	script	Demon Wing	KASA,{
+
+.@dmw$ = "[^FF0000 Demon Wing ^000000]";
+
+mes .@dmw$;
+
+mes "Los demonios, el enemigo natural de la luz y los Angeles.";
+mes "Sin nosotros, no existiria un equilibrio en este mundo.";
+next;
+mes "[^FF0000"+strcharinfo(0)+"^000000]";
+mes "** Te pones a pensar **";
+mes "** Mejor me aseguro no hablar mucho con el**";
+next;
+mes .@dmw$;
+mes "Los espiritus siempre estaremos rodeando a los seres vivos.";
+mes "Alguien debe proveer el equilibrio a la vida.";
+mes "¿Que te trae por aqui?";
+next;
+mes "[^FF0000"+strcharinfo(0)+"^000000]";
+mes "Estoy en busca de Alas para fortalecer mi batalla.";
+next;
+mes .@dmw$;
+mes "Me lo esperaba, tipico de una criatura como tu.";
+if(select("Obtener Receta","Salir")==2){close;}
+
+	mes "No trabajo gratis para nadie,";
+	mes "como tampoco ofrezo mis servicios de manera facil.";
+	next;
+	mes .@phw$;
+	
+		while (.@i < getarraysize(.required_items10)){
+    mes "^c70f3f"+ getitemname(.required_items10[.@i]) +"^000000 ^00587cx"+ .required_amount10[.@i] +"^000000";
+    ++.@i;
+			}
+			if (select("Completar", "¡No, gracias!") == 2) {
+				
+   				 close;
+					}
+
+if ((countitem(.required_items10[0]) < .required_amount10[0]) ||
+    (countitem(.required_items10[1]) < .required_amount10[1]) ||
+    (countitem(.required_items10[2]) < .required_amount10[2]) ||
+    (countitem(.required_items10[3]) < .required_amount10[3]) ||
+    (countitem(.required_items10[4]) < .required_amount10[4])) {
+next;
+	mes .@dmw$;
+
+	mes "¡No tienes todo los requerimientos!";
+	close;
+				}
+if (!checkweight(.reward_item10, .reward_amount10)){
+	next;
+	mes .@dmw$;
+    mes "No tienes suficiente espacio en tu inventario.";
+    close;
+		}
+while (.@j < getarraysize(.required_items10)){
+    delitem .required_items10[.@j], .required_amount10[.@j];
+    ++.@j;
+		}
+getitem .reward_item10, .reward_amount10;
+close;
+
+
+OnInit:
+    .reward_item10 = Demon_Wings;
+    .reward_amount10 = 1;
+    setarray .required_items10[0], Devil_Wings, Dragon_Scale, Evil_Horn, Tiger_Footskin, Gold;
+    setarray .required_amount10[0], 1, 100, 100, 100, 100, 100;
+    end;
+
+		}
+
+
+// Phoenix Wings
+thor_v01,161,151,5	script	Phoenix Wing	KASA,{
+
+.@phw$ = "[^FF0000 Phoenix Wing ^000000]";
+
+mes .@phw$;
+
+mes "La cenizas son el principio de un nuevo comienzo.";
+mes "Lo quemado es el significado de un renacimiento.";
+next;
+mes "[^FF0000"+strcharinfo(0)+"^000000]";
+mes "Bonitas palabras pero, ¿Quién eres?.";
+mes "Creí que estarías atacando como los demás.";
+next;
+mes .@phw$;
+mes "No promulgo la paz, como tampoco la adversidad.";
+mes "Soy alguien neutral, vivo para mis propios principios.";
+mes "¿Que te trae por aqui?";
+next;
+mes "[^FF0000"+strcharinfo(0)+"^000000]";
+mes "Estoy en busca de Alas para fortalecer mi batalla.";
+next;
+mes .@phw$;
+mes "Me lo esperaba, tipico de una criatura como tu.";
+if(select("Obtener Receta","Salir")==2){close;}
+
+	mes "No trabajo gratis para nadie,";
+	mes "como tampoco ofrezo mis servicios de manera facil.";
+	next;
+	mes .@phw$;
+	
+		while (.@i < getarraysize(.required_items8)){
+    mes "^c70f3f"+ getitemname(.required_items8[.@i]) +"^000000 ^00587cx"+ .required_amount8[.@i] +"^000000";
+    ++.@i;
+			}
+			if (select("Completar", "¡No, gracias!") == 2) {
+				
+   				 close;
+					}
+
+if ((countitem(.required_items8[0]) < .required_amount8[0]) ||
+    (countitem(.required_items8[1]) < .required_amount8[1]) ||
+    (countitem(.required_items8[2]) < .required_amount8[2]) ||
+    (countitem(.required_items8[3]) < .required_amount8[3]) ||
+    (countitem(.required_items8[4]) < .required_amount8[4]) ||
+    (countitem(.required_items8[5]) < .required_amount8[5]) ) {
+next;
+	mes .@phw$;
+
+	mes "¡No tienes todo los requerimientos!";
+	close;
+				}
+if (!checkweight(.reward_item8, .reward_amount8)){
+	next;
+	mes .@phw$;
+    mes "No tienes suficiente espacio en tu inventario.";
+    close;
+		}
+while (.@j < getarraysize(.required_items8)){
+    delitem .required_items8[.@j], .required_amount8[.@j];
+    ++.@j;
+		}
+getitem .reward_item8, .reward_amount8;
+close;
+
+
+OnInit:
+    .reward_item8 = Phoenix_Wings;
+    .reward_amount8 = 1;
+    setarray .required_items8[0], fallen_Wings, Flame_Heart, Shining_Scales, Wing_Of_Red_Bat, Rough_Wind, Gold;
+    setarray .required_amount8[0], 1, 80, 80, 80, 10, 100;
+    end;
+
+		}
+
+
+// GARGOYLE WINGS
+
+gl_sew01,99,65,6	script	Gargoyle	GARGOYLE,{
+
+.@garg$ = "[^FF0000 Gargoyle ^000000]";
+
+mes .@garg$;
+
+mes "Las Gargolas no deben ver la luz.";
+mes "La luz nos mata...";
+next;
+mes "[^FF0000"+strcharinfo(0)+"^000000]";
+mes "Entiendo.. (creo).";
+mes "¿De todas formas, tienes algo para mi?";
+next;
+mes .@garg$;
+mes "... ¿Algo para tí?.";
+mes "Oh.. si... tengo para ofrecer mis queridas alas.";
+mes "Con ellas podrás petrificar y obtener destreza en tus batallas.";
+next;
+mes .@garg$;
+if(select("Obtener Receta","Salir")==2){close;}
+
+	mes "Perfecto..";
+	mes "La luz no es mi amiga...";
+	mes "Por lo cual te pediré los siguientes materiales para que puedas utilizar mi obra de arte.";
+	next;
+	mes .@garg$;
+	
+		while (.@i < getarraysize(.required_items9)){
+    mes "^c70f3f"+ getitemname(.required_items9[.@i]) +"^000000 ^00587cx"+ .required_amount9[.@i] +"^000000";
+    ++.@i;
+			}
+			if (select("Completar", "¡No, gracias!") == 2) {
+				
+   				 close;
+					}
+
+if ((countitem(.required_items9[0]) < .required_amount9[0]) ||
+    (countitem(.required_items9[1]) < .required_amount9[1]) ||
+    (countitem(.required_items9[2]) < .required_amount9[2]) ||
+    (countitem(.required_items9[3]) < .required_amount9[3]) ||
+    (countitem(.required_items9[4]) < .required_amount9[4])){
+	next;
+	mes .@garg$;
+	mes "¡No tienes todo los requerimientos!";
+	close;
+}
+if (!checkweight(.reward_item9, .reward_amount9)){
+	next;
+	mes .@garg$;
+    mes "No tienes suficiente espacio en tu inventario.";
+    close;
+}
+while (.@j < getarraysize(.required_items9)){
+    delitem .required_items9[.@j], .required_amount9[.@j];
+    ++.@j;
+}
+getitem .reward_item9, .reward_amount9;
+close;
+
+
+OnInit:
+    .reward_item9 = Gargoyle_Wings;
+    .reward_amount9 = 1;
+    setarray .required_items9[0], Devil_Wings, Bat_Cage, Soft_Feather, Stone_Piece, Gold;
+    setarray .required_amount9[0], 1, 100, 100, 100, 100;
+    end;
+
+		} // Fin Script
+
+//TORN WINGS
+
+um_fild01,87,130,6	script	Torn Wings	4_F_FAIRY1,{
+
+.@twi$ = "[^FF0000 Torn Wings ^000000]";
+
+mes .@twi$;
+
+mes "La naturaleza es sabia, las plantas tiñen su color por la vitalidad del bosque que nos rodea.";
+mes "No hay igual, ellas deben ser preservadas...";
+next;
+mes "[^FF0000"+strcharinfo(0)+"^000000]";
+mes "Pienso al igual que tú.";
+mes "Es por eso que busco la forma de fortalecer mis habilidades y defender estos lugares.";
+next;
+mes .@twi$;
+mes "Esta bien, te ayudaré.";
+next;
+mes .@twi$;
+if(select("Obtener Receta","Salir")==2){close;}
+
+	mes "Sola una condición.";
+	mes "Los artículos corren por tu cuenta.";
+	mes "Por lo cual te pediré los siguientes materiales para que puedas utilizar mi obra de arte.";
+	next;
+	mes .@twi$;
+		while (.@i < getarraysize(.required_items0)){
+    mes "^c70f3f"+ getitemname(.required_items0[.@i]) +"^000000 ^00587cx"+ .required_amount0[.@i] +"^000000";
+    ++.@i;
+			}
+			if (select("Completar", "¡No, gracias!") == 2) {
+				
+   				 close;
+					}
+
+if ((countitem(.required_items0[0]) < .required_amount0[0]) ||
+    (countitem(.required_items0[1]) < .required_amount0[1]) ||
+    (countitem(.required_items0[2]) < .required_amount0[2]) ||
+    (countitem(.required_items0[3]) < .required_amount0[3]) ||
+    (countitem(.required_items0[4]) < .required_amount0[4])){
+	next;
+	mes .@garg$;
+	mes "¡No tienes todo los requerimientos!";
+	close;
+}
+if (!checkweight(.reward_item0, .reward_amount0)){
+	next;
+	mes .@garg$;
+    mes "No tienes suficiente espacio en tu inventario.";
+    close;
+}
+while (.@j < getarraysize(.required_items0)){
+    delitem .required_items0[.@j], .required_amount0[.@j];
+    ++.@j;
+}
+getitem .reward_item0, .reward_amount0;
+close;
+
+
+OnInit:
+    .reward_item0 = Torn_Wings;
+    .reward_amount0 = 1;
+    setarray .required_items0[0], angeling_wings, Peco_Wing_Feather, Powder_Of_Butterfly, Wind_Of_Verdure, Gold;
+    setarray .required_amount0[0], 1, 100, 150, 100, 100;
+    end;
+
+		} // Fin Script
+
+
+invek,90,58,5	script	Icarus	4_M_GENIE,{
+
+.@icaw$ = "[^FF0000Icarus^000000]";
+
+if (icaruw==2){
+		mes "Me alegro en verte nuevamente, pero no tengo nada mas para ofrecer.";
+		close;
+			}
+if (icaruw==1){
+		mes .@icaw$;
+		mes "Bienvenido nuevamente.";
+		mes "¿Qué deseas hacer?";
+		next;
+		mes .@icaw$;
+			if (select("Completar", "Repetir la Lista") == 2) {
+		while (.@i < getarraysize(.required_items10)){
+   		 mes "^c70f3f"+ getitemname(.required_items10[.@i]) +"^000000 ^00587cx"+ .required_amount10[.@i] +"^000000";
+   			 ++.@i;
+			}
+	mes "100,000,000 Zeny";
+   				 close;
+					}
+
+	if ((countitem(.required_items10[0]) < .required_amount0[0]) ||
+    (countitem(.required_items10[1]) < .required_amount10[1]) ||
+    (countitem(.required_items10[2]) < .required_amount10[2]) ||
+    (countitem(.required_items10[3]) < .required_amount10[3]) ||
+    (countitem(.required_items10[4]) < .required_amount10[4]) ||
+    (countitem(.required_items10[5]) < .required_amount10[5]) ||
+    (countitem(.required_items10[6]) < .required_amount10[6]) ||
+    (countitem(.required_items10[7]) < .required_amount10[7]) ||
+    (countitem(.required_items10[8]) < .required_amount10[8]) ){
+	next;
+	mes .@icaw$;
+	mes "¡No tienes todo los requerimientos!";
+	close;
+}
+if (!checkweight(.reward_item10, .reward_amount10)){
+	next;
+	mes .@icaw$;
+    mes "No tienes suficiente espacio en tu inventario.";
+    close;
+}
+while (.@j < getarraysize(.required_items10)){
+    delitem .required_items10[.@j], .required_amount10[.@j];
+    ++.@j;
+}
+getitem .reward_item10, .reward_amount10;
+icaruw=2;
+close;
+
+
+		}
+
+
+mes "Uhm... las joyas son importantes.";
+mes "¿Acaso tu tienes un Emerald que me puedas regalar?.";
+next;
+mes "[^FF0000"+strcharinfo(0)+"^000000]";
+mes "Permiteme revisar...";
+next;
+mes .@icaw$;
+if(select("Entregar Emerald","¡Emerald?")==2){ mes "Adios.";}
+
+	if (countitem(721) < 1){
+		mes "Obviamente no tienes una Esmeralda...";
+			close;
+				}
+	icaruw=1;
+	delitem 721,1;
+	mes "¡GENIAL!";
+	mes "Por fin tengo esta piedra que he estado buscando.";
+	mes "Ahora mis sueños se podrán hacer realidad.";
+	next;
+	mes .@icaw$;
+	mes "Como muestra de agradecimiento, te puedo enseñar una receta de unas par de alas que te pueden ayudar mucho en tus batallas.";
+	mes "También se complementa muy bien con algunas armas que han sido diseñadas especialmente para este par de Alas!.";
+	mes "¿No es eso grandioso?.";
+	next;
+	mes .@icaw$;
+	mes "Bien...";
+	mes "Lo que necesito, es lo siguiente:";
+		while (.@i < getarraysize(.required_items10)){
+    mes "^c70f3f"+ getitemname(.required_items10[.@i]) +"^000000 ^00587cx"+ .required_amount10[.@i] +"^000000";
+    ++.@i;
+			}
+	mes "100,000,000 Zeny";
+	next;
+	mes .@icaw$;
+	mes "Entonces, ¿Qué deseas hacer?";
+			if (select("Completar", "Repetir la Lista") == 2) {
+		while (.@i < getarraysize(.required_items10)){
+   		 mes "^c70f3f"+ getitemname(.required_items10[.@i]) +"^000000 ^00587cx"+ .required_amount10[.@i] +"^000000";
+   			 ++.@i;
+			}
+	mes "100,000,000 Zeny";
+   				 close;
+					}
+
+	if ((countitem(.required_items10[0]) < .required_amount0[0]) ||
+    (countitem(.required_items10[1]) < .required_amount10[1]) ||
+    (countitem(.required_items10[2]) < .required_amount10[2]) ||
+    (countitem(.required_items10[3]) < .required_amount10[3]) ||
+    (countitem(.required_items10[4]) < .required_amount10[4]) ||
+    (countitem(.required_items10[5]) < .required_amount10[5]) ||
+    (countitem(.required_items10[6]) < .required_amount10[6]) ||
+    (countitem(.required_items10[7]) < .required_amount10[7]) ||
+    (countitem(.required_items10[8]) < .required_amount10[8]) ||
+	(Zeny < 100000000)){
+	next;
+	mes .@icaw$;
+	mes "¡No tienes todo los requerimientos!";
+	close;
+}
+if (!checkweight(.reward_item10, .reward_amount10)){
+	next;
+	mes .@icaw$;
+    mes "No tienes suficiente espacio en tu inventario.";
+    close;
+}
+while (.@j < getarraysize(.required_items10)){
+    delitem .required_items10[.@j], .required_amount10[.@j];
+    ++.@j;
+}
+Zeny-=100000000;
+getitem .reward_item10, .reward_amount10;
+icaruw=2;
+close;
+
+OnInit:
+    .reward_item10 = Icarus_Wings;
+    .reward_amount10 = 1;
+    setarray .required_items10[0], Wb_Wings, Bb_Wings, Angel_Wings, Devil_Wings, Orange_Dyestuffs, Red_Gemstone, Yellow_Gemstone, Gold, 721;
+    setarray .required_amount10[0], 1, 1, 1, 1, 100,200,200,100,1;
+    end;
+
+}	

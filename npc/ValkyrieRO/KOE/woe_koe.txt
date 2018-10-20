@@ -1,0 +1,168 @@
+-	script	KoE	-1,{
+OnInit:
+		disablenpc "King of Emperium#KoE";
+		bindatcmd "koe", strnpcinfo(0)+"::Oncommand", 99,99;
+
+		disablenpc "TIME_COMMAND_2";
+		disablenpc "KOE_START_TIME_EVENT";
+		
+		disablenpc "KOE Guild Master#KoE";
+end;
+
+Oncommand:
+	if(compare(.@atcmd_parameters$, "start" )) goto L_start;
+	else if(compare( .@atcmd_parameters$, "end")) goto L_end;
+	else{
+		dispbottom "type - '@koe start' to start the event";
+		dispbottom "type - '@koe end' to end the event";
+	}
+end;
+	
+//################# START KOE ################# \\ 
+//SET KOE START TIME HERE [NOTE: DON'T FORGET TO SET END TIME OF KOE]
+OnClock1000:
+OnClock1400:
+OnClock1800:
+OnClock2200:
+OnClock0200:
+
+
+L_start:
+	enablenpc "TIME_COMMAND_2";
+	enablenpc "KOE_START_TIME_EVENT";
+	disablenpc "KOE Guild Master#KoE";
+
+	gvgon "guild_vs1";
+	announce "The King of Emperium Hill has begun!", bc_all;
+	.start = 1;
+	
+	enablenpc "King of Emperium#KoE";
+	//disablenpc "Exit#KoE";
+	donpcevent "::OnRevKoE";
+	maprespawnguildid "guild_vs1", $koegid, 7;
+	
+	if(strnpcinfo(2) == "guild_vs1"){
+		setarray .@emproom[0],49,49; 
+	}else{
+		monster "guild_vs1",49,49,"EMPERIUM",1288,1,"KoE::OnEmpDead";
+		end;
+	}
+	
+	if(!mobcount(strnpcinfo(2),"KoE#"+strnpcinfo(2)+"::OnEmpDead")){
+		monster strnpcinfo(2),.@emproom[0],.@emproom[1],"Emperium",1288,1,"KoE::OnEmpDead";
+	}
+end;
+
+
+
+//################# KOE END ################# \\
+//SET KOE END TIME HERE
+OnClock1015:
+OnClock1415:
+OnClock1815:
+OnClock2215:
+OnClock0215: 
+
+L_end:
+	disablenpc "TIME_COMMAND_2";
+	disablenpc "KOE_START_TIME_EVENT";
+	enablenpc "KOE Guild Master#KoE";
+	//attachnpctimer ""+strcharinfo(0)+"";
+	//stopnpctimer;
+	
+	
+	//CHECKING FOR AFK INSIDE THE MAP
+	gvgoff "guild_vs1";
+	announce "The King of Emperium Hill is over!", bc_all;
+	.start = 0;
+	
+	//KICKALL PLAYER INSIDE THE MAP
+	//maprespawnguildid "guild_vs1", $koegid, 7;
+	
+	disablenpc "King of Emperium#KoE";
+	killmonsterall "guild_vs1";
+	
+end;
+
+	
+//################# KOE BREAK
+OnEmpDead:
+	$koegid = getcharid(2);
+	set .@guild_id, getcharid(2);
+	announce "The current King of Emperium Hill is the ["+ strcharinfo(2) +"] guild.", bc_all;
+	donpcevent "::OnRevKoE";
+	maprespawnguildid "guild_vs1", $koegid, 6;
+	sleep 500;
+	if ( .start )
+		monster "guild_vs1",49,49,""+ getguildname($koegid) +"",1288,1,"KoE::OnEmpDead";
+end;
+}
+
+
+// KoE Entrance
+prontera,174,178,4	script	King of Emperium#KoE	1288,{
+	mes "[The King]";
+	if (!getcharid(2)){
+		mes "You must have a guild to participate in the ^FF0000King of Emperium Hill Tournament^000000.";
+		close;
+	}
+	mes "Hello.";
+	mes "Would you like to participate in the ^FF0000King of Emperium Hill Tournament^000000?";
+	if ( select ( "Yes", "No" ) == 2 ) close;
+	switch(rand(1,4)){
+		case 1:	warp "guild_vs1", 50, 88; end;
+		case 2:	warp "guild_vs1", 88, 50; end;
+		case 3:	warp "guild_vs1", 50, 11; end;
+		case 4:	warp "guild_vs1", 11, 50; end;
+	}
+	set prize_receive, 0;
+}
+
+// KOE REWARD SYSTEM FOR ALL GUILD MEMBERS  
+guild_vs1,44,44,5	script	KOE Guild Master#KoE	419,{
+	mes "[KOE Master]";
+	if (!getcharid(2)){
+		mes "You must have a guild if you want to talk to me..";
+		close;
+	}else{
+		if(getcharid(2) == $koegid){
+			dispbottom "Good Job! " + strcharinfo(0) + "";
+			getitembound 50005,10,1; //KOE TOKEN
+			warp "prontera",150,150;
+		}else{
+			dispbottom "sorry better luck next time.";
+			warp "prontera",150,150;
+		} 
+	}
+	end;
+}
+
+// Flags
+guild_vs1,49,38,4	script	King of Emperium#1::koe_flag	722,{
+	if (!$koegid) end;
+		mes "[King of Emperium]";
+		mes "The Current King of Emperium is the ["+ getguildname($koegid) +"] guild.";
+	close;
+OnRevKoE:
+	flagemblem $koegid;
+end;
+}
+
+//SET FLAG
+guild_vs1,61,49,6	duplicate(koe_flag)	King of Emperium#2	722
+guild_vs1,38,49,2	duplicate(koe_flag)	King of Emperium#3	722
+guild_vs1,49,61,0	duplicate(koe_flag)	King of Emperium#4	722
+
+prontera,176,173,2	duplicate(koe_flag)	King of Emperium#5	722
+prontera,179,176,2	duplicate(koe_flag)	King of Emperium#6	722
+
+guild_vs1	mapflag	nobranch
+guild_vs1	mapflag	nomemo
+guild_vs1	mapflag	nopenalty
+guild_vs1	mapflag	noreturn
+guild_vs1	mapflag	nosave	SavePoint
+guild_vs1	mapflag	noteleport
+guild_vs1	mapflag	gvg_noparty
+guild_vs1	mapflag	nowarp
+guild_vs1	mapflag	nowarpto
+guild_vs1	mapflag	guildlock

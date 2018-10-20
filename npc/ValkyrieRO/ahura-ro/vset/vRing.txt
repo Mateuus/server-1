@@ -1,0 +1,109 @@
+//Valkyrie's Ring
+ein_in01,174,284,4	script	Phiroz	4_M_3RDPRIN2,{
+
+	.@vring$ =  "^FF0000[Phiroz]^000000";
+
+mes .@vring$;
+
+		if (ValkRing==1){
+
+				mes "Buena suerte.";
+				close;
+				}
+
+	if (!Bts) {
+	
+			mes "No sé que quieres, pero aquí no lo encontraras.";
+			mes "No trabajo para cualquiera.";
+			close;
+	} // Fin Bts
+
+			
+	if ( (readparam(bVit) < 55 ) || (readparam(bDex) < 55 ) || (readparam(bAgi) < 55) || (readparam(bStr) < 55) || (readparam(bInt) < 55) || (readparam(bLuk) < 55) ) {
+
+		mes "Lo siento, no pareces ser alguien muy equilibrado.";
+		mes "Solo hablo con personas que al menos tengan estados ^9a0000distruibuidos.^000000";
+		close;
+				}
+
+
+			if (!vringok){
+		mes "Oh, veo que has logrado pasar la prueba.";
+		mes "Muy bien hecho "+strcharinfo(0)+".";
+		mes "Esto es solo el principio de lo que te espera.";
+		mes "Aprovecha esta oportunidad para luchar por la justicia.";
+		next;
+		mes .@vring$;
+		mes "El equipo que estoy ofreciendo es : ^9a0000"+getitemname(.vring)+"^000000";
+		mes "Este anillo forma parte del Set del ^420f6eCamino Del Guerrero Legendario.^000000";
+		next;
+		mes .@vring$;
+		mes "Permiteme darte una breve explicación.";
+		mes "Una vez que hayas terminado todas las partes del ^420f6eCamino Del Guerrero Legendario^000000, tendrás la oportunidad de hablar con la ^357ebdDiosa Valkyrie^000000.";
+		mes "Son 8 partes las cuales han sido repartidas entre difentes familiares del cielo, los cuales me incluyen a mi, hermanos y hermanas.";
+		next;
+		mes .@vring$;
+		mes "Debes tener en consideración que debes terminar las 8 misiones y conseguir las 8 partes por tu cuenta.";
+		mes "Comprar el equipo por el mercado, jugadores o por intercambio, no contarán y no serán aceptados al momento de requerir el permiso para visitar a Valkyrie.";
+		vringok = 1;
+		close;
+		} else {
+		mes "¿Deseas conocer el requisito de "+getitemname(.vring)+"?";
+		if(select("Si porfavor.","No por el momento.")==2){close;}
+		next;
+		mes .@vring$;
+		mes "Aprecio tu determinación.";
+		mes "Esta es la prueba que debes realizar:";
+		next;
+		mes .@vring$;
+		while (.@i < getarraysize(.b_vring)){
+			mes "- ^FF0000"+ getitemname(.b_vring[.@i]) +"^000000 x"+ .r_vring[.@i] +"";
+						++.@i;
+							} // Cirre Ciclo While
+		mes "300,000,000 Zeny.";
+		next;
+			mes .@vring$;
+				mes "¿Deseas crear "+getitemname(.vring)+"?";
+					if(select("Crear","Salir")==2){close;}
+		next;
+		mes .@vring$;
+		if ((countitem(.b_vring[0]) < .r_vring[0] ) ||
+			(countitem(.b_vring[1]) < .r_vring[1] ) ||
+			(countitem(.b_vring[2]) < .r_vring[2] ) ||
+			(countitem(.b_vring[3]) < .r_vring[3] ) ||
+					(Zeny < 300000000) ) {
+					mes "No tienes todos los items de la lista o falta Zeny.";
+					close;
+			}
+			if (!checkweight(.vring, 1)){
+			mes "No tienes espacio suficiente en tu inventario.";
+			close;
+						}	
+						
+				while (.@j < getarraysize(.b_vring)){
+						delitem .b_vring[.@j], .r_vring[.@j];
+						++.@j;
+					
+						}
+							Zeny-=300000000;
+	
+		next;	
+		mes .@vring$;
+		mes "¡Felicidades!";
+		ValkRing=1;
+		next;
+		announce "[Phiroz]: ¡WoW! "+strcharinfo(0)+ " ha completado una parte del Camino del Ultimo Guerrero.",0,0x00CCFF;
+		getitem .vring[0], .vring_r[0];
+		close;
+
+				} // FIN ELSE
+					
+
+OnInit:
+
+	setarray .b_vring[0], Saliva_Of_Bird, Mystery_Wheel, Fang_Of_Garm, Treasure_Box;
+	setarray .r_vring[0], 4, 4, 100, 100;
+	setarray .vring[0], Ring_Of_Valkyrie;
+	setarray .vring_r[0], 1;
+end;
+			} // FIN SCRIPT

@@ -1,0 +1,132 @@
+//===== Global Chile ======
+//=== https://www.facebook.com/IntegralesGlobal ===
+
+izlude,134,155,5	script	Ayudante de Santa	714,{
+	mes "[Ayudante de Santa]";
+	mes "Hola y felices temporadas de fiestas.";
+	mes "Quieres vestirte como yo? el precio es de 400.000z.";
+	next;
+	menu "Sí, quiero comprar.",L_SantaBag,"No por ahora no.",-;
+	mes "[Ayudante de Santa]";
+	mes "No hay problema. Prepárate para esta navidad y pásalo bien.";
+	close;
+
+L_SantaBag:
+	if(Zeny < 400000) {
+		mes "[Ayudante de Santa]";
+		mes "Que pena, pero no tienes suficiente dinero...";
+		close;
+	}
+	set Zeny, Zeny - 400000;
+	getitem 12132,1;
+	rentitem 20434,204800;
+	mes "[Ayudante de Santa]";
+	mes "Disfrútalo, y pasa una feliz temporada.";
+	close;
+OnPCLoadMapEvent:
+	showevent 4,0;
+	end;
+}
+
+
+
+//============================================================
+
+
+izlude,127,137,4	script	Santa Claus	718,{
+	mes "[Santa Claus]";
+	if(#event_xmas > 0 && #event_xmas < 30 ) goto L_Start;
+	mes "Feliz Navidad!";
+	if(Class==0 || #event_xmas>=30 ) close; //anti exploit protection
+	mes "Tengo un Lindo Gorro para ti! Ho Ho Ho!";
+	mes "Frozen Twin Pompom";
+	set #event_xmas,#event_xmas+1;
+	close;
+
+L_Start:
+	mes "Estoy Feliz!!!";
+	mes "Hoy es Navidad!!! JoJoJo..";
+	next;
+	menu "Escuchar a Santa Claus.",M_0, "Tengo los item.",M_1, "Salir.",M_End;
+
+	M_0:
+		mes "[Santa Claus]";
+		mes "Feliz Navidad!!!";
+		mes "En estos días ando muy feliz";
+		mes "por eso a todo aquel";
+		mes "que pueda recolectar";
+		mes "los siguientes articulos";
+		mes "yo les daré un lindo regalo de navidad";
+		mes "Recuerda que solo estaré 24-25 diciembre";
+		next;
+		mes "[Santa Claus]";
+		mes "Cuando tengas  todo eso";
+		mes "Puedes venir por tu Premio";
+		mes "Un lindo Santa Poring Cap";
+		next;
+		mes "[Santa Claus]";
+		mes "Entonces..Tienes...";
+		mes "10 Old Purple Box";
+		mes "10 Gift Box";
+		mes "1 Hat(spore)";
+		mes "200 Fabric";
+		close;
+	M_1:
+		mes "[Santa Claus]";
+		if(countitem(617) < 10) goto L_NotEnuf;
+		if(countitem(644) < 10) goto L_NotEnuf;
+		if(countitem(2220) < 1) goto L_NotEnuf;
+		if(countitem(1059) < 200) goto L_NotEnuf;
+		delitem 617,10;
+		delitem 644,10;
+		delitem 2220,1;
+		delitem 1059,200;
+		mes "Miremos que me trajiste...";
+		next;
+		getitem 5381 ,1; //Poring Santa Cap
+		set #event_xmas,#event_xmas+1;
+		mes "[Santa Claus]";
+		mes "Feliz Navidad.";
+		mes "Que tengas un buen Año y Linda navidad.";
+		close;
+	
+		L_NotEnuf:
+			mes "No Cuentas con los item necesarios";
+			mes "Vuelve cuando tengas todo";
+			close;
+	M_End:
+		mes "[Santa Claus]";
+		mes "No ves que estoy ocupado";
+		mes "Si no ayudas vete de aquí....";
+		close;
+OnInit:
+	setarray .@m0$[0], "¡","F","e","l","i","z"," ","N","a","v","i","d","a","d","!";
+	setarray .@m1$[0], "¡","J","o"," ","J","o"," ","J","o","!";
+	do {
+		if (.@i == 2)
+			set .@i, 0;
+		// Efecto nº 1 - Añadir una palabra nueva a la anterior
+		for (set .@c, 0; .@c < getarraysize(getd(".@m" + .@i + "$")); set .@c, .@c + 1) {
+			set .@f$, .@f$ + getd(".@m" + .@i + "$[" + .@c + "]");
+			waitingroom .@f$,0;
+			sleep 150;
+			delwaitingroom;
+		} // End loop
+		// Efecto nº 2 - Hacer una animación de aparición y vacío
+		for (set .@c, 0; .@c < 6; set .@c, .@c + 1) {
+			waitingroom "",0;
+			sleep 150;
+			delwaitingroom;
+			waitingroom .@f$,0;
+			sleep 150;
+			delwaitingroom;
+		} // End loop
+		waitingroom .@f$,0;
+		sleep 2000; // 3 segundos cambio de mensaje
+		set .@f$, "";
+		delwaitingroom;
+		set .@i, .@i + 1;
+	} while(1); // End loop
+end;
+}
+

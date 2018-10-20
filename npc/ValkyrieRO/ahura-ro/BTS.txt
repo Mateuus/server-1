@@ -1,0 +1,132 @@
+prt_in,137,23,3	script	Mhyldan	4_M_SAKRAY,{
+.@npcz$ = "[^FF0000 Mhyldan ^000000]";
+	
+if ( (NileRose == 1) && (ValkArmor == 1) && (ValkMant == 1) && (ValkShield == 1) && (ValkCirclet == 1) && (ValkRing == 1 ) && (Sigrun == 1 ) && (ValkShoes == 1) ) {
+
+		if (btsfull == 0){
+btsfull=1;
+announce "WOW!, "+strcharinfo(0)+" HA TERMINADO EL CAMINO DEL GUERRERO !. SE HA GANADO EL RESPETO ABSOLUTO DE VALKYRIE!!!",bc_all,0xff0000;
+	mes .@npcz$;
+		mes "Wow!, me has dejado sin palabras.";
+		mes "Realmente has cumplido la travesia, y no solo eso. La has completado.";
+		next;
+	mes .@npcz$;
+		mes "No hay duda, tu eres el guerrero destinado a visitar a nuestra Diosa Valkyrie.";
+		mes "En unos segundos te llevare con ella.";
+		btstalk=1;
+		// warp...
+		close2;
+
+		}else if(btstalk == 1){
+			mes "¿Desear ir al reino?";
+			if (select("Si","No")==2){close;}
+			//warp
+			close;
+					}
+
+				}else if (Bts != 0){ 
+		mes .@npcz$;
+				mes "Buena suerte.";
+				close;
+			
+	
+} else {
+
+
+mes .@npcz$;
+if(platica == 0){
+mes "Hola ^FF0000"+strcharinfo(0)+ "^000000.";
+mes "Si has llegado a mi, tiene que ser porque estas interesado en obtener el Camino del Ultimo Guerrero";
+mes "¿No es así?.";
+if(select("Es correcto","A quien le importa.")== 2) {close;}
+next;
+mes .@npcz$;
+mes "Como lo pensé, pero no importa por donde mire, pareces ser alguien un poco debil.";
+mes "Pero de todas formas, te pondré una prueba para saber si eres el indicado de obtenerlo.";
+next;
+mes .@npcz$;
+mes "Deberás entregarme el siguiente listado.";
+mes "Esta será la prueba suficiente para saber que estas preparado.";
+next;
+while (.@i < getarraysize(.b_item)){
+	mes "- ^FF0000"+ getitemname(.b_item[.@i]) +"^000000 x"+ .r_cant[.@i] +"";
+			++.@i;
+					}
+mes .@npcz$;
+mes "Cuando hayas conseguido todo, procura venir a visitarme nuevamente.";
+platica = 1;
+close;
+} else {
+
+	mes "¿Tienes todo lo que te he pedido?.";
+
+	if(select("Si, aqui esta", "No, me lo podrias repetir." )==2){
+
+next;
+mes .@npcz$;
+while (.@i < getarraysize(.b_item)){
+	mes "- ^FF0000"+ getitemname(.b_item[.@i]) +"^000000 x"+ .r_cant[.@i] +"";
+			++.@i;
+					} // Cierre de IF
+close;
+	} // cierre de Else
+
+	next;
+mes .@npcz$;
+		if ((countitem(.b_item[0]) < .r_cant[0] ) ||
+			(countitem(.b_item[1]) < .r_cant[1] ) ||
+			(countitem(.b_item[2]) < .r_cant[2] ) ||
+			(countitem(.b_item[3]) < .r_cant[3] ) ||
+			(countitem(.b_item[4]) < .r_cant[4] ) ||
+			(countitem(.b_item[5]) < .r_cant[5] ) ||
+			(countitem(.b_item[6]) < .r_cant[6] ) ||
+			(countitem(.b_item[7]) < .r_cant[7] ) ||
+			(countitem(.b_item[8]) < .r_cant[8] ) ||
+			(countitem(.b_item[9]) < .r_cant[9] ) ||
+			(countitem(.b_item[10]) < .r_cant[10] ) ||
+			(countitem(.b_item[11]) < .r_cant[11] ) ||
+			(countitem(.b_item[12]) < .r_cant[12] ) ||
+			(countitem(.b_item[13]) < .r_cant[13] ) ||
+			(countitem(.b_item[14]) < .r_cant[14] ) ||
+			(countitem(.b_item[15]) < .r_cant[15] ) ) {
+					mes "No tienes todos los items de la lista.";
+					close;
+			}
+			if (!checkweight(.c_drop, 1)){
+			mes "No tienes espacio suficiente en tu inventario.";
+			close;
+						}	
+						
+				while (.@j < getarraysize(.b_item)){
+						delitem .b_item[.@j], .r_cant[.@j];
+						++.@j;
+						
+						}
+						
+			announce "[Mhyldan]: "+strcharinfo(0)+ " ha terminado de romper el sello, los Dioses han elegido su suerte.",bc_all;
+						.@r = rand(19);
+						getitem(.c_drop[.@r]), 1;
+						Bts = 1;
+							close;
+			
+			
+			
+			
+			
+OnInit:
+
+	setarray .b_item[0], Lip_Of_Ancient_Fish, Olivine, Pyroxene, Muscovite, Biotite, Talon_Of_Griffin, Rose_Quartz, Agate,
+						 Young_Twig, Rojerta_Piece, Mothers_Nightmare, Matchstick, Phlogopite, Piece_Of_Bone_Armor, Sacred_Marks,
+						 Cursed_Seal;
+						 
+	setarray .r_cant[0], 100, 20, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 200, 300;
+	
+	setarray .c_drop[0], Jewel_Of_Prayer, Iron_Glove, Iron_Maiden, Mystery_Wheel, Silver_Fancy, Anger_Of_Valkurye, Feather_Of_Angel, 
+						 Foot_Step_Of_Cat, Beard_Of_Women, Root_Of_Stone, Soul_Of_Fish, Saliva_Of_Bird, Tendon_Of_Bear, Symbol_Of_Sun,
+						 Breath_Of_Soul, Crystal_Of_Snow, Indication_Of_Tempest, Slilince_Wave, Rough_Billows, Air_Stream;
+		}	
+						 
+						 
+	}
+
+}

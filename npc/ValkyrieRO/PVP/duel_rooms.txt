@@ -1,0 +1,35 @@
+arena_4,157,124,3	script	PVP 1VS1#pvp1	808,{
+	setarray $duelmaps$[0],"pvp_y_1-2","pvp_y_7-1","pvp_y_7-2","pvp_y_7-3","pvp_y_7-4","pvp_y_7-5","pvp_y_7-5","pvp_y_7-2";
+
+inicio:
+	mes "[^ff0000[Duel Room]^000000]";
+	mes "Hola " + strcharinfo(0) + ".";
+	mes "Escoje la sala en la que quieres entrar";
+	next;
+	mes "[^ff0000[Duel Room]^000000]";
+	for (set .@i, 0; .@i < getarraysize($duelmaps$); set .@i, .@i + 1) {
+		if (getmapusers($duelmaps$[.@i]) >= 2) { mes "Sala "+.@i+": Llena"; } else { mes "Sala "+.@i+": Libre"; }
+		if( .@i < 1 )
+			set .@menu$, "Sala "+.@i;
+		else
+			set .@menu$, .@menu$+":Sala "+.@i;
+	}
+
+	next;
+	select(.@menu$);
+	set @choice, @menu - 1;
+
+	if (getmapusers($duelmaps$[@choice]) >= 2) {
+		mes "[^ff0000[Duel Room]^000000]";
+		mes "Sala "+@choice+" Llena";
+		mes "No puedes entrar, escoge otra.";
+		next;
+		goto inicio;
+	} else {
+		warp $duelmaps$[@choice],0,0;
+		close;
+OnInit:
+waitingroom "Player VS Player",0;;
+end;
+	}
+}

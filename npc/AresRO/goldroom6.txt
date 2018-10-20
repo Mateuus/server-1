@@ -1,0 +1,30 @@
+// Default Monster = "Am Mut" - (1301)
+
+prontera,164,169,4	script	Gold Room	802,{
+mes "[Guarda]";
+mes "Hi! I can take you with me to my Gold Room.";
+mes "Would you like to go with me??";
+menu "Yep",-,"No, thx",GOLD;
+next;
+mes "[Guarda]";
+mes "When you want to go out,";
+mes "Use any warp command.";
+next;
+warp "bat_b01",62,150;	close;
+
+GOLD:
+mes "[Guarda]";
+mes "Volte quando você quiser";
+mes "^.^";
+close;
+
+}
+
+
+//==================================================
+// bat_b01 - Gold Room
+//==================================================
+bat_b01,0,0,0,0	monster	Dokebi	              1110,100,0,0,0
+bat_b01,0,0,0,0	monster	Golden Savage 	1840,230,0,0,0
+bat_b01,0,0,0,0	monster	Dokebi	              1110,100,0,0,0
+bat_b01,0,0,0,0	monster	Dokebi	              1110,100,0,0,0

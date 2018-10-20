@@ -1,0 +1,511 @@
+//===== EinherjarRO Scripts ================================== 
+//= Daily Prize, OnPCLoginEvent
+//===== By: ================================================== 
+//= Stolao
+//===== Current Version: ===================================== 
+//= 1.59
+//===== Compatible With: ===================================== 
+//= rAthena SVN
+//===== Description: ========================================= 
+//= A reward system for players who play more frequently
+//===== Comments: ============================================
+//= Maybe Make .MinWait an array mins,days,weeks,months,years;
+//===== Additional Comments: =================================
+//= For Older See Forums
+//= 1.51 Changed set .@g formula and move lower into script
+//= 1.52 Replace all disbottom -> message
+//= 1.53 Changed Format to Include minuets instead of just hours
+//= 1.54 Made Time till next rewards display dynamic
+//= 1.55 Changed a forgotten  .PointType$ -> getd(.@TT[1])
+//= 1.56 changed .@XT -> .@XT$
+//= 1.57 Added Atoi where nessisary
+//= 1.58 Fixed a swapped .@x and .@x+1
+//= 1.59 Serveral Edit Undocumented to fix
+//===== Contact Info: ========================================
+//= [Stolao] 
+//= Email: Taingram11@gmail.com
+//============================================================
+-	script	LOGIN	-1,{
+OnWhisperGlobal:
+OnLoginCmnd:
+OnPCLoginEvent:
+	sleep2 1000 + .Rest * 60000;
+	set .@i, (gettime(7) * 365 * 24 * 60) + (gettime(8) * 24 * 60) + (gettime(3) * 60) +gettime(2);
+	if(.@i >= (#LastDailyReward + .MinWait)){
+		if(.@i < #LastDailyReward + .MaxWait){	set #DRewardCon, #DRewardCon + 1;
+		} else {	set #DRewardCon, 1;	}
+		set .@g, (#DRewardCon > getarraysize(.Rewards$)) ? (getarraysize(.Rewards$)-1) : #DRewardCon;
+		explode(.@XT$,.Rewards$[.@g],"|");
+		for(set .@x,0; .@x < getarraysize(.@XT$); set .@x,.@x + 1){
+			set .@TT[.@x], atoi(.@XT$[.@x]);
+		}
+		if(.Mode & 1 && .@TT[4]){	//[Note]: I need to figure out a checkweight for all items tired atm lol, for now ill leave it missing
+			for(set .@x,4; .@x < getarraysize(.@TT); set .@x,.@x + 2){	getitem  .@TT[.@x], .@TT[.@x+1];	message strcharinfo(0),"Recived "+  .@TT[.@x+1] +" "+ getitemname(.@TT[.@x]);	}
+		}
+		if(.Mode & 2){
+			if(.@TT[0]){	set zeny,zeny + .@TT[0];	message strcharinfo(0),"Recived "+ .@TT[0] +"z";	}
+			if(.@TT[1]){	setd getd(.Points$[0]),getd(.Points$[0]) + .@TT[1];	message strcharinfo(0),"Recived "+ .@TT[1] +" "+.Points$[1];	}
+		}
+		if(.Mode & 4 && (.@TT[3] || .@TT[4])) getexp .@TT[3], .@TT[4];
+		if(.Mode & 8){
+			for(set .@x,0; .@x < getarraysize(.BuffInfo); set .@x,.@x + 4){
+				if(#DRewardCon % .BuffInfo[.@x + 1] == 0)
+					sc_start .BuffInfo[.@x], .BuffInfo[.@x + 2] * 60000, .BuffInfo[.@x + 3];
+			}
+		}
+		message strcharinfo(0),"Usted ha recogido su premio a diario, por "+#DRewardCon+" day"+((#DRewardCon > 1)?"s":"")+" en una fila.";
+		set #LastDailyReward, .@i;
+	} else {
+		set .@days,(#LastDailyReward + .MinWait - .@i)/60/24;
+		set .@hours,((#LastDailyReward + .MinWait - .@i)/60)%24;
+		set .@mins,(#LastDailyReward + .MinWait - .@i)%60;
+		message strcharinfo(0),"Tu tienes "+ ((.@days) ? .@days +":Days " : "") +""+ ((.@hours) ? .@hours +":Horas " : "") +""+ ((.@mins) ? .@mins +":Minutos " : "") +"hasta la próxima recompensa.";
+	}
+end;
+OnInit:
+	//Basic Settings
+	//   1: Item | 2: Points | 4: Exp  
+	//   8: Gain Buffs Every X Consecutive Days logged in
+	// (a bit value, e.g. 3 = Items & Points from Multi)
+	set .Mode,1 + 2 + 4 + 8;
+
+	//To Enable @ Command '@loginreward' unslash next lines
+	// * Needs extra commands for typos
+	bindatcmd("relog"	,"LOGIN::OnLoginCmnd",0,99);
+
+	//Minimum Minuets Between Collecting Daily Reward
+	//   Day: 22*60 - 24*60
+	//   Week: 10080
+	set .MinWait,1320;
+
+	//Minuets Before Lose Consecutive Daily Reward
+	//   Day: 48*60 - 50*60
+	//   Week: 20160
+	set .MaxWait,3000;
+
+	//Number of mins after logging before collecting prize
+	set .Rest,0;
+
+	//Point Type
+	//   [0] Points earned
+	//   [1] Point name in mes
+	setarray .Points$,"#KAFRAPOINTS","K-Points";
+
+	// Consecutive Days Buff
+	// Each buff contains 4 variables (32 Total Max)
+	// <Type>,<Days>,<Duration>,<Rate>, // Buff 1
+	// <Type>,<Days>,<Duration>,<Rate>, // Buff 2
+	//   ...;
+	//
+	//  Example: 188,7,45,3
+	//    -Every 7th consecutive day logged in Player gains +3 Str for 45 mins
+	//
+	//  Type is 188, which references which SC_ to use, SC_INCSTR in this example
+	//     -For a full list of SC_ visit the db/const.txt
+	//  Days is days buff is applied, in this example 7, so every 7th day, 14,21,28....
+	//  Duration is buff duration is Minuits, in this example 45 mins
+	//  Rate is buff strength, in this example player gains 3 Str
+	setarray .BuffInfo	,260,2,360,1	// Life Insurance for 360 Mins Every 2nd Day
+				,198,3,120,10	// +10% Hp for 120 Mins Every 3th Day
+				,196,5,120,25	// +25 Flee for 120 Mins Every 5th Day
+				,257,7,240,50;	// +50% Exp for 240 Mins Every 7th Day
+
+	// Daily Prize items (max 128 days):
+	//   "<Zeny>|<Points>|<BaseExp>|<JobExp>|<itemID-1>|<amount-1>|<itemID-2>|<amount-2>...etc", // Day 1
+	//   "<Zeny>|<Points>|<BaseExp>|<JobExp>|<itemID-1>|<amount-1>|<itemID-2>|<amount-2>...etc"  // Day 2
+	//   ...;
+	// Total length of any days string must be 255 or shorter
+	// * If players login longer than the last set
+	//   day, they will keep getting the last prize.
+	setarray .Rewards$,
+		"0|0|0|0|969|1",			// Day 1:Gold Zeny
+		"0|0|0|0|12208|2",			// Day 2: 2 Battle Manual
+		"0|0|0|0|12211|5",			// Day 3: 5 Kafra Card
+		"0|0|0|0|14521|10",			// Day 4: 10 Repair Weapon Scroll
+		"0|0|0|0|12210|1",			// Day 5: 1 Bubble Gum
+		"0|0|0|0|7621|2",			// Day 6: 2 Token Of Siegfried
+		"0|0|0|0|14533|1",			// Day 7: 1 Field Manual 100%
+		"0|0|0|0|12103|1",			// Day 8: 1 Bloody Branch
+		"0|0|0|0|12214|2",			// Day 9: 2 Convex Mirror
+		"0|0|0|0|7539|5",			// Day 10: 5 Poring Coin
+		"0|0|0|0|12522|5",			// Day 11: 10 Blessing Scroll Lv 10
+		"0|0|0|0|14545|1",			// Day 12: 1 Field Manual 300%
+		"0|0|0|0|12161|2",			// Day 13: 2 Bowman Scroll 9 
+		"0|0|0|0|12211|5",			// Day 14: 5 Kafra Card
+		"0|0|0|0|14317|1",			// Day 15: 1 Bacsojin Scroll
+		"0|0|0|0|616|3",			// Day 16: 3 Old Card Album
+		"0|0|0|0|12523|10",			// Day 17: 10 Agility Scroll 10
+		"0|0|0|0|12211|10",			// Day 18: 10 Kafra Card
+		"0|0|0|0|12103|2",			// Day 19: 2 Bloody Branch
+		"0|0|0|0|7539|10",			// Day 20: 10 Poring Coin
+		"0|0|0|0|12210|2",			// Day 21: 2 Bubble Gum
+		"0|0|0|0|7621|5",			// Day 22: 5 Token Of Siegfried
+		"0|0|0|0|7228|1",			// Day 23: 1 Gold Bullion
+		"0|0|0|0|12103|3",			// Day 24: 3 Bloody Branch
+		"0|0|0|0|7829|300",			// Day 25: 300 Valor Badge
+		"0|0|0|0|14171|2",			// Day 26: 2 Aspersio 5 Scroll Box
+		"0|0|0|0|12218|10",			// Day 27: 10 LV5 Assumptio Scroll
+		"0|0|0|0|12221|5",			// Day 28: 5 Megaphone
+		"0|0|0|0|12250|5",			// Day 29: 5 Steamed Tongue
+		"0|0|0|0|5934|1",			// Day 30: 1 Happy Balloon
+		"0|0|0|0|12246|2",			// Day 31: 2 Mystical Card Album
+
+
+
+
+
+end;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//===== rAthena Script =======================================
+//= Job Master
+//===== By: ==================================================
+//= Euphy
+//===== Current Version: =====================================
+//= 1.4
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: =========================================
+//= A fully functional job changer.
+//===== Additional Comments: =================================
+//= 1.0 Initial script.
+//= 1.1 Fixed reset on Baby job change.
+//= 1.2 Added Expanded Super Novice support and initial Kagerou/Oboro support.
+//= 1.3 Kagerou/Oboro added.
+//= 1.4 Rebellion added.
+//============================================================
+
+prt_in,136,31,3	script	Job Master	459,{
+function Job_Menu;
+cutin "ep13_captin_edq",2;
+	mes "[Job Master]";
+	if (Class > Job_Soul_Linker) {
+		mes "No más Jobs disponibles.";
+cutin "",255;
+		close;
+	}
+	if (checkfalcon() || checkcart() || checkriding() || ismounting()) {
+		mes "Por favor retire su " +
+			((checkfalcon()) ? "falcon" : "") +
+			((checkcart()) ? "cart" : "") +
+			((checkriding()) ? "Peco" : "") +
+			((ismounting()) ? "mount" : "") +
+			" before proceeding.";
+cutin "",255;
+		close;
+	}
+	if (.SkillPointCheck && SkillPoint) {
+		mes "Utilice todos sus puntos de habilidad antes de proceder.";
+cutin "",255;
+		close;
+	}
+
+	.@eac = eaclass();
+	.@i = ((.ThirdClass) ? roclass(.@eac&EAJ_UPPERMASK) : Class);
+	if (.@i >= Job_Knight && .@i <= Job_Crusader2) {
+		if (BaseLevel < .Rebirth[0] || JobLevel < .Rebirth[1]) {
+			.@blvl = .Rebirth[0] - BaseLevel;
+			.@jlvl = .Rebirth[1] - JobLevel;
+			mes "You need " +
+				((.@blvl > 0) ? .@blvl + " more base levels " + ((.@jlvl > 0) ? "/ " : "") : "") +
+				((.@jlvl > 0) ? .@jlvl + " more job levels " : "") + "to continue.";
+cutin "",255;
+			close;
+		}
+		if (Class > Job_Crusader2) {
+			mes "Switch to third class?";
+			next;
+			Job_Menu(roclass(.@eac|EAJL_THIRD));
+cutin "",255;
+			close;
+		}
+		while(1) {
+			mes "Selecciona una opcion.";
+			next;
+			.@i = select(" ~ ^0055FFRenacer^000000:" + ((.ThirdClass) ? " ~ ^FF0000Third Class^000000" : "") + ": ~ ^777777Cancel^000000");
+			if (.@i == 3)
+cutin "",255;
+				close;
+			mes "[Job Master]";
+			mes "¿Estás seguro?";
+			next;
+			Job_Menu(((.@i == 1) ? Job_Novice_High : roclass(.@eac|EAJL_THIRD)));
+			mes "[Job Master]";
+		}
+	}
+	.@j1 = roclass(.@eac|EAJL_2_1);
+	.@j2 = roclass(.@eac|EAJL_2_2);
+	if ((.@eac&EAJ_UPPERMASK) == EAJ_SUPER_NOVICE)
+		setarray .@exp[0], roclass(.@eac|EAJL_THIRD), 99;
+	if (Class == Job_Ninja || Class == Job_Gunslinger)
+		setarray .@exp[0], .@j1, 70;
+	if (.@exp[0] && .SecondExpanded) {
+		if (BaseLevel < .Rebirth[0] || JobLevel < .@exp[1]) {
+			.@blvl = .Rebirth[0] - BaseLevel;
+			.@jlvl = .@exp[1] - JobLevel;
+			mes "You need " +
+				((.@blvl > 0) ? .@blvl + " more base levels " + ((.@jlvl > 0) ? "/ " : "") : "") +
+				((.@jlvl > 0) ? .@jlvl + " more job levels " : "") + "to continue.";
+cutin "",255;			
+close;
+		}
+		mes "Switch to " + jobname(.@exp[0]) + "?";
+		next;
+		Job_Menu(.@exp[0]);
+cutin "",255;
+		close;
+	}
+	if (.@eac&EAJL_2)
+		if (.@eac&(EAJL_UPPER|EAJL_BABY) || roclass(.@eac|EAJL_UPPER) == -1) {
+			mes "No más jobs disponibles.";
+cutin "",255;
+			close;
+		}
+	if ((.@eac&EAJ_BASEMASK) == EAJ_NOVICE) {
+		if (JobLevel < .JobReq[0])
+			mes "El nivel de job de " + .JobReq[0] + " se requiere para cambiar a la primera clase.";
+		else if (Class == Job_Novice_High && .LastJob && lastJob) {
+			mes "Switch classes now?";
+			next;
+			Job_Menu(roclass((eaclass(lastJob)&EAJ_BASEMASK)|EAJL_UPPER));
+		} else {
+			switch(Class) {
+			case Job_Novice:
+				Job_Menu(
+					Job_Swordman,
+					Job_Mage,
+					Job_Archer,
+					Job_Acolyte,
+					Job_Merchant,
+					Job_Thief,
+					Job_SuperNovice,
+					Job_Taekwon,
+					Job_Gunslinger,
+					Job_Ninja,
+					Job_Baby
+				);
+				break;
+			case Job_Novice_High:
+				Job_Menu(
+					Job_Swordman_High,
+					Job_Mage_High,
+					Job_Archer_High,
+					Job_Acolyte_High,
+					Job_Merchant_High,
+					Job_Thief_High
+				);
+				break;
+			case Job_Baby:
+				Job_Menu(
+					Job_Baby_Swordman,
+					Job_Baby_Mage,
+					Job_Baby_Archer,
+					Job_Baby_Acolyte,
+					Job_Baby_Merchant,
+					Job_Baby_Thief,
+					Job_Super_Baby
+				);
+				break;
+			default:
+				mes "Se ha producido un error.";
+				break;
+			}
+		}
+		close;
+	}
+	if (roclass(.@eac|EAJL_2_1) == -1 || roclass(.@eac|EAJL_2_2) == -1)
+		mes "No more jobs are available.";
+	else if (!(.@eac&EAJL_2) && JobLevel < .JobReq[1])
+		mes "A job level of " + .JobReq[1] + " is required to change into the 2nd Class.";
+	else if (.LastJob && lastJob && (.@eac&EAJL_UPPER)) {
+		mes "Cambie de clases ahora?";
+		next;
+		Job_Menu(lastJob + Job_Novice_High);
+	} else
+		Job_Menu(.@j1, .@j2);
+cutin "",255;
+	close;
+
+function Job_Menu {
+	while(1) {
+		if (getargcount() > 1) {
+			mes "Seleccionar un job.";
+			.@menu$ = "";
+			for (.@i = 0; .@i < getargcount(); .@i++)
+				.@menu$ = .@menu$ + " ~ " + jobname(getarg(.@i)) + ":";
+			.@menu$ = .@menu$+" ~ ^777777Cancel^000000";
+			next;
+			.@i = getarg(select(.@menu$) - 1, 0);
+			if (!.@i)
+				close;
+			if ((.@i == Job_SuperNovice || .@i == Job_Super_Baby) && BaseLevel < .SNovice) {
+				mes "[Job Master]";
+				mes "El nivel de base de " + .SNovice + " se requiere para convertirse en un " + jobname(.@i) + ".";
+cutin "",255;
+				close;
+			}
+			mes "[Job Master]";
+			mes "¿Estás seguro?";
+			next;
+		} else
+			.@i = getarg(0);
+		if (select(" ~ Change into ^0055FF" + jobname(.@i) + "^000000 class: ~ ^777777" + ((getargcount() > 1) ? "Go back" : "Cancel") + "^000000") == 1) {
+			mes "[Job Master]";
+			mes "Ahora estas " + callfunc("F_InsertArticle", jobname(.@i)) + "!";
+			if (.@i == Job_Novice_High && .LastJob)
+				lastJob = Class;
+			jobchange .@i;
+			if (.@i == Job_Novice_High)
+				resetlvl(1);
+			else if (.@i == Job_Baby) {
+				resetstatus;
+				resetskill;
+				set SkillPoint,0;
+			}
+			specialeffect2 EF_ANGEL2;
+			specialeffect2 EF_ELECTRIC;
+			if (.Platinum)
+				callsub Get_Platinum;
+cutin "",255;
+			close;
+		}
+		if (getargcount() == 1)
+			return;
+		mes "[Job Master]";
+	}
+	end;
+}
+
+Get_Platinum:
+	skill "NV_FIRSTAID",1,SKILL_PERM;
+	switch (BaseClass) {
+	case Job_Novice:
+		if (Class != Job_SuperNovice)
+			skill "NV_TRICKDEAD",1,SKILL_PERM;
+		break;
+	case Job_Swordman:
+		skill "SM_MOVINGRECOVERY",1,SKILL_PERM;
+		skill "SM_FATALBLOW",1,SKILL_PERM;
+		skill "SM_AUTOBERSERK",1,SKILL_PERM;
+		break;
+	case Job_Mage:
+		skill "MG_ENERGYCOAT",1,SKILL_PERM;
+		break;
+	case Job_Archer:
+		skill "AC_MAKINGARROW",1,SKILL_PERM;
+		skill "AC_CHARGEARROW",1,SKILL_PERM;
+		break;
+	case Job_Acolyte:
+		skill "AL_HOLYLIGHT",1,SKILL_PERM;
+		break;
+	case Job_Merchant:
+		skill "MC_CARTREVOLUTION",1,SKILL_PERM;
+		skill "MC_CHANGECART",1,SKILL_PERM;
+		skill "MC_LOUD",1,SKILL_PERM;
+		break;
+	case Job_Thief:
+		skill "TF_SPRINKLESAND",1,SKILL_PERM;
+		skill "TF_BACKSLIDING",1,SKILL_PERM;
+		skill "TF_PICKSTONE",1,SKILL_PERM;
+		skill "TF_THROWSTONE",1,SKILL_PERM;
+		break;
+	default:
+		break;
+	}
+	switch (BaseJob) {
+	case Job_Knight:
+		skill "KN_CHARGEATK",1,SKILL_PERM;
+		break;
+	case Job_Priest:
+		skill "PR_REDEMPTIO",1,SKILL_PERM;
+		break;
+	case Job_Wizard:
+		skill "WZ_SIGHTBLASTER",1,SKILL_PERM;
+		break;
+	case Job_Blacksmith:
+		skill "BS_UNFAIRLYTRICK",1,SKILL_PERM;
+		skill "BS_GREED",1,SKILL_PERM;
+		break;
+	case Job_Hunter:
+		skill "HT_PHANTASMIC",1,SKILL_PERM;
+		break;
+	case Job_Assassin:
+		skill "AS_SONICACCEL",1,SKILL_PERM;
+		skill "AS_VENOMKNIFE",1,SKILL_PERM;
+		break;
+	case Job_Crusader:
+		skill "CR_SHRINK",1,SKILL_PERM;
+		break;
+	case Job_Monk:
+		skill "MO_KITRANSLATION",1,SKILL_PERM;
+		skill "MO_BALKYOUNG",1,SKILL_PERM;
+		break;
+	case Job_Sage:
+		skill "SA_CREATECON",1,SKILL_PERM;
+		skill "SA_ELEMENTWATER",1,SKILL_PERM;
+		skill "SA_ELEMENTGROUND",1,SKILL_PERM;
+		skill "SA_ELEMENTFIRE",1,SKILL_PERM;
+		skill "SA_ELEMENTWIND",1,SKILL_PERM;
+		break;
+	case Job_Rogue:
+		skill "RG_CLOSECONFINE",1,SKILL_PERM;
+		break;
+	case Job_Alchemist:
+		skill "AM_BIOETHICS",1,SKILL_PERM;
+		break;
+	case Job_Bard:
+		skill "BA_PANGVOICE",1,SKILL_PERM;
+		break;
+	case Job_Dancer:
+		skill "DC_WINKCHARM",1,SKILL_PERM;
+		break;
+	default:
+		break;
+	}
+	return;
+
+OnInit:
+	setarray .Rebirth[0],99,50;	// Minimum base level, job level to rebirth OR change to third class
+	setarray .JobReq[0],10,40;	// Minimum job level to turn into 1st class, 2nd class
+	.ThirdClass = 0;			// Enable third classes? (1: yes / 0: no)
+	.SecondExpanded = 0;		// Enable new expanded second classes: Ex. Super Novice, Kagerou/Oboro, Rebellion? (1: yes / 0: no)
+	.SNovice = 45;				// Minimum base level to turn into Super Novice
+	.LastJob = 1;				// Enforce linear class changes? (1: yes / 0: no)
+	.SkillPointCheck = 1;		// Force player to use up all skill points? (1: yes / 0: no)
+	.Platinum = 0;				// Get platinum skills automatically? (1: yes / 0: no)
+
+OnPCLoadMapEvent:
+	showevent 1,2;
+	end;
+}
+
+prt_in	mapflag	loadevent
+

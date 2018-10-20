@@ -1,0 +1,73 @@
+//===== Script eAthena ======================================= 
+//= Travelet Gold Hat Quest
+//===== por: ================================================== 
+//= Creador de Quests Ragnarok World
+//= v1.0
+//===== Compatible Con: ===================================== 
+//= eAthena SVN
+//===== Descripción: ========================================= 
+//  Quest Creada por el Script Creador de Quests Online de
+//  http://www.ragnarokworld.net
+//============================================================ 
+
+poring_w02,70,41,3	script	Travelet Gold Hat	71,{
+ 	set @NPCName$, "[^Travelet Gold Hat^000000]";
+	set @cost, 5000000;
+	mes @NPCName$;
+	mes "Quieres Obtener este Item? Bonus Stats: +30 All stats..!!";
+	next;
+	switch(select("Si:No:No, grasias.")) {
+ 	case 1:
+	mes @NPCName$;
+	mes "Estos son Los Items Necesarios.";
+	mes "  ^Feather^000000 [200]";
+	mes "  ^Cactus Needle^000000 [200]";
+	mes "  ^Stone Heart^000000 [150]";
+	mes "  ^5000000 Zeny^000000";
+	next;
+	if (countitem(949) < 200) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(952) < 200) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(953) < 150) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (Zeny < @cost) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	mes @NPCName$;
+	mes "Bien! Tienes todos los Items! Felicidades !";
+	mes "el Objeto es Tuyo";
+	delitem 949,200;
+	delitem 952,200;
+	delitem 953,150;
+	set Zeny,Zeny-@cost;
+	getitem 20134,1;
+	close;
+	case 2:
+	mes @NPCName$;
+	mes "de acuerdo, vuelve pronto !";
+	close;
+	case 3:
+	close;
+	}
+
+}
+
+//============================================================
+//===== Creador de Quests Ragnarok World ===========================
+//============================================================

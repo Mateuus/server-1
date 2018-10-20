@@ -1,0 +1,308 @@
+//====================== rAthena Script ===============================================================
+//=== Made by Associate
+//==================== Information ====================================================================
+//==== A quest to Defeat Satan Morroc again, but now he's trying to takeover Prontera!
+//================= Version : =========================================================================
+//=== Topic Link: http://rathena.org/board/topic/70148-how-to-add-checkweight-in-my-script/
+//=== QUest made for PinasRO, feel free to use and give credit. Oh and Contributing is allowed
+//=== V 1.0	Initial Release [Associate]
+//============== Credits : ============================================================================
+//=== rAthena Profile Link : http://rathena.org/board/user/3300-ejay/
+//=====================================================================================================
+
+-	script	DisableNPCs	-1,{
+	OnInit:
+		disablenpc "Lucile#02";
+		end;
+}
+
+prontera,187,207,3	script	Wounded Knight	699,{
+	if (BaseLevel < 150) {
+		mes "[Wounded Knight]";
+		mes "Jagsi2nSHLhbeb 20uZ9 BNlb324n.. .io98Zbno33";
+		next;
+		mes "^0000FFParece que no entiendes lo que está diciendo, trata de subir de nivel al menos 150 niveles base para comprender.^000000";
+		close;
+	}
+	switch(checkquest(70251)) {
+		case -1:
+		mes "[Wounded Knight]";
+		mes "Pleas... Please... H.. He.. Help Me!!";
+		next;
+		switch(select("Help Her:Leave Her")) {
+			case 1:
+			mes "[Wounded Knight]";
+			mes "Ugh.. thanks but.. i can.. ugh..";
+			mes "I can recov.. recover myself, but ple.. please";
+			mes "Do me a... huge.. favor!";
+			next;
+			switch(select("What Favor?")) {
+				case 1:
+				mes "[Wounded Knight]";
+				mes "Go.. to... Morroc. And..";
+				mes "Talk to Lieutenant Mich.. Michael..";
+				mes "Tell him.. you were sent by... Dav.. Dave!";
+				setquest 70251;
+				close;
+			}
+			case 2:
+			mes "[Wounded Knight]";
+			mes "Thanks for helping us!";
+			close;
+		}
+		case 1:
+		mes "[Wounded Knight]";
+		mes "Please.. Do... that Favor!";
+		close;
+	}
+}
+
+morocc,179,97,3	script	Lieutenant Michael	653,{
+	switch(checkquest(70256)) {
+		case 1:
+		mes "[^00FF00Lieutenant Michael^000000]";
+		mes "Thanks for rescuing us from Satan Morroc!";
+		next;
+		mes "[^00FF00Lieutenant Michael^000000]";
+		mes "In exchange, i'd like to give you this";
+		next;
+		completequest 70256;
+		getitem 5825,1;
+		close;
+	}
+	switch(checkquest(70251)) {
+		case -1:
+		mes "[^00FF00Lieutenant Michael^000000]";
+		mes "Argh! Get out of here, can't you see i'm busy?";
+		close;
+		case 1:
+		if (getmapusers("moro_cav") > 1) {
+			mes "[^00FF00Lieutenant Michael^000000]";
+			mes "Someone is doing the quest, please try again later!";
+		}
+		if (getmapusers("dali02") > 1) {
+			mes "[^00FF00Lieutenant Michael^000000]";
+			mes "Someone is doing the quest, please try again later!";
+		}
+		mes "[^00FF00Lieutenant Michael^000000]";
+		mes "Hmm. What if we do? Huh what? Who are you?";
+		next;
+		switch(select("Oh sorry to bother you!:I was sent by Dave")) {
+			case 1:
+			mes "[^00FF00Lieutenant Michael^000000]";
+			mes "Get outta here!";
+			close;
+			case 2:
+			mes "[^00FF00Lieutenant Michael^000000]";
+			mes "Ahh, our best Knight Dave.";
+			mes "He was the Strongest Knight here, after Thanatos";
+			mes "Now.. What can i do for you?";
+			next;
+			switch(select("I want to help!:Nothing")) {
+				case 1:
+				mes "[^00FF00Lieutenant Michael^000000]";
+				mes "Okay then, if you insist.";
+				mes "We need to rescue the King and Officials from Morroc!";
+				mes "We will have to Teleport to his Dungeon inside the ^FF0000Flame Cave^000000";
+				mes "Oh and don't worry! Our team has killed all monsters there!";
+				mes "You ready?";
+				next;
+				switch(select("No:Yeah!")) {
+					case 1:
+					mes "[^00FF00Lieutenant Michael^000000]";
+					mes "Okay then, i'll give you some time.";
+					close;
+					case 2:
+					mes "[^00FF00Lieutenant Michael^000000]";
+					mes "Here we go!";
+					warp "moro_cav",63,12;
+					changequest 70251,70252;
+					close;
+					OnTimer5000:
+						mapannounce "moro_cav","Satan Morroc: Who dares challenge me? Hah! all of you will perish!!","bc_map";
+						end;
+				}
+				case 2:
+				mes "[^00FF00Lieutenant Michael^000000]";
+				mes "Okay then!";
+				close;
+			}
+		}
+		case 2:
+			mes "[^00FF00Lieutenant Michael^000000]";
+			mes "Thanks for helping us!!";
+			close;
+	}
+}
+
+moro_cav,63,12,3	script	HiddenNPC	139,3,3,{
+	OnTouch_:
+		initnpctimer;
+		disablenpc "King Of Prontera#02";
+		disablenpc "Lucile";
+		mapannounce strnpcinfo(4),"Satan Morroc: Hah! Who goes there? Pesky Humans, ya'll can't defeat me!", 0x9, 0xff0000;
+		end;
+	OnTimer3000:
+		mapannounce strnpcinfo(4),"Satan Morroc: Hmph, if you're thinking you can defeat me, you can't! HAHAHA", 0x9, 0xff0000;
+		end;
+}
+
+moro_cav,45,68,3	script	Satan Morroc	1916,6,6,{
+	OnInt:
+		initnpctimer;
+		npctalk "Satan Morroc: It's time for you to die King!!";
+		end;
+	OnTimer2000:
+		npctalk "Soul Destroyer!!";
+		disablenpc "King Of Prontera";
+		enablenpc "King Of Prontera#02";
+		end;
+	OnTimer4000:
+		npctalk "Satan Morroc: Now that they're gone, it's time for you to be gone!";
+		monster "moro_cav",45,67,"Clone Of Morroc",1916,1;
+		monster "moro_cav",47,67,"Clone Of Morroc",1916,1;
+		monster "moro_cav",42,67,"Clone Of Morroc",1916,1;
+		disablenpc strnpcinfo(3);
+		enablenpc "Lucile";
+		end;
+}
+
+moro_cav,45,65,3	script	King Of Prontera	108,3,3,{
+	OnInt:
+		initnpctimer;
+		npctalk "King: Help me please...";
+		end;
+}
+
+moro_cav,45,65,3	script	King Of Prontera#02	956,3,3,{
+	OnInt:
+		initnpctimer;
+		npctalk "King: Ugh... Ugh..";
+		end;
+}
+
+moro_cav,47,65,3	script	Lucile	667,3,3,{
+	OnInt:
+		attachnpctimer;
+		initnpctimer;
+		npctalk "Lucile: Oh! The king.";
+		end;
+	OnTimer3000:
+		npctalk "Lucile: Let me help you!";
+		killmonsterall "moro_cav";
+		end;
+	OnTimer5000:
+		npctalk "Lucile: The king is Hurt! Help me bring him to Morroc!";
+		changequest 70252,70253;
+		warp "moscovia",166,243;
+		disablenpc "Lucile";
+		enablenpc "Satan Morroc";
+		disablenpc "King Of Prontera#02";
+		enablenpc "King Of Prontera";
+		enablenpc "Lucile#02";
+		detachnpctimer;
+		end;
+}
+
+moscovia,168,245,3	script	Lucile#02	667,3,3,{
+	switch(checkquest(70253)) {
+	case 1:
+		OnInt:
+			attachnpctimer;
+			initnpctimer;
+			npctalk "Huh, what?!? Where are we?";
+			end;
+		OnTimer4000:
+			npctalk "Oh no... This is bad! The teleportation device broke! What shall we do??";
+			end;
+		OnTimer8000:
+			unittalk getcharid(3),"I think i can help you, i have some items here!";
+			end;
+		OnTimer16000:
+			npctalk "Really? Great! I just need 1x YGGDrasil Berry!";
+			changequest 70253,70254;
+			end;
+	}
+
+	switch(checkquest(70254)) {
+		case 1:
+		mes "[Lucile]";
+		mes "Do you have it?";
+		npctalk "Do you have it?";
+		next;
+		switch(select("Yes:Not Yet")) {
+			case 1:
+			unittalk getcharid(3),"Yes!";
+			if (countitem(607) < 1) {
+				mes "[Lucile]";
+				mes "Looks like you don't have it!";
+				npctalk "Looks like you don't have it!";
+				close;
+			}
+			else
+			{
+			mes "[Lucile]";
+			mes "Great! Let me do this.. and.. that, There we go! It's fixed";
+			npctalk "Great! Let me do this.. and.. that, There we go! It's fixed";
+			next;
+			mes "Lucile";
+			mes "Time to go to Lieutenant Michael now! Thanks " + strcharinfo(0);
+			npctalk "Time to go to Lieutenant Michael now! Thanks " + strcharinfo(0);
+			disablenpc "Lucile#02";
+			warp "dali02",113,82;
+			enablenpc "Lucile#03";
+			close;
+			}
+			case 2:
+			unittalk getcharid(3),"Not Yet";
+			mes "[Lucile]";
+			mes "Well, go get them! We don't have much time!";
+			npctalk "Well, go get them! We don't have much time!";
+			close;
+		}
+	}
+}
+
+dali02,111,84,6	script	Lucile#03	667,3,3,{
+		OnInt:
+			attachnpctimer;
+			initnpctimer;
+			npctalk "Huh what? The Dimensional Rift?? The Teleportation Device has no location set to this!";
+			changequest 70254,70255;
+			end;
+		OnTimer4000:
+			unittalk getcharid(3),"I think we were summoned here by... Satan Morroc";
+			end;
+		OnTimer6000:
+			npctalk "Why? And how did you know?";
+			end;
+		OnTimer9000:
+			unittalk getcharid(3),"Because, he's right over there!";
+			sleep2 3000;
+			//clear;
+			npctalk "Foolish Humans! I summoned you here so that you can see me Destroy Prontera!","Satan Morroc#02";
+			mapannounce strnpcinfo(4),"Satan Morroc: Foolish Humans! I summoned you here so that you can see me Destroy Prontera!", 0x9, 0xff0000;
+			end;
+		OnTimer20000:
+			unittalk getcharid(3),"No! You can't!!";
+			sleep2 3000;
+			//clear;
+			npctalk "Oh really? You think i'm afraid of you? I can defeat you easily!","Satan Morroc#02";
+			mapannounce strnpcinfo(4),"Satan Morroc: Oh really? You think i'm afraid of you? I can defeat you easily!",0x9, 0xff0000;
+			disablenpc "Satan Morroc#02";
+			monster "dali02",109,94,"Satan Morroc",1916,1;
+			npctalk "Ahhh!";
+			unittalk getcharid(3),"Lucile!!";
+			end;
+		OnNPCKillEvent:
+			mapannounce strnpcinfo(4),"Satan Morroc: How can this be!! A little human, defeating me!! I will take revenge!! No Matter! 	I'll teleport you to the Morroc Ruins so you can see how Prontera would look like soon!",0x9, 0xff0000;
+			changequest 70255,70256;
+			sleep2 5000;
+			//clear;
+			warp "morocc",160,117;
+			disablenpc "Lucile#03";
+			enablenpc "Satan Morroc#02";
+			end;
+}
+
+dali02,109,94,3	script	Satan Morroc#02	1916,3,3,{}

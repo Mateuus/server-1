@@ -1,0 +1,928 @@
+// ==============================================================================
+// = BY VYKIMO
+// ==============================================================================
+// ==============================================================================
+// BattleGround System - Common NPCs
+// ==============================================================================
+
+// MapFlags
+// *********************************************************************
+
+bat_room	mapflag	nomemo
+bat_room	mapflag	nowarpto
+bat_room	mapflag	nowarp
+bat_room	mapflag	nobranch
+bat_room	mapflag	nopenalty
+bat_room	mapflag	noteleport
+bat_room	mapflag	nosave	SavePoint
+// Mapflag Town is required to Join BG Queues
+bat_room	mapflag	town
+
+// Fonction reward
+// Reward_BG(Equipe1,Equipe2)
+function	script	Reward_BG	{
+	
+	if(getarg(0,0) && getarg(1,0)) {
+	
+		.@total1 = getarg(0);
+		.@total2 = getarg(1);
+
+		// Rewards constants
+		.@nb_joueurs = (bg_get_data($@BG_Team1,0) + bg_get_data($@BG_Team2,0))/2;
+
+		for(.@i = 1; .@i < 3; .@i++) {
+			
+			// On uniformise le nombre de badges a donner (multiple de 3)
+			.@mod = getd(".@total"+.@i) % 3;
+			setd(".@total"+.@i), getd(".@total"+.@i) - .@mod;
+			
+			.@par_item = (getd(".@total"+.@i) / 3) + .@nb_joueurs;
+			
+			bg_getitem getd("$@BG_Team"+.@i),7773,.@par_item; // War Badges
+			bg_getitem getd("$@BG_Team"+.@i),7829,.@par_item; // Valor Badges
+			bg_getitem getd("$@BG_Team"+.@i),7828,.@par_item; // Bravery Badges
+			
+		}
+	}
+	return;
+}
+
+// Battleground Queue Admin
+// *********************************************************************
+bat_room,0,0,0	script	BG_Queue_Join	-1,{
+	end;
+	
+OnReloadMapServer:
+	if(!agitcheck2() && !agitcheck() && !bgcheck())
+		bgstart();
+	end;
+
+// ================================== BattleGround Happy Hour ===================================
+
+// BattleGround Happy Hour
+OnDoHappyHour:
+OnClock1600:
+OnClock1800:
+OnClock2000:
+OnClock2200:
+	switch( gettime(4) )
+	{
+	case 1:
+	case 3:
+	case 5:
+		if( gettime(3) >= 20 && gettime(3) < 22 )
+		{
+			announce "-- Battleground Happy Hour has begun --",0,0x00FF00;
+			setbattleflag "bg_reward_rates",120; // +20% Reward Rates
+			end;
+		}
+		
+		if( gettime(3) == 22 )
+		{
+			announce "-- Battleground Happy Hour is over --",0,0x00BFFF;
+			setbattleflag "bg_reward_rates",100; // Normal Rates
+			end;
+		}
+		break;
+	case 2:
+	case 4:
+	case 6:
+		if( gettime(3) >= 16 && gettime(3) < 18 )
+		{
+			announce "-- Battleground Happy Hour has begun --",0,0x00FF00;
+			setbattleflag "bg_reward_rates",120; // +20% Reward Rates
+			end;
+		}
+		
+		if( gettime(3) == 18 )
+		{
+			announce "-- Battleground Happy Hour is over --",0,0x00BFFF;
+			setbattleflag "bg_reward_rates",100; // Normal Rates
+			end;
+		}
+		break;
+	}
+	end;
+
+
+// ======================================== OnEvents ========================================
+OnAgitStart:
+	if(bgcheck())
+		bgend();
+	end;
+	
+// On met 1 minute d'attente avant le lancement du BG apres la WoE2
+OnAgitEnd:
+	sleep 60000;
+	donpcevent "BG_Queue_Join::OnReloadMapServer";
+	end;
+
+OnBGGlobalStart:
+	announce "==== The Battleground is starting ==== @joinbg/@leavebg available in town.",0;
+	sleep 1000;
+	enablenpc "BG_Register";
+	// On lance la rotation
+	donpcevent "BG_Queue_Join::OnRotate";
+	end;
+	
+OnBGEnd:
+	announce "==== The Battleground just ended. ====",0;
+	disablenpc "BG_Register";
+	// On stoppe la rotation
+	stopnpctimer;
+	end;
+
+OnCompterVotes:
+	deletearray $@Total_Votes_BG[0],getarraysize($@Total_Votes_BG);
+	cleararray $@Total_Votes_BG[0],0,10;
+
+	.@taille_queue = bg_queue_data(.BG_Queue,0);
+	deletearray .@queue[0],getarraysize(.@queue);
+	bg_queue_data .BG_Queue,1;
+	copyarray .@queue$[0],$@qmembers$[0],getarraysize($@qmembers$);
+	for(.@i=0;.@i<.@taille_queue;.@i++) {
+	
+		if(attachrid(getcharid(3,.@queue$[.@i]))) {
+			if(@Vote_BG>0)
+				$@Total_Votes_BG[@Vote_BG-1]+=1;
+			detachrid();
+		}
+	}
+	end;
+// ======================================== Commandes ========================================
+// @joinbg
+OnDoJoin: 	
+	if($@BG_Status == 2) {
+		dispbottom "Please retry in few seconds, just wait for the end of the current mode.";
+	} else if(($@BG_Status == 1) || (.@atcmd_numparameters == 1 && (.@mode = atoi(.@atcmd_parameters$[0])) > 0 && (.@mode) < 11 )) {
+		if(bgcheck()) {
+			if(BaseLevel < 80) dispbottom "@joinbg failed. Level 80 is required to compete.";
+			else {
+				if( checkquest(8506,PLAYTIME) == 2 )
+					erasequest 8506;
+
+				if( checkquest(8506,PLAYTIME) != -1 ) {
+					dispbottom "@joinbg failed. You are a deserter. You cannot participate for a short time.";
+					end;
+				}
+				dispbottom "@joinbg trying to join the queue. @leavebg to quit the queue.";
+				if(bg_queue_join(.BG_Queue) && $@BG_Status == 0) {
+					set @Vote_BG,.@mode;
+					if($@BG_Status == 0)
+						bgannounce "[ Battleground ] ~ '" + strcharinfo(0) + "' just voted for ''"+.BG_Names$[--.@mode]+" ( id : "+@Vote_BG+" )'' -- @joinbg <1-10> to vote.",0xc58000;
+				}
+			}
+		} else {
+			dispbottom "@joinbg failed. Command available when the battleground is on.";
+		}
+	} else {
+		dispbottom "@joinbg failed. Please vote for one mode.";
+		dispbottom "= @joinbg 1 - [ Capture the Flag ] min "+(.BG_Min[0]*2)+" players =";
+		dispbottom "= @joinbg 2 - [ Team DeathMatch ] min "+(.BG_Min[1]*2)+" players =";
+		dispbottom "= @joinbg 3 - [ Eye of Storm ] min "+(.BG_Min[2]*2)+" players =";
+		dispbottom "= @joinbg 4 - [ Conquest ] min "+(.BG_Min[3]*2)+" players =";
+		dispbottom "= @joinbg 5 - [ Kreiger Von Midgard ] min "+(.BG_Min[4]*2)+" players =";
+		dispbottom "= @joinbg 6 - [ Stone Control ] min "+(.BG_Min[5]*2)+" players =";
+		dispbottom "= @joinbg 7 - [ Domination ] min "+(.BG_Min[6]*2)+" players =";
+		dispbottom "= @joinbg 8 - [ Rush ] min "+(.BG_Min[7]*2)+" players =";
+		dispbottom "= @joinbg 9 - [ Poring Ball ] min "+(.BG_Min[8]*2)+" players =";
+		dispbottom "= @joinbg 10 - [ Touch Down ] min "+(.BG_Min[8]*2)+" players =";
+	}
+	end;
+// @leavebg
+OnDoLeave: 
+	if(bgcheck()) {
+		dispbottom "@leavebg trying to quit the queue.";
+		if(bg_queue_leave(.BG_Queue))
+			set @Vote_BG,0;
+	} else 
+		dispbottom "@leavebg failed. Command available when the battleground is on.";
+	end;
+
+OnMessageOn:
+	dispbottom "BatteGroung messages ON";
+	set .Messbg, 1;
+	end;
+OnMessageOff:
+	dispbottom "BatteGroung messages OFF";
+	set .Messbg, 0;
+	end;
+
+	
+// ======================================== ON INIT ========================================
+OnInit:
+	bindatcmd "leavebg", strnpcinfo(3)+"::OnDoLeave";
+	bindatcmd "joinbg", strnpcinfo(3)+"::OnDoJoin";
+	bindatcmd "bgmsgon", strnpcinfo(3)+"::OnMessageOn";
+	bindatcmd "bgmsgoff", strnpcinfo(3)+"::OnMessageOff";
+	.Messbg = 1;
+	// Palettes Rouges et Bleue
+	$Palette_BG_Rouge = 409;
+	$Palette_BG_Bleu = 376;
+	// Configuration
+	// *****************************************************
+	// Battleground Rotation - Main NPC name
+	setarray .BG_Arenas$[0],       		  "Flavius_CTF",     "Flavius_TD",  "Tierra_EOS","Conquest",           "KvM01_BG",   "Flavius_SC","Tierra_DOM",    "Rush", "PoringBall", "s4_game";
+	// Battleground Arena Name - for announcements
+	setarray .BG_Names$[0],   		 "Capture the Flag","Team DeathMatch","Eye of Storm","Conquest","Kreiger Von Midgard","Stone Control","Domination",    "Rush","Poring Ball", "Touch Down";
+	setarray .BG_VAR$[0],   		 "BG_CTF","BG_TDM","BG_EOE","BG_CON","BG_KVM","BG_SC","BG_DOM","BG_RUSH","BG_PB","BG_TD";
+	// Minimum Players to start the BG
+	setarray .BG_Min[0],                              3,         3,         3,         1,              3,              3,           3,         1,            3,			4;
+	// Maximum Players per Team
+	setarray .BG_Max[0],                             20,        20,        24,        30,              20,             20,          20,        30,          20,			20;
+	// Team Building Mode : 0 = Lineal | 1 = Random | 2 = Class Priority
+	set .TeamMode, 1;
+	// Main Code
+	// *****************************************************
+	set .BG_Count, getarraysize(.BG_Arenas$);
+	set .BG_Queue, bg_queue_create("Battleground Arena","BG_Queue_Join::OnJoinEvent",80);
+	// Move to Next Arena
+	if( $BG_Index >= .BG_Count ) set $BG_Index,0;
+	.Mode_Precedent = -1;
+	set .Ready, 1;
+	donpcevent "BG_Queue_Join::OnDoHappyHour";
+	disablenpc "BG_Register";
+	bgend();
+	// Warps Teams
+	if( $@BG_Team1 ) { bg_warp $@BG_Team1,"bat_room",155,150; bg_destroy $@BG_Team1; set $@BG_Team1, 0; }
+	if( $@BG_Team2 ) { bg_warp $@BG_Team2,"bat_room",155,150; bg_destroy $@BG_Team2; set $@BG_Team2, 0; }	
+	donpcevent "BG_Queue_Join::OnReloadMapServer";
+	end;
+
+OnRotate:
+	set $@BG_Status, 0;	
+	// Warps Teams
+	if( $@BG_Team1 ) { bg_reward $@BG_Team1,0,0,0,0,.BG_VAR$[$BG_Index],1,0,0; bg_warp $@BG_Team1,"bat_room",155,150; bg_destroy $@BG_Team1; set $@BG_Team1, 0; }
+	if( $@BG_Team2 ) { bg_reward $@BG_Team2,0,0,0,0,.BG_VAR$[$BG_Index],1,0,0; bg_warp $@BG_Team2,"bat_room",155,150; bg_destroy $@BG_Team2; set $@BG_Team2, 0; }
+	.Mode_Precedent = $BG_Index;
+
+OnJoinEvent:
+	if( $@BG_Status == 2 )
+		end; // BG Ending... Must wait until OnRotate is called
+
+	set .@Queue_Count, bg_queue_data(.BG_Queue,0);
+	sc_end SC_SPIRIT;
+	switch( $@BG_Status )
+	{
+	case 0: // Idle - Ready to Start
+	
+		//debugmes "ready";
+		if(.@Queue_Count >= 2) {
+		
+			donpcevent "BG_Queue_Join::OnCompterVotes";
+			
+			// On détermine ceux qui ont le plus de votes			
+			deletearray .@candidats[0],getarraysize(.@candidats);
+			for(.@k=0;.@k<10;.@k++) {
+				if(max($@Total_Votes_BG) == $@Total_Votes_BG[.@k])
+					setarray .@candidats[getarraysize(.@candidats)],.@k+1;
+			}			
+			// Un choix aléatoire est fait parmis les plus votés		
+			.@j = 0;
+			.Mode_Precedent =0;
+			while(($BG_Index = .@candidats[rand(getarraysize(.@candidats))]-1) == .Mode_Precedent) {
+				.@j++;
+				if(.@j > 10) {
+					bgannounce "[ Battleground ] You cannot play two times the same mode ( id : "+(.Mode_Precedent+1)+" ). Please vote for another mode.",0xFF5555;
+					end;
+				}
+			}
+			
+			.BG_Arena$ = .BG_Arenas$[$BG_Index];
+			
+			set .@Req, .BG_Min[$BG_Index] * 2;
+			if( bg_queue_checkstart(.BG_Queue,.TeamMode,2,.BG_Min[$BG_Index]) )
+			{
+				donpcevent .BG_Arena$ + "::OnBuildTeams";
+
+				// Fill Teams with Queue Members	
+				bg_queue2teams .BG_Queue,.BG_Min[$BG_Index],.BG_Max[$BG_Index],.TeamMode,$@BG_Team1,$@BG_Team2;
+
+				set $@BG_Status,1;
+				
+				set .@msg$, "[ Battleground ] ~ " + .BG_Names$[$BG_Index] + " -- Started. You can join the mode with @joinbg.";
+				if (.Messbg == 1){
+					bgannounce .@msg$,0xffde55;
+				} else if (.Messbg == 0){
+					break;
+				}
+
+				donpcevent .BG_Arena$ + "::OnReady";
+			}
+			else
+			{
+				sleep 500;
+				set .@msg$, "[ Battleground ] ~ " + .BG_Names$[$BG_Index] + " ( id : "+($BG_Index+1)+" ) -- " + (.@Req - .@Queue_Count) + " players left -- @joinbg to vote";
+				if (.Messbg == 1){
+					bgannounce .@msg$,0xFFA500;
+				} else if (.Messbg == 0){
+					break;
+				}
+			}
+		}
+		break;
+	case 1: // Running - Others can join
+		if( .@Queue_Count > 0 )
+		{			
+			bg_balance_teams .BG_Queue,.BG_Max[$BG_Index],.TeamMode,$@BG_Team1,$@BG_Team2;
+			if( .BG_Arena$ == "KvM01_BG" ) {
+				set getvariableofnpc(.Guillaume_Count,"KvM01_BG"), 	bg_get_data($@BG_Team1, 0);
+				set getvariableofnpc(.Croix_Count,"KvM01_BG"), 		bg_get_data($@BG_Team2, 0);
+			}
+			set .@BG_Count1, bg_get_data($@BG_Team1,0);
+			set .@BG_Count2, bg_get_data($@BG_Team2,0);
+			set .@msg$, "[ Battleground ] - " + .BG_Names$[$BG_Index] + " -- B: " + .@BG_Count1 + "/" + .BG_Max[$BG_Index] + ", R: " + .@BG_Count2 + "/" + .BG_Max[$BG_Index] + " (Playing)";
+			
+			if (.Messbg== 1) {
+				bgannounce .@msg$,0xffde55;
+			} else if (.Messbg == 0){
+				break;
+			}
+		}
+		break;
+	}
+	end;
+}
+// Registration NPC
+// *********************************************************************
+bat_room,155,157,0	script	Votes Results	857,{
+	mes "[Votes Results]";
+	donpcevent "BG_Queue_Join::OnCompterVotes";
+	for(.@k=0;.@k<9;.@k++) 
+		mes $@Total_Votes_BG[.@k]+" vote"+($@Total_Votes_BG[.@k]>1?"s":"")+" pour "+getelementofarray(getvariableofnpc(.BG_Names$, "BG_Queue_Join"),.@k)+"";
+	close;
+}
+bat_room,153,157,4	script	Battle Recruiter::BG_Register	4_F_JOB_KNIGHT,{
+
+	if( getvariableofnpc(.Ready,"BG_Queue_Join") == 0 )
+		donpcevent "BG_Queue_Join::OnInit";
+
+	mes "[^1AAF9B Battle Recruiter ^000000]";
+	mes "This is the Battleground Information and Registration service.";
+	mes "What do you want to do?";
+	next;
+	switch( select("^FFA500Battleground's Modes^000000:Quit") )
+	{
+	case 2: close;
+	case 1:
+		mes "[^1AAF9B Battle Recruiter ^000000]";
+		mes "Battlegrounds Arena are different kinds of games where Teams fight for victory.";
+		mes "What do you want to do?";
+		next;
+		switch( select("Register -@joinbg-:Leave the queue -@leavebg-:About the Battleground") )
+		{
+		case 1:
+			if( BaseLevel < 80 )
+			{
+				mes "[^1AAF9B Battle Recruiter ^000000]";
+				mes "Min required level to join a battleground is 80.";
+				close;
+			}
+			if( checkquest(8506,PLAYTIME) == 2 )
+				erasequest 8506;
+			if( checkquest(8506,PLAYTIME) != -1 )
+			{
+				mes "[^1AAF9B Battle Recruiter ^000000]";
+				mes "You are a Deserter. You can't participate until the indicator goes off";
+				close;
+			}
+
+			mes "[^1AAF9B Battle Recruiter ^000000]";
+			if($@BG_Status == 2) {
+				mes "The mode is currently ending, Please retry in few minutes.";
+				close;
+			} else if($@BG_Status == 0) {
+				mes "Please vote for the mode you want to play.";
+				@Vote_BG = select("[ Capture the Flag ]:[ Team DeathMatch ]:[ Eye of Storm ]:[ Conquest ]:[ Kreiger Von Midgard ]:[ Stone Control ] :[ Domination ]:[ Rush ]:[ Poring Ball ]:[ Touch Down ]");
+				if(bg_queue_join (getvariableofnpc(.BG_Queue,"BG_Queue_Join")) && $@BG_Status == 0)
+					bgannounce "[ Battleground ] ~ '" + strcharinfo(0) + "' just voted for ''"+getelementofarray(getvariableofnpc(.BG_Names$, "BG_Queue_Join"),@Vote_BG-1)+"'' -- @joinbg <1-10> to vote.",0xc58000;
+			} else {
+				mes "Let's proceed with the registration...";
+				if(bg_queue_join (getvariableofnpc(.BG_Queue,"BG_Queue_Join")))
+					mes "^00fa00Success^000000.";
+				close;
+			}
+			end;
+		case 2:
+			mes "[^FFA500Battle Recruiter^000000]";
+			mes "If you are registered, you will be removed.";
+			mes "Are you sure?";
+			next;
+			if( select("Yes, leave queue:No, I will stay") == 2 )
+			{
+				mes "[^FFA500Battle Recruiter^000000]";
+				mes "Ok, nothing to change.";
+				close;
+			}
+
+			mes "[^FFA500Battle Recruiter^000000]";
+			mes "Close this window to continue...";
+			close2;
+			bg_queue_leave getvariableofnpc(.BG_Queue,"BG_Queue_Join");
+			end;
+		case 3:
+			mes "[^1AAF9B Battle Recruiter ^000000]";
+			mes "Tell me... what battleground you don't understand?";
+			next;
+			switch( select("Capture the Flag:Team DeathMatch:Stone Control:Eye of Storm:Domination:Conquest:Rush:KvM") )
+			{
+			case 1:
+			mes "[^FFA500Battle Recruiter^000000]";
+				mes "The objective of the Flavius Battle CTF is to score 3 points before your enemy, by capture their Flag.";
+				next;
+				mes "[^FFA500Battle Recruiter^000000]";
+				mes "To capture a Flag you need to take the enemy flag, and bring it to your base flag.";
+				next;
+				mes "[^FFA500Battle Recruiter^000000]";
+				mes "If your base flag is captured too, you need to kill the flag carrier and take the flag back to your base.";
+				break;
+			case 2:
+				mes "[^FFA500Battle Recruiter^000000]";
+				mes "Kill all the enemy players to let their Team without points.";
+				mes "Protect our army.";
+				break;
+			case 3:
+				mes "[^FFA500Battle Recruiter^000000]";
+				mes "Take the Stones in the middle of the battlefield and put in on your base, in the Stone Points.";
+				next;
+				mes "[^FFA500Battle Recruiter^000000]";
+				mes "Each Stone will give points to your team. First team reach 99 points wins the game.";
+				next;
+				mes "[^FFA500Battle Recruiter^000000]";
+				mes "Protect your stones from to be captured by the enemy.";
+				break;
+			case 4:
+				mes "[^FFA500Battle Recruiter^000000]";
+				mes "There are two bases, North and South which teams can capture by holding position on the Base more than the other team.";
+				next;
+				mes "[^FFA500Battle Recruiter^000000]";
+				mes "Each base will give you points each 5 seconds of Domination. If your Team control both bases the amount of points increases.";
+				next;
+				mes "[^FFA500Battle Recruiter^000000]";
+				mes "To get aditional points, in the middle there is a Flag spawn, capture it and put it on any of your team Bases.";
+				next;
+				mes "[^FFA500Battle Recruiter^000000]";
+				mes "The first Team reach 99 points wins the match.";
+				break;
+
+			case 5:
+				mes "[^FFA500Battle Recruiter^000000]";
+				mes "There are three bases, North, Center and South which teams can capture by holding position on the Base more than the other team.";
+				next;
+				mes "[^FFA500Battle Recruiter^000000]";
+				mes "Each base will give you points each 5 seconds of Domination.";
+				next;
+				mes "[^FFA500Battle Recruiter^000000]";
+				mes "The first Team reach 99 points wins the match.";
+				break;
+			
+			case 6:
+				mes "[^FFA500Battle Recruiter^000000]";
+				mes "If you are Attacking, destroy the enemy defenses and it's Flag.";
+				next;
+				mes "[^FFA500Battle Recruiter^000000]";
+				mes "If you are Defending, protect your castle defenses and the Flag.";
+				break;
+
+			case 7:
+				mes "[^FFA500Battle Recruiter^000000]";
+				mes "Fight to capture the Castle and organize your team to defend it.";
+				next;
+				mes "[^FFA500Battle Recruiter^000000]";
+				mes "If you fail on the first capture, kill the defender and take it for your team.";
+				break;
+			case 8:
+				mes "[^1AAF9B Battle Recruiter ^000000]";
+				mes "Fight to drop down the opponent's points to 0.";
+				next;
+				mes "[^1AAF9B Battle Recruiter ^000000]";
+				mes "Each player represent one point, if you kill him your team win a point and his team loose one point.";
+				next;
+				mes "[^1AAF9B Battle Recruiter ^000000]";
+				mes "5 minutes of fighting. The team with the high score win the game.";
+				break;
+			}
+			break;
+		}
+		close;
+	}
+	end;
+}
+
+// General Guillaume
+// *********************************************************************
+bat_room,160,159,3	script	General Guillaume	420,{
+	cutin "bat_kiyom2",2;
+	mes "[General Guillaume]";
+	mes "Hot-blooded adventurer, we need your ability to win this battle.";
+	next;
+	cutin "bat_kiyom1",2;
+	mes "[General Guillaume]";
+	mes "Our great king, Marcel Marollo VII, is very sick lately. His Majesty has declared that he chosen either me or Prince Croix as the next king amongst his 9 sons.";
+	next;
+	mes "[General Guillaume]";
+	mes "Two kings can't share a nation!";
+	mes "Only the one victorious from His Majesty's appointed battle will be enthroned.";
+	next;
+	mes "[General Guillaume]";
+	mes "This is however, not just a battle between us. This battle will determine the future of this country. I pledge on my honor to prove that I'm the one who can protect this Maroll from outside threats.";
+	close2;
+	cutin "",255;
+	end;
+}
+
+// General Croix
+// *********************************************************************
+bat_room,160,140,3	script	Prince Croix	416,{
+	cutin "bat_crua1",2;
+	mes "[Prince Croix]";
+	mes "Wise adventurer, why don't you lend us your power for victory?";
+	next;
+	cutin "bat_crua2",2;
+	mes "[Prince Croix]";
+	mes "I do not wish to shed blood, but I have no choice but to fight for the possibility of peace and for the sake of my people.";
+	next;
+	mes "[Prince Croix]";
+	mes "General Guillaume may have an advantage in this battle as he is the great general of Maroll, but that doesn't automatically mean he'll win. I want to win this battle so that I can grant a better future for my people.";
+	close2;
+	cutin "",255;
+	end;
+}
+
+// Guard Dummy
+// *********************************************************************
+
+bat_room,161,141,3	script	Prince Croix's Aid::bat_aid	415,{ end; }
+bat_room,161,139,3	duplicate(bat_aid)	Prince Croix's Aid::bat_aid2	415
+bat_room,161,160,3	duplicate(bat_aid)	General Guillaume's Aid::bat_aid3	419
+bat_room,161,158,3	duplicate(bat_aid)	General Guillaume's Aid::bat_aid4	419
+
+// Flags
+// *********************************************************************
+
+-	script	Base Flag#bg	-1,{ end; }
+
+// BattleGround Warper - Exit
+// *********************************************************************
+
+bat_room,148,150,4	script	Teleporter#bat	124,{
+	mes "[Teleporter]";
+	mes "Do you wish to leave the battlefield? Use my service to return to town.";
+	next;
+	if( select("Leave:Don't Leave") == 2 )
+	{
+		mes "[Teleporter]";
+		mes "I'll be here whenever you're in need of my service.";
+		close;
+	}
+	set .@spoint$, getsavepoint(0);
+	set .@x, getsavepoint(1);
+	set .@y, getsavepoint(2);
+	mes "[Teleporter]";
+	mes "You will be sent back to " + .@spoint$ + ".";
+	close2;
+	warp .@spoint$, .@x, .@y;
+	end;
+}
+
+// Kafra
+// *********************************************************************
+bat_room,148,147,4	script	Kafra Staff::kaf_bat	861,{
+	cutin "kafra_09",2;
+	callfunc "F_Kafra",0,2,1,150,0;
+}
+
+// Badges Exchange
+//============================================================
+
+bat_room,159,146,3	script	Telma	701,{
+	mes "[Telma]";
+	mes "Welcome, mighty warrior.";
+	mes "Do you need supply for your battles?";
+	mes "I can exchange you a nice amount for your badges or open the normal Chronos Supply Store for you.";
+	next;
+	switch( select("^FF0000Terra Old Red Box^000000::^FF0000Battleground Exclusive^000000:^0000FFWar of Emperium Exclusive Boxs:War of Emperium Exclusive Items^000000:Other Items") )
+	{
+	case 1: // Terra Old Red Box
+		mes "[Telma]";
+		mes "You can exchange your BG partipation points, a full round of each won BG, for one ^FF0000Terra Old Red Box^000000.";
+		mes "Let me check your points...";
+		next;
+		.@ok = 0;
+		for(.@i=0;.@i<getarraysize(.BG_VAR$);.@i++) {
+			mes .BG_Names$[.@i]+" : ^0000FF" + getd(.BG_VAR$[.@i]) + "^000000";
+			if(getd(.BG_VAR$[.@i]) > 0) .@ok++;
+		}
+		next;
+		if( .@ok == getarraysize(.BG_VAR$)-1)
+		{
+			for(.@i=0;.@i<getarraysize(.BG_VAR$);.@i++)
+				set getd(.BG_VAR$[.@i]),getd(.BG_VAR$[.@i])-1;
+			
+			getitem 5000,1;
+			mes "[Telma]";
+			mes "Here is one Box for you!!";
+			mes "I hope you can find inside it a big surprise.";
+			mes "Talk to me if you want to exchange more.";
+		}
+		else
+		{
+			mes "[Telma]";
+			mes "To exchange your points for a Box, you need at least 2 one of each Battleground.";
+			mes "Play all kinds of BG's!!.";
+		}
+		close;
+	case 3: // BG Supply
+		setarray .@Items[0],   547,  504,  505,  678, 7135, 7136, 7137, 7138, 7139,  715,  716,  717,12016, 1025, 7321,  662,12072,12077,12082,12087,12092,12097;
+		setarray .@Amount[0],  150,  100,  100,   10,   40,   40,   30,   30,   25,   50,  100,  200,   10,   40,   25,   10,    3,    3,    3,    3,    3,    3;
+		setarray .@Value[0],     1,    1,    1,    1,    1,    1,    1,    1,    1,    1,    1,    1,    1 ,   1,    1,    1,    1,    1,    1,    1,    1,    1;
+		set .@cID, getbattleflag("bg_reserved_char_id");
+		set .@Tarjet$, "Battleground";
+		break;
+	case 4: // WoE Supply Boxs
+		setarray .@Items[0],  8916, 8917, 8924, 8929, 8935, 8934,             8926, 8927, 8962, 8961, 8925, 8928, 8930;
+		setarray .@Amount[0],    3,    1,    2,    2,    1,    1,                2,    1,    1,    1,    4,    1,    1;
+		setarray .@Value[0],     8,    4,    4,    8,   10,   10,                8,    8,    4,    2,    8,   10,    8;
+		set .@cID, 0;
+		set .@Tarjet$, "War of Emperium or GvG";
+		break;
+	case 5: // WoE Supply Items
+		setarray .@Items[0],  7137, 7138,  662,12072,12077,12082,12087,12092,12097,14287,14288;
+		setarray .@Amount[0],   30,   30,   10,    6,    6,    6,    6,    6,    6,    5,    5;
+		setarray .@Value[0],     4,    4,    4,    8,    8,    8,    8,    8,    8,    8,    8;
+		set .@cID, getbattleflag("woe_reserved_char_id");
+		set .@Tarjet$, "War of Emperium or GvG";
+		break;
+	case 6:
+		setarray .@Items[0],  8918, 8919, 8960;
+		setarray .@Amount[0],    1,    1,    1;
+		setarray .@Value[0],    15,   15,   15;
+		set .@cID, 0;
+		set .@Tarjet$, "Everywhere";
+		break;
+	}
+
+	set .@Menu$, "";
+	for( set .@i, 0; .@i < getarraysize(.@Items); set .@i, .@i + 1 )
+		set .@Menu$, .@Menu$ + .@Amount[.@i] + " " + getitemname(.@Items[.@i]) + " (" + .@Value[.@i] + " badges):";
+	set .@j, select(.@Menu$) - 1;
+
+	mes "[Telma]";
+	mes "^0000FF" + .@Amount[.@j] + " " + getitemname(.@Items[.@j]) + "^000000";
+	mes "It will cost you " + .@Value[.@j] + " badges per pack.";
+	mes "Remember this can only be used on " + .@Tarjet$ + ".";
+	next;
+	
+	mes "[Telma]";
+	mes "But tell me first, where do you want to receive the items?";
+	next;
+	set .@Destiny, select("Here, in my Inventory:Direct to my Storage") - 1;
+
+	mes "[Telma]";
+	mes "How many packets do you want to buy? (1..50)";
+	next;
+
+	input .@total;
+	if( .@total < 1 || .@total > 50 )
+	{
+		mes "[Telma]";
+		mes "I am sorry, please input a value from 1 to 50.";
+		mes "Talk to me again when you do your selections.";
+		close;
+	}
+	
+	set .@vtotal, .@total * .@Value[.@j]; // Value of all Packages
+	set .@total, .@total * .@Amount[.@j]; // Total Amount of Items
+
+	if( .@Destiny )
+	{ // Check Storage Space Limit
+		if( .@cID )
+		{
+			if( checkspace(.@Items[.@j],.@total,1,0,0,254,0,.@cID&0xffff,(.@cID>>16)&0xffff) == 0 )
+			{
+				mes "[Telma]";
+				mes "It's seen your storage cannot accept more items.";
+				mes "Go to your store and check the free space.";
+				close;
+			}
+		}
+		else
+		{
+			if( checkspace(.@Items[.@j],.@total,1,0,0,0,0,0,0) == 0 )
+			{
+				mes "[Telma]";
+				mes "It's seen your storage cannot accept more items.";
+				mes "Go to your store and check the free space.";
+				close;
+			}
+		}
+	}
+	else
+	{ // Check Weight Limit
+		if( checkweight(.@Items[.@j],.@total) == 0 )
+		{
+			mes "[Telma]";
+			mes "It's seen you can't carry the stuff you want to buy.";
+			mes "Go and store some items on your Kafra Storage.";
+			close;
+		}
+	}
+
+	if( countitem(7828) + countitem(7829) + countitem(7773) < .@vtotal )
+	{
+		mes "[Telma]";
+		mes "Required Badges: ^0000FF" + .@vtotal + "^000000";
+		mes "You do not have enough badges. Sorry...";
+		mes "Participate in Battleground arenas to receive it.";
+		close;
+	}
+	set .@vcount, .@vtotal;
+	set .@i7828, 0;
+	set .@i7829, 0;
+	set .@i7773, 0;
+
+	// Bravery Badges
+	if( countitem(7828) > 0 )
+	{
+		mes "[Telma]";
+		mes "Required Badges: ^0000FF" + .@vcount + "^000000";
+		mes "Bravery Badges to expend:";
+		next;
+		input .@i7828;
+		if( .@i7828 < 0 || .@i7828 > countitem(7828) )
+		{
+			mes "[Telma]";
+			mes "Invalid number... Sorry.";
+			close;
+		}
+		
+		if( .@i7828 > .@vcount ) set .@i7828,.@vcount;
+		set .@vcount, .@vcount - .@i7828;
+	}
+
+	// Valor Badges
+	if( .@vcount && countitem(7829) > 0 )
+	{
+		mes "[Telma]";
+		mes "Required Badges: ^0000FF" + .@vcount + "^000000";
+		mes "Valor Badges to expend:";
+		next;
+		input .@i7829;
+		if( .@i7829 < 0 || .@i7829 > countitem(7829) )
+		{
+			mes "[Telma]";
+			mes "Invalid number... Sorry.";
+			close;
+		}
+		
+		if( .@i7829 > .@vcount ) set .@i7829,.@vcount;
+		set .@vcount, .@vcount - .@i7829;
+	}
+
+	// Heroism Badges
+	if( .@vcount && countitem(7773) > 0 )
+	{
+		mes "[Telma]";
+		mes "Required Badges: ^0000FF" + .@vcount + "^000000";
+		mes "Heroism Badges to expend:";
+		next;
+		input .@i7773;
+		if( .@i7773 < 0 || .@i7773 > countitem(7773) )
+		{
+			mes "[Telma]";
+			mes "Invalid number... Sorry.";
+			close;
+		}
+
+		if( .@i7773 > .@vcount ) set .@i7773, .@vcount;
+		set .@vcount, .@vcount - .@i7773;
+	}
+
+	// Final Checks
+	if( .@vcount != 0 )
+	{
+		mes "[Telma]";
+		mes "Sorry, not enough badges to pay the total value.";
+		close;
+	}
+
+	mes "[Telma]";
+	mes "Are you ready to pay and receive your items?";
+	mes "Your payment details:";
+	mes "^0000FF" + .@i7828 + "^000000 Bravery Badges";
+	mes "^0000FF" + .@i7829 + "^000000 Valor Badges";
+	mes "^0000FF" + .@i7773 + "^000000 Heroism Badges";
+	next;
+
+	if( select("Yes, let's do it:I am sorry... not this time") == 2 )
+	{
+		mes "[Telma]";
+		mes "Ok, come again if you change your mind.";
+		close;
+	}
+
+	if( .@Destiny )
+	{ // Check Storage Space Limit
+		if( .@cID )
+		{
+			if( checkspace(.@Items[.@j],.@total,1,0,0,254,0,.@cID&0xffff,(.@cID>>16)&0xffff) == 0 )
+			{
+				mes "[Telma]";
+				mes "It's seen your storage cannot accept more items.";
+				mes "Go to your store and check the free space.";
+				close;
+			}
+		}
+		else
+		{
+			if( checkspace(.@Items[.@j],.@total,1,0,0,0,0,0,0) == 0 )
+			{
+				mes "[Telma]";
+				mes "It's seen your storage cannot accept more items.";
+				mes "Go to your store and check the free space.";
+				close;
+			}
+		}
+	}
+	else
+	{ // Check Weight Limit
+		if( checkweight(.@Items[.@j],.@total) == 0 )
+		{
+			mes "[Telma]";
+			mes "It's seen you can't carry the stuff you want to buy.";
+			mes "Go and store some items on your Kafra Storage.";
+			close;
+		}
+	}
+
+	if( .@i7828 > countitem(7828) || .@i7829 > countitem(7829) || .@i7773 > countitem(7773) )
+	{
+		mes "[Telma]";
+		mes "What!?, are you a magician or a thief? What did you do with your badges!?";
+		mes "Get out of here!";
+		close;
+	}
+
+	delitem 7828,.@i7828;
+	delitem 7829,.@i7829;
+	delitem 7773,.@i7773;
+
+	if( .@cID )
+	{
+		if( .@Destiny )
+			storeitem2 .@Items[.@j],.@total,1,0,0,254,0,.@cID&0xffff,(.@cID>>16)&0xffff;
+		else
+			getitem2 .@Items[.@j],.@total,1,0,0,254,0,.@cID&0xffff,(.@cID>>16)&0xffff;
+	}
+	else
+	{
+		if( .@Destiny )
+			storeitem .@Items[.@j],.@total;
+		else
+			getitem .@Items[.@j],.@total;
+	}
+
+	mes "[Telma]";
+	mes "Here it is... Now take care and fight for the honor and glory of your prince.";
+	close;
+}
+
+bat_room,1,1,3	itemshop	BraveryExchanger	111,7828,13036:100,13411:100,1425:100,1632:100,1634:100,1543:100,1924:100,1978:100,1574:100,1824:100,1183:100,1380:100,13305:100,1279:100,1739:100,13108:100,13172:100,2538:50,2539:50,2540:50,2435:50,2436:50,2437:50,2376:80,2377:80,2378:80,2379:80,2380:80,2381:80,2382:80,2720:500,2721:500,2722:500,2723:500,2724:500,2725:500,2733:500
+bat_room,1,1,3	itemshop	ValorExchanger	111,7829,13037:100,13410:100,1633:100,1635:100,1542:100,1923:100,1977:100,1575:100,1823:100,1184:100,1482:100,1379:100,13306:100,1280:100,1738:100,13171:100,13173:100,13174:100,2538:50,2539:50,2540:50,2435:50,2436:50,2437:50,2376:80,2377:80,2378:80,2379:80,2380:80,2381:80,2382:80,2720:500,2721:500,2722:500,2723:500,2724:500,2725:500,2733:500
+bat_room,1,1,3	itemshop	HeroismExchanger	111,7773,1187:2000,1281:2000,1282:2000,1310:2000,1382:2000,1426:2000,1486:2000,1546:2000,1576:2000,1577:2000,1640:2000,1641:2000,1743:2000,1826:2000,1827:2000,1927:2000,1981:2000,2002:2000,13042:2000,13110:2000,13176:2000,13177:2000,13178:2000,13179:2000,13307:2000,13416:2000,13417:2000,13418:2000,2394:840,2395:170,2396:25,2444:580,2445:70,2446:15,2549:630,2772:1200,2773:280,2774:40
+
+bat_room,159,154,3	script	Erundek	109,{
+	mes "[Erundek]";
+	mes "Welcome, mighty warrior.";
+	mes "What can I do for you today ?";
+	next;
+	switch( select("Exchange Bravery Badges","Exchange Valor Badges","Exchange Heroism Badges","Hmm, nothing I guess.") )
+	{
+		case 4:
+			mes "[Erundek]";
+			mes "As you wish.";
+			mes "See you later.";
+			close;
+		case 1: // Bravery Badges
+			mes "[Erundek]";
+			mes "So you want to exchange ^0000FFBravery Badges^000000 from the Battle of Tierra Valley.";
+			mes "Close this window to open shop.";
+			close2;
+			callshop "BraveryExchanger",0;
+			end;
+		case 2: // Valor Badges
+			mes "[Erundek]";
+			mes "So you want to exchange ^FF0000Valor Badges^000000 from the Battle of Flavius.";
+			mes "Close this window to open shop.";
+			close2;
+			callshop "ValorExchanger",0;
+			end;
+		case 3: // Heroism Badges
+			mes "[Erundek]";
+			mes "So you want to exchange ^FFA500Heroism Badges^000000 from the Battle of Kriger Von Midgard.";
+			mes "Close this window to open shop.";
+			close2;
+			callshop "HeroismExchanger",0;
+			end;
+	}
+}

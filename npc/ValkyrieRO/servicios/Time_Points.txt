@@ -1,0 +1,129 @@
+//===== Global Chile ======
+//=== https://www.facebook.com/IntegralesGlobal ==
+//=== DESCRIPCION: Entrega Kafra Points por estar ON  ==
+
+-	script	TimePoints	-1,{
+
+OnWhisperGlobal:
+	if (@whispervar0$ == "-desactivar")
+	{
+		if (#TimePointsEst == 0)
+		{
+			dispbottom "[ Sistema de Puntos por Tiempo ]";
+			dispbottom "El sistema ya esta DESACTIVADO. Ingrese '-ayuda' para obtener ayuda.";
+		}
+		else
+		{
+			dispbottom "[ Sistema de Puntos por Tiempo ]";
+			dispbottom "Estado : [ DESACTIVADO ] ";
+			set #TimePointsEst , 0 ; //desactiva
+		}
+	}
+	else
+	{
+		if (@whispervar0$ == "-activar")
+		{
+			if (#TimePointsEst == 1)
+			{
+				dispbottom "[ Sistema de Puntos por Tiempo ]";
+				dispbottom "El sistema ya esta ACTIVADO. Ingrese '-ayuda' para obtener ayuda.";
+			}
+			else
+			{
+				dispbottom "[ Sistema de Puntos por Tiempo ]";
+				dispbottom "Estado : [ ACTIVADO ] ";
+				set #TimePointsEst , 1 ; //activa
+			}
+		}
+		else
+		{
+			if (@whispervar0$ == "-ayuda")
+			{
+				dispbottom "[ Sistema de AYUDA de Puntos por Tiempo ]";
+				dispbottom "Comandos permitidos:";
+				dispbottom "'-ayuda': Activa ayuda.";
+				dispbottom "'-activar': Activa ganancia de puntos por tiempo.";
+				dispbottom "'-desactivar': Desactiva ganancia de puntos por tiempo.";
+				dispbottom "'-informacion': Información general.";
+			}
+			else
+			{
+				if (@whispervar0$ == "-informacion")
+				{
+					dispbottom "[ Sistema de INFORMACIÓN de Puntos por Tiempo ]";
+					dispbottom "El sistema de 'Puntos por Tiempo', te permite ganar Kafra Points por estar conectado(a) cada cierto tiempo. Los cambios o efectos que se apliquen serán por cuenta, y se aplicarán al desloguear.";
+					dispbottom "Ingresa a '-ayuda' para obtener los comandos disponibles.";
+				}
+				else	dispbottom "Comando mal ingresado, ingrese '-ayuda' para obtener ayuda.";
+			}
+		}
+	}
+	end;
+
+OnPCLoginEvent:
+	if (#TimePointNewPj != 1)
+	{
+		mes "[ ^008888Sistema Puntos por Tiempo^000000 ]";
+		mes "Bienvenido a ^008888tRO^000000, puedes iniciar la configuración de Puntos por Tiempo enviando ^0000FF'-informacion'^000000 como mensaje privado a ^0000FF'npc:TimePoints'^000000.";
+		next;
+		mes "Seguir mostrando anuncio?";
+		if (select("Si:No") == 2) {		
+		set #TimePointsEst, 1;
+		set #TimePointNewPj, 1;
+		}
+		close2;
+		addtimer .Timer,"TimePoints::OnTimeOut";
+	}
+		addtimer .Timer,"TimePoints::OnTimeOut";
+		end;
+
+OnTimeOut:
+	if (checkvending() || checkchatting() || agitcheck())	end;
+	mes "[ ^008888Sistema Puntos por Tiempo^000000 ]";
+	mes "Se activa el sistema de Puntos por Tiempo por estar conectad"+ (Sex?"o":"a") + ".";
+	//setoption 0x40,1;
+	//pcblockmove getcharid(3),1;
+	next;
+	set .@a, rand(10,99);
+	set .@b, rand(10,99);
+	set .@c, rand(10,99);
+	switch (rand(1,3))
+	{
+		case 1:
+			set .@codigo, .@a;
+			set .@mostrar$, "^0B610B"+ .@codigo +"^000000 ^FF0000"+ .@b +"^000000 ^FF0000"+ .@c +"^000000";
+			break;
+		case 2:
+			set .@codigo, .@b;
+			set .@mostrar$, "^FF0000"+ .@a +"^000000 ^0B610B"+ .@codigo +"^000000 ^FF0000"+ .@c +"^000000";
+			break;
+		case 3:
+			set .@codigo, .@c;
+			set .@mostrar$, "^FF0000"+ .@a +"^000000 ^FF0000"+ .@b +"^000000 ^0B610B"+ .@codigo +"^000000";
+			break;
+	}
+	mes "[ ^008888Sistema Puntos por Tiempo^000000 ]";
+	mes "Ingresa el numero que aparecerá en color verde [ "+ .@mostrar$ +" ] para ganar Kafra Points.";
+	next;
+	mes "[ ^008888Sistema Puntos por Tiempo^000000 ]";
+	mes "¿Que numero aparecio de color ^0B610BVERDE^000000?";
+	input .@input;
+	if (.@input == .@codigo)
+	{
+		mes " ";
+		mes "Correcto!, ganas ^008800~1 Kafra Points~^000000 por estar conectad"+ (Sex?"o":"a") +".";
+		set #KAFRAPOINTS , #KAFRAPOINTS +1;
+	}
+	else
+	{
+		mes " ";
+		mes "Que lastima, es incorrecto... El número correcto era ^0B610B"+ .@codigo +"^000000.";
+	}
+	addtimer .Timer,"TimePoints::OnTimeOut";
+	close;
+
+OnInit:
+	set .Timer, 1800000; //UNA HORA [ 1000 = 1 SEGUNDO ]
+	end;
+
+}

@@ -1,0 +1,189 @@
+// Gold Room Warper v1.0
+invek,136,135,5	script	Sala del Oro	4_M_KNIGHT_GOLD,{
+
+set .@nombre$, "[^0000FFSala del Oro^000000]";
+
+
+mes .@nombre$;
+mes "Bienvenido a la sala de oro.";
+mes "En este lugar podrás eliminar Peco Peco, los cuales te otorgaran puntos de oro,";
+mes "los cuales puedes intercambiar por oro real.";
+next;
+mes .@nombre$;
+mes "Dentro de la sala el uso de habilidades, el uso del comando @wap, no estan permitidos.";
+mes "Por lo cual te aconsejo llevar Fly Wings para poder teletransportarte dentro de la sala.";
+mes "Además tampoco podras utilizar @go para visitar alguna ciudad dentro de la sala.";
+mes "La unica salida que encontrarás es usar los portales de salida dentro del mapa.";
+next;
+mes .@nombre$;
+mes "La sala es un ambiente PvP, por lo cual sieres eliminado, todos tus puntos serán borrados!.";
+next;
+mes .@nombre$;
+mes "En resumen, te aconsejo lo siguiente:";
+mes "- Llevar Fligh Wings.";
+mes "- Llevar Butterfly Wings.";
+next;
+mes .@nombre$;
+mes "Por costos de visitar mi sala, deberás cancelar un valor de 100,000 Zeny.";
+mes "¿ Qué deseas hacer ?.";
+next;
+mes .@nombre$;
+switch(select("Entrar a la Sala:Revisar mis Puntos:Intercambiar mis Puntos:Salir")){ 
+
+	case 1:
+
+		if (Zeny < 100000) {
+			mes "No tienes el dinero suficiente.";
+			close;
+				} else  {
+					
+	Zeny-=100000;
+		warp "ordeal_3-2",154,154;
+		end;
+}
+
+	case 2:
+
+		mes "Actualmente tienes : ^6c2436"+GoldRoom+" puntos.^000000";
+		close;
+
+	case 3: 
+
+		mes "Actualmente tienes : ^6c2436"+GoldRoom+" puntos.^000000";
+		mes "¿Deseas convertir todos tus puntos o seleccionar cuantos puntos convertir?.";
+		if(select("Convertir todo","Seleccionar")==1){
+		
+			 if( !GoldRoom ){
+			next;
+			mes .@nombre$;
+  			mes "No tienes ningún Punto.";
+			close;
+ 					}else{
+	
+				if (!checkweight(969, GoldRoom)){
+		next;
+			mes .@nombre$;
+			mes "¡ Advertencia !";
+			mes "No tienes espacio suficiente en tu inventario para recibir el oro.";
+			mes "Procura liberar más espacio en tu inventario.";
+			close;
+						}
+		        getitem 969,GoldRoom;
+        set GoldRoom, 0;
+	close;
+		} // Fin else
+
+  } // Fin comprobación == 1
+
+
+			 if( !GoldRoom){
+			next;
+			mes .@nombre$;
+  			mes "No tienes ningún Punto.";
+			close;
+ 					}else{
+		next;
+					mes .@nombre$;
+ 			 mes "¿Cuantos puntos deseas intercambiar?";
+  				input @GP,0,GoldRoom;
+  			if( !@GP || GoldRoom < 0 || @GP > GoldRoom){
+			next;
+			mes .@nombre$;
+  				 mes "Trato cancelado.";
+				close;
+  						}else{
+				if (!checkweight(969, @GP)){
+			mes "¡ Advertencia !";
+			mes "No tienes espacio suficiente en tu inventario para recibir el oro.";
+			mes "Procura liberar más espacio en tu inventario.";
+			close;
+						}
+   					 getitem 969,@GP;
+       				 set GoldRoom, GoldRoom-@GP;
+			close;
+  } // Fin else
+
+		} // FIN gold		
+
+			end;
+
+	case 4:
+		close;
+}
+		}
+
+
+
+-	script	GoldRoom	HIDDEN_NPC,{
+
+OnNPCKillEvent:
+
+	if (strcharinfo(3) != "ordeal_3-2") end;
+
+		if (killedrid != 1233) end;
+switch (rand(4)) {
+        case 0:
+                set .@g, 1;
+                set GoldRoom, GoldRoom+ .@g;
+                break;
+               
+        case 1:
+                set .@g, 1;
+                set GoldRoom, GoldRoom+ .@g;
+                break;
+               
+        case 2:
+                set .@g, 2;
+                set GoldRoom, GoldRoom+ .@g;
+                break;
+		
+	case 3:
+                set .@g, 2;
+                set GoldRoom, GoldRoom+ .@g;
+                break;
+} // End switch
+
+dispbottom "Has ganado " +.@g +" Gold Points, ahora tienes un total de " +GoldRoom+" Gold points.";
+end;
+ 
+OnPCDieEvent:
+
+if (strcharinfo(3) != "ordeal_3-2") end;
+dispbottom "Has perdido tus Gold points porque te han matado en la sala Gold Room Ordeal.";
+set GoldRoom, 0;
+end;
+
+	} // End Script
+ 
+ 
+// Natural Monsters v1.0
+ordeal_3-2,154,154,0,0	monster	Gold Peco Peco	1233,5,0,0,0
+ordeal_3-2,0,0,0,0	monster	Gold Peco Peco	1233,35,0,0,0
+ordeal_3-2,0,0,0,0	monster	Gold Peco Peco	1233,75,0,0,0
+ordeal_3-2,0,0,0,0	monster	Gold Peco Peco	1233,60,0,0,0
+ordeal_3-2,0,0,0,0	monster	Gold Guardian	1439,15,0,0,0
+ordeal_3-2,154,154,0,0	monster	Gold Guardian	1439,2,0,0,0
+ 
+// Map Flags v1.0
+ordeal_3-2	mapflag	nowarp
+ordeal_3-2	mapflag	nobranch
+ordeal_3-2	mapflag	nomemo
+ordeal_3-2	mapflag	nowarpto
+ordeal_3-2	mapflag	nopenalty
+ordeal_3-2	mapflag	pvp_noparty
+ordeal_3-2	mapflag	noskill
+
+ordeal_3-2,24,228,0	warp	invek1	1,1,invek,147,166
+ordeal_3-2,25,58,0	warp	invek2	1,1,invek,147,166
+ordeal_3-2,289,130,0	warp	invek3	1,1,invek,147,166
+ordeal_3-2,283,230,0	warp	invek4	1,1,invek,147,166
+ordeal_3-2,210,203,0	warp	invek5	1,1,invek,147,166
+
+-	script	GoldCell	HIDDEN_NPC,{
+
+OnInit:
+setcell "ordeal_3-2",146,161,161,147,cell_basilica,true;
+end;
+}
+
+ordeal_3-2,153,153,0	shop	Gold Shop	4_M_JOB_HUNTER,601:100000,602:200000

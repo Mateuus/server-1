@@ -1,0 +1,50 @@
+//Author		Goddameit
+//Version		2012/10/27 - 22:02
+//Web		http://bit.ly/MDuQ9F
+prontera,150,180,4	script	Go to practice	100,{
+	if(!getcharid(1))
+	{
+		mes "Please create a party.";
+		close;
+	}
+	if(instance_id(1))
+	{
+		doevent "Leave and End::OnDo";
+		end;
+	}
+	set .@id,instance_create("Practice",getcharid(1));
+	instance_attachmap "2@cata",.@id;
+	instance_attach .@id;
+	instance_init .@id;
+	instance_set_timeout 3600,3600,.@id;
+	warp has_instance("2@cata"),25,16;
+	end;
+}
+2@cata,25,21,4	script	Spawn Monster	100,{
+	getmapxy(.@m$,.@x,.@y,0);
+	killmonsterall "2@cata";
+	set smp_tick,gettimetick(2);
+	monster "2@cata",.@x,.@y,"Practice",1083,1,instance_npcname(strnpcinfo(0))+"::OnKill";
+	end;
+OnKill:
+	if(!playerattached())
+		end;
+	set .@total,gettimetick(2)-smp_tick;
+	set smp_tick,0;
+	set .@min,.@total/60;
+	set .@sec,.@total%60;
+	instance_announce instance_id(0),"Total time : "+.@min+"m "+.@sec+"s",0;
+	end;
+}
+2@cata,28,21,4	script	Leave and End	100,{
+OnDo:
+OnPCLogoutEvent:
+	set .@id,instance_id(1);
+	if(!.@id)
+		end;
+	set smp_tick,0;
+	instance_warpall "prontera",150,180;
+	instance_detachmap "2@cata",.@id;
+	instance_destroy .@id;
+	end;
+}

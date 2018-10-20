@@ -1,0 +1,20 @@
+poring_w02,70,88,5    script    Comprador de Cabezas    416,{
+
+set .NPC$,"[^0066CCComprador de Cabezas ^000000]";
+set .@custom, <customid>;
+
+mes .NPC$;
+mes "Would you like to trade in 1000 Skulls for a "+getitemname(.@custom)+"?";
+next;
+if(select("Yes","No)==2) close;
+mes .NPC$;
+if(countitem(29030) < 1000){
+    mes "You don't have 1000 PvP Skulls!";
+    close;
+}
+mes "Thanks! Heres your item!";
+delitem 29030, 1000;
+getitem .@custom, 1;
+close;
+
+}

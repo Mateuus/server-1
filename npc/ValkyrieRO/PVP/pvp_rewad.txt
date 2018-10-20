@@ -1,0 +1,127 @@
+//===== rAthena Script =======================================================
+//= Unique Pvp
+//===== By: ==================================================================
+//= Gerome
+//===== Current Version: =====================================================
+//= 1.0    
+//===== Compatible With: =====================================================
+//= eAthena , rAthena
+//===== Description: =========================================================
+//= When a Player Killed Another Player. He/she will Got a Reward
+//===== Topic ================================================================
+//= http://rathena.org/board/topic/59302-unique-pvp-room/
+//============================================================================
+
+
+-	script	UniquePvp	-1,{
+OnInit:
+    /* ------------*
+    | Config Start |
+    /*-------------*/
+     setarray .unq_req_id[0], 671,670; 			// Required Item ID
+     setarray .unq_req_quantity[0],10,5;		// Required item Quantity
+    
+     setarray .unq_reward_id[0], 671;     		// Reward Item ID
+     setarray .unq_reward_quantity[0],20; 		// Reward Item Quantity
+    
+     set .unq_gm_lvl,60; // If set to 60, GM lvl 60 and above will not get a Reward
+    
+     //  "<map_name>" Put the name of the map to Enabled the Rewarding of Item
+     // it will Also listed in the choices of the Room
+     setarray .unq_pvpmap$[0], "pvp_y_8-4","guild_vs3";
+                                        
+    // FORMAT: "<x-axis>,<y-axis>", set the x-Axis and y-Axis to 0 to make it Random                            
+     setarray .unq_pvproom_location[0],"0,0","0,0"; // x-Axis and y-Axis location
+    
+     set .unq_trigger_all_maps,0; //don't Mind this one!
+    /* ----------*
+    | Config End |
+    /*-----------*/
+    end;
+    
+OnPCKillEvent:
+            if ( getgmlevel() >= .unq_gm_lvl ) end;
+            getmapxy .@map$, .@x, .@y, 0;
+            for ( set .@x,0; .@x < getarraysize(.unq_pvpmap$); set .@x,.@x + 1 )
+            {
+                if( .@map$ == .unq_pvpmap$[.@x] || .unq_trigger_all_maps == 1 )
+                {
+                    attachrid killedrid;
+                    if ( killerrid != getcharid(3))
+                    {
+                         message strcharinfo(0),"You have been killed by "+ rid2name(killerrid);
+                         message rid2name(killerrid),"You just killed "+ strcharinfo(0);
+                    }
+                    for ( set .@x,0; .@x < getarraysize(.unq_req_id); set .@x,.@x + 1 )
+                    {
+                        getitem .unq_req_id[.@x], .unq_req_quantity[.@x], getcharid( 3,rid2name(killerrid) );
+					}
+                }   
+            }
+    end;
+    
+
+}
+
+/*------------*
+| PVP WARPER  |
+/*------------*/
+prontera,145,164,6	script	PVP Warper#p1	108,{
+     set .variable_npc$,"UniquePvp";
+     set .npcname$,"[^990000Unique Pvp Warper^000000]"; // Npc Name
+
+    
+     mes .npcname$;
+     mes "Hello " + strcharinfo(0);
+     mes "I can warp you to PVP Room";
+     mes "But i need This Following item";
+    
+     for ( set .@x,0; .@x < getarraysize( getvariableofnpc(.unq_req_id, .variable_npc$)); set .@x,.@x + 1 )
+     {
+        mes getvariableofnpc(.unq_req_quantity[.@x],.variable_npc$)+" ^FF0000"+getitemname( getvariableofnpc(.unq_req_id[.@x],.variable_npc$) )+"^000000";
+     }
+
+     next;
+     switch(select("Ok:Cancel")){
+         case 1:
+                // Check Required Item
+                for ( set .@x,0; .@x < getarraysize( getvariableofnpc(.unq_req_id, .variable_npc$) ); set .@x,.@x + 1 )
+                {
+                    if( countitem( getvariableofnpc(.unq_req_id[.@x], .variable_npc$)) < getvariableofnpc(.unq_req_quantity[.@x], .variable_npc$) )
+                    {
+                        mes .npcname$;
+                        mes "you don't have the Required item";
+                        next;
+                        goto L_EXIT;
+                    }
+               }
+                
+                for ( set .@x,0; .@x < getarraysize( getvariableofnpc(.unq_pvpmap$, .variable_npc$) ); set .@x,.@x + 1 )
+                {
+                    set .unq_temp_pvpmap$[.@x], getvariableofnpc(.unq_pvpmap$[.@x], .variable_npc$) + "("  + getmapusers(getvariableofnpc(.unq_pvpmap$[.@x], .variable_npc$)) + ")";
+                }
+                 // Display Menu
+                set @choosen_menu, select( implode(.unq_temp_pvpmap$, ":") );
+                set @choosen_menu, @choosen_menu - 1;
+                // Delete Item
+                for ( set .@x,0; .@x < getarraysize( getvariableofnpc(.unq_req_id,"UniquePvp") ); set .@x,.@x + 1 )
+                {
+                    delitem getvariableofnpc(.unq_req_id[.@x],.variable_npc$), getvariableofnpc(.unq_req_quantity[.@x], .variable_npc$);
+                }
+                // Send Player to Choosen map
+                explode( @location$, getvariableofnpc(.pvproom$[@choosen_menu], .variable_npc$), "," );
+                warp getvariableofnpc(.unq_pvpmap$[@choosen_menu], .variable_npc$), atoi( @location$[0] ), atoi( @location$[1] );    
+        end;
+        break; // Break Case 1
+        
+         case 2:
+            goto L_EXIT;
+        break;
+    
+     }
+L_EXIT:
+        mes .npcname$;
+        mes "Bye!";
+        close;
+        
+}

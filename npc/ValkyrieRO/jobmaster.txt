@@ -1,0 +1,443 @@
+//===== rAthena Script =======================================
+//= Job Master
+//===== By: ==================================================
+//= Euphy
+//===== Current Version: =====================================
+//= 1.4
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: =========================================
+//= A fully functional job changer.
+//===== Additional Comments: =================================
+//= 1.0 Initial script.
+//= 1.1 Fixed reset on Baby job change.
+//= 1.2 Added Expanded Super Novice support and initial Kagerou/Oboro support.
+//= 1.3 Kagerou/Oboro added.
+//= 1.4 Rebellion added.
+//============================================================
+
+-	script	::Job Master	-1,{
+function Job_Menu;
+
+	mes "[Job Master]";
+	if (Class > Job_Soul_Linker) {
+		mes "No más clases disponibles.";
+		cutin "",255;
+		close;
+	}
+	if (checkfalcon() || checkcart() || checkriding() || ismounting()) {
+		mes "Por favor retire su " +
+			((checkfalcon()) ? "falcon" : "") +
+			((checkcart()) ? "cart" : "") +
+			((checkriding()) ? "Peco" : "") +
+			((ismounting()) ? "mount" : "") +
+			" antes de continuar.";
+		cutin "",255;
+		close;
+	}
+	if (.SkillPointCheck && SkillPoint) {
+		mes "Por favor, use todos sus puntos de habilidad antes de proceder.";
+		cutin "",255;
+		close;
+	}
+
+	.@eac = eaclass();
+	.@i = ((.ThirdClass) ? roclass(.@eac&EAJ_UPPERMASK) : Class);
+	if (.@i >= Job_Knight && .@i <= Job_Crusader2) {
+		if (BaseLevel < .Rebirth[0] || JobLevel < .Rebirth[1]) {
+			.@blvl = .Rebirth[0] - BaseLevel;
+			.@jlvl = .Rebirth[1] - JobLevel;
+			mes "You need " +
+				((.@blvl > 0) ? .@blvl + " more base levels " + ((.@jlvl > 0) ? "/ " : "") : "") +
+				((.@jlvl > 0) ? .@jlvl + " more job levels " : "") + "continuar.";
+		cutin "",255;
+			close;
+		}
+		if (Class > Job_Crusader2) {
+			mes "Cambiar a tercera clase?";
+			next;
+			Job_Menu(roclass(.@eac|EAJL_THIRD));
+		cutin "",255;
+			close;
+		}
+		while(1) {
+			cutin "sarah_hero3",2;
+			mes "Seleccione una opcion.";
+			next;
+			.@i = select(" ~ ^0055FFRebirth^000000:",": ~ ^777777Cancel^000000");
+			if (.@i == 3)
+				close;
+			mes "[Job Master]";
+			mes "¿Estás seguro?";
+			next;
+			Job_Menu(((.@i == 1) ? Job_Novice_High : roclass(.@eac|EAJL_THIRD)));
+			mes "[Job Master]";
+		}
+	}
+	.@j1 = roclass(.@eac|EAJL_2_1);
+	.@j2 = roclass(.@eac|EAJL_2_2);
+	if ((.@eac&EAJ_UPPERMASK) == EAJ_SUPER_NOVICE)
+		setarray .@exp[0], roclass(.@eac|EAJL_THIRD), 99;
+	if (Class == Job_Ninja || Class == Job_Gunslinger)
+		setarray .@exp[0], .@j1, 70;
+	if (.@exp[0] && .SecondExpanded) {
+		if (BaseLevel < .Rebirth[0] || JobLevel < .@exp[1]) {
+			.@blvl = .Rebirth[0] - BaseLevel;
+			.@jlvl = .@exp[1] - JobLevel;
+			mes "Tu necesitas " +
+				((.@blvl > 0) ? .@blvl + " more base levels " + ((.@jlvl > 0) ? "/ " : "") : "") +
+				((.@jlvl > 0) ? .@jlvl + " more job levels " : "") + "to continue.";
+		cutin "",255;
+			close;
+		}
+		mes "Cambiar a " + jobname(.@exp[0]) + "?";
+		next;
+		Job_Menu(.@exp[0]);
+		close;
+	}
+	if (.@eac&EAJL_2)
+		if (.@eac&(EAJL_UPPER|EAJL_BABY) || roclass(.@eac|EAJL_UPPER) == -1) {
+			mes "No más de clase están disponibles.";
+			cutin "",255;
+			close;
+		}
+	if ((.@eac&EAJ_BASEMASK) == EAJ_NOVICE) {
+		if (JobLevel < .JobReq[0])
+			mes "Un nivel de job " + .JobReq[0] + " se requiere que se ponga la 1ª Clase.";
+		else if (Class == Job_Novice_High && .LastJob && lastJob) {
+			mes "Cambiar las clases ahora?";
+			next;
+			Job_Menu(roclass((eaclass(lastJob)&EAJ_BASEMASK)|EAJL_UPPER));
+		} else {
+			switch(Class) {
+			case Job_Novice:
+				Job_Menu(
+					Job_Swordman,
+					Job_Mage,
+					Job_Archer,
+					Job_Acolyte,
+					Job_Merchant,
+					Job_Thief,
+					Job_SuperNovice,
+					Job_Taekwon,
+					Job_Gunslinger,
+					Job_Ninja,
+					Job_Baby
+				);
+				break;
+			case Job_Novice_High:
+				Job_Menu(
+					Job_Swordman_High,
+					Job_Mage_High,
+					Job_Archer_High,
+					Job_Acolyte_High,
+					Job_Merchant_High,
+					Job_Thief_High
+				);
+				break;
+			case Job_Baby:
+				Job_Menu(
+					Job_Baby_Swordman,
+					Job_Baby_Mage,
+					Job_Baby_Archer,
+					Job_Baby_Acolyte,
+					Job_Baby_Merchant,
+					Job_Baby_Thief,
+					Job_Super_Baby
+				);
+				break;
+			default:
+				mes "Se ha producido un error.";
+				break;
+			}
+		}
+		cutin "",255;
+		close;
+	}
+	if (roclass(.@eac|EAJL_2_1) == -1 || roclass(.@eac|EAJL_2_2) == -1)
+		mes "No hay más job disponibles.";
+	else if (!(.@eac&EAJL_2) && JobLevel < .JobReq[1])
+		mes "Un nivel de job " + .JobReq[1] + " se requiere para cambiar a la 2 ª clase.";
+	else if (.LastJob && lastJob && (.@eac&EAJL_UPPER)) {
+		mes "Cambiar las clases ahora?";
+		next;
+		Job_Menu(lastJob + Job_Novice_High);
+	} else
+		Job_Menu(.@j1, .@j2);
+	close;
+
+function Job_Menu {
+	while(1) {
+		if (getargcount() > 1) {
+			cutin "sarah_hero3",2;
+			mes "Seleccione una clase.";
+			.@menu$ = "";
+			for (.@i = 0; .@i < getargcount(); .@i++)
+				.@menu$ = .@menu$ + " ~ " + jobname(getarg(.@i)) + ":";
+			.@menu$ = .@menu$+" ~ ^777777Cancel^000000";
+			next;
+			.@i = getarg(select(.@menu$) - 1, 0);
+			if (!.@i)
+				close;
+			if ((.@i == Job_SuperNovice || .@i == Job_Super_Baby) && BaseLevel < .SNovice) {
+				mes "[Job Master]";
+				mes "un nivel básico de " + .SNovice + " se requiere para convertirse en una " + jobname(.@i) + ".";
+				cutin "",255;
+				close;
+			}
+			mes "[Job Master]";
+			mes "¿Estás seguro?";
+			next;
+		} else
+			.@i = getarg(0);
+		if (select(" ~ Cambie a ^0055FF" + jobname(.@i) + "^000000 clase: ~ ^777777" + ((getargcount() > 1) ? "Regresa" : "Cancel") + "^000000") == 1) {
+			mes "[Job Master]";
+			mes "Ahora estas " + callfunc("F_InsertArticle", jobname(.@i)) + "!";
+			if (.@i == Job_Novice_High && .LastJob)
+				lastJob = Class;
+			jobchange .@i;
+			if (.@i == Job_Novice_High)
+				resetlvl(1);
+			else if (.@i == Job_Baby) {
+				resetstatus;
+				resetskill;
+				set SkillPoint,0;
+			}
+			specialeffect2 EF_ANGEL2;
+			specialeffect2 EF_ELECTRIC;
+			specialeffect2 203;
+			if (.Platinum)
+				callsub Get_Platinum;
+			if (.JobWeapon)
+				callsub Get_JobWeapon;
+			if (.JobHeadGear)
+				callsub Get_JobHeadGear;
+				cutin "",255;
+			close;
+		}
+		if (getargcount() == 1)
+			return;
+		mes "[Job Master]";
+	}
+	end;
+}
+
+Get_Platinum:
+	skill "NV_FIRSTAID",1,SKILL_PERM;
+	switch (BaseClass) {
+	case Job_Novice:
+		if (Class != Job_SuperNovice)
+			skill "NV_TRICKDEAD",1,SKILL_PERM;
+		break;
+	case Job_Swordman:
+		skill "SM_MOVINGRECOVERY",1,SKILL_PERM;
+		skill "SM_FATALBLOW",1,SKILL_PERM;
+		skill "SM_AUTOBERSERK",1,SKILL_PERM;
+		break;
+	case Job_Mage:
+		skill "MG_ENERGYCOAT",1,SKILL_PERM;
+		break;
+	case Job_Archer:
+		skill "AC_MAKINGARROW",1,SKILL_PERM;
+		skill "AC_CHARGEARROW",1,SKILL_PERM;
+		break;
+	case Job_Acolyte:
+		skill "AL_HOLYLIGHT",1,SKILL_PERM;
+		break;
+	case Job_Merchant:
+		skill "MC_CARTREVOLUTION",1,SKILL_PERM;
+		skill "MC_CHANGECART",1,SKILL_PERM;
+		skill "MC_LOUD",1,SKILL_PERM;
+		break;
+	case Job_Thief:
+		skill "TF_SPRINKLESAND",1,SKILL_PERM;
+		skill "TF_BACKSLIDING",1,SKILL_PERM;
+		skill "TF_PICKSTONE",1,SKILL_PERM;
+		skill "TF_THROWSTONE",1,SKILL_PERM;
+		break;
+	default:
+		break;
+	}
+	switch (BaseJob) {
+	case Job_Knight:
+		skill "KN_CHARGEATK",1,SKILL_PERM;
+		break;
+	case Job_Priest:
+		skill "PR_REDEMPTIO",1,SKILL_PERM;
+		break;
+	case Job_Wizard:
+		skill "WZ_SIGHTBLASTER",1,SKILL_PERM;
+		break;
+	case Job_Blacksmith:
+		skill "BS_UNFAIRLYTRICK",1,SKILL_PERM;
+		skill "BS_GREED",1,SKILL_PERM;
+		break;
+	case Job_Hunter:
+		skill "HT_PHANTASMIC",1,SKILL_PERM;
+		break;
+	case Job_Assassin:
+		skill "AS_SONICACCEL",1,SKILL_PERM;
+		skill "AS_VENOMKNIFE",1,SKILL_PERM;
+		break;
+	case Job_Crusader:
+		skill "CR_SHRINK",1,SKILL_PERM;
+		break;
+	case Job_Monk:
+		skill "MO_KITRANSLATION",1,SKILL_PERM;
+		skill "MO_BALKYOUNG",1,SKILL_PERM;
+		break;
+	case Job_Sage:
+		skill "SA_CREATECON",1,SKILL_PERM;
+		skill "SA_ELEMENTWATER",1,SKILL_PERM;
+		skill "SA_ELEMENTGROUND",1,SKILL_PERM;
+		skill "SA_ELEMENTFIRE",1,SKILL_PERM;
+		skill "SA_ELEMENTWIND",1,SKILL_PERM;
+		break;
+	case Job_Rogue:
+		skill "RG_CLOSECONFINE",1,SKILL_PERM;
+		break;
+	case Job_Alchemist:
+		skill "AM_BIOETHICS",1,SKILL_PERM;
+		break;
+	case Job_Bard:
+		skill "BA_PANGVOICE",1,SKILL_PERM;
+		break;
+	case Job_Dancer:
+		skill "DC_WINKCHARM",1,SKILL_PERM;
+		break;
+	default:
+		break;
+	}
+	return;
+	
+Get_JobWeapon:
+
+//=========================Primera Clase==========================================
+	if (Class == Job_Novice_High || Class == Job_Baby)	{getitem 501,1;	return;}
+	if (Class == Job_Swordman || Class == Job_Baby_Swordman)	{getitem 1102,1;	return;}
+	if (Class == Job_Mage || Class == Job_Baby_Mage)	{getitem 1602,1;	return;}
+	if (Class == Job_Archer || Class == Job_Baby_Archer)	{getitem 1702,1;	return;}
+	if (Class == Job_Acolyte || Class == Job_Baby_Acolyte)	{getitem 1521,1;	return;}
+	if (Class == Job_Merchant || Class == Job_Baby_Merchant)	{getitem 1309,1;	return;}
+	if (Class == Job_Thief || Class == Job_Baby_Thief)	{getitem 1214,1;	return;}
+
+//======================Segunda clase=============================================
+	if (Class == Job_Knight || Class == Job_Knight2 || Class == Job_Baby_Knight || Class == Job_Baby_Knight2)	{getitem 1418,1;	return;}
+	if (Class == Job_Priest || Class == Job_Baby_Priest)	{getitem 1551,1;	return;}
+	if (Class == Job_Wizard || Class == Job_Baby_Wizard)	{getitem 1472,1;	return;}
+	if (Class == Job_Blacksmith || Class == Job_Baby_Blacksmith)	{getitem 1363,1;	return;}
+	if (Class == Job_Hunter || Class == Job_Baby_Hunter)	{getitem 1727,1;	return;}
+	if (Class == Job_Assassin || Class == Job_Baby_Assassin)	{getitem 1251,1;	return;}
+	if (Class == Job_Crusader || Class == Job_Crusader2 || Class == Job_Baby_Crusader || Class == Job_Baby_Crusader2)	{getitem 2110,1;	return;}
+	if (Class == Job_Monk || Class == Job_Baby_Monk)	{getitem 1816,1;	return;}
+	if (Class == Job_Sage || Class == Job_Baby_Sage)	{getitem 1561,1;	return;}
+	if (Class == Job_Rogue || Class == Job_Baby_Rogue)	{getitem 1229,1;	return;}
+	if (Class == Job_Alchem || Class == Job_Baby_Alchem)	{getitem 1307,1;	return;}
+	if (Class == Job_Bard || Class == Job_Baby_Bard)	{getitem 1902,1;	return;}
+	if (Class == Job_Dancer || Class == Job_Baby_Dancer)	{getitem 1964,1;	return;}
+
+//========================High Clase===========================================
+	if (Class == Job_Lord_Knight || Class == Job_Lord_Knight2)	{getitem 1175,1;	return;}
+	if (Class == Job_High_Priest)	{getitem 1540,1;	return;}
+	if (Class == Job_High_Wizard)	{getitem 2004,1;	return;}
+	if (Class == Job_Whitesmith)	{getitem 1385,1;	return;}
+	if (Class == Job_Sniper)	{getitem 1723,1;	return;}
+	if (Class == Job_Assassin_Cross)	{getitem 1284,1;	return;}
+	if (Class == Job_Paladin)	{getitem 1420,1;	return;}
+	if (Class == Job_Champion)	{getitem 1544,1;	return;}
+	if (Class == Job_Professor)	{getitem 1572,1;	return;}
+	if (Class == Job_Stalker)	{getitem 1719,1;	return;}
+	if (Class == Job_Creator)	{getitem 1231,1;	return;}
+	if (Class == Job_Clown)	{getitem 1919,1;	return;}
+	if (Class == Job_Gypsy)	{getitem 1972,1;	return;}
+	if (Class == Job_SuperNovice || Class == Job_Super_Baby)	{getitem 1621,1;	return;}
+	if (Class == Job_Taekwon)	{getitem 2441,1;	return;}
+	if (Class == Job_Gunslinger)	{getitem 13101,1;	return;}
+	if (Class == Job_Ninja)	{getitem 13303,1;	return;}
+	if (Class == Job_Star_Gladiator || Class == Job_Star_Gladiator2)	{getitem 1562,1;	return;}
+	if (Class == Job_Soul_Linker)	{getitem 501,1;	return;}
+
+//========================3rd Clase===========================================
+	if (Class == Job_Rune_Knight || Class == Job_Rune_Knight_T || Class == Job_Rune_Knight2 || Class == Job_Rune_Knight_T2 || Class == Job_Baby_Rune || Class == Job_Baby_Rune2)	{getitem 13414,1;	return;}
+	if (Class == Job_Warlock || Class == Job_Warlock_T || Class == Job_Baby_Warlock)	{getitem 2024,1;	return;}
+	if (Class == Job_Ranger || Class == Job_Ranger_T || Class == Job_Ranger2 || Class == Job_Ranger_T2 || Class == Job_Baby_Ranger || Class == Job_Baby_Ranger2)	{getitem 18111,1;	return;}
+	if (Class == Job_Arch_Bishop || Class == Job_Arch_Bishop_T || Class == Job_Baby_Bishop)	{getitem 1647,1;	return;}
+	if (Class == Job_Mechanic || Class == Job_Mechanic_T || Class == Job_Mechanic2 || Class == Job_Mechanic_T2 || Class == Job_Baby_Mechanic || Class == Job_Baby_Mechanic2)	{getitem 1311,1;	return;}
+	if (Class == Job_Guillotine_Cross || Class == Job_Guillotine_Cross_T || Class == Job_Baby_Cross)	{getitem 1291,1;	return;}
+	if (Class == Job_Royal_Guard || Class == Job_Royal_Guard_T || Class == Job_Royal_Guard2 || Class == Job_Royal_Guard_T2 || Class == Job_Baby_Guard || Class == Job_Baby_Guard2)	{getitem 1433,1;	return;}
+	if (Class == Job_Sorcerer || Class == Job_Sorcerer_T || Class == Job_Baby_Sorcerer)	{getitem 1588,1;	return;}
+	if (Class == Job_Minstrel || Class == Job_Minstrel_T || Class == Job_Baby_Minstrel)	{getitem 1926,1;	return;}
+	if (Class == Job_Wanderer || Class == Job_Wanderer_T || Class == Job_Baby_Wanderer)	{getitem 1989 ,1;	return;}
+	if (Class == Job_Sura || Class == Job_Sura_T || Class == Job_Baby_Sura)	{getitem 1825,1;	return;}
+	if (Class == Job_Genetic || Class == Job_Genetic_T || Class == Job_Baby_Genetic)	{getitem 1385,1;	return;}
+	if (Class == Job_Shadow_Chaser || Class == Job_Shadow_Chaser_T || Class == Job_Baby_Chaser)	{getitem 13061,1;	return;}
+	if (Class == Job_Super_Novice_E || Class == Job_Super_Baby_E)	{getitem 1148,1;	return;}
+	if (Class == Job_Kagerou)	{getitem 13315,1;	return;}
+	if (Class == Job_Oboro)	{getitem 13314,1;	return;}
+	if (Class == Job_Rebellion)	{getitem 13125,1;	return;}
+	return;
+
+Get_JobHeadGear:
+	if (Class == Job_Rune_Knight || Class == Job_Rune_Knight_T) {getitem 5746,1;	return;}
+	else if (Class == Job_Royal_Guard || Class == Job_Royal_Guard_T) {getitem 5757,1;	return;}
+	else if (Class == Job_Arch_Bishop || Class == Job_Arch_Bishop_T) {getitem 5747,1;	return;}
+	else if (Class == Job_Sura || Class == Job_Sura_T) {getitem 5754,1;	return;}
+	else if (Class == Job_Warlock || Class == Job_Warlock_T) {getitem 5753,1;	return;}
+	else if (Class == Job_Sorcerer || Class == Job_Sorcerer_T) {getitem 5756,1;	return;}
+	else if (Class == Job_Mechanic || Class == Job_Mechanic_T) {
+	if (Sex)
+				getitem 5749,1;
+			else
+				getitem 5760,1;
+			getitem 2795,1;		return;}
+	else if (Class == Job_Genetic || Class == Job_Genetic_T) {getitem 5752,1;	return;}
+	else if (Class == Job_Ranger || Class == Job_Ranger_T) {getitem 5748,1;		return;}
+	else if (Class == Job_Minstrel || Class == Job_Minstrel_T) {getitem 5751,1;	return;}
+	else if (Class == Job_Wanderer || Class == Job_Wanderer_T) {getitem 5758,1;	return;}
+	else if (Class == Job_Guillotine_Cross || Class == Job_Guillotine_Cross_T) {getitem 5755,1;	return;}
+	else if (Class == Job_Shadow_Chaser || Class == Job_Shadow_Chaser_T) {getitem 5750,1;	return;}
+	return;
+	
+OnInit:
+	setarray .Rebirth[0],99,50;	// Minimum base level, job level to rebirth OR change to third class
+	setarray .JobReq[0],10,40;	// Minimum job level to turn into 1st class, 2nd class
+	.ThirdClass = 0;			// Enable third classes? (1: yes / 0: no)
+	.SecondExpanded = 0;		// Enable new expanded second classes: Ex. Super Novice, Kagerou/Oboro, Rebellion? (1: yes / 0: no)
+	.SNovice = 45;				// Minimum base level to turn into Super Novice
+	.LastJob = 1;				// Enforce linear class changes? (1: yes / 0: no)
+	.SkillPointCheck = 1;		// Force player to use up all skill points? (1: yes / 0: no)
+	.Platinum = 1;				// Get platinum skills automatically? (1: yes / 0: no)
+	.JobWeapon = 1;				// Get weapon for each job? (1: yes / 0: no)
+	.JobHeadGear = 1;			// Get headgear for third class? (1: yes / 0: no)
+	end;
+}
+
+
+-	script	LevelUpQuotes	-1,{
+end;
+
+OnInit:
+	setarray .q$,"He avanzado hacia adelante!","No puedo detenerme ahora!","Mira que me vaya!","Hay más de donde vino.","Esto ni siquiera es mi forma final!";
+	.num1 = getarraysize(.q$);
+	setarray .maxq$,"Lo he hecho!","Nunca pensé que me había convertido esta fuerte ...","He llegado a mi forma final.";
+	.num2 = getarraysize(.maxq$);
+	end;
+
+OnPCBaseLvUpEvent:
+	if( BaseLevel > 99 && getstatus(SC_ITEMBOOST) == 0 ) { sc_start SC_ITEMBOOST,180000,200; }
+	if( BaseLevel == 150 ) { .@r = rand(.num2); showscript strcharinfo(0)+" : "+.maxq$[.@r]; }
+	else { .@r = rand(.num1); showscript strcharinfo(0)+" : "+.q$[.@r]; }
+	if( getstatus(SC_INCREASEAGI) != 1 ) { sc_start SC_INCREASEAGI,30000,10; }
+	end;
+}
+
+
+prontera,154,193,5	duplicate(Job Master)	Job Master#prt	10066
+//prt_in,136,34,3	duplicate(Job Master)	Job Master#morocc	10085
+morocc,164,97,5	duplicate(Job Master)	Job Master#morocc1	10085
+payon,162,241,5	duplicate(Job Master)	Job Master#pay	10085
+geffen,125,70,3	duplicate(Job Master)	Job Master#geff	10085
+alberta,187,148,3	duplicate(Job Master)	Job Master#alb	10085
+yuno,171,18,3	duplicate(Job Master)	Job Master#yuno	10085
+izlude,125,148,5	duplicate(Job Master)	Job Master#izl	10085
+//npc_in,35,42,5

@@ -1,0 +1,100 @@
+//===== Global Chile ======
+//=== https://www.facebook.com/IntegralesGlobal ===
+
+prt_in,125,17,3	script	Domador de Bestias	603,{
+		cutin "jpn_berkut01",2;
+if (QueMont == 1) goto avances;
+if (QueMont == 2) goto fin;
+	if(Sex == 1){
+mes "[^CC0000Domador de Bestias^000000]";
+mes "¡Bienvenido aventurero!";
+mes "¿Estás interesado en conseguir una montura?";
+next;
+	goto cont01;}
+else
+mes "[^CC0000Domador de Bestias^000000]";
+mes "¡Bienvenida aventurera!";
+mes "¿Estás interesada en conseguir una montura?";
+next;
+
+cont01:
+	cutin "jpn_berkut02",2;
+menu "Quiero una montura",montque,"No me interesa",nointeresa;
+
+montque:
+		cutin "jpn_berkut04",2;
+		mes "[^CC0000Domador de Bestias^000000]";
+		mes "¡Interesante!";
+		mes "A diferencia de los demás no te pediré que me regales nada por la montura pero a cambio quiero que me demuestres que eres un gran aventurero.";
+		next;
+		cutin "jpn_berkut02",2;
+		menu "¿Como lo demuestro?",inique,"No me interesa",nointeresa;
+close;
+		cutin "",255;
+		inique:
+		mes "[^CC0000Domador de Bestias^000000]";
+		mes "Si quieres una montura tendrás que conseguir lo siguiente:";
+		mes "- Level Base 99";
+		mes "- Animal Skin x200";
+		mes "- Chivalry Emblem x5";
+		mes "- 1.000.000 Zeny";
+		next;
+		mes "[^CC0000Domador de Bestias^000000]";
+		mes "Estos objetos tan solo tendrás que enseñarmelos, una vez te entregue la montura podrás hacer lo que quieras con ellos.";
+		next;
+		set QueMont,1;
+		mes "[^CC0000Domador de Bestias^000000]";
+		mes "¡Espero verte pronto!";
+		cutin "",255;
+		close;
+
+
+avances:
+		if (BaseLevel < 99) goto avances2;
+		if(countitem(919)<200)goto avances2;
+		if(countitem(1004)<5)goto avances2;
+		if (Zeny < 100000) goto avances2;
+
+		mes "[^CC0000Domador de Bestias^000000]";
+		mes "¡Estupendo!";
+		mes "¡Ahora ya te puedo llamar aventurero!";
+		next;
+		getitem 12622,1;
+		set QueMont,2;
+		mes "[^CC0000Domador de Bestias^000000]";
+		mes "Lo prometido es deuda, aquí tienes.";
+		cutin "",255;
+		close;
+
+
+avances2:
+		mes "[^CC0000Domador de Bestias^000000]";
+		mes "Veamos tus progresos de aventurero:";
+		mes "Nivel Base: ^CC0000"+BaseLevel+"^000000/175";
+		mes "Ba Gua: ^CC0000"+countitem(7169)+"^000000/5";
+		mes "Atlas Weapon: ^CC0000"+countitem(1175)+"^000000/1";
+		mes "Zeny: ^CC0000"+Zeny+"^000000/1.000.000";
+		cutin "",255;
+close;
+
+fin:
+		mes "[^CC0000Domador de Bestias^000000]";
+		mes "Espero que estés disfrutando de tu montura.";
+close;
+
+nointeresa:
+		cutin "jpn_berkut03",2;
+		mes "[^CC0000Domador de Bestias^000000]";
+		mes "Una lástima...";
+		mes "Vuelve si cambias de opinión.";
+		cutin "",255;
+		close;
+
+
+OnPCLoadMapEvent:
+	showevent 1,0;
+	end;
+	}
+
+
+prt_in	mapflag	loadevent

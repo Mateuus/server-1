@@ -1,0 +1,289 @@
+-	script	Security	-1,{
+	mes "[Security]";
+	mes "Hi there.";
+	mes "I'm in charge of security around here. I can setup an 'Account Lock' password for you to protect your account when you're offline.";
+	next;
+	L_MainMenu:
+	if(#Security_Password$ == "")
+		set .@menu_security$, "Setup an Account Lock password:How does this locking system work?:Ah nice. I'll come back.";
+	else
+		set .@menu_security$, "Change Account Lock password:How does this locking system work?:Ah nice. I'll come back.";
+	switch(select(.@menu_security$))
+	{
+		case 1: //Setup an Account Lock password
+		if(#Security_Password$ != ""){
+		set .@security_changing, 1;
+		mes "[Security]";
+		mes "Tell me what is your current password first:";
+		next;
+		goto L_ChangePasswordMenu;
+		
+		
+		
+		
+		}
+		mes "[Security]";
+		mes "Ok, first you will have to select a password.";
+		mes "The password need to be between 3 and 10 characters.";
+		mes "I STRONGLY suggests that you DO NOT USE your login password.";
+		next;
+		mes "[Security]";
+		mes "To prevent possible keylogging from hackers, you will have to select characters from a menu.";
+		mes "So, ready to choose your password?";
+		next;
+		switch(select("Sure, let's start:Ugh, not yet.. umm"))
+		{
+			case 1:
+			mes "[Security]";
+			mes "Ok, here we go:";
+			next;
+			L_ChangePasswordMenu:
+			set .@i, 0;
+			L_CharsMenu:
+			if(.@i == 10) // Reached max characters
+				goto L_CharsInputMax;
+			switch(select("[0-9]:[A-B-C-D]:[E-F-G-H]:[I-J-K-L]:[M-N-O-P]:[Q-R-S-T-U]:[V-W-X-Y-Z]:Done:Cancel"))
+			{
+				case 1://[0-9]
+					switch(select("0:1:2:3:4:5:6:7:8:9:Back"))
+					{
+						case 1:		set .@password$[.@i], "0"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 2:		set .@password$[.@i], "1"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 3:		set .@password$[.@i], "2"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 4:		set .@password$[.@i], "3"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 5:		set .@password$[.@i], "4"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 6:		set .@password$[.@i], "5"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 7:		set .@password$[.@i], "6"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 8:		set .@password$[.@i], "7"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 9:		set .@password$[.@i], "8"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 10:	set .@password$[.@i], "9"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 11:	goto L_CharsMenu; break;
+					}
+					break;
+				case 2://[A-B-C-D]
+					switch(select("A:a:B:b:C:c:D:d:Back"))
+					{
+						case 1:		set .@password$[.@i], "A"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 2:		set .@password$[.@i], "a"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 3:		set .@password$[.@i], "B"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 4:		set .@password$[.@i], "b"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 5:		set .@password$[.@i], "C"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 6:		set .@password$[.@i], "c"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 7:		set .@password$[.@i], "D"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 8:		set .@password$[.@i], "d"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 9:		goto L_CharsMenu; break;
+					}
+					break;
+				case 3://[E-F-G-H]
+					switch(select("E:e:F:f:G:g:H:h:Back"))
+					{
+						case 1:		set .@password$[.@i], "E"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 2:		set .@password$[.@i], "e"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 3:		set .@password$[.@i], "F"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 4:		set .@password$[.@i], "f"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 5:		set .@password$[.@i], "G"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 6:		set .@password$[.@i], "g"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 7:		set .@password$[.@i], "H"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 8:		set .@password$[.@i], "h"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 9:		goto L_CharsMenu; break;
+					}
+					break;
+				case 4://[I-J-K-L]
+					switch(select("I:i:J:j:K:k:L:l:Back"))
+					{
+						case 1:		set .@password$[.@i], "I"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 2:		set .@password$[.@i], "i"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 3:		set .@password$[.@i], "J"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 4:		set .@password$[.@i], "j"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 5:		set .@password$[.@i], "K"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 6:		set .@password$[.@i], "k"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 7:		set .@password$[.@i], "L"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 8:		set .@password$[.@i], "l"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 9:		goto L_CharsMenu; break;
+					}
+					break;
+				case 5://[M-N-O-P]
+					switch(select("M:m:N:n:O:o:P:p:Back"))
+					{
+						case 1:		set .@password$[.@i], "M"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 2:		set .@password$[.@i], "m"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 3:		set .@password$[.@i], "N"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 4:		set .@password$[.@i], "n"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 5:		set .@password$[.@i], "O"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 6:		set .@password$[.@i], "o"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 7:		set .@password$[.@i], "P"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 8:		set .@password$[.@i], "p"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 9:		goto L_CharsMenu; break;
+					}
+					break;
+				case 6://[Q-R-S-T-U]
+					switch(select("Q:q:R:r:S:s:T:t:U:u:Back"))
+					{
+						case 1:		set .@password$[.@i], "Q"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 2:		set .@password$[.@i], "q"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 3:		set .@password$[.@i], "R"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 4:		set .@password$[.@i], "r"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 5:		set .@password$[.@i], "S"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 6:		set .@password$[.@i], "s"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 7:		set .@password$[.@i], "T"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 8:		set .@password$[.@i], "t"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 9:		set .@password$[.@i], "U"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 10:	set .@password$[.@i], "u"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 11:	goto L_CharsMenu; break;
+					}
+					break;
+				case 7://[V-W-X-Y-Z]
+					switch(select("V:v:W:w:X:x:Y:y:Z:z:Back"))
+					{
+						case 1:		set .@password$[.@i], "V"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 2:		set .@password$[.@i], "v"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 3:		set .@password$[.@i], "W"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 4:		set .@password$[.@i], "w"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 5:		set .@password$[.@i], "X"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 6:		set .@password$[.@i], "x"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 7:		set .@password$[.@i], "Y"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 8:		set .@password$[.@i], "y"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 9:		set .@password$[.@i], "Z"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 10:	set .@password$[.@i], "z"; set .@i, .@i + 1; goto L_CharsMenu; break;
+						case 11:	goto L_CharsMenu; break;
+					}
+					break;
+				case 8://Done
+				L_CharsInputMax: //if input is already == 10
+				//next;
+				if(.@i<2){
+					mes "[Security]";
+					mes "Your password does not meet the length requirement.";
+					close;
+				}
+				if(.@security_changing == 1){
+					if(implode(.@password$) == #Security_Password$){
+						mes "[Security]";
+						mes "Now enter the new password";
+						set .@i, 0;
+						set .@security_changing, 0;
+						deletearray .@password$[0];
+						goto L_CharsMenu;
+					}
+					else{
+						mes "[Security]";
+						mes "The password you provided isn't correct.";
+						close;
+					}
+				}
+				else if(.@security_changing == 2){
+					if(implode(.@password$) == #Security_Password$){
+						mes "[Security]";
+						mes "Thank you!";
+						mes "Your account is now unlocked!";
+						set #AccountLocked, 0;
+						updatesecurity;
+						close;
+					}
+					else{
+						mes "[Security]";
+						mes "The password you provided isn't correct.";
+						close;
+					}
+				}
+				else
+				{
+					mes "[Security]";
+					mes "The password you have chosen is:";
+					mes implode(.@password$);
+					mes " ";
+					mes "Is this correct?";
+					next;
+					switch(select("Yes:No"))
+					{
+						case 1:
+						set #Security_Password$, implode(.@password$);
+						mes "[Security]";
+						mes "Done! Your password has been saved.";
+						mes "You can now use @lock and @unlock";
+						mes "to prevent account hacking.";
+						mes "Enjoy and play safely!";
+						close;
+						break;
+						case 2:
+						mes "[Security]";
+						mes "Then, please, talk to me again when";
+						mes "you are sure of your password.";
+						close;
+						break;
+					}
+					close;
+				}
+				break;
+				case 9://Cancel
+				mes "[Security]";
+				mes "Try again anytime.";
+				close;
+				break;
+			}
+			break;
+			
+			case 2:
+			mes "[Security]";
+			mes "Then, take some time to think about it.";
+			mes "I'll be right there when you're ready.";
+			close;
+			break;
+		}
+		break;
+		
+		case 2: //How does this locking system work?
+		mes "[Security]";
+		mes "This system is 100%";
+		mes "keylogging-proof and can help you";
+		mes "keep your account to safety in the";
+		mes "case someone was able to have";
+		mes "access to it.";
+		next;
+		mes "[Security]";
+		mes "One you have set up your password";
+		mes "with me, simply use @lock anytime";
+		mes "to 'lock' your account.";
+		mes "When your account is locked, any of";
+		mes "your characters won't be able to";
+		mes "drop, trade or sell items/zenys.";
+		mes "Also, they won't be able to";
+		mes "interact with any NPC.";
+		next;
+		mes "[Security]";
+		mes "To be able to fully use your";
+		mes "account again, simply use @unlock";
+		mes "and a window will popup asking for";
+		mes "your password using a menu of";
+		mes "letters and numbers (thus";
+		mes "keylogging-proof).";
+		mes "nce it is done, your account has";
+		mes "been unlocked and can be used to";
+		mes "the fullest again.";
+		next;
+		mes "[Security]";
+		mes "That's pretty much it.";
+		mes "What would you like to do now?";
+		next; // go back to main menu
+		goto L_MainMenu;
+		break;
+		
+		case 3: //Ah nice. I'll come back.
+		mes "[Security]";
+		mes "Farewell.";
+		close;
+		break;
+	}
+
+OnUnlock:
+	mes "[Locking System]";
+	mes "Welcome clydelion!";
+	mes "Please, enter your Account Lock password:";
+	next;
+	set .@security_changing, 2;
+	set .@i, 0;
+	goto L_CharsMenu;
+	end;
+}
+
+phtownall,217,217,3	duplicate(Security)	Security#1	56

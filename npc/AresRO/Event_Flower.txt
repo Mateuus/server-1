@@ -1,0 +1,79 @@
+/////////////////////////////////////////////
+//By Sanasol for Mouse Ragnarok Online///////
+////////////////////////////////////////////
+
+prontera,0,0,0	script	announce	-1,{
+end;
+OnInit:
+
+//????? ? ??????? ????? ?????????? ??????
+OnClock1230:
+OnClock1430:
+OnClock1630:
+OnClock1830:
+
+
+initnpctimer;
+OnTimer0:
+announce "In Prontera has appeared NPC - 'Event Flower'.",0,0x00ff00;
+end;
+
+OnTimer1000:
+enablenpc "Event Flower";
+announce "Event will begin in 1 minute",0,0x00ff00;
+end;
+
+OnTimer60000:
+stopnpctimer; //we disconnect the timer
+disablenpc "Event Flower";
+monster "guild_vs5",0,0,"Event Flower",1083,150,"announce2::Onmobdead";
+	end;
+}
+//ssss
+guild_vs5,0,0,0	script	announce2	-1,{
+
+Onmobdead:
+	set $trava,getmapmobs("guild_vs5");
+	set $trava, $trava - 1;
+	set @z, @z + 1; // +1 ???
+	if(@z == 21) {goto prize;
+} // Mobs for the Victory 21=20,31=30....
+	if($trava < 10) {goto resp;
+} // Check on grasses.
+end;
+
+resp:
+monster "guild_vs5",0,0,"Event Flower",1083,150,"announce2::Onmobdead";
+end;
+
+prize:
+	killmonster "guild_vs5","All";
+	getitem 969,1; // Prize ID ,How much
+	end;
+}
+
+prontera,155,181,4	script	Event Flower	72,{
+mes "Event will begin after all participants will be register";
+mes "You want to take part?";
+next;
+mes "it is good, you register";
+mes "Wish to get to a location of event?";
+next;
+menu "Go",case1,"Info",case2,"Noo 8)",case2;
+case1:
+set @z,1;
+warp "guild_vs5",0,0;
+close;
+case2:
+mes "[Event Flower]";
+mes "I cause 150 Florets";
+mes "that Will win";
+mes "Who the first will kill 20 pieces";
+mes "Good Luck.";
+close;
+case3:
+mes "[Event Flower]";
+mes "it is good, come when want.";
+close;
+}
+guild_vs5	mapflag	noskill

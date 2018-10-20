@@ -1,0 +1,50 @@
+//made by DJ Dorky Mike toRO
+
+poring_w02,146,78,7	script	Green Fairy Wings	821,{
+
+	mes "Michael";
+	mes "Oh high do you mind helping me?";
+	next;
+	mes "I was banished from heaven by God. He tore my wings off and sent me to this wretched place. Will you help me collect supplies to remake my wings. I'll give you a set of course.";
+	next;
+	menu "Hmm i think i can do that.",Yes,"No thanks, You were punished for a reason",No;
+
+Yes:
+
+	if ((countitem(671) < 2000) || (countitem(511) < 300) || (countitem(979) < 25)) {
+	mes "Michael";
+	mes "Bring me these items mortal and make it fast!";
+	mes "2000x Gold Coin";
+	mes "300x Green Herb";
+	mes "25x Darkgreen Dyestuff";
+	close;
+	}
+
+Get:
+	mes "Michael";
+	mes "Next time hurry up I can't stand this mortal plane.";
+	delitem 671,2000;
+	delitem 511,300;
+	delitem 979,25;
+	getitem 29024,1; // Moved here so all items deleted, then immediately you get the hat.
+	next;
+	mes "Michael";
+	mes "Now get out of my face before I have you head on a pike!!!!!";
+	close;
+
+No:	mes "Michael";
+	mes "Fine Mortal have it your way I will see you in hell!!!!!";
+	close;
+
+
+}
+
+
+  
+  
+
+
+
+
+
+

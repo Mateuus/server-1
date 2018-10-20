@@ -1,0 +1,38 @@
+//===== Global Chile ======
+//=== https://www.facebook.com/IntegralesGlobal ===
+
+prontera,155,190,4	script	Kriemhild::OutsideFlagsPR1	722,{
+
+	set .@GID, GetCastleData("prtg_cas01",1);
+
+	if (.@GID == 0) {
+		mes "[ Bienvenido Gran Guerrero ]";
+		mes " ";
+		mes "Los Dueños de Castillos";
+		mes "Tienen su mapa especial ;)";
+		mes "deseas ir a el?.";
+		close;
+	}
+	if (getcharid(2) == .@GID) {
+		mes "[ Bienvenido Gran Guerrero ]";
+		mes "Te llevo al Palacio?...";
+		next;
+		if(select("Ir al Palacio.:Salir.") == 1) {
+			close2;
+			if (getcharid(2) == GetCastleData("prtg_cas01",1)) {
+				warp "vip_lounge",143,228;
+				end;
+			}
+			end;
+		}
+		close;
+	}
+	mes "Lo siento no eres dueño del castillo";
+	mes "El castillo pertenece a ^ff0000"+GetGuildName(.@GID)+"^000000";
+	mes "y su lider es ^ff0000"+GetGuildMaster(.@GID)+"^000000";
+	close;
+
+OnRecvCastlePt01:
+	FlagEmblem GetCastleData("prtg_cas01",1);
+	end;
+}

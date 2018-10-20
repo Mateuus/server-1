@@ -1,0 +1,62 @@
+//===== Global Chile ======
+//=== https://www.facebook.com/IntegralesGlobal ===
+
+-	script	Bienvenida	-1,{
+OnPCLoginEvent:
+if (getgmlevel() > 1) end;
+	//bonus bAspdRate,-30;
+	set @Sexo$, "Bienvenido ";
+	if(Sex==0) set @Sexo$,"Bienvenido ";
+	
+
+        If(#newcont >= 1) goto Nomsg;
+
+	
+	set #newcont,#newcont + 1; 
+	Announce "Recién llegado " + strcharinfo(0)+ " Nuestro Server. "+@Sexo$,16; 
+	End;
+	
+
+Nomsg:
+	announce @Sexo$ + " " + strcharinfo(0)+ " A Nuestro server ..::ThanatosRO::..",16;
+}
+
+new_1-1,65,114,7	script	Bienvenido	837,2,2,{
+	
+	if( #Nuevo == 1)
+	{
+	mes "[^FFA500Bienvenido^000000]";
+	mes "Hola, bienvenido a tRO, ^0000FF" + strcharinfo(0) + "^000000.";
+	next;
+	if( select("Llevame a la ciudad:No quiero nada") == 2 )
+	{
+		mes "[^FFA500Bienvenido^000000]";
+		mes "¡Vale!";
+		close;
+	}
+	warp "prt_in",127,31;
+	end;
+	}
+	else
+	{
+	mes "[^FFA500Bienvenido^000000]";
+	mes "Hola, bienvenido a tRO, ^0000FF" + strcharinfo(0) + "^000000.";
+	mes "Veo que eres nuevo. Te prestaré un equipo extra por 1 semana para que puedas sacar tu equipo y subir de nivel";
+	next;
+	mes "Pero no le digas a nadie. Es nuestro secreto, si no seré castigado por el cruel y tirano Staff de tRO";
+	next;
+	rentitem 2424,604800;
+	rentitem 2528,604800;
+	rentitem 5172,604800;
+	rentitem 1245,604800;
+	set zeny, zeny + 50000;
+	set #Nuevo, 1;
+	warp "prt_in",127,31;
+	end;
+	}
+
+	OnInit:
+	waitingroom "Bienvenido",0;
+	end;
+	
+}

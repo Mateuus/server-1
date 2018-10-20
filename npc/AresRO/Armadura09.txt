@@ -1,0 +1,448 @@
+//============================================================
+
+yuno,265,100,5	script	Elite Shooter's Suit	63,{
+
+	soundeffect "siroma_move.wav",0;
+
+ mes "[Elite Shooter's Suit]";
+ mes "Buenas, Yo soy el forjador.";
+ next;
+	soundeffect "siroma_move.wav",0;
+
+ mes "[Elite Shooter's Suit]";
+ mes "Yo puedo crearte una armadura que no existe en el RO,";
+ mes "Ademas lleva 1 sloot y es sagrada,";
+ mes "Solo tienes que traerme ciertos items";
+ mes "Es solo para Gunslinger.";
+ next;
+ menu "Si, Claro.",-,"No, Despues.",M_EXIT;
+
+	soundeffect "siroma_move.wav",0;
+
+ mes "[Elite Shooter's Suit]";
+ mes "Los items que necesito para crearlo son:";
+ mes "1 Odin's Blessing [1],";
+ mes "1 Slingshot,";
+ mes "1 Lever Action Rifle [2],";
+ mes "5,000,000z .";
+ next;
+
+	soundeffect "siroma_move.wav",0;
+
+ mes "[Elite Shooter's Suit]";
+ mes "conseguiste los items?";
+ next;
+
+	soundeffect "siroma_move.wav",0;
+
+ menu "Si, porsupuesto.",-,"No, es dificil.",M_EXIT;
+ 
+ if(countitem(2353) < 1 || countitem(7195) < 1 || countitem(13170) < 1 ||   Zeny<5000000) GOTO L_NOITEM;
+ delitem 2353,1;
+ delitem 7195,1;
+ delitem 13170,1;
+ set Zeny,Zeny-5000000;
+ getitem 2382,1;
+	soundeffect "siroma_move.wav",0;
+
+ mes "[Elite Shooter's Suit]";
+ mes "Genial, seras mas poderoso.";
+ close;
+	soundeffect "siroma_move.wav",0;
+
+L_NOITEM:
+ mes "[Elite Shooter's Suit]";
+ mes "Disculpa, no puedo continuar puesto que te faltan items o zenny";
+ mes "vuelve cuando tengas todo";
+ close;
+
+M_EXIT:
+ mes "[Elite Shooter's Suit]";
+ mes callfunc("F_Bye");
+
+ close;
+}
+//-----Quest hat Ares RO---
+
+//---------------
+
+//------- Death Knight----
+//-----Quest Hat Ares RO---
+//---------------
+//------- Death Knight----
+prontera,169,291,4	script	Death Knight	998,{
+	if(countitem(7914)>0) goto T_SG_done;
+	mes "Disculpa...";
+	next;
+	if(countitem(7730)>0) goto T_SG_done1;
+	mes "[Death Knight]";
+	mes "Creo que te eh visto antes...,";
+	next;
+	if(countitem(7806)>0) goto Termilamierda;
+	mes "A no Disculpa te confundi con alguien mas... pero andas en busqueda de informacion...,";
+	mes "Yo te puedo dar la ubicacion de La forjadora de el moonligth Hat y El Satanic Bone Helm... ";
+	next;
+	mes "[Death Knight]";
+	mes "Pero para informarte  y que puedas hacer la quest, ya que yo soy le único";
+	mes "que puede darte la ubicacion de Fenrir, para que forje el preciado Hat...";
+	next;
+	mes "[Death Knight]";
+	mes "Solo pido un pequeño Incentivo";
+	mes "entregame 50m, 15 Cracked Diamond y 10 Gold ";
+	mes "Y Asi te dare esa informacion que tanto quieres..";
+	next;
+	mes "[Death Knight]"; 
+	mes "Entonces que decides?..";
+	Menu "Si te dare lo que pides",T_SG_DK1,"No, es demasiado..",T_SG_DK1no;
+T_SG_DK1:
+	next;
+	if(countitem(733)<15) goto falta1;
+	if(countitem(969)<10) goto falta1;
+	if(Zeny<=50000000) goto falta1;
+	next;
+	mes "umm que bien traiste todo...";
+	next;
+	delitem 733,15;
+	delitem 969,10;
+	set Zeny,zeny-50000000;
+	getitem 7914,1;
+	next;
+	mes "[Death Knight]";
+	mes " Muy bien "+strcharinfo(0)+" aqui te va la informacion...";
+	mes "Mr. Fenrir te recívira con mucho gusto...";
+	next;
+	mes "[Death Knight]";
+	mes "ahh..,se me olvidaba Mr. Fenrir Se encuentra en la ciudad de los Muertos";
+	mes "IfeheimlN..,iNfeleimh..,Nifeimlhe..(1g3o)..";
+	next;
+	mes "[Death Knight]";
+	mes "Que tengas suerte en tu busqueda..."; 
+	close;
+falta1:
+	mes "[Death Knight]";
+	mes "Intentas estafarme!, Vuelve cuando hayas conseguido todo...";
+	close;
+T_SG_DK1no:
+	mes "[Death Knight]";
+	mes "Ok "+strcharinfo(0)+" tu te lo pierdes...";
+	close;
+T_SG_done:
+	mes "[Death Knight]";
+	mes "Mr. Fenrir Se encuentra en la ciudad de los Muertos";
+	mes "IfeheimlN..,iNfeleimh..,Nifeimlhe..";
+    	mes "No hay nada más que pueda decirte.";
+        close;
+T_SG_done1:
+mes "[Death Knight]";
+	mes "Ya veo Ya encontraste al Sagaz Forjador del Midgrad";
+	close;
+Termilamierda:
+ 	mes "Hola "+strcharinfo(0)+" ";
+	mes "Que hay de nuevo..";
+	next;
+	if(countitem(12080)>0) goto T_LA_M_DECOTAIL;
+	mes "Conque ya puedes Hacer hats";
+	mes "Viste te sirvio de mucha ayuda mi información";
+	next;
+    	mes "Cualquier quest que recuerde te aviso";
+	mes "sigue buscando mas quest";
+	next; 
+	mes "mmm Creo Aver Recordar una  quest Pero Traeme 1 Dragon Breath Cocktail para darte la información";
+        close;
+T_LA_M_DECOTAIL:
+	mes "MMM Gracias por el Dragon Breath Cocktail";
+	mes "no me lo podré tomar todo, ok amos con lo de la quest";
+	next; 
+	mes "mmm Recuerdo que la Quest trata de un Forjador del Valhaja llamado Æsir";
+	mes "Dicen que el es Capar de crear Magnificos items como o mejores que Fenrir";
+	next;
+	mes "Segun la historia son dos grandes Amigos, y desde pequeños empezaron a entrar al mundo de la herrería";
+	mes "se hicieron Grandes forjadores pero al final  tomaron caminos diferentes";
+	next;
+	mes "Se dice Que la quest de Æsir Inicia en una cuidad devastada por el Demonio de demonios";
+	mes "Es todo lo que se.";
+	close;
+}
+
+//------- Mr. Fenrir
+niflheim,88,150,5	script	Mr.Fenrir	3038,{
+	if(countitem(7914)>0) goto T_SG_Fr1;	
+	mes "..";
+	next;
+	if(countitem(7730)>0) goto T_HOLFF_Fr1;
+	mes "....";
+	Next;
+	if(countitem(7806)>0) goto L_SI_QUEST_HAFF;
+	mes "[Fenrir]";
+	mes "No me pareces conocido";
+	mes "Solo atiendo personas con referencias...";
+	close;
+T_SG_Fr1:	
+	mes "[Fenrir]";
+	mes "Hola "+strcharinfo(0)+" tu eres de quien me hablo Death Knigth";
+	mes "Bueno me presento yo soy capaz de crear el Moonligth Hat";
+	next;
+	mes "yo soy el Gran Creador de los Moonligth hats y El Bone Helm";
+	next;
+	mes "Eres tan persistente y valiente para hacer mi quest";
+	mes "Te atreves a aceptar el reto?";
+	menu "Si",L_Si,"No",L_No;
+L_Si:
+	next;
+	mes "Bueno solo hay un problema me hace falta mi";
+	mes "God Anvil y solo lo puedes encontrar en un lugar";
+	next;
+	mes "tengo un viejo Amigo Llamado Holffar,";
+	mes "El es un Gran herrero te podra conseguir el Anvil";
+	next;	
+	mes "LLevale esta identificacion y asi vera que te envie a buscar mi anvil";
+	delitem 7314,1;
+	getitem 7730,1;
+	next;
+	mes "Lo Podras encontrar al Suroeste de Geffen donde esta la herreria";
+	
+L_SI_QUEST_HAFF:	
+	mes "Muchisimas gracias por traerme mi Gold Anvil";
+	mes "Ahora tienes el derecho de hacer Los hats";
+	next;
+	mes "Estos Son los Hats que puedo Crear";
+	menu "Moonligth Hat",QUEST1,"Cat o' Nine Tails Hat",QUEST2,"Bone Head",QUEST3;
+
+	QUEST1:
+	next;
+	mes "Necesitaras esto para hacer el Moonligth Hat:";
+	mes "777 Nine Tails";
+	mes "100 Feather";
+	mes "9 Lemon Dyestuffs";
+	mes "9 Orange Dyestuffs";
+	mes "100 Witch Starsand";
+	mes "3 Agate";
+	mes "1 Moonlight Flower Card";
+	mes "200 Cursed Seal";
+	mes "10 Yellow Jewel";   
+	mes "200m";
+	menu "Me faltan items todiavia",m_falta1,"Tengo todo",T_todo1;
+T_todo1:
+	next;
+	if(countitem(1022)<777) goto falta;
+	if(countitem(949)<100) goto falta;
+	if(countitem(976)<9) goto falta;
+	if(countitem(980)<9) goto falta;
+	if(countitem(1061)<100) goto falta;
+	if(countitem(7291)<3) goto falta;
+	if(countitem(4131)<1) goto falta;
+	if(countitem(7442)<200) goto falta;
+	if(countitem(7577)<10) goto falta;
+	if(Zeny<=200000000) goto falta;
+	next;
+	mes "Tienes todo, asi que aqui esta tu Moonligth Hat";
+	next;
+	delitem 7806,1;
+	delitem 1022,777;
+	delitem 949,100;
+	delitem 976,9;
+	delitem 980,9;
+	delitem 1061,100;
+	delitem 7291,3;
+	delitem 4131,1;
+	delitem 7442,200;
+	delitem 7577,10;
+	set Zeny,zeny-200000000;
+	getitem 19161,1;
+	atcommand "@effect 703";
+	goto F_SG_final;
+
+	QUEST2:
+	next;
+	mes "Necesitaras esto para hacer el Cat O' Nine Tails Hat:";
+	mes "777 Nine Tails";
+	mes "100 Feather";
+	mes "12 Cobaltblue Dyestuffs";
+	mes "3 Black Dyestuffs";
+	mes "100 Witch Starsand";
+	mes "15 Punisher";
+	mes "3 Cat O' Nine Tails Card";
+	mes "200 Blue Feather";
+	mes "3 Golden Bell ";   
+	mes "200m";
+	menu "Me faltan items todiavia",m_falta1,"Tengo todo",T_todo2;
+T_todo2:
+	next;
+	if(countitem(1022)<777) goto falta;
+	if(countitem(949)<100) goto falta;
+	if(countitem(978)<12) goto falta;
+	if(countitem(983)<3) goto falta;
+	if(countitem(1061)<100) goto falta;
+	if(countitem(10008)<15) goto falta;
+	if(countitem(4290)<3) goto falta;
+	if(countitem(7441)<200) goto falta;
+	if(countitem(10016)<3) goto falta;
+	if(Zeny<=200000000) goto falta;
+	next;
+	mes "Tienes todo, asi que aqui esta tu Cat O' Nine Tails Hat";
+	next;
+	delitem 1022,777;
+	delitem 949,100;
+	delitem 978,12;
+	delitem 983,3;
+	delitem 1061,100;
+	delitem 10008,15;
+	delitem 4290,3;
+	delitem 7441,200;
+	delitem 10016,3;
+	set Zeny,zeny-200000000;
+	atcommand "@effect 703";
+	getitem 19291,1;
+	goto F_SG_finalmoon;
+
+	QUEST3:
+	next;
+	mes "Necesitaras esto para hacer el Satan Bone Helm:";
+	mes "500 Skull";
+	mes "250 Skel-Bone";
+	mes "10 white Dyestuffs";
+	mes "3 Black Dyestuffs";
+	mes "9 Bloody Edge";
+	mes "3 Skeletal Armor Piece ";
+	mes "9 Fragment of Hatred";
+	mes "200 Animal Gore";
+	mes "70 Fragment of Darkness";
+	mes "300 Cursed Water";
+	mes "3 Bloody Eater [2]";  
+	mes "1 Dark Bacilium";   
+	mes "800m";
+	menu "Me faltan items todiavia",m_falta1,"Tengo todo",T_todo3;
+T_todo3:
+	next;
+	if(countitem(7005)<500) goto falta;
+	if(countitem(932)<250) goto falta;
+	if(countitem(982)<10) goto falta;
+	if(countitem(983)<3) goto falta;
+	if(countitem(7024)<9) goto falta;
+	if(countitem(7450)<3) goto falta;
+	if(countitem(7438)<9) goto falta;
+	if(countitem(702)<200) goto falta;
+	if(countitem(7798)<70) goto falta;
+	if(countitem(12020)<300) goto falta;
+	if(countitem(1182)<3) goto falta;
+	if(countitem(5808)<1) goto falta;
+	if(Zeny<=800000000) goto falta;
+	next;
+	mes "Tienes todo, asi que aqui esta tu Bone Helm";
+	next;
+	delitem 7005,500;
+	delitem 932,250;
+	delitem 982,10;
+	delitem 983,3;
+	delitem 7024,9;
+	delitem 7450,3;
+	delitem 7438,9;
+	delitem 702,200;
+	delitem 7798,70;
+	delitem 12020,300;
+	delitem 1182,3;
+	delitem 5808,1;
+	set Zeny,zeny-800000000;
+	atcommand "@effect 703";
+	getitem 5529,1;
+	goto F_SG_Bone;
+	
+falta:
+	mes "La quest es demasiado para ti.....";
+	mes "Regresa cuando hayas conseguido todo";
+	close;
+m_falta1:
+	next;
+	mes "Vamos regresa con todo y te forjare el hat";
+	close;
+L_No:
+	mes "Eres muy inesperto todavía..., esta quest no esta a tu nivel";
+	close;
+T_HOLFF_Fr1:
+	next;
+	mes "Vamos encuentra a Holffar";
+	mes "y Regresa con el Anvil";
+	menu "Repiteme la ubicación..",Ubi_again,"Hare lo posible por encontrale",P_porencontrale,"Ya le encontre",Ya_LOencontro;
+Ubi_again:
+	next;
+	mes "Lo Podras encontrar al Suroeste de Geffen donde esta la herrería..";
+	close;
+P_porencontrale:
+	next;
+	mes "Vamos los encontraras se encuentra al suroeste de Geffen en la herrería..";
+	mes "El es un señor ya mayor de edad vamos encuentralo...";
+	close;
+Ya_LOencontro:
+	next;
+	mes "llevale lo que pide te esperare con el God Anvil ok ^ ^";
+	close;
+F_SG_final:
+	atcommand "@kami "+strcharinfo(0)+" ha terminado La quest de Fenrir, ha forjado el Moonligth Hat...";
+	mes "Felicidades por terminar la quest...";
+	close;
+F_SG_Bone:
+	atcommand "@kami "+strcharinfo(0)+" ha terminado La quest de Fenrir,Ha Forjado el Satanic Bone Helm...";
+	close;
+F_SG_finalmoon:
+	atcommand "@kami "+strcharinfo(0)+" ha terminado La quest de Fenrir,Ha Forjado el Cat O' Nine Tails Hat...";
+	close;
+
+}
+
+
+//------- Mr. Holffar
+geffen,179,56,3	script	Holffar	63,{
+	if(countitem(7730)>0) goto tengolam;
+	mes "Me das un Segundo";
+	next;
+	if(countitem(7806)>0) goto Termilaptm;
+	mes "[Holffar]";
+	mes "Forjo, forjo.. Forjo ???...";
+	next;
+	mes "No puedo atenderte lo siento me encuentro ocupado. ??";
+	close;
+tengolam:
+	mes "Hola soy "+strcharinfo(0)+" fui enviado por Fenrir";
+	mes "Para que le enviaras su GOD Anvil";
+	next;
+	mes "[Holffar]";
+	mes "ya veo pero me tienes que entraga rlo siguiente para entregarte el Anvil";
+	next;
+	mes "Solo necesito un Emperium Anvil, 3 emperuim, 30 cursed seal y 10m";
+	mes "Tienes los items?";
+	next;
+	menu "Si",L_Sih,"No",L_Noh;
+L_sih: 
+	if(countitem(7442)<30) goto cursedseal;
+	if(countitem(989)<1) goto cursedseal;;
+	if(countitem(714)<3) goto cursedseal;
+	if(Zeny<=10000000) goto cursedseal;
+	next;
+	mes "Tienes todo toma tu GOD anvil";
+	next;
+	delitem 7442,30;
+	delitem 989,1;
+	delitem 714,3;
+	set Zeny,zeny-50000000;
+	delitem 7730,1;
+	getitem 7806,1;
+	goto final_Hondail;
+
+cursedseal:
+	mes "Te hacen falta Items regresa cuando los tengas";
+	close;
+final_Hondail:
+	mes "Gracias por realizar la quest llevale el Anvil a Fenrir para que pueda hacer los hats";
+	close;
+Termilaptm:
+	mes "Gracias por forjar el Anvil,Llevaselo a Fenrir lo mas pronto posible para que pueda hacer los hats";
+	close;
+L_Noh:
+	mes "Bueno entonces para que me molestas -.-, vuele cuando tengas los item";
+	close;
+}
+
+
+
+
+

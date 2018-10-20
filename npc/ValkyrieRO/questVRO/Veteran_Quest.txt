@@ -1,0 +1,614 @@
+//naheulbeuk
+//ars_fild20,135,151,5	script	Veteran::vet_av	4_M_KAGE_OLD,{
+
+prontera,146,170,6	script	Veteran::vet_av	588,{
+	set .@npcname$, "[Veterano aventurero]";
+	mes .@npcname$;
+	set .@basexp, 50000;
+	set .@jobexp, 50000;
+	setarray .@itemAdv[0],1231,1,1363,1,1618,1,2111,1,2254,1,2407,1,945,200,741,30;
+	mes "";
+	set .enableAdvancedQuest, 1;
+
+	mes "Hola, viajero!";
+	if (Q_NAH_COMPLETE == 0)
+	{
+		if (Q_NAH == 0)
+		{
+			mes "Puedo ver en tus ojos que tu alma es la de un aventurero.";
+			mes "Puedo apostar mi pan en eso. ¿Estoy en lo cierto?";
+			switch(select("Si","No"))
+			{
+				case 2:
+					next;
+					mes .@npcname$;
+					mes "Ah...Parece....";
+					break;
+				case 1:
+					next;
+					mes .@npcname$;
+					mes "¡Lo habría apostado!";
+					mes "¿Alguna vez oíste hablar de la vida del aventurero?";
+					mes "Se trata de hacer vivir una aventura. Acción, peleas, embriaguez...";
+					mes "¿Conoces una vida de aventurero?";
+					next;
+					switch(select("¡No puedes decir mejor!","No lo creo"))
+					{
+						case 1:
+							if (Q_NAH == 0)
+								mes "No deberías mentir así...";
+							break;
+						case 2:
+							mes "Bueno, ese es el momento adecuado para comenzar!";
+							mes "¿Qué dices acerca de eso? ¿Quieres probar?";
+							switch(select("¡Bueno, vamos!","Yo prefiero no..."))
+							{
+								case 1:
+									next;
+									mes .@npcname$;
+									mes "Bien, aquí vamos!";
+									set Q_NAH, 1;
+									mes "Mantén esto en mente:";
+									mes "*Toma una voz alta*";
+									mes "Cuando tengo mi nivel 2,";
+									mes "Yo compraría un edredón,";
+									next;
+									mes "¿Correcto? Vuelve cuando tengas cosas para crear un ganso.";
+									mes "100 ^FF0000Soft Feathers^000000 será suficiente."; 
+									break;
+								case 2:
+									mes "Como desées.";
+									mes "Vuelve cuando seas un hombre.";
+									break;
+							}
+							break;
+					}
+					break;
+			}
+		}
+		else if (Q_NAH == 1)
+		{
+			if (countitem(7063) >= 100)
+			{
+				mes "¡Hey! ¡Lo tienes todo! ¡Estupendo!";
+				mes "La canción dice:";
+				mes "Cuando tengo mi nivel 2,";
+				mes "Yo compraría un edredón,";
+				next;
+				mes "Entonces:";
+				mes "Para dormir en las mazmorras,";
+				mes "Sin tener frío!";
+				next;
+				mes "Estas listo para eso?";
+				mes "Vamos a probar tu pluma de ganso?";
+				switch(select("¡Aquí vamos!","Yo no quiero..."))
+				{
+					case 1:
+						mes "Hiargh Hiargh! Aquí estamos, chico";
+						mes "Te llevaré plumas y te dejaré usar mi propia pluma de ganso.";
+						mes "Te protegerá de la helada que encontrarás allí.";
+						delitem 7063, 100;
+						warp "coliseum", 150,150;
+						goto OnDonjonGele;
+						break;
+					case 2:
+						mes "Todavía no es un aventurero, ¿verdad?";
+						break;
+				}
+			}
+			else
+				mes "Necesito estas plumas. De Verdad.";
+		}
+		else if (Q_NAH == 2)
+		{
+			mes "Parece que fallaste en la primera escalera.";
+			mes "Puedes intentarlo de nuevo, pero necesitaré las plumas nuevamente.";
+			if (countitem(29241) >= 1)
+				delitem 29241, 1;
+			set Q_NAH, 1;
+		}
+		else if (Q_NAH == 3)
+		{
+			//RATHENA
+			if (checkquest(70674,HUNTING) == 2)
+			//HERCULES
+			//if (questprogress(70674,HUNTING) == 2)
+			{
+				mes "Bien hecho, chico.";
+				mes "¡Puedes ir más allá!";
+				set Q_NAH, 4;
+				getexp .@basexp * Q_NAH, .@jobexp * Q_NAH;
+				set XP_NAH, 0;
+				mes "Déjame un momento para recordar.";
+			}
+			//RATHENA
+			if (checkquest(70674,HUNTING) == 1)
+			//HERCULES
+			//if (questprogress(70674,HUNTING) == 1)
+			{
+				mes "Hum... No has matado suficientes esqueletos.";
+			}
+			else if (countitem(7161) >= 200)
+			{
+				mes "Gracias chico!";
+				mes "Entonces dice:";
+				mes "Yo pondría flechas mágicas,";
+				mes "Al igual, te arrancas un brazo.";
+				mes "Es un poco así, la vida de un aventurero,";
+				mes "Y aquí vamos, ¡hay esqueletos para PELEAR!";
+				delitem 7161, 200;
+				setquest 70674;
+			}
+			else
+			{
+				mes "¡Bien hecho, chico! ¡Pasas por el primer paso!";
+				if (XP_NAH == 0)
+				{
+					getexp .@basexp * Q_NAH, .@jobexp * Q_NAH;
+					set XP_NAH, 1;
+				}
+				mes "¿Quieres escuchar la oración de la siguiente canción?";
+				mes "Aquí estás:";
+				mes "Cuando tengo mi nivel 3,";
+				mes "Yo compraría un carcaj.";
+				next;
+				mes "¿Sabes qué hacer, verdad?";
+				mes "Tráeme algo para crear un quiver.";
+				mes "Voy a usar algo de ^FF0000Black Bear Skin^000000 para eso.";
+				mes "200 piezas deberían ser suficientes";
+			}
+		}
+		else if (Q_NAH == 4)
+		{
+			//RATHENA
+			if (checkquest(70674,HUNTING) == 2)
+			//HERCULES
+			//if (questprogress(70674,HUNTING) == 2)
+			{
+				if (countitem(944) >= 60)
+				{
+					mes "Bien hecho, aprendiz de aventurero.";
+					mes "¡Has pasado el tercer paso!";
+					mes "¡Siga adelante!";
+					delitem 944, 60;
+					mes "Entonces dice...";
+					mes "Es un poco así, la vida de un aventurero.";
+					mes "Y aquí vamos, ¡hay orcos para diezmar!";
+					changequest 70674, 70675;
+					set Q_NAH, 5;
+				}
+				else
+				{
+					mes "Muy bien, recuerdo lo siguiente:";
+					mes "Cuando tengo mi nivel 4,";
+				next;
+					mes "Yo compraría un caballo.";
+					mes "Realmente no sé cómo montar...";
+					mes "Lástima que no me importa.";
+				next;
+					mes "Para este, me parece obvio.";
+					mes "Devuélveme 60 Herraduras";
+				}
+			}
+			else
+				mes "Parece que no matas suficientes skeletons.";
+			
+		}
+		else if (Q_NAH == 5)
+		{
+			//RATHENA
+			if (checkquest(70675,HUNTING) == 2)
+			//HERCULES
+			//if (questprogress(70675,HUNTING) == 2)
+			{
+				if (countitem(7099) >= 60)
+				{
+					mes "Bien hecho, aprendiz de aventurero.";
+					mes "Puedes continuar.";
+					mes "Siguiente dice:";
+					mes "Es un poco así, vida de aventurero,";
+					mes "y vamos hay momias para quemar!";
+					changequest 70675, 70676;
+					delitem 7099, 60;
+					set Q_NAH, 6;		
+					set XP_NAH, 0;
+				}
+				else
+				{
+					mes "Bien hecho, niño. ¡Pareces un verdadero aventurero!";
+					if (XP_NAH == 0)
+					{
+						getexp .@basexp * Q_NAH, .@jobexp * Q_NAH;
+						set XP_NAH, 1;
+					}
+					mes "La canción dice:";
+					mes "Cuando obtengo mi nivel 5,";
+					mes "Compraré pergaminos,";
+					mes "lanzar hechizos";
+					mes "¡incluso si no soy un mago!";
+					next;
+					mes "Para este paso, necesitaré algunos rollos mágicos.";
+					mes "Hay algunos raros en, el ^FF0000Worn-out Magic Scroll^000000.";
+					mes "Devuélveme 300."; 
+				}
+			}	
+			else
+				mes "Parece que no diezmas suficientes orcos.";
+		}
+		else if (Q_NAH == 6)
+		{
+			//RATHENA
+			if (checkquest(70676,HUNTING) == 2)
+			//HERCULES
+			//if (questprogress(70676,HUNTING) == 2)
+			{
+				mes "¡Bien hecho, niño! ¡Ahora eres un verdadero aprendiz de aventurero!";
+				if (XP_NAH == 0)
+				{
+					getexp .@basexp * Q_NAH, .@jobexp * Q_NAH;
+					set XP_NAH, 1;
+				}
+				mes "Lo siguiente dice:";
+				mes "Cuando obtengo mi nivel 6,";
+				mes "Compraré una armadura";
+				mes "es menos fácil de ejecutar,";
+				mes "¡pero evitamos las fracturas!";
+				mes "Es un poco así, la vida de un aventurero,";
+				next;
+				mes "Esta vez será un poco diferente.";
+				mes "Tienes que demostrarme que puedes resistir, con tu armadura puesta.";
+				mes "¡Tienes que saber cómo defenderte también!";
+				goto OnDonjonArmure;
+			}
+			else
+				mes "Parece que no quemaste suficientes momias.";
+		}
+		else if (Q_NAH == 7)
+		{
+			if (countitem(941) >= 50)
+			{
+				delitem 941, 50;
+				mes "¡Estupendo! Parece que es así.";
+				mes "Entonces dice:";
+				mes "Es un poco así, vida de aventurero,";
+				mes "¡y aquí vamos Minotauros a matar!";
+				changequest 70676, 70677;
+				set Q_NAH, 8;
+				set XP_NAH, 0;
+			}
+			else
+			{
+				mes "Increíble. Lo has hecho.";
+				mes "Eso no fue fácil, pensó.";
+				if (XP_NAH == 0)
+				{
+					getexp .@basexp * Q_NAH, .@jobexp * Q_NAH;
+					set XP_NAH, 1;
+				}
+				mes "Vamonos. Pronto serás un aventurero.";
+				mes "Cuando obtengo mi nivel 7,";
+				mes "Compraré un anillo,";
+				mes "que da +200 en carisma,";
+				mes "y el poder de un toro!";
+				mes "Me gustaría tener este...";
+				mes "Pero en este momento, algunos ^FF0000Nose Ring^000000. debería hacer el trabajo. Digamos...50?";
+			}
+		}
+		else if (Q_NAH == 8)
+		{
+			//RATHENA
+			if (checkquest(70677,HUNTING) == 2)
+			//HERCULES
+			//if (questprogress(70677,HUNTING) == 2)
+			{
+				mes "Bien hecho, chico. Se vuelve más difícil, ¿verdad?";
+				mes "Continúemos. Pronto serás un aventurero.";
+				mes "Cuando obtengo mi nivel 8,";
+				mes "Compraré una balista,";
+				mes "para sitiar las mazmorras,";
+				mes "¡Necromancultistas!";
+				mes "Es un poco así, vida de aventurero,";
+				mes "¡y aquí vamos a Liche a entrar!";
+				next;
+				mes "Bueno eso ... No tenemos eso aquí.";
+				mes "Pero Necromancultiste se conoce aquí como Nigromante.";
+				mes "Hay criaturas grandes, fuertes y enormes,";
+				mes "¡y tendrás que matar eso!";
+				mes "Vamonos.";
+				warp "abbey01", 322,98;
+				changequest 70677, 70678;
+				set Q_NAH, 9;
+				goto OnDonjonNecro;
+			}
+		}
+		else if (Q_NAH == 9)
+		{
+			//RATHENA
+			if (checkquest(70678,HUNTING) == 2)
+			//HERCULES
+			//if (questprogress(70678,HUNTING) == 2)
+			{
+				mes "AHAHAHAHA, entonces? No tan fácil, ¿verdad?";
+				mes "Bien hecho, aunque.";
+				if (XP_NAH == 0)
+				{
+					getexp .@basexp * Q_NAH, .@jobexp * Q_NAH;
+					set XP_NAH, 1;
+				}
+				mes "Vamonos. Está casi terminado.";
+				mes "Cuando obtengo mi nivel 9,";
+				mes "Compraré un Vorpale,";
+				mes "arrebatarle al dragón,";
+				mes "sus genitales!";
+				next;
+				mes "No puedo ayudarte esta vez.";
+				mes "Tienes el papel de cazar solo esta vez.";
+				mes "Creo que deberías probar con un ^FF0000Gopinich^000000 esta vez. Es lo suficientemente bueno para comenzar.";
+				changequest 70678, 70679;
+				set Q_NAH, 10;
+			}
+			//RATHENA
+			if (checkquest(70678,HUNTING) == 1)
+			//HERCULES
+			//if (questprogress(70678,HUNTING) == 1)
+			{
+				mes "AHAHAH Te dije que era duro.";
+				mes "¡Aquí vamos de nuevo!";
+				warp "abbey01", 322,98;
+				goto OnDonjonNecro;
+			}
+		}
+		else
+		{
+			//RATHENA
+			if (checkquest(70679,HUNTING) == 2)
+			//HERCULES
+			//if (questprogress(70679,HUNTING) == 2)
+			{
+				mes "¡Finalmente te has convertido en un verdadero Aventurero!";
+				mes "¡Estoy orgulloso de ti!";
+				if (XP_NAH == 0)
+				{
+					getexp .@basexp * Q_NAH, .@jobexp * Q_NAH;
+					set XP_NAH, 1;
+				}
+				mes "Aquí está el último secreto de esta canción.";
+				next;
+				mes "Cuando tengo mi nivel 10,";
+				mes "Compraría aderezos,";
+				mes "Para corregir mis errores,";
+				mes "Niveles previos.";
+				mes "Esta es especialmente la vida del Aventurero.";
+				mes "Me voy a casa, mi carrera ha terminado.";
+				next;
+				mes "Sí. Ese es el secreto: tómate tu tiempo.";
+				mes "La muerte no se puede curar, no como las heridas.";
+				mes "Aquí hay algo para curar a algunos.";
+				mes "Vuelve mas tarde. Tendré algo más para ti.";
+				getitem 607, 15;
+				getitem 675, 5;
+				getitem 675, 5;
+				erasequest 70679;
+				set Q_NAH_COMPLETE, 1;
+			}
+		}
+	}
+	else if (Q_NAH_COMPLETE == 1)
+	{
+		mes "Has pasado por toda la prueba, pacientemente.";
+		mes "En este momento, te has convertido en un Aventurero reconocido.";
+		mes "¡Enhorabuena!";
+		rentitem 29311, 60;
+		if(.rewardMode == 1)
+		{
+			mes "Como recompensa por su dificultad,";
+			mes "Puedes tener cualquiera del objeto de la prueba.";
+			mes "¡Pero recuerda! ¡Solo uno!";	
+			next;
+			goto OnAskChoice;
+		}
+	}
+	else if (Q_NAH_COMPLETE == 2 && .enableAdvancedQuest == 1)
+	{
+		if (Q_NAH == 10)
+		{
+			mes "Ah! ¡Aquí estás de nuevo!";
+			mes "¿Qué? ¿Quieres una Marca de Aventurero?";
+			mes "Por qué no, pero no será barato, lo sé.";
+			set Q_NAH, 11;
+			goto DispAdvBackItem;
+		}
+		else if (Q_NAH == 11)
+		{
+			mes "So? Do you have it all?";
+			for (set .@i,0; .@i<getarraysize(.@itemAdv); set .@i,.@i+2)
+			{
+				if (countitem(getelementofarray(.@itemAdv,.@i)) < getelementofarray(.@itemAdv,.@i+1))
+				{
+					mes "Lo siento pero todavía faltan algunos.";
+					mes "¿Quieres la lista otra vez?";
+					switch(select("Si","No"))
+					{
+						case 1:
+							goto DispAdvBackItem;
+							break;
+						case 2:
+							mes "Todo bien. Esperaré.";
+							close;
+					}
+				}
+			}
+			for (set .@i,0; .@i<getarraysize(.@itemAdv); set .@i,.@i+2)
+			{
+				delitem getelementofarray(.@itemAdv,.@i), getelementofarray(.@itemAdv,.@i+1);
+			}
+			mes "¡Lo tienes todo!";
+			mes "Aquí está tu marca.";
+			getitem 2576, 1;
+			mes "Te veo pronto.";
+		}
+		else
+		{
+			mes "¿Cómo llegaste allí?";
+		}
+		close;
+	}
+	else
+	{
+		mes "No tengo nada más que aprender para ti.";
+		mes "Ahora deberías vivir por tu cuenta.";
+	}
+	close;
+
+OnInit:
+	set .rewardMode, 0;
+	end;
+
+OnWhisperGlobal:
+	dispbottom "dah: " + Q_NAH;
+	set Q_NAH_COMPLETE, 0;
+	set Q_NAH, 3;
+	end;
+
+DispAdvBackItem:
+mes "Me lo deberás a cambio:";
+for (set .@i,0; .@i<getarraysize(.@itemAdv); set .@i,.@i+2)
+{
+	mes "^5555FF"+ getelementofarray(.@itemAdv,.@i+1) +" "+ getitemname(getelementofarray(.@itemAdv,.@i)) +"^000000";
+}
+mes "Got it all?";
+mes "I'll wait here.";
+close;
+
+OnDonjonGele:
+	killmonsterall "coliseum";
+	// spawn 10 Gobelin of each gender and 1 Gobelin Leader in the 50x50 area centered on (155,188)
+	areamonster "coliseum",175,149,175,149,"Gobelin",1122,15,"vet_av::OnMobKill";
+	areamonster "coliseum",149,123,149,123,"Gobelin",1123,15,"vet_av::OnMobKill";
+	areamonster "coliseum",122,150,122,150,"Gobelin",1124,15,"vet_av::OnMobKill";
+	areamonster "coliseum",150,178,150,178,"Gobelin",1125,15,"vet_av::OnMobKill";
+	areamonster "coliseum",170,169,170,169,"Gobelin",1126,15,"vet_av::OnMobKill";
+	areamonster "coliseum",130,171,130,171,"Gobelin Leader",1299,1,"vet_av::OnMobKill";
+	addtimer 5000, strnpcinfo(3)+"::OnTimer5000";
+	dispbottom "Et on y va,";
+	dispbottom "Y a des Gobelins à Saigner!";
+	set @idpc, getcharid(3);
+	end;
+
+OnDonjonArmure:
+	killmonsterall "coliseum";
+	areamonster "coliseum",175,149,149,175,"Troll des Bois",1497,15,"vet_av::OnMobKill";
+	areamonster "coliseum",175,149,149,175,"Troll des Montagnes",2024,5,"vet_av::OnMobKill";
+	areamonster "coliseum",175,149,149,175,"Troll des Laves",1366,15,"vet_av::OnMobKill";
+	areamonster "coliseum",175,149,149,175,"Troll des Lacs",1278,15,"vet_av::OnMobKill";
+	warp "coliseum", 150,150;
+	dispbottom "Et on y va,";
+	dispbottom "Y a des Trolls à Bousiller!";
+	end;
+
+OnDonjonNecro:
+	killmonsterall "coliseum";
+	areamonster "coliseum",175,149,149,175,"Necromancultistes",1870,5,"vet_av::OnMobKill";
+	end;
+
+OnTimer5000:
+	if (Q_NAH == 1)
+	{
+		set .@id, rand(1122, 1126);
+		areamobuseskill "coliseum",48,51,50,.@id,"WZ_STORMGUST",5,2500,1,ET_KIK,0;
+		addtimer 5000, strnpcinfo(3)+"::OnTimer5000";
+	}
+	end;
+
+OnMobKill:
+	set .@mob_dead_num,mobcount("coliseum","vet_av::OnMobKill");
+	if (.@mob_dead_num < 1)
+	{
+		attachrid @idpc;
+		if (Q_NAH == 1)
+		{
+			mapwarp "coliseum", "izlude", 173,74; 
+			set Q_NAH, 3;		
+			set XP_NAH, 0;
+		}
+		else if (Q_NAH == 6)
+		{
+			mapwarp "coliseum", "izlude", 173,74; 
+			set Q_NAH, 7;	
+			set XP_NAH, 0;
+		}
+		else if (Q_NAH == 8)
+		{
+			mapwarp "coliseum", "izlude", 173,74; 
+			set Q_NAH, 9;	
+			set XP_NAH, 0;	
+		}
+	}
+	end;
+
+OnAskChoice:
+if(Q_NAH_COMPLETE == 1)
+{
+	mes "What kind of item are you interested in?";
+	goto OnChooseItem;
+}
+close;
+
+OnChooseItem:
+	set .menu$, "";
+
+	mes "Which form do you want?";
+	set .@choice, select("A Spear","A Sword","A Book","A Mace","A Staff","An Axe","A Dagger","A Katar","A Fist","A Bow","A Whipe","An Instrument","A Gun","A Huuma Shuriken");
+	npctalk .@choice;
+	switch(.@choice)
+	{
+		case 1:
+			getitem 29431, 1;
+			break;
+		case 2:
+			getitem 29427, 1;
+			break;
+		case 3:
+			getitem 29428, 1;
+			break;
+		case 4:
+			getitem 29436, 1;
+			break;
+		case 5:
+			getitem 29429, 1;
+			break;
+		case 6:
+			getitem 29435, 1;
+			break;
+		case 7:
+			getitem 29438, 1;
+			break;
+		case 8:
+			getitem 29437, 1;
+			break;
+		case 9:
+			getitem 29434, 1;
+			break;
+		case 10:
+			getitem 29430, 1;
+			break;
+		case 11:
+			getitem 29433, 1;
+			break;
+		case 12:
+			getitem 29432, 1;
+			break;
+		case 13:
+			getitem 29440, 1;
+			break;
+		case 14:
+			getitem 29439, 1;
+			break;
+		case 255:
+			close;
+	}
+	set Q_NAH_COMPLETE, 2;
+	mes "Here's your reward.";
+	mes "Now, go! And live an Aventurer's Life.";
+	close;
+}

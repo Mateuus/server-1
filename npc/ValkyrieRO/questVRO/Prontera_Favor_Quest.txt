@@ -1,0 +1,809 @@
+//There will be a Favor Rate Board on each map.
+//Npcs across the map will ask for favors, and completting it gives a small exp and progress to the map favor board.
+//Filling 100% of the board makes it give a reward to the player upon talking to it.
+//Map quests are not doable after the quest board is completed.
+
+//--- Prontera ---
+prontera,152,285,5	script	Favor Rate Board#0prt	857,{
+	callfunc "F_FavorBoard", "<NAVI>[Terry]<INFO>prontera,79,273,0,000,0</INFO></NAVI>, <NAVI>[Albedo]<INFO>prontera,251,290,0,000,0</INFO></NAVI>, <NAVI>[Caithe]<INFO>prontera,117,160,0,000,0</INFO></NAVI>", 2261, 1, .FavorVar$, .TotalFavorRate;
+	end;
+	
+	OnInit:
+	.FavorVar$ = "favor_"+strnpcinfo(4);
+	.TotalFavorRate = 5000;
+	end;
+}
+
+/*prontera,246,88,4	script	Cruise Vianno#prt_qst	105,{
+	.@NpcName$ = "[Cruise Vianno]";
+	.@VarName$ = getvariableofnpc(.FavorVar$, "Favor Rate Board#0prt");
+	.@MaxFavorRate = getvariableofnpc(.TotalFavorRate, "Favor Rate Board#0prt");
+	mes .@NpcName$;
+	if(getd(.@VarName$) >= 0 && getd(.@VarName$) < .@MaxFavorRate)
+	{
+		mes "";
+	}
+	else
+	{
+		mes "Always on duty.";
+	}
+	close;
+}*/
+
+prontera,117,160,3	script	Caithe#prt_qst	67,{
+	.@NpcName$ = "[Caithe]";
+	.@VarName$ = getvariableofnpc(.FavorVar$, "Favor Rate Board#0prt");
+	.@MaxFavorRate = getvariableofnpc(.TotalFavorRate, "Favor Rate Board#0prt");
+	mes .@NpcName$;
+	if(getd(.@VarName$) >= 0 && getd(.@VarName$) < .@MaxFavorRate)
+	{
+		mes "Soy un desastre ... accidentalmente dejé caer todo el stock de Jellopy del Herrero en el brasero y arruiné todo...";
+		next;
+		mes .@NpcName$;
+		mes "Ahora el Herrero quiere que yo consiga un nuevo stock...";
+		mes "Oye, tú, ¿tienes un Jellopy? Podría comprarlas para darlas al maestro del herrero.";
+		.@menu$ = "";
+		.@Jellopies = countitem(909);
+		if(.@Jellopies >= 1)
+			.@menu$ = "Tengo algunas Jellopies";
+		.@menu$ += ":No, no tengo...";
+		if(select(.@menu$) == 1)
+		{
+			next;
+			mes .@NpcName$;
+			while(.@Jellopies >= 1)
+			{
+				mes "¡Hurra! Gracias. Aquí 30 Zenys para los Jellopies.";
+				delitem 909, 1;
+				Zeny += 30;
+				getexp 6, 3;
+				.@Jellopies -= 1;
+				setd(.@VarName$, getd(.@VarName$) + 75);
+				if(getd(.@VarName$) >= .@MaxFavorRate)
+				{
+					mes "Esto es suficiente para pagar mi deuda, gracias.";
+					close;
+				}
+				mes "Anyway, do you have more?";
+				if(select((.@Jellopies >= 1 ? "Sí, tengo más." : "") + ":No, lo siento, no tengo...") == 2)
+				{
+					next;
+					mes .@NpcName$;
+					mes "Aww... Lástima, bueno, ven a verme cuando tengas más.";
+					close;
+				}
+				next;
+				mes .@NpcName$;
+			}
+		}
+		else
+		{
+			next;
+			mes .@NpcName$;
+			mes "Oh ... Supongo que tendré que tratar de cultivarlos yo mismo...";
+		}
+	}
+	else
+	{
+		mes "Gracias por todos los suministros de Jellopy que me has traído.";
+	}
+	close;
+}
+
+prontera,251,290,3	script	Albedo#prt_qst	50,{
+	.@NpcName$ = "[Albedo]";
+	.@VarName$ = getvariableofnpc(.FavorVar$, "Favor Rate Board#0prt");
+	.@MaxFavorRate = getvariableofnpc(.TotalFavorRate, "Favor Rate Board#0prt");
+	mes .@NpcName$;
+	if(getd(.@VarName$) >= 0 && getd(.@VarName$) < .@MaxFavorRate)
+	{
+		mes "Good that you appeared, I am having an issue, I am looking for someone to play Ragnarok Rock, Paper and Scissors with but no one wants to.";
+		mes "What about playing RRPS with me?";
+		switch(select("Sure:Rules of RRPS:No way"))
+		{
+			case 1:
+			next;
+			mes .@NpcName$;
+			mes "Alright, Let's begin, pick one.";
+			selectionReturn:
+			.@Select = select("Rock:Paper:Scissors:Cancel");
+			if(.@Select == 4)
+			{
+				next;
+				mes .@NpcName$;
+				mes "Going already? Alright, good bye.";
+				close;
+			}
+			next;
+			mes .@NpcName$;
+			mes "Ragnarok Rock, Paper and Scissors!";
+			.@NpcChoice = rand(1, 3);
+			if(.@Select == 1 && .@NpcChoice == 2 || .@Select == 2 && .@NpcChoice == 3 || .@Select == 3 && .@NpcChoice == 1)
+			{
+				mes "I won! *Punches your face*";
+				percentheal -10, 0;
+			}
+			if(.@Select == 1 && .@NpcChoice == 3 || .@Select == 2 && .@NpcChoice == 1 || .@Select == 3 && .@NpcChoice == 2)
+			{
+				mes "Aquí he perdido... 20 Zenys.";
+				Zeny += 20;
+				//GiveZenyReward(100);
+			}
+			if(.@Select == .@NpcChoice)
+			{
+				mes "¡Es un empate! Aquí algunos experiencia, como prometió.";
+				getexp(7, 5);
+			}
+			setd(.@VarName$, getd(.@VarName$) + 250);
+			if(getd(.@VarName$) >= .@MaxFavorRate)
+			{
+				mes "Uff... Estoy cansado de jugar Ragnarok Piedra, Paper y Tijeras... Debería buscar otro Hobbie, pero seguramente fue divertido.";
+				close;
+			}
+			mes "Want to try again?";
+			if(select("Yes:No") == 1)
+			{
+				next;
+				mes .@NpcName$;
+				mes "Prepare your hand.";
+				goto selectionReturn;
+			}
+			break;
+			
+			case 2:
+			next;
+			mes .@NpcName$;
+			mes "It is too simple, If you win, you receive Zenys as reward,";
+			mes "If you lose, I will punch you,";
+			mes "and if there is a draw, you will gain experience.";
+			close;
+		}
+		
+	}
+	else
+	{
+		mes "I am now looking for something else to do right now.";
+	}
+	close;
+}
+
+prontera,79,273,5	script	Terry, the Bard#prt_qst	51,{
+	.@NpcName$ = "[Terry]";
+	.@VarName$ = getvariableofnpc(.FavorVar$, "Favor Rate Board#0prt");
+	.@MaxFavorRate = getvariableofnpc(.TotalFavorRate, "Favor Rate Board#0prt");
+	mes .@NpcName$;
+	if(getd(.@VarName$) >= 0 && getd(.@VarName$) < .@MaxFavorRate)
+	{
+		mes "I am a novice bard, and I need someone to bring-me Flowers for the decoration of my next serenade.";
+		.@menu$ = "";
+		.@FlowerSum = countitem(712);
+		if(.@FlowerSum > 0)
+			.@menu$ = "I have some flowers.";
+		.@menu$ += ":Good Luck.";
+		if(select(.@menu$) == 1)
+		{
+			next;
+			while(.@FlowerSum > 0)
+			{
+				mes .@NpcName$;
+				mes "Thanks, my serenade will be the best serenade in the world.";
+				setd(.@VarName$, getd(.@VarName$) + 75);
+				.@FlowerSum--;
+				delitem(712, 1);
+				getexp(1, (.@FlowerSum % 2 == 1 ? 1 : 0));
+				if(getd(.@VarName$) >= .@MaxFavorRate)
+				{
+					mes "I believe those are enough for my serenade, bye bye.";
+					close;
+				}
+				if(select((.@FlowerSum > 0 ? "I have more Flowers" : "") + ":Stop conversation") == 2)
+				{
+					next;
+					mes .@NpcName$;
+					mes "Talk to me when you have more flowers.";
+					close;
+				}
+				next;
+			}
+		}
+		next;
+		mes .@NpcName$;
+		mes "Hum, maybe I could ask someone else.";
+		close;
+	}
+	else
+	{
+		mes "I does not need anything right now, check out later.";
+	}
+	close;
+}
+
+//prt_fild08
+
+prt_fild08,177,358,3	script	Favor Rate Board#1prt	857,{
+	callfunc "F_FavorBoard", "<NAVI>[Apple Gatherer]<INFO>prt_fild08,135,368,0,000,0</INFO></NAVI>, <NAVI>[Milk Vendor]<INFO>prt_fild08,280,229,0,000,0</INFO></NAVI>, <NAVI>[Grandpa Lionel]<INFO>prt_fild08,50,54,0,000,0</INFO></NAVI>", 12208, 2, .FavorVar$, .TotalFavorRate;
+	end;
+	
+	OnInit:
+	.FavorVar$ = "favor_"+strnpcinfo(4);
+	.TotalFavorRate = 3000;
+	end;
+}
+
+prt_fild08,50,54,3	script	Peace Loving Old Man#prt08_qst	120,{
+	.@NpcName$ = "[Lionel]";
+	.@FavorBoardNpc$ = "Favor Rate Board#1prt";
+	.@VarName$ = getvariableofnpc(.FavorVar$, .@FavorBoardNpc$);
+	.@MaxFavorRate = getvariableofnpc(.TotalFavorRate, .@FavorBoardNpc$);
+	mes .@NpcName$;
+	if(getd(.@VarName$) >= 0 && getd(.@VarName$) < .@MaxFavorRate)
+	{
+		mes "Hum, it is really unusual to see someone come here.";
+		.@MaxFeathersCount = 1;
+		mes "Since you came, I am in need of Feathers, I need them to make a pillow, a stack of "+.@MaxFeathersCount+" Feathers may be nice.";
+		.@FeathersCount = countitem(949);
+		.@menu$ = "";
+		if(.@FeathersCount >= .@MaxFeathersCount)
+			.@menu$ = "I got some Feathers.";
+		.@menu$ += ":I am starting to feel lazy aswell...";
+		if(select(.@menu$) == 1)
+		{
+			while(.@FeathersCount >= .@MaxFeathersCount)
+			{
+				next;
+				mes .@NpcName$;
+				mes "This wait is making me more sleepy...";
+				delitem 949, .@MaxFeathersCount;
+				getexp(9, 5);
+				//GiveZenyReward(50);
+				setd(.@VarName$, getd(.@VarName$) + 120);
+				.@FeathersCount -= .@MaxFeathersCount;
+				if(getd(.@VarName$) >= .@MaxFavorRate)
+				{
+					mes "I were able to fill this pillow with all the feathers adventurers gathered for me, if you does not mind, I will get some sleep, so please move away.";
+					close2;
+					warp "prt_fild08", 29, 76;
+					end;
+				}
+				mes "But those feathers are not enough to fill the pillow.";
+				if(select((.@FeathersCount >= .@MaxFeathersCount ? "No worry, I have more" : "") + ":I am getting lazy...") == 2)
+				{
+					next;
+					mes .@NpcName$;
+					mes "Well, I does not plan to move from here to gather feathers.";
+					close;
+				}
+			}
+		}
+		else
+		{
+			next;
+			mes .@NpcName$;
+			mes "Ho, Ho ho, Ho ho ho ho ho ho ho.";
+			mes "Nice joke kid, just needed to tell-me that you did not wanted to do that, instead.";
+		}
+	}
+	else
+	{
+		mes "I can get back to taking some peacefull rest...";
+	}
+	close;
+}
+
+prt_fild08,280,229,3	script	Milk Vendor#1prt	90,{
+	//callfunc("F_SingleItemFavor", "Marta", "Hello, I am a helper of Prontera Milk Ranch vendors.\nI am currently looking for [reqitem] to place the milk inside and then sell,\nbut this is a lot of hard work for only one person.|So, let's make a deal? If you bring-me [reqstack] [reqitem] stacks, I will give you a nice reward, what do you think?", "Deal.", "No Deal.", "This will be helpfull.", "This is all the Empty Bottles the Ranchers asked me to gather.", "But the Ranchers will need more empty bottles.", "I have a number of them in the inventory", "I can try to gather more.", "Alright, be sure of bringing them to me.", "The farmers from the milk ranch are all thanking you for your help.", 713, 5, 7, 3, 35, 500);
+	//end;
+	
+	.@NpcName$ = "[Marta]";
+	.@FavorBoardNpc$ = "Favor Rate Board#1prt";
+	.@VarName$ = getvariableofnpc(.FavorVar$, .@FavorBoardNpc$);
+	.@MaxFavorRate = getvariableofnpc(.TotalFavorRate, .@FavorBoardNpc$);
+	mes .@NpcName$;
+	if(getd(.@VarName$) >= 0 && getd(.@VarName$) < .@MaxFavorRate)
+	{
+		mes "Hello, I am a helper of Prontera Milk Ranch vendors.";
+		mes "I am currently looking for Empty Bottles to place the milk inside and then sell,";
+		mes "but this is a lot of hard work for only one person.";
+		next;
+		mes .@NpcName$;
+		.@MaxBottleCount = 1;
+		mes "So, let's make a deal? If you bring me "+.@MaxBottleCount+" Empty Bottle stacks, I will give you a nice reward, what do you think?";
+		.@BottleCount = countitem(713);
+		.@menu$ = "";
+		if(.@BottleCount >= .@MaxBottleCount)
+			.@menu$ = "Deal.";
+		.@menu$ += ":No Deal.";
+		if(select(.@menu$) == 1)
+		{
+			while(.@BottleCount >= .@MaxBottleCount)
+			{
+				next;
+				mes .@NpcName$;
+				mes "This will be helpfull.";
+				delitem 713, .@MaxBottleCount;
+				getexp(7, 3);
+				//GiveZenyReward(35);
+				setd(.@VarName$, getd(.@VarName$) + 100);
+				.@BottleCount -= .@MaxBottleCount;
+				if(getd(.@VarName$) >= .@MaxFavorRate)
+				{
+					mes "This is all the Empty Bottles the Ranchers asked me to gather.";
+					close;
+				}
+				mes "But the Ranchers will need more empty bottles";
+				if(select((.@BottleCount >= .@MaxBottleCount ? "I have a number of them in the inventory" : "") + ":I can try to gather more.") == 2)
+				{
+					next;
+					mes .@NpcName$;
+					mes "Alright, be sure of bringing them to me.";
+					close;
+				}
+			}
+		}
+		else
+		{
+			next;
+			mes .@NpcName$;
+			mes "Does not sounds tempting? Well, at least I tried...";
+		}
+	}
+	else
+	{
+		mes "";
+	}
+	close;
+}
+
+prt_fild08,135,368,5	script	Apple Gatherer#prt08_qst	85,{
+	.@NpcName$ = "[Edward]";
+	.@FavorBoardNpc$ = "Favor Rate Board#1prt";
+	.@VarName$ = getvariableofnpc(.FavorVar$, .@FavorBoardNpc$);
+	.@MaxFavorRate = getvariableofnpc(.TotalFavorRate, .@FavorBoardNpc$);
+	mes .@NpcName$;
+	if(getd(.@VarName$) >= 0 && getd(.@VarName$) < .@MaxFavorRate)
+	{
+		mes "Porings! Porings stole the Apples I gathered this morning.";
+		.@MaxAppleCount = 1;
+		mes "I will give you a good reward if you find "+.@MaxAppleCount+" of the stolen apples stacks.";
+		.@AppleCount = countitem(512);
+		.@menu$ = "";
+		if(.@AppleCount >= .@MaxAppleCount)
+			.@menu$ = "I have found some.";
+		.@menu$ += ":Count on me.";
+		if(select(.@menu$) == 1)
+		{
+			while(.@AppleCount >= .@MaxAppleCount)
+			{
+				next;
+				mes .@NpcName$;
+				mes "Good job, Good job.";
+				delitem 512, .@MaxAppleCount;
+				getexp(4, 2);
+				//GiveZenyReward(20);
+				setd(.@VarName$, getd(.@VarName$) + 50);
+				.@AppleCount -= .@MaxAppleCount;
+				if(getd(.@VarName$) >= .@MaxFavorRate)
+				{
+					mes "All batches of apple I have gathered this morning are here, Thank you, kid.";
+					close;
+				}
+				mes "But I still does not have all apples the porings stole.";
+				if(select((.@AppleCount >= .@MaxAppleCount ? "I have another batch of apple here" : "") + ":I can try to collect more.") == 2)
+				{
+					next;
+					mes .@NpcName$;
+					mes "Right, just bring the apples to me.";
+					close;
+				}
+			}
+		}
+		else
+		{
+			next;
+			mes .@NpcName$;
+			mes "You know where I am, so bring the apples to me.";
+		}
+	}
+	else
+	{
+		mes "Well, those Porings no longer stole apples from my apple trees, now I can get some rest.";
+	}
+	close;
+}
+
+//prt_fild05
+
+prt_fild05,279,229,5	script	Favor Rate Board#2prt	857,{
+	callfunc "F_FavorBoard", "<NAVI>[Bug Hunter]<INFO>prt_fild05,224,204,0,000,0</INFO></NAVI>, <NAVI>[Weird Armorer Bam]<INFO>prt_fild05,179,286,0,000,0</INFO></NAVI>", 12208, 2, .FavorVar$, .TotalFavorRate;
+	end;
+	
+	OnInit:
+	.FavorVar$ = "favor_"+strnpcinfo(4);
+	.TotalFavorRate = 3000;
+	end;
+}
+
+prt_fild05,179,286,5	script	Weird Armorer#prt05_qst	98,{
+	.@NpcName$ = "[Bam]";
+	.@FavorBoardNpc$ = "Favor Rate Board#2prt";
+	.@VarName$ = getvariableofnpc(.FavorVar$, .@FavorBoardNpc$);
+	.@MaxFavorRate = getvariableofnpc(.TotalFavorRate, .@FavorBoardNpc$);
+	mes .@NpcName$;
+	if(getd(.@VarName$) >= 0 && getd(.@VarName$) < .@MaxFavorRate)
+	{
+		mes "I want to make a Bug armor, using bug skin as material.";
+		.@MaxMucusCount = 1;
+		.@MaxPeelingCount = 2;
+		mes "But to make this turn to truth I will need "+.@MaxPeelingCount+" Worm Peelings and "+.@MaxMucusCount+" Sticky Mucus.";
+		.@WormPeeling = countitem(955);
+		.@Mucus = countitem(938);
+		.@menu$ = "";
+		if(.@WormPeeling >= .@MaxPeelingCount && .@Mucus >= .@MaxMucusCount)
+			.@menu$ = "I have some.";
+		.@menu$ += ":You are weird";
+		if(select(.@menu$) == 1)
+		{
+			while(.@WormPeeling >= .@MaxPeelingCount && .@Mucus >= .@MaxMucusCount)
+			{
+				next;
+				mes .@NpcName$;
+				mes "Wow, this can allow me to make the armor.";
+				delitem 955, .@MaxPeelingCount;
+				delitem 938, .@MaxMucusCount;
+				getexp(12, 6);
+				//GiveZenyReward(120);
+				setd(.@VarName$, getd(.@VarName$) + 1000);
+				.@WormPeeling -= .@MaxPeelingCount;
+				.@Mucus -= .@MaxMucusCount;
+				if(getd(.@VarName$) >= .@MaxFavorRate)
+				{
+					mes "Finally, I am able to make the armor of my dreams.";
+					mes "We are a step closer of reaching the future of the toughest armors.";
+					next;
+					getitem2 2303, 1, 0, 4, 1, 0, 0, 0, 0;
+					mes .@NpcName$;
+					mes "My marvelous armor... It is finally done....";
+					mes "Keep it, as a proof of my skills on armoring, also, do not forget to recommend ME to your friends.";
+					close;
+				}
+				mes "But I still am unable to finish my armor.";
+				if(select((.@WormPeeling >= .@MaxPeelingCount && .@Mucus >= .@MaxMucusCount ? "This is enough to finish the armor?" : "") + ":Too bad... Good bye.") == 2)
+				{
+					next;
+					mes .@NpcName$;
+					mes "Hey, wait, the armor of my dreams... I will not be able to finish it alone.";
+					close;
+				}
+			}
+		}
+		else
+		{
+			next;
+			mes .@NpcName$;
+			mes "Why does everyone keeps telling me that?";
+		}
+	}
+	else
+	{
+		mes "I will check out if I will have success making another version of my bug armor.";
+	}
+	close;
+}
+
+prt_fild05,224,204,5	script	Bug Hunter#prt05_qst	118,{
+	.@NpcName$ = "[Alan]";
+	.@FavorBoardNpc$ = "Favor Rate Board#2prt";
+	.@VarName$ = getvariableofnpc(.FavorVar$, .@FavorBoardNpc$);
+	.@MaxFavorRate = getvariableofnpc(.TotalFavorRate, .@FavorBoardNpc$);
+	mes .@NpcName$;
+	if(getd(.@VarName$) >= 0 && getd(.@VarName$) < .@MaxFavorRate)
+	{
+		mes "Hey, You. Yes, you, if I ever see you were hunting bugs around this area, I will give you a interesting payment. for that.";
+	}
+	else
+	{
+		mes "Bugs are no longer a problem to anyone.";
+	}
+	close;
+	
+	OnNPCKillEvent:
+	if(strcharinfo(3) == strnpcinfo(4))
+	{
+		.@FavorBoardNpc$ = "Favor Rate Board#2prt";
+		.@VarName$ = getvariableofnpc(.FavorVar$, .@FavorBoardNpc$);
+		.@MaxFavorRate = getvariableofnpc(.TotalFavorRate, .@FavorBoardNpc$);
+		if(getd(.@VarName$) < .@MaxFavorRate)
+		{
+			.@Increment = 0;
+			.@Zeny = 0;
+			if(killedrid == 1048)
+			{
+				.@Increment = 70;
+				.@Zeny = 5;
+			}
+			if(killedrid == 1051)
+			{
+				.@Increment = 45;
+				.@Zeny = 7;
+			}
+			if(.@Increment > 0)
+			{
+				message strcharinfo(0), "Bug Hunter Alan approves your action.";
+				setd(.@VarName$, getd(.@VarName$) + .@Increment);
+				//GiveZenyReward(.@Zeny);
+			}
+		}
+	}
+	end;
+}
+
+//izlude
+
+izlude,138,157,3	script	Favor Rate Board#3prt	857,{
+	callfunc "F_FavorBoard", "<NAVI>[Glue Maker]<INFO>izlude,206,135,0,000,0</INFO></NAVI>, <NAVI>[Shop Keeper]<INFO>izlude_in,73,110,0,000,0</INFO></NAVI>, <NAVI>[Basil]<INFO>izlude,105,230,0,000,0</INFO></NAVI>", 7311, 2, .FavorVar$, .TotalFavorRate;
+	end;
+	
+	OnInit:
+	.FavorVar$ = "favor_"+strnpcinfo(4);
+	.TotalFavorRate = 5000;
+	end;
+}
+
+izlude,106,230,3	script	Wolfie#izlude_qst	427,{
+	.@FavorBoardNpc$ = "Favor Rate Board#3prt";
+	.@VarName$ = getvariableofnpc(.FavorVar$, .@FavorBoardNpc$);
+	.@MaxFavorRate = getvariableofnpc(.TotalFavorRate, .@FavorBoardNpc$);
+	mes "[Wolfie]";
+	if(getd(.@VarName$) < .@MaxFavorRate)
+	{
+		mes "Grrr....";
+	}
+	else
+	{
+		mes "Auf.";
+	}
+	close;
+}
+
+izlude,104,230,5	script	Pet Trainer#izlude_qst	626,{
+	.@NpcName$ = "[Basil]";
+	.@FavorBoardNpc$ = "Favor Rate Board#3prt";
+	.@VarName$ = getvariableofnpc(.FavorVar$, .@FavorBoardNpc$);
+	.@MaxFavorRate = getvariableofnpc(.TotalFavorRate, .@FavorBoardNpc$);
+	mes .@NpcName$;
+	if(getd(.@VarName$) >= 0 && getd(.@VarName$) < .@MaxFavorRate)
+	{
+		mes "This is my pet, his name is Wolfie, but I does not have money to buy his food, and if I does not get food for him, soon he will...";
+		.@Meats = countitem(517);
+		.@menu$ = "";
+		if(.@Meats > 0)
+			.@menu$ = "I have some meats.";
+		.@menu$ += ":...I have nothing to offer...";
+		if(select(.@menu$) == 1)
+		{
+			next;
+			while(.@Meats > 0)
+			{
+				mes .@NpcName$;
+				mes "Wolfie is really happy.";
+				setd(.@VarName$, getd(.@VarName$) + 105);
+				.@Meats--;
+				delitem(517, 1);
+				getexp(5, 3);
+				if(getd(.@VarName$) >= .@MaxFavorRate)
+				{
+					mes "I guess Wolfie is satisfied, isn't it right, Wolfie?";
+					getitem 5474, 1;
+					next;
+					mes "[Wolfie]";
+					mes "Auf!";
+					next;
+					mes .@NpcName$;
+					mes "Thanks, I will not lose anymore my best friend all thanks to you, take this as a token of my affection.";
+					close;
+				}
+				mes "Uh, I believe he is not full yet, can you gather more Meats?";
+				if(select((.@Meats > 0 ? "I have more meat." : "") + ":I have none...") == 2)
+				{
+					next;
+					mes .@NpcName$;
+					mes "Wolfie...";
+					close;
+				}
+				next;
+			}
+		}
+		else
+		{
+			next;
+			mes .@NpcName$;
+			mes "Oh... I hope Wolfie did not heard that...";
+			close2;
+			npctalk("Wolfie!!! No!!!");
+			heal -45,0;
+			end;
+		}
+	}
+	else
+	{
+		mes "My pet Wolfie is going fine.";
+	}
+	close;
+}
+
+izlude,206,135,5	script	Glue Maker#izlude_qst	101,{
+	.@NpcName$ = "[Ada]";
+	.@FavorBoardNpc$ = "Favor Rate Board#3prt";
+	.@VarName$ = getvariableofnpc(.FavorVar$, .@FavorBoardNpc$);
+	.@MaxFavorRate = getvariableofnpc(.TotalFavorRate, .@FavorBoardNpc$);
+	mes .@NpcName$;
+	if(getd(.@VarName$) >= 0 && getd(.@VarName$) < .@MaxFavorRate)
+	{
+		mes "I am a famous glue maker around those areas, but latelly I ran out of Sticky Mucus to make them.";
+		mes "Bring-me Sticky Mucus and I will be able to make more glues.";
+		.@menu$ = "";
+		.@StickyMucus = countitem(938);
+		if(.@StickyMucus > 0)
+			.@menu$ = "I got some.";
+		.@menu$ += ":Too bad.";
+		if(select(.@menu$) == 1)
+		{
+			next;
+			while(.@StickyMucus > 0)
+			{
+				mes .@NpcName$;
+				mes "This will be enough to craft the glue.";
+				setd(.@VarName$, getd(.@VarName$) + 85);
+				.@StickyMucus--;
+				delitem(938, 1);
+				getexp(5, 3);
+				if(getd(.@VarName$) >= .@MaxFavorRate)
+				{
+					mes "This number of Sticky Mucus is enough, as a token of my gratitude, take this, I am not using either way.";
+					getitem 5474, 1;
+					close;
+				}
+				mes "Hum... No, I miscalculated, I will need more...";
+				if(select((.@StickyMucus > 0 ? "I have more Sticky Mucus" : "") + ":I have none...") == 2)
+				{
+					next;
+					mes .@NpcName$;
+					mes "I will still need more Sticky Mucus to make the glues...";
+					close;
+				}
+				next;
+			}
+		}
+		next;
+		mes .@NpcName$;
+		mes "Indeed, I wish someone would help me.";
+		close;
+	}
+	else
+	{
+		mes "Making glue is an art that can stick with you.";
+	}
+	close;
+}
+
+izlude_in,73,110,5	script	Shop Keeper#izlude_qst	48,{
+	.@NpcName$ = "[Julio Baddeaulx]";
+	.@FavorBoardNpc$ = "Favor Rate Board#3prt";
+	.@VarName$ = getvariableofnpc(.FavorVar$, .@FavorBoardNpc$);
+	.@MaxFavorRate = getvariableofnpc(.TotalFavorRate, .@FavorBoardNpc$);
+	mes .@NpcName$;
+	if(getd(.@VarName$) >= 0 && getd(.@VarName$) < .@MaxFavorRate)
+	{
+		mes "Everyday adventurers fights monsters, and everyday... They dies.";
+		mes "If you happen to find a weapon from one of those monsters on the field to the west, I can buy them for 50% extra their price.";
+		.@Knives = countitem(1202);
+		.@Shields = countitem(2102);
+		.@Rods = countitem(1602);
+		.@menu$ = "";
+		if(.@Knives > 0)
+			.@menu$ += "I have found a Knife.";
+		.@menu$ += ":";
+		if(.@Shields > 0)
+			.@menu$ += "I have found a Shield.";
+		.@menu$ += ":";
+		if(.@Rods > 0)
+			.@menu$ += "I have found a Rod.";
+		.@menu$ += ":I can try.";
+		switch(select(.@menu$))
+		{
+			case 1:
+			next;
+			while(.@Knives > 0)
+			{
+				mes .@NpcName$;
+				mes "Hum, not a that great item, but here your payment, 75 Zenys.";
+				setd(.@VarName$, getd(.@VarName$) + 220);
+				.@Knives--;
+				delitem(1202, 1);
+				getexp(16, 7);
+				//GiveZenyReward(75);
+				if(getd(.@VarName$) >= .@MaxFavorRate)
+				{
+					mes "The number of loot I were able to acquire is really good, I can't wonder what will be the result if I decide to sell them to citizens.";
+					close;
+				}
+				mes "Please, bring-me more.";
+				if(select((.@Knives > 0 ? "I have another Knife" : "") + ":I have none...") == 2)
+				{
+					next;
+					mes .@NpcName$;
+					mes "Well, you know where to make a good deal... Hehehe.";
+					close;
+				}
+				next;
+			}
+			break;
+			
+			case 2:
+			next;
+			while(.@Shields > 0)
+			{
+				mes .@NpcName$;
+				mes "Hum, now this is a rare masterpiece, here your payment, 750 Zenys.";
+				setd(.@VarName$, getd(.@VarName$) + 450);
+				.@Shields--;
+				delitem(2102, 1);
+				getexp(25, 22);
+				//GiveZenyReward(750);
+				if(getd(.@VarName$) >= .@MaxFavorRate)
+				{
+					mes "The number of loot I were able to acquire is really good, I can't wonder what will be the result if I decide to sell them to the citizens.";
+					close;
+				}
+				mes "Please, bring-me more.";
+				if(select((.@Shields > 0 ? "I have another Shield" : "") + ":I have none...") == 2)
+				{
+					next;
+					mes .@NpcName$;
+					mes "Well, you know where to make a good deal... Hehehe.";
+					close;
+				}
+				next;
+			}
+			break;
+			
+			case 3:
+			next;
+			while(.@Rods > 0)
+			{
+				mes .@NpcName$;
+				mes "Hum, now this is a not so great item, here your payment, 75 Zenys.";
+				setd(.@VarName$, getd(.@VarName$) + 260);
+				.@Rods--;
+				delitem(1602, 1);
+				getexp(18, 11);
+				//GiveZenyReward(75);
+				if(getd(.@VarName$) >= .@MaxFavorRate)
+				{
+					mes "The number of loot I were able to acquire is really good, I can't wonder what will be the result if I decide to sell them to the citizens.";
+					close;
+				}
+				mes "Please, bring-me more.";
+				if(select((.@Rods > 0 ? "I have another Rod" : "") + ":I have none...") == 2)
+				{
+					next;
+					mes .@NpcName$;
+					mes "Well, you know where to make a good deal... Hehehe.";
+					close;
+				}
+				next;
+			}
+			break;
+			
+			case 4:
+			next;
+			mes "You will find nowhere else a better deal than mine.";
+			break;
+		}
+	}
+	else
+	{
+		mes "With all those items you acquired from the monsters, I can sell them back in a higer price.";
+	}
+	close;
+}

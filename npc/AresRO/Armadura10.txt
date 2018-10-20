@@ -1,0 +1,880 @@
+//===== eAthena Script ===========================================
+//= Invasion NPC
+//===== By: ======================================================
+//= SketchyPhoenix
+//===== Current Version: =========================================
+//= 2.1
+//===== Compatible With: =========================================
+//= Anything revision not ancient :p
+//===== Description: =============================================
+//= Summons every MVP from a list at a random number on a random map.
+//= There are 3 different types of spawns the invasion supports.
+//===== Additional Comments: =====================================
+//= 1.1 Added Invasion Control Panel
+//= 1.1 Whisper to NPC:Invasion to access the Panel (lv 90 or higher GMs)
+//= 1.2 Fixed a lot of variables (wrong scope)
+//= 1.2 Cleared up some script errors | SonicR
+//= 1.21 Fixed up all the errors I could find after a lot of testing
+//= 1.21 added array population, event triggers in the panel
+//= 1.22 Fixed the mob counting issue with invasion type 3
+//= 1.23 Added a counter setting for invasions type 2 and 3.
+//= 1.24 Fixed a variable typo for invasion types 2,3 causing unattached rid errors.
+//= 1.3 Added a time setter (converted the custom WoE Setter to a function) /lazy on
+//= 1.31 Added invasion type setting to timers and the menu returns to the beginning instead of closing
+//= 2.1 Added an option to set and remove maps via panel
+//===== Variable Explanations ====================================
+//= $mvplist | All our MvPs and Mini Bosses are contained here.
+//= .@mapname$ | Our list of potential invasion maps.
+//= .@r | How many times should each monster spawn?
+//= .clear | Is the event done?
+//= $alteredlist | When you alter the array list, we dont want it to be overwritten.
+//= .eventisoff | Prevents the event from starting (various reasons)
+//= $invtype | Affects how the script spawns the monsters
+//= .gmreq | Required GM level to use the panel.
+//= .i_type2_count | Controls how many monsters spawn on invasion type 2
+//= .i_type3_count | Same for type 3
+//= $i_map$ | The map randomly chosen earlier is copied to a permanent var so that it can be used by the control panel 
+//===================================================================
+
+-	script	Invasion Fenix	-1,{
+end;
+
+OnInit:
+
+	if (.i_type2_count==0) set .i_type2_count, 50; //Don't touch. Just defaults for how many monsters 
+	if (.i_type3_count==0) set .i_type3_count, 50; //to spawn on invasions type 2 and 3 use the panel instead
+	set .gmreq, 50;
+	end;
+	
+OnMinute00:
+// starting time check
+	set $@num,0;
+L_StartLoop:
+	if($inv_sday[$@num] == 0 && $inv_eday[$@num] == 0 && $inv_time[$@num] == 0 && $inv_time2[$@num] == 0) goto L_StartLoopEnd;
+	if(gettime(4)==$inv_sday[$@num] && gettime(3)>=$inv_time[$@num] && (gettime(3)<$inv_time2[$@num] || $inv_sday[$@num]!=$inv_eday[$@num])) goto L_Start;
+	set $@num,$@num+1;
+	goto L_StartLoop;
+
+// end time checks
+	L_StartLoopEnd:
+	set $@num,0;
+	L_EndLoop:
+	if($inv_eday[$@num] == 0 && $inv_time[$@num] == 0 && $inv_time2[$@num] == 0) end;
+	if((gettime(4)==$inv_eday[$@num]) && (gettime(3)==$inv_time2[$@num])) goto L_End;
+	set $@num,$@num+1;
+	goto L_EndLoop;
+	end;
+	
+
+L_Start:
+
+	if (.clear == 1 || agitcheck() == 1 || .eventisoff == 1) end;
+
+	if ($alteredlist == 0) {
+	setarray $mvplist[0],1511,1647,1785,1630,1039,1399,1874,1272,1719,1046,1389,1112,1115,1418,1871,1252,1768,1086,1885,1649,1651,1832,1492,1734,1251,1779,1688,1646,1373,1147,1059,1150,1087,1190,1038,1157,1159,1502,1623,1650,1583,1708,1312,1751,1685,1648,1658,1219,1275,1096,1388,1268,1250,1283,1270,1302,1108,1582,1091,1093,1205,1120,1299,1259,1376,1296,1090,1289,1313,1262,1203,1204,1308,1065,1089,1618,1092,1088,1200;
+	setarray $mapname$[0],"prontera","izlude","geffen","morocc";
+	}
+
+L_Event:
+	set .@m, rand(0,getarraysize($mapname$));
+	if (.@m == getarraysize($mapname$)) set .@m, .@m-1; //Simply putting a -1 in the line abouve didn't seem to work so I just used this.
+	set $i_map$, $mapname$[.@m]; //For Panel
+	set .mobcount, 0;
+	set .totalkills, 0;
+	set .@mcount, 0;
+	if ($inv_timetype[.@num] == 2) goto L_Type2;
+	if ($inv_timetype[.@num] == 3 || $inv_timetype[.@num] == 0) goto L_Type3;
+L_Type1:
+	if ($invtype == 1) {
+		for(set .@i,0; .@i < getarraysize($mvplist) ; set .@i,.@i+1)
+		{
+			set .@r, rand(1,3);
+			monster $mapname$[.@m],0,0,""+getmonsterinfo($mvplist[.@i],0)+"",$mvplist[.@i],.@r,"Invasion::OnInvasion";
+			set .mobcount, .mobcount+.@r;
+		}
+	}
+L_Type2:
+	if ($invtype == 2) {
+		for(set .@b,0; .@b < .i_type2_count ; set .@b,.@b+1)
+		{
+			set .@r, rand(1,3);
+			monster $mapname$[.@m],0,0,"Enslaved Minion",-1,.@r,"Invasion::OnInvasion";
+			set .mobcount, .mobcount+.@r;
+		}
+	}
+L_Type3:
+	if ($invtype == 3 || $invtype == 0) {
+		for(set .@c,0; .@c < .i_type3_count ; set .@c,.@c+1)
+		{
+			set .@r, rand(1,3);
+			if (.@mcount == 10) {
+				set .@mr, rand(0,getarraysize($mvplist)-1);
+				monster $mapname$[.@m],0,0,""+getmonsterinfo($mvplist[.@mr],0)+"",$mvplist[.@mr],.@r,"Invasion::OnInvasion";
+				set .mobcount, .mobcount+.@r;
+				set .@mcount, 0;
+			}
+			monster $mapname$[.@m],0,0,"Enslaved Minion",-1,.@r,"Invasion::OnInvasion";
+			set .mobcount, .mobcount+.@r;
+			set .@mcount, .@mcount+1;
+		}
+	}
+	announce "Look out! Monsters are invading!! ("+$mapname$[.@m]+")",0;
+	set .clear, 1;
+	end;
+
+OnWhisperGlobal:
+	if(getgmlevel() < .gmreq || @whispervar0$ != "Panel") end;
+	mes "[Invasion NPC Control Panel]";
+	mes "Current List of Monsters Spawned by the Invasion Array.";
+	next;
+	set .@jl, 0;
+	for(set .@j,0; .@j < getarraysize($mvplist) ; set .@j,.@j+1)
+	{
+		set .@jl,.@j+1;
+		mes "["+.@jl+"]. "+getmonsterinfo($mvplist[.@j],0)+",";
+	}
+	next;
+	mes "[Invasion NPC Control Panel]";
+L_PanelMenu:
+	mes "What action would you like to take?";
+	switch(select("Populate Arrays","Add a monster","Remove a monster","Add a map","Remove a map","Set Invasion Count","Set Invasion Type","Disable Events","Trigger Event","Cancel Event","Set Invasion Times")) {
+
+	case 1:
+		next;
+		setarray $mvplist[0],1511,1647,1785,1630,1039,1399,1874,1272,1719,1046,1389,1112,1115,1418,1871,1252,1768,1086,1885,1649,1651,1832,1492,1734,1251,1779,1688,1646,1373,1147,1059,1150,1087,1190,1038,1157,1159,1502,1623,1650,1583,1708,1312,1751,1685,1648,1658,1219,1275,1096,1388,1268,1250,1283,1270,1302,1108,1582,1091,1093,1205,1120,1299,1259,1376,1296,1090,1289,1313,1262,1203,1204,1308,1065,1089,1618,1092,1088,1200;
+		setarray $mapname$[0],"prontera","izlude","geffen","morocc";
+		mes "[Invasion NPC Control Panel]";
+		mes "Arrays populated!";
+		next;;
+		goto L_PanelMenu;
+
+	case 2:
+		next;
+		if (getarraysize($mvplist) == 128) {
+			mes "[Invasion NPC Control Panel]";
+			mes "The list of MVPs is full!";
+			mes "Please delete an MVP from the list first.";
+			close;
+		}
+		mes "[Invasion NPC Control Panel]";
+		mes "Add the monster's ^0000ffID^000000 to the list.";
+		mes "0 = cancel.";
+		input @mobid;
+		next;
+		if (@mobid <= 0 || getmonsterinfo(@mobid,1) == -1) {
+			mes "[Invasion NPC Control Panel]";
+			mes "Invalid monster or user-cancelled!";
+			close;
+		}
+		setarray $mvplist[getarraysize($mvplist)],@mobid;
+		mes "[Invasion NPC Control Panel]";
+		mes "The monster, "+getmonsterinfo(@mobid,0)+", has been added to the list!";
+		set $alteredlist, 1;
+		next;
+		goto L_PanelMenu;
+
+	case 3:
+		next;
+		mes "[Invasion NPC Control Panel]";
+		mes "Which monster would you like to delete from the list?";
+		mes "(No. on the list | 0 to cancel)";
+		input @l;
+		if (@l <= 0) {
+			mes "[Invasion NPC Control Panel]";
+			mes "Invalid Entry!";
+			close;
+		} //Have to seperate these checks otherwise there's an error | -1 isn't an index :{
+		set @l, @l-1;
+		if (getmonsterinfo($mvplist[@l],1) == -1) {
+			next;
+			mes "[Invasion NPC Control Panel]";
+			mes "Invalid Entry!";
+			close;
+		}
+		next;
+		mes "[Invasion NPC Control Panel]";
+		mes "You have deleted monster, "+getmonsterinfo($mvplist[@l],0)+", from the list!";
+		deletearray $mvplist[@l],1;
+		set $alteredlist, 1;
+		next;
+		goto L_PanelMenu;
+		
+	case 4:
+		next;
+		mes "[Invasion NPC Control Panel]";
+		mes "Current List of maps used by the Invasion Array.";
+		next;
+		set .@mnl, 0;
+		for(set .@p,0; .@p < getarraysize($mapname$) ; set .@p,.@p+1)
+		{
+			set .@mnl,.@p+1;
+			mes "["+.@mnl+"]. "+$mapname$[.@p]+",";
+		}
+		next;	
+		if (getarraysize($mapname$) == 128) {
+			mes "[Invasion NPC Control Panel]";
+			mes "The list of maps is full!";
+			mes "Please delete a map from the list first.";
+			close;
+		}
+		mes "[Invasion NPC Control Panel]";
+		mes "Add the map to the list.";
+		mes "0 = cancel.";
+		input @mapname$;
+		next;
+		if (@mapname$ == "0" || getmapmobs(@mapname$) == -1) {
+			mes "[Invasion NPC Control Panel]";
+			mes "Invalid map or user-cancelled!";
+			close;
+		}
+		setarray $mapname$[getarraysize($mapname$)],@mapname$;
+		mes "[Invasion NPC Control Panel]";
+		mes "The map, "+@mapname$+", has been added to the list!";
+		set $alteredlist, 1;
+		next;
+		goto L_PanelMenu;
+		
+	case 5:
+		next;
+		mes "[Invasion NPC Control Panel]";
+		mes "Current List of maps used by the Invasion Array.";
+		next;
+		set .@mnl, 0;
+		for(set .@p,0; .@p < getarraysize($mapname$) ; set .@p,.@p+1)
+		{
+			set .@mnl,.@p+1;
+			mes "["+.@mnl+"]. "+$mapname$[.@p]+",";
+		}
+		next;
+		mes "[Invasion NPC Control Panel]";
+		mes "Which map would you like to delete from the list?";
+		mes "(No. on the list | 0 to cancel)";
+		input @map$;
+		if (@map$ == "0") {
+			mes "[Invasion NPC Control Panel]";
+			mes "Cancelled!";
+			next;
+			goto L_PanelMenu;
+		}
+		for (set @b,0; @b < getarraysize($mapname$) ; set @b, @b+1) {
+			if ($mapname$[@b] == @map$) {
+			next;
+			mes "[Invasion NPC Control Panel]";
+			mes "You have deleted map, "+$mapname$[@b]+", from the list!";
+			deletearray $mapname$[@b],1;
+			set $alteredlist, 1;
+			next;
+			goto L_PanelMenu;
+			}
+		}
+		next;
+		mes "[Invasion NPC Control Panel]";
+		mes "Map not found!";
+		next;
+		goto L_PanelMenu;
+		
+	case 6:
+		mes "[Invasion NPC Control Panel]";
+		mes "Input the amount of monsters to spawn for invasion type 2. ( 0 to cancel/skip to type 3 )";
+		input .@i_type2_count;
+		if (.@i_type2_count < 1) {
+			mes "Invasion Type 2 skipped.";
+		}
+		else if (.@i_type2_count > 0) {
+			set .i_type2_count, .@i_type2_count;
+			mes "Type 2 will now spawn "+.i_type2_count+" monsters.";
+		}
+		next;
+		mes "[Invasion NPC Control Panel]";
+		mes "Input the amount of monsters to spawn for invasion type 3. ( 0 to cancel )";
+		input .@i_type3_count;
+		if (.@i_type3_count < 1) {
+			mes "Invasion Type 3 skipped.";
+		}
+		else if (.@i_type3_count > 0) {
+			set .i_type3_count, .@i_type3_count;
+			mes "Type 3 will now spawn "+.i_type3_count+" monsters.";
+		}
+		next;
+		mes "[Invasion NPC Control Panel]";
+		mes "Thank you for using the Invasion Panel!";
+		next;
+		goto L_PanelMenu;
+
+	case 7:
+		next;
+		mes "[Invasion NPC Control Panel]";
+		mes "Invasion Types:";
+		mes "1 - Only monsters from the Invasion Array will spawn.";
+		mes "2 - Only Dead Branch / Bloody Branch monsters will spawn.";
+		mes "3 - Spawns 1 Invasion Array monster for every 10 DB/BB monsters spawned.";
+		next;
+		mes "[Invasion NPC Control Panel]";
+		mes "Which one do you want?";
+		mes "(Number of Invasion type. 0 to cancel)";
+		input $invtype;
+		next;
+		if ($invtype <= 0 || $invtype >= 4) {
+			mes "[Invasion NPC Control Panel]";
+			mes "Invalid number or cancelled!";
+			close;
+		}
+		mes "[Invasion NPC Control Panel]";
+		mes "Invasion style "+$invtype+" set!";
+		next;
+		goto L_PanelMenu;
+
+	case 8:
+		next;
+		if (.eventisoff == 0) {
+			mes "[Invasion NPC Control Panel]";
+			mes "The Invasion events will cease to run until the NPC is reloaded or is set back on.";
+			set .eventisoff, 1;
+			close;
+		}
+		mes "[Invasion NPC Control Panel]";
+		mes "The Invasion events will continue as scheduled.";
+		set .eventisoff, 0;
+		next;
+		goto L_PanelMenu;
+
+	case 9:
+		mes "[Invasion NPC Control Panel]";
+		mes "Now triggering event...";
+		close2;
+		goto L_Event;
+
+	case 10:
+		killmonster $i_map$,"Invasion::OnInvasion";
+		announce "The Invasion Event has been cancelled!",0;
+		set .clear, 0;
+		next;
+		goto L_PanelMenu;
+	
+	case 11:
+		callfunc "inv_setter";
+		next;
+		goto L_PanelMenu;
+		
+	case 12:
+		mes "[Invasion NPC Control Panel]";
+		mes "Thank you for using Phoenix Invasion.";
+		close;
+	}
+	
+L_End:
+	if (.clear == 1) {
+		killmonster $i_map$,"Invasion::OnInvasion";
+		announce "Time has run out! The Invasion has ended!",0;
+		set .clear, 0;
+		end;
+	}
+	
+OnInvasion:
+	set .totalkills, .totalkills+1;
+	if (.totalkills >= .mobcount) {
+		set .clear, 0;
+		announce "Congratulations, the invasion was stopped!",0;
+		end;
+	}
+	end;
+
+OnAgitStart:
+	if (.clear == 1) {
+		killmonster $i_map$,"Invasion::OnInvasion";
+		announce "WoE has begun, the Invasion event has ended!",0;
+		set .clear, 0;
+		end;
+	}
+}
+
+function	script	inv_setter	{
+	mes "[Invasion NPC Control Panel]";
+	mes "Please use this menu to control Invasion Times.";
+	mes "Simply follow the intruction given in each section after this, and it should be set and ready to use";
+	menu "Add an Invasion time",L_Add,"Reset all Invasion times.",L_Reset,"View Current Invasion times",-;
+	mes "[Invasion NPC Control Panel]";
+	mes "Current Invasion times are set for...:-";
+	set .@num,0;
+L_LoopList:
+	if($inv_sday[.@num] == 0 && $inv_eday[.@num] == 0 && $inv_time[.@num] == 0 && $inv_time2[.@num] == 0) goto L_LoopListEnd;
+	if($inv_sday[.@num]==0) set $@inv_tempday$,"Sunday";
+	if($inv_sday[.@num]==1) set $@inv_tempday$,"Monday";
+	if($inv_sday[.@num]==2) set $@inv_tempday$,"Tuesday";
+	if($inv_sday[.@num]==3) set $@inv_tempday$,"Wednesday";
+	if($inv_sday[.@num]==4) set $@inv_tempday$,"Thursday";
+	if($inv_sday[.@num]==5) set $@inv_tempday$,"Friday";
+	if($inv_sday[.@num]==6) set $@inv_tempday$,"Saturday";
+	if($inv_eday[.@num]==0) set $@inv_tempday2$,"Sunday";
+	if($inv_eday[.@num]==1) set $@inv_tempday2$,"Monday";
+	if($inv_eday[.@num]==2) set $@inv_tempday2$,"Tuesday";
+	if($inv_eday[.@num]==3) set $@inv_tempday2$,"Wednesday";
+	if($inv_eday[.@num]==4) set $@inv_tempday2$,"Thursday";
+	if($inv_eday[.@num]==5) set $@inv_tempday2$,"Friday";
+	if($inv_eday[.@num]==6) set $@inv_tempday2$,"Saturday";
+	if($inv_eday[.@num]==$inv_sday[.@num]) mes $@inv_tempday$+" from "+$inv_time[.@num]+":00 till "+$inv_time2[.@num]+":00 : Type "+$inv_timetype[.@num];
+	if($inv_eday[.@num]!=$inv_sday[.@num]) mes "From "+$@inv_tempday$+" "+$inv_time[.@num]+":00 till "+$@inv_tempday2$+" "+$inv_time2[.@num]+":00 : Type "+$inv_timetype[.@num];
+	set .@num,.@num+1;
+	goto L_LoopList;
+L_LoopListEnd:
+	return;
+L_Add:
+	set .@num,0;
+L_AddLoop:
+	if($inv_sday[.@num] == 0 && $inv_eday[.@num] == 0 && $inv_time[.@num] == 0 && $inv_time2[.@num] == 0) goto L_AddLoopEnd;
+	set .@num,.@num+1;
+	goto L_AddLoop;
+L_AddLoopEnd: 
+	mes "[Invasion NPC Control Panel]";
+	mes "What day do you want the Invasion to start ^FF0000start^000000 in?";
+	next;
+	menu "Sunday",-,"Monday",-,"Tuesday",-,"Wednesday",-,"Thursday",-,"Friday",-,"Saturday",-;
+	if(@menu==1) set $inv_sday[.@num],0;
+	if(@menu==2) set $inv_sday[.@num],1;
+	if(@menu==3) set $inv_sday[.@num],2;
+	if(@menu==4) set $inv_sday[.@num],3;
+	if(@menu==5) set $inv_sday[.@num],4;
+	if(@menu==6) set $inv_sday[.@num],5;
+	if(@menu==7) set $inv_sday[.@num],6;
+	mes "[Invasion NPC Control Panel]";
+	mes "Ok, now please enter the hour you want the Invasion to ^FF0000start^000000 at";
+	mes "This is using a 24 hour clock";
+	mes "00 = Midnight";
+	mes "12 = Mid-day";
+	mes "23 = 11pm";
+	next;
+	input .@input;
+	if (.@input < 0 || .@input > 24) goto L_BadNumber;
+	set $inv_time[.@num],.@input;
+	mes "[Invasion NPC Control Panel]";
+	mes "What day do you want the Invasion to start ^FF0000finish^000000 in?";
+	next;
+	menu "Same as start",-,"Sunday",-,"Monday",-,"Tuesday",-,"Wednesday",-,"Thursday",-,"Friday",-,"Saturday",-;
+	if(@menu==1) set $inv_eday[.@num],$inv_sday[@num];
+	if(@menu==2) set $inv_eday[.@num],0;
+	if(@menu==3) set $inv_eday[.@num],1;
+	if(@menu==4) set $inv_eday[.@num],2;
+	if(@menu==5) set $inv_eday[.@num],3;
+	if(@menu==6) set $inv_eday[.@num],4;
+	if(@menu==7) set $inv_eday[.@num],5;
+	if(@menu==8) set $inv_eday[.@num],6;
+	mes "[Invasion NPC Control Panel]";
+	mes "Ok, now please enter the hour you want the Invasion to ^FF0000finish^000000 at";
+	mes "This also uses the 24 hour clock";
+	mes "00 = Midnight";
+	mes "12 = Mid-day";
+	mes "23 = 11pm";
+	next;
+	input .@input;
+	if (.@input < 0 || .@input > 24) goto L_BadNumber;
+	set $inv_time2[.@num],.@input;
+	mes "[Invasion NPC Control Panel]";
+	mes "Set the Invasion Type for this time.";
+	input .@input;
+	if (.@input < 1 || .@input > 3) goto L_BadNumber;
+	set $inv_timetype[.@num],.@input;
+	mes "Your Invasion time has now been set";
+	mes "To confirm this, ask me to show you the ^FF0000'Current Invasion times'^000000";
+	return;
+L_Reset:
+	mes "[Invasion NPC Control Panel]";
+	mes "You are about to reset all the set Invasion times you have created";
+	mes "Are you sure?";
+	next;
+	menu "No, what was I thinking",L_No,"Yes I really want to do it",-;
+	if(.clear == 1) goto L_InvOn;
+	deletearray $inv_sday[0],200;
+	deletearray $inv_eday[0],200;
+	deletearray $inv_time[0],200;
+	deletearray $inv_time2[0],200;	
+	mes "[Invasion NPC Control Panel]";
+	mes "They are all gone now, please remember to set new ones";
+	return;
+L_InvOn:
+	mes "[Invasion NPC Control Panel]";
+	mes "Sorry, since there is a Invasion in progress you cannot reset the Invasion times";
+	return;
+L_No:
+	mes "[Invasion NPC Control Panel]";
+	mes "Oh, good, come back whenever";
+	return;
+L_BadNumber:
+	mes "[Invasion NPC Control Panel]";
+	mes "Sorry that was an invalid number, please try again";
+	return;
+}
+
+
+
+//============================================================
+
+amatsu,193,246,5	script	Ninja Suit	63,{
+
+	soundeffect "siroma_move.wav",0;
+
+ mes "[Ninja Suit]";
+ mes "Hola Yo soy el forjador.";
+ next;
+	soundeffect "siroma_move.wav",0;
+
+ mes "[Ninja Suit]";
+ mes "Yo puedo crearte una armadura que no existe en el RO,";
+ mes "Ademas lleva 1 sloot y es sagrada.";
+ mes "Solo traeme unos items especiales y lo hare.";
+ next;
+ menu "Si, hagamoslo.",-,"No, grasias.",M_EXIT;
+
+	soundeffect "siroma_move.wav",0;
+
+ mes "[Ninja Suit]";
+ mes "Los items que quiero son:";
+ mes "1 Fuuma Shuriken Rekka,";
+ mes "1 Spirit of Kamaitachi,";
+ mes "1 Dragon's Breath,";
+ mes "5,000,000z .";
+ next;
+
+	soundeffect "siroma_move.wav",0;
+
+ mes "[Ninja Suit]";
+ mes "Tienes todos los items?";
+ next;
+
+	soundeffect "siroma_move.wav",0;
+
+ menu "Si.",-,"No.",M_EXIT;
+ 
+ if(countitem(13303) < 1 || countitem(13304) < 1 || countitem(2527) < 1 ||   Zeny<5000000) GOTO L_NOITEM;
+ delitem 13303,1;
+ delitem 13304,1;
+ delitem 2527,1;
+ set Zeny,Zeny-5000000;
+ getitem 2359,1;
+	soundeffect "siroma_move.wav",0;
+
+ mes "[Ninja Suit]";
+ mes "Grandioso, Ahora seras mas Fuerte.";
+ close;
+	soundeffect "siroma_move.wav",0;
+
+L_NOITEM:
+ mes "[Ninja Suit]";
+ mes "Disculpa, no puedo continuar puesto que te faltan items o zenny";
+ mes "vuelve cuando tengas todo";
+ close;
+
+M_EXIT:
+ mes "[Ninja Suit]";
+ mes callfunc("F_Bye");
+
+ close;
+}
+
+//===== eAthena Script ======================================= 
+//= Valkyrie's Brothers
+//===== By: ================================================== 
+//= Katazui or WanMan or Kaji
+//===== Current Version: ===================================== 
+//= 1.0
+//===== Compatible With: ===================================== 
+//= eAthena 7.15 +
+//===== Description: ========================================= 
+//= #quest. Valkyrie's Brothers
+//===== Additional Comments: ================================= 
+//= 1.0 First Release Contact me if Errored
+//============================================================
+prontera,155,285,6	script	Valkyrie	811,{
+	if (#quest == 2) goto what;
+	if (#quest == 3) goto brosecond;
+	if (#quest == 4) goto brothird;
+	if (#quest == 5) goto hey;
+	if (#quest >= 6) goto yourdone;
+	mes "[Valkyrie]";
+	mes "*Crys, Sniffs, Looks Up*";
+	mes "...Yes?";
+	menu "Nothing",dead,"¿Qué tienes?",yes;
+
+	dead:
+		mes "[Valkyrie]";
+		mes "*Keeps Crying...*";
+		close;
+
+	yes:
+		mes "[Valkyrie]";
+		mes "¡Oh! Mis tres hermanos ...";
+		mes "Se llevaron a todos nuestros familiares Únicos!";
+		mes "Son de gran alcance los elementos así son mis hermanos ... Uno de ellos mató a nuestra Madre ..";
+		mes "Sólo tenemos a nuestro Padre!";
+		mes "...";
+		next;
+		mes "[Valkyrie]";
+		mes "¿Me ayudarías?";
+		mes "¿Quieres ayudarme a conseguir los artículos de vuelta!";
+		menu "Yo no quiero que me pase algo malo gritó!",dead2,"Seguro",yes1;
+		
+	yes1:
+			mes "[Valkyrie]";
+			mes "Thank you";
+			mes "Uno de ellos vive en su propia guarida ...";
+			mes "Te deformación allí ... Tenga cuidado ... Es poderoso..";
+			set #quest,1;
+			next;
+			warp "sec_pri",20,17;
+			end;
+
+	what:
+		mes "[Valkyrie]";
+		mes "¿Qué fue eso?";
+		mes "Tienes suerte que combado sobre vosotros!";
+		set #quest,0;
+		close;
+	dead2:
+		mes "[Valkyrie]";
+		mes "* Sigue llorando ...*";
+		close;
+
+		end;
+//Next Part2
+		brosecond:
+		mes "[Valkyrie]";
+		mes "Hola!";
+		mes "¿Estás listo para electrónica?";
+		next;
+		menu "Yup!",yes4,"Ahora no ...",tapos;
+	tapos:
+		mes "[Valkyrie]";
+		mes "Muy bien. Por favor, ven pronto.";
+		close;
+	yes4:
+		mes "[Valkyrie]";
+		mes "Bueno ... He aquí algunos consejos ...";
+		next;
+		mes "Mi segundo hermano es más inteligente de todos ...";
+		next;
+		mes "Él sabe cómo hacer hologramas de él mismo ...";
+		next;
+		mes "Sólo en el caso, que hizo este interruptor que elimina todos sus hologramas";
+		next;
+		mes "Está en la espalda a la derecha ...";
+		next;
+		mes "¿Está listo?";
+		menu "Estoy más que listo!",yes5,"No ... Tengo miedo ...",tapos;
+
+	yes5:
+		warp "job_prist",24,55;
+		end;
+
+	tapos2:		
+	mes "[Valkyrie]";
+	mes "Muy bien. Por favor, ven pronto.";
+		close;
+		end;
+//Next Part3
+	brothird:
+	mes "[Valkyrie]";
+	mes "Zeburh...";
+	mes "¡Oh! Hola! ¿Estás listo para Zeburh?";
+	menu "Tengo mi Buffes y mi Wepons!",yup1,"Zeburh?! Infierno ¡NO!",sarado;
+	
+	sarado:
+		mes "Gallina";
+		close;
+
+	yup1:
+		mes "[Valkyrie]";
+		mes "Okay...";
+		mes "También inteligente ...";
+		mes "Hace hologramas también ... Electrón dio su sistema le";
+		next;
+		mes "Hace sólo dos hologramas ... Gracias a Dios.";
+		next;
+		mes "Pero, él hace, Rangris y electrones ...";
+		next;
+		mes "No los de verdad ... un holograma";
+		next;
+		mes "Te llevaré a él ahora.";
+		next;
+		warp "mag_dun02",148,188;
+		end;
+hey:
+	mes "[Valkyrie]";
+	mes "Gracias por salvarnos! Aquí están nuestros familiares únicas, como en un recuerdo de su honor.";
+			mes "[Valkyrie]";
+			mes "Usted lo hizo!";
+			mes "Tienes los 3 item";
+			mes "Yo y mi Padre el que os gracias ..";
+			mes "¿Sabes qué? Mantenga los artículos!";
+			mes "Realmente no los necesitamos!";
+			mes "Here!";
+			getitem 2410,1;
+			getitem 2383,1;
+			getitem 2554,1;
+			getitem 28027,1;
+			getitem 19337,1;
+			set #quest,100;
+	close;
+	end;
+			
+yourdone:
+	mes "[Valkyrie]";
+	mes "Gracias por salvarnos! Aquí están nuestros familiares únicas, como en un recuerdo de su honor.";
+	close;
+	end;		
+
+}
+
+sec_pri,19,17,1	script	Rangris	1765,{
+	if (#quest == 1) goto play;
+	if (#quest == 5) close;
+	mes "[Rangris]";
+	mes "¿Qué estás haciendo en mi guarida!";
+	mes "Usted tiene 3 maldición en su cuerpo!";
+	next;
+	close2;
+	warp "prontera",150,150;
+	sleep2 10000;
+	warp "prontera",0,0;
+	sleep2 100000;
+	warp "prontera",0,0;
+	end;
+		play:
+		mes "[Rangris]";
+		mes "¿Qué estás haciendo en mi guarida!";
+		mes "Yo te enviare la cárcel en mi guarida nadie entra!";
+		next;
+		mes "Encarcelamiento de 5!";
+		next;
+		mes "4!";
+		next;
+		mes "3!";
+		next;
+		mes "2!";
+		next;
+		mes "AAAAHHH! CONOZCA A SU";
+		menu "Su hermana me tientas!",yes2,"Cárcel de mí! NO ME IMPORTA!",curse;
+			curse:
+			warp "sec_pri",49,76;
+			OnMinute1:
+			warp "prontera",150,151;
+			set #quest,2;
+			end;
+			yes2:
+			mes "[Rangris]";
+			mes "¿Es así ...";
+			mes "¿Qué estás haciendo aquí?!";
+			menu "Necesito los artículos ...",yes3,"Para que se molesta!",curse;
+				yes3:
+				mes "[Rangris]";
+				mes "¡Ja! Me río de mi culo!";
+				mes "Debes enfrentarte a mí ya mi Minons!";
+				next;
+				warp "sec_pri",50,75;
+				monster "sec_pri",50,75,"Rangris",1751,1,"Rangris::OnEvent";
+				end;
+
+		OnEvent:
+			killmonsterall "sec_pri";
+			announce "Rangris: Nooo! Déjennos en paz! Puede esta prenda",bc_self;
+			getitem 2524,1;
+			set #quest,3;
+			warp "prontera",150,150;
+			sleep2 10000;
+			mes "[Valkyrie]";
+			mes "¡Gracias!";
+			mes "Usted tiene 1 de cada 3 artículos de nuestra Familia!";
+			delitem 2524,1;
+			mes "* Se entregó la ropa a Valkyrie *";
+			mes "Ahora para mi segundo hermano ... Electrón";
+			mes "Él es mucho más potente que la primera ...";
+			set #quest,3;
+			mes "Yo entiendo que usted necesita un descanso ...";
+			mes "Vuelve pronto!";
+			close;
+
+				
+}	
+		
+job_prist,24,48,1	script	Electron	1921,{
+	if (#quest == 3) goto play2;
+	mes "[Electron]";
+	mes "Bueno ... Utilice el 'if (#quest == 1)'...";
+	mes ".... ¿Qué?";
+	mes "¿Quién eres tú!? Y ¿Qué estás haciendo aquí?!";
+	menu "Sólo para que toque con H20! Nerd ...",byebye;
+		byebye:
+		next;
+		mes "[Electron]";
+		mes "Usted es un desperdicio de mi tiempo!";
+		mes "Vete pedazo de $%&*!";
+		next;
+		warp "prontera",150,150;
+		end;
+	play2:
+	mes "[Electron]";
+	mes "Okay... Use the 'if (#quest == 1)'...";
+	mes "¿Quién eres tú!? Y ¿Qué estás haciendo aquí?!";	
+	menu "Su hermana me tantes para conseguir los artículos de nuevo",yes6,"Sólo para que toque con H20! Nerd ...",byebye;
+		yes6:
+		next;
+		mes "[Electron]";
+		mes "Ahh ... Usted mató a mi hermano ... Rangris";
+		next;
+		mes "Le doy las gracias por eso, porque su un idiota";
+		next;
+		mes "Pero, matando a mi hermano para conseguir el Únicos! ¡NO!";
+		next;
+		mes "Enfrentar el miedo de mi hologramas!";
+		monster "job_prist",24,48,"Hologramas Electron",1921,1,"Electron::OnEvent2";
+		close;
+		end;
+		
+OnEvent2:
+			announce "Valkyrie: Ha derrotado electrón! Usted necesitará a su vez que la palanca para obtener los últimos Uniques",bc_self;
+			sleep2 10000;
+			warp "jupe_ele",43,55;
+			end;
+}
+
+jupe_ele,43,55,1	script	Master Lever	111,{
+	getitem 2421,1;
+	warp "prontera",150,150;
+	sleep2 10000;
+	mes "[Valkyrie]";
+	mes "¡Sí! Usted tiene 2 de cada 3 de los artículos de mi familia!";
+	mes "* Se entregó el Sleipnir*";
+	delitem 2421,1;
+	mes "Bueno ... Mi hermano más antiguo y pasado ...";
+	mes "Él es el más grande y más gordo de todos ...";
+	mes "Zeburh...";
+	mes "Bueno ... Su Quiebre .. Me olvidé de ...";
+	set #quest,4;
+	close;
+	end;
+
+}
+
+mag_dun02,150,194,5	script	Zeburh	1885,{
+	if (#quest == 4) goto play3;
+	warp "prontera",150,150;
+	end;
+
+	play3:
+		warp "mag_dun02",146,179;
+		mapannounce "mag_dun02","Zeburh: Muaha! Yo sé lo que estado haciendo ...",0;
+		sleep2 1000;
+		mapannounce "mag_dun02","Zeburh: necesito que me matan!",0;
+		goto simot;
+		end;
+
+	simot:
+		monster "mag_dun02",0,0,"Zeburh",1885,1,"Zeburh::OnEvent3";
+		end;
+
+	OnEvent3:
+			mapannounce "mag_dun02","Zeburh: Noo! Pensé que esto nunca va a pasar! Tómalo!",0;
+			warp "prontera",100,185;
+			set #quest,5;
+			close;
+			end;
+
+}

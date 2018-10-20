@@ -1,0 +1,271 @@
+//        //=====//     /==/     /==/          /==/      
+//       //     //     /==/     /==/  /=/     /==/         
+//      //=====//              /==/  /=/             /==============/     /========/   /==//===/    /==/     /==/
+//     //=//////    /==/      /==//=/       /==/    /==/==/==/==/==/     /     /  /   /==/         /==/     /==/
+//    // ==        /==/      /==//=/       /==/    /==/  /==/  /==/     ======/  /   /==/         /==/     /==/
+//   //   ==      /==/      /==/  /=/     /==/    /==/  /==/  /==/     / /===/  /   /==/         /==/     /==/
+//  //     ==    /==/      /==/   /=/    /==/    /==/  /==/  /==/     / /===/  /   /==/         /==/=====/==/
+// //       ==  /==/      /==/    /=/   /==/    /==/  /==/  /==/     /========/   /==/         /==///////==/
+// ================ rAthena Script ==================================================
+// ============== Information =======================================================
+// = iRO Daily Quest : No more Lonley Knights Delivery
+// = Made by :
+// = Rikimaru
+//===== Current Version: =============================================== 
+//= 1.7
+//===== Compatible With: =============================================== 
+//= any rAthena SVN
+//===== Description: =================================================== 
+//= The iRO Daily Quest : No more Lonley Knights Delivery
+//= Usefull for having fun in a Server with a Mini Quest
+//= Has a counter of 20 Hours until the Players can do the Quest agian.
+//===== Additional Comments: =========================================== 
+//= 1.6 Finished Scripting all NPC's [Rikimaru]
+//= 1.7 Fixed a few mistakes in the Script [Rikimaru]
+//====================================================================== 
+//============== DO NOT REMOVE MY CREDITS AND CLAIM MY WORK AS YOURS ===
+ma_in02,121,165,5	script	[Quest] Messenger Girl	537,{
+set .@npcname$,"^0000FF[ [Quest] Messenger Girl ]^000000";
+if(BaseLevel >= 81) {
+mes .@npcname$;
+mes "Hola "+strcharinfo(0)+",yo";
+mes "Necesito tu ayuda.";
+next;
+mes .@npcname$;
+mes "¿Podría por favor enviar un ";
+mes "Mensaje al Sir Grevious?";
+mes "El esta en algun lugar en";
+mes "la isla de las tortugas.";
+next;
+switch(select("Si:No:Cancelar")) {
+	case 1:
+	mes .@npcname$;
+	mes "OK gracias!";
+	mes "Ve y encuentra a él.";
+	set message5,1;
+	close;
+	case 2:
+	mes .@npcname$;
+	mes "De acuerdo, adios!";
+	close;
+	case 3:
+	close;
+}
+}
+if(BaseLevel <= 80 && BaseLevel >= 61) {
+mes .@npcname$;
+mes "Hola "+strcharinfo(0)+",yo";
+mes "Necesito tu ayuda.";
+next;
+mes .@npcname$;
+mes "¿Podría por favor enviar un ";
+mes "Mensaje para Sir Midetz?";
+mes "El esta en algun lugar en";
+mes "Izlude.";
+next;
+switch(select("Si:No:Cancelar")) {
+	case 1:
+	mes .@npcname$;
+	mes "OK gracias!";
+	mes "Ve y encuentra a él.";
+	set message4,1;
+	close;
+	case 2:
+	mes .@npcname$;
+	mes "De acuerdo, adios!";
+	close;
+	case 3:
+	close;
+}
+}
+if(BaseLevel <= 60 && BaseLevel >= 41) {
+mes .@npcname$;
+mes "Hola "+strcharinfo(0)+",yo";
+mes "Necesito tu ayuda.";
+next;
+mes .@npcname$;
+mes "¿Podría por favor enviar un ";
+mes "Mensaje al Sir Lion?";
+mes "El esta en algun lugar en";
+mes "Prontera";
+next;
+switch(select("Si:No:Cancelar")) {
+	case 1:
+	mes .@npcname$;
+	mes "OK gracias!";
+	mes "Ve y encuentra a él.";
+	set message3,1;
+	close;
+	case 2:
+	mes .@npcname$;
+	mes "De acuerdo, adios!";
+	close;
+	case 3:
+	close;
+}
+}
+if(BaseLevel <= 40 && BaseLevel >= 21) {
+mes .@npcname$;
+mes "Hola "+strcharinfo(0)+",yo";
+mes "Necesito tu ayuda.";
+next;
+mes .@npcname$;
+mes "¿Podría por favor enviar un ";
+mes "Mensaje al Sir Richard?";
+mes "El esta en algun lugar en";
+mes "La tierra del tesoro.";
+next;
+switch(select("Si:No:Cancelar")) {
+	case 1:
+	mes .@npcname$;
+	mes "OK gracias!";
+	mes "Ve y encuentra a él.";
+	set message2,1;
+	close;
+	case 2:
+	mes .@npcname$;
+	mes "De acuerdo, adios!";
+	close;
+	case 3:
+	close;
+}
+}
+mes .@npcname$;
+mes "Hola "+strcharinfo(0)+",yo";
+mes "Necesito tu ayuda.";
+next;
+mes .@npcname$;
+mes "¿Podría por favor enviar un ";
+mes "Mensaje al Sir Donovan?";
+mes "El esta en algun lugar en";
+mes "Alberta.";
+next;
+switch(select("Si:No:Cancelar")) {
+	case 1:
+	mes .@npcname$;
+	mes "OK gracias!";
+	mes "Ve y encuentra a él.";
+	set message1,1;
+	close;
+	case 2:
+	mes .@npcname$;
+	mes "De acuerdo, adios!";
+	close;
+	case 3:
+	close;
+}
+}
+// ======================== End of 1st NPC ==============================================
+// ==================== Other NPC's coming now ==========================================
+alberta,56,80,5	script	Sir Donovan	65,{
+set .@npcname$,"^0000FF[Sir Donovan]^000000";
+if(gettimetick(2) - sendm1 < (60 * 60 * 20)) {
+mes .@npcname$;
+mes "Lo siento pero tienes que esperar";
+mes "¡Hasta las 20 horas!";
+close;
+}
+if(message1==1) {
+mes .@npcname$;
+mes "¿Tienes un mensaje para mí?";
+mes "Gracias. Toma la Exp!";
+set BaseExp,+141;
+set JobExp,+100;
+set sendm1,gettimetick(2);
+close;
+}
+mes .@npcname$;
+mes "Hola...";
+close;
+}
+// ================== End of the NPC ====================================================
+alb2trea,62,69,5	script	Sir Richard	65,{
+set .@npcname$,"^0000FF[Sir Richard]^000000";
+if(gettimetick(2) - sendm2 < (60 * 60 * 20)) {
+mes .@npcname$;
+mes "Lo siento pero tienes que esperar";
+mes "¡Hasta las 20 horas!";
+close;
+}
+if(message2==1) {
+mes .@npcname$;
+mes "¿Tienes un mensaje para mí?";
+mes "Gracias. Toma la Exp!";
+set BaseExp,+1500;
+set JobExp,+1000;
+set sendm2,gettimetick(2);
+close;
+}
+mes .@npcname$;
+mes "Hola...";
+close;
+}
+// ================== End of the NPC ====================================================
+prontera,109,116,5	script	Sir Lion	65,{
+set .@npcname$,"^0000FF[Sir Lion]^000000";
+if(gettimetick(2) - sendm3 < (60 * 60 * 20)) {
+mes .@npcname$;
+mes "Lo siento pero tienes que esperar";
+mes "¡Hasta las 20 horas!";
+close;
+}
+if(message3==1) {
+mes .@npcname$;
+mes "¿Tienes un mensaje para mí?";
+mes "Gracias. Toma la Exp!";
+set BaseExp,+16509;
+set JobExp,+10000;
+set sendm3,gettimetick(2);
+close;
+}
+mes .@npcname$;
+mes "Hola...";
+close;
+}
+// ================== End of the NPC ====================================================
+izlude,123,173,5	script	Sir Midetz	65,{
+set .@npcname$,"^0000FF[Sir Midetz]^000000";
+if(gettimetick(2) - sendm4 < (60 * 60 * 20)) {
+mes .@npcname$;
+mes "Lo siento pero tienes que esperar";
+mes "¡Hasta las 20 horas!";
+close;
+}
+if(message4==1) {
+mes .@npcname$;
+mes "¿Tienes un mensaje para mí?";
+mes "Gracias. Toma la Exp!";
+set BaseExp,+160308;
+set JobExp,+100000;
+set sendm4,gettimetick(2);
+close;
+}
+mes .@npcname$;
+mes "Hola...";
+close;
+}
+// ================== End of the NPC ====================================================
+tur_dun01,188,118,5	script	Sir Grevious	65,{
+set .@npcname$,"^0000FF[Sir Grevious]^000000";
+if(gettimetick(2) - sendm5 < (60 * 60 * 20)) {
+mes .@npcname$;
+mes "Lo siento pero tienes que esperar";
+mes "¡Hasta las 20 horas!";
+close;
+}
+if(message5==1) {
+mes .@npcname$;
+mes "¿Tienes un mensaje para mí?";
+mes "Gracias. Toma la Exp!";
+getitem 5653,1;
+set BaseExp,+500000;
+set JobExp,+150000;
+set sendm5,gettimetick(2);
+close;
+}
+mes .@npcname$;
+mes "Hola...";
+close;
+}
+// ================== End of the NPC ====================================================
+// =============== Have fun with this Script. Yours,Rikimaru ============================

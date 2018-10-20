@@ -1,0 +1,124 @@
+//===== rAthena Script ======================================= 
+//= Poring's Blessing Event (Baphomet Server)
+//===== By: ================================================== 
+//= Ziu
+//===== Current Version: ===================================== 
+//= 1.0  (Spanish Scene)
+//===== Compatible With: ===================================== 
+//= rAthena TRUNK last rev + ziu data rev.465
+//===== Additional Comments: ================================= 
+//= [AEGIS Playing Conversion]
+//= Official Korean Texts [Ziu]
+//= 1.0 Complete script [Ziu]
+//= No existe un bonus que de solamente experiencia de job por lo tanto se incrementa la experiencia en general [Ziu]
+//============================================================
+
+-	script	Poring Blessing#evt_04	-1,{
+	end;
+
+OnChat:
+	npctalk "El sueño de izlude empieza~";
+	end;
+OnChat1:
+	npctalk "Es un regalo Poring Blessing aumento de Batalla~";
+	end;
+OnChat2:
+	npctalk "Regalos Poring regalos regalos~";
+	end;
+OnInit:
+	enablenpc "Poring Blessing#evt_04";
+	initnpctimer;
+	end;
+OnReplayP:
+	initnpctimer;
+	end;	
+OnTimer4000:
+	donpcevent "Poring Blessing#evt_04::OnChat";
+	end;
+OnTimer8000:
+	donpcevent "Poring Blessing#evt_04::OnChat1";
+	end;
+OnTimer12000:
+	donpcevent "Poring Blessing#evt_04::OnChat2";
+	stopnpctimer;
+	donpcevent "Poring Blessing#evt_04::OnReplayP";
+	end;
+
+	}
+
+// Duplicates
+//============================================================
+int_land01,60,84,3	duplicate(Poring Blessing#evt_04)	Poring Blessing#Bizluda	948
+int_land02,60,84,3	duplicate(Poring Blessing#evt_04)	Poring Blessing#Bizludb	948
+int_land03,60,84,3	duplicate(Poring Blessing#evt_04)	Poring Blessing#Bizludc	948
+int_land04,60,84,3	duplicate(Poring Blessing#evt_04)	Poring Blessing#Bizludd	948
+
+
+izlude,132,207,3	script	Poring Blessing#evt_iz_04	909,5,5,{
+	if ((Class == Job_Novice) && (BaseLevel < 11)) {
+		if ((BaseLevel == 10) && (checkquest(2351) == -1)) {
+			mes "[Poring Blessing]";
+			mes "Aww wow regalos Poring, Nivel 10 Novato carino!!!";
+			mes "Se lo dare a un aventurero sincero.~";
+			next;
+			mes "[Poring Blessing]";
+			mes "Otro nuevo ^3131FFRegalo^000000Estamos listos. ^FF0000http://ares-ro.com/^000000Por favor, venga al poring~";
+			next;
+			mes "^FF0000[Precaucion]: Este aficionado no se aplica al aficionado que es causado por el gato y la cana.^000000";
+			setquest 2351;
+			completequest 2351;
+			getitem	12803,1; //Support Beginners box
+			specialeffect2	EF_OVERTHRUST;
+			sc_start SC_SpeedUp1,5000,0;
+			bonus_script "{ bonus2 bExpAddClass,Class_All,50; }",3600,3,0,SI_OVERLAPEXPUP;
+			end;
+		} else {
+			mes "[Poring Blessing]";
+			mes "Regalos Poring dan regalos Poring~";
+			mes "^FF0000Nivel 10 Novatos^000000 Todo lo que tienes para tus amigos. Poring~";
+			mes "Izlude es una gran escuela querido~  poring aprender mucho mucho~";
+			next;
+			mes "^FF0000[Precaucion]: Este aficionado no se aplica al aficionado que es causado por el gato y la cana.^000000";
+			specialeffect2	EF_OVERTHRUST;
+			sc_start SC_SpeedUp1,5000,0;
+			bonus_script "{ bonus2 bExpAddClass,Class_All,50;}",3600,3,0,SI_OVERLAPEXPUP;
+			close;
+		}
+	} else {
+		mes "[Poring Blessing]";
+		mes "Regalo a principiantes, regalo poring~";
+		mes "10Lv Un regalo más grande para principiantes~";
+		close;
+	}
+OnTouch:
+	npctalk "El Poring Blessing es el don de servicio comenzo~!";
+	end;
+}
+
+prt_fild08,345,216,6	script	Arc bishop passing#evt5	677,7,7,{
+	end;
+OnTouch:
+	npcskill "AL_HEAL",11,1,1;
+	npcskill "AL_BLESSING",10,1,1;
+	npcskill "AL_INCAGI",10,1,1;
+	npctalk "¿Sabes que? Cuando te sientas, HP y SP son resistentes.";
+	end;
+}
+
+// Duplicates Arc bichop
+//============================================================
+prt_fild08a,345,216,6	duplicate(Arc bishop passing#evt5)	Arc bishop passing#prtda	677,7,7
+prt_fild08b,345,216,6	duplicate(Arc bishop passing#evt5)	Arc bishop passing#prtdb	677,7,7
+prt_fild08c,345,216,6	duplicate(Arc bishop passing#evt5)	Arc bishop passing#prtdc	677,7,7
+prt_fild08d,345,216,6	duplicate(Arc bishop passing#evt5)	Arc bishop passing#prtdd	677,7,7
+
+// Duplicates
+//============================================================
+izlude_a,132,207,3	duplicate(Poring Blessing#evt_iz_04)	Poring Blessing#izluda	909,5,5
+izlude_b,132,207,3	duplicate(Poring Blessing#evt_iz_04)	Poring Blessing#izludb	909,5,5
+izlude_c,132,207,3	duplicate(Poring Blessing#evt_iz_04)	Poring Blessing#izludc	909,5,5
+izlude_d,132,207,3	duplicate(Poring Blessing#evt_iz_04)	Poring Blessing#izludd	909,5,5
+
+//waper
+//iz_int03,93,73,0	warp	to_izlude05	1,1,izlude,195,209	
+		

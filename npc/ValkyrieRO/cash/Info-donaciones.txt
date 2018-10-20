@@ -1,0 +1,66 @@
+lib_in.gat,230,186,3	script	Info. De Donaciones	858,{
+	mes "^000080Info. De Donaciones^000000";
+	mes "Hola Bienvenido mi Deber es Informarte sobre las Donaciones^000000";
+	mes "Aqui te dire Donde puedes Donar^000000";
+next;
+	menu "^5533ffPORQUE DONAR?^000000",P_Dona,"^cc6600Wester Union^000000",r_union,"^ff0000Donaciones SMS^000000",sms_items,"Paypal",pay_items,"nada",r_nada;
+P_Dona:
+	mes "^000080Info. De Donaciones^000000";
+	mes "Antes que todo quiero aclarar que ThanatosRO es un servidor gratuito,";
+	mes "nadie paga por el simple hecho de tener una cuenta ni de jugar en él.";
+	mes "Pero el inconveniente surgió cuando dejamos la conexión casera y decidimos que para crecer necesitábamos inversión,";
+	mes "y a partir de eso nos mudamos a un servidor dedicado el cual nos cobra una cuota mensual en dólares estadounidenses la cual lamentablemente yo solo no tengo la facultad de solventar.";
+	mes "Es por ellos que pido de tu colaboración para que tRO se mantenga online.";
+	close;
+r_union:
+	next;
+	mes "^000080Info. De Donaciones^000000";
+	mes "^000080Antes de donar por Wester Union lee esto por favor^000000";
+next;
+	mes "^000080Info. De Donaciones^000000";
+	mes "Este medio de envió de dinero esta disponible en muchos banco y empresas en el mundo.";
+	mes "Solo tienen que acudir a algún lugar donde manejen este sistema y solicitar un envió de dinero.";
+	mes "Para este método no es necesario ser mayor de edad, simplemente le haces saber al encargado de la caja donde depositaras tu dinero que estas seguro de los datos del destinatario.";
+	mes "Es por ello que hemos elegido este método para que tú realices tus donaciones.";
+	mes "Es un método seguro y rápido de envió de dinero.";
+	mes "Los únicos datos que les piden son los siguientes:";
+	next;
+	mes "Datos del Destinatario:";
+	mes "Nombre(s):";
+	mes "Apellidos:";
+	mes "Ciudad:";
+	mes "Estado:";
+	mes "País: España";
+next;
+	mes "Después de haber efectuado tu donativo te entregaran un ticket donde señala la cantidad que donaste y un numero de serie que identifica tu envió.";
+	mes "Cuando tengas tu ticket a la mano, lo que necesitas es enviar un mail a ^ff0000thanatosro4@gmail.com^000000 con los siguientes datos.";
+next;
+	mes "^ff0000MTCN ^000000(Dígitos que identifican tu envió):";
+	mes "^ff0000Nombre ^000000(el nombre del depositante que aparece en el ticket):";
+	mes "^ff0000Apellido^000000:";
+	mes "^ff0000Ciudad^000000:";
+	mes "^ff0000País^000000:";
+	mes "^ff0000Monto^000000:";
+	mes "^ff0000[Nick]^000000 de tu cuenta de Thanatos Ragnarök:";
+	mes "Todos los ítem serán entregados en un plazo máximo de ^ff000048^000000 hora de haber sido una transferencia exitosa.";
+	close;   
+       
+sms_items:
+	mes "^000080Info. De Donaciones^000000";
+	mes "Por un lado presentamos el sistema de SMS / Mensaje de texto.";
+	mes "Por cada SMS que envies, se te darán ^ff0000150 cash points= 1 USD^000000.";
+	mes "Para más informacion contacte con el Staff del server.";
+	close;
+
+pay_items:
+	mes "^000080Info. De Donaciones^000000";
+	mes "Envío de Dinero por PayPal. Solo cliquee el botón “Donar” en nuestro panel de control ^ff0000http://shops.thanatos-ro.net/^000000.";
+	mes "Enseguida me mandas un mail en donde el ASUNTO CONLLEVE POR NOMBRE DONACION, y donde me haces saber tu nombre, mail y cantidad donada.";
+	mes "Después de haber hecho esto nos pondremos de acuerdo para entregarte tus ítem’s especiales en hora y fechas en la que ambos estemos reacuerdo.";
+	mes "^ff0000Eso Es Todo De Mi Parte , Lo Demas Preguntale A^000000 ^ff0000Admin Thanatos^000000";
+	close;
+
+r_nada:
+	mes "que tenga buen dia^^";
+	close; 
+}

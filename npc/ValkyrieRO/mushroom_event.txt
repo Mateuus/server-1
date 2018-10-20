@@ -1,0 +1,53 @@
+//===== rAthena Script ======================================= 
+//= Feel_Reset
+//===== By: ================================================== 
+//= Mysterious
+//===== Current Version: ===================================== 
+//= 3.6a
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= Find the Mushroom - random amount of Mushrooms spawns in random maps.
+//= Players need to find these mushrooms and kill them to gain prizes!
+//===== Additional Comments: =================================
+//= 3.0 Fully Functional with Rewritten script. [Mysterious]
+//= 3.6a Slightly edited. [Euphy]
+//============================================================ 
+
+Lunette,160,110,5    script    SG Resetter    644,{
+    cutin "arang01",2;
+    mes "[SG Resetter]";
+    mes "What do you wish to reset?";
+    menu "Reset Feeling",feeling,"Reset Hatred",hatred;
+
+feeling:
+    atcommand "@feelreset";
+    mes "Done.";
+    close2;
+    cutin "",255;
+    end;
+
+hatred:
+    set PC_HATE_MOB_MOON, 0;
+    set PC_HATE_MOB_STAR, 0;
+    set PC_HATE_MOB_SUN, 0;
+    mes "Done.";
+    next;
+    mes "[SG Resetter]";
+    mes "Hatred will be reset upon relogging.";
+    mes "Do you wish to relog now?";
+    menu "Relog now",relog,"Later",later;
+
+relog:
+    atcommand "@kick "+strcharinfo(0);
+    end;
+
+later:
+    next;
+    mes "[SG Resetter]";
+    mes "Ok then, but don't forget changes won't take effect until you relog.";
+    close2;
+    cutin "",255;
+    end;
+
+}

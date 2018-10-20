@@ -1,0 +1,213 @@
+//===============RATHENA SCRIPT==================//
+//Username: Eyske				 //
+//Made for: Rathena				 //
+//===============================================//
+//Purpose:					 //	
+//Lets User exchange supplies into a Box of the	 //
+//same type to decrease the total used weight.	 //
+//Can come in handy if a User plays WoE, PVP	 //
+//or plays a Jobclass that uses supplies like	 //
+//its candy. For Exapmle any tanking Class ;)	 //
+//===============================================//
+//Questions:					 //
+//If you have any questions, feel free to PM me	 //
+//at Rathena under my Username Eyske anytime	 //
+//or write an reply in the topic this script	 //
+//was released.					 //
+//===============================================//
+//Disclaimer:					 //
+//Use this Script on your own risk!		 //
+//I highly advice you to make an Backup of your	 //
+//Database, Server and any files BEFORE you	 //
+//play this Script on your test or live server!	 //
+//I try my best to cause no damage and only	 //
+//release bullet proved Scripts.		 //
+//However, if a Script causes damage to you,	 //
+//your Server or anything related to it,	 //
+//I can not be held responsible for that!	 //
+//REMEBER: Use this Script ON YOUR OWN RISK!!!	 //
+//===============================================//
+//Copyright:					 //
+//This Script was made by Eyske and is		 //
+//released at Rathena for puplic use.		 //
+//You CAN use this Script for free but you	 //
+//are NOT ALLOWED to release this Script anywhere//
+//else without my explicite permission!		 //
+//===============================================//
+
+
+//===============Administration Area=============//
+//Config here what you want the User to be able to exchange.
+//1 = YES; 2 = NO
+//EXAMPLE: Exchange ,,White Potion"?
+//set $lvboxterWP,1
+
+new_1-1,0,0,4	script	Admin#BoxterLA	581,{
+
+set $lvboxter,1;			//1 = Enable the NPC; 0 = Disable the NPC
+set $lvboxterWP,1;		//White Potion 100 => 1 White Potion Box (ID: 12531)
+set $lvboxterBP,1;		//Blue Potion 25 => 1 Blue Potion Box (ID: 13810)
+set $lvboxterYB,1;		//Yggdrasil Berry 10 => 1 Yggdrasil Berry Box (ID: 14232)
+set $lvboxterYS,1;		//Yggdrasil Seed 10 => 10 Yggdrasil Seed Box (ID: 12534)
+set $lvboxterMF,1;		//Mastela Fruit 100 => 1 Mastela Fruit Box (ID: 12530)
+set $lvboxterSP,1;		//Speed Potion 10 => 1 Speed Potion Box (ID: 13995)
+set $lvboxterPB,1;		//Poison Bottle 10 => 1 Poison Bottle Box (ID: 14004)
+set $lvboxterAB,1;		//Acid Bomb Ingedrients 10 => 1 Acid Bomb Box (ID: 13989)
+}
+
+//===============NPC AREA========================//
+new_1-1,55,115,4	script	Lady Ashvale	581,{
+
+if ($lvboxter == 0) {mes "[Lady Ashvale]";
+			mes "I am currently not offering my Service.";
+			mes "Please come back later my dear!";
+close;}
+
+else {mes	"[Lady Ashvale]";
+mes	"Hello " + strcharinfo(0) + ",";
+mes	"my Name is Lady Ashvale, I am the local";
+mes	"Boxter and I am happy to be helping you!";
+next;
+mes	"[Lady Ashvale]";
+mes	"I can turn these supplies into a Box";
+if ($lvboxterWP == 1) {mes "100 White Potions into 1 White Potion Box";}
+	else {mes "Exchange of White Potions currently not offered";}
+if ($lvboxterBP == 1) {mes "25 Blue Potions into 1 Blue Potion Box";}
+	else {mes "Exchange of Blue Potions currently not offered";}
+if ($lvboxterYB == 1) {mes "10 Yggdrasil Berrys into 1 Yggdrasil Berry Box";}
+	else {mes "Exchange of Yggdrasil Berrys currently not offered";}
+if ($lvboxterYS == 1) {mes "10 Yggdrasil Seeds into 1 Yggdrasil Seed Box";}
+	else {mes "Exchange of Yggdrasil Seeds currently not offered";}
+if ($lvboxterMF == 1) {mes "100 Mastela Fruits into 1 Mastela Fruit Box";}
+	else {mes "Exchange of Mastela Fruits currently not offered";}
+if ($lvboxterSP == 1) {mes "10 Speed Potions into 1 Speed Potion Box";}
+	else {mes "Exchange of Speed Potions currently not offered";}
+if ($lvboxterPB == 1) {mes "10 Poison Bottles into 1 Poison Bottle Box";}
+	else {mes "Exchange of Poison Bottles currently not offered";}
+if ($lvboxterAB == 1) {mes "10 Fire Bottles and 10 Acid Bottles into 1 Acid Bomb Box";}
+	else {mes "Exchange of Acid Bombs currently not offered";}
+menu "White Potion",WP,"Blue Potion",BP,"Yggdrasil Berry",YB,"Yggdrasil Seed",YS,"Mastela Fruit",MS,"Speed Potion",SSP,"Poison Bottle",PB,"Acid Bomb",AB;
+
+WP:	//Exchange White Potions
+if ($lvboxterWP == 1) {if (countitem(504) >= 100) {
+		mes "[Lady Ashvale]";
+		mes "Here you go!";
+		delitem 504,100;
+		getitem 12531,1;
+		close;
+}
+else {mes "[Lady Ashvale]";
+		mes "Are you trying to scam me!?";
+}
+		}
+	else {mes "Exchange of White Potions currently not offered";
+close;}
+
+BP:	//Exchange Blue Potions
+if ($lvboxterBP == 1) {if (countitem(505) >= 25) {
+		mes "[Lady Ashvale]";
+		mes "Here you go!";
+		delitem 505,25;
+		getitem 13810,1;
+		close;
+}
+else {mes "[Lady Ashvale]";
+		mes "Are you trying to scam me!?";
+}
+		}
+	else {mes "Exchange of Blue Potions currently not offered";
+close;}
+
+YB:	//Exchange Yggdrasil Berry
+if ($lvboxterYB == 1) {if (countitem(607) >= 10) {
+		mes "[Lady Ashvale]";
+		mes "Here you go!";
+		delitem 607,10;
+		getitem 14232,1;
+		close;
+}
+else {mes "[Lady Ashvale]";
+		mes "Are you trying to scam me!?";
+}
+		}
+	else {mes "Exchange of Yggdrasil Berrys currently not offered";
+close;}
+
+YS:	//Exchange Yggdrasil Seed
+if ($lvboxterYS == 1) {if (countitem(608) >= 10) {
+		mes "[Lady Ashvale]";
+		mes "Here you go!";
+		delitem 608,10;
+		getitem 12534,1;
+		close;
+}
+else {mes "[Lady Ashvale]";
+		mes "Are you trying to scam me!?";
+}
+		}
+	else {mes "Exchange of Yggdrasil Seeds currently not offered";
+close;}
+
+MF:	//Exchange Mastela Fruit
+if ($lvboxterMF == 1) {if (countitem(522) >= 100) {
+		mes "[Lady Ashvale]";
+		mes "Here you go!";
+		delitem 522,100;
+		getitem 12530,1;
+		close;
+}
+else {mes "[Lady Ashvale]";
+		mes "Are you trying to scam me!?";
+}
+		}
+	else {mes "Exchange of Mastela Fruits currently not offered";
+close;}
+
+SSP:	//Exchange Speed Potions
+if ($lvboxterSP == 1) {if (countitem(12016) >= 10) {
+		mes "[Lady Ashvale]";
+		mes "Here you go!";
+		delitem 12016,10;
+		getitem 13995,1;
+		close;
+}
+else {mes "[Lady Ashvale]";
+		mes "Are you trying to scam me!?";
+}
+		}
+	else {mes "Exchange of Speed Potions currently not offered";
+close;}
+
+PB:	//Exchange Poison Bottles
+if ($lvboxterPB == 1) {if (countitem(678) >= 10) {
+		mes "[Lady Ashvale]";
+		mes "Here you go!";
+		delitem 678,10;
+		getitem 14004,1;
+		close;
+}
+else {mes "[Lady Ashvale]";
+		mes "Are you trying to scam me!?";
+}
+		}
+	else {mes "Exchange of Poison Bottles currently not offered";
+close;}
+
+AB:	//Exchange Acid Bottles
+if ($lvboxterAB == 1) {if (countitem(7136) >= 10 && countitem(7135) >= 10) {
+		mes "[Lady Ashvale]";
+		mes "Here you go!";
+		delitem 7136,10;
+		delitem 7135,10;
+		getitem 13989,1;
+		close;
+}
+else {mes "[Lady Ashvale]";
+		mes "Are you trying to scam me!?";
+}
+		}
+	else {mes "Exchange of Acid Bombs currently not offered";
+close;}
+
+	}
+}

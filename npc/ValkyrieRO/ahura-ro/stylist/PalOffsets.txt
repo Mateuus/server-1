@@ -1,0 +1,29 @@
+//===== *Athena Script =======================================
+//= Pal Offsets Script
+//===== By: ==================================================
+//= Evil Puncker, KamiShi, Darkness
+//===== Current Version: =====================================
+//= 1.4
+//===== Compatible With: =====================================
+//= *Athena
+//===== Description: =========================================
+//= Define the pals positions index for the different races.
+
+-	script	PalOffsets	HIDDEN_NPC,{
+OnInit:
+	set .@offc, 0;
+	set .@offh, 0;
+	
+	/* Define Palettes Positions */
+	setarray $RacePals[0], 0,127+.@offh,0,693+.@offc;						// Human
+	
+	setarray $RacePals[21*4], 1340+.@offh,1372+.@offh,1340+.@offc,1372+.@offc;  // Brown PPL
+	
+	/* Define Races Names */
+	setarray $RaceNames$[0], "Human";
+	setarray $RaceNames$[1], "Brown Skin";
+	end;
+	
+	
+
+}

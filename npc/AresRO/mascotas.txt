@@ -1,0 +1,115 @@
+// NPC Mascotas por Hake
+//
+//
+// Versión 1: primeras mascotas, precio(s) configurable(s)
+// Versión 2: corregido un pequeño error en el precio (no cobraba en la elección uno)
+//
+//
+// Los NPC llevan su tiempo, por eso lo único que pido es que no se borre esta parte.
+//
+//
+//
+//[Observaciones: por defecto podrás tener hasta 3 mod slave, pero se pueden modificar en if(@mslave==3)
+//
+//
+//============================================================
+
+
+poring_w02.gat,109,88,3	script	Mascotas	975,{
+
+set	@name$,"[^FF0000Mascotas^000000]";	//Nombre del NPC
+set	@precio,100000;		// Dinero que cuesta
+set	@limit$,1;		// Si se deja en 1, habrá límite de mod, si por el contrario se pone 0, será ilimitado
+
+	mes @name$;
+	mes "Hola! ^5555FF" + strcharinfo(0) + "^000000!,";
+	mes "Yo puedo proporcionarte un Mod Slave, pero tendrás que pagarme.";
+	mes "¿Qué te parece?";
+	menu "Quiero comprarlo",comprar,"¿Qué son?",explicar,"No, no quiero gracias",no;
+
+
+comprar:
+	
+next;
+	next;
+	if(@mslave==3) {	mes @name$;	mes "Lo siento, solo puedes tener 3 mod slaves.";	close;}
+	mes @name$;
+	mes "Estos son los Mod Slaves que puedes elegir, pero recuerda que te costarán 5.000.000 zenys cada uno:";
+	menu "Angeling",elec1,"Archangeling",elec2,"Deviling",elec3,"Hellion Revenant",elec4,"Observation",elec5,"Assassin Cross Eremes",elec6;
+
+
+
+elec1:
+	set zeny, zeny-@precio;
+	if(zeny <= @precio) goto no_zeny;
+	atcommand strcharinfo(0)+":@summon 1096	10"+strcharinfo(0);
+	set @mslave,@mslave+1;
+	close;
+
+elec2:
+	set zeny, zeny-@precio;
+	if(zeny <= @precio) goto no_zeny;
+	atcommand strcharinfo(0)+":@summon 1388	10"+strcharinfo(0);
+	set @mslave,@mslave+1;
+	close;
+
+elec3:
+	set zeny, zeny-@precio;
+	if(zeny <= @precio) goto no_zeny;
+	atcommand strcharinfo(0)+":@summon 1582	10"+strcharinfo(0);
+	set @mslave,@mslave+1;
+	close;
+
+elec4:
+	set zeny, zeny-@precio;
+	if(zeny <= @precio) goto no_zeny;
+	atcommand strcharinfo(0)+":@summon 1626	10"+strcharinfo(0);
+	set @mslave,@mslave+1;
+	close;
+
+elec5:
+	set zeny, zeny-@precio;
+	if(zeny <= @precio) goto no_zeny;
+	atcommand strcharinfo(0)+":@summon 1700	10"+strcharinfo(0);
+	set @mslave,@mslave+1;
+	close;
+
+elec6:
+	set zeny, zeny-@precio;
+	if(zeny <= @precio) goto no_zeny;
+	atcommand strcharinfo(0)+":@summon 1647	10"+strcharinfo(0);
+	set @mslave,@mslave+1;
+	close;
+
+
+explicar:
+
+	next;
+	mes @name$;
+	mes "Los ^0000FF Mob Slave. ^000000,";
+	mes "son monstruos que actúan como mascotas sobre tí y que podrás usar para ayudarte en el camino del Ragnarok Online.";
+	next;
+	mes "Éstos, pueden atacar e incluso usar skill para ayudarte o apoyarte en fuerza";
+	mes "Pero... si mueres, ¡lo perderás!";
+	next;
+	mes "Después de esto, ¿qué quieres hacer?";
+	menu "Comprar uno",comprar,"No me quedó muy claro...",explicar,"No me has convencido",no;
+
+
+
+no:
+	next;
+	mes @name$;
+	mes "Puse todo mi empeño en explicarte...";
+	mes "¡Vuelve pronto!";
+	close;
+
+no_zeny:
+	next;
+	mes @name$;
+	mes "Aún no tienes suficiente dinero para comprar uno,";
+	mes "vuelve cuando puedas permitírtelo.";
+	close;
+
+close;
+}

@@ -1,0 +1,84 @@
+//===== eAthena Script =====================================
+//= Cloner
+//===== By ================================================
+//= Conwaidd (Luis Tapia)
+//===== Version ===========================================
+//= 2.0
+//=========================================================
+//= 1.0 - Creacion de script
+//=	1.5 - Reparacion de codigo y bugs 
+//= 2.0 - final release
+//===== Compatible With ===================================
+//= Any eAthena (cualquier eathena)
+//===== Description =======================================
+//= Npc que clona por un precio X
+//=========================================================
+poring_w02.gat,116,92,4	script	Cientifico	121,{
+
+set @price1,30000;		//precio de clone normal
+set @price2,45000		//precio de clone slave
+set @price3,50000;		//precio de clone evil
+set @name$,"[Cientifico]";	//nombre NPC
+set @limit$,1;		//0 = desabilitar limite 1 = habilitar limite (defecto)
+
+	mes @name$;
+	mes "Hello! ^5555FF"+strcharinfo(0)+"^000000!";
+	mes "I'm a scientist specializing in Human Cloning";
+	mes "In the existence of Humans there are secrets";
+	mes "It is preferable to maintain these in secret, this is one of them";
+	mes "So I will not say how I make clones";
+	mes "The prices are:";
+	mes "Normal Clone:"+@price1+"";
+	mes "Slave Clone:"+@price2+"";
+	mes "Evil Clone Clone:"+@price3+"";
+	mes "You interested???";
+	next;
+	menu "Sure",-,"No Thanks.",l_no;
+	if(@clon == 3) {	mes @name$;	mes "I'm sorry, you can only have or acquire 3 clones.";	close;}
+	mes @name$;
+	mes "I can create the following types of clones:";
+	menu "Normal Clone",clone_normal,"Slave Clone",clone_slave,"Evil Clone",clone_evil;
+
+clone_normal:
+	next;
+	if(zeny <= @price1) goto no_zeny;
+	set zeny, zeny-@price1;
+	atcommand strcharinfo(0)+ ":@clone " + strcharinfo(0);
+	if(@limit$==1) set @clone,@clone+1;
+	mes @name$;
+	mes "Ready this is your clone ^55555FFExactamente Igual a ti^000000, in all its aspects";
+	mes "I hope you enjoy it, take care of it";
+	close;
+	
+clone_slave:
+	next;
+	if(zeny <= @price2) goto no_zeny;
+	set zeny, zeny-@price2;
+	atcommand strcharinfo(0)+ ":@slaveclone " + strcharinfo(0);
+	if(@limit$==1) set @clone,@clone+1;
+	mes @name$;
+	mes "Ready this is your slave clone ^55555FFExactamente Igual a ti^000000, It will be a great help";
+	mes "I hope you enjoy it, take care of it";
+	close;
+	
+clone_evil:
+	next;
+	if(zeny <= @price3) goto no_zeny;
+	set zeny, zeny-@price3;
+	atcommand strcharinfo(0)+ ":@evilclone " + strcharinfo(0);
+	if(@limit$==1) set @clone,@clone+1;
+	mes @name$;
+	mes "Ready this is your clone ^55555FFExactamente Igual a ti^000000,It is evil";
+	mes "Be careful ^0000FF MUCHO CUIDADO^000000";
+	close;
+	
+l_no:
+	mes @name$;
+	mes "Well i will be here experimenting. See you soon";
+	close;
+	
+no_zeny:
+	mes @name$;
+	mes "I'm sorry but you do not have enough money.";
+	close;
+}			 

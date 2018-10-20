@@ -1,0 +1,31 @@
+-	script	porsize	-1,{
+OnEventPor1:
+	getmapxy(.@m$,.@x,.@y,0);
+	areamonster .@m$,.@x+5,.@y+5,.@x-5,.@y-5,"--ja--",.mobid,2,"porsize::OnEventPor2",0,0;
+	end;
+
+OnEventPor2:
+	getmapxy(.@m$,.@x,.@y,0);
+	areamonster .@m$,.@x+5,.@y+5,.@x-5,.@y-5,"--ja--",.mobid,2,"porsize::OnEventPor3",1,0;
+	end;
+
+OnEventPor3:
+	set .Count,.Count+1;
+	if(.Count == 4){
+		areamonster .PlayMap$,0,0,500,500,"--ja--",.mobid,1,"porsize::OnEventPor1",2,0;
+		set .Count,0;
+	}
+	end;
+
+OnInit:
+	set .TotalBig,100;
+	set .PlayMap$,"prt_fild08";
+	set .mobid,1002;
+	set .b,rand(.TotalBig)+1;
+	set .m,rand(.TotalBig-.b);
+	set .s,.TotalBig-.b-.m;
+	areamonster .PlayMap$,0,0,500,500,"--ja--",.mobid,.b,"porsize::OnEventPor1",2,0;
+	areamonster .PlayMap$,0,0,500,500,"--ja--",.mobid,.m*2,"porsize::OnEventPor2",0,0;
+	areamonster .PlayMap$,0,0,500,500,"--ja--",.mobid,.a*4,"porsize::OnEventPor3",1,0;
+	end;
+}

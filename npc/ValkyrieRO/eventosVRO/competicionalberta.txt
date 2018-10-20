@@ -1,0 +1,561 @@
+//===== Global Chile ======
+//=== https://www.facebook.com/IntegralesGlobal ===
+
+-	script	pescaalberta	-1,{
+
+OnInit:
+inicio:
+sleep2 rand(4320000,25920000);
+	monster "quiz_02",314,57,"Competicion Pesca",2260,1;
+announce "Gran Pescador: ¡¡Va a empezar una competición de pesca en la ciuda de Alberta!!",bc_all,0x919CFF;
+sleep2 10000;
+announce "Gran Pescador: ¡¡Los que quieran participar acercaos a la esquina de abajo-derecha!!",bc_all,0x919CFF;
+sleep2 10000;
+announce "Gran Pescador: ¡¡En 5 minutos empezamos!!",bc_all,0x919CFF;
+set $@ComPesAlb,1;
+sleep2 300000;
+announce "Gran Pescador: ¡¡Empieza la competición!!",bc_all,0x919CFF;
+set $PSCALBRank,0;
+set $@ComPesAlb,2;
+enablenpc "Zona de Pesca";
+enablenpc "Zona de Pesca#02";
+enablenpc "Zona de Pesca#03";
+enablenpc "Zona de Pesca#04";
+enablenpc "Vendedora Cebos";
+sleep2 60000;
+mapannounce "alberta","[Concurso de Pesca] Ganador Actual: "+$PSCALBRankN0$+" ["+$PSCALBRank+" Puntos.]",bc_yellow;
+sleep2 60000;
+mapannounce "alberta","[Concurso de Pesca] Ganador Actual: "+$PSCALBRankN0$+" ["+$PSCALBRank+" Puntos.]",bc_yellow;
+sleep2 60000;
+mapannounce "alberta","[Concurso de Pesca] Ganador Actual: "+$PSCALBRankN0$+" ["+$PSCALBRank+" Puntos.]",bc_yellow;
+sleep2 60000;
+mapannounce "alberta","[Concurso de Pesca] Ganador Actual: "+$PSCALBRankN0$+" ["+$PSCALBRank+" Puntos.]",bc_yellow;
+sleep2 60000;
+mapannounce "alberta","[Concurso de Pesca] Ganador Actual: "+$PSCALBRankN0$+" ["+$PSCALBRank+" Puntos.]",bc_yellow;
+sleep2 60000;
+mapannounce "alberta","[Concurso de Pesca] Ganador Actual: "+$PSCALBRankN0$+" ["+$PSCALBRank+" Puntos.]",bc_yellow;
+sleep2 60000;
+mapannounce "alberta","[Concurso de Pesca] Ganador Actual: "+$PSCALBRankN0$+" ["+$PSCALBRank+" Puntos.]",bc_yellow;
+sleep2 60000;
+mapannounce "alberta","[Concurso de Pesca] Ganador Actual: "+$PSCALBRankN0$+" ["+$PSCALBRank+" Puntos.]",bc_yellow;
+sleep2 60000;
+mapannounce "alberta","[Concurso de Pesca] Ganador Actual: "+$PSCALBRankN0$+" ["+$PSCALBRank+" Puntos.]",bc_yellow;
+sleep2 60000;
+disablenpc "Zona de Pesca";
+disablenpc "Zona de Pesca#02";
+disablenpc "Zona de Pesca#03";
+disablenpc "Zona de Pesca#04";
+disablenpc "Vendedora Cebos";
+announce "Gran Pescador: ¡¡La competición de pesca ha finalizado!!",bc_all,0x919CFF;
+mapannounce "alberta","[Concurso de Pesca] ¡¡Ganador Final "+$PSCALBRankN0$+" con "+$PSCALBRank+" Puntos!!",bc_yellow;
+sleep2 10000;
+announce "Gran Pescador: ¡¡El ganador dispone de 5 minutos para recoger su premio!!",bc_all,0x919CFF;
+set $@ComPesAlb,3;
+sleep2 300000;
+set $@ComPesAlb,0;
+goto inicio;
+end;
+}
+
+-	script	despesalb	-1,{
+
+OnInit:
+disablenpc "Zona de Pesca";
+disablenpc "Zona de Pesca#02";
+disablenpc "Zona de Pesca#03";
+disablenpc "Zona de Pesca#04";
+disablenpc "Vendedora Cebos";
+end;
+}
+
+alberta.gat,215,33,1	shop	Vendedora Cebos	73,2775:50
+
+
+// -------------------- Gran Pescador  ---------------------
+// =========================================================
+
+alberta.gat,224,35,4	script	Gran Pescador	52,{
+
+	if ($@ComPesAlb == 1) goto instrucciones;
+	if ($@ComPesAlb == 2) goto activo;
+	if ($@ComPesAlb == 3) goto ganador;
+	mes "[^CC0000 Gran Pescador ^000000]";
+	mes "Aquí se realizan grandes competiciones de pesca, avisaremos en cuanto empiece una.";
+	close;
+
+instrucciones:
+	mes "[^CC0000 Gran Pescador ^000000]";
+	mes "La competición de pesca empezará pronto.";
+	next;
+	mes "[^CC0000 Gran Pescador ^000000]";
+	mes "¿Quieres que te explique como funciona?";
+	next;
+	menu "Explicación",expli,"Mejor no",cancelar;
+	close;
+
+ganador:
+	if(strcharinfo(0) == $PSCALBRankN0$) goto tuganas;
+	mes "[^CC0000 Gran Pescador ^000000]";
+	mes "Lo siento, no has podido ganar esta vez, espero que te lo hayas pasado bien almenos.";
+close;
+
+tuganas:
+	mes "[^CC0000 Gran Pescador ^000000]";
+	mes "¡Enhorabuena!";
+	mes "El primer puesto de esta competición es tuyo.";
+next;
+	getitem 7711,1;
+	set $@ComPesAlb,0;
+	mes "[^CC0000 Gran Pescador ^000000]";
+	mes "Aquí tienes, te lo mereces.";
+close;
+
+expli:
+	mes "[^CC0000 Gran Pescador ^000000]";
+	mes "Al empezar apareceran 4 zonas de pesca justo debajo mio y un vendedor de cebos.";
+next;
+	mes "[^CC0000 Gran Pescador ^000000]";
+	mes "Tendrás que comprar rápidamente algún cebo en la tienda y correr hacia una zona de pesca.";
+next;
+	mes "[^CC0000 Gran Pescador ^000000]";
+	mes "Las zonas de pesca pueden ser usadas por cualquier jugador ilimitadamente mientras la competición esté activa.";
+next;
+	mes "[^CC0000 Gran Pescador ^000000]";
+	mes "Ahora te tocará pescar para obtener puntos y ser mejor que todos los demás.";
+next;
+	mes "[^CC0000 Gran Pescador ^000000]";
+	mes "Si acaba la competición y eres el pescador con mayor número de puntos ganarás.";
+next;
+	mes "[^CC0000 Gran Pescador ^000000]";
+	mes "Hasta aquí mi explicación.";
+close;
+
+activo:
+	mes "[^CC0000 Gran Pescador ^000000]";
+	mes "La competición ya está activa, compra cebos y pesca ahí abajo para ganar.";
+close;
+
+cancelar:
+close;
+}
+
+alberta.gat,224,40,3	script	Pescado	1158,{
+}
+alberta,220,40,4	duplicate(Pescado)	Pescado#02	1158
+alberta,216,40,4	duplicate(Pescado)	Pescado#03	1158
+alberta,214,38,4	duplicate(Pescado)	Pescado#04	1158
+alberta,213,35,4	duplicate(Pescado)	Pescado#05	1158
+
+
+// --------------- Lugares para pescar  ---------------
+// =========================================================
+
+alberta.gat,224,27,4	script	Zona de Pesca	111,{
+
+	mes "[^CC0000 " +strcharinfo(0) + " ^000000]";
+	mes "Parece ser que he encontrado una zona donde poder pescar...";
+	next;
+	mes "[^CC0000 " +strcharinfo(0) + " ^000000]";
+	mes "¿Que deberia hacer?";
+	next;
+menu "Pescaré un poco",pescar,"Mejor no",cancelar;
+
+
+// --------------- Efectos de Pesca  ---------------
+// =========================================================
+
+pescar:
+	if(countitem(2775)<1)goto nocebo;
+	mes "[^CC0000 " +strcharinfo(0) + " ^000000]";
+	mes "Bien, pescare un poco ya que parece que tengo todo lo necesario.";
+	next;	
+	mes "[^CC0000 " +strcharinfo(0) + " ^000000]";
+	mes "Ahi voy!!";
+	next;
+	specialeffect2 501;
+	sleep2 1000;
+	specialeffect2 457;
+	specialeffect2 265;
+	atcommand "@me lanza el cebo con todas sus fuerzas.";
+	sleep2 4000;
+	set @cebo,rand(1,10);
+	if (@cebo == 1) goto pesca;
+	if (@cebo == 2) goto pesca;
+	if (@cebo >= 3) goto fallo;
+	close;
+
+
+
+pesca:
+	sleep2 4000;
+	mes "[^CC0000 " +strcharinfo(0) + " ^000000]";
+	mes "Algo ha mordido el anzuelo!!";
+	next;
+	mes "[^CC0000 " +strcharinfo(0) + " ^000000]";
+	mes "¿Que deberia hacer?";
+	next;
+menu "Estirar la caña",estirar,"Dejarlo marchar",dejarlo;
+
+
+estirar:
+	specialeffect2 463;
+	specialeffect2 457;
+	atcommand "@me estira su caña con fuerza.";
+	sleep2 2000;
+	set @pesca,rand(1,12);
+	if (@pesca == 1) goto pescado;
+	if (@pesca == 2) goto pescado;
+	if (@pesca == 3) goto pescado;
+	if (@pesca == 4) goto pescado;
+	if (@pesca == 5) goto estiramiento;
+	if (@pesca == 6) goto estiramiento;
+	if (@pesca == 7) goto estiramiento;
+	if (@pesca == 8) goto estiramiento;
+	if (@pesca == 9) goto estiramiento;
+	if (@pesca == 10) goto estiramiento;
+	if (@pesca == 11) goto estiramiento;
+	if (@pesca == 12) goto rotura;
+	close;
+
+
+// --------------- Selección de Premio  ---------------
+// =========================================================
+
+pescado:
+	atcommand "@me de un gran tirón consigue sacar algo de debajo del agua.";
+	specialeffect2 610;
+	set @pez,rand(1,1000);
+	if (@pez <= 58) goto pespes1;
+	if (@pez <= 116) goto pespes2;
+	if (@pez <= 174) goto pespes3;
+	if (@pez <= 232) goto pespes4;
+	if (@pez <= 290) goto pespes5;
+	if (@pez <= 348) goto pespes6;
+	if (@pez <= 406) goto pespes7;
+	if (@pez <= 464) goto pespes8;
+	if (@pez <= 522) goto pespes9;
+	if (@pez <= 580) goto pespes10;
+	if (@pez <= 638) goto pespes11;
+	if (@pez <= 696) goto pespes12;
+	if (@pez <= 754) goto pespes13;
+	if (@pez <= 812) goto pespes14;
+	if (@pez <= 870) goto pespes15;
+	if (@pez <= 928) goto pespes16;
+	if (@pez <= 986) goto pespes17;
+	if (@pez <= 999) goto pespes18;
+	if (@pez <= 1000) goto pespes19;
+	close;
+
+pespes1:
+	set @PuntosPesca,@PuntosPesca+2;
+	dispbottom "¡Consigues pescar una [Estrella de Mar]!";
+	dispbottom "¡Ganas 2 puntos de pesca! [Total: "+@PuntosPesca+" Puntos.]";
+	if (@PuntosPesca > $PSCALBRank){
+	set $PSCALBRank,@PuntosPesca;
+	set $PSCALBRankN0$,strcharinfo(0);
+	}
+	areamonster "alberta",212,31,227,27,"Estrella de Mar",1266,1;
+	mes "[^CC0000 " +strcharinfo(0) + " ^000000]";
+	mes "He conseguido sacar una estrella de mar, no parece comestible...";
+close;
+
+pespes2:
+	set @PuntosPesca,@PuntosPesca+1;
+	dispbottom "¡Consigues pescar un [Coral Reef]!";
+	dispbottom "¡Ganas 1 punto de pesca! [Total: "+@PuntosPesca+" Puntos.]";
+	if (@PuntosPesca > $PSCALBRank){
+	set $PSCALBRank,@PuntosPesca;
+	set $PSCALBRankN0$,strcharinfo(0);
+	}
+	getitem 7013,1;
+	mes "[^CC0000 " +strcharinfo(0) + " ^000000]";
+	mes "Solo era un trozo de coral pegado a una roca...";
+close;
+
+pespes3:
+	set @PuntosPesca,@PuntosPesca+2;
+	dispbottom "¡Consigues pescar una [Concha Marina]!";
+	dispbottom "¡Ganas 2 puntos de pesca! [Total: "+@PuntosPesca+" Puntos.]";
+	if (@PuntosPesca > $PSCALBRank){
+	set $PSCALBRank,@PuntosPesca;
+	set $PSCALBRankN0$,strcharinfo(0);
+	}
+	areamonster "alberta",212,31,227,27,"Concha Marina",1067,1;
+	mes "[^CC0000 " +strcharinfo(0) + " ^000000]";
+	mes "He conseguido sacar una concha marina, no parece comestible...";
+close;
+
+pespes4:
+	set @PuntosPesca,@PuntosPesca+1;
+	dispbottom "¡Consigues pescar un [Conch]!";
+	dispbottom "¡Ganas 1 punto de pesca! [Total: "+@PuntosPesca+" Puntos.]";
+	if (@PuntosPesca > $PSCALBRank){
+	set $PSCALBRank,@PuntosPesca;
+	set $PSCALBRankN0$,strcharinfo(0);
+	}
+	getitem 961,1;
+	mes "[^CC0000 " +strcharinfo(0) + " ^000000]";
+	mes "Solo era un trozo de concha pegado a una roca...";
+close;
+
+pespes5:
+	set @PuntosPesca,@PuntosPesca+3;
+	dispbottom "¡Consigues pescar un [Cangrejo]!";
+	dispbottom "¡Ganas 3 puntos de pesca! [Total: "+@PuntosPesca+" Puntos.]";
+	if (@PuntosPesca > $PSCALBRank){
+	set $PSCALBRank,@PuntosPesca;
+	set $PSCALBRankN0$,strcharinfo(0);
+	}
+	areamonster "alberta",212,31,227,27,"Cangrejo",1073,1;
+	mes "[^CC0000 " +strcharinfo(0) + " ^000000]";
+	mes "He conseguido sacar un cangrejo, tiene bastante mala pinta...";
+close;
+
+pespes6:	
+	set @PuntosPesca,@PuntosPesca+3;
+	dispbottom "¡Consigues pescar un [Caballito de Mar]!";
+	dispbottom "¡Ganas 3 puntos de pesca! [Total: "+@PuntosPesca+" Puntos.]";
+	if (@PuntosPesca > $PSCALBRank){
+	set $PSCALBRank,@PuntosPesca;
+	set $PSCALBRankN0$,strcharinfo(0);
+	}
+	areamonster "alberta",212,31,227,27,"Caballito de Mar",1045,1;
+	mes "[^CC0000 " +strcharinfo(0) + " ^000000]";
+	mes "He conseguido sacar un caballito de mar, esto no se lo come ni un Phreeoni...";
+close;
+
+pespes7:
+	set @PuntosPesca,@PuntosPesca+4;
+	dispbottom "¡Consigues pescar un [Calamar]!";
+	dispbottom "¡Ganas 4 puntos de pesca! [Total: "+@PuntosPesca+" Puntos.]";
+	if (@PuntosPesca > $PSCALBRank){
+	set $PSCALBRank,@PuntosPesca;
+	set $PSCALBRankN0$,strcharinfo(0);
+	}
+	areamonster "alberta",212,31,227,27,"Calamar",1144,1;
+	mes "[^CC0000 " +strcharinfo(0) + " ^000000]";
+	mes "He conseguido sacar un calamar, me lo comeria pero esta especie es venenosa...";
+close;
+
+pespes8:
+	set @PuntosPesca,@PuntosPesca+5;
+	dispbottom "¡Consigues pescar una [Sirena]!";
+	dispbottom "¡Ganas 5 puntos de pesca! [Total: "+@PuntosPesca+" Puntos.]";
+	if (@PuntosPesca > $PSCALBRank){
+	set $PSCALBRank,@PuntosPesca;
+	set $PSCALBRankN0$,strcharinfo(0);
+	}
+	areamonster "alberta",212,31,227,27,"Sirena",1044,1;
+	mes "[^CC0000 " +strcharinfo(0) + " ^000000]";
+	mes "He conseguido sacar una sirena, no pienso comermela...";
+close;
+
+pespes9:
+	set @PuntosPesca,@PuntosPesca+6;
+	dispbottom "¡Consigues pescar un [Phen]!";
+	dispbottom "¡Ganas 6 puntos de pesca! [Total: "+@PuntosPesca+" Puntos.]";
+	if (@PuntosPesca > $PSCALBRank){
+	set $PSCALBRank,@PuntosPesca;
+	set $PSCALBRankN0$,strcharinfo(0);
+	}
+	areamonster "alberta",212,31,227,27,"Phen",1158,1;
+	mes "[^CC0000 " +strcharinfo(0) + " ^000000]";
+	mes "He conseguido sacar un phen, parece delicioso...";
+next;
+	mes "[^CC0000 " +strcharinfo(0) + " ^000000]";
+	mes "¡Vaya!";
+	mes "¡Se me ha escapado de las manos!";
+close;
+
+pespes10:
+	set @PuntosPesca,@PuntosPesca+4;
+	dispbottom "¡Consigues pescar una [Piraña]!";
+	dispbottom "¡Ganas 4 puntos de pesca! [Total: "+@PuntosPesca+" Puntos.]";
+	if (@PuntosPesca > $PSCALBRank){
+	set $PSCALBRank,@PuntosPesca;
+	set $PSCALBRankN0$,strcharinfo(0);
+	}
+	areamonster "alberta",212,31,227,27,"Piraña",2070,1;
+	mes "[^CC0000 " +strcharinfo(0) + " ^000000]";
+	mes "¡¡Uaaah!! ¡Una piraña!";
+close;
+
+pespes11:
+	set @PuntosPesca,@PuntosPesca+2;
+	dispbottom "¡Consigues pescar una [Rana]!";
+	dispbottom "¡Ganas 2 puntos de pesca! [Total: "+@PuntosPesca+" Puntos.]";
+	if (@PuntosPesca > $PSCALBRank){
+	set $PSCALBRank,@PuntosPesca;
+	set $PSCALBRankN0$,strcharinfo(0);
+	}
+	areamonster "alberta",212,31,227,27,"Rana",1012,1;
+	mes "[^CC0000 " +strcharinfo(0) + " ^000000]";
+	mes "Una pequeña ranita, esto no me sirve...";
+close;
+
+pespes12:
+	set @PuntosPesca,@PuntosPesca+2;
+	dispbottom "¡Consigues pescar una [Almeja]!";
+	dispbottom "¡Ganas 2 puntos de pesca! [Total: "+@PuntosPesca+" Puntos.]";
+	if (@PuntosPesca > $PSCALBRank){
+	set $PSCALBRank,@PuntosPesca;
+	set $PSCALBRankN0$,strcharinfo(0);
+	}
+	areamonster "alberta",212,31,227,27,"Almeja",1012,1;
+	mes "[^CC0000 " +strcharinfo(0) + " ^000000]";
+	mes "Una almeja en mal estado, mejor la tiro...";
+close;
+
+pespes13:
+	set @PuntosPesca,@PuntosPesca+4;
+	dispbottom "¡Consigues pescar un [Swordfish]!";
+	dispbottom "¡Ganas 4 puntos de pesca! [Total: "+@PuntosPesca+" Puntos.]";
+	if (@PuntosPesca > $PSCALBRank){
+	set $PSCALBRank,@PuntosPesca;
+	set $PSCALBRankN0$,strcharinfo(0);
+	}
+	areamonster "alberta",212,31,227,27,"Swordfish",1069,1;
+	mes "[^CC0000 " +strcharinfo(0) + " ^000000]";
+	mes "Un swordfish, de los peores pescados que puedas probar...";
+close;
+
+pespes14:
+	set @PuntosPesca,@PuntosPesca+1;
+	dispbottom "¡Consigues pescar un [Rotten Fish]!";
+	dispbottom "¡Ganas 1 punto de pesca! [Total: "+@PuntosPesca+" Puntos.]";
+	if (@PuntosPesca > $PSCALBRank){
+	set $PSCALBRank,@PuntosPesca;
+	set $PSCALBRankN0$,strcharinfo(0);
+	}
+	getitem 624,1;
+	mes "[^CC0000 " +strcharinfo(0) + " ^000000]";
+	mes "Un pescado podrido...";
+close;
+
+pespes15:
+	set @PuntosPesca,@PuntosPesca+12;
+	dispbottom "¡Consigues pescar un [Pescado Fresco]!";
+	dispbottom "¡Ganas 12 punto de pesca! [Total: "+@PuntosPesca+" Puntos.]";
+	if (@PuntosPesca > $PSCALBRank){
+	set $PSCALBRank,@PuntosPesca;
+	set $PSCALBRankN0$,strcharinfo(0);
+	}
+	getitem 579,1;
+	mes "[^CC0000 " +strcharinfo(0) + " ^000000]";
+	mes "Un buen pescado fresco, esto me servirá.";
+close;
+
+pespes16:
+	set @PuntosPesca,@PuntosPesca+15;
+	dispbottom "¡Consigues pescar un [Gran Pescado Azul]!";
+	dispbottom "¡Ganas 15 punto de pesca! [Total: "+@PuntosPesca+" Puntos.]";
+	if (@PuntosPesca > $PSCALBRank){
+	set $PSCALBRank,@PuntosPesca;
+	set $PSCALBRankN0$,strcharinfo(0);
+	}
+	getitem 6096,1;
+	mes "[^CC0000 " +strcharinfo(0) + " ^000000]";
+	mes "Un gran pescado azul ¡Perfecto!";
+close;
+
+pespes17:
+	set @PuntosPesca,@PuntosPesca+20;
+	dispbottom "¡Consigues pescar un [¿Gorro?]!";
+	dispbottom "¡Ganas 20 punto de pesca! [Total: "+@PuntosPesca+" Puntos.]";
+	if (@PuntosPesca > $PSCALBRank){
+	set $PSCALBRank,@PuntosPesca;
+	set $PSCALBRankN0$,strcharinfo(0);
+	}
+	getitem 5380,1;
+	mes "[^CC0000 " +strcharinfo(0) + " ^000000]";
+	mes "¿Que es esto..? Da igual, lo guardaré.";
+close;
+
+pespes18:
+	set @PuntosPesca,@PuntosPesca+9;
+	dispbottom "¡Consigues pescar una [Gamba]!";
+	dispbottom "¡Ganas 9 punto de pesca! [Total: "+@PuntosPesca+" Puntos.]";
+	if (@PuntosPesca > $PSCALBRank){
+	set $PSCALBRank,@PuntosPesca;
+	set $PSCALBRankN0$,strcharinfo(0);
+	}
+	getitem 567,1;
+	mes "[^CC0000 " +strcharinfo(0) + " ^000000]";
+	mes "Estas gambas són muy raras en este lugar del mundo, la guardaré.";
+close;
+
+pespes19:
+	set @PuntosPesca,@PuntosPesca+18;
+	dispbottom "¡Consigues pescar una [Calamarcin]!";
+	dispbottom "¡Ganas 18 punto de pesca! [Total: "+@PuntosPesca+" Puntos.]";
+	if (@PuntosPesca > $PSCALBRank){
+	set $PSCALBRank,@PuntosPesca;
+	set $PSCALBRankN0$,strcharinfo(0);
+	}
+	getitem 7768,1;
+	mes "[^CC0000 " +strcharinfo(0) + " ^000000]";
+	mes "¡Guau! Un calamarcin, esto me dará algunos puntos.";
+close;
+
+// --------------- Estiramiento  ---------------
+// =========================================================
+
+estiramiento:	
+	mes "[^CC0000 " +strcharinfo(0) + " ^000000]";
+	mes "El pez se resiste y intenta escapar!";
+	next;
+	mes "[^CC0000 " +strcharinfo(0) + " ^000000]";
+	mes "¿Que deberia hacer?";
+	next;
+menu "Estirar la caña",estirar,"Dejarlo marchar",dejarlo;
+close;
+
+
+// --------------- Rotura  ---------------
+// =========================================================
+
+rotura:
+	specialeffect2 611;
+	delitem 2775,1;
+	dispbottom "Has perdido tu cebo, deberás comprar otro.";
+	mes "[^CC0000 " +strcharinfo(0) + " ^000000]";
+	mes "Oh,no!";
+	mes "He estirado demasiado fuerte y he roto el hilo!";
+close;
+
+
+dejarlo:	
+	mes "[^CC0000 " +strcharinfo(0) + " ^000000]";
+	mes "Mejor lo dejo, nunca se sabe lo que podria llegar a pescar en estas aguas...";
+	close;
+
+fallo:
+	sleep2 4000;
+	mes "[^CC0000 " +strcharinfo(0) + " ^000000]";
+	mes "Parece que no pican...";
+	next;
+menu "Seguir pescando",seguir,"Olvidalo",cancelar;
+
+
+
+seguir:
+	set @cebo, rand(1,10);
+	if (@cebo == 1) goto pesca;
+	if (@cebo == 2) goto pesca;
+	if (@cebo >= 2) goto fallo;
+close;
+
+cancelar:
+	mes "[^CC0000 " +strcharinfo(0) + " ^000000]";
+	mes "Mejor sigo mi camino.";
+close;
+
+nocebo:
+	mes "[^CC0000 " +strcharinfo(0) + " ^000000]";
+	mes "Necesito un cebo para pescar aquí.";
+close;
+}
+
+alberta,220,27,4	duplicate(Zona de Pesca)	Zona de Pesca#02	111
+alberta,216,27,4	duplicate(Zona de Pesca)	Zona de Pesca#03	111
+alberta,212,27,4	duplicate(Zona de Pesca)	Zona de Pesca#04	111

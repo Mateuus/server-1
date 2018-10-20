@@ -1,0 +1,28 @@
+//=====invasion=======
+-	script	towninvasion2	-1,{
+OnClock0600:
+OnClock1200:
+OnClock1800:
+OnClock0000:
+set .town,rand(2);
+setarray  $@mapinvasion$[0],"izlude","izlude";
+
+announce "Un Boss está destruyendo nuestra ciudad principal! ¡Por favor ayudenos!",bc_all,0x00FFFF;
+sleep2 2000;
+announce "Por favor ayúdenos antes de que destruya toda la ciudad principal de Izlude!",bc_all,0x00FFFF;
+sleep2 5000;
+announce "Este monstruo es bastante difícil de alcanzar! Así que por favor ganarle.!",bc_all,0x00FFFF;
+monster $@mapinvasion$[.town],77,258,"Satan Morroc",1916,1,"towninvasion2::OnInvadeKill2";
+end;
+
+OnInvadeKill2:
+announce "Buen trabajo, para mantener nuestra Ciudad Principal segura!",bc_all,0x00FFFF;
+getitem 7539,150;
+end;
+
+OnInit:
+setarray  $@mapinvasion$[0],"izlude","izlude";
+end;
+
+}
+

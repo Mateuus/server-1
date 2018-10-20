@@ -1,0 +1,68 @@
+Header:
+  Type: ATTENDANCE_CONF
+  Version: 1
+
+Attendance:
+  - Start: 20180925
+    End: 20191025
+    Rewards:
+      - Day: 1
+        ItemId: 14174
+        Amount: 2
+      - Day: 2
+        ItemId: 7228
+        Amount: 1
+      - Day: 3
+        ItemId: 14521
+        Amount: 10
+      - Day: 4
+        ItemId: 12210
+        Amount: 1
+      - Day: 5
+        ItemId: 7621
+        Amount: 2
+      - Day: 6
+        ItemId: 14533
+        Amount: 1
+      - Day: 7
+        ItemId: 12523
+        Amount: 10
+      - Day: 8
+        ItemId: 12214
+        Amount: 2
+      - Day: 9
+        ItemId: 14545
+        Amount: 1
+      - Day: 10
+        ItemId: 12522
+        Amount: 5
+      - Day: 11
+        ItemId: 14545
+        Amount: 1
+      - Day: 12
+        ItemId: 12161
+        Amount: 2
+      - Day: 13
+        ItemId: 12211
+        Amount: 5
+      - Day: 14
+        ItemId: 12264
+        Amount: 5
+      - Day: 15
+        ItemId: 12210
+        Amount: 5
+      - Day: 16
+        ItemId: 12515
+        Amount: 5
+      - Day: 17
+        ItemId: 12522
+        Amount: 5
+      - Day: 18
+        ItemId: 12523
+        Amount: 5
+      - Day: 19
+        ItemId: 12246
+        Amount: 3
+      - Day: 20
+        ItemId: 7829
+        Amount: 300

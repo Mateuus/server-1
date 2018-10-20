@@ -1,0 +1,74 @@
+//===== rAthena Script ======================================= 
+//= Instance related commands compatibility layer.
+//===== By: ================================================== 
+//= Secret
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Changelog: =========================================== 
+//= 1.0 First version [Secret]
+//============================================================ 
+
+// Relays has_instance calls to instance_mapname command
+function	script	has_instance	{
+	return instance_mapname(getarg(0,""), (getargcount() < 2 ? instance_id() : getarg(1, 0)));
+}
+
+// Since rAthena automatically attaches all maps in the database,
+// there is no need for instance_attachmap anymore.
+// We will just relay this to instance_mapname call.
+function	script	instance_attachmap	{
+	return instance_mapname(getarg(0,""), (getargcount() < 2 ? instance_id() : getarg(1, 0)));
+}
+
+// rAthena does this on instance_create call.
+function	script	instance_set_timeout	{
+	return;
+}
+
+// rAthena does this on instance_create call.
+function	script	instance_init	{
+	return;
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+//
+// Another variant of `checkquest` script command for compatibility with
+// scripts from other emulators that use `questprogress`.
+// (This does not ensure 100% compatibility due to different architecture?. /s)
+//
+// *questprogress(<ID>{,PLAYTIME|HUNTING})
+//
+// If no additional argument supplied, return the state of the quest:
+//	0 = Quest not started (not in quest log)
+//	1 = Quest has been given
+//	2 = Quest completed
+//
+// If parameter 'PLAYTIME' is supplied:
+//	0 = Quest not started (not in quest log)
+//	1 = The time limit has not yet been reached
+//	2 = The time limit has been reached
+//
+// If parameter 'HUNTING' is supplied:
+//	0 = Quest not started (not in quest log)
+//	1 = Player hasn't killed all of the target monsters
+//	2 = Player has killed all of the target monsters
+//
+//////////////////////////////////////////////////////////////////////////////////
+function	script	questprogress	{
+	.@id = getarg(0);
+	.@type = getarg(1, HAVEQUEST);
+	.@val = checkquest(.@id, .@type);
+	if(.@val == -1){
+		return 0;
+	}else if(.@val == 0 || .@val == 1){
+		return 1;
+	}else if(.@val == 2){
+		return 2;
+	}else{ // Unknown state
+		return 0;
+	}
+}
+
+function	script	mobremove	{
+	return unitkill(getarg(0));
+}

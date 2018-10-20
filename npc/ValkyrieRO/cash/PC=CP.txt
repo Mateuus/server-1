@@ -1,0 +1,92 @@
+//===== Global Chile ======
+//=== https://www.facebook.com/IntegralesGlobal ===
+npc_in,27,30,4	script	Harold	872,{
+
+	set @npcname$,"[^8000FFHarold^000000]";
+	set @cantidad,0;
+
+	cutin "lhz_karl",2;
+	mes @npcname$;
+	mes (Sex?"Bienvenido":"Bienvenida")+" a las oficinas de AresRO "+(Sex?"chico":"chica")+",";
+	next;
+	mes "Soy ^8000FFHarold^000000 y soy el encargado oficial de las divisas.";
+	mes "Puedo cambiar tus ^F79F81Gold Coin^000000 (^F79F81GC^000000) por ^04B404Cash Points^000000 (^04B404CP^000000) y viceversa!";
+	mes "Y ademas puedo decirte cuantos ^04B404Cash^000000 te quedan en tu cuenta!";
+	next;
+	switch(select("Informacion:^F79F81Gold Coin^000000 por ^04B404Cash Point^000000:^04B404Cash Point^000000 por ^F79F81Cold Point^000000")) {
+		case 1:
+			switch(select("Ver mis ^04B404Cash Points^000000:Intercambio de divisas")) {
+				case 1:
+					mes @npcname$;
+					mes "Actualmente tienes [^04B404"+#CASHPOINTS+"^000000] ^04B404CP^000000.";
+					close2;
+					cutin "",255;
+					end;
+				case 2:
+					mes @npcname$;
+					mes "Actualmente, el precio de mercado de ^F79F81Gold Coin^000000 y ^04B404Cash Point^000000 es el mismo, por ejemplo podria hacer que [^F79F8120^000000] ^F79F81PC^000000 pasen a ser [^04B40420^000000] ^04B404CP^000000!";
+					close2;
+					cutin "",255;
+					end;
+			}
+			
+		case 2:
+			mes @npcname$;
+			mes "Que cantidad de ^F79F81Gold Coin^000000 deseas pasar a ^04B404Cash Point^000000?";
+			next;
+			input @cantidad;
+			mes @npcname$;
+			mes "Estas "+(Sex?"seguro":"segura")+" de querer cambiar el total de [^F79F81"+@cantidad+"^000000] ^F79F81Gold Coin^000000?";
+			next;
+			menu "Si",-,"No",L_Cancel;
+			if ( countitem(671) < @cantidad) goto L_NoPC;
+			delitem 671,@cantidad;
+			set #CASHPOINTS, #CASHPOINTS + @cantidad;
+specialeffect2 10;
+			mes @npcname$;
+			mes "Tus [^F79F81"+@cantidad+"^F79F81] ^F79F81PC^000000 ahora son [^04B404"+@cantidad+"^000000] ^04B404Cash Point^000000!";
+			close2;
+			cutin "",255;
+			end;
+			
+		case 3:
+			mes @npcname$;
+			mes "Que cantidad de ^04B404Cash Point^000000 deseas pasar a ^F79F81Gold Coin^000000?";
+			next;
+			input @cantidad;
+			mes @npcname$;
+			mes "Estas "+(Sex?"seguro":"segura")+" de querer cambiar el total de [^04B404"+@cantidad+"^000000] ^04B404Cash Point^000000?";
+			next;
+			menu "Si",-,"No",L_Cancel;
+			if ( #CASHPOINTS < @cantidad) goto L_NoCP;
+			set #CASHPOINTS, #CASHPOINTS - @cantidad;
+			getitem 671,@cantidad;
+specialeffect2 10;
+			mes @npcname$;
+			mes "Tus [^04B404"+@cantidad+"^000000] ^04B404Cash Point^000000 ahora son [^F79F81"+@cantidad+"^000000] ^F79F81Gold Coin^000000!";
+			close2;
+			cutin "",255;
+			end;
+	}
+
+L_NoPC:
+	mes @npcname$;
+	mes "Lo siento ^0080FF"+strcharinfo(0)+"^000000, pero te faltan ^F79F81Gold Coins^000000 para realizar la transaccion.";
+	close2;
+	cutin "",255;
+	end;
+	
+L_NoCP:
+	mes @npcname$;
+	mes "Lo siento ^0080FF"+strcharinfo(0)+"^000000, pero te faltan ^04B404Cash Points^000000 para realizar la transaccion.";
+	close2;
+	cutin "",255;
+	end;
+	
+L_Cancel:
+	mes @npcname$;
+	mes "Como usted desee, que pase un buen dia!";
+	close2;
+	cutin "",255;
+	end;
+}

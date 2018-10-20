@@ -1,0 +1,182 @@
+pvp_valk,93,104,5	script	Quest Wing Master	611,{
+	if (Valkyquest < 1) {
+	set @npcname$,"^0000FF[^000000^FF0000Quest Wing Master^000000^0000FF]^000000";
+	mes @npcname$;
+	mes "Hola! ^5555FF" + strcharinfo(0) + "^000000!";
+	//mes "Mi Nombre es ^5555FF" + @npcname$ + "^000000!";
+	mes "Vengo de Valhalla para ayudarle.";
+	mes "Puedo transmutar para usted muchos de las alas Valhallen,";
+	mes "aunque requieren muchos elementos raros de hacer.";
+	next;
+
+	mes @n$;
+	mes "¿Que Custom item te gustaria Crear?,";
+	switch(select("Dark Angel.:Anchangel Wings.:Gargoyle Wings.:No thanks.")){
+		
+		case 1://Ala de Fuerza
+			next;
+			mes @n$;
+			mes "[^0065DFDark Angel^000000]";
+			mes "STR + 10, VIT + 10.";
+			if(qest19200 < 1){
+			mes "¿Te gustaria hacer la Quest?";
+			if(select("Si, Claro:No, Gracias")==2)close;
+			setquest 19200;
+			set qest19200,2;
+			mes "Necesitas traerme los siguientes items...";
+			next;
+			mes @n$;
+			mes "~1x Evil Wing";
+			mes "~200x Burning Hair";
+			mes "~200x Burning Heart";
+			mes "~300x Brigan";
+			}
+			next;
+			mes @n$;
+			mes "Ya tienes todos los items?";
+			if(select("Si los tengo:No ire a buscarlos")==2)close;
+			next;
+			mes @n$;
+			mes "Ok,Dejame revisar tu Inventario";
+			next;
+			if(countitem(2255) >= 1 && countitem(7122) >= 200 && countitem(7097) >= 200 && countitem(7054) >= 300 ){
+			mes @n$;
+			mes "Bien, si tienes todo lo necesario...";
+			next;
+			mes @n$;
+			mes "Procedere a crear tu item";
+			delitem 2255,1;
+			delitem 7122,200;
+			delitem 7097,200;
+			delitem 7054,300;
+			getitem 30151,1;
+			erasequest 19200;
+			set qest19200,0;
+			mes "Muy bien!! Ahi tienes tus Nuevas Alas.";
+			announce ""+strcharinfo(0)+" ah terminado la quest de Wing Master y obtuvo una Dark Angel",bc_all,0xFF0000; 
+			close;
+			
+				}//Fin if countitem
+				else{
+				mes @n$;
+				mes "Te faltan conseguir items...";
+				mes "Dedicate a conseguirlos y lo haras rapido";
+				close;
+			}//fin else
+			
+			
+		case 2://Anchangel Wings
+			next;
+			mes @n$;
+			mes "[^0065DFAnchangel Wings^000000]";
+			mes "INT + 10, DEX + 10.";
+			if(qest19201 < 1){
+			mes "¿Te gustaria hacer la Quest?";
+			if(select("Si, Claro:No, Gracias")==2)close;
+			setquest 19201;
+			set qest19201,2;
+			mes "Necesitas traerme los siguientes items...";
+			next;
+			mes @n$;
+			mes "~1x Angel Wing";
+			mes "~200x Feather of Birds";
+			mes "~200x Fluff";
+			mes "~300x Feather";
+			}
+			next;
+			mes @n$;
+			mes "Ya tienes todos los items?";
+			if(select("Si los tengo:No ire a buscarlos")==2)close;
+			next;
+			mes @n$;
+			mes "Ok,Dejame revisar tu Inventario";
+			next;
+			if(countitem(2254) >= 1 && countitem(916) >= 200 && countitem(914) >= 200 && countitem(949) >= 300 ){
+			mes @n$;
+			mes "Bien, si tienes todo lo necesario...";
+			next;
+			mes @n$;
+			mes "Procedere a crear tu item";
+			delitem 2254,1;
+			delitem 916,200;
+			delitem 914,200;
+			delitem 949,300;
+			getitem 30149,1;
+			erasequest 19201;
+			set qest19201,0;
+			mes "Muy bien!! Ahi tienes tus Nuevas Alas.";
+			announce ""+strcharinfo(0)+" ah terminado una quest de Wing Master y obtuvo una Anchangel Wings",bc_all,0xFF0000; 
+			close;			
+				}//Fin if countitem
+				else{
+				mes @n$;
+				mes "Te faltan conseguir items...";
+				mes "Dedicate a conseguirlos y lo haras rapido";
+				close;
+			}//fin else
+			
+			
+			
+		case 3://Gargoyle Wings
+			next;
+			mes @n$;
+			mes "[^0065DFGargoyle Wings^000000]";
+			mes "Agi + 10, DEX +10";
+			if(qest19202 < 1){
+			mes "¿Te gustaria hacer la Quest?";
+			if(select("Si, Claro:No, Gracias")==2)close;
+			setquest 19202;
+			set qest19202,2;
+			mes "Necesitas traerme los siguientes items...";
+			next;
+			mes @n$;
+			mes "~1x Ghost Bandana";
+			mes "~200x Talon";
+			mes "~200x Garlet";
+			mes "~300x Wing of Red Bat";
+			}
+			next;
+			mes @n$;
+			mes "Ya tienes todos los items?";
+			if(select("Si los tengo:No ire a buscarlos")==2)close;
+			next;
+			mes @n$;
+			mes "Ok,Dejame revisar tu Inventario";
+			next;
+			if(countitem(2274) >= 1 && countitem(910) >= 200 && countitem(910) >= 200 && countitem(7006) >= 300 ){
+			mes @n$;
+			mes "Bien, si tienes todo lo necesario...";
+			next;
+			mes @n$;
+			mes "Procedere a crear tu item";
+			delitem 2274,1;
+			delitem 917,200;
+			delitem 910,200;
+			delitem 7006,300;
+			getitem 30150,1;
+			erasequest 19202;
+			set qest19202,0;
+			mes "Muy bien!! Ahi tienes tus Nuevas Alas.";
+			announce ""+strcharinfo(0)+" ah terminado una quest de Wing Master y obtuvo una Gargoyle Wings",bc_all,0xFF0000; 
+			close;			
+				}//Fin if countitem
+				else{
+				mes @n$;
+				mes "Te faltan conseguir items...";
+				mes "Dedicate a conseguirlos y lo haras rapido";
+				close;
+			}//fin else
+			
+			
+	case 4:
+			next;
+			mes @n$;
+			mes "[Quest Wing Master]";
+			mes "Muy bien. Vuelve inmediatamente si buscas mis servicios.";
+			close;
+			}//fin else		
+		
+	
+	}//Fin Switch primer menu
+}//Fin Script
+

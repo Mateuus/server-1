@@ -1,0 +1,306 @@
+///////////////Mini MVP Spawner//////////////
+/////////////////////////////////////////////
+//////////////Written + Scripted/////////////
+/////////////////////////////////////////////
+////////////////Location + Zeny//////////////
+/////////////May be changed as fit///////////
+/////////////////////////////////////////////
+//////////////////////By/////////////////////
+/////////////////Filipino Rice///////////////
+/////////////////////////////////////////////
+guild_vs1.gat,46,57,5	script	Mini MVP Master	790,{
+mes "I'm the Mini MVP Master and I summon Mini MVP's for those worthy enough to fight them.";
+mes "If you believe you are worthy enough..We'll see about that!";
+next;
+mes "Pick a Mini MVP Monster to spawn!";
+mes "^FF0000Note: Mini MVP monsters can vary in price depending on the monster.^000000";
+menu "Abysmal Knight",abysmal,"Alice",alice,"Angeling",angel,"Arc Angeling",aangel,"Bloody Knight",bknight,"Chepet",chepet,"Chimera",chimera,"Clock Tower Manager",ctm,"Dark Illusion",dill,"Deviace",deviace,"Deviling",devil,"Dragon Fly",dfly,"Eclipse",eclipse,"Executioner",execu,"Ghostring",ghostr,"Goblin Leader",glead,"Gryphon",gryphon,"Harpy",harpy,"Kobold Leader",kleader,"Mastering",masteri,"Maya Purple",mayap,"Mobster",mobster,"Mutant Dragonoid",mdragonoid,"Mysteltainn",myste,"Tirfing",tirfing,"Panzer Goblin",pgoblin,"Strouf",strouf,"Toad",toad,"Ungoliant",ungoliant,"Vagabond Wolf",vwolf,"Vocal",vocal,"Zealotus",zealotus;
+
+abysmal:
+mes "Would you like to summon Abysmal Knight?";
+mes "It costs 5 million zeny to summon”;
+if( select("Yes","No") == 2 ) { mes "Goodbye"; close; }
+if( Zeny<5000000 ) { mes "You do not have sufficient funds!"; close;}
+set Zeny,Zeny-5000000;
+monster "guild_vs1",50,50,"Abysmal Knight",1219,1;
+close;
+
+alice:
+mes "Would you like to summon Alice?";
+mes "It costs 1 million zeny to summon”;
+if( select("Yes","No") == 2 ) { mes "Goodbye"; close; }
+if( Zeny<1000000 ) { mes "You do not have sufficient funds!"; close;}
+set Zeny,Zeny-1000000;
+monster "guild_vs1",50,50,"Alice",1275,1;
+close;
+
+angel:
+mes "Would you like to summon Angeling?";
+mes "It costs 5 million zeny to summon”;
+if( select("Yes","No") == 2 ) { mes "Goodbye"; close; }
+if( Zeny<5000000 ) { mes "You do not have sufficient funds!"; close;}
+set Zeny,Zeny-5000000;
+monster "guild_vs1",50,50,"Angeling",1096,1;
+close;
+
+aangel:
+mes "Would you like to summon Arc Angeling?";
+mes "It costs 5 million zeny to summon”;
+if( select("Yes","No") == 2 ) { mes "Goodbye"; close; }
+if( Zeny<5000000 ) { mes "You do not have sufficient funds!"; close;}
+set Zeny,Zeny-5000000;
+monster "guild_vs1",50,50,"Arc Angeling",1388,1;
+close;
+
+bknight:
+mes "Would you like to summon Bloody Knight?";
+mes "It costs 2 million zeny to summon”;
+if( select("Yes","No") == 2 ) { mes "Goodbye"; close; }
+if( Zeny<2000000 ) { mes "You do not have sufficient funds!"; close;}
+set Zeny,Zeny-2000000;
+monster "guild_vs1",50,50,"Bloody Knight",1268,1;
+close;
+
+chepet:
+mes "Would you like to summon Chepet?";
+mes "It costs 1 million zeny to summon”;
+if( select("Yes","No") == 2 ) { mes "Goodbye"; close; }
+if( Zeny<1000000 ) { mes "You do not have sufficient funds!"; close;}
+set Zeny,Zeny-1000000;
+monster "guild_vs1",50,50,"Chepet",1250,1;
+close;
+
+chimera:
+mes "Would you like to summon Chimera?";
+mes "It costs 1 million zeny to summon”;
+if( select("Yes","No") == 2 ) { mes "Goodbye"; close; }
+if( Zeny<1000000 ) { mes "You do not have sufficient funds!"; close;}
+set Zeny,Zeny-1000000;
+monster "guild_vs1",50,50,"Chimera",1283,1;
+close;
+
+ctm:
+mes "Would you like to summon Clock Tower Manager?";
+mes "It costs 1 million zeny to summon”;
+if( select("Yes","No") == 2 ) { mes "Goodbye"; close; }
+if( Zeny<1000000 ) { mes "You do not have sufficient funds!"; close;}
+set Zeny,Zeny-1000000;
+monster "guild_vs1",50,50,"Clock Tower Manager",1270,1;
+close;
+
+dill:
+mes "Would you like to summon Dark Illusion?";
+mes "It costs 5 million zeny to summon”;
+if( select("Yes","No") == 2 ) { mes "Goodbye"; close; }
+if( Zeny<5000000 ) { mes "You do not have sufficient funds!"; close;}
+set Zeny,Zeny-5000000;
+monster "guild_vs1",50,50,"Dark Illusion",1302,1;
+close;
+
+deviace:
+mes "Would you like to summon Deviace?";
+mes "It costs 2 million zeny to summon”;
+if( select("Yes","No") == 2 ) { mes "Goodbye"; close; }
+if( Zeny<2000000 ) { mes "You do not have sufficient funds!"; close;}
+set Zeny,Zeny-2000000;
+monster "guild_vs1",50,50,"Deviace",1108,1;
+close;
+
+devil:
+mes "Would you like to summon Deviling?";
+mes "It costs 5 million zeny to summon”;
+if( select("Yes","No") == 2 ) { mes "Goodbye"; close; }
+if( Zeny<5000000 ) { mes "You do not have sufficient funds!"; close;}
+set Zeny,Zeny-5000000;
+monster "guild_vs1",50,50,"Deviling",1582,1;
+close;
+
+dfly:
+mes "Would you like to summon Dragon Fly?";
+mes "It costs 1 million zeny to summon”;
+if( select("Yes","No") == 2 ) { mes "Goodbye"; close; }
+if( Zeny<1000000 ) { mes "You do not have sufficient funds!"; close;}
+set Zeny,Zeny-1000000;
+monster "guild_vs1",50,50,"Dragon Fly",1091,1;
+close;
+
+eclipse:
+mes "Would you like to summon Eclipse?";
+mes "It costs 1 million zeny to summon”;
+if( select("Yes","No") == 2 ) { mes "Goodbye"; close; }
+if( Zeny<1000000 ) { mes "You do not have sufficient funds!"; close;}
+set Zeny,Zeny-1000000;
+monster "guild_vs1",50,50,"Eclipse",1093,1;
+close;
+
+execu:
+mes "Would you like to summon Executioner?";
+mes "It costs 2 million zeny to summon”;
+if( select("Yes","No") == 2 ) { mes "Goodbye"; close; }
+if( Zeny<2000000 ) { mes "You do not have sufficient funds!"; close;}
+set Zeny,Zeny-2000000;
+monster "guild_vs1",50,50,"Executioner",1205,1;
+close;
+
+ghostr:
+mes "Would you like to summon Ghostring?";
+mes "It costs 5 million zeny to summon”;
+if( select("Yes","No") == 2 ) { mes "Goodbye"; close; }
+if( Zeny<5000000 ) { mes "You do not have sufficient funds!"; close;}
+set Zeny,Zeny-5000000;
+monster "guild_vs1",50,50,"Ghostring",1120,1;
+close;
+
+glead:
+mes "Would you like to summon Goblin Leader?";
+mes "It costs 2 million zeny to summon”;
+if( select("Yes","No") == 2 ) { mes "Goodbye"; close; }
+if( Zeny<2000000 ) { mes "You do not have sufficient funds!"; close;}
+set Zeny,Zeny-2000000;
+monster "guild_vs1",50,50,"Goblin Leader",1299,1;
+close;
+
+gryphon:
+mes "Would you like to summon Gryphon?";
+mes "It costs 2 million zeny to summon”;
+if( select("Yes","No") == 2 ) { mes "Goodbye"; close; }
+if( Zeny<2000000 ) { mes "You do not have sufficient funds!"; close;}
+set Zeny,Zeny-2000000;
+monster "guild_vs1",50,50,"Gryphon",1259,1;
+close;
+
+harpy:
+mes "Would you like to summon Harpy?";
+mes "It costs 2 million zeny to summon”;
+if( select("Yes","No") == 2 ) { mes "Goodbye"; close; }
+if( Zeny<2000000 ) { mes "You do not have sufficient funds!"; close;}
+set Zeny,Zeny-2000000;
+monster "guild_vs1",50,50,"Harpy",1376,1;
+close;
+
+kleader:
+mes "Would you like to summon Kobold Leader?";
+mes "It costs 2 million zeny to summon”;
+if( select("Yes","No") == 2 ) { mes "Goodbye"; close; }
+if( Zeny<2000000 ) { mes "You do not have sufficient funds!"; close;}
+set Zeny,Zeny-2000000;
+monster "guild_vs1",50,50,"Kobold Leader",1296,1;
+close;
+
+masteri:
+mes "Would you like to summon Mastering?";
+mes "It costs 1 million zeny to summon”;
+if( select("Yes","No") == 2 ) { mes "Goodbye"; close; }
+if( Zeny<1000000 ) { mes "You do not have sufficient funds!"; close;}
+set Zeny,Zeny-1000000;
+monster "guild_vs1",50,50,"Mastering",1090,1;
+close;
+
+mayap:
+mes "Would you like to summon Maya Purple?";
+mes "It costs 10 million zeny to summon”;
+if( select("Yes","No") == 2 ) { mes "Goodbye"; close; }
+if( Zeny<10000000 ) { mes "You do not have sufficient funds!"; close;}
+set Zeny,Zeny-10000000;
+monster "guild_vs1",50,50,"Maya Purple",1289,1;
+close;
+
+mobster:
+mes "Would you like to summon Mobster?";
+mes "It costs 2 million zeny to summon”;
+if( select("Yes","No") == 2 ) { mes "Goodbye"; close; }
+if( Zeny<2000000 ) { mes "You do not have sufficient funds!"; close;}
+set Zeny,Zeny-2000000;
+monster "guild_vs1",50,50,"Mobster",1313,1;
+close;
+
+mdragonoid:
+mes "Would you like to summon Mutant Dragonoid?";
+mes "It costs 5 million zeny to summon”;
+if( select("Yes","No") == 2 ) { mes "Goodbye"; close; }
+if( Zeny<5000000 ) { mes "You do not have sufficient funds!"; close;}
+set Zeny,Zeny-5000000;
+monster "guild_vs1",50,50,"Mutant Dragonoid",1262,1;
+close;
+
+myste:
+mes "Would you like to summon Mysteltainn?";
+mes "It costs 5 million zeny to summon”;
+if( select("Yes","No") == 2 ) { mes "Goodbye"; close; }
+if( Zeny<5000000 ) { mes "You do not have sufficient funds!"; close;}
+set Zeny,Zeny-5000000;
+monster "guild_vs1",50,50,"Mysteltainn",1203,1;
+close;
+
+tirfing:
+mes "Would you like to summon Tirfing?";
+mes "It costs 5 million zeny to summon”;
+if( select("Yes","No") == 2 ) { mes "Goodbye"; close; }
+if( Zeny<5000000 ) { mes "You do not have sufficient funds!"; close;}
+set Zeny,Zeny-5000000;
+monster "guild_vs1",50,50,"Tirfing",1203,1;
+close;
+
+pgoblin:
+mes "Would you like to summon Panzer Goblin?";
+mes "It costs 2 million zeny to summon”;
+if( select("Yes","No") == 2 ) { mes "Goodbye"; close; }
+if( Zeny<2000000 ) { mes "You do not have sufficient funds!"; close;}
+set Zeny,Zeny-2000000;
+monster "guild_vs1",50,50,"Panzer Goblin",1308,1;
+close;
+
+strouf:
+mes "Would you like to summon Strouf?";
+mes "It costs 1 million zeny to summon”;
+if( select("Yes","No") == 2 ) { mes "Goodbye"; close; }
+if( Zeny<1000000 ) { mes "You do not have sufficient funds!"; close;}
+set Zeny,Zeny-1000000;
+monster "guild_vs1",50,50,"Strouf",1065,1;
+close;
+
+toad:
+mes "Would you like to summon Toad?";
+mes "It costs 1 million zeny to summon”;
+if( select("Yes","No") == 2 ) { mes "Goodbye"; close; }
+if( Zeny<1000000 ) { mes "You do not have sufficient funds!"; close;}
+set Zeny,Zeny-1000000;
+monster "guild_vs1",50,50,"Toad",1089,1;
+close;
+
+ungoliant:
+mes "Would you like to summon Ungoliant?";
+mes "It costs 1 million zeny to summon”;
+if( select("Yes","No") == 2 ) { mes "Goodbye"; close; }
+if( Zeny<1000000 ) { mes "You do not have sufficient funds!"; close;}
+set Zeny,Zeny-1000000;
+monster "guild_vs1",50,50,"Ungoliant",1618,1;
+close;
+
+vwolf:
+mes "Would you like to summon Vagabond Wolf?";
+mes "It costs 1 million zeny to summon”;
+if( select("Yes","No") == 2 ) { mes "Goodbye"; close; }
+if( Zeny<1000000 ) { mes "You do not have sufficient funds!"; close;}
+set Zeny,Zeny-1000000;
+monster "guild_vs1",50,50,"Vagabond Wolf",1092,1;
+close;
+
+vocal:
+mes "Would you like to summon Vocal?";
+mes "It costs 1 million zeny to summon”;
+if( select("Yes","No") == 2 ) { mes "Goodbye"; close; }
+if( Zeny<1000000 ) { mes "You do not have sufficient funds!"; close;}
+set Zeny,Zeny-1000000;
+monster "guild_vs1",50,50,"Vocal",1088,1;
+close;
+
+zealotus:
+mes "Would you like to summon Zealotus?";
+mes "It costs 5 million zeny to summon”;
+if( select("Yes","No") == 2 ) { mes "Goodbye"; close; }
+if( Zeny<5000000 ) { mes "You do not have sufficient funds!"; close;}
+set Zeny,Zeny-5000000;
+monster "guild_vs1",50,50,"Zealotus",1200,1;
+close;
+}

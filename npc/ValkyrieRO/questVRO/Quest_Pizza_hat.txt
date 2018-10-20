@@ -1,0 +1,104 @@
+
+
+izlude,97,169,3	script	Pizzero	829,{
+
+	if (QueMont == 1) goto avances;
+	if (QueMont == 2) goto fin;
+	if(Sex == 1){
+	mes "[^CC0000Pizzero^000000]";
+	mes "¡Bienvenido aventurero!";
+	mes "¿Estás interesado en conseguir una Pizzas Hat?";
+	next;
+	goto cont01;}
+else
+	mes "[^CC0000Pizzero^000000]";
+	mes "¡Bienvenida aventurera!";
+	mes "¿Estás interesada en conseguir una Piazza Hat?";
+next;
+
+cont01:
+
+menu "Quiero una Pizza",montque,"No me interesa",nointeresa;
+
+montque:
+		mes "[^CC0000Pizzero^000000]";
+		mes "¡Interesante!";
+		mes "A diferencia de los demás no te pediré que me regales nada por la pizza pero a cambio quiero que me demuestres que eres un gran aventurero.";
+		next;
+		menu "¿Como lo demuestro?",inique,"No me interesa",nointeresa;
+close;
+		cutin "",255;
+		inique:
+		mes "[^CC0000Pizzero^000000]";
+		mes "Si quieres una pizza tendrás que conseguir los ingredientes:";
+		mes "- Bacillus x20";
+		mes "- Rotten Meat x15";
+		mes "- Meat x25";
+		mes "- 10.000 Zeny";
+		next;
+		mes "[^CC0000Pizzero^000000]";
+		mes "Estos ingredientes tan solo tendrás que enseñarmelos, una vez te entregue tu pizza Hat podrás hacer lo que quieras con ellos.";
+		next;
+		set QueMont,1;
+		mes "[^CC0000Pizzero^000000]";
+		mes "¡Espero verte pronto!";
+		cutin "",255;
+		close;
+
+
+avances:
+		if(countitem(7119)<20)goto avances2;
+		if(countitem(7564)<15)goto avances2;
+		if(countitem(517)<25)goto avances2;
+		if (Zeny < 10000) goto avances2;
+
+		mes "[^CC0000Pizzero^000000]";
+		mes "¡Estupendo!";
+		mes "¡Ahora ya te puedo llamar aventurero!";
+		next;
+		getitem 5499,1;
+		set QueMont,2;
+		mes "[^CC0000Pizzero^000000]";
+		mes "Lo prometido es deuda, aquí tienes.";
+		cutin "",255;
+		close;
+
+
+avances2:
+		mes "[^CC0000Pizzero^000000]";
+		mes "Veamos tus progresos de aventurero:";
+		mes "Bacillus: ^CC0000"+countitem(7119)+"^000000/20";
+		mes "Rotten Meat: ^CC0000"+countitem(7564)+"^000000/15";
+		mes "Meat: ^CC0000"+countitem(517)+"^000000/25";
+		mes "Zeny: ^CC0000"+Zeny+"^000000/10.000";
+
+close;
+
+fin:
+		mes "[^CC0000Pizzero^000000]";
+		mes "Espero que estés disfrutando de tu Pizza Hat.";
+close;
+
+nointeresa:
+
+		mes "[^CC0000Pizzero^000000]";
+		mes "Una lástima...";
+		mes "Vuelve si cambias de opinión.";
+		cutin "",255;
+		close;
+OnPCLoadMapEvent:
+	showevent 1,0;
+	end;
+		}
+
+
+
+
+izlude,93,169,3	script	Pizzeria	830,{
+
+	mes "[Pizzeria]";
+	mes "¿Qué pasa?!";
+	mes "Dejame trabajar...";
+	mes "-_-.";
+close;
+}

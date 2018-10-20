@@ -1,0 +1,1342 @@
+//============= Creed Helm ======= Lo :]
+pvp_valk,47,60,3	script	Chad#1	715,{
+    if(Weight >= MaxWeight/2) goto Loverweight;
+    set @npcname$, "[ Chad ]";
+    
+    if (donecreed >= 1) {
+        mes @npcname$;
+        mes "Hey "+strcharinfo(0)+"! ¿Cómo te gusta tu Yelmo del Destino?";
+        menu "¡Trabajé muy duro para esto!", L_nm, "Es agradable tener esto!", L_nm, "¡Gracias a ti!", L_nm;
+    }
+    
+    if (donemarlo >= 1) {
+        mes @npcname$;
+        mes "¿Quieres que te Warp a Maru?";
+        menu "Sí por favor.",-, "No.", L_nm;
+        
+        next;
+        mes @npcname$;
+        mes "Como dijiste...";
+        next;
+        warp "6@tower.gat",155,65;
+        close;
+    }
+    
+    if (donesakura >= 1) {
+        mes @npcname$;
+        mes "¿Quieres que te Warp a Marlo?";
+        menu "Sí por favor.",-, "No.", L_nm;
+        
+        next;
+        mes @npcname$;
+        mes "As you said...";
+        next;
+        warp "5@tower.gat",66,68;
+        close;
+    }
+    
+    if (donewil >= 1) {
+        mes @npcname$;
+        mes "¿Quieres que te Warp a Sakura?";
+        menu "Sí por favor.",-, "No.", L_nm;
+        
+        next;
+        mes @npcname$;
+        mes "Como dijiste...";
+        next;
+        warp "2@tower.gat",392,355;
+        close;
+    }
+    
+    if (donecassio >= 1) {
+        mes @npcname$;
+        mes "¿Quieres que te Warp a Wil?";
+        menu "Sí por favor.",-, "No.", L_nm;
+        
+        next;
+        mes @npcname$;
+        mes "Como dijiste...";
+        next;
+        warp "1@tower.gat",50,270;
+        close;
+    }
+    
+    if (donechad >= 1) {
+        mes @npcname$;
+        mes "Que esta pasando "+strcharinfo(0)+"?";
+        menu "Déjame ver Cassiopeia",-, "Solo pasando por...",L_nm;
+        
+        next;
+        warp "arug_que01.gat",100,80;
+        close;
+    }
+    
+    if (chad >= 1) {
+        mes @npcname$;
+        mes "¿Así que tienes todos mis artículos o quieres ver la lista de nuevo?";
+        menu "¡Estoy listo!",-, "Quiero ver la lista de nuevo.", L_list;
+        
+        next;
+        mes @npcname$;
+        mes "Déjame revisar tus artículos entonces..";
+        if ( (countitem(730) < 100) || (countitem(731) < 100) || (countitem(732) < 100) || (countitem(733) < 100) || //diamonds
+                (countitem(7446) < 100) || (countitem(7445) < 100) || (countitem(7447) < 100) || (countitem(7448) < 100) ) // bijous
+                {
+                    next;
+                    mes @npcname$;
+                    mes "¿Me estás tomando el pelo? Ir a completarlos.";
+                    close;
+                }
+        if ( (countitem(730) >= 100) || (countitem(731) >= 100) || (countitem(732) >= 100) || (countitem(733) >= 100) || //diamonds
+                (countitem(7446) >= 100) || (countitem(7445) >= 100) || (countitem(7447) >= 100) || (countitem(7448) >= 100) ) // bijous
+                {
+                    next;
+                    
+                    delitem 730,100;
+                    delitem 731,100;
+                    delitem 732,100;
+                    delitem 733,100;
+                    delitem 7446,100;
+                    delitem 7445,100;
+                    delitem 7447,100;
+                    delitem 7448,100;
+                    
+                    mes @npcname$;
+                    mes "¡Decir ah! ¡Eres genial! Ahora te dejaré ver a Cassiopeia. ¡Trátela bien!";
+                    set donechad,1;
+                    next;
+                    warp "arug_que01.gat",100,80;
+                    close;
+                }
+    }
+    
+    if (gym >= 1) goto L_talkagain;
+    
+    mes @npcname$;
+    mes "'Sup?";
+    next;
+    menu "No mucho.",L_nm, "¿Estoy bien usted?",-;
+    
+    mes @npcname$;
+    mes "Oh estoy aburrido es por eso que me ves jugando con mis bolas. ¿Sabes a lo que me refiero?";
+    next;
+    menu "LOL usted es bromas!",-;
+    next;
+    mes @npcname$;
+    mes "Hahaha sí, ¿quieres hacer algo genial?";
+    menu "¡Si, seguro!", L_fosho, "No lo olvide.", L_nm;
+    
+    L_fosho:
+        mes @npcname$;
+        mes "¡Ir al gimnasio! Así es como usted consigue las niñas!";
+        set gym,1;
+        close;
+        
+    L_talkagain:
+        mes @npcname$;
+        mes "Así que veo que me estás hablando de nuevo, y supongo que no tienes nada mejor que hacer, así que deberías encontrar a Cassiopeia y hacer su búsqueda.";
+        next;
+        mes @npcname$;
+        mes "Pero antes de que te deje hablar con ella, tienes que encontrarme todo esto..";
+        mes "^FF5533100 1Carat Diamonds ^000000";
+        mes "^FF5533100 2Carat Diamonds ^000000";
+        mes "^FF5533100 3Carat Diamonds ^000000";
+        mes "^FF5533100 Cracked Diamonds ^000000";
+        mes "^FF5533100 Blue Bijou ^000000";
+        mes "^FF5533100 Green Bijou ^000000";
+        mes "^FF5533100 Red Bijou ^000000";
+        mes "^FF5533100 Yellow Bijou ^000000";
+        next;
+        mes @npcname$;
+        mes "¿Conseguiste la lista o estás listo para hacer la búsqueda?";
+        menu "Quiero ver mi progresode nuevo, por favor.", L_list, "Estoy listo.",-;
+        
+        next;
+        mes @npcname$;
+        mes "¡Buena suerte!";
+        set chad,1;
+        close;
+    
+    L_list:
+        next;
+        mes @npcname$;
+	mes "Veamos tus progresos de aventurero:";
+        mes "^FF5533100 1Carat Diamonds ^000000";
+        mes "^FF5533100 2Carat Diamonds ^000000";
+        mes "^FF5533100 3Carat Diamonds ^000000";
+        mes "^FF5533100 Cracked Diamonds ^000000";
+        mes "^FF5533100 Blue Bijou ^000000";
+        mes "^FF5533100 Green Bijou ^000000";
+        mes "^FF5533100 Red Bijou ^000000";
+        mes "^FF5533100 Yellow Bijou ^000000";
+        mes "Aquí está la lista. Asegúrese de que escribió estos elementos en algún lugar!";
+        set chad,1;
+        close;
+    
+    L_nm:
+        mes @npcname$;
+        mes "lol sí...";
+        close;
+    
+    Loverweight:
+        mes @npcname$;
+        mes "Ir al gimnasio y perder algunas de esas grasas. ¡Hacer trabajo!";
+        close;
+
+OnPCLoadMapEvent:
+	showevent 1,0;
+	end;
+	}
+
+//========== Cassiopeia ======== Lo :]
+arug_que01.gat,105,138,3	script	Cassiopeia	1886,{
+    if(Weight >= MaxWeight/2) goto Loverweight;
+    set @npcname$, "[ Cassiopeia ]";
+    
+    if (ttyl >= 1) {
+        mes @npcname$;
+        mes "Bienvenido de nuevo "+strcharinfo(0)+". ¿Estás listo para ayudar a este lugar?";
+        menu "Sí, tengo todos los elementos que necesitas",-, "¿Qué cosas necesitas de nuevo?", L_help;
+        
+        next;
+        mes @npcname$;
+        mes "Ok muéstrelos a mí.";
+        if ( (countitem(710) < 100) || (countitem(629) < 100) || (countitem(749) < 100) || (countitem(7293) < 100) ||
+                (countitem(1068) < 100) || (countitem(7222) < 100) || (countitem(707) < 100) || Zeny < 50000000 )
+                {
+                    next;
+                    mes @npcname$;
+                    mes "Usted no está nunca me va a engañar.";
+                    close;
+                }
+        if ( (countitem(710) >= 100) || (countitem(629) >= 100) || (countitem(749) >= 100) || (countitem(7293) >= 100) ||
+                (countitem(1068) >= 100) || (countitem(7222) >= 100) || (countitem(707) >= 100) || Zeny >= 50000000 )
+                {
+                    next;
+                    
+                    delitem 710,100;
+                    delitem 629,100;
+                    delitem 749,100;
+                    delitem 7293,100;
+                    delitem 1068,100;
+                    delitem 7222,100;
+                    delitem 707,100;
+                    set Zeny,Zeny - 50000000;
+                    
+                    mes @npcname$;
+                    mes "Esto parece ser el trato.";
+                    next;
+                    mes @npcname$;
+                    mes "Gracias por ayudar. Ahora, como te prometo, te llevaré a uno de los guardianes que sabe más sobre el elemento raro.";
+                    set donecassio,1;
+                    next;
+                    warp "1@tower.gat",50,270;
+                    close;
+                }
+    }
+    
+    if (getout >= 1) {
+            mes @npcname$;
+            mes "No pruebes mi paciencia o te dejaré probar mi ira.";
+            next;
+            menu "Está bien, lo siento..",L_help, "Pruébame.",-;
+            
+            mes @npcname$;
+            mes "Huh.";
+            next;
+            percentheal -100,0;
+            close;
+    }
+    
+    mes @npcname$;
+    mes "Hola "+strcharinfo(0)+". Así que hablaste con Chad, eh. Supongo que voy a tener que hacer mi búsqueda entonces.";
+    next;
+    mes @npcname$;
+    mes "Cuando todavía era un niño, solía soñar con un lugar donde flores hermosas están por todas partes y ahora, estoy viviendo mi sueño. Esa es una de las razones por las que estoy aquí, pero en los últimos días, las flores están empezando a morir. Gracias a Dios que Chad te envió a mí.";
+    next;
+    mes @npcname$;
+    mes "Usted puede ayudarme a mantener con este lugar por un tiempo porque este lugar significa realmente mucho para mí. Ayudándome, te enseñaré cómo obtener uno de los sombreros más raros.";
+    next;
+    menu "De Verdad? ¡Me encantaría ayudarte!", L_help, "No me interesa.", L_not;
+    
+    L_help:
+        mes @npcname$;
+        mes "Aquí están las cosas que necesito para mantener este lugar vivo...";
+        mes "^FF553350,000,000 Zeny ^000000";
+        mes "^FF5533100 Illusion Flower ^000000";
+        mes "^FF5533100 Singing Flower ^000000";
+        mes "^FF5533100 Singing Plant ^000000";
+        mes "^FF5533100 Frozen Rose ^000000";
+        mes "^FF5533100 Rose Quartz ^000000";
+        mes "^FF5533100 Barren Trunk ^000000";
+        mes "^FF5533100 Wooden Gnarl ^000000";
+        next;
+        mes @npcname$;
+        mes "Buena suerte!";
+        set ttyl,1;
+        close;
+        
+    L_not:
+        mes @npcname$;
+        mes "Sal de aquí antes de destruir este lugar.";
+        set getout,1;
+        close;
+    
+    Loverweight:
+        mes @npcname$;
+        mes "¡Tienes sobrepeso, peggy!";
+        close;
+}
+
+//================ Wil ============ :]
+1@tower.gat,30,300,4	script	Wil	997,{
+    if(Weight >= MaxWeight/2) goto Loverweight;
+    set @npcname$, "[ Wil ]";
+    
+    if (cometopapa >= 1) {
+        mes @npcname$;
+        mes "Supongo que quieres algo porque vuelves a hablar conmigo. ¿Qué es?";
+        next;
+        menu "I want to review the list again.", L_doit, "I have all your requirements.",-;
+        
+        next;
+        mes @npcname$;
+        mes "Mmmm.. let me take a look at them then.";
+        if ( (countitem(7451) < 25) || (countitem(4160) < 20) || (countitem(12114) < 100) ||
+                (countitem(12118) < 100) || (countitem(994) < 100) || Zeny < 50000000 ) {
+                    next;
+                    mes @npcname$;
+                    mes "You don't have all of the items/zeny!";
+                    close;
+                }
+        
+        if ( (countitem(7451) >= 25) || (countitem(4160) >= 20) || (countitem(12114) >= 100) ||
+                (countitem(12118) >= 100) || (countitem(994) >= 100) || Zeny >= 50000000 ) {
+                    next;
+                    
+                    delitem 7451,25;
+                    delitem 4160,20;
+                    delitem 12114,100;
+                    delitem 12118,100;
+                    delitem 994,100;
+                    set Zeny,Zeny - 50000000;
+                    
+                    mes @npcname$;
+                    mes "Wow you really want to get that uncommon item ehh. Well then I'll get you to meet Sakura!";
+                    set donewil,1;
+                    next;
+                    warp "2@tower.gat",392,355;
+                    close;
+                }
+    }
+    
+    mes @npcname$;
+    mes "This place looks awesome, right "+strcharinfo(0)+"?";
+    next;
+    mes @npcname$;
+    mes "You're about to be granted of one of the most uncommon headgear but before I let you do that, I would like to know that you have to pass me, Sakura, and Marlo.";
+    next;
+    mes @npcname$;
+    mes "This quest will take you loads of time so you might want to consider that before giving you the requirements.";
+    next;
+    menu "I'll do it.", L_doit, "Forget it.", L_efit;
+    
+    L_doit:
+        mes @npcname$;
+        mes "Yeah that's what I wanted to hear! Write all these down somewhere so you won't miss anything.";
+        next;
+        mes @npcname$;
+        mes "Here are the requirements...";
+        mes "^FF553325 Fire Dragon Scale ^000000";
+        mes "^FF553320 Firelock Soldier Card ^000000";
+        mes "^FF5533100 Flame Elemental Converter ^000000";
+        mes "^FF5533100 Fire Resist Potion ^000000";
+        mes "^FF5533100 Flame Heart ^000000";
+        mes "^FF553350,000,000 Zeny ^000000";
+        next;
+	mes @npcname$;
+        mes "Come talk to me again if you have completed them.";
+        set cometopapa,1;
+        close;
+        
+    L_efit:
+        mes @npcname$;
+        mes "Wrong answer.";
+        next;
+        warp "prontera.gat",0,0;
+        close;
+    
+    Loverweight:
+        mes @npcname$;
+        mes "You fatty! Lose some of that weight!";
+        close;
+}
+
+//========== Sakura ======== Lo :]
+2@tower.gat,372,385,4	script	Sakura	1881,{
+    if(Weight >= MaxWeight/2) goto Loverweight;
+    set @npcname$, "[ Sakura ]";
+    
+    if (beensak >= 1) {
+        mes @npcname$;
+        mes "Hmmm. What do you want now, "+strcharinfo(0)+"?";
+        menu "What are the requirements again?", L_saquest, "Here are the items that you wanted.",-;
+        
+        next;
+        mes @npcname$;
+        mes "I hope you're not lying.";
+        
+        if ( (countitem(979) < 25) || (countitem(1041) < 100) || (countitem(993) < 100) ||
+                (countitem(7220) < 100) || (countitem(7003) < 100) || Zeny < 50000000 ) {
+                    
+                    next;
+                    mes @npcname$;
+                    mes "I may be the sexiest but I'm not the dumbest. You can't fool me!";
+                    close;
+                }
+        
+        if ( (countitem(979) >= 25) || (countitem(1041) >= 100) || (countitem(993) >= 100) ||
+                (countitem(7220) >= 100) || (countitem(7003) >= 100) || Zeny >= 50000000 ) {
+                    
+                    delitem 979,25;
+                    delitem 1041,100;
+                    delitem 993,100;
+                    delitem 7220,100;
+                    delitem 7003,100;
+                    set Zeny, Zeny - 50000000;
+                    
+                    next;
+                    mes @npcname$;
+                    mes "Hmmmm. Resulta que no estás mintiendo.";
+                    next;
+                    mes @npcname$;
+                    mes "Me alegra que estés decidido a obtener ese artículo raro. Marlo te dirá qué debe hacer a continuación. Te voy a llevar con él. Buena suerte "+strcharinfo(0)+"!";
+                    set donesakura,1;
+                    next;
+                    warp "5@tower.gat",66,68;
+                    close;
+                }
+    }
+    
+    if (outsight >= 1) {
+	mes @npcname$;
+	mes "Entonces has vuelto...";
+	next;
+	menu "¡Estoy aquí para molestarte!", L_no, "Quiero hacer la quest ahora.", L_saquest;
+    }
+
+    mes @npcname$;
+    mes "Hmmmm. I understand I got company now. What do you want?";
+    menu "Teach me how to make the rarest headgear.", L_sakura, "You look awesome!",-;
+    
+    next;
+    mes @npcname$;
+    mes "I know that. Thanks.";
+    close;
+    
+    L_sakura:
+        next;
+        mes @npcname$;
+        mes "You think I would teach you how to make it just right off the bat? No. You're going to give me what I want.";
+        menu "I'm ready to listen.", L_saquest, "I don't think so...", L_no;
+        
+    L_saquest:
+        next;
+        mes @npcname$;
+        mes "Here are the things that I need. Make sure you list them down.";
+        mes "^FF553325 Darkgreen Dyestuff ^000000";
+        mes "^FF5533100 Lantern ^000000";
+        mes "^FF5533100 Green Live ^000000";
+        mes "^FF5533100 Ectoplasm ^000000";
+        mes "^FF5533100 Anolian Skin ^000000";
+        mes "^FF553350,000,000 Zeny ^000000";
+        next;
+        mes @npcname$;
+        mes "Good luck "+strcharinfo(0)+".";
+        set beensak,1;
+        close;
+	
+    L_no:
+	next;
+	mes @npcname$;
+	mes "Hmm! Out of my sight!";
+	set outsight,1;
+	next;
+	warp "prontera.gat",156,174;
+	close;
+    
+    Loverweight:
+        mes @npcname$;
+        mes "¡Pierde algo de ese peso!";
+        close;
+}
+
+//======== Marlo ========== Lo :]
+5@tower.gat,105,108,4	script	Marlo#124	1933,{
+    if(Weight >= MaxWeight/2) goto Loverweight;
+    set @npcname$, "[ Marlo ]";
+    
+    if (marlo >= 1) {
+        mes @npcname$;
+        mes "What are you asking me to do?";
+        menu "Show me the list again please.", L_good, "I want to obtain the rarest item.",-;
+        
+        next;
+        mes @npcname$;
+        mes "Not too fast. Let me see all the items first.";
+        
+        if ( (countitem(724) < 100) || (countitem(1039) < 100) || (countitem(7168) < 100) ||
+                (countitem(7101) < 100) || (countitem(7064) < 100) || (countitem(7006) < 150 ) ) {
+                    
+                    next;
+                    mes @npcname$;
+                    mes "Nice try. You still don't have the items.";
+                    close;
+                }
+        
+        if ( (countitem(724) >= 100) || (countitem(1039) >= 100) || (countitem(7168) >= 100) ||
+                (countitem(7101) >= 100) || (countitem(7064) >= 100) || (countitem(7006) >= 150 ) ) {
+                    
+                    delitem 724,100;
+                    delitem 1039,100;
+                    delitem 7168,100;
+                    delitem 7101,100;
+                    delitem 7064,100;
+                    delitem 7006,150;
+                    
+                    next;
+                    mes @npcname$;
+                    mes "Wow. You really want it.";
+                    set donemarlo,1;
+                    next;
+                    mes @npcname$;
+                    mes "I'll show you to way to my brother.";
+                    next;
+                    warp "6@tower.gat",155,65;
+                    close;
+                }
+    }
+    
+    if (off >= 1) {
+        mes @npcname$;
+        mes "Guess who's back huh.";
+        next;
+        menu "I want to do the quest now.", L_good, "Yeah! *whines*!!",-;
+        
+        next;
+        mes @npcname$;
+        mes "You're making it hard for yourself. Just get out of here.";
+        next;
+        warp "prontera.gat",0,0;
+        close;
+    }
+    
+    mes @npcname$;
+    mes "So you have met and talked to the people that builds the foundation of such 'family'. You don't have to be scared, disgusted, or worried rather be concerned because you've come a long way and we are proud of you. Let your worries go away.";
+    next;
+    mes @npcname$;
+    mes "Right now.";
+    next;
+    mes @npcname$;
+    mes "Before I let you talk to my brother, you're going to have to get me the items that I want.";
+    menu "Sounds good.", L_good, "I'm tired of doing that!", L_wrong;
+    
+    L_good:
+        next;
+        mes @npcname$;
+        mes "Good decision. Here are my requirements...";
+        mes "^FF5533100 Curse Ruby ^000000";
+        mes "^FF5533100 Little Evil Wing ^000000";
+        mes "^FF5533100 Giant Butterfly Wing ^000000";
+        mes "^FF5533100 Peco Peco Feather ^000000";
+        mes "^FF5533100 Wing of Dragonfly ^000000";
+        mes "^FF5533150 Wing of Red Bat ^000000";
+        set marlo,1;
+        close;
+    
+    L_wrong:
+        mes @npcname$;
+        mes "Well guess what. You're cut off.";
+        set off,1;
+        close;
+    
+    Loverweight:
+        mes @npcname$;
+        mes "You have to lose some of that weight!";
+        close;
+}
+
+//========== Maru ============ Lo :]
+6@tower.gat,156,147,4	script	Thoraku	403,{
+    if(Weight >= MaxWeight/2) goto Loverweight;
+    set @npcname$, "[ Thoraku ]";
+    
+    if (creed >= 1) {
+        mes @npcname$;
+        mes "It's nice talking to you again "+strcharinfo(0)+". What can I do for you?";
+        menu "Show me the list please.", L_list, "Make me the rarest thing you're talking about",-;
+        
+        next;
+        mes @npcname$;
+        mes "I don't want to break your heart but this can fail...";
+        next;
+        mes @npcname$;
+        mes "Show me all the items you have and I'll try to make it.";
+        
+        if ( (countitem(7294) < 40) || (countitem(7024) < 40) || (countitem(7214) < 40) ||
+                (countitem(7286) < 40) || (countitem(605) < 100) || (countitem(7077) < 2) ||
+                    (countitem(7085) < 2) || (countitem(7088) < 2) || (countitem(7089) < 2) ||
+                        (countitem(7091) < 2) || (countitem(7090) < 2) || (countitem(7078) < 2) ||
+                            (countitem(7086) < 2) || (countitem(7079) < 2) ) {
+                                next;
+				mes @npcname$;
+				mes ".........";
+				next;
+				mes @npcname$;
+				mes "............";
+				next;
+				mes @npcname$;
+				mes ".................";
+				next;
+				mes @npcname$;
+				mes "........";
+				next;
+                                mes @npcname$;
+                                mes "No tienes todos los artículos que pedía.";
+                                close;
+                            }
+        if ( (countitem(7294) >= 40) || (countitem(7024) >= 40) || (countitem(7214) >= 40) ||
+                (countitem(7286) >= 40) || (countitem(605) >= 100) || (countitem(7077) >= 2) ||
+                    (countitem(7085) >= 2) || (countitem(7088) >= 2) || (countitem(7089) >= 2) ||
+                        (countitem(7091) >= 2) || (countitem(7090) >= 2) || (countitem(7078) >= 2) ||
+                            (countitem(7086) >= 2) || (countitem(7079) >= 2) ) {
+                                
+                                delitem 7294,40;
+                                delitem 7024,40;
+                                delitem 7214,40;
+                                delitem 7286,40;
+                                delitem 605,100;
+                                delitem 7077,2;
+                                delitem 7085,2;
+                                delitem 7088,2;
+                                delitem 7089,2;
+                                delitem 7091,2;
+                                delitem 7090,2;
+                                delitem 7078,2;
+                                delitem 7086,2;
+                                delitem 7079,2;
+                                
+                                next;
+				mes @npcname$;
+				mes ".........";
+				next;
+				mes @npcname$;
+				mes "............";
+				next;
+				mes @npcname$;
+				mes ".................";
+				next;
+				mes @npcname$;
+				mes "........";
+				next;
+                                mes @npcname$;
+                                mes "¡Quiero que me felicites! Has recorrido un largo camino para conseguir esto.";
+                                next;
+                                mes @npcname$;
+                                mes "Te mereces esto "+strcharinfo(0)+"!";
+                                getitem 30060,1;
+                                announce "Wow! "+strcharinfo(0)+" has just obtained the Helm of Destiny!","0x33FF66";
+                                set donecreed,1;
+                                next;
+                                mes @npcname$;
+                                mes "Now take care of that huh.";
+                                next;
+                                warp "prontera.gat",156,186;
+                                close;
+                            }
+    }
+    
+    mes @npcname$;
+    mes "Has recorrido un largo camino para encontrarme "+strcharinfo(0)+".";
+    next;
+    mes @npcname$;
+    mes "Tienes mi respeto por venir aquí. Ahora antes de darte lo más raro que quisieras. Quiero que me hagas un favor.";
+    menu "Okay.", L_list, "¡Las cosas que hice eran demasiado!", L_toobad;
+    
+    L_list:
+	next;
+        mes @npcname$;
+        mes "I need you to give me these...";
+        mes "^FF553340 Turquoise ^000000";
+        mes "^FF553340 Bloody Edge ^000000";
+        mes "^FF553340 Bat Cage ^000000";
+        mes "^FF553340 Red Chile ^000000";
+        mes "^FF5533100 Anodyne ^000000";
+        mes "^FF55332 Billow ^000000";
+        mes "^FF55332 Ripple ^000000";
+        mes "^FF55332 Omen of Tempest ^000000";
+        mes "^FF55332 Wrath of Valkyrie ^000000";
+        mes "^FF55332 Emblem of Sun God ^000000";
+        mes "^FF55332 Feather of Angel Wing ^000000";
+        mes "^FF55332 Snow Crystal ^000000";
+        mes "^FF55332 Silver Ornament ^000000";
+        mes "^FF55332 Sinew of Bear ^000000";
+        set creed,1;
+        next;
+        mes @npcname$;
+        mes "¡Buena suerte!";
+        close;
+    
+    L_toobad:
+        mes @npcname$;
+        mes "Bien mal. Para que usted gane este artículo, usted tiene que hacer lo que estoy pidiendo.";
+        close;
+    
+    Loverweight:
+        mes @npcname$;
+        mes "¡Tienes que perder algo de ese peso!";
+        close;
+}
+
+
+//======== Skewer & FOF =============== Lo :]
+amatsu.gat,47,127,5	script	Junard	10179,{
+    if (Weight >= MaxWeight/2) goto Loverweight;
+    set @npcname$, "[ Junard ]";
+    
+    if (uhyea >= 1) goto L_back;
+    
+    mes @npcname$;
+    mes "Hola, soy el guardián de esta hermosa casa. ¿No es hermoso? Mi amo, que me entrena para ser un buen combatiente, está fuera de la ciudad ahora mismo y voy a hacer una fiesta esta noche!";
+    next;
+    mes @npcname$;
+    mes "¡Va a ser una locura! Un montón de chicas y chicos sexy estará aquí!";
+    emotion ET_KIK;
+    next;
+    menu "¿Estoy invitado?",L_invited, "¡Te estoy contando!",L_snitch;
+    
+    L_invited:
+        next;
+        mes @npcname$;
+        mes "Bueno, podría invitarte, pero necesito algunas cosas para esta noche y tal vez puedas ayudarme. ¡Yo cambiaría estas armas de combate!";
+        next;
+        mes @npcname$;
+        mes "You can pick one or two from these...";
+        menu "Skewer",L_skewer, "Fist of Fury",L_fof, "¡No quiero ir de fiesta contigo!", L_snitch;
+        
+    L_back:
+        mes @npcname$;
+        mes "Oh hey "+strcharinfo(0)+"! You party animal! You're back! What can I do for you?";
+        menu "Necesito revisar los requisitos de nuevo.", L_reqs, "¡Estoy listo para hacer un arma!", L_which, "Creo que eres un ****.", L_snitch;
+        
+    L_reqs:
+        mes @npcname$;
+        mes "¿Cúal?";
+        menu "Skewer",L_skewer, "Fist of Fury",L_fof;
+	
+    L_which:
+	next;
+        mes @npcname$;
+        mes "¿Cúal?";
+        menu "Skewer",L_doskewer, "Fist of Fury",L_dofof;
+	
+	L_doskewer:
+        next;
+        mes @npcname$;
+        mes "¿Oh si? Dame un momento para revisar tus artículos...";
+        if ( (countitem(20012) < 1) || (countitem(1235) < 1) || (countitem(4002) < 5) || (countitem(4086) < 5) ) goto L_idiot;
+        
+        if ( (countitem(20012) >= 1) || (countitem(1235) >= 1) || (countitem(4002) >= 5) || (countitem(4086) >= 5) ) {
+            
+            delitem 20012,1;
+            delitem 1235,1;
+            delitem 4002,5;
+            delitem 4086,5;
+            
+	    next;
+            mes @npcname$;
+            mes "Seems like you're ready to have a Skewer!";
+            next;
+            mes @npcname$;
+            mes "Here it is then!";
+            getitem 13032,1;
+            next;
+            mes @npcname$;
+            mes "Don't forget the party soon!";
+            close;
+        }
+        
+    L_dofof:
+        if ( (countitem(20006) < 1) || (countitem(5113) < 1) || (countitem(1507) < 1) || (countitem(4027) < 5) || (countitem(4246) < 5) ) goto L_idiot;
+        if ( (countitem(20006) >= 1) || (countitem(5113) >= 1) || (countitem(1507) >= 1) || (countitem(4027) >= 5) || (countitem(4246) >= 5) ) {
+            next;
+            
+            delitem 20006,1;
+            delitem 5113,1;
+            delitem 1507,1;
+            delitem 4027,5;
+            delitem 4246,5;
+            
+            mes @npcname$;
+            mes "Parece que estás listo para tener un puño de furia!";
+            next;
+            mes @npcname$;
+            mes "Here it is then!";
+            getitem 1530,1;
+            next;
+            mes @npcname$;
+            mes "Don't forget the party soon!";
+            close;
+        }
+    
+    L_idiot:
+	next;
+        mes @npcname$;
+        mes "You don't have all the items I need "+strcharinfo(0)+"! You can't be invited to my party if you're being like that! Now get them fast!";
+        close;
+        
+    L_skewer:
+        next;
+        mes @npcname$;
+        mes "Here is the list of the items I need. Make sure you don't forget them!";
+	mes "^FF55331 Costume Double Horn Helm ^000000";
+	mes "^FF55331 Azoth  ^000000";
+	mes "^FF55335 Fabre Cards ^000000";
+	mes "^FF55335 Soldier Skeleton Cards ^000000";
+	next;
+	mes @npcname$;
+	mes "You better hurry up!";
+	set uhyea,1;
+	close;
+	    
+    L_fof:
+        next;
+        mes @npcname$;
+        mes "Here is the list of the items I need. Make sure you don't forget them!";
+        mes "^FF55331 Phoenix Wings ^000000";
+        mes "^FF55331 Angry Snarl ^000000";
+        mes "^FF55331 Smasher[2] ^000000";
+	mes "^FF55335 Kukre Cards ^000000";
+	mes "^FF55335 Assaulter Cards ^000000";
+	next;
+	mes @npcname$;
+	mes "Será mejor que date prisa!";
+	set uhyea,1;
+	close;
+	    
+    L_snitch:
+        next;
+        mes @npcname$;
+        mes "Yeah, get out of here!";
+        close;
+    
+    Loverweight:
+        mes @npcname$;
+        mes "¡Tienes que perder un poco de peso, grasa!";
+        close;
+
+OnPCLoadMapEvent:
+	showevent 1,0;
+	end;
+
+}
+
+amatsu	mapflag	loadevent
+
+//======= s1 npcs for creed helm ======= :]
+5@tower.gat,86,95,5	script	Lykos#3	1989,{
+    set @npcname$, "[ Lykos ]";
+    mes @npcname$;
+    mes "Rawr!";
+    close;
+}
+
+5@tower.gat,90,109,4	script	Lykos#2	973,{
+    mes "^FF0000 Lykos ^000000: Un nombre común para los ríos griegos, parece haberse originado en la impresión hecha en la mente del espectador por un torrente que se precipitó al lado de una colina, lo que sugirió la idea de un lobo (griego: Lykos) corriendo a su presa.";
+    close;
+}
+
+
+5@tower.gat,71,80,5	script	Wolf#8	972,{}
+5@tower.gat,71,83,4	script	Wolf#9	972,{}
+5@tower.gat,71,86,4	script	Baby Wolf#14	1107,{}
+5@tower.gat,71,89,5	script	Baby Wolf#15	1107,{}
+5@tower.gat,71,92,4	script	Baby Wolf#16	1107,{}
+5@tower.gat,71,95,5	script	Baby Wolf#17	1107,{}
+5@tower.gat,74,89,4	script	Baby Wolf#18	1107,{}
+5@tower.gat,74,92,5	script	Baby Wolf#19	1107,{}
+5@tower.gat,74,95,4	script	Baby Wolf#20	1107,{}
+5@tower.gat,74,83,5	script	Wolf#10	427,{}
+5@tower.gat,74,86,5	script	Wolf#11	427,{}
+5@tower.gat,77,92,4	script	Baby Wolf#21	1107,{}
+5@tower.gat,77,95,5	script	Baby Wolf#22	1107,{}
+5@tower.gat,77,86,4	script	Baby Wolf#23	1107,{}
+5@tower.gat,77,89,5	script	Baby Wolf#24	1107,{}
+5@tower.gat,80,89,4	script	Wolf#12	427,{}
+5@tower.gat,80,92,4	script	Wolf#13	427,{}
+5@tower.gat,80,95,4	script	Baby Wolf#25	1107,{}
+5@tower.gat,83,92,4	script	Wolf#14	972,{}
+5@tower.gat,83,95,4	script	Wolf#15	972,{}
+
+5@tower.gat,77,74,9	script	Wolf#1	972,{}
+5@tower.gat,80,74,4	script	Wolf#2	427,{}
+5@tower.gat,80,77,4	script	Wolf#3	427,{}
+5@tower.gat,83,74,4	script	Baby Wolf#1	1107,{}
+5@tower.gat,83,77,9	script	Baby Wolf#2	1107,{}
+5@tower.gat,83,80,4	script	Baby Wolf#3	1107,{}
+5@tower.gat,86,74,9	script	Baby Wolf#4	1107,{}
+5@tower.gat,86,77,4	script	Baby Wolf#5	1107,{}
+5@tower.gat,86,80,9	script	Wolf#4	427,{}
+5@tower.gat,86,83,9	script	Wolf#5	427,{}
+5@tower.gat,89,74,9	script	Baby Wolf#6	1107,{}
+5@tower.gat,89,77,4	script	Baby Wolf#7	1107,{}
+5@tower.gat,89,80,9	script	Baby Wolf#8	1107,{}
+5@tower.gat,89,83,4	script	Wolf#6	972,{}
+5@tower.gat,89,86,4	script	Wolf#7	972,{}
+5@tower.gat,92,74,4	script	Baby Wolf#9	1107,{}
+5@tower.gat,92,77,9	script	Baby Wolf#10	1107,{}
+5@tower.gat,92,80,4	script	Baby Wolf#11	1107,{}
+5@tower.gat,92,83,9	script	Baby Wolf#12	1107,{}
+5@tower.gat,92,86,4	script	Baby Wolf#13	1107,{}
+5@tower.gat,92,89,9	script	Lykos#1	1989,{}
+
+
+6@tower.gat,149,115,5	script	Maru#1	447,{}
+6@tower.gat,149,112,5	script	Wil#1	444,{}
+6@tower.gat,149,109,5	script	Harold#1	445,{}
+6@tower.gat,149,106,5	script	Jhake#1	443,{}
+6@tower.gat,149,103,5	script	Chad#2	442,{}
+6@tower.gat,149,100,5	script	Junard#1	445,{}
+6@tower.gat,149,97,5	script	Tah#1	444,{}
+6@tower.gat,149,94,5	script	Sam#1	442,{}
+6@tower.gat,149,91,5	script	Mika#1	438,{}
+6@tower.gat,149,88,5	script	Ivee#1	439,{}
+6@tower.gat,149,85,5	script	Roi#1	787,{}
+6@tower.gat,149,82,5	script	Pao#1	445,{}
+6@tower.gat,149,79,5	script	Susanna#1	446,{}
+
+6@tower.gat,162,115,4	script	Lo#1	447,{}
+6@tower.gat,162,112,4	script	Karla#1	436,{}
+6@tower.gat,162,109,4	script	Steph#1	440,{}
+6@tower.gat,162,106,4	script	Vincent#1	442,{}
+6@tower.gat,162,103,4	script	Alex#123	445,{}
+6@tower.gat,162,100,4	script	Jaypee#1	444,{}
+6@tower.gat,162,97,4	script	Paul#1	443,{}
+6@tower.gat,162,94,4	script	Janna#1	437,{}
+6@tower.gat,162,91,4	script	Raine#1	444,{}
+6@tower.gat,162,88,4	script	Togi#1	444,{}
+6@tower.gat,162,85,4	script	Arvin#1	443,{}
+6@tower.gat,162,82,4	script	Jad#1	442,{}
+6@tower.gat,162,79,4	script	Marvin#1	445,{}
+
+//============== BTS - Diablo Quest =============== Lo :]
+sky_quest,31,30,3	script	Break the Seal	10182,{
+function checkItem;
+function delitemFunction;
+function showItem;
+
+	mes .npcname$;
+	if ( stepvalk_quest == 6  )
+		mes "Go away!";
+	else if ( Weight >= MaxWeight/2 )
+		mes "Tienes sobrepeso. Por favor, guarde algunos artículos antes de hablar conmigo.";
+	else if ( readbts == 1 ) {	// read break the seal
+		checkItem;
+		mes "Así que gracias por la ayuda! No has roto el sello, "+strcharinfo(0)+"!";
+		delitemFunction;
+		set stepvalk_quest, 1;
+		set readbts, 0;
+		set wasnotinterested, 0;
+		next;
+		select( "You're Welcome" );
+		// Castle Drops
+		set .@gamble1, rand(1,500);
+		if ((.@gamble1 > 200) && (.@gamble1 < 205)) {
+			set .@gamble2, rand(1,10);
+			if      ((.@gamble2 > 0) && (.@gamble2 <  3)) set .@item,7086; // esg
+			else if ((.@gamble2 > 2) && (.@gamble2 <  5)) set .@item,7090; // ripple
+			else if ((.@gamble2 > 4) && (.@gamble2 <  7)) set .@item,7091; // billow
+			else if ((.@gamble2 > 6) && (.@gamble2 <  9)) set .@item,7077; // silver
+			else if ((.@gamble2 > 8) && (.@gamble2 < 11)) set .@item,7078; // wov
+		}
+		else if ((.@gamble1 >   0) && (.@gamble1 < 201)) set .@item,7086; // esg
+		else if ((.@gamble1 > 204) && (.@gamble1 < 301)) set .@item,7090; // ripple
+		else if ((.@gamble1 > 300) && (.@gamble1 < 401)) set .@item,7091; // billow
+		else if ((.@gamble1 > 401) && (.@gamble1 < 481)) set .@item,7077; // silver
+		else if ((.@gamble1 > 480) && (.@gamble1 < 501)) set .@item,7078; // wov
+		getitem .@item, 1;
+			
+		mes .npcname$;
+		mes "Ahora usted puede comenzar su viaje!!";
+		next;
+		mes .npcname$;
+		mes "Go out and search the ^FF0000fields of payon^000000, the ^FF0000fields of geffen^000000, and the ^FF0000towns of lighthalzen and comodo^000000 for the Valkyrie equips.";
+		close2;
+		announce "Wow! "+strcharinfo(0)+" has just broken the seal and will start the journey to Diabolus!",bc_all,0x00FF4C;
+		end;
+	}
+	else if ( readbts == 2 ) {	// read fusion shield
+		checkItem;
+		mes "Wow!";	
+		next;
+		mes .npcname$;
+		mes "It seems that you have all the items I need so in return, take this!";
+		next;
+		delitemFunction;
+		getitem 2537,1;
+		set stepvalk_quest, 2;
+		set readbts, 0;
+		set wasnotinterested, 0;
+		mes .npcname$;
+		mes "Nicely done! Enjoy the shield!";
+		next;
+		mes .npcname$;
+		mes "You must go now because I have to practice some spells!";
+		close2;
+		announce "Wow! "+strcharinfo(0)+" has just created the Diablo Shield.",8;
+		end;
+	}
+	else if ( readbts == 3 ) {
+		mes "Hey there again young soldier!";
+		next;
+		mes .npcname$;
+		checkItem;
+		mes "Very well done, "+strcharinfo(0)+", I'm a little bit impressed!";
+		delitemFunction;
+		getitem 2375,1; 
+		set stepvalk_quest, 3;
+		set readbts, 0;
+		next;
+		mes .npcname$;
+		mes "Good job and enjoy your new armor! Now you should go on your way and don't look back.";
+		close2;
+		announce "Wow! "+strcharinfo(0)+" has just created the Diablo Armor!",8;
+		end;
+	}
+	else if ( readbts == 4 ) {	// shoes
+		checkItem;
+		mes "Well, good job! It seems that you have everything I've assigned!";
+		next;
+		delitemFunction;
+		getitem 2433,1;
+		set stepvalk_quest, 4;
+		set readbts, 0;
+		mes .npcname$;
+		mes "Turns out I was right all along that you are fit to take a test! Now go on, young warrior!";
+		next;
+		mes .npcname$;
+		mes "Enjoy the shoes!";
+		close2;
+		announce "Wow! "+strcharinfo(0)+" has just created the Diablo Boots.",8;
+		end;
+	}
+	else if ( readbts == 5 ) {	// robe
+		mes "Guess who's talking to me again huh?";
+		next;
+		mes .npcname$;
+		checkItem;
+		mes "AHA! Awesome! You have everything I need!";
+		next;
+		mes .npcname$;
+		mes "Well here you go then!";
+		delitemFunction;
+		getitem 2374,1;
+		set stepvalk_quest, 5;
+		set readbts, 0;
+		close2;
+		announce "Wow! "+strcharinfo(0)+" has just created the Diablo Robe.",8;
+		end;
+	}
+	else if ( readbts == 6 ) {	// helm
+		mes "I see you are back, my little friend. What can I do for you?";
+		next;
+		menu "Can I see the list again?", L_list3, "I want to be a true warrior now!", -;
+		mes .npcname$;
+		mes "I'm really liking your spirit young fella!";
+		next;
+		mes .npcname$;
+		mes "Now let me see if you have the items I asked you to gather.";
+		next;
+		mes .npcname$;
+		mes "...";
+		next;
+		mes .npcname$;
+		mes "...";
+		mes "....";
+		next;
+		mes .npcname$;
+		mes "...";
+		mes "....";
+		mes ".....";
+		next;
+		mes .npcname$;
+		checkItem;
+		mes "Very well done my friend! You are very good!!";	
+		delitemFunction;	
+		getitem 5808,1;
+		set stepvalk_quest, 6;
+		set readbts, 0;
+		next;	
+		mes .npcname$;
+		mes "Success!!!! Enjoy the Diablo Helm! You are now a real warrior of OldschoolRO! Go free now you noble man!";
+		close2;
+		announce "OMG! "+strcharinfo(0)+" has just become one of the real warriors and gained Diablo Helm!",bc_all,0x00FF4C;
+		end;
+	}
+	else if ( wasnotinterested == 1 ) {	// was not interested break the seal
+		mes "I see you've come back, "+ strcharinfo(0) +". Do you want to fulfill your journey and earn great rewards, or are you still not interested?";
+		next;
+		menu "Count me in.", -, "I didn't mean to talk to you.", L_fail;
+		mes .npcname$;
+		mes "Okay make sure you remember the following and not miss anything!";
+		set wasnotinterested, 0;
+		next;
+		goto L_list;
+	}
+	else if ( wasnotinterested == 2 ) {	// was not interested fusion shield
+		mes "I see you've come back, young warrior.";
+		next;
+		mes .npcname$;
+		mes "Now you have no other choice but to go and...";
+		set wasnotinterested, 0;
+		next;
+		goto L_list2;
+	}
+	else if ( stepvalk_quest == 0 ) {	// has not read and nothing done
+		mes "Let me tell you an ancient story, young soldier! And at the end of this story, you will venture an unforgettable journey and you will earn yourself a valkyrie set!";
+		next;
+		mes .npcname$;
+		mes "Once upon a time, there was a renowned paladin and prince named ^0000FFOldies^000000. He defended his village of Strahnbrad from demon-controlled Orcs.";
+		next;
+		mes .npcname$;
+		mes "He embarks on a trip to find a powerful sword called ^0000FFFrostmourne^000000. On his way, he meets several people along the way which helped him be successful, and sadly at the same time, fail.";
+		next;
+		mes .npcname$;
+		mes "As THE Prophet, I will name each and everyone of them for you if you give me the items I'm about to list.";
+		next;
+		mes .npcname$;
+		mes "Do you accept? Or you will accept your future as a failure?";
+		next;
+		menu "I accept", -, "I'm not interested.", L_fail;
+		mes .npcname$;
+		mes "Make sure you remember the following and not miss anything!";
+		next;
+	L_list:
+		mes .npcname$;
+		mes "These are the items I need for you to break the seal:";
+		showItem;
+		set readbts, 1;
+	}
+	else if ( stepvalk_quest == 1 ) {	// has not read and break the seal done
+		mes "I am trying to figure out this rapidly-spreading plague!!";
+		mes "...and I actually need some things from you!";
+		next;
+		mes .npcname$;
+		mes "My gut is telling me that ^0000FFKel'Thuzad^000000 is behind the plague! ^0000FFOldies^000000 and I will try to stop him but I need to craft protective gears and practice some spells in order to battle him!";
+		next;
+		mes .npcname$;
+		mes "...and I want you to help me! Otherwise, I'll drop you over here!";
+		next;
+		menu "I'd be glad to help!", -, "Drop me then!", L_drop;
+		mes .npcname$;
+		mes "Good!";
+		next;
+		mes .npcname$;
+		mes "I crafted a legion of this ^FF0000Diablo Shield^000000 and I would like you to have one for your own protection but I need some items first for insurance.";
+		next;
+	L_list2:
+		mes .npcname$;
+		mes "Get me these...";
+		showItem;
+		set readbts, 2;
+	}
+	else if ( stepvalk_quest == 2 ) {
+		mes "Hello "+strcharinfo(0)+"! I figured out your name in respect to the experienced I've gained.";	
+		next;
+		mes .npcname$;
+		mes "Since I learned how to walk, my father trained me to be a warrior... and now that I'm old, I just can't keep myself staying inside our castle - that's one of the reasons why I'm in the field.";
+		next;
+		mes .npcname$;
+		mes "Another reason is that I want to travel without stressing the fact that I have to save my dynasty. My son, ^0000FFZeta^000000, is already doing that job for the rest of us.";
+		next;
+		mes .npcname$;
+		mes "But before I let you go or before my stubborn son finds out you're near me and do something stupid, I'd like to give you a ^FF0000Diablo Armor^000000 in exchange of the items I want you to gather.";
+		next;
+		mes .npcname$;
+		mes "Don't be silly "+strcharinfo(0)+", the items won't be hard to get. Consider this a personal request from me, and what I mean by that is you cannot say 'no' to this.";
+		next;
+		mes .npcname$;
+		mes "This great armor is very complicated, it needs very rare materials to be crafted, so if you really want it go get me all these:";	
+		next;	
+		mes .npcname$;
+		showItem;
+		set readbts, 3;
+	}
+	else if ( stepvalk_quest == 3 ) {	// shoes
+		mes "I have assigned a task to this young fellow...";
+		mes "...and as I am waiting for him, I'd like to tell you a story. Keep me company, you know. Unless you have something else to do...";
+		next;
+		mes .npcname$;
+		mes "No! You have to listeng to me! Just like everyone else who I find fit to the task. ^0000FFZeta^000000 don't even complain!";
+		next;
+		mes .npcname$;
+		mes "I recognize that you can pass any physical test. Now , as a person who assigns series of test, I'd like you to get me items.";
+		next;
+		mes .npcname$;
+		mes "I've assigned harder tests so you should be okay to collect some items!";
+		next;
+		mes .npcname$;
+		mes "When you've done collecting the items, I will grant you ^FF0000Diablo Boots^000000!";
+		next;
+		mes .npcname$;
+		mes "Here are the items...";
+		showItem;
+		set readbts, 4;
+	}
+	else if ( stepvalk_quest == 4 ) {	// robe
+		mes "Hey!";
+		next;
+		mes .npcname$;
+		mes "I am in search of a sword called ^FF0000Frostmourne^000000 but I am waiting for a friend of mine. Because I am in the field most of the time, I don't have enough time to go grab stuffs for my family so do you mind grabbing some items for me?";
+		next;
+		mes .npcname$;
+		mes "I will give you ^FF0000Diablo Robe^000000 in return!";
+		next;
+		mes .npcname$;
+		mes "Great! Bring me all these...";
+		showItem;
+		next;
+		mes .npcname$;
+		mes "Don't forget them!";
+		set readbts, 5;
+	}
+	else if ( stepvalk_quest == 5 ) {	// helm
+		mes "Hello there my friend, I am Jhake, the most powerful of all Diabolus Warriors!";
+		next;
+		mes .npcname$;
+		mes "I see that you have acquired the Diablo Set. Very well then! You must have been dreaming to be a true warrior since the first day you talked to ^0000FFThe Prophet^000000!";
+		next;
+		mes .npcname$;
+		mes "Now, I need to test you for the last time in order for me to see that you actually deserve this!";
+		next;
+		mes .npcname$;
+		mes "This test will grant you a ^FF0000Diablo Helm^000000. Not just an ordinary Diablo Helm but a helm of your own!";
+		next;
+		mes .npcname$;
+		mes "That's right! I will engrave your name on the Diablo Helm to make it truly yours!";
+		next;
+		mes .npcname$;
+		mes "The great Diabolus named after Satan's trusty steed. It is the most powerful shoe in the land. Gather these things so I may craft it and honour you as a true warrior!";
+		next;
+	L_list3:
+		mes .npcname$;
+		showItem;
+		next;
+		mes .npcname$;
+		mes "Come back to me when you gather all the items!";
+		set readbts, 6;
+	}
+	close;
+
+L_fail:	// break the seal
+	mes .npcname$;
+	mes "That's what I heard from ^0000FFZeta^000000 before he turned as a failure!";
+	set wasnotinterested, 1;
+	close;
+L_drop:	// for fusion shield
+	mes .npcname$;
+	mes "Wrong choice, young warrior!";
+	set wasnotinterested, 2;
+	next;
+	percentheal -100,-100;
+	warp "geffen",0,0;
+	close;
+
+function checkItem {
+	while( .@i < getd( ".size"+ stepvalk_quest ) ) {
+		if ( countitem( getd( ".item_ID"+ stepvalk_quest +"["+ .@i +"]" ) ) < getd( ".amount"+ stepvalk_quest +"["+ .@i +"]" ) )
+			set .@miss, .@miss | ( 1 << .@i );
+		set .@i, .@i + 1;
+	}
+	if ( .@miss ) {
+		if ( stepvalk_quest == 0 )	// for break the seal
+			mes "Get me the following, "+ strcharinfo(0) +", and I will lead you to the right path.";
+		else if ( stepvalk_quest == 1 ) {	// for fusion shield
+			mes "Well...";
+			next;
+			mes .npcname$;
+			mes "Where are the...";
+		}
+		else if ( stepvalk_quest == 2 )	// for armor
+			mes "You better hurry! You're missing...";
+		else if ( stepvalk_quest == 3 )	{// for shoes
+			mes "When the test I've assigned doesn't get completed, I get pissed... and that's a bad news for you, young warrior!";
+			next;
+			mes .npcname$;
+			mes "Where are the...";
+		}
+		else if ( stepvalk_quest == 4 )	// for robe
+			mes "No, you don't have...";
+		else if ( stepvalk_quest == 5 )	// helm
+			mes "It turns out that you don't have everything I need. Get back to me the following!";
+		for ( set .@i, 0; .@i < getd( ".size"+ stepvalk_quest ); set .@i, .@i +1 )
+			if ( .@miss & ( 1 << .@i ) )
+				mes "^FF0000"+ ( getd( ".amount"+ stepvalk_quest +"["+ .@i +"]" )  - countitem( getd( ".item_ID"+ stepvalk_quest +"["+ .@i +"]" ) ) )+ "^000000 "+ getitemname( getd( ".item_ID"+ stepvalk_quest +"["+ .@i +"]" ) ) +" (ID: ^ff0000"+ getd( ".item_ID"+ stepvalk_quest +"["+ .@i +"]" ) +"^000000)";
+		if ( stepvalk_quest == 2 ) {
+			next;
+			mes .npcname$;
+			mes "Now go before my son sees you!";
+		}
+		close;
+	}
+	return;
+}
+
+function delitemFunction {
+	for ( set .@i, 0; .@i < getd( ".size"+ stepvalk_quest ); set .@i, .@i +1 )
+		delitem getd( ".item_ID"+ stepvalk_quest +"["+ .@i +"]" ), getd( ".amount"+ stepvalk_quest +"["+ .@i +"]" );
+	return;
+}
+
+function showItem {
+	for ( set .@i, 0; .@i < getd( ".size"+ stepvalk_quest ); set .@i, .@i +1 ) {
+		if ( stepvalk_quest < 2 )
+			mes "^FF0000"+ getitemname( getd( ".item_ID"+ stepvalk_quest +"["+ .@i +"]" ) ) +" - "+ getd( ".amount"+ stepvalk_quest +"["+ .@i +"]" ) +" pcs ^000000 (ID: ^ff0000"+ getd( ".item_ID"+ stepvalk_quest +"["+ .@i +"]" ) +"^000000)";
+		else
+			mes "- "+ getd( ".amount"+ stepvalk_quest +"["+ .@i +"]" ) +" ^FF0000"+ getitemname( getd( ".item_ID"+ stepvalk_quest +"["+ .@i +"]" ) ) +" ^000000 (ID: ^ff0000"+ getd( ".item_ID"+ stepvalk_quest +"["+ .@i +"]" ) +"^000000)";
+	}
+	return;
+}
+
+OnInit:
+	set .npcname$, "[ Jhake ]";
+	// items / amount to break the seal
+	setarray .item_ID0, 1054, 7289, 7297, 7018, 7020, 7035, 1009, 7442;
+	setarray .amount0, 100,	  25,   15,   10,   10,   15,   200,  100;
+	set .size0, getarraysize( .item_ID0 );
+	// items / amount to shield
+	setarray .item_ID1, 7451, 7090, 2104, 7444;
+	setarray .amount1, 100,    14,     1,   100;
+	set .size1, getarraysize( .item_ID1 );
+	// fusion armor
+	setarray .item_ID2, 7443, 7086, 7444, 2315;
+	setarray .amount2, 200,   14,    100,  1;
+	set .size2, getarraysize( .item_ID2 );
+	// shoes
+	setarray .item_ID3, 7450, 7091, 7444, 2406;
+	setarray .amount3, 40,   14,     100,  1;
+	set .size3, getarraysize( .item_ID3 );
+	// robe
+	setarray .item_ID4, 7035, 7077, 2506, 7444;
+	setarray .amount4, 100,   14,     1,    100;
+	set .size4, getarraysize( .item_ID4 );
+	// helm
+	setarray .item_ID5, 7345, 7086, 7035, 969;
+	setarray .amount5, 300,   14,   100,   100;
+	set .size5, getarraysize( .item_ID5 );
+	end;
+
+OnPCLoadMapEvent:
+	showevent 1,0;
+	end;
+	}

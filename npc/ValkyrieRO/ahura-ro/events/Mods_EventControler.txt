@@ -1,0 +1,115 @@
+-	script	EventItemScript	HIDDEN_NPC,{
+	end;
+
+OnInit:
+OnClock0000:
+	set .Day, gettime(5);
+	set .Month, gettime(6);
+
+	// Aniversario Ahura-RO
+	if( .Day == 28 && .Month == 4 ) {
+		setitemscript 5097,"{ bonus bAllStats,3; }";
+		setitemscript 5201,"{ bonus bAllStats,3; }";
+		setitemscript 5147,"{ bonus2 bExpAddRace,RC_Boss,50; bonus2 bExpAddRace,RC_NonBoss,50; }";
+	} else {
+		setitemscript 5097,"{}";
+		setitemscript 5201,"{}";
+		setitemscript 5147,"{}";
+	}
+	
+	// Cumpleaños Staff
+	if( (.Day == 28 && .Month == 7) || (.Day == 13 && .Month == 6) || (.Day == 5 && .Month == 11) || (.Day == 27 && .Month == 1) ) {
+		setitemscript 5318,"{ bonus bAllStats,3; }";
+	} else {
+		setitemscript 5318,"{}";
+	}
+	
+	// Día del Padre
+	if( .Day == 19 && .Month == 6 ) {
+		setitemscript 5366,"{ bonus bAllStats,5; }";
+	} else {
+		setitemscript 5366,"{}";
+	}	
+	
+	// Halloween
+	if( (.Day == 31 && .Month == 10) || (.Day == 1 && .Month == 11) ) {
+		setitemscript 5356,"{ bonus bAllStats,2; bonus2 bSubRace,RC_Demon,5; bonus3 bAddMonsterDropItem,529,RC_DemiHuman,1500; }";
+		setitemscript 5202,"{ bonus bAllStats,2; bonus2 bSubRace,RC_Demon,5; bonus3 bAddMonsterDropItem,529,RC_DemiHuman,1500; }";
+	} else {
+		setitemscript 5356,"{}";
+		setitemscript 5202,"{}";
+	}	
+	
+	// Navidad
+	if( (.Day == 24 && .Month == 12) || (.Day == 25 && .Month == 12) ) {
+		setitemscript 5136,"{ bonus bMdef,1; bonus bLuk,1; bonus3 bAutoSpellWhenHit,28,3,50; bonus3 bAutoSpellWhenHit,34,10,50; }";
+	} else {
+		setitemscript 5136,"{}";
+	}
+
+	// Independencia Chilena
+	if( .Day == 18 && .Month == 9 ) {
+		setitemscript 5395,"{ bonus2 bExpAddRace,RC_Boss,50; bonus2 bExpAddRace,RC_NonBoss,50; }";
+	} else {
+		setitemscript 5395,"{}";
+	}
+	
+	// Año Nuevo
+	if( .Day == 1 && .Month == 1 ) {
+		setitemscript 5264,"{ bonus bAllStats,2; }";
+		setitemscript 5392,"{ bonus bLuk,2; bonus2 bAddMonsterDropItem,668,300; }";
+	} else {
+		setitemscript 5264,"{}";
+		setitemscript 5392,"{ bonus bLuk,2; }";
+	}
+	
+	// Glorias Navales
+	if( .Day == 21 && .Month == 5 ) {
+		setitemscript 5305,"{ bonus bBaseAtk,5; bonus2 bExpAddRace,RC_Boss,15; bonus2 bExpAddRace,RC_NonBoss,15; }";
+		setitemscript 5804,"{ bonus2 bExpAddRace,RC_Boss,15; bonus2 bExpAddRace,RC_NonBoss,15; }";
+	} else {
+		setitemscript 5305,"{ bonus bBaseAtk,5; }";
+		setitemscript 5804,"{}";
+	}
+	
+	// Fiesta de la Tirana
+	if( .Day == 15 && .Month == 7 ) {
+		setitemscript 5145,"{ bonus bAllStats,3; }";
+	} else {
+		setitemscript 5145,"{}";
+	}
+	
+	// San Pedro y San Pablo
+	if( .Day == 28 && .Month == 6 ) {
+		setitemscript 5178,"{ bonus bAllStats,1; }";
+	} else {
+		setitemscript 5178,"{}";
+	}
+
+	// Día de la Madre
+	if( .Day == 15 && (.Month == 5 || .Month == 8) ) {
+		setitemscript 5801,"{ bonus bAllStats,2; bonus2 bSubRace,RC_DemiHuman,10; if (getskilllv(29) == 10) { bonus3 bAutoSpellWhenHit,28,10,20; } else { bonus3 bAutoSpellWhenHit,28,5,20; } }";
+	} else {
+		setitemscript 5801,"{}";
+	}
+
+	// Dia de la Raza
+	if( .Day == 12 && .Month == 10 ) {
+		setitemscript 5199,"{ bonus bSpeedAddRate,25; }";
+	} else {
+		setitemscript 5199,"{}";
+	}
+
+	// Carnavales Brazil
+	if( .Day == 1 && .Month == 3 ) {
+		setitemscript 5150,"{ bonus bSpeedAddRate,35; }";
+		setitemscript 5308,"{ bonus bSpeedAddRate,25; }";
+	} else {
+		setitemscript 5150,"{}";
+		setitemscript 5308,"{}";
+	}
+	
+	setitemscript 5205,"{}"; // bonus bAllStats,1; bonus bMdef,3;
+	setitemscript 5320,"{}"; // bonus bAllStats,2; bonus4 bAutoSpellWhenHit,28,1,50,0;
+	end;
+}

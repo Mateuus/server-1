@@ -1,0 +1,522 @@
+//============================================================
+//      .... SQL Database ....   
+//        VIP System for RO
+//      
+//============================================================
+-	script	VIP#config	-1,{
+//===== Settings: ========================================
+//
+OnInit:
+//
+// Minimum level for GM to access the VIP list
+// Reminder: You must also know the password.
+//  (deffault: 80 )
+set $mingmlvl,"99";
+//
+// VIP Account level (deffault: 1)
+set $viplvl, 1;
+//
+// Does your version has @reloadgmdb?
+// (0 no, 1 yes) (deffault: 0)
+//set $reloadgmdb, 0;
+//
+// Password for VIP in-game :
+set $password$,"p@ssw0rd";
+//
+// Amount of VIP to be shown on the list
+// Max: 100 items per page. ( deffault: 30 )
+set $mesVIPs, 30;
+//
+// Coordinates for VIP room :
+set $viplocation$,"moc_para01";
+set $spawnx,22;
+set $spawny,179;
+//
+// Your server website : 
+// OBS: leave blank if none.
+set $site$,"http://ares-ro.com";
+//
+//NPC name:
+set $npcname$, "^CD0000[VIP Manager]^000000";
+//
+//Ticket ID:
+set $Ticket,671;
+//
+end;
+//
+//============================================================
+}
+
+prt_in,136,34,3	script	VIP Manager#Mng	861,{
+	cutin "kafra_09",2;
+if(getgmlevel() >= 2 && getgmlevel() <= 98) end;
+set .@loop,1;
+while(.@loop){
+mes $npcname$;
+mes "Hola "+strcharinfo(0)+"!";
+mes "¿En qué puedo ayudarle?";
+next;
+if (getgmlevel() >= $mingmlvl)
+set .@menu$,select("- Information","- Admin VIPs","","- Nothing");
+else
+set .@menu$,select("- Information","","- VIP days left","- Nothing","- Add VIP");
+switch(.@menu$){
+		Case 1:	//Information
+			next;
+			mes $npcname$;
+			mes "El servicio Vip es una mejora de cuenta exclusiva con límite de tiempo, que realza tu experiencia de juego y hace que tu aventura resulte más cómoda, fácil y rápida.";
+			next;
+			mes "PLAN DE 5 DÍAS ^FF0000Gold Coin 5^000000 .";
+			mes "PLAN DE 10 DÍAS ^FF0000Gold Coin 10^000000 .";
+			mes "PLAN DE 30 DÍAS ^FF0000Gold Coin 30^000000 .";
+cutin "",2;
+			close;
+			break;
+			
+		Case 2:	// Admin (Admin VIP)
+			next;
+			mes ""+$npcname$+" - ^FF0000Administration^000000";
+			mes "Input your password to access the admin panel:";
+			input @adminpass$;
+			next;
+			if (@adminpass$ != $password$){
+			mes ""+$npcname$+" - ^FF0000Administration^000000"; 
+			mes "Incorrect pass!";
+			next;
+			break;
+			}
+			mes ""+$npcname$+" - ^FF0000Administration^000000";
+			mes "Access granted...";
+			mes "Moving you to VIP administration panel...";
+			set .@loop2,1;
+			while(.@loop2) {
+			next;
+			mes ""+$npcname$+" - ^FF0000Administration^000000";
+			mes "What would you like to do?";
+			switch(select("- Add VIP:- Edit VIP:- List VIP:- Total VIP accounts:- Extra options:- Leave")){
+
+				Case 1: //Admin Add VIP
+					set .@loop6,1;
+					while(.@loop6) {
+					next;
+					mes ""+$npcname$+" - ^FF0000Administration^000000";
+					mes "¿Cómo le gustaría añadir VIP?";
+					switch(select("- By account name:- By char name:- Return")){
+						
+						Case 1: // Admin Add VIP by Acc name
+							next;
+							mes ""+$npcname$+" - ^FF0000Administration^000000";	
+							mes "Input the account name:";
+							mes "PS: You can't add a VIP that already exists..";
+							input @login$;
+							next;
+							set @accid,0;
+							set @acclogin$,"";
+							query_sql "SELECT `account_id` FROM `login` WHERE `group_id`='0' AND `vip_time`='0' AND `userid`='"+@login$+"'",@accid;
+							if (@accid[0] == 0){
+							mes ""+$npcname$+" - ^FF0000Administration^000000";
+							mes "This account does not exist or is a VIP already.";
+							break;
+							}
+							query_sql "SELECT `userid` FROM `login` WHERE `account_id`='"+@accid+"'",@acclogin$;
+							mes ""+$npcname$+" - ^FF0000Administration^000000";
+							mes "^FF0000Account ID : ^000000"+@accid+"";
+							mes "^FF0000Login : ^000000"+@acclogin$+"";
+							mes "How many VIP days would you like to add?";
+							mes "PS: You cant add 0 as VIP days.";
+							input @days;
+							next;
+							if (@days == 0){
+							mes ""+$npcname$+" - ^FF0000Administration^000000";
+							mes "You cant add 0 as VIP days!!";
+							break;
+							}
+							mes ""+$npcname$+" - ^FF0000Administration^000000";
+							mes "Add ^FF0000"+@days+"^000000 VIP days to the account: ^FF0000"+@acclogin$+"^000000.";
+							mes "Proceed?";
+							if(select("- Yes:- No") == 2) break;
+							query_sql "UPDATE `login` SET `group_id`='"+$viplvl+"',`vip_time`='"+@days+"' WHERE `account_id`='"+@accid+"'";
+							next;
+							//atcommand "@reloadgmdb";
+							mes ""+$npcname$+" - ^FF0000Administration^000000";
+							mes "VIP Acccount added!";
+							break;
+							
+						Case 2: //Admin Add VIP by Char name
+							next;
+							mes ""+$npcname$+" - ^FF0000Administration^000000";	
+							mes "Input the char name to add VIP:";
+							mes "PS: You can't add a VIP that already exists..";
+							input @name$;
+							next;
+							set @accid2,0;
+							set @acclogin2$,"";
+							query_sql "SELECT `account_id` FROM `char` WHERE `name`='"+@name$+"'",@accid2;
+							if (@accid2[0] == 0){
+							mes ""+$npcname$+" - ^FF0000Administration^000000";
+							mes "This char doesnt exists!";
+							break;
+							}
+							query_sql "SELECT `userid` FROM `login` WHERE `group_id`='0' AND `vip_time`='0' AND `account_id`='"+@accid2+"'",@acclogin2$;
+							if (@acclogin2$[0] == ""){
+							mes ""+$npcname$+" - ^FF0000Administration^000000";
+							mes "This account is already VIP!";
+							break;
+							}
+							query_sql "SELECT `name` FROM `char` WHERE `account_id`='"+@accid2+"'",@charname$;
+							mes ""+$npcname$+" - ^FF0000Administration^000000";
+							mes "Char: ^FF0000"+@charname$+"^000000 is from:";
+							mes "^FF0000Account ID : ^000000"+@accid2+"";
+							mes "^FF0000Login : ^000000"+@acclogin2$+"";
+							mes "How many VIP days would you like to add to this account?";
+							mes "PS: You cant add 0 as VIP days.";
+							input @days2;
+							next;
+							if (@days2 == 0){
+							mes ""+$npcname$+" - ^FF0000Administration^000000";
+							mes "PS: You cant add 0 as VIP days!";
+							break;
+							}
+							mes ""+$npcname$+" - ^FF0000Administration^000000";
+							mes "Add ^FF0000"+@days2+"^000000 VIP days to account: ^FF0000"+@acclogin2$+"^000000 in which the char is: ^FF0000"+@charname$+"^000000.";
+							mes "Proceed??";
+							if(select("- Yes:- No") == 2) break;
+							query_sql "UPDATE `login` SET `group_id`='"+$viplvl+"',`vip_time`='"+@days2+"' WHERE `account_id`='"+@accid2+"'";
+							next;
+							//atcommand "@reloadgmdb";
+							mes ""+$npcname$+" - ^FF0000Administration^000000";
+							mes "VIP account added!";
+							break;
+						
+						Case 3: // Return
+							set .@loop6,0;
+							break;
+					
+					}
+					}
+					break;
+					
+					
+				Case 2: //Admin Edit VIP
+					next;
+					mes ""+$npcname$+" - ^FF0000Administration^000000";
+					mes "input Login from account you want to edit:";
+					mes "PS: Cant edit accounts that arent VIP.";
+					input @login$;
+					set @accid,0;
+					set @daysr,0;
+					set @acclogin$,"";
+					set @EColor$, "^000000";
+					query_sql "SELECT `account_id` FROM `login` WHERE `group_id`='"+$viplvl+"' AND `userid`='"+@login$+"'",@accid;
+					if (@accid[0] == 0) {
+					next;
+					mes ""+$npcname$+" - ^FF0000Administration^000000";
+					mes "Not a VIP account.";
+					break;
+					}
+					set .@loop3,1;
+					while(.@loop3) {
+					next;
+					query_sql "SELECT `userid` FROM `login` WHERE `account_id`='"+@accid+"'",@acclogin$;
+					query_sql "SELECT `vip_time` FROM `login` WHERE `account_id`='"+@accid+"'",@daysr;
+					mes ""+$npcname$+" - ^FF0000Administration^000000";
+					mes "Selected account:";
+					if (@daysr[0] <= 1) Set @Color$, "^FF0000";
+					if (@daysr[0] >= 2 && @daysr[0] < 7) Set @Color$, "^FFA200";
+					if (@daysr[0] >= 7 && @daysr[0] < 15) Set @Color$, "^C4CB00";
+					if (@daysr[0] >= 15) Set @Color$, "^008000";
+					mes "===========================";
+					mes "Account ID: "+ @Color$ + @accid + @EColor$;
+					mes "Logint: "+ @Color$ + @acclogin$ + @EColor$;
+					mes "Remaining VIP days: "+ @Color$ + @daysr + @EColor$;
+					mes "===========================";
+					mes "What do you want to do?";
+					switch(select("- Edit VIP days:- Cancel VIP account:- Return")){
+
+						Case 1: //Admin Edit VIP days
+							next;
+							mes ""+$npcname$+" - ^FF0000Administration^000000";
+							mes "Modify remaining days from VIP:";
+							mes "account: ^FF0000"+@acclogin$+"^000000 from ^FF0000"+@daysr+"^000000 VIP day(s)";
+							mes "To?";
+							mes "Cant change to 0 days!";
+							input @dayse;
+							next;
+							if (@dayse == 0){
+							mes ""+$npcname$+" - ^FF0000Administration^000000";
+							mes "Cant change to 0 days.";
+							break;
+							}
+							mes ""+$npcname$+" - ^FF0000Administration^000000";
+							mes "Modify from^FF0000"+@daysr+"^000000 VIP days(s) to ^FF0000"+@dayse+"^000000 VIP day(s) ?";
+							if(select("- Yes:- No") == 2) break;
+							query_sql "UPDATE `login` SET `vip_time`='"+@dayse+"' WHERE `account_id`='"+@accid+"'";
+							next;
+							//atcommand "@reloadgmdb";
+							mes ""+$npcname$+" - ^FF0000Administration^000000";
+							mes "Changed!";
+							break;
+
+						Case 2: //Admin Edit VIP cancel
+							next;
+							mes ""+$npcname$+" - ^FF0000Administration^000000";
+							mes "Cancel VIP:";
+							mes "account: ^FF0000"+@acclogin$+"^000000 ?";
+							if(select("- Yes:- No") == 2) break;
+							query_sql "UPDATE `login` SET `group_id`='0',`vip_time`='0' WHERE `account_id`='"+@accid+"'";
+							next;
+							//atcommand "@reloadgmdb";
+							mes ""+$npcname$+" - ^FF0000Administration^000000";
+							mes "Vip Canceled.!";
+							break;
+								
+						Case 3: //Return
+							set .@loop3,0;
+							break;
+						}
+					}
+					break;
+
+				Case 3: //Admin List VIP
+					set .@Page, 0;
+					set .@Found, 0;
+					set .@loop5,1;
+					while(.@loop5){
+					deleteArray .@UserID$[0], 128;
+					deleteArray .@AccID[0], 128;
+					deleteArray .@vip_time[0], 128;
+					if ($mesVIPs > 100) Set $mesVIPs, 100;
+					set @EColor$, "^000000";
+					set .@Page, .@Page + 1;
+					next;
+					mes ""+$npcname$+" - ^FF0000Administration^000000";
+					mes "VIP Accounts list:";
+					query_Sql "SELECT `userid`, `account_id`, `vip_time` FROM `login` WHERE `group_id`='"+$viplvl+"' LIMIT " + (.@Page - 1) * $mesVIPs + ", " + ($mesVIPs + 1), .@UserID$, .@AccID, .@vip_time;
+					for (Set .@i, 0; .@i < $mesVIPs; Set .@i, .@i + 1) {
+						if (.@vip_time[.@i] <= 1) Set @Color$, "^FF0000";
+						if (.@vip_time[.@i] >= 2 && .@vip_time[.@i] < 7) Set @Color$, "^FFA200";
+						if (.@vip_time[.@i] >= 7 && .@vip_time[.@i] < 15) Set @Color$, "^C4CB00";
+						if (.@vip_time[.@i] >= 15) Set @Color$, "^008000";
+						if (.@AccID[.@i]) {
+						mes "Account ID: "+ @Color$ + .@AccID[.@i] + @EColor$;
+						mes "Login: "+ @Color$ + .@UserID$[.@i] + @EColor$;
+						mes "Remaining VIP days: "+ @Color$ + .@vip_time[.@i] + @EColor$;
+						mes "===========================";
+						set .@Found, 1;
+						}
+					}
+					setArray .@Mnu$[0], "", "";
+					if (.@Page > 1) Set .@Mnu$[0], "- Previous";
+					if (.@AccID[$mesVIPs]) Set .@Mnu$[1], "- Next ";
+					if (!.@Found) mes "No VIP accounts found.";
+					switch(select(""+.@Mnu$[0]+"",""+.@Mnu$[1]+"","- Return")){
+						
+						Case 1: //Admin List VIP Previous
+							set .@Page, .@Page - 2;
+							break;
+						
+						Case 2: //Admin List VIP Next
+							break;
+
+						Case 3: //Return
+						set .@loop5,0;
+						break;
+						}
+					}
+					break;
+
+				Case 4: //Admin Total VIP accounts
+					next;
+					set @totalvip,0;
+					set @desbug,0;
+					query_sql "SELECT COUNT(1) FROM `login` WHERE `group_id`='"+$viplvl+"'",@totalvip;
+					query_sql "SELECT COUNT(1) FROM `login` WHERE `group_id`='"+$viplvl+"' AND `vip_time`<= '0'",@desbug;
+					if (@desbug[0] > 0){
+					mes ""+$npcname$+" - ^FF0000Administration^000000";
+					mes "Your server has a total of ^008000"+@totalvip+"^000000 VIP accounts, but there are ^FF0000"+@desbug+"^000000 VIP accounts that were supposed to be canceled.";
+					mes "Would you like to cancel VIP from accounts with VIP days over?";
+					if(select("- Yes:- No") == 2) break;
+					query_sql "UPDATE `login` SET `group_id`='0' WHERE `vip_time`<='0' AND `group_id`='"+$viplvl+"'";
+					next;
+					//atcommand "@reloadgmdb";
+					mes ""+$npcname$+" - ^FF0000Administration^000000";
+					mes "VIP canceled accounts done.";
+					break;
+					}
+					mes ""+$npcname$+" - ^FF0000Administration^000000";
+					mes "Your server has a total of ^008000"+@totalvip+"^000000 VIP accounts.";
+					select("- Return");
+					break;
+					
+				Case 5: //Admin Extra Options
+					set .@loop4,1;
+					while(.@loop4) {
+					next;
+					mes ""+$npcname$+" - ^FF0000Administration^000000";
+					mes "what would you like to do?";
+					switch(select("- Process VIP accounts:- Cancel ALL VIP accounts:- Return")){
+			
+						Case 1: //Admin Extra Process VIP Accounts
+							next;
+							mes ""+$npcname$+" - ^FF0000Administration^000000";
+							mes "Processing as VIP accounts you ";
+							mes "withdraw 1 day from all VIP accounts ";
+							mes "and if any account reaches 0 days ";
+							mes "it will be canceled.";
+							mes "Proceed?";
+							if(select("Yes:No") == 2) break;
+							query_sql "UPDATE `login` SET `vip_time`=`vip_time`-1 WHERE `group_id`='"+$viplvl+"'";
+							query_sql "UPDATE `login` SET `group_id`='0' WHERE `vip_time`<='0' AND `group_id`='"+$viplvl+"'";
+							next;
+							//atcommand "@reloadgmdb";
+							mes ""+$npcname$+" - ^FF0000Administration^000000";
+							mes "Accounts sucessfully processed!";
+							break;
+
+						Case 2: ////Admin Extra Cancel VIP Accounts
+							next;
+							mes ""+$npcname$+" - ^FF0000Administration^000000";
+							mes "Doing this you will cancel";
+							mes "ALL of the VIP Accounts from the server.";
+							mes "Proceed?";
+							if(select("Yes:No") == 2) break;
+							query_sql "UPDATE `login` SET `group_id`='0',`vip_time`='0' WHERE `group_id`='"+$viplvl+"'";
+							next;
+							//atcommand "@reloadgmdb";
+							mes ""+$npcname$+" - ^FF0000Administration^000000";
+							mes "Done.";
+							break;
+			
+						Case 3://Return
+							set .@loop4,0;
+							break;
+						}
+					}
+					break;
+
+				Case 6://Rerutn
+					set .@loop2,0;
+					break;
+				}
+			}
+			close;
+
+		Case 3: //Player VIP days left
+			if (getgmlevel() < $viplvl){mes $npcname$;
+			mes "You are not VIP";
+			close;}
+			next;
+			query_sql "SELECT `vip_time` FROM `login` WHERE `account_id` = '"+ getcharid(3) +"'", @days;
+			if (@days[0] <= 5){
+			mes $npcname$;
+			mes "You have only "+@days+" VIP days remaining.";
+			mes "recharge your VIP !!!";
+			select("- Return");
+			next;
+			break;
+			}
+			mes $npcname$;
+			mes "You still have "+@days+" VIP days.";
+			select("- Return");
+			next;
+			break;
+		
+		Case 4: //Player Nothing
+			next;
+			mes $npcname$;
+			mes "Ok! come back any time!";
+cutin "",2;
+			set .@loop,0;
+			break;
+			
+		Case 5: //Player Add VIP
+		set .@loop7,1;
+		while(.@loop7) {
+		next;
+		mes $npcname$;
+		mes "Would you like to use 5 VIP Tickets to obtain 30 days of VIP?";
+		menu "Yes",M_Yes,"No",M_No;
+		
+		M_Yes:
+		next;
+		if(countitem($Ticket) >= 5){
+		mes $npcname$;
+		set @accid,getcharid(3);
+		set @acclogin$,"";
+		query_sql "SELECT `userid` FROM `login` WHERE `account_id`='"+@accid+"'",@acclogin$;
+		query_sql "SELECT `vip_time` FROM `login` WHERE `account_id`='"+@accid+"'",@vipcount;
+		mes "^FF0000Account ID : ^000000"+@accid+"";
+		mes "^FF0000Login : ^000000"+@acclogin$+"";
+		mes "^FF0000Current VIP days: ^000000"+@vipcount+""; 
+		mes "";
+		mes "Is your information correct?";
+		menu "Yes",-,"No",M_Acc_No;
+		next;
+		if(countitem($Ticket) <= 4){goto M_Lck;}
+		set @days,@vipcount+30;
+		mes $npcname$;
+		query_sql "UPDATE `login` SET `group_id`='"+$viplvl+"',`vip_time`='"+@days+"' WHERE `account_id`='"+@accid+"'";
+		delitem $Ticket,5;
+		//atcommand "@reloadgmdb";
+		mes "VIP successfully updated! Have fun~";
+		close;}
+		mes $npcname$;
+		mes "Looks like you don't have enough Tickets to obtain VIP.";
+		close;		
+		
+		M_Lck:
+		mes $npcname$;
+		mes "Looks like you don't have enough Tickets to obtain VIP.";
+		close;
+		
+		M_No:
+		next;
+		mes $npcname$;
+		mes "See you soon!";
+		close;
+		
+		M_Acc_No:
+		next;
+		mes $npcname$;
+		mes "Please contact the administrator.";
+		close;
+		set .@loop7,0;
+		break;}		
+		
+	} //Ends menu
+}// Ends Loop
+close;
+}//Ends Script
+
+
+-	script	VIP#T-1	-1,{
+	end;
+
+OnClock0001:
+	query_sql "UPDATE `login` SET `vip_time`=`vip_time`-1 WHERE `group_id`='"+$viplvl+"'";
+	end;
+
+OnClock0002:
+	query_sql "UPDATE `login` SET `group_id`='0' WHERE `vip_time`<='0' AND `group_id`='"+$viplvl+"'";
+	end;
+}
+
+-	script	VIP#L-1	-1,{
+OnPCLoginEvent:
+	if (getgmlevel() != $viplvl) end;
+	query_sql "SELECT `vip_time` FROM `login` WHERE `account_id` = '"+ getcharid(3) +"'", @days;
+	if (@days[0] <= 5){
+	dispbottom "[ VIP Control ]";
+	dispbottom "You have only "+@days+" VIP days remaining.";
+	dispbottom "Recharge your VIP and support the server !!!";
+	end;
+	}
+	dispbottom "[ VIP Control ]";
+	dispbottom "You still have "+@days+" VIP days.";
+	end;
+}
+
+
+
+prontera,165,166,0	warp	premium1-1	1,1,prt_in,128,38
+prt_in,128,44,0	warp	premium1-2	1,1,prontera,159,166

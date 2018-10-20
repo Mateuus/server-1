@@ -1,0 +1,89 @@
+//===== rAthena Script =======================================
+//= The Claw Script
+//===== By: ==================================================
+//= Nova http://www.novaragnarok.com
+//============================================================
+
+moc_para01,13,25,6	script	The Claw	562,{
+    set .@n$,"[ ^FF0000The Claw^000000 ]";
+    mes .@n$;
+    mes "Instructions:";
+	mes "Usted puede pagar 250 monedas por un casco al azar, o 500 para elegir un casco específico.";
+	mes "Los nuevos sombreros estarán en stock cada mes.";
+    next;
+	
+		switch(select("Random Hat",""+.hat1$+"",""+.hat2$+"",""+.hat3$+"",""+.hat4$+"")) {
+			case 1:
+				mes .@n$;
+				mes "¿Estás seguro de que quieres un sombrero aleatorio para 250 Gold Coins?";
+				next;
+				switch(select("Yes","No")) {
+					case 1:
+						if (countitem(671)) < (500) { mes .@n$,"No tienes suficiente Gold Coins para operar The Claw."; close; }
+						if (checkweight(.@pickedhat,1) == 0 ) { mes .@n$,"The Claw detecta que está sobre su límite de peso."; close; }
+						set .HatRandomArray,rand(1,4);
+						delitem 671,250;
+						if(.HatRandomArray==1) { getitem .hatid1,1; }
+						if(.HatRandomArray==2) { getitem .hatid2,1; }
+						if(.HatRandomArray==3) { getitem .hatid3,1; }
+						if(.HatRandomArray==4) { getitem .hatid4,1; }
+						mes .@n$;
+						mes "The Claw ha escogido. Aquí está tu sombrero.";
+						close;
+					case 2:                 
+						mes .@n$;
+						mes "¡Vuelve y juega de nuevo!";
+							close;
+				}
+				end;
+			case 2:
+				.@pickedhat = .hatid1;
+				.@pickedname$ = .hat1$;
+				break;
+			case 3:
+				.@pickedhat = .hatid2;
+				.@pickedname$ = .hat2$;
+				break;
+			case 4:
+				.@pickedhat = .hatid3;
+				.@pickedname$ = .hat3$;
+				break;
+			case 5:
+				.@pickedhat = .hatid4;
+				.@pickedname$ = .hat4$;
+				break;
+		}
+            
+		mes .@n$;
+		mes "Estas seguro que quieres comprar: ";
+		mes "<ITEMLINK>"+.@pickedname$+"<INFO>"+.@pickedhat+"</INFO></ITEMLINK> ?";
+		next;
+		
+			switch(select("Comprar por 500 Gold Coins","Cancel")) {
+				case 1:
+					if (countitem(671)) < (500) { mes .@n$,"No tienes suficiente Gold Coins para operar
+ The Claw."; close; }
+					if (checkweight(.@pickedhat,1) == 0 ) { mes .@n$,"The Claw detecta que está sobre su límite de peso."; close; }
+					delitem 671,500;
+					getitem .@pickedhat,1;
+					mes .@n$;
+					mes "The Claw Ha recuperado tu "+.@pickedname$+". Disfrútala.";
+					close;	
+				case 2:
+					mes .@n$;
+					mes "¡Vuelve y juega de nuevo!";
+					close;
+			}
+	
+OnInit:
+	.hatid1 = 5474;
+	.hatid2 = 5102;
+	.hatid3 = 18678;
+	.hatid4 = 5914;
+	.hat1$ = getitemname(.hatid1);
+	.hat2$ = getitemname(.hatid2);
+	.hat3$ = getitemname(.hatid3);
+	.hat4$ = getitemname(.hatid4);
+	end;
+	
+}

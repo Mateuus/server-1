@@ -1,0 +1,139 @@
+int_land,85,85,3	script	Acolyte Diana	641,{
+
+OnPCLoginEvent:
+	if (getgmlevel() >= 2) end;
+	if(#gift2 > 0) end;
+	
+mes "[^000088 Freebies Giver ^000000]";
+mes "Hola "+strcharinfo(0)+", Bienvenido a Ares Ragnarok!";
+mes "Soy la donante de regalos.";
+mes "Solo doy un regalos por personaje y solo puedes usarlo con este personaje.";
+next;
+mes "[^000088 Freebies Giver ^000000]";
+mes "Selecione el tipo de caracter.";
+mes "Por favor elija";
+
+switch(select("Tipo de Fuerza:Tipo de Inteligencia:Tipo de Destreza")) {
+		case 1:	callsub S_Free1;
+		case 2:	callsub S_Free2;
+		case 3:	callsub S_Free3;
+		
+	}
+	end;
+	
+S_Free1:
+	
+	Switch (Select ("Por favor bendíceme:Cambio de opinión")) {
+		Case 1:
+			if(#gift2 > 0) {
+			mes "Ya tienes tus regalos.";
+			close;
+			}
+
+			getitem2 30032,1,1,0,0,4302,0,0,0;     //Items Are costume you can change them 
+			getitem2 30033,1,1,0,0,4143,0,0,0;     //Items Are costume you can change them 
+			getitem2 30034,1,1,0,0,4133,0,0,0;     //Items Are costume you can change them 
+			getitem2 30035,1,1,0,0,4058,0,0,0;     //Items Are costume you can change them 
+			getitem2 30036,1,1,0,0,4107,0,0,0;     //Items Are costume you can change them 
+			getitem2 2614,2,1,0,0,4079,0,0,0;     //Items Are costume you can change them 
+			getitem2 30048,1,1,0,0,4112,0,0,0;     //Items Are costume you can change them 
+			getitem2 1108,1,1,10,0,0,0,0,0;     //Items Are costume you can change them 
+			getitem2 1208,1,1,10,0,0,0,0,0;     //Items Are costume you can change them 
+			getitem2 1505,1,1,10,0,0,0,0,0;     //Items Are costume you can change them 
+			getitem 14545,1;     //Items Are costume you can change them 
+			getitem 20008,1;     //Items Are costume you can change them 
+			dispbottom "¡Felicidades, ahora recibiste tus regalos gratis!";
+			dispbottom "Revisa tu inventario para ver todos los regalos.";
+			dispbottom "Disfrutar jugando AresRaganrok!";
+			warp "prontera",156,191;
+			set #gift2,1;
+			mes "Disfruta de tus regalos.";
+			close;
+			
+		Case 2:
+			Mes "Vuelve por mi bendicion";
+			Mes "Gracias";
+			Break;
+
+			}
+			Close;
+
+S_Free2:
+	
+	Switch (Select ("Por favor bendíceme:Cambio de opinión")) {
+		Case 1:
+			if(#gift2 > 0) {
+			mes "Ya tienes tus regalos.";
+			close;
+			}
+
+			getitem2 30032,1,1,0,0,4302,0,0,0;     //Items Are costume you can change them 
+			getitem2 30033,1,1,0,0,4143,0,0,0;     //Items Are costume you can change them 
+			getitem2 30034,1,1,0,0,4133,0,0,0;     //Items Are costume you can change them 
+			getitem2 30035,1,1,0,0,4058,0,0,0;     //Items Are costume you can change them 
+			getitem2 30036,1,1,0,0,4107,0,0,0;     //Items Are costume you can change them 
+			getitem2 2614,1,1,0,0,4044,0,0,0;     //Items Are costume you can change them 
+			getitem2 2614,1,1,0,0,4349,0,0,0;     //Items Are costume you can change them 
+			getitem2 30048,1,1,0,0,4112,0,0,0;     //Items Are costume you can change them 
+			getitem2 1602,1,1,10,0,0,0,0,0;     //Items Are costume you can change them 
+			getitem2 1208,1,1,10,0,0,0,0,0;     //Items Are costume you can change them 
+			getitem2 1505,1,1,10,0,0,0,0,0;     //Items Are costume you can change them 
+			getitem 14545,1;     //Items Are costume you can change them 
+			getitem 20007,1;     //Items Are costume you can change them 
+			dispbottom "¡Felicidades, ahora recibiste tus regalos gratis!";
+			dispbottom "Revisa tu inventario para ver todos los regalos.";
+			dispbottom "Disfrutar jugando AresRaganrok!";
+			warp "prontera",156,191;
+			set #gift2,1;
+			mes "Disfruta de tus regalos.";
+			close;
+			
+		Case 2:
+			Mes "Vuelve por mi bendicion";
+			Mes "Gracias";
+			Break;
+
+			}
+			Close;
+
+S_Free3:
+	
+	Switch (Select ("Por favor bendíceme:Cambio de opinión")) {
+		Case 1:
+			if(#gift2 > 0) {
+			mes "Ya tienes tus regalos.";
+			close;
+			}
+
+			getitem2 30032,1,1,0,0,4302,0,0,0;     //Items Are costume you can change them 
+			getitem2 30033,1,1,0,0,4143,0,0,0;     //Items Are costume you can change them 
+			getitem2 30034,1,1,0,0,4133,0,0,0;     //Items Are costume you can change them 
+			getitem2 30035,1,1,0,0,4058,0,0,0;     //Items Are costume you can change them 
+			getitem2 30036,1,1,0,0,4107,0,0,0;     //Items Are costume you can change them 
+			getitem2 2614,2,1,0,0,4064,0,0,0;     //Items Are costume you can change them 
+			getitem2 30048,1,1,0,0,4112,0,0,0;     //Items Are costume you can change them 
+			getitem2 1208,1,1,10,0,0,0,0,0;     //Items Are costume you can change them 
+			getitem2 1705,1,1,10,0,0,0,0,0;     //Items Are costume you can change them 
+			getitem2 1705,1,1,10,0,0,0,0,0;     //Items Are costume you can change them 
+			getitem 14545,1;     //Items Are costume you can change them 
+			getitem 20009,1;     //Items Are costume you can change them 
+			dispbottom "¡Felicidades, ahora recibiste tus regalos gratis!";
+			dispbottom "Revisa tu inventario para ver todos los regalos.";
+			dispbottom "Disfrutar jugando AresRaganrok!";
+			warp "prontera",156,191;
+			set #gift2,1;
+			mes "Disfruta de tus regalos.";
+			close;
+		
+		Case 2:
+			Mes "Vuelve por mi bendicion";
+			Mes "Gracias";
+			Break;
+
+			}
+			Close;
+			
+OnInit:
+waitingroom "Nuevo en AresRO? ¡Haga clic aquí!",0;
+end;
+}

@@ -1,0 +1,2318 @@
+//===================== Token =====================================================
+
+yuno.gat,48,101,6	script	Notice	722,{
+	mes "^FF0000[ Treasure Hunter Guild House ]^000000";
+	mes " ";
+	mes "Welcome to the Treasure Hunter's Guild House.";
+	mes "Feel free to drop in and look around";
+	mes "and feel free to become a memeber if you wish.";
+	mes " ";
+	mes "For membership applications please talk to Keegan";
+	mes "up the stairs and down the hall.";
+	close;
+}
+//Saver Girl;
+yuno_in01.gat,32,178,3	script	Ahlma	94,{
+	mes "[Ahlma]";
+	if (Event_THQS == 0) goto N_Member;
+	mes "Welcome to The Treasure Hunter Guild.";
+	mes "How may I help you?";
+	next;
+	menu "Save",-,"Quit",N_Quit;
+	mes "[Ahlma]";
+	mes "Ok, saved. Thank you ~ See you soon~";
+	savepoint "yuno_in01.gat",34,176;
+	close;
+N_Quit:
+	mes "[Ahlma]";
+	mes "Well if you think you are safe, good on you.";
+	close;
+N_Member:
+	mes "Sorry, members only.";
+	close;
+
+}
+
+
+//======Token NPCs========
+yuno_in01.gat,33,162,3	script	Smile Helper	92,{
+	mes "[Smile Gal]";
+	mes "Oh man...I am so sick of";
+	mes "trading Mr. Smile masks for crap.";
+	mes " ";
+	mes "You ask me for one and you'll find yourself 10 pounds lighter!";
+	close;
+}
+//Usless Female Assasin;
+yuno_in01.gat,22,162,6	script	Female Assasin	725,{
+	mes "[Sharlet]";
+	if (Event_THQS > 0) goto N_Member;
+	mes "Umm sorry I'm not gona waste my time talking to you if you arn't even a member!";
+	close;
+N_Member:
+	set @TEMP,rand(1,2);
+	if (@TEMP == 1) goto N_Chat1;
+	if (@TEMP == 2) goto N_Chat2;
+	mes "How are you reading this???";
+	mes "Well unless you are reading the code :)";
+	close;
+N_Chat1:
+	mes "Ahh welcome fellow Treasure Hunter "+strcharinfo(0)+".";
+	mes "Did you hear about that brave man that went into Glast Heim alone?! He must be crazy.";
+	close;
+N_Chat2:
+	mes ""+strcharinfo(0)+" don't you have something better you could be doing? Like a quest.";
+	close;
+}
+//another usless member
+yuno_in01.gat,25,162,6	script	Female Wizard	123,{
+	mes "[Sasha]";
+	if (Event_THQS > 0) goto N_Member;
+	mes "Umm sorry I'm not gona waste my time talking to you if you arn't even a member!";
+	close;
+N_Member:
+	set @TEMP,rand(2);
+	if (@TEMP == 1) goto N_Chat;
+	mes "Ahh welcome fellow Treasure Hunter "+strcharinfo(0)+".";
+	mes "Did you hear about that goat man running around in the trees?";
+	mes " ";
+	mes "Aperently his name is Baphomet and he has been runing around the Forest Maze out side of prontera for quite some time now.";
+	close;
+N_Chat:
+	mes ""+strcharinfo(0)+" don't you have something better you could be doing? Like a quest.";
+	close;
+}
+
+
+//===================== Token =====================================================
+
+yuno_in01.gat,124,164,6	script	Guild Leader	108,{
+	if (BaseLevel < 255) {
+		mes @header$;
+		mes "You need to be level 255 to use the Token Quest.";
+		close;
+	}
+
+	mes "[Keegan]";
+	mes "What brings you here? Have something to say?";
+	next;
+	menu "I want to be a Treasure Hunter",-,"Take a New Quest.",N_NQuest,"Take me to the Official Shop.",N_OShop,"Nevermind.",N_NVM;
+	if(Event_THQS==1) goto N_AlreadyReg;
+	mes "[Keegan]";
+	mes "Well "+strcharinfo(0)+" if you want to be a Treasure Hunter first you must.";
+	mes " ";
+	mes "^FF00001.^000000 You well be changed ^FF0000100,000,000z^000000 for basic training and your proof of being a member.";
+	mes " ";
+	mes "Umm... Well that is all you need to do. Hahaha.";
+	next;
+	menu "Pay ^FF0000100,000,000z^000000.",-,"Thats way to high!!",N_HighPrice;
+	if (zeny < 100000000) goto N_NoZeny;
+	set Zeny,Zeny-100000000;
+	//getitem 7950, 1;
+	//getitem 7951, 1;
+	set Event_THQS,1;
+	mes "[Keegan]";
+	mes "Congratulations!";
+	emotion 46;
+	next;
+	mes "[Keegan]";
+	mes "Welcome to the Guild of Treasure Hunters.";
+	mes "You may now take a Treasure Hunting Quest as you see fit.";
+	close;
+N_NoZeny:
+	mes "[Keegan]";
+	mes "Hmmm you don't seem to have ^FF0000100,000,000z^000000 "+strcharinfo(0)+". Please come back when you do.";
+	close;
+N_HighPrice:
+	mes "[Keegan]";
+	mes "Well if you can't afford a small ^FF0000100,000,000z^000000 you shouldent be a Treasure Hunter yet.";
+	close;
+N_AlreadyReg:
+	mes "[Keegan]";
+	mes "Ha ha ha...you are already a member.";
+	close;
+N_NQuest:
+	if (Event_THQS!=1) goto A_NeedReg;
+	mes "[Keegan]";
+	mes "Well "+strcharinfo(0)+" if you wish to take a quest go talk to the fellow Treasure Hunter in the other room there.";
+	close;
+A_NeedReg:
+	mes "[Keegan]";
+	mes "Sorry you must be a member of the Treasure Hunter Guild if you wish to take a quest.";
+	mes " ";
+	mes "Also now that you are a member feel free to use our shops anytime you wish.They are all located on this floor.";
+	mes " ";
+	mes "We also have another shop for members only,in which we use little metal diamonds called Treasure Hunter Tokens to exchange for rare goods.";
+	mes " ";
+	mes "You will even have access to our exclusive personal Dungeon.";
+	close;
+N_OShop:
+	if (Event_THQS!=1) goto N_NeedMem;
+	mes "[Keegan]";
+	mes "Yes "+strcharinfo(0)+" I will take you to our shop right away!";
+	next;
+	warp "lhz_in03.gat",260,260;
+	close;
+	end;
+N_NeedMem:
+	mes "[Keegan]";
+	mes "Im sorry only members may visit our private shop.";
+	close;
+N_NVM:
+	mes "[Keegan]";
+	mes "Alright come back when you have the free time to spare.";
+	close;
+
+}
+
+//===================== Token =====================================================
+
+yuno_in01.gat,112,151,6	script	Quest Manager	62,{
+
+	if (BaseLevel < 255) {
+		mes @header$;
+		mes "You need to be level 255 to use the Token Quest.";
+		close;
+	}
+if(@tcheck < 1) {
+set fakenamechoice,rand(1,10);
+botcheck;
+sleep2 2000;
+mes "Sorry to disturb you, but I need to check if you're a bot.";
+mes "Please don't get alarmed, I had changed your name temporarily";
+mes "Just look at your name by pointing at your character";
+mes "Then type EXACTLY what it says(case sensitive), or else you will be kicked.";
+
+switch(fakenamechoice) {
+case 1:
+atcommand "@fakename heyhey";
+input botname$;
+if(botname$ != "heyhey") atcommand "@kick "+strcharinfo(0);
+break;
+
+case 2:
+atcommand "@fakename youyou";
+input botname$;
+if(botname$ != "youyou") atcommand "@kick "+strcharinfo(0);
+break;
+
+
+case 3:
+atcommand "@fakename nowaynoway";
+input botname$;
+if(botname$ != "nowaynoway") atcommand "@kick "+strcharinfo(0);
+break;
+
+case 4:
+atcommand "@fakename howhow";
+input botname$;
+if(botname$ != "howhow") atcommand "@kick "+strcharinfo(0);
+break;
+
+
+case 5:
+atcommand "@fakename wawawawawat";
+input botname$;
+if(botname$ != "wawawawawat") atcommand "@kick "+strcharinfo(0);
+break;
+
+
+case 6:
+atcommand "@fakename Uiztoken";
+input botname$;
+if(botname$ != "Uiztoken") atcommand "@kick "+strcharinfo(0);
+break;
+
+case 7:
+atcommand "@fakename Iiztokener";
+input botname$;
+if(botname$ != "Iiztokener") atcommand "@kick "+strcharinfo(0);
+break;
+
+case 8:
+atcommand "@fakename watchathink";
+input botname$;
+if(botname$ != "watchathink") atcommand "@kick "+strcharinfo(0);
+break;
+
+
+case 9:
+atcommand "@fakename watchuthink";
+input botname$;
+if(botname$ != "watchuthink") atcommand "@kick "+strcharinfo(0);
+break;
+
+default:
+atcommand "@fakename watsdapoint";
+input botname$;
+if(botname$ != "watsdapoint") atcommand "@kick "+strcharinfo(0);
+break;
+
+}
+
+mes "Thank you for your patience, you can now move on.";
+set @tcheck,1;
+botcheck;
+atcommand "@fakename";
+}
+next;
+     //checking if time penalty is over [Lupus]
+	if (#THQ_DELAY > (GetTime(7)*12*31*24 + GetTime(6)*31*24 + GetTime(5)*24 + GetTime(3)) ) {
+		mes "[Guy]";
+		mes "I'm afraid there aren't any Quests for you yet.";
+		mes "Call in "+ (#THQ_DELAY - (GetTime(7)*12*31*24+GetTime(6)*31*24+GetTime(5)*24+GetTime(3)) )+" hours later.";
+		emotion 17;
+		close;
+	}
+	mes "[Guy]";
+	mes "Welcome to the Treasure Hunters Guild "+strcharinfo(0)+".";
+	next;
+	if (On_Quest == 0) goto N_NewQuest;
+	mes "[Guy]";
+	mes "Look " +strcharinfo(0)+ ", you can only 1 quest at a time, you should finish the quest unless you have given up.";
+	mes "Giving up will cost you ^FF00002500z^000000.";
+	next;
+	menu "No, never would I leave a quest!",-,"Yah I'm pathetic... Pay 2500z",N_PayZeny;
+	mes "[Guy]";
+	mes "Good well get back out there.";
+	close;
+N_PayZeny:
+	if (zeny < 2500) goto N_ZenyFail;
+	set one_qset, 0;
+	set two_qset, 0;
+	set three_qset, 0;
+	set four_qset, 0;
+	set five_qset, 0;
+	set six_qset, 0;
+	set seven_qset, 0;
+	set eight_qset, 0;
+	set nine_qset, 0;
+	set ten_qset, 0;
+	set On_Quest, 0;
+	set Zeny,Zeny-2500;
+	//add time delay penalty. You can get another quest after 2 - 3 hours. [Lupus]
+	set #THQ_DELAY, (GetTime(7)*12*31*24+GetTime(6)*31*24+GetTime(5)*24+GetTime(3)+rand(2,3));
+	mes "[Guy]";
+	mes "Its sad to see someone give a quest up...";
+	mes "Shame on you.";
+	emotion 7;
+	close;
+
+N_ZenyFail:
+	mes "[Guy]";
+	mes "Thats sad you don't even have ^FF00002500z^000000.";
+	close;
+
+N_NewQuest:
+	if (Event_THQS == 0) goto N_Signup;
+	mes "[Guy]";
+	mes "Ahh welcome fellow Treasure Hunter.";
+	mes "You currently have ^FF0000"+#Treasure_Token+"^000000 treasure tokens!!!";
+	mes "Would you like me to asign you a Quest?";
+	next;
+	menu "Yes I would like a Quest Please.",-,"Sorry Guy no time today.",N_NoTime;
+	
+	mes "[Guy]";
+	mes "Ok lets see what quest we can give you today.";
+	mes "The quest names in ^FF0000This Colour^000000 mean that they are more challanging then the rest, but have better rewards.";
+	next;
+	set #THQ_DELAY,(GetTime(7)*12*31*24+GetTime(6)*31*24+GetTime(5)*24+GetTime(3) + 1); //you can get another quest after 1 hour [Lupus]
+	emotion 21;
+	if(@treasure_job==0) set @treasure_job,rand(1,10); //doesn't allow cheaters to pick any quest they want
+	if(@treasure_job==2) goto N_JobList2;
+	if(@treasure_job==3) goto N_JobList3;
+	if(@treasure_job==4) goto N_JobList4;
+	if(@treasure_job==5) goto N_JobList5;
+	if(@treasure_job==6) goto N_JobList6;
+	if(@treasure_job==7) goto N_JobList7;
+	if(@treasure_job==8) goto N_JobList8;
+	if(@treasure_job==9) goto N_JobList9;
+	if(@treasure_job==10) goto N_JobList10;
+	goto N_JobList1; //if(@treasure_job==1)
+
+N_NoTime:
+	mes "[Guy]";
+	mes "Alright maybe next time "+strcharinfo(0)+".";
+	emotion 20;
+	close;
+
+N_Signup:
+	mes "[Guy]";
+	mes "I'm afraid you must sign up for the guild before you can go on a quest!";
+	emotion 17;
+	close;
+
+L_QuestGiven:
+	set On_Quest,1;
+	set @treasure_job,0; //next time u get random quest
+	close;
+
+///////Job list 1///////
+N_JobList1:
+	mes "[Guy]";
+	mes "Ok you have a couple quests that can be done here.";
+	next;
+	menu "Lost Old Man.",-,"Master needs his Bow.",N_MasterBow,"The Hit List.",N_HitList,"^FF0000The Sad Widow.^000000",N_SadWidow;
+	mes "[Guy]";
+	mes "^FF0000Lost Old Man^000000";
+	mes "^FF0000------------^000000";
+	mes "This is an easy and low payed quest.";
+	mes " ";
+	mes "A wife came in asking us to find his husband, she seems to come in alot asking us to find him over and over again.";
+	next;
+	mes "[Guy]";
+	mes "But he always seems to be around the same place so there isn't much looking involved,check the mountains 1 west and 1 north of prontera.";
+	set one_qset,1;
+	goto L_QuestGiven;
+
+N_MasterBow:
+	mes "[Guy]";
+	mes "^FF0000Master needs his Bow^000000";
+	mes "^FF0000--------------------^000000";
+	mes "This is just a package delivery run, no big deal or anything.";
+	mes " ";
+	mes "Take this to an archer in the Archer Village outside of Payon.";
+	getitem 1072,1; //Delivery_Box
+	set one_qset,2;
+	goto L_QuestGiven;
+
+N_HitList:
+	mes "[Guy]";
+	mes "^FF0000The Hit List^000000";
+	mes "^FF0000------------^000000";
+	mes "In this quest you get to see some action.";
+	mes " ";
+	mes "There has been a farmer that keeps having all his crops eaten by ^FF0000Thief Bugs, Porings, and Lunitics^000000 here is a lost of what I need you to do. He is nexting East of Prontera.";
+	next;
+	mes "[Guy]";
+	mes "Ok go to the east and bash those little bastards like there is no tommorow. When you are done with that list you have just discard it, but you will NOT get another one!.";
+	set one_qset,3;
+	goto L_QuestGiven;
+
+N_SadWidow:
+	mes "^FF0000The Sad Widow^000000";
+	mes "^FF0000*************^000000";
+	mes "This is just another quest with possable well pay.";
+	mes " ";
+	mes "There is an old Widow in pontera, she recently lost her husband due to a monster attack.She has requested a Guild member to come talk to her at the Pontera Graveyard.";
+	set one_qset,4;
+	goto L_QuestGiven;
+
+///////Job list 2///////
+N_JobList2:
+	mes "[Guy]";
+	mes "Ok you have a couple quests that can be done here.";
+	next;
+	menu "The Strange Letter",-,"Jur for Jeramiah",N_JurJeramiah,"Bee Keepers Hunny",N_BeeHunny,"^FF0000The Wander Man^000000",N_WanderMan;
+
+	mes "^FF0000The Strange Letter^000000";
+	mes "^FF0000------------------^000000";
+	mes "I do not know much about this quest.";
+	mes " ";
+	mes "A strange man came in here yesterday and asked me to deliver this ^FF0000Strange Letter^000000 to some woman in Morroc. Knowing us we do not ask questions so you must take care of this delivery.";
+	mes "The Woman is in located in Morroc and her name is Erika.";
+	set two_qset, 1;
+	getitem 1072,1; //Delivery_Message
+	goto L_QuestGiven;
+
+N_JurJeramiah:
+	mes "^FF0000Jur for Jeramiah^000000";
+	mes "^FF0000----------------^000000";
+	mes "Standard delivery quest.";
+	mes " ";
+	mes "Jeramiah ordered a Special Jur from our weapon shop.Your Job is to deliver it to him in the Assasin Temple.";
+	getitem 1998,1; //Jeramiah's_Jur
+	set two_qset,2;
+	goto L_QuestGiven;
+
+N_BeeHunny:
+	mes "^FF0000Bee Keepers Hunny^000000";
+	mes "^FF0000-----------------^000000";
+	mes "Strange man in the marsh need your help.";
+	mes " ";
+	mes "There is a strange man in the forest in ^FF00001 south and 1 west^000000 of Prontera, he need your help with something.";
+	set two_qset,3;
+	goto L_QuestGiven;
+
+N_WanderMan:
+	mes "^FF0000The Wander Man^000000";
+	mes "^FF0000**************^000000";
+	mes "There is a woman in Payon that is in desperate for aid.";
+	mes " ";
+	mes "There is a woman in Payon named Molly please get to her as soon as possable the letter she sent here sounded like someone was killing her.";
+	set two_qset,4;
+	goto L_QuestGiven;
+
+///////Job list 3///////
+N_JobList3:
+	mes "[Guy]";
+	mes "Ok you have a couple quests that can be done here.";
+	next;
+	menu "Damn Pixies!",-,"Package Delivery",N_Delivery1,"Prontera Culvert",N_ProntCulvert,"^FF0000Trouble at the Coal Mine^000000",N_CoalMine;
+	mes "^FF0000Damn Pixies!^000000";
+	mes "^FF0000------------^000000";
+	mes "Have you ever been to Hell?";
+	mes " ";
+	mes "A man outside of ^FF0000Ant Hell^000000 has requested your audiance, I suggest you hurry.";
+	set three_qset,1;
+	goto L_QuestGiven;
+
+N_Delivery1:
+	mes "^FF0000Package Delivery^000000";
+	mes "^FF0000----------------^000000";
+	mes "Standard drop off quest.";
+	mes " ";
+	mes "In this quest you need to deliver a mystery box to someone names ^FF0000Flank at the bridge between Aldebaran and Juno^000000.";
+	getitem 1082,1; //Delivery_Box_
+	set three_qset,2;
+	goto L_QuestGiven;
+
+N_ProntCulvert:
+	mes "^FF0000Prontera Culvert^000000";
+	mes "^FF0000----------------^000000";
+	mes "The bugs,They are everywere!.";
+	mes " ";
+	mes "The ^FF0000Prontera Culvert^000000 is out of control!Sign up as a volenteer to clean out some of the culvert.";
+	next;
+	mes "I know it seems like there is no stoping them but however many you kill does makes a differance. After you have signed up, inside the Culvert there will be a Knight that will give you a quest.";
+	set three_qset,3;
+	goto L_QuestGiven;
+
+N_CoalMine:
+	mes "^FF0000Trouble at the Coal Mine^000000";
+	mes "^FF0000************************^000000";
+	mes "The fun...err...trouble never stops in Rune Midgar.";
+	mes " ";
+	mes "Recently there was an acident at the coal mines. There was a huge chasm that released some undead Evil Druids.";
+	next;
+	mes "The Evil Druids started to turn all the workers into the undead. We do not know why, but we do not want to find out, contact a man named Rudolfo outside the Coal Mines.";
+	set three_qset,4;
+	goto L_QuestGiven;
+
+///////Job list 4///////
+N_JobList4:
+	mes "[Guy]";
+	mes "Ok you have a couple quests that can be done here.";
+	next;
+	menu "Zombie Attack",-,"Mystic Wizard",N_MWizard,"Aww shoot!",N_Shoot,"^FF0000Emperium^000000",N_Emp;
+	mes "^FF0000Zombie Attack^000000";
+	mes "^FF0000-------------^000000";
+	mes "The undead have invaded Payon Cave!";
+	mes " ";
+	mes "I remember when Payon Cave used to be a safe place to visit, but now undead Zombies have infested the cave! Please contact ^FF0000Flora outside on Payon Cave^000000 and aid her.";
+	set four_qset,1;
+	goto L_QuestGiven;
+
+N_MWizard:
+	mes "^FF0000Mystic Wizard^000000";
+	mes "^FF0000-------------^000000";
+	mes "Proto-type of a Staff must be delivered to Zed the Wizard.";
+	mes " ";
+	mes "Zed the Wizard has requested to try out a new un-named proto-type staff. It will be your job to deliver this to him. Zed tend to stay within the general area of Juno.";
+	getitem 1999,1; //Zed's_Staff
+	set four_qset,2;
+	goto L_QuestGiven;
+
+N_Shoot:
+	mes "^FF0000Aww shoot!^000000";
+	mes "^FF0000----------^000000";
+	mes "A little girl is in trouble.";
+	mes " ";
+	mes "There is a little girl in trouble, her name is Dassy and she is ^FF0000east of the prontera fountan^000000.";
+	set four_qset,3;
+	goto L_QuestGiven;
+
+N_Emp:
+	mes "^FF0000Emperium^000000";
+	mes "^FF0000********^000000";
+	mes "This is a strange quest that I know little about.";
+	mes " ";
+	mes "Someone in ^FF0000Prontera Guild Hall^000000 has requested to see one of our members, his name is Czhore.";
+	set four_qset,4;
+	goto L_QuestGiven;
+
+///////Job list 5///////
+N_JobList5:
+	mes "[Guy]";
+	mes "Ok you have a couple quests that can be done here.";
+	next;
+	menu "Savage Land",-,"Pyramid's part 1",N_PyrPRT1,"Thinking first",N_Thinkfirst,"^FF0000The not so friendly ghost^000000",N_Ghost;
+	mes "^FF0000Savage Land^000000";
+	mes "^FF0000-----------^000000";
+	mes "Easy for some very hard for others.";
+	mes " ";
+	mes "A man named Lithin wish's to give you a quest, you can find him north of prontera inside of ^FF0000The Hidden Temple^000000";
+	set five_qset,1;
+	goto L_QuestGiven;
+
+N_PyrPRT1:
+	mes "^FF0000Pyramid's^000000";
+	mes "^FF0000---------^000000";
+	mes "Its funny cause no one knows how these were really made.";
+	mes " ";
+	mes "Aperently the Pyramids have are beganing to be infested with undead activity,outside the pyramids a man will be nexting for you. He did no give us his name but he asked for you to hurry.";
+	set five_qset,2;
+	goto L_QuestGiven;
+
+N_Thinkfirst:
+	mes "^FF0000Thinking first^000000";
+	mes "^FF0000--------------^000000";
+	mes "This sounds like another one of those ditzy girl quests...";
+	mes " ";
+	mes "Dazzy the local blond around Geffen has asked for you to deliver her these flowers. I don't know why someone would send flowers to herself...";
+	getitem 744,1; //Bouquet
+	set five_qset,3;
+	goto L_QuestGiven;
+
+N_Ghost:
+	mes "^FF0000The not so friendly ghost^000000";
+	mes "^FF0000*************************^000000";
+	mes "Well no one ever said Casper was nice behind the sceens.";
+	mes " ";
+	mes "A wizard on the 3rd floor of geffen tower want's to talk to you about the anchient ruins underneath the city.";
+	set five_qset,4;
+	goto L_QuestGiven;
+
+///////Job list 6///////
+N_JobList6:
+	mes "[Guy]";
+	mes "Ok you have a couple quests that can be done here.";
+	next;
+	menu "Package for thiefs",-,"Pyramid's part 2",N_PyrPRT2,"Special delivery",N_Delivery2,"^FF0000Geffenia^000000",N_Gef;
+	mes "^FF0000Package for thiefs^000000";
+	mes "^FF0000------------------^000000";
+	mes "How ironic.";
+	mes " ";
+	mes "Deliver this Box to the Thiefs guild.";
+	set six_qset,1;
+	getitem 1083,1; //Delivery_Box__
+	goto L_QuestGiven;
+
+N_PyrPRT2:
+	mes "^FF0000Pyramid's part 2^000000";
+	mes "^FF0000----------------^000000";
+	mes "More undead action in this triangle!";
+	mes " ";
+	mes "Talk to a man outside the entrance of the pyramids, he seems to have another quest for you.";
+	set six_qset,2;
+	goto L_QuestGiven;
+
+N_Delivery2:
+	mes "^FF0000Special delivery^000000";
+	mes "^FF0000----------------^000000";
+	mes "Well most of what we do is run packages, this is no different from other's.";
+	mes " ";
+	mes "Take this box, DO NOT OPEN IT! To a little girl in Lutie named Chirach she should be around santa.";
+	set six_qset,3;
+	getitem 1083,1; //Delivery_Box__
+	goto L_QuestGiven;
+
+N_Gef:
+	mes "^FF0000Geffenia^000000";
+	mes "^FF0000********^000000";
+	mes "The little children of Geffen have been haveing strange nightmares.";
+	mes " ";
+	mes "We belive that the ruins underneath geffen are causeing this problem, talk to a Wizard named Zuuzuu inside Geffen Tower for your mission.";
+	set six_qset,4;
+	goto L_QuestGiven;
+
+///////Job list 7///////
+N_JobList7:
+	mes "[Guy]";
+	mes "Ok you have a couple quests that can be done here.";
+	next;
+	menu "Apple Juice",-,"Delivery",N_Delivery3,"^FF0000Golden Thief Bug^000000",N_GTB,"^FF0000Evil Pirates^000000",N_EvilPirates;
+	mes "^FF0000Apple Juice^000000";
+	mes "^FF0000-----------^000000";
+	mes "Can't say no to some good apple juice.";
+	mes " ";
+	mes "There is a little girl up in prontera Square a bit north from the fountain, go talk to her.";
+	set seven_qset,1;
+	goto L_QuestGiven;
+
+N_Delivery3:
+	mes "^FF0000Delivery^000000";
+	mes "^FF0000--------^000000";
+	mes "So many packages so little time.";
+	mes " ";
+	mes "Take this box to a man in Alberta named Charles.";
+	getitem 1082,1; //Delivery_Box_
+	set seven_qset,2;
+	goto L_QuestGiven;
+
+N_GTB:
+	mes "^FF0000Golden Thief Bug^000000";
+	mes "^FF0000****************^000000";
+	mes "The prontera Culvert has never been the same...";
+	mes " ";
+	mes "Well there have been reports of a Golden Thief Bug running around the bottem on the Culvert. Talk to a Knight inside the Culvert.";
+	set seven_qset,3;
+	goto L_QuestGiven;
+
+N_EvilPirates:
+	mes "^FF0000Evil Pirates^000000";
+	mes "^FF0000************^000000";
+	mes "A ghost ship has washed up on shore on an island outside of Izlude.";
+	mes " ";
+	mes "A female assasin has a quest for you, she is nexting outside the Ghost Ship.There have been reports of evil undead pirates lurking around inside the ship.";
+	set seven_qset,4;
+	goto L_QuestGiven;
+
+///////Job list 8///////
+N_JobList8:
+	mes "[Guy]";
+	mes "Ok you have a couple quests that can be done here.";
+	next;
+	menu "Banana Juice",-,"Another Delivery",N_Delivery4,"My lost beeds",N_LostBeeds,"^FF0000Baphomet!^000000",N_Bapho;
+	mes "^FF0000Banana Juice^FF0000";
+	mes "^FF0000------------^FF0000";
+	mes "Sound gross to some good to others.";
+	mes " ";
+	mes "There is a little girl up in prontera Square a bit north from the fountain, go talk to her.";
+	set eight_qset,1;
+	goto L_QuestGiven;
+
+N_Delivery4:
+	mes "^FF0000Another Delivery^FF0000";
+	mes "^FF0000----------------^FF0000";
+	mes "Well yah box delivering is in high demand,lots of lazy people.";
+	mes " ";
+	mes "Take this package to a man in Morroc named Klye.";
+	set eight_qset,2;
+	getitem 1081,1; //Delivery_Box
+	goto L_QuestGiven;
+
+N_Bapho:
+	mes "^FF0000Baphomet!^FF0000";
+	mes "^FF0000*********^FF0000";
+	mes "Hidden in the Temple he watches and guards.";
+	mes " ";
+	mes "Rumor has it that a Goat Man is lurking in the Hidden Temple, There is also a man in the Hidden Temple names Zack that needs you help with this Goat Man known as Baphomet.";
+	set eight_qset,3;
+	goto L_QuestGiven;
+
+N_LostBeeds:
+	mes "^FF0000My lost Beeds^FF0000";
+	mes "^FF0000-------------^FF0000";
+	mes "Oh great I smell stupidity...";
+	mes " ";
+	mes "A little girl in Payon wants to talk to you, her name is Flower, What a stupid name,Hahaha.";
+	set eight_qset,4;
+	goto L_QuestGiven;
+
+///////Job list 9///////
+N_JobList9:
+	mes "[Guy]";
+	mes "Ok you have a couple quests that can be done here.";
+	next;
+	menu "Smelly Box",-,"Payon Cave",N_PayonC,"^FF0000Sohee's Everywere!^000000",N_Sohee,"^FF0000Moonlight Flower^000000",N_Moonlight;
+	mes "^FF0000Smelly Box^FF0000";
+	mes "^FF0000----------^FF0000";
+	mes "Oh god please get this out of here fast.";
+	mes " ";
+	mes "Oh man smells like someone died in here.Take this to the Magic School in Geffen and hurry,ahh the smell its burning my eye's!!!";
+	getitem 1082,1; //Delivery_Box_
+	set nine_qset,1;
+	goto L_QuestGiven;
+
+N_Sohee:
+	mes "^FF0000Sohee's Everywere!^FF0000";
+	mes "^FF0000******************^FF0000" ;
+	mes "Hmmm seem's a man named Jack wants to speak to you in the Archer Guild House.";
+	mes " ";
+	mes "Well what we know about Payon is that a while ago there was a freak fire that burnt down the old school.";
+	next;
+	mes "The strange thing about what happened was that the children inside did not seem to die from the flames.";
+	mes "Speak to the little school girl somewere in Payon.";
+	set nine_qset,2;
+	goto L_QuestGiven;
+
+N_Moonlight:
+	mes "^FF0000Moonlight Flower^FF0000";
+	mes "^FF0000****************^FF0000" ;
+	mes "Hmmm seem's a man named Jack wants to speak to you in the Archer Guild House.";
+	mes " ";
+	mes "Well I don't know much about this, it has to do with the deepest reagions of Payon Cave, We don't know much because no one ever seems to make it back alive.";
+	set nine_qset,3;
+	goto L_QuestGiven;
+
+N_PayonC:
+	mes "^FF0000Payon Cave^FF0000";
+	mes "^FF0000----------^FF0000" ;
+	mes "Hmmm seem's a man named Jack wants to speak to you in the Archer Guild House.";
+	mes " ";
+	mes "The farther we go into the cave the stranger it gets.";
+	set nine_qset,4;
+	goto L_QuestGiven;
+
+///////Job list 10///////
+N_JobList10:
+	mes "[Guy]";
+	mes "Ok you have a couple quests that can be done here.";
+	next;
+	menu "The Blank Box",-,"^FF0000Eddga^000000",N_Eddga,"^FF0000Phreeoni^000000",N_Phreeoni,"^FF0000Maya^000000",N_Maya;
+
+	mes "^FF0000The Blank Box^FF0000";
+	mes "^FF0000-------------^FF0000";
+	mes "Package to Morroc";
+	mes " ";
+	mes "There is nothing writen on this box but a notice to deliver it to a man Kreg.";
+	getitem 1082,1; //Delivery_Box_
+	set ten_qset,1;
+	goto L_QuestGiven;
+
+N_Eddga:
+	mes "^FF0000Eddga^FF0000";
+	mes "^FF0000*****^FF0000";
+	mes "Tony the Tiger is on crack and destroying the forest.";
+	mes " ";
+	mes "Talk to a man outside the 'Hidden' Hunter Guild, He needs your help.";
+	set ten_qset,2;
+	goto L_QuestGiven;
+
+N_Phreeoni:
+	mes "^FF0000Phreeoni^FF0000";
+	mes "^FF0000********^FF0000";
+	mes "He is big and Pink and you run and hide!";
+	mes " ";
+	mes "This guy just poped into some hole one day, He dosent look that tough but you would be supprised. Talk to a man named Caral outside of Ant Hell.";
+	set ten_qset,3;
+	goto L_QuestGiven;
+
+N_Maya:
+	mes "^FF0000Maya^FF0000";
+	mes "^FF0000****^FF0000";
+	mes "Something scary!";
+	mes " ";
+	mes "This half naked freak need an army to take down, now its your job, good luck. Meet a girl named Jeni outside of the back entrance to Ant Hell.";
+	set ten_qset,4;
+	goto L_QuestGiven;
+}
+
+//===================== Token =====================================================
+
+mjolnir_09.gat,187,189,6	script	Old Man	107,{
+	if (one_qset==1) goto N_QuestStart;
+	mes "[Old Man]";
+	mes "Eh! Can't and old man walk in peace anymore?!";
+	close;
+N_QuestStart:
+	mes "[Old Man]";
+	mes "Eh? whats that?!";
+	mes " ";
+	mes "My wife wants me home?! Alright, alright... I'm going, I'm going. Thank you for telling me the message.";
+	mes " ";
+	mes "Here take this Treasure Token.";
+	set one_qset,0;
+	set On_Quest,0;
+	set #Treasure_Token,#Treasure_Token+1;
+	close;
+}
+//1-2;
+pay_arche.gat,86,129,6	script	Archer	732,{
+	if (one_qset == 2) goto N_QuestStart;
+	mes "[Kieth]";
+	mes "Sorry can't talk, I'm a busy man, I'm waiting for my package.";
+	close;
+N_QuestStart:
+	mes "[Kieth]";
+	mes "Ahh, you must be from the Treasure Hunter Agensy. Do you have my bow??";
+	mes " ";
+	mes "Ahh, good,thank you for your time. Take this Treasure Token.";
+	set one_qset,0;
+	set On_Quest,0;
+	delitem 1072,1;
+	set #Treasure_Token,#Treasure_Token+1;
+	close;
+}
+//1-3
+prt_fild06.gat,37,192,6	script	Farmer	125,{
+	if (one_qset == 3 && countitem(909) > 19 && countitem(955) > 19 && countitem(914) > 19 && countitem(705) > 19) goto N_QuestComp;
+	if (one_qset==3) goto N_QuestStart;
+	mes "[Billy-Bob]";
+	mes "Arrrg!... Those Bastard Bugs have eaten everything, this place donest even look like my farm anymore!!";
+	close;
+N_QuestComp:
+	mes "[Billy-Bob]";
+	mes "Ohhh, thank you thats a good start for me.";
+	mes "Well those bugs can bugger off...";
+	mes " ";
+	mes "Well here take these 2 Treasure Tokens.";
+	set one_qset,0;
+	set #Treasure_Token,#Treasure_Token+2;
+	set On_Quest,0;
+	delitem 909,20;
+	delitem 955,20;
+	delitem 914,20;
+	delitem 705,20;
+	close;
+N_QuestStart:
+	mes "[Billy-Bob]";
+	mes "Those Bastard Bugs are Everywere!!!";
+	mes "You must be from the guild! OK, bring me 20 Worm Peelings, 20 Jellopys, 20 fluff and 20 Clovers.";
+	close;
+}
+//1-4
+prontera.gat,264,353,6	script	Old Lady#token	103,{
+	if (one_qset == 4 && countitem(934) > 14) goto N_QuestComp;
+	if (one_qset == 4) goto N_QuestStart;
+	mes "[Old Lady]";
+	mes "This is my husbands grave... I'm just paying him a little visit.";
+	close;
+N_QuestComp:
+	mes "[Old Lady]";
+	mes "You have them?!";
+	next;
+	mes "[Old Lady]";
+	mes "Thank you sooo much here have these 3 Treasure Tokens.";
+	set #Treasure_Token,#Treasure_Token+3;
+	delitem 934,15;
+	set one_qset,0;
+	set On_Quest,0;
+	close;
+N_QuestStart:
+	mes "[Old Lady]";
+	mes "So your the one that has come to help me?";
+	mes " ";
+	mes "Ok well this is what I wanted you to do,this greave beside me is my husbands grave and I promised him that I would bury some Mementos with him, The problem is that I have no Mementos...";
+	next;
+	mes "[Old Lady]";
+	mes "Bring me 15 Mementos, please.";
+	close;
+}
+///////Job list 2///////
+//2-1;
+morocc.gat,59,109,6	script	Erika	700,{
+	if (two_qset == 1 && countitem(1072) > 0) goto N_QuestComp;
+	if (two_qset == 1) goto N_QuestStart;
+	mes "[Erika]";
+	mes "Hello my name is Erika.";
+	close;
+N_QuestComp:
+	mes "[Erika]";
+	mes "What's that? You have a letter for me!!";
+	mes "Oooooh I just love,love letters :D. next here will I open it.";
+	next;
+	mes "[Letter]";
+	mes "Dear Erika";
+	mes " ";
+	mes "Sorry to inform you but you have been evicted, please move out within 3-5 days.";
+	mes " ";
+	mes "-Managment";
+	next;
+	mes "[Erika]";
+	mes "Oh... um... Well fuck, that bastard thinks he can kick me out!!!!! He's got another thing coming!";
+	mes " ";
+	mes "Well thank you for delivering this anyway have this Treasure Token.";
+	delitem 1072,1;
+	set two_qset,0;
+	set #Treasure_Token,#Treasure_Token+1;
+	set On_Quest,0;
+	close;
+N_QuestStart:
+	mes "[Erika]";
+	mes "So your the one that has a letter for me?";
+	mes " ";
+	mes "Ok well where's the letter?";
+	close;
+}
+//2-2;
+in_moc_16.gat,15,30,6	script	Jeramiah	730,{
+	if (two_qset == 2 && countitem(1998) > 0) goto N_QuestComp;
+	if (two_qset == 2) goto N_QuestStart;
+	mes "[Jeramiah]";
+	mes "Its so boring when you have to next on people...";
+	close;
+N_QuestComp:
+	mes "[Jeramiah]";
+	mes "Ahh hello, you must be from the Treasure Hunter Guild.";
+	mes "Do you have my Jur? Ahh good good. Thank you.";
+	mes "Here have this Treasure Hunter Token.";
+	set two_qset,0;
+	set On_Quest,0;
+	delitem 1998,1;
+	set #Treasure_Token,#Treasure_Token+1;
+	close;
+N_QuestStart:
+	mes "[Jeramiah]";
+	mes "So your the one that is supposed to bring my Jur?";
+	mes "So where's my Jur?";
+	close;
+}
+//2-3;
+prt_fild07.gat,316,263,6	script	Marsh Man	84,{
+	if (two_qset == 3 && countitem(518) > 19) goto N_QuestComp;
+	if (two_qset == 3) goto N_QuestStart;
+	mes "[Lenith]";
+	mes "Hello, sorry I don't have much time to talk I'm waiting for someone.";
+	close;
+N_QuestComp:
+	mes "[Lenith]";
+	mes "Oh hello, OH you have my honey, my bees and I thank you.";
+	mes " ";
+	mes "Here have these 2 Treasure Hunter Tokens.";
+	delitem 518,20;
+	set #Treasure_Token,#Treasure_Token+2;
+	set two_qset,0;
+	set On_Quest,0;
+	close;
+N_QuestStart:
+	mes "[Lenith]";
+	mes "Hello, my name is Lenith and I have a quest for you.";
+	mes "Well resently a bunch of stupid bears stole the supers off all my bee's nests...Stupid bears.";
+	mes " ";
+	mes "What I need you to do is find me some more honey so these bee's can get through the winter. I will need about 20 Honey.";
+	close;
+}
+//2-4;
+payon.gat,161,72,6	script	Molly	714,{
+	if (two_qset == 4 && countitem(7005) > 0) goto N_QuestComp;
+	if (two_qset == 4) goto N_QuestStart;
+	mes "[Molly]";
+	mes "Sorry can't talk, I'm waiting for someone.";
+	close;
+N_QuestComp:
+	mes "[Molly]";
+	mes "WOW YOU DID IT!!!";
+	mes " ";
+	mes "I knew you looked strong, I have no idea how you could have killed that monster though.";
+	mes "thank you so much, here have these 3 Guild Tokens as a reward.";
+	set two_qset,0;
+	set On_Quest,0;
+	set #Treasure_Token,#Treasure_Token+3;
+	delitem 7005,1;
+	close;
+N_QuestStart:
+	mes "[Molly]";
+	mes "Wow you must be the brave man from the treasure hunter guild!";
+	mes "Ok here is whats happening, I don't know what started it but there is a strange Ronan Skeleton running aroung the woods 2 East from here.";
+	next;
+	mes "[Molly]";
+	mes "We have try to kill him in the past but it was not...ummm...It was a bad idea. What I want you to do is go there and bring me back his Skull as proof of you killing him.";
+	mes " ";
+	mes "Good Luck";
+	close;
+}
+///////Job list 3///////
+//3-1;
+moc_fild04.gat,208,322,6	script	Clark	65,{
+	if (three_qset == 1 && countitem(1040) > 29) goto N_QuestComp;
+	if (three_qset == 1) goto N_QuestStart;
+	mes "[Clark]";
+	mes "Love to chat, but I'm waiting for someone.";
+	close;
+N_QuestComp:
+	mes "[Clark]";
+	mes "Ok well this is a start.";
+	mes " ";
+	mes "I hope that this hole will go away 1 day, and I might have another quest for you in the future.";
+	mes "here take these 2 Treasure Tokens.";
+	set #Treasure_Token,#Treasure_Token+2;
+	delitem 1040,30;
+	set three_qset,0;
+	set On_Quest,0;
+	close;
+N_QuestStart:
+	mes "[Clark]";
+	mes "Well hello to you.";
+	mes "You must be from the Treasure Hunter Guild.";
+	mes " ";
+	mes "Ok well this is my problem, yah see that hole in the ground? Yah that thing just popped out of nowhere a couple years ago, inside its full of these ugly ants and these monsters called Giearths.";
+	next;
+	mes "[Clark]";
+	mes "What I want you to do is kill some of the Giearths.Bring me 30 of there little Moustaches.";
+	close;
+}
+//3-2;
+yuno_fild01.gat,186,162,6	script	Flank	73,{
+	if (three_qset == 2 && countitem(1082) > 0) goto N_QuestComp;
+	if (three_qset == 2) goto N_QuestStart;
+	mes "[Flank]";
+	mes "Sorry I'm waiting for my package so I don't want to talk.";
+	close;
+N_QuestComp:
+	mes "[Flank]";
+	mes "Perfect right on time, now I must be going to plant this bomb.... Err I meen give this package to my mother for her birthday.";
+	next;
+	mes "[Flank]";
+	mes "Thanks";
+	mes "Have this Treasure Token";
+	set three_qset,0;
+	delitem 1082,1;
+	set #Treasure_Token,#Treasure_Token+1;
+	set On_Quest,0;
+	close;
+N_QuestStart:
+	mes "[Flank]";
+	mes "So you have my packages?";
+	mes "Well where is it then?";
+	close;
+}
+//3-3 Goes to 7-3 using callfunc
+prt_sewb1.gat,120,245,6	script	Sewer Managment Knight	705,{
+	if (three_qset == 3 && countitem(955) > 149) goto N_QuestComp;
+	if (three_qset == 3) goto N_QuestStart;
+	if (seven_qset == 3) goto N_QuestStart2;
+	mes "[Sewer Managmant]";
+	mes "Live dosent get any worse for me,working in the bug filled Culvert every day...";
+	close;
+N_QuestComp:
+	mes "[Sewer Managment]";
+	mes "Well that looked like it was no trouble for you.";
+	mes "Thanks have these 4 Treause Tokens.";
+	delitem 955,150;
+	set #Treasure_Token,#Treasure_Token+4;
+	set three_qset,0;
+	set On_Quest,0;
+	close;
+N_QuestStart:
+	mes "[Sewer Managmant]";
+	mes "For a while now we have had monster, mostly bugs infesting the culvert...";
+	mes " ";
+	mes "What I want you to do is kinda clean some of it out, every little bit counts.";
+	mes "Bring me 150 Worm Peelings.";
+	close;
+N_QuestStart2:
+	callfunc "seven_qset-3";
+	close;
+}
+//3-4
+mjolnir_02.gat,87,357,6	script	Man#01	51,{
+	if (three_qset == 4 && countitem(1041) > 49) goto N_QuestComp;
+	if (three_qset == 4) goto N_QuestStart;
+	mes "[Rudolfo]";
+	mes "Danger, the Coal Mine is now a hostile area.";
+	close;
+N_QuestComp:
+	mes "[Rudolfo]";
+	mes "Well its good to see that you have come back alive.";
+	mes "I had my doughts but thank you for your help.";
+	mes " ";
+	mes "Here have these 4 Treasure Tokens.";
+	set three_qset,0;
+	set On_Quest,0;
+	delitem 1041,50;
+	set #Treasure_Token,#Treasure_Token+4;
+	close;
+N_QuestStart:
+	mes "[Rudolfo]";
+	mes "Hello, you must be from the Treasure Hunter Guild.";
+	mes " ";
+	mes "They must have filled you in on what is happening on the lower levels of this Coal Mine, I know its desturbing and we are still trying to figure out why and how 2 Evil Druids got down there.";
+	mes " ";
+	mes "Well what I want you to do is bring me 50 Lantern's as proof that you have cleaned some of them out, any loot you find down there you may keep other then what I have asked you to get for me.";
+	close;
+}
+///////Job list 4///////
+//4-1;
+pay_arche.gat,45,138,6	script	Flora	724,{
+	if (four_qset == 1 && countitem(957) > 49) goto N_QuestComp;
+	if (four_qset == 1) goto N_QuestStart;
+	mes "[Flora]";
+	mes "Well hello be carfull in the cave, we have heard reports of Undead monster funning around.";
+	close;
+N_QuestComp:
+	mes "[Flora]";
+	mes "Welcome back, good job you did it. (I wonder if that Flaming Bastard is still alive)";
+	mes "Well I hope that cut down a bit on the monsters and here have these 2 Tokens.";
+	set #Treasure_Token,#Treasure_Token+2;
+	delitem 957,50;
+	set four_qset,0;
+	set On_Quest,0;
+	killmonster "pay_dun00.gat","Flora::OnMobDead";
+	close;
+N_QuestStart:
+	mes "[Flora]";
+	mes "Well hello there.";
+	mes " ";
+	mes "Well this is what I need you to do, bring me 50 Decayed Nails - awile back Payon Cave used to be a safe place to go...But now things have gone out of controll and Zombies have invaded the first floor...";
+	mes " ";
+	mes "There is also these new monsters that have just poped out of no were, we call them Flaming Bastards...Be carfull if you arn't powerfull yet because they are very strong.";
+	next;
+	mes "[Flora]";
+	mes "Good Luck";
+	mes "Remember I need 50 Nail's";
+	monster "pay_dun00.gat",0,0,"Flaming Bastard",1072,1,"Flora::OnMobDead";
+	monster "pay_dun00.gat",0,0,"Flaming Bastard",1072,1,"Flora::OnMobDead";
+	close;
+OnMobDead:
+	end;
+}
+//4-2;
+yuno.gat,45,138,6	script	Zed	735,{
+	if (four_qset == 2 && countitem(1999) > 0) goto N_QuestComp;
+	if (four_qset == 2) goto N_QuestStart;
+	mes "[Zed]";
+	mes "Get out of my face you flake.";
+	close;
+N_QuestComp:
+	mes "[Zed]";
+	mes "Dear god took you long enough you bastard!";
+	mes "You know how much my time is worth!!!!";
+	mes "Your slow and I'm never gona recomend a job for you, Gimmie my staff and get out of me face!";
+	next;
+	mes "[Zed]";
+	mes "Well you can take this crapy Treausre Token.";
+	set On_Quest,0;
+	set four_qset,0;
+	delitem 1999,1;
+	set #Treasure_Token,#Treasure_Token+1;
+	close;
+N_QuestStart:
+	mes "[Zed]";
+	mes "Where's my staff?";
+	close;
+}
+//4-3;
+prontera.gat,176,204,6	script	Dassy	95,{
+	if (four_qset == 3 && countitem(711) > 19) goto N_QuestComp;
+	if (four_qset == 3) goto N_QuestStart;
+	mes "[Dassy]";
+	mes "Hello!";
+	close;
+N_QuestComp:
+	mes "[Dassy]";
+	mes "Yes! Now my pet will not starve!";
+	mes "Thank you so much!";
+	mes "Have this Treasure Token.";
+	set On_Quest,0;
+	set four_qset,0;
+	delitem 711,20;
+	set #Treasure_Token,#Treasure_Token+1;
+	close;
+N_QuestStart:
+	mes "[Dassy]";
+	mes "Hello person!!";
+	mes "You have come to help me? Yes, yes.";
+	mes " ";
+	mes "Ok I don't want to talk about it but I need you to fine me 20 Shoot's";
+	mes "Thank you!";
+	close;
+}
+//4-4;
+prt_gld.gat,157,99,6	script	Czhore	752,{
+	if (four_qset == 4 && countitem(714) > 0) goto N_QuestComp;
+	if (four_qset == 4) goto N_QuestStart;
+	mes "[Czhore]";
+	mes "Hello friend";
+	mes "Have you come to check out one of these guild halls?";
+	close;
+N_QuestComp:
+	mes "[Czhore]";
+	mes "Thank god!";
+	mes " ";
+	mes "I'm so happy to see one of these Emperiums! Thank you "+strcharinfo(0)+".";
+	next;
+	mes "[Czhore]";
+	mes "Here have these 2 Treasure Tokens.";
+	mes "And some of my old treasure...";
+	set four_qset,0;
+	set On_Quest,0;
+	delitem 714,1;
+	set #Treasure_Token,#Treasure_Token+2;
+	close;
+N_QuestStart:
+	mes "[Czhore]";
+	mes "Hello friend";
+	mes "I know this may sound stupid but ever since I was a boy I have dreamed of having an Emperium...";
+	mes "As I know I look old, I have just never been able to find one, now that I am retired from the Treasure Hunter Guild there is no more action for me...";
+	mes " ";
+	mes "If you can get me one I shall reward you.";
+	close;
+}
+///////Job list 5///////
+//5-1;
+prt_maze01.gat,18,184,6	script	Lithin#01	752,{
+	if (five_qset == 1 && countitem(1028) > 14) goto N_QuestComp;
+	if (five_qset == 1) goto N_QuestStart;
+	mes "[Lithin]";
+	mes "Well hello.";
+	mes "Welcome to the Forest Maze.";
+	close;
+N_QuestComp:
+	mes "[Lithin]";
+	mes "Oh thank you so much, but they will be back...";
+	next;
+	mes "Take these 2 Treasure Tokens";
+	set five_qset,0;
+	set On_Quest,0;
+	set #Treasure_Token,#Treasure_Token+2;
+	delitem 1028,15;
+	close;
+N_QuestStart:
+	mes "[Lithin]";
+	mes "Well hello.";
+	mes "Welcome to the Forest Maze, I have a task for you.";
+	mes " ";
+	mes "Ever heard of a moster called a Savage? It looks like a boar but it makes very annoying noices.";
+	mes "What I want you to do is bring me 15 Manes from the savages.";
+	close;
+}
+//5-2 goes to 6-2 using callfunc;
+moc_ruins.gat,75,167,6	script	Lithin#02	87,{
+	if (five_qset == 2 && countitem(932) > 29) goto N_QuestComp;
+	if (five_qset == 2) goto N_QuestStart;
+	if (six_qset == 2) goto N_QuestStart2;
+	mes "[Strange Man]";
+	mes "...";
+	close;
+N_QuestComp:
+	mes "[Strange Man]";
+	mes "Much thanks I have for you.";
+	next;
+	mes "Take with you these 2 Treasure Token's.";
+	set #Treasure_Token,#Treasure_Token+2;
+	set five_qset,0;
+	set On_Quest,0;
+	delitem 932,30;
+	close;
+N_QuestStart:
+	mes "[Strange Man]";
+	mes "Must do for me you shall.Venture through the Pyramid.";
+	mes "When second floor you have reached,slay skeletons of evil.";
+	mes "Bring me back there bones you must.";
+	mes "It is 30 that I desire.";
+	close;
+N_QuestStart2:
+	callfunc "six_qset2";
+}
+//5-3;
+geffen.gat,57,130,6	script	Blonde Girl	724,{
+	if (five_qset == 3 && countitem(744) > 0) goto N_QuestComp;
+	if (five_qset == 3) goto N_QuestStart;
+	mes "[Blonde Girl]";
+	mes "I wonder what happened to my flowers";
+	close;
+N_QuestComp:
+	mes "[Blonde Girl]";
+	mes "Oh are these my flower! To bad I don't want them anymore...";
+	mes " ";
+	mes "You can keep them is you want.";
+	next;
+	mes "[Blonde Girl]";
+	mes "Here take this Treasure Token as a reward.";
+	set five_qset,0;
+	set On_Quest,0;
+	set #Treasure_Token,#Treasure_Token+1;
+	close;
+N_QuestStart:
+	mes "[Blonde Girl]";
+	mes "Hello, did you bring me flowers!?!";
+	close;
+}
+//5-4;
+gef_tower.gat,49,27,6	script	Wizard#01	735,{
+	if (five_qset == 4 && countitem(1059) > 49) goto N_QuestComp;
+	if (five_qset == 4) goto N_QuestStart;
+	mes "[Wizard]";
+	mes "Hello, have you seen my Whisper friend?";
+	close;
+N_QuestComp:
+	mes "[Wizard]";
+	mes "Thank you for helping me, I presume the worse.";
+	next;
+	mes "[Wizard]";
+	mes "Here take these 4 Treasure Tokens.";
+	set five_qset,0;
+	set On_Quest,0;
+	delitem 1059,50;
+	set #Treasure_Token,#Treasure_Token+4;
+	close;
+N_QuestStart:
+	mes "[Wizard]";
+	mes "Hello, the reason why I brought you here was because of a long time ago I made a friend, which happened to be a Whipser.";
+	mes "He told me that he was always bullied by the other ghosts down there and I haven't seen him in a while.";
+	mes "Thinking of the worse case here, I want vengance!";
+	mes " ";
+	mes "Bring me 50 Fabrics!";
+	close;
+}
+///////Job list 6///////
+//6-1;
+moc_prydb1.gat,47,132,6	script	Thief	48,{
+	if (six_qset == 1 && countitem(1083) > 0) goto N_QuestComp;
+	if (six_qset == 1) goto N_QuestStart;
+	mes "[Thief]";
+	mes "Welcome to the Thiefs Guild.";
+	close;
+N_QuestComp:
+	mes "[Thief]";
+	mes "Thank you for this delivery.";
+	next;
+	mes "[Thief]";
+	mes "Here take this Treasure Token as a reward.";
+	set six_qset,0;
+	delitem 1083,1;
+	set On_Quest,0;
+	set #Treasure_Token,#Treasure_Token+1;
+	close;
+N_QuestStart:
+	mes "[Thief]";
+	mes "Where's my delivery?";
+	close;
+}
+//6-2
+function	script	six_qset2	{
+	if (six_qset == 2 && countitem(930) > 29) goto N_QuestComp2;
+	mes "[Strange Man]";
+	mes "Another quest for you I have.";
+	mes "Futher into the pyramid you must go.";
+	mes "Fighting Mummys is future for you.";
+	mes " ";
+	mes "Bring back for me their wrappings you must.";
+	mes "It is 30 Rotten bandages I desire.";
+	close;
+N_QuestComp2:
+	mes "[Strange Man]";
+	mes "Much thanks for you that I have.";
+	next;
+	mes "[Strange Man]";
+	mes "Take with you these 3 tokens.";
+	set #Treasure_Token,#Treasure_Token+3;
+	delitem 930,30;
+	set On_Quest,0;
+	set six_qset,0;
+	close;
+}
+//6-3;
+xmas.gat,144,136,6	script	Chirach	48,{
+	if (six_qset == 3 && countitem(1083) > 0) goto N_QuestComp;
+	if (six_qset == 3) goto N_QuestStart;
+	mes "[Chirach]";
+	mes "Welcome.";
+	close;
+N_QuestComp:
+	mes "[Chirach]";
+	mes "Thank you for this delivery.";
+	next;
+	mes "[Chirach]";
+	mes "Here take this Treasure Token as a reward.";
+	set six_qset,0;
+	delitem 1083,1;
+	set On_Quest,0;
+	set #Treasure_Token,#Treasure_Token+1;
+	close;
+N_QuestStart:
+	mes "[Chirach]";
+	mes "Where's my delivery?";
+	close;
+}
+//6-4;
+gef_tower.gat,52,87,6	script	Wizard#02	735,{
+	if (six_qset == 4 && countitem(944) > 19) goto N_QuestComp;
+	if (six_qset == 4) goto N_QuestStart;
+	mes "[Zuuzuu]";
+	mes "Hello, welcome to geffen tower.";
+	close;
+N_QuestComp:
+	mes "[Wizard]";
+	mes "Thank you for helping me.";
+	next;
+	mes "Here take these 4 Treasure Tokens.";
+	set six_qset,0;
+	set On_Quest,0;
+	delitem 944,20;
+	set #Treasure_Token,#Treasure_Token+4;
+	next;
+	mes "[Zuuzuu]";
+	mes "Oh dear god!!!";
+	mes "One of those evil mosters has followed you up here, Kill it, Kill it!!!";
+	next;
+	monster "gef_tower.gat",42,89,"Evil Nightmare",1061,1;
+	close;
+N_QuestStart:
+	mes "[Zuuzuu]";
+	mes "Hello, the reason I sent for a young adventurer was because of the problems we are having under the tower.";
+	mes "There seem to be more ghosts day after day down there. What I need you to do is go down there and find these mosters we call Nightmares.";
+	mes " ";
+	mes "You must slay them and bring me 20 of there horse shoes.";
+	close;
+}
+///////Job list 7///////
+//7-1 goes to 8-1 using callfunc;
+prontera.gat,123,208,6	script	Little Girl	717,{
+	if (seven_qset == 1 && countitem(531) > 4) goto N_QuestComp;
+	if (seven_qset == 1) goto N_QuestStart;
+	if (eight_qset == 1) goto N_QuestStart2;
+	mes "[Girl]";
+	mes "Hello mister "+strcharinfo(0)+".";
+	close;
+N_QuestComp:
+	mes "[Girl]";
+	mes "Thank you so much!";
+	next;
+	mes "[Girl]";
+	mes "Have these 1 Treasure Tokens.";
+	set seven_qset,0;
+	set On_Quest,0;
+	delitem 531,5;
+	set #Treasure_Token,#Treasure_Token+1;
+	close;
+N_QuestStart:
+	mes "[Girl]";
+	mes "Hi mister person. Can you get me some apple juice?";
+	mes "I want 5 of them.";
+	close;
+N_QuestStart2:
+	callfunc "eight_qset1";
+}
+//7-2;
+alberta.gat,101,84,6	script	Charles	48,{
+	if (seven_qset == 2 && countitem(1082) > 0) goto N_QuestComp;
+	if (seven_qset == 2) goto N_QuestStart;
+	mes "[Charles]";
+	mes "Hello "+strcharinfo(0)+" welcome to Alberta.";
+	close;
+N_QuestComp:
+	mes "[Charles]";
+	mes "Thank you for this delivery.";
+	next;
+	mes "[Charles]";
+	mes "Here take this Treasure Token as a reward.";
+	set seven_qset,0;
+	delitem 1082,1;
+	set On_Quest,0;
+	set #Treasure_Token,#Treasure_Token+1;
+	close;
+N_QuestStart:
+	mes "[Charles]";
+	mes "So where is my package?";
+	close;
+}
+//7-3
+function	script	seven_qset-3	{
+	if (seven_qset == 3 && countitem(969) > 0) goto N_QuestComp2;
+	mes "[Sewer Managment]";
+	mes "Well there have been reports of a Golden Thief Bug running around the bottem on the Culvert";
+	mes " ";
+	mes "Bring me 1 Gold Bar from him.";
+	close;
+N_QuestComp2:
+	mes "[Sewer Managment]";
+	mes "Thank you for helping me.";
+	next;
+	mes "[Sewer Managment]";
+	mes "Here take these 4 Treasure Tokens.";
+	set seven_qset,0;
+	set On_Quest,0;
+	delitem 969,1;
+	set #Treasure_Token,#Treasure_Token+4;
+	close;
+}
+//7-4;
+alb2trea.gat,94,102,6	script	Scarlet	725,{
+	if (seven_qset == 4 && countitem(1127) > 0) goto N_QuestComp;
+	if (seven_qset == 4) goto N_QuestStart;
+	mes "[Scarlet]";
+	mes "Sorry, busy.";
+	close;
+N_QuestComp:
+	mes "[Scarlet]";
+	mes "Thank you for helping me, I presume the worse.";
+	next;
+	mes "[Scarlet]";
+	mes "Here take these 4 Treasure Tokens.";
+	set seven_qset,0;
+	set On_Quest,0;
+	delitem 1127,1;
+	set #Treasure_Token,#Treasure_Token+4;
+	close;
+N_QuestStart:
+	mes "[Scarlet]";
+	mes "Good your here. Ok there are reports of an old captain named Drake abored this ship. Kill Him!";
+	mes " ";
+	mes "Bring me his Saber as proof!";
+	close;
+}
+///////Job list 8///////
+//8-1
+function	script	eight_qset1	{
+	if (eight_qset == 1 && countitem(532) > 4) goto N_QuestComp2;
+	mes "[Girl]";
+	mes "Hi mister person. Can you get me some Banana juice?";
+	mes "I want 5 of them.";
+	close;
+N_QuestComp2:
+	mes "[Girl]";
+	mes "Thank you so much!";
+	next;
+	mes "[Girl]";
+	mes "Have these 1 Treasure Tokens.";
+	set eight_qset,0;
+	set On_Quest,0;
+	delitem 532,5;
+	set #Treasure_Token,#Treasure_Token+1;
+	close;
+}
+//8-2;
+morocc.gat,165,55,6	script	Klye	48,{
+	if (eight_qset == 2 && countitem(1081) > 0) goto N_QuestComp;
+	if (eight_qset == 2) goto N_QuestStart;
+	mes "[Klye]";
+	mes "Hello "+strcharinfo(0)+".";
+	close;
+N_QuestComp:
+	mes "[Klye]";
+	mes "Thank you for this delivery.";
+	next;
+	mes "[Klye]";
+	mes "Here take this Treasure Token as a reward.";
+	set eight_qset,0;
+	delitem 1081,1;
+	set On_Quest,0;
+	set #Treasure_Token,#Treasure_Token+1;
+	close;
+N_QuestStart:
+	mes "[Kyle]";
+	mes "So where's my Delivery";
+	close;
+
+}
+//8-3;
+prt_maze02.gat,103,86,6	script	Zack	751,{
+	if (eight_qset == 3 && countitem(923) > 0) goto N_QuestComp;
+	if (eight_qset == 3) goto N_QuestStart;
+	mes "[Zack]";
+	mes "Hello, have you seen my Whisper friend?";
+	close;
+N_QuestComp:
+	mes "[Zack]";
+	mes "Thank you for helping me, I presume the worse.";
+	next;
+	mes "[Zack]";
+	mes "Here take these 5 Treasure Tokens.";
+	set eight_qset,0;
+	set On_Quest,0;
+	delitem 923,1;
+	set #Treasure_Token,#Treasure_Token+5;
+	close;
+N_QuestStart:
+	mes "[Zack]";
+	mes "Hello,the reason why I brought you here was because of a very strange monster known as Baphomet.";
+	mes "People say that Baphomet guilds the gate to the under-world but I don't belive them, Kill Baphomet!";
+	mes " ";
+	mes "Bring me his Evil Horn!";
+	close;
+}
+//8-4;
+payon.gat,136,129,6	script	Flower	703,{
+	if (eight_qset == 4 && countitem(746) > 9) goto N_QuestComp;
+	if (eight_qset == 4) goto N_QuestStart;
+	mes "[Flower]";
+	mes "Sorry I'm waiting for someone. You will have to come back later.";
+	close;
+N_QuestComp:
+	mes "[Flower]";
+	mes "Thank you for helping me, I presume the worse.";
+	next;
+	mes "[Flower]";
+	mes "Here take these 2 Treasure Tokens.";
+	set eight_qset,0;
+	set On_Quest,0;
+	delitem 746,10;
+	set #Treasure_Token,#Treasure_Token+2;
+	close;
+N_QuestStart:
+	mes "[Flower]";
+	mes "Help, help I have lost my Beads!! My brother Bush is going to kill me please help";
+	mes " ";
+	mes "Bring me 10 Glass Beads!";
+	close;
+}
+///////Job list 9///////
+//9-1;
+geffen_in.gat,168,124,6	script	Mage	48,{
+	if (nine_qset == 1 && countitem(1082) > 0) goto N_QuestComp;
+	if (nine_qset == 1) goto N_QuestStart;
+	mes "[Mage]";
+	mes "Hello "+strcharinfo(0)+" welcome to the Mage Guild.";
+	close;
+N_QuestComp:
+	mes "[Mage]";
+	mes "Thank you for this delivery. Sorry about the smell, Its a box of Toad Tounges";
+	next;
+	mes "[Mage]";
+	mes "Here take this Treasure Token as a reward.";
+	set nine_qset,0;
+	delitem 1082,1;
+	set On_Quest,0;
+	set #Treasure_Token,#Treasure_Token+1;
+	close;
+N_QuestStart:
+	mes "[Mage]";
+	mes "Hello "+strcharinfo(0)+", Where is my box of Toad Tounges?.";
+	close;
+}
+//9-2;
+pay_arche.gat,98,74,6	script	School Girl	703,{
+	if (nine_qset == 2 && countitem(1020) > 19) goto N_QuestComp;
+	if (nine_qset == 2) goto N_QuestStart;
+	mes "[School Girl]";
+	mes "Sorry I'm waiting for someone, you will have to come back later";
+	close;
+N_QuestComp:
+	mes "[School Girl]";
+	mes "Thank you for helping me.";
+	next;
+	mes "[School Girl]";
+	mes "Here take these 4 Treasure Tokens.";
+	set nine_qset,0;
+	set On_Quest,0;
+	delitem 1020,20;
+	set #Treasure_Token,#Treasure_Token+4;
+	close;
+N_QuestStart:
+	mes "[School Girl]";
+	mes "Help, Well what we know about Payon is that a while ago there was a freak fire that burnt down the old school.";
+	next;
+	mes "[School Girl]";
+	mes "The strange thing about what happened was that the children inside did not seem to die from the flames. They have taken over the entire 3rd floor of Payon Cave.";
+	mes " ";
+	mes "Bring me 20 Black Hair!";
+	close;
+}
+//9-3
+payon_in02.gat,19,33,6	script	Jack	740,{
+	if (nine_qset == 3 && countitem(1022) > 0) goto N_QuestComp;
+	if (nine_qset == 3) goto N_QuestStart;
+	if (nine_qset == 4) goto N_QuestStart2;
+	mes "[Jack]";
+	mes "Sorry I'm waiting for someone, you will have to come back later";
+	close;
+N_QuestComp:
+	mes "[Jack]";
+	mes "Thank you for helping me.";
+	next;
+	mes "[Jack]";
+	mes "Here take these 4 Treasure Tokens.";
+	set nine_qset,0;
+	set On_Quest,0;
+	delitem 1022,1;
+	set #Treasure_Token,#Treasure_Token+4;
+	close;
+N_QuestStart:
+	mes "[Jack]";
+	mes "Well I don't know much about this, it has to do with the deepest reagions of Payon Cave. We don't know much because no one ever seems to make it back alive. We suspect a monster we call the Moonlight Flower";
+	mes " ";
+	mes "Bring me back 1 Nine Tales!";
+	close;
+N_QuestStart2:
+//9-4
+	if (nine_qset == 4 && countitem(901) > 39) goto N_QuestComp2;
+	mes "[Jack]";
+	mes "Hello, we need you to investigate some crap in the 3rd level of payon.";
+	mes " ";
+	mes "Bring me back 40 Daenggie's.";
+	close;
+N_QuestComp2:
+	mes "[Jack]";
+	mes "Thank you for helping me.";
+	next;
+	mes "[Jack]";
+	mes "Here take these 3 Treasure Tokens.";
+	set nine_qset,0;
+	set On_Quest,0;
+	delitem 901,40;
+	set #Treasure_Token,#Treasure_Token+3;
+	close;
+}
+///////Job list 10///////
+//10-1
+morocc.gat,193,51,6	script	Kreg	48,{
+	if (ten_qset == 1 && countitem(1082) > 0) goto N_QuestComp;
+	if (ten_qset == 1) goto N_QuestStart;
+	mes "[Kreg]";
+	mes "Hello "+strcharinfo(0)+" welcome to Morroc.";
+	close;
+N_QuestComp:
+	mes "[Kreg]";
+	mes "Thank you for this delivery.";
+	next;
+	mes "[Kreg]";
+	mes "Here take this Treasure Token as a reward.";
+	set ten_qset,0;
+	delitem 1082,1;
+	set On_Quest,0;
+	set #Treasure_Token,#Treasure_Token+1;
+	close;
+N_QuestStart:
+	mes "[Kreg]";
+	mes "So where's my Delivery";
+	close;
+}
+//10-2;
+pay_fild10.gat,145,252,6	script	Man#02	122,{
+	if (ten_qset == 2 && countitem(1029) > 0) goto N_QuestComp;
+	if (ten_qset == 2) goto N_QuestStart;
+	mes "[Man]";
+	mes "Sorry I'm waiting for someone, you will have to come back later";
+	close;
+N_QuestComp:
+	mes "[Man]";
+	mes "Thank you for helping me.";
+	next;
+	mes "[Man]";
+	mes "Here take these 4 Treasure Tokens.";
+	set ten_qset,0;
+	set On_Quest,0;
+	delitem 1029,1;
+	set #Treasure_Token,#Treasure_Token+4;
+	close;
+N_QuestStart:
+	mes "[Man]";
+	mes "Tony the Tiger is on Crack! He must be stoped, KILL HIM!";
+	mes " ";
+	mes "Bring me back 1 Tiger's_Skin!";
+	close;
+}
+//10-3;
+moc_fild04.gat,193,51,6	script	Caral	119,{
+	if (ten_qset == 3 && countitem(1015) > 0) goto N_QuestComp;
+	if (ten_qset == 3) goto N_QuestStart;
+	mes "[Caral]";
+	mes "Sorry I'm waiting for someone, you will have to come back later.";
+	close;
+N_QuestComp:
+	mes "[Caral]";
+	mes "Thank you for helping me.";
+	next;
+	mes "[Caral]";
+	mes "Here take these 4 Treasure Tokens.";
+	set ten_qset,0;
+	set On_Quest,0;
+	delitem 1015,1;
+	set #Treasure_Token,#Treasure_Token+4;
+	close;
+N_QuestStart:
+	mes "[Caral]";
+	mes "Phreeoni the Pink Fluff is terrorizing little novices! He must be stoped, KILL HIM!";
+	mes " ";
+	mes "Bring me back 1 Tounge!";
+	close;
+}
+//10-4
+moc_fild15.gat,250,251,6	script	Jeni	727,{
+	if (ten_qset == 4 && countitem(1096) > 0) goto N_QuestComp;
+	if (ten_qset == 4) goto N_QuestStart;
+	mes "[Jeni]";
+	mes "Sorry I'm waiting for someone, You will have to come back later";
+	close;
+N_QuestComp:
+	mes "[Jeni]";
+	mes "Thank you for helping me.";
+	next;
+	mes "[Jeni]";
+	mes "Here take these 3 Treasure Tokens.";
+	set ten_qset,0;
+	set On_Quest,0;
+	delitem 1096,1;
+	set #Treasure_Token,#Treasure_Token+3;
+	close;
+N_QuestStart:
+	mes "[Jeni]";
+	mes "This half naked freak need an army to take down, now its your job,good luck.";
+	mes " ";
+	mes "Bring me back 1 Round Shell!";
+	close;
+}
+
+//===================== Token =====================================================
+
+lhz_in03.gat,266,255,0	warp	thqwrp#1	1,1,yuno_in01.gat,123,155
+
+lhz_in03.gat,261,265,1	script	Treasure Hunter's Shop	65,{
+	mes "[Ash]";
+	mes "Ahh, "+strcharinfo(0)+"! Welcome to the Offical Treasure Hunter's Guild Shop.";
+	mes "You currently have ^FF0000"+#Treasure_Token+"^000000 treasure tokens!!!";
+	next;
+	menu "How does this place work?",-,"What do you have in stock?",N_Shop,"Nevermind",N_NVM;
+	mes "[Ash]";
+	mes "Well you see here you can exchange your treasure hunter tokens for zeny or rare weapons forged by our blacksmiths.";
+	mes " ";
+	mes "Everything has its own price value and the only way you can get the tokens is by completing quests assigned to you,the system normally works like this.";
+	mes " ";
+	mes "The harder the mission the more Tokens you will earn. All red quests are worth 4-8 Tokens, and the rest are worth 1-5.";
+	mes " ";
+	mes "Hope that solves your problem and questions.";
+	close;
+N_NVM:
+	close;
+	end;
+N_Shop:
+//This is when it gets hard :)
+	mes "[Ash]";
+	mes "Ok here is our Big list of goods.";
+	mes " ";
+	mes "(Note T stands for a Treasure Token.)";
+	next;
+	menu "Trade for Zeny",-,"Trade for Weapons",N_BuyWeps,"Trade for Special Item",N_BuyCards,"Nevermind",N_NVM;
+	mes "[Ash]";
+	mes "This is what we have to offer.";
+	next;
+	menu "5000000z - 1T",-,"50000000z - 10T",N_10T,"600000000z - 100T",N_100T,"Nevermind",N_NVM;
+	if (#Treasure_Token > 0) goto N_GetZeny1k;
+	mes "You don't have enough tokens!";
+	close;
+N_GetZeny1k:
+	set #Treasure_Token,#Treasure_Token-1;
+	set zeny,zeny+5000000;
+	close;
+N_10T:
+	if (#Treasure_Token > 9) goto N_GetZeny10k;
+	mes "You don't have enough tokens!";
+	close;
+N_GetZeny10k:
+	set #Treasure_Token,#Treasure_Token-10;
+	set zeny,zeny+50000000;
+	close;
+N_100T:
+	if (#Treasure_Token > 99) goto N_GetZeny100k;
+	mes "You don't have enough tokens!";
+	close;
+N_GetZeny100k:
+	set #Treasure_Token,#Treasure_Token-100;
+	set zeny,zeny+600000000;
+	close;
+
+N_BuyWeps:
+	mes "[Ash]";
+	mes "This is what we have to offer.";
+	next;
+	menu "Axe's",-,"1 Handed Swords",N_1HandSword,"2 Handed Swords",N_2HandSword,"Book's",N_Book,"Bow's",N_Bow,"Katar's",N_Katar,"Knuckle's",N_Knuckle,"Mace's",N_Mace,"Whips",N_Whip,"Wands",N_Wand,"Nevermind",N_NVM;
+
+	mes "[Ash]";
+	mes "This is what we have to offer.";
+	next;
+	menu "Sabbath - 160T",-,"Slaughter - 160T",N_Slau,"Tomahawk - 180T",N_Toma,"Great Axe - 200T",N_GreatA,"Guillotine - 200T",N_Guill,"Nevermind",N_NVM;
+
+	if (#Treasure_Token < 160) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-160;
+	getitem 1365,1;
+	logmes "Treasure Token: Bought a Sabbath";
+	close;
+N_Slau:
+	if (#Treasure_Token < 160) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-160;
+	getitem 1367,1;
+	logmes "Treasure Token: Bought a Slaughter";
+	close;
+N_Toma:
+	if (#Treasure_Token < 180) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-180;
+	getitem 1368,1;
+	logmes "Treasure Token: Bought a Tomahawk";
+	close;
+N_GreatA:
+	if (#Treasure_Token < 200) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-200;
+	getitem 1364,1;
+	logmes "Treasure Token: Bought a Great Axe";
+	close;
+N_Guill:
+	if (#Treasure_Token < 200) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-200;
+	getitem 1369,1;
+	logmes "Treasure Token: Bought a Guillotine";
+	close;
+N_NeedToken:
+	mes "[Ash]";
+	mes "You don't have enough tokens!";
+	close;
+
+
+N_1HandSword:
+	mes "[Ash]";
+	mes "This is what we have to offer.";
+	next;
+	menu "Edge - 130T",-,"Solar Sword - 150T",N_SolarS,"Caesar's Sword - 170T",N_CaesarS,"Nagan - 180T",N_Nagan,"Immaterial Sword - 200T",N_ImmatS,"Excalibur - 200T",N_Excal,"Byeollungum - 240T",N_Byeoll,"Talefing - 320T",N_Talef,"Nevermind",N_NVM;
+
+	if (#Treasure_Token < 130) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-130;
+	getitem 1132,1;
+	logmes "Treasure Token: Bought a Edge";
+	close;
+N_SolarS:
+	if (#Treasure_Token < 150) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-150;
+	logmes "Treasure Token: Bought a Solar Sword";
+	getitem 1136,1;
+	close;
+N_CaesarS:
+	if (#Treasure_Token < 170) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-170;
+	logmes "Treasure Token: Bought a Caesars Sword";
+	getitem 1134,1;
+	close;
+N_Nagan:
+	if (#Treasure_Token < 180) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-180;
+	logmes "Treasure Token: Bought a Nagan";
+	getitem 1130,1;
+	close;
+N_ImmatS:
+	if (#Treasure_Token < 200) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-200;
+	logmes "Treasure Token: Bought a Immaterial Sword";
+	getitem 1141,1;
+	close;
+N_Excal:
+	if (#Treasure_Token < 200) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-200;
+	logmes "Treasure Token: Bought a Excalibur";
+	getitem 1137,1;
+	close;
+N_Byeoll:
+	if (#Treasure_Token < 240) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-240;
+	logmes "Treasure Token: Bought a Byeollungum";
+	getitem 1140,1;
+	close;
+N_Talef:
+	if (#Treasure_Token < 320) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-320;
+	logmes "Treasure Token: Bought a Talefing";
+	getitem 1139,1;
+	close;
+
+
+N_2HandSword:
+	mes "[Ash]";
+	mes "This is what we have to offer.";
+	next;
+	menu "Dragon Slayer - 140T",-,"Schweizersabel - 200T",N_Schwe,"Katzbalger - 300T",N_Katzb,"Muramasa - 300T",N_Murama,"Masamune - 400T",N_Masamu,"Broad Sword - 100T",N_Balmu,"Nevermind",N_NVM;
+
+	if (#Treasure_Token < 140) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-140;
+	logmes "Treasure Token: Bought a Dragon Slayer";
+	getitem 1166,1;
+	close;
+N_Schwe:
+	if (#Treasure_Token < 200) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-200;
+	logmes "Treasure Token: Bought a Schweizersabel";
+	getitem 1167,1;
+	close;
+N_Katzb:
+	if (#Treasure_Token < 300) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-300;
+	logmes "Treasure Token: Bought a Katzbalger";
+	getitem 1170,1;
+	close;
+N_Murama:
+	if (#Treasure_Token < 300) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-300;
+	logmes "Treasure Token: Bought a Muramasa";
+	getitem 1164,1;
+	close;
+N_Masamu:
+	if (#Treasure_Token < 400) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-400;
+	logmes "Treasure Token: Bought a Masamune";
+	getitem 1165,1;
+	close;
+N_Balmu:
+	if (#Treasure_Token < 100) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-100;
+	logmes "Treasure Token: Bought a Broad Sword";
+	getitem 1162,1;
+	close;
+
+
+N_Book:
+	mes "[Ash]";
+	mes "This is what we have to offer.";
+	next;
+	menu "Book of the Burning Sun - 80T",-,"Book of the Rough Seas - 80T",N_RoughSea,"Book of the Dry Winds - 80T",N_DryWinds,"Book of the Ripe Earth - 80T",N_RipeEarth,"Book of the Revelations - 80T",N_Revela,"Bible - 90T",N_Bible,"Tablet - 120T",N_Tablet,"Nevermind",N_NVM;
+
+	if (#Treasure_Token < 80) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-80;
+	logmes "Treasure Token: Bought a Book of the Burning Sun";
+	getitem 1555,1;
+	close;
+N_RoughSea:
+	if (#Treasure_Token < 80) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-80;
+	logmes "Treasure Token: Bought a Book of the Rough Seas";
+	getitem 1553,1;
+	close;
+N_DryWinds:
+	if (#Treasure_Token < 80) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-80;
+	logmes "Treasure Token: Bought a Book of the Dry Winds";
+	getitem 1556,1;
+	close;
+N_RipeEarth:
+	if (#Treasure_Token < 80) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-80;
+	logmes "Treasure Token: Bought a Book of the Ripe Earth";
+	getitem 1554,1;
+	close;
+N_Revela:
+	if (#Treasure_Token < 80) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-80;
+	logmes "Treasure Token: Bought a Book of the Revelations";
+	getitem 1557,1;
+	close;
+N_Bible:
+	if (#Treasure_Token < 90) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-90;
+	logmes "Treasure Token: Bought a Bible";
+	getitem 1551,1;
+	close;
+N_Tablet:
+	if (#Treasure_Token < 120) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-120;
+	logmes "Treasure Token: Bought a Tablet";
+	getitem 1552,1;
+	close;
+
+N_Bow:
+	mes "[Ash]";
+	mes "This is what we have to offer.";
+	next;
+	menu "Rudra's Bow - 150T",-,"Roguemaster's Bow - 150T",N_Rogue,"Nevermind",N_NVM;
+
+	if (#Treasure_Token < 150) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-150;
+	logmes "Treasure Token: Bought a Rudra Bow";
+	getitem 1720,1;
+	close;
+N_Rogue:
+	if (#Treasure_Token < 150) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-150;
+	logmes "Treasure Token: Bought a Roguemaster Bow";
+	getitem 1719,1;
+	close;
+
+N_Katar:
+	mes "[Ash]";
+	mes "This is what we have to offer.";
+	next;
+	menu "Katar of the Blazing Rage - 70T",-,"Katar of the Cold Icicle - 70T",N_ColdIce,"Katar of the Piercing Wind - 70T",N_PiercWind,"Katar of the Dusty Thornbush - 70T",N_DustyT,"Sharpened Legbone of Ghoul - 125T",N_Legbone,"Infiltrator - 150T",N_Infiltra,"Nevermind",N_NVM;
+
+	if (#Treasure_Token < 70) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-70;
+	logmes "Treasure Token: Bought a Katar of the Blazing Rage";
+	getitem 1258,1;
+	close;
+N_ColdIce:
+	if (#Treasure_Token < 70) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-70;
+	logmes "Treasure Token: Bought a Katar of the Cold Icicle";
+	getitem 1256,1;
+	close;
+N_PiercWind:
+	if (#Treasure_Token < 70) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-70;
+	logmes "Treasure Token: Bought a Katar of the Piercing Wind";
+	getitem 1259,1;
+	close;
+N_DustyT:
+	if (#Treasure_Token < 70) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-70;
+	logmes "Treasure Token: Bought a Katar of the Dusty Thornbush";
+	getitem 1257,1;
+	close;
+N_Legbone:
+	if (#Treasure_Token < 125) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-125;
+	logmes "Treasure Token: Bought a Sharpened Legbone of Ghoul";
+	getitem 1260,1;
+	close;
+N_Infiltra:
+	if (#Treasure_Token < 150) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-150;
+	logmes "Treasure Token: Bought a Infiltrator";
+	getitem 1261,1;
+	close;
+
+N_Knuckle:
+	mes "[Ash]";
+	mes "This is what we have to offer.";
+	next;
+	menu "Kaiser Knuckle - 75T",-,"Berserk - 75T",N_Berserk,"Nevermind",N_NVM;
+
+	if (#Treasure_Token < 75) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-75;
+	logmes "Treasure Token: Bought a Kaiser Knuckle";
+	getitem 1813,1;
+	close;
+N_Berserk:
+	if (#Treasure_Token < 75) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-75;
+	logmes "Treasure Token: Bought a Berserk";
+	getitem 1814,1;
+	close;
+
+N_Mace:
+	mes "[Ash]";
+	mes "This is what we have to offer.";
+	next;
+	menu "Spike - 65T",-,"Slash - 90T",N_Slash,"Grand Cross - 100T",N_GrandC,"Quadrille - 110T",N_Quadr,"Fist of Fury - 1000T",N_MJ,"Nevermind",N_NVM;
+
+	if (#Treasure_Token < 65) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-65;
+	logmes "Treasure Token: Bought a Spike";
+	getitem 1523,1;
+	close;
+N_Slash:
+	if (#Treasure_Token < 90) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-90;
+	logmes "Treasure Token: Bought a Slash";
+	getitem 1526,1;
+	close;
+N_GrandC:
+	if (#Treasure_Token < 100) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-100;
+	logmes "Treasure Token: Bought a Grand Cross";
+	getitem 1528,1;
+	close;
+N_Quadr:
+	if (#Treasure_Token < 110) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-110;
+	logmes "Treasure Token: Bought a Quadrille";
+	getitem 1527,1;
+	close;
+N_MJ:
+	if (#Treasure_Token < 1000) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-1000;
+	logmes "Treasure Token: Bought a Fist of Fury";
+	getitem 1530,1;
+	close;
+
+N_Whip:
+	mes "[Ash]";
+	mes "This is what we have to offer.";
+	next;
+	menu "Rapture Rose - 50T",-,"Chemeti - 65T",N_Chemeti,"Nevermind",N_NVM;
+
+	if (#Treasure_Token < 50) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-50;
+	logmes "Treasure Token: Bought a Rapture Rose";
+	getitem 1963,1;
+	close;
+N_Chemeti:
+	if (#Treasure_Token < 65) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-65;
+	logmes "Treasure Token: Bought a Chemeti";
+	getitem 1964,1;
+	close;
+
+N_Wand:
+	mes "[Ash]";
+	mes "This is what we have to offer.";
+	next;
+	menu "Mighty Staff - 90T",-,"Wizardry Staff - 150T",N_Wizardry,"Bone Wand - 110T",N_BoneW,"Staff of Soul - 120T",N_SOSoul,"Nevermind",N_NVM;
+
+	if (#Treasure_Token < 90) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-90;
+	logmes "Treasure Token: Bought a Mighty Staff";
+	getitem 1613,1;//Items: Mighty_Staff,
+	close;
+N_Wizardry:
+	if (#Treasure_Token < 150) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-150;
+	logmes "Treasure Token: Bought a Wizardry Staff";
+	getitem 1473,1;//Items: Wizardy_Staff,
+	close;
+N_BoneW:
+	if (#Treasure_Token < 110) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-110;
+	logmes "Treasure Token: Bought a Bone Wand";
+	getitem 1615,1;//Items: Bone_Wand,
+	close;
+N_SOSoul:
+	if (#Treasure_Token < 120) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-120;
+	logmes "Treasure Token: Bought a Staff of Soul";
+	getitem 1472,1;//Items: Staff_of_Soul,
+	close;
+
+N_BuyCards:
+	mes "[Ash]";
+	mes "This is what we have to offer.";
+	next;
+	menu "Emblem of the Sun God - 300T",-,"Silver Ornament - 300T",N_CPasana,"Billow - 300T",N_CDok,"Ripple - 300T",N_CSFish,
+		"Wrath of Valkyrie - 300T",N_CSMan,"GTB Card - 350T",N_CDrain,"Hollow Mask - 600T",N_CKaho,"Gentlemans Pipe - 600T",N_CMand,
+		"Ghostring Card - 350T",N_CVadon,"Omen of Tempest - 300T",N_CMummy,"Snow Crystal - 300T",N_CZeno,"Sinew of Bird - 300T",N_CCond,
+		"Deviling Card - 350T",N_CZomb,"Nevermind",N_NVM;
+
+	if (#Treasure_Token < 300) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-300;
+	logmes "Treasure Token: Bought a ESG";
+	getitem 7086,1;//Items: Emblem_of_the_Sun_God,
+	close;
+
+N_CPasana:
+	if (#Treasure_Token < 300) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-300;
+	logmes "Treasure Token: Bought a Silver Ornament";
+	getitem 7077,1;//Items: Silver_Ornament,
+	close;
+N_CDok:
+	if (#Treasure_Token < 300) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-300;
+	logmes "Treasure Token: Bought a Billow";
+	getitem 7091,1;//Items: Billow,
+	close;
+N_CSFish:
+	if (#Treasure_Token < 300) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-300;
+	logmes "Treasure Token: Bought a Ripple";
+	getitem 7090,1;//Items: Ripple,
+	close;
+N_CSMan:
+	if (#Treasure_Token < 300) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-300;
+	logmes "Treasure Token: Bought a Wrath of Valkyrie";
+	getitem 7078,1;//Items: Wrath_of_Valkyrie,
+	close;
+N_CDrain:
+	if (#Treasure_Token < 350) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-350;
+	logmes "Treasure Token: Bought a Golden Thief Bug Card";
+	getitem 4128,1;//Items: Golden_Thief_Bug_Card,
+	close;
+N_CKaho:
+	if (#Treasure_Token < 600) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-600;
+	logmes "Treasure Token: Bought a Hollow Mask";
+	getitem 30021,1;//Items: Hollow_Mask,
+	close;
+N_CMand:
+	if (#Treasure_Token < 600) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-600;
+	logmes "Treasure Token: Bought a Gentlemans Pipe";
+	getitem 30004,1;//Items: Gentlemans_Pipe,
+	close;
+N_CVadon:
+	if (#Treasure_Token < 350) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-350;
+	logmes "Treasure Token: Bought a Ghostring Card";
+	getitem 4047,1;//Items: Ghostring_Card,
+	close;
+N_CMummy:
+	if (#Treasure_Token < 300) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-300;
+	logmes "Treasure Token: Bought a Omen of Tempest";
+	getitem 7089,1;//Items: Omen_of_Tempest,
+	close;
+N_CZeno:
+	if (#Treasure_Token < 300) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-300;
+	logmes "Treasure Token: Bought a Snow Crystal";
+	getitem 7088,1;//Items: Snow_Crystal,
+	close;
+N_CCond:
+	if (#Treasure_Token < 300) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-300;
+	logmes "Treasure Token: Bought a Sinew of Bear";
+	getitem 7085,1;//Items: Sinew_of_Bear,
+	close;
+N_CZomb:
+	if (#Treasure_Token < 350) goto N_NeedToken;
+	set #Treasure_Token,#Treasure_Token-350;
+	logmes "Treasure Token: Bought a Deviling Card";
+	getitem 4174,1;//Items: Deviling_Card,
+	close;
+}

@@ -1,0 +1,619 @@
+//===== Global Chile ======
+//=== https://www.facebook.com/IntegralesGlobal ===
+
+
+prontera.gat,148,199,4	script	Recompensas NPC::Rewards	833,{
+	// Garbage cleaning
+ mes "^008888[Rewards]^000000";
+mes "¿Como puedo ayudarte hoy?";
+next;
+
+switch( select("^2E8B57Donaciones SMS^000000","Items por Creditos","^333300Divisas^000000","^6600ffVote For Points^000000") ){
+
+case 1:
+/*********************** [ VARIABLES ] **********************************************************/
+set .@n$,"^008888[ Contadora SMS ]^000000"; //Nombre del NPC
+set @servi$,"[ ^99cc00 Ares Ragnarök ^000000 ]"; //Nombre del servidor
+set .@web$, "<URL> ^ff0000 http://www.ares-ro.com/ ^000000</URL>";
+/************************************************************************************************/
+
+	/*  MENU DE USUARIOS NORMALES */
+	/* ************************************************************* */
+	mes .@n$;
+	mes "Saludos, Bienvenido al sistema de Donaciones SMS";
+	mes "   "+ @servi$+" ";
+	next;
+	soundeffect "siroma_move.wav",0;
+	mes .@n$;
+	mes "¿En que puedo  ayudarte?";
+	next;
+	soundeffect "siroma_move.wav",0;
+   
+  	
+	
+   
+   menu "^ff0000 ¡Validar Codigo SMS! ^000000",vali,"¿^99cc00Cuanto Cash Point tengo ^000000?",total_cashpoint,"¿^0000cc Como dono via SMS ^000000?",COMO,"¿^660000 Que cosa Gano ^000000?",GANAS,"^cc9933 ------> Salir <------^000000",salir;
+    
+GANAS:
+	next;
+	soundeffect "siroma_move.wav",0;
+	mes .@n$;
+	
+	mes "Ganas  [ ^ff0000150^000000 ]  Cash point para gastarlos en lo que mas gustes en el Cash Shop.";
+	next;
+			mes "¿Validar un Codigo de SMS ?";
+			if (select("Si:No") == 2)	goto salir;
+			goto vali;
+ 
+vali:
+
+next;
+soundeffect "siroma_move.wav",0;
+mes .@n$;
+mes "Por favor, Introduce el código que has recibido por SMS:";
+next;
+
+soundeffect "siroma_move.wav",0;
+input @sms_message$;
+
+next;
+soundeffect "siroma_move.wav",0;
+//Revisa si el codigo esta activo
+query_sql("SELECT COUNT(*) FROM sms_donacion WHERE sms_message = '" + @sms_message$ + "' AND id_sms_stado = '1'", @producto);
+if (@producto == 0) {
+		//Revisa si el codigo esta Usado
+		query_sql("SELECT COUNT(*) FROM sms_donacion WHERE sms_message = '" + @sms_message$ + "' AND id_sms_stado = '2'", @producto);
+		if (@producto == 1) {
+			mes .@n$;
+			soundeffect "eggyra_die.wav",0;
+			mes "El código de donación sms: ^ff0000"+@sms_message$+"^000000";
+			mes "Ya fue usado.";
+			next;
+			mes "¿Validar un Codigo Correcto de SMS ?";
+			if (select("Si:No") == 2)	goto salir;
+			goto vali;
+		}
+        mes .@n$;
+		soundeffect "eggyra_die.wav",0;
+        mes "El código de donación sms: ^ff0000"+@sms_message$+"^000000";
+        mes "No es válido.";
+        next;
+			mes "¿Validar un Codigo Correcto de SMS ?";
+			if (select("Si:No") == 2)	goto salir;
+			goto vali;
+}
+
+// Trae punto de donacion para pasarlos a cashpoint
+query_sql("SELECT `sms_custom`  FROM sms_donacion WHERE sms_message = '" + @sms_message$ + "' AND id_sms_stado = '1'", @cashpoint);
+
+// actualiza el estado de la donacion para que llege a cobrado
+query_sql("UPDATE `sms_donacion` SET  `id_sms_stado` =  '2' WHERE  `sms_message` ='" + @sms_message$ + "'");
+
+// Trae punto de donacion para pasarlos a cashpoint
+query_sql("SELECT `id_sms_donacion`  FROM sms_donacion WHERE sms_message = '" + @sms_message$ + "'", @id_donacion);
+
+//inserta cash a la cuenta del usuario
+set #CASHPOINTS,#CASHPOINTS + @cashpoint;
+// puntos de donacion para dar el bonus de donacion sms ^^
+set #Puntossms,#Puntossms + 1;
+
+//inserta log donacion
+query_sql("INSERT INTO `sms_donacion_log` (`id_sms_donacion_log`, `id_sms_donacion`, `sms_donacion_fecha_cobro`, `sms_donacion_cuenta`) VALUES (NULL, '"+ @id_donacion +"', '" + gettimestr("%Y-%m-%d %H:%M:%S",21) + "', '" + getcharid(3) + "')");
+
+next;
+soundeffect "siroma_move.wav",0;
+mes .@n$;
+mes "El código de donación SMS: [ ^ff0000 "+@sms_message$+" ^000000 ]";
+mes "Es correcto, gracias por donar a nuestro servidor  "+ @servi$+" ";
+
+// Aviso a los usuarios que X usuario Dono
+announce "~ " + (Sex?"El ":"La ") + " [ "+ strcharinfo(0) +" ]  acaba de donar vía SMS. Obtiene  [" + @cashpoint + "]  Cash Point a su cuenta . Gracias ~",bc_all,0xFF6633;
+soundeffect "dying.wav",0;
+
+next;
+soundeffect "siroma_move.wav",0;
+dispbottom "[>> Ahora tienes tus "+@cashpoint+" Cash point en tu cuenta <<]";
+dispbottom "[>> Ahora Tienes 1 Punto de donacionSMS <<]";
+next;
+soundeffect "siroma_move.wav",0;
+mes .@n$;
+mes "Se han añadido: [ ^ff0000 "+@cashpoint+" ^000000 ] Cash Points a tu Personaje.";
+
+next;
+soundeffect "siroma_move.wav",0;
+mes .@n$;
+mes "Actualmente dispones de :";
+mes " Tu Cash point total es [ ^0000FF "+#CASHPOINTS+" ^000000 ]";
+next;
+			mes "¿Validar otro codigo ?";
+			if (select("Si:No") == 2)	goto salir;
+			goto vali;
+
+COMO:
+soundeffect "siroma_move.wav",0;
+mes .@n$;
+mes "Para donar por Via SMS es super Facil";
+
+next;
+soundeffect "siroma_move.wav",0;
+mes .@n$;
+mes "Entra al panel de control que es";
+mes .@web$;
+
+next;
+soundeffect "siroma_move.wav",0;
+mes .@n$;
+mes "Pincha donde dice Donacion SMS ";
+
+next;
+soundeffect "siroma_move.wav",0;
+mes .@n$;
+mes "Apreta continuar";
+
+next;
+soundeffect "siroma_move.wav",0;
+mes .@n$;
+mes "Te saldra la ventana de Paygol ";
+mes "ahora escoje tu pais";
+
+next;
+soundeffect "siroma_move.wav",0;
+mes .@n$;
+mes "Recuerda Respeta las mayusculas GOL ";
+mes "^336699 Ho no te servira de nada aver enviado el SMS con la palabra GOL en minusculas ^000000";
+
+next;
+soundeffect "siroma_move.wav",0;
+mes .@n$;
+mes "Resiviras un SMS con un codigo";
+mes "Ahora ponle OK en la ventana de donacion Paygol";
+
+next;
+soundeffect "siroma_move.wav",0;
+mes .@n$;
+mes "Ahora ve aprontera y introduce el codigo en este misno npc en ^5533ff¡Validar Codigo SMS!^000000";
+next;
+			mes "¿Validar un codigo sms ?";
+			if (select("Si:No") == 2)	goto salir;
+			goto vali;
+
+ 
+salir:
+soundeffect "siroma_move.wav",0;
+mes .@n$;
+mes "Vuelva cuando nesesite mi ayuda";
+mes "Te estare esperando";
+close;
+
+total_cashpoint:
+soundeffect "siroma_move.wav",0;
+mes .@n$;
+mes "Usted tiene un total de:";
+mes "Tienes ^0000FF[ "+#CASHPOINTS+" ]  ^000000 Cash Points ";
+next;
+			mes "¿Validar un codigo sms ?";
+			if (select("Si:No") == 2)	goto salir;
+			goto vali;
+
+end;
+
+
+
+case 2:
+
+// ----------------- NPC Settings -----------------
+	// --- SET THESE BEFORE LOADING THE SCRIPT! ---
+	
+	// Server Name
+	set .serverName$,"Thanatos-RO";
+	
+	// NPC Name to display during chat.
+	// Default: "[Donor Rewards Redeemer]"
+	set .npcName$,"^008888[Rewards]^000000";
+	
+	// DO NOT CHANGE THIS!
+	// Default: "cp_redeemlog"
+	set .redeemTable$,"cp_redeemlog";
+	
+	// Display Credits to FluxCP Creators?
+	// Help promote our product if its useful.
+	// 0 = Disable. 1 = Enable.
+	// Default: 1
+	set .showCredits,1;
+	
+	// Max number of unique items to redeem at a time.
+	// DO NOT RAISE THIS VALUE ABOVE 128 WITHOUT
+	// MAKING THE NECESSARY SCRIPT ENGINE MODS
+	// FOR SCRIPT ARRAY SIZING! DANGEROUS!
+	// Default: 128
+	set .numRedemptionsSimul,128; 
+	// --------------- End NPC Settings ---------------
+
+	// ----------------- Begin Script -----------------
+	mes .npcName$;
+	mes "Buenas, hola " + (Sex ? "Señor!" : "Señorita!");
+	mes "¿Cómo puedo ser de ayuda para usted en este buen día?";
+	next;
+	prompt("Deseo canjear items:¿Quién eres tú?:Simplemente estoy hojeando la zona");
+	mes .npcName$;
+	switch(@menu) {
+		case 1:
+			query_sql "SELECT `id`, `nameid`, `quantity` FROM `" + escape_sql(.redeemTable$) + "` WHERE `account_id` = " + getcharid(3) + " AND `redeemed` = 0 LIMIT " + .numRedemptionsSimul,.@id,.@nameid,.@quantity;
+			if (getarraysize(.@id) > 0) {
+				mes "Items Pending Redemption: " + getarraysize(.@id);
+				for (set .@i,0; .@i < getarraysize(.@id); set .@i,.@i+1)
+					if (checkweight(.@nameid[.@i],.@quantity[.@i]) == 0) {
+						mes "Lo siento mucho, pero usted está llevando demasiado para aceptar " + (.@i ? "any more of " : " ") + "your rewards at this time.";
+						mes "Por favor, vuelve con menos items.";
+					} else {
+						query_sql "UPDATE `" + escape_sql(.redeemTable$) + "` SET `char_id` = " + getcharid(0) + ", `redeemed` = 1, `redemption_date` = NOW() WHERE `id` = " + .@id[.@i];
+						getitem .@nameid[.@i],.@quantity[.@i];
+						mes .@quantity[.@i] + "x " + getitemname(.@nameid[.@i]);
+					}
+				if (.@i == getarraysize(.@id)) {
+					mes "Gracias por su patrocinio " + (Sex ? "fine sir." : "ma'am.");
+					mes "Por favor, disfrutar de su estancia en " + .serverName$ + "!";
+				}
+				if (.showCredits)
+					callfunc "F_FluxCredits";
+			} else {
+				mes "Mis registros indican que no hay recompensas que aguardan para ser redimidos.";
+				mes "Mis más profundas disculpas por el malentendido.";
+			}
+		break;
+		case 2:
+			mes "Yo estoy aquí para permitir la redención de recompensas para las donaciones a " + .serverName$ + ".";
+			mes "Las donaciones se pueden hacer con el servidor a través del panel de control.";
+		break;
+		default:
+			mes "Muy bien entonces.";
+			mes "Que tengas un buen día.";
+		break;
+	}
+	close;
+
+	
+	
+case 3:
+
+	set @npcname$,"^008888[Rewards]^000000";
+	set @cantidad,0;
+
+	mes @npcname$;
+	mes (Sex?"Bienvenido":"Bienvenida")+" al mercado "+(Sex?"chico":"chica")+",";
+	mes "soy el encargado oficial de las divisas.";
+	mes "Puedo cambiar tus ^F79F81Poring Coin^000000 (^F79F81PC^000000) por ^04B404Cash Points^000000 (^04B404CP^000000) y viceversa!";
+	mes "Y ademas puedo decirte cuantos ^04B404CP^000000 te quedan en tu cuenta!";
+	next;
+	switch(select("Informacion:^F79F81PC^000000 por ^04B404CP^000000:^04B404CP^000000 por ^F79F81PC^000000")) {
+		case 1:
+			switch(select("Ver mis ^04B404Cash Points^000000:Intercambio de divisas")) {
+				case 1:
+					mes @npcname$;
+					mes "Actualmente tienes [^04B404"+#CASHPOINTS+"^000000] ^04B404CP^000000.";
+					close2;
+					end;
+				case 2:
+					mes @npcname$;
+					mes "Actualmente, el precio de mercado de ^F79F81PC^000000 y ^04B404CP^000000 es el mismo, por ejemplo podria hacer que [^F79F8120^000000] ^F79F81PC^000000 pasen a ser [^04B40420^000000] ^04B404CP^000000!";
+					close2;
+					end;
+			}
+			
+		case 2:
+			mes @npcname$;
+			mes "Que cantidad de ^F79F81PC^000000 deseas pasar a ^04B404CP^000000?";
+			next;
+			input @cantidad;
+			mes @npcname$;
+			mes "Estas "+(Sex?"seguro":"segura")+" de querer cambiar el total de [^F79F81"+@cantidad+"^000000] ^F79F81PC^000000?";
+			next;
+			menu "Si",-,"No",L_Cancel;
+			if ( countitem(7539) < @cantidad) goto L_NoPC;
+			delitem 7539,@cantidad;
+			set #CASHPOINTS, #CASHPOINTS + @cantidad;
+			mes @npcname$;
+			mes "Tus [^F79F81"+@cantidad+"^F79F81] ^F79F81PC^000000 ahora son [^04B404"+@cantidad+"^000000] ^04B404CP^000000!";
+			close2;
+			end;
+			
+		case 3:
+			mes @npcname$;
+			mes "Que cantidad de ^04B404CP^000000 deseas pasar a ^F79F81PC^000000?";
+			next;
+			input @cantidad;
+			mes @npcname$;
+			mes "Estas "+(Sex?"seguro":"segura")+" de querer cambiar el total de [^04B404"+@cantidad+"^000000] ^04B404CP^000000?";
+			next;
+			menu "Si",-,"No",L_Cancel;
+			if ( #CASHPOINTS < @cantidad) goto L_NoCP;
+			set #CASHPOINTS, #CASHPOINTS - @cantidad;
+			getitem 7539,@cantidad;
+			mes @npcname$;
+			mes "Tus [^04B404"+@cantidad+"^000000] ^04B404CP^000000 ahora son [^F79F81"+@cantidad+"^000000] ^F79F81PC^000000!";
+			close2;
+			end;
+	}
+
+L_NoPC:
+	mes @npcname$;
+	mes "Lo siento ^0080FF"+strcharinfo(0)+"^000000, pero te faltan ^F79F81Poring Coins^000000 para realizar la transaccion.";
+	close2;
+	end;
+	
+L_NoCP:
+	mes @npcname$;
+	mes "Lo siento ^0080FF"+strcharinfo(0)+"^000000, pero te faltan ^04B404Cash Points^000000 para realizar la transaccion.";
+	close2;
+	end;
+	
+L_Cancel:
+	mes @npcname$;
+	mes "Como usted desee, que pase un buen dia!";
+	close2;
+	end;
+		
+
+case 4:
+
+
+//Function Prototypes
+function garbagecol;//Garbage collection for the Character variables
+garbagecol();
+function add_item; //Syntanx: add_item(ITEMID,QUANTITY,POINTS,CATEGORY);
+function makeCategory;//This will return a list of the categories
+function getItemsByCat;//This will return the list of items associated to the particular category
+function getItemDetails;//This will return the details of the item
+function getPoints;//This will return the points of the player stored in the database
+function updatePoints;//This will updates the points of the player stored in the database
+
+
+//NPC Name
+set .npcname$,"[ Vote For Points ]";
+	
+//Initialization of the Rewards
+add_item(5132,1,50,"Angeling Hat");
+add_item(5776,1,80,"Blazing Sun");
+add_item(18550,1,201,"Asgard Blessing [1]");
+add_item(18561,1,220,"B Feather Beret [1]");
+add_item(5211,1,250,"Dress Hat [1]");
+add_item(18630,1,280,"Drooping Alicel");
+add_item(18528,1,300,"Drooping Neko Crew [1]");
+add_item(5762,1,310,"Duneyrr Helm");
+add_item(18522,1,350,"Evil Marcher Hat [1]");
+add_item(18508,1,500,"Garuda Hat [1]");
+//Script Start	
+	mes .npcname$;
+	mes "¡Hola! ¿Quieres intercambiar sus puntos de voto?:";
+	switch(select("Sí, quiero cambiar mis puntos:Ver mis puntos"))
+	{
+		case 1:
+		next;
+			mes .npcname$;
+			mes "Por favor elija una categoría:";
+			set .@selected,select(makeCategory())-1;
+		next;
+			mes .npcname$;
+			mes "Por favor, el elemento que desee:";
+			set .@selected,select(getItemsByCat(@listCat$[.@selected]))-1;
+			
+		next;
+			mes .npcname$;						
+			set .@ritemid,getItemDetails(@itemKeys[.@selected],"itemid");
+			set .@rquantity,getItemDetails(@itemKeys[.@selected],"quantity");
+			set .@rpoints,getItemDetails(@itemKeys[.@selected],"points");
+			mes "Item ID:"+.@ritemid;
+			mes "Item Name: "+getitemname(.@ritemid);
+			mes "Item Quantity: "+.@rquantity+" pc(s).";
+			mes "Required Points: "+.@rpoints+" pt(s).";
+			mes "\n";
+			mes "¿Quieres este artículo?";
+			if(select("Si:No")==1)
+			{
+				set .@points,getPoints(getcharid(3));
+				if(.@points>=.@rpoints)
+				{
+					next;
+					mes .npcname$;			
+					updatePoints(getcharid(3),.@rpoints);
+					getitem .@ritemid,.@rquantity;
+					mes "¡Aqui tienes!. Gracias por votar. No te olvides de votar de nuevo. :D";
+				}
+				else
+					mes "Lo sentimos, usted no tiene los puntos suficientes para este ítem.";				
+			}
+			else
+			{
+				next;
+				mes .npcname$;			
+				mes "¡De acuerdo, adios!";
+			}			
+			garbagecol();
+		close;
+		case 2:
+			next;
+			mes .npcname$;			
+			set .@points,getPoints(getcharid(3));			
+			mes "Tu Actualmente tienes "+.@points+" pt(s).";
+			garbagecol();
+		close;
+	}
+end;
+
+//Functions Bodies
+	function updatePoints {
+		set .@account_id,getarg(0);
+		set .@usedPoints,getarg(1);
+		query_sql("UPDATE `cp_v4p_voters` SET points=(points-"+.@usedPoints+") WHERE account_id='"+.@account_id+"'");
+		return;
+	}
+
+	function getPoints {
+		set .@account_id,getarg(0);
+		query_sql("SELECT `points` FROM `cp_v4p_voters` WHERE account_id="+.@account_id+" LIMIT 1",.@points);
+		if(getarraysize(.@points)==0)
+			return 0;		
+		return .@points[0];
+	}
+
+	function getItemDetails {
+		set .@key,getarg(0); //Key
+		set .@detail$,getarg(1); //What details to return such as ItemID, Points, Quantity, Category
+		
+		if(strtolower(.@detail$) == strtolower("ItemID"))
+			return @itemID[.@key];
+		else if(strtolower(.@detail$) == strtolower("Quantity"))
+			return @itemQ[.@key];
+		else if(strtolower(.@detail$) == strtolower("Points"))
+			return @points[.@key];
+		else if(strtolower(.@detail$) == strtolower("Category"))
+			return @category$[.@key];
+	}
+
+	function getItemsByCat {		
+		set .@selectedCat$,getarg(0);
+		set .@make_string$,"";
+		set .@x,0;
+		for(set .@i,0; .@i<getarraysize(@category$); set .@i,.@i+1)
+		{
+			if(strtolower(.@selectedCat$) == strtolower(@category$[.@i]))
+			{
+				setarray @itemKeys[.@x],.@i;
+				if(.@make_string$ == "")
+					set .@make_string$,getitemname(@itemID[.@i]);
+				else
+					set .@make_string$,.@make_string$+":"+getitemname(@itemID[.@i]);
+				
+				set .@x,.@x+1;
+			}
+		}
+		return .@make_string$;
+	}
+	
+	
+	function makeCategory {
+		set .@make_string$,"";
+		for(set .@i,0; .@i<getarraysize(@category$); set .@i,.@i+1)
+		{			
+			if(.@make_string$ == "")
+			{
+				setarray @listCat$[getarraysize(@listCat$)],@category$[.@i];
+				set .@make_string$,@category$[.@i];
+			}
+			else
+			{
+				if(compare(.@make_string$,@category$[.@i])==0)
+				{
+					setarray @listCat$[getarraysize(@listCat$)],@category$[.@i];
+					set .@make_string$,.@make_string$+":"+@category$[.@i];				
+				}
+			}
+		}
+		return .@make_string$;
+	}
+			
+	function add_item
+	{
+		set .@itemID,getarg(0,-1); //IteID
+		set .@itemQ,getarg(1,-1); //Item Quantity
+		set .@points,getarg(2,-1);
+		set .@cat$,getarg(3,"Uncategorized"); //Category
+		
+		
+		if(.@itemID == -1)
+		{
+			debugmes "Invalid Item ID. Script not completely loaded.";
+			end;
+		}
+		else if(.@itemQ == -1)
+		{
+			debugmes "Invalid Item Quantity. Script not completely loaded.";
+			end;
+		}
+		else if(.@points == -1)
+		{
+			debugmes "Points assignment error. Script not completely loaded.";
+			end;
+		}
+		set .@key,getarraysize(@itemID);
+		setarray @itemID[.@key],.@itemID;
+		setarray @itemQ[.@key],.@itemQ;
+		setarray @points[.@key],.@points;
+		setarray @category$[.@key],.@cat$;
+		return 1; //return 1 as success
+	}
+	
+	function garbagecol{
+		deletearray @itemID[0],128;
+		deletearray @itemQ[0],128;
+		deletearray @points[0],128;	
+		deletearray @category$[0],128;	
+		deletearray @listCat$[0],128;
+		deletearray @itemKeys[0],128;
+		return;
+	}
+end;
+} // End Script
+
+end;
+}
+
+
+
+function	script	F_FluxCredits	{
+	mes "-----------------------------------";
+	mes "Powered by Flux Control Panel.";
+	mes "Copyright © 2015-2016 Matthew Harris and Nikunj Mehta.";
+	mes "http://ares-ro.com/";
+	return;
+}
+
+izlude.gat,131,150,4	duplicate(Rewards)	Rewards#1	833
+
+
+
+
+darkmall,86,98,3	script	Master Gold room	10005,{
+mes "¿Quieres entrar en mi habitación de oro?";
+menu "Si",-,"No gracias.",L_No;
+				specialeffect2 71;
+				specialeffect2 72;
+				pcblockmove getcharid(3),1;
+				sleep2 500;
+				specialeffect2 402;
+				sleep2 500;
+				emotion 12;
+				specialeffect2 6;
+				sleep2 200;
+				specialeffect2 304;
+				emotion e_ok;
+				warp "new_3-3.gat",0,0;
+				pcblockmove getcharid(3),0;
+
+end;
+
+L_No:
+close;
+
+}
+
+// Monsters
+new_3-3,0,0,0,0	monster	Dokebi	1110,140,0,0,0
+new_3-3,0,0,0,0	monster	Dokebi	1110,40,0,0,0
+new_3-3,0,0,0,0	monster	Dokebi	1110,140,0,0,0
+new_3-3,0,0,0,0	monster	Dokebi	1110,40,0,0,0
+new_3-3,0,0,0,0	monster	Gold poring	1110,10,0,0,0
+new_3-3,0,0,0,0	monster	Gold Guardian	1726,10,0,0,0
+new_3-3,95,170,0,0	monster	Gold Guardian	1727,3,0,0,0
+
+
+new_3-3	mapflag	nobranch
+new_3-3	mapflag	noexppenalty
+new_3-3	mapflag	pvp	on
+new_3-3	mapflag	noexppenalty
+
+// Warps
+//new_3-3.gat,130,193,0	warp	testwrp#1	3,3,ordeal_3-2.gat,154,154
+//ordeal_3-2.gat,106,154,0	warp	testwrp#2	3,3,ordeal_3-2.gat,154,154
+//ordeal_3-2.gat,201,129,0	warp	testwrp#3	3,3,ordeal_3-2.gat,154,154
+//ordeal_3-2.gat,177,193,0	warp	testwrp#4	3,3,ordeal_3-2.gat,154,154

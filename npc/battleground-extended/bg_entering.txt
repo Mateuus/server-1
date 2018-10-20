@@ -1,0 +1,89 @@
+// BG + PVP warper
+// By Vykimo
+
+prontera,183,191,2	script	Battleground#j	966,{
+		if(bgcheck())
+		{
+			mes "^404040[^808080" + strnpcinfo(1) + "^404040]^000000";
+			mes "Ahora puedes participar en el campo de batalla y ganar premios con tus insignias. ¿Quieres participar en el campo de batalla?";
+			next;
+			menu
+			"Participate in the Battleground(^FF0000" + (bg_queue_data(getvariableofnpc(.BG_Queue,"BG_Queue_Join"),0)) + " players^000000)",L_BG,
+			//"Free PVP Arene(^FF0000" + (getmapusers("1@dth3")+getmapusers("1@lab")+getmapusers("1@mir")) + " players^000000)",L_PVP,
+			"Cancel",-;
+			close;
+		}
+			mes "^404040[^808080" + strnpcinfo(1) + "^404040]^000000";
+			mes "Hola, puedo entrar en el campo de PVP del servidor.";
+			next;
+			menu
+			"Free PVP Arene(^FF0000" + (getmapusers("1@dth3")+getmapusers("1@lab")+getmapusers("1@mir")) + " players^000000)",L_PVP,
+			"Access the battleground room",L_BG,
+			"Any",-;
+			close;
+
+
+L_PVP:
+	mes "^404040[^808080" + strnpcinfo(1) + "^404040]^000000";
+	mes "RAPPEL du réglement du PVP :";
+	mes " ";
+	mes "- It is forbidden to Kill Deco (ie kill a player, then immediately disconnect to avoid getting killed).";
+	mes " ";
+	mes "- It is forbidden to Kill Raise (kill and then revive the same player without his consent).";
+	mes " ";
+	mes "- It is strictly forbidden to Double Account to boost the PVP / WOE and BG.";
+	close2;
+	getmapxy(@pvp_lmap$,@pvp_lx,@pvp_ly,UNITTYPE_PC);
+	warp "1@pop3",57,68;
+	sc_end SC_ALL;
+	end;
+
+L_BG:
+		if( BaseLevel < 79 )
+		{
+			mes "^404040[^808080" + strnpcinfo(1) + "^404040]^000000";
+			mes "Debes estar en el nivel mínimo base 80 para poder acceder al battleground.";
+			close;
+		}
+		if( checkquest(8506,PLAYTIME) == 2 ) erasequest 8506;
+		if( checkquest(8506,PLAYTIME) != -1 )
+		{
+			mes "^404040[^808080" + strnpcinfo(1) + "^404040]^000000";
+			mes "A marker indicates that you have recently accessed a game mode. I can not let you access the Battleground ["+checkquest(8506,PLAYTIME)+"/3min restant].";
+			close;
+		}
+	mes "^404040[^808080" + strnpcinfo(1) + "^404040]^000000";
+	mes "REMINDER of the regulation of the BG :";
+	mes " ";
+	mes "- It is forbidden to Kill Deco (ie kill a player, then immediately disconnect to avoid getting killed).";
+	mes " ";
+	mes "- Il est interdit de Kill Raise (kill and then revive the same player without his consent).";
+	mes " ";
+	mes "- It is strictly forbidden to Double Account to boost the PVP / WOE and BG.";
+	close2;
+	warp "bat_room",155,150;
+	end;
+	
+OnTimer5000:
+	stopnpctimer;
+	set .nbr_joueurBG,bg_queue_data(getvariableofnpc(.BG_Queue,"BG_Queue_Join"),0);
+	set .@nbr_joueurPVP,(getmapusers("1@dth3")+getmapusers("1@lab")+getmapusers("1@mir"));
+	delwaitingroom;
+OnInit:
+	if(.nbr_joueurBG >=1) 
+		waitingroom .nbr_joueurBG + " Player"+(.nbr_joueurBG>1?"s":"")+" au BG",0;
+	else if(.@nbr_joueurPVP >=1) 
+		waitingroom .@nbr_joueurPVP + " Player"+(.@nbr_joueurPVP>1?"s":"")+" au PVP",0;
+	else
+		waitingroom "No players in combat",0;
+	initnpctimer;
+	end;
+	
+OnBGGlobalStart:
+	while(bgcheck()) {
+		if(bg_queue_data(getvariableofnpc(.BG_Queue,"BG_Queue_Join"),0)>0)
+			specialeffect 367;
+		sleep 1500;
+	}
+	end;
+}

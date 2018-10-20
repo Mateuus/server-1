@@ -1,0 +1,111 @@
+//Valkyrie's Armor
+gon_in,182,24,0	script	Rhiper	4_M_MAYOR,{
+
+	.@varmor$ =  "^FF0000[Rhiper]^000000";
+
+mes .@varmor$;
+
+		if (ValkArmor==1){
+
+			mes "Buena suerte.";
+			close;
+
+				}
+	if (!Bts) {
+	
+			mes "No sé que quieres, pero aquí no lo encontraras.";
+			mes "No trabajo para cualquiera.";
+			close;
+	} // Fin Bts
+
+			
+	if (readparam(bAgi) < 255) {
+
+		mes "Lo siento, no pareces ser muy veloz.";
+		mes "Solo hablo con personas que sean ^9a0000veloces.^000000";
+		close;
+				}
+
+
+			if (!varmorok){
+		mes "Oh, veo que has logrado pasar la prueba.";
+		mes "Muy bien hecho "+strcharinfo(0)+".";
+		mes "Esto es solo el principio de lo que te espera.";
+		mes "Aprovecha esta oportunidad para luchar por la justicia.";
+		next;
+		mes .@varmor$;
+		mes "El equipo que estoy ofreciendo es : ^9a0000"+getitemname(.varmor)+"^000000";
+		mes "Este anillo forma parte del Set del ^420f6eCamino Del Guerrero Legendario.^000000";
+		next;
+		mes .@varmor$;
+		mes "Permiteme darte una breve explicación.";
+		mes "Una vez que hayas terminado todas las partes del ^420f6eCamino Del Guerrero Legendario^000000, tendrás la oportunidad de hablar con la ^357ebdDiosa Valkyrie^000000.";
+		mes "Son 8 partes las cuales han sido repartidas entre difentes familiares del cielo, los cuales me incluyen a mi, hermanos y hermanas.";
+		next;
+		mes .@varmor$;
+		mes "Debes tener en consideración que debes terminar las 8 misiones y conseguir las 8 partes por tu cuenta.";
+		mes "Comprar el equipo por el mercado, jugadores o por intercambio, no contarán y no serán aceptados al momento de requerir el permiso para visitar a Valkyrie.";
+		varmorok = 1;
+		close;
+		} else {
+		
+		mes "¿Deseas conocer el requisito de "+getitemname(.varmor)+"?";
+		if(select("Si porfavor.","No por el momento.")==2){close;}
+		next;
+		mes .@varmor$;
+		mes "Aprecio tu determinación.";
+		mes "Esta es la prueba que debes realizar:";
+		next;
+		mes .@varmor$;
+		while (.@i < getarraysize(.b_varmor)){
+			mes "- ^FF0000"+ getitemname(.b_varmor[.@i]) +"^000000 x"+ .r_varmor[.@i] +"";
+						++.@i;
+							} // Cirre Ciclo While
+		mes "300,000,000 Zeny";
+		next;
+			mes .@varmor$;
+				mes "¿Deseas crear "+getitemname(.varmor)+"?";
+					if(select("Crear","Salir")==2){close;}
+
+		if ((countitem(.b_varmor[0]) < .r_varmor[0] ) ||
+			(countitem(.b_varmor[1]) < .r_varmor[1] ) ||
+			(countitem(.b_varmor[2]) < .r_varmor[2] ) ||
+			(countitem(.b_varmor[3]) < .r_varmor[3] ) ||
+					(Zeny < 300000000) ) {
+				next;
+				mes .@varmor$;
+					mes "No tienes todos los items de la lista o falta Zeny.";
+					close;
+			}
+			if (!checkweight(.varmor, 1)){
+			mes "No tienes espacio suficiente en tu inventario.";
+			close;
+						}	
+						
+				while (.@j < getarraysize(.b_varmor)){
+						delitem .b_varmor[.@j], .r_varmor[.@j];
+						++.@j;
+					
+						}
+							Zeny-=300000000;
+	
+		next;	
+		mes .@varmor$;
+		mes "¡Felicidades!";
+		ValkArmor=1;
+		next;
+		announce "[Rhiper]: ¡WoW! "+strcharinfo(0)+ " ha completado una parte del Camino del Ultimo Guerrero.",0,0x00CCFF;
+		getitem .varmor[0], .varmor_r[0];
+		close;
+
+				} // FIN ELSE
+					
+
+OnInit:
+
+	setarray .b_varmor[0], Slilince_Wave, Silver_Fancy, Tri_Headed_Dragon_Head, Treasure_Box;
+	setarray .r_varmor[0], 4, 4, 100, 100;
+	setarray .varmor[0], Valkyrie_Armor;
+	setarray .varmor_r[0], 1;
+end;
+			} // FIN SCRIPT

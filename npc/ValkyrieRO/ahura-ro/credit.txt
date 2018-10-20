@@ -1,0 +1,284 @@
+invek,162,142,3	script	Sistema de Creditos	4_M_KAGE_OLD,{
+
+		set .nc$,"[^FF8000 Sistema de Creditos^000000]";
+
+		if (Creditos == 0){
+		.@SantaCardTurn = 0;
+		.@SantaCardWins = 0;
+		mes .nc$;
+		mes "Bienvenido al sistema de creditos.";
+		mes "Aqui podras intercambiar Zeny por tickets de Creditos.";
+		mes "Los cuales pueden ser usados para intercambiar por items que superen el limite permitido de Zenys.";
+		next;
+		mes "Cada Credito tiene el valor de 10.000.000 Zeny.";
+		mes "Por lo cual, puedes realizar transacciones realmente grandes !.";
+		next;
+		mes .nc$;
+		mes "¿Deseas integrarte al sistema de creditos?.";
+		if (select("Si","No")==2){ next; mes .nc$; mes "Muy bien, vuelve cuando quieras integrarte."; close;}
+		next;
+		mes .nc$;
+		mes "Muy bien, antes de poder ingresar al sistema de creditos, deberás pasar el examen.";
+		mes "No te proecupes, es muy sencillo y solo requieres de un poco de suerte.";
+		next;
+		mes .nc$;
+		mes "Solo debes ganarme en un juego de cartas.";
+		mes "En mi mano tengo 3 cartas, las cuales son: Poring Card, Ghostring Card, y Angeling Card.";
+		mes "Solo debes adivinar cual es la carta que tengo en mi mano!.";
+		next;
+		mes .nc$;
+		mes "Si logras vencerme en un total de 3 a 5, entonces serás inscrito en el sistema de creditos.";
+		next;
+		mes .nc$;
+		mes "Oh!, olvide mencionarlo.";
+		mes "Para poder inscribirte en el sistema, debes pagar un total de 10.000.000 Zeny.";
+		mes "No te preocupes, solo se paga una vez.";
+		if(select("Pagar y Jugar","Pasar...")==2){ next; mes .nc$; mes "vuelve cuando quieras."; close;}
+		next;
+		mes .nc$;
+		mes "Muy bien!.";
+		mes "Revisando zeny...";
+		if (Zeny < 10000000){
+		next;
+		mes .nc$;
+		mes "Lo siento, debes pagar el costo del servicio.";
+		close;
+		}
+		Zeny-=10000000;
+		mes "Listo!. El Zeny ha sido pagado.";
+		next;
+		mes .nc$;
+		mes "Que comience el juego!.";
+		next;
+		while(.@SantaCardTurn != 5) {
+			emotion e_loud;
+			mes .nc$;
+			mes "Primero, barajaré las cartas... Ok!!!";
+			next;
+			specialeffect EF_HIT1;
+			mes .nc$;
+			mes "Uno!";
+			next;
+			specialeffect EF_HIT2;
+			mes .nc$;
+			mes "Dos!";
+			next;
+			specialeffect EF_HIT3;
+			mes .nc$;
+			mes "Tres!";
+			next;
+			specialeffect EF_STEAL;
+			next;
+			cutin "sorry",4;
+			mes .nc$;
+			mes "HE ESCOGIDO UNA!";
+			mes "¿Cual ha sido?.";
+			next;
+			switch(select("Poring", "Angeling", "Ghostring")) {
+				case 1:
+					mes "["+strcharinfo(PC_NAME)+"]";
+					mes "Um...La carta de Poring!";
+					.@SantaCardP = 1;
+					next;
+					break;
+
+				case 2:
+					mes "["+strcharinfo(PC_NAME)+"]";
+					mes "Um...La carta de Angeling!";
+					.@SantaCardP = 2;
+					next;
+					break;
+
+				case 3:
+					mes "["+strcharinfo(PC_NAME)+"]";
+					mes "Um...la carta de Ghostring!";
+					.@SantaCardP = 3;
+					next;
+			}
+			mes .nc$;
+			mes "Vamos a ver...!!";
+			mes "Uno! Dos! Tres!";
+			.@SantaCardNpc = rand(1,3);
+			next;
+			mes .nc$;
+			mes "Veamos!!";
+			mes "Uno! Dos! Tres!";
+			if (.@SantaCardNpc == 1) {
+				cutin "Æ÷¸µÄ«µå",4; // Poring Card
+			}
+			else if (.@SantaCardNpc == 2) {
+				cutin "¿£Á©¸µÄ«µå",4; // Angeling Card
+			}
+			else if (.@SantaCardNpc == 3) {
+				cutin "°í½ºÆ®¸µÄ«µå",4; // Ghostring Card
+			}
+			next;
+			++.@SantaCardTurn;
+			if (.@SantaCardP == .@SantaCardNpc) {
+				++.@SantaCardWins;
+				emotion e_gasp;
+				emotion e_ic,1;
+				cutin "",255;
+				mes .nc$;
+				mes "Wow!, tiene suerte.";
+				mes "Veamos si tienes la misma suerte en el proxmimo juego.";
+				next;
+			} else {
+				emotion e_gasp;
+				emotion e_omg,1;
+				cutin "",255;
+				mes .nc$;
+				mes "Aww que mala suerte...";
+				next;
+			}
+		}
+		if (.@SantaCardWins < 3) {
+			mes "["+strcharinfo(PC_NAME)+"]";
+			mes "Solo ha sido suerte.";
+			mes "Denuevo!!";
+			next;
+			mes .nc$;
+			mes "Cuando quieras.";
+			close;
+		} else {
+			mes .nc$;
+			mes "Eres muy bueno!";
+			next;
+			mes .nc$;
+			mes "Aqui esta lo prometido.";
+			next;
+			mes "["+strcharinfo(PC_NAME)+"]";			
+			mes "Firmando registro...";
+			next;
+			mes .nc$;
+			mes "Gracias !.";
+			Creditos=1;
+			close;
+		}
+
+				} else {
+
+
+
+
+// 1 Poring Coin = How Many Zeny ?
+set .Rates,10000000;
+mes .nc$;
+	mes "¿Que deseas hacer?";
+	next;
+while( 1 ){
+switch( select("Credito a Zeny:Zeny a Credito") ){
+case 1:
+ if( !countitem(30002) ){
+  mes "No tienes ningún Credito.";
+ }else{
+	mes .nc$;
+  mes "Tienes "+countitem(30002)+" Creditos";
+	mes " ";
+  mes "¿Cuantos creditos deseas cambiar ?";
+  input @Amount,0,countitem(30002);
+  if( !@Amount || (( .Rates * @Amount ) + Zeny ) > 1000000000 ){
+   mes "Trato cancelado.";
+  }else{
+   delitem 30002,@Amount;
+	next;
+	mes .nc$;
+   mes "Has convertido "+@Amount+" Creditos a Zeny.";
+   mes "Recibes un total de "+callfunc("F_InsertComma",.Rates * @Amount)+" de Zeny.";
+   set Zeny,Zeny + ( .Rates * @Amount );
+  }
+ }
+ next;
+ break;
+case 2:
+ if( Zeny < .Rates ){
+  mes "No tienes suficiente Zeny.";
+ }else{
+	mes .nc$;
+  mes "Actualmente tienes "+callfunc("F_InsertComma",Zeny)+" Zeny.";
+  mes " ";
+  mes "Puedes obtener un maximo de "+( Zeny / .Rates )+" Creditos.";
+  mes " ";
+  mes "¿Cuantos creditos deseas ?";
+
+  input @Amount,0,( Zeny / .Rates );
+  if( !@Amount ){
+   mes "Trato Cancelado.";
+  }else{
+   set Zeny,Zeny - ( @Amount * .Rates );
+	next;
+	mes .nc$;
+   mes "Has convertido "+( @Amount * .Rates )+" Zeny en "+@Amount+" Creditos.";
+   getitem 30002,@Amount;
+  }
+ }
+ next;
+ break;
+}
+}
+close;
+}
+		}	
+
+invek,136,138,5	script	Heirmur	4_M_PHILOFONTES,{
+
+set .esp$,"[^FF8000 Heirmur^000000]";
+
+mes .esp$;
+mes "Saludos, "+strcharinfo(0)+".";
+mes "Tengo a la venta items realmente grandiosos y lujosos.";
+mes "Los cuales pueden ser muy raros, epicos y reliquias.";
+mes "Mis varian según el tipo de articulo que pongo en venta.";
+next;
+mes .esp$;
+mes "Remodelo mi negocio cada 1 semana.";
+mes "Mi metodo de venta es por ^FF8000Creditos^000000 y no aceptaré ningun otro tipo de cambio.";
+close2;
+			openshop "SystemHeir";
+			end;
+
+	}
+
+
+-	script	SystemHeir	4_TREASURE_BOX,{
+
+OnInit:
+	.credito = 30002;
+	tradertype(NST_CUSTOM);
+
+		sellitem RWC_Champ_Crown_Fourth_Place,90;
+		sellitem Sealed_Amon_Ra_Card,50;
+		sellitem Olivine,5;
+		sellitem Jewel_Of_Prayer,50;
+	end;
+
+OnCountFunds:
+
+	dispbottom "Sistema de Compras: "+getitemname( .credito )+".";
+	setcurrency( countitem( .credito ) );
+	end;
+
+OnPayFunds:
+	//dispbottom "Hi: price="+@price+" and points="+@points;
+	if( countitem(.credito) < @points )
+		end;
+	delitem .credito,@points;
+	delitem .credito,( @price - @points );
+	purchaseok();
+end;
+
+		}
+
+
+
+-	script	AnuncioH	HIDDEN_NPC,{
+end;
+OnMinute10:
+
+	announce "Heirmur: Oh!, entren a mi tienda. Mis articulos son unicos.",bc_all,0x9933FF;
+	sleep 1000;
+	announce "Heirmur: Tengo en venta en este momento interesantes artículos. !",bc_all,0x9933FF;;
+	sleep 1500;
+	announce "Heirmur: Ven a visitarme a Invek (@go 36) ",bc_all,0x9933FF;;
+end;
+		}

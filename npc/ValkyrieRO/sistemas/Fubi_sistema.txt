@@ -1,0 +1,1053 @@
+//===== eAthena Script =======================================
+//= kRO 2010 April Fools Event
+//===== By: ==================================================
+//= Chilly
+//===== Current Version: =====================================
+//= 1.0
+//===== Compatible With: =====================================
+//= eAthena SVN 14200+
+//===== Description: =========================================
+//= Chance to obtain Chocolate Donut In Mouth lower headgear.
+//= Allows Geek Glasses to be enchanted.
+//===== Additional Comments: =================================
+//= 1.0 First version. [Chilly]
+//============================================================
+
+// Fumbi System
+// Developed by: Aeromas
+// Enlightenment goes to Grunger for helping me, Kit the Baby Fox for more enlightment, & Crayu my friend for the idea =P
+// Version: 1.0
+// What it does:
+// It's based off the game S4 League, basically you fumbi a armor or weapon and you get a random armor or weapon.
+// After 20 Fumbi's you get the chance to get a card for 10,000,000 If you don't want to fumbi a card, you can decline, but it resets your chance.
+// http://www.s4.alaplaya.eu Try it out
+//quick npc to whisper to get fumb20 to 20 to test >_>
+
+prontera,168,171,3	script	Loteria Costume	10235,{
+	set wpnfee, 10;
+	set armfee, 20;
+	set carfee, 30;
+	set .@fname$, "[Fumbi]";
+
+//=============================
+// Card Option starts here
+//=============================
+//=============================
+//=============================
+	if(fumb20 == 20) {
+	soundeffect "fumbi_fail.wav",0;
+		mes .@fname$;
+		mes "Usted está en 20 Fumbis";
+		next;
+		mes .@fname$;
+		mes "Te gustaría una card de 2.000.000 z?";
+		next;
+		switch(select("Yes:No")) {
+			case 1:
+				mes .@fname$;
+				mes "Seguro que quieres de una tarjeta de fumbi 2.000.000z?";
+				if(select("No:Yes")&1) goto No_Card_Roll;
+				if (countitem(671) >= carfee)
+				next;
+				mes .@fname$;
+				mes "Bien entonces, que ahora se iniciar? el despliegue Fumbi!";
+				mes "Now let's start this up.";
+				next;
+				mes .@fname$;
+				mes "Fumbi rollo est? comenzando...";
+				sleep2 1000;
+				soundeffect "fumbi_run.wav",0;
+				mes "1..";
+				soundeffect "fumbi_start.wav",0;
+				sleep2 2000;
+				mes "2...";
+				soundeffect "fumbi_start.wav",0;
+				sleep2 2000;
+				mes "3...";
+				soundeffect "fumbi_start.wav",0;
+				sleep2 2000;
+				soundeffect "fumbi_start.wav",0;
+				mes "4...";
+				sleep2 2000;
+				switch(rand(1,4)) {
+					case 1:
+						soundeffect "s4miss_start.wav",0;
+						mes "Lo sentimos, pero parece que no el rollo.";
+						mes "Mejor suerte la próxima vez!";
+						delitem 671,carfee;
+						set fumb20,0;
+						close;
+					default:
+						mes "Felicitaciones! Acaba de obtener una Carta!";
+						set .@item,callfunc ("Fumbi_Roll",4001,4453);
+						getitem .@item,1;
+						delitem 671,carfee;
+						set fumb20,0;
+						close;
+				}
+				break;
+				close;
+
+			case 2:
+				No_Card_Roll:
+				next;
+				mes .@fname$;
+				soundeffect "fumbi_fail.wav",0;
+				mes "Oh okay.";
+				mes "¿Desea restablecer la cuenta de fumbi o esperar hasta que haya 2.000.000 zeny?";
+				menu "Voy a reiniciar mi cuenta fumbi.",resf,"Voy a esperar.",iwat;
+resf:
+				mes .@fname$;
+				mes "Oh bien, el recuento de fumbi ahora se restablecer?!";
+				mes "1...";
+				sleep2 1000;
+				mes "2...";
+				sleep2 1000;
+				mes "3...";
+				sleep2 1000;
+				mes "El conteo de Fumbi se ha restablecido.";
+				set fumb20, 0;
+				close;
+iwat:
+				mes .@fname$;
+				mes "todos los derechos";
+				mes "Vuelve a más cuando estás preparado para tratar de fumbi.";
+				close;
+		}
+	}
+
+				mes .@fname$;
+				soundeffect "fumbi_fail.wav",0;
+				mes "Hola,";
+				mes "Usted probablemente ha visto que se me cogi? por los jugadores de S4 League";
+				mes "Y fumbing armas y armaduras para los jugadores.";
+				mes "Así que decid? venir de más a AresRO y ayudar a los chicos a cabo tambi?n!";
+				next;
+				mes "Usted tiene la opci?n de fumbi un arma de 200,000 zeny o una armadura de 10,000,000 zeny.";
+				mes "Una vez que fumbi al menos 20 veces, usted tendr? la opci?n de una tarjeta de fumbi 20,000,000 zeny.";
+				mes "Por lo tanto, le gustar?a tratar de fumbi un arma o armadura,Custom Item.?";
+				next;
+				menu "Seguro.",sacc,"No, gracias.",nothx;
+sacc:
+				mes .@fname$;
+				mes "Impresionante, por lo que le gustaría tratar de ganar, un Hat y Custume Item.?";
+				next;
+				menu "Hats",wopt,"Custom",Custron;
+
+//===============================================================================
+// Hats Option starts here
+//===============================================================================
+//===============================================================================
+//===============================================================================
+//===============================================================================
+//===============================================================================
+
+wopt:
+next;
+mes .@fname$;
+mes "Bueno, por lo que la categoria de hats le gustaría elegir?";
+next;
+menu "Upper",swrd,"Mi",dggr,"Katars",katr,"Maces",mccs,"Staffs",staf,"Guns",guns,"Bows",bows,"Knuckles",knuc,"Whips",whip,"Books",book,"Axes",axes,"Spears",spea,"Instruments",inst;
+// Weapon Options Start Here with Sword, going all the way down to Instruments
+swrd:
+		mes .@fname$;
+		mes "Muy bien, por lo que le gustaría tratar de fumbi?";
+		menu "Yes",swyes,"No",swno;
+swyes:
+		if (countitem(671) <10){
+		mes "Lo siento, pero parece que no tiene Gold coin.";
+		mes "Por favor, vuelve cuando tengas 10 Gold coin.";
+		close;
+	}
+	else
+		mes "Usted tiene 10 Gold coin! Ahora vamos a iniciar el proceso.";
+		next;
+		sleep2 1000;
+		soundeffect "fumbi_run.wav",0;
+		mes "1..";
+		soundeffect "fumbi_start.wav",0;
+		sleep2 2000;
+		mes "2...";
+		soundeffect "fumbi_start.wav",0;
+		sleep2 2000;
+		mes "3...";
+		soundeffect "fumbi_start.wav",0;
+		sleep2 2000;
+		soundeffect "fumbi_start.wav",0;
+		mes "4...";
+		sleep2 2000;
+		soundeffect "fumbi_wpn.wav",0;
+		set .@item,callfunc ("Fumbi_Roll",5086,5137,5074,5132,5153,5175,2284,5080,5270,5174,5277,2237,5147,5057,5076,5236,5235,5237,5382,5065,5052,2296,5129,5102,5023,5109,5016,5110,5191,5169,5034,2214,5024,5028,5200,5184,5359,5214,5026,5142,5283,5260,5075,5048,5036,5135,5181,5108,5254,5038,5229,5227,5820,5822,5826); //Item ID's from Swords, 1101 - 1190
+		getitem .@item, 1;
+		delitem 671,wpnfee;
+		mes "Tienes tu Hat! Por favor, vuelva a intentarlo!";
+		set fumb20,fumb20+1;
+		mes "Tienes (^CD3333"+fumb20+"^000000/^003EFF20^000000)  para tratar de conseguir una Carta de 10.000.000 zeny!";
+		close;
+swno:
+next;
+mes .@fname$;
+mes "Bueno, por favor regrese si le gustar?a probar y fumbi un arma.";
+close;
+dggr:
+mes .@fname$;
+mes "Muy bien, por lo que le gustar?a tratar de fumbi?";
+menu "Yes",dgyes,"No",dgno;
+dgyes:
+if (countitem(671) <10) { mes "Lo siento, pero parece que no tiene 10 Gold coin.";
+mes "Please come again when you have golg coin.";
+close;
+} else mes "Usted tiene 200,000 zeny! Ahora vamos a iniciar el proceso de fumbing.";
+next;
+sleep2 1000;
+soundeffect "fumbi_run.wav",0;
+mes "1..";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+mes "2...";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+mes "3...";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+soundeffect "fumbi_start.wav",0;
+mes "4...";
+sleep2 2000;
+soundeffect "fumbi_wpn.wav",0;
+set .@item,callfunc ("Fumbi_Roll",1201,1249); //Item ID's from Daggers, 1201 - 1249
+getitem .@item,1;
+delitem 671,wpnfee;
+mes "?Tienes tu arma! Por favor, vuelva a intentar fumbi!";
+set fumb20,fumb20+1;
+mes "Tienes (^CD3333"+fumb20+"^000000/^003EFF20^000000)  para tratar de fumbi una tarjeta de 10.000.000 zeny!";
+close;
+dgno:
+next;
+mes .@fname$;
+mes "Bueno, por favor regrese si le gustar?a probar y fumbi un arma.";
+close;
+katr:
+mes .@fname$;
+mes "Muy bien, por lo que le gustar?a tratar de fumbi?";
+menu "Yes",ktyes,"No",ktno;
+ktyes:
+if (countitem(909) >=10) { mes "Lo siento, pero parece que no tiene 200,000z.";
+mes "Por favor, vuelva cuando tenga 200.000z.";
+close;
+} else mes "Usted tiene 200,000 zeny! Ahora vamos a iniciar el proceso de fumbing.";
+next;
+sleep2 1000;
+soundeffect "fumbi_run.wav",0;
+mes "1..";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+mes "2...";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+mes "3...";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+soundeffect "fumbi_start.wav",0;
+mes "4...";
+sleep2 2000;
+soundeffect "fumbi_wpn.wav",0;
+set .@item,callfunc ("Fumbi_Roll",1250,1282); //Item ID's for Katars, 1250~1282
+getitem .@item, 1;
+delitem 671,wpnfee;
+mes "?Tienes tu arma! Por favor, vuelva a intentar fumbi!";
+set fumb20,fumb20+1;
+mes "Tienes (^CD3333"+fumb20+"^000000/^003EFF20^000000)  para tratar de fumbi una tarjeta de 10.000.000 zeny!";
+close;
+ktno:
+next;
+mes .@fname$;
+mes "Bueno, por favor regrese si le gustar?a probar y fumbi un arma.";
+close;
+mccs:
+mes .@fname$;
+mes "Muy bien, por lo que le gustar?a tratar de fumbi?";
+menu "Yes",mcyes,"No",mcno;
+mcyes:
+if (countitem(671) <10) { mes "Lo siento, pero parece que no tiene 200,000z.";
+mes "Por favor, vuelva cuando tenga 200.000z.";
+close;
+} else mes "Usted tiene 200,000 zeny! Ahora vamos a iniciar el proceso de fumbing.";
+next;
+sleep2 1000;
+soundeffect "fumbi_run.wav",0;
+mes "1..";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+mes "2...";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+mes "3...";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+soundeffect "fumbi_start.wav",0;
+mes "4...";
+sleep2 2000;
+soundeffect "fumbi_wpn.wav",0;
+set .@item,callfunc ("Fumbi_Roll",1501,1546); //Item ID's from Maces, 1501 - 1546
+getitem .@item, 1;
+delitem 671,wpnfee;
+mes "?Tienes tu arma! Por favor, vuelva a intentar fumbi!";
+set fumb20,fumb20+1;
+mes "Tienes (^CD3333"+fumb20+"^000000/^003EFF20^000000)  para tratar de fumbi una tarjeta de 10.000.000 zeny!";
+close;
+mcno:
+next;
+mes .@fname$;
+mes "Bueno, por favor regrese si le gustar?a probar y fumbi un arma.";
+close;
+staf:
+mes .@fname$;
+mes "Muy bien, por lo que le gustar?a tratar de fumbi?";
+menu "Yes",styes,"No",stno;
+styes:
+if (countitem(671) <10){ mes "Lo siento, pero parece que no tiene 200,000 z.";
+mes "Por favor, vuelva cuando tenga 200.000 z.";
+close;
+} else mes "Usted tiene 200,000 zeny! Ahora vamos a iniciar el proceso de fumbing.";
+next;
+sleep2 1000;
+soundeffect "fumbi_run.wav",0;
+mes "1..";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+mes "2...";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+mes "3...";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+soundeffect "fumbi_start.wav",0;
+mes "4...";
+sleep2 2000;
+soundeffect "fumbi_wpn.wav",0;
+set .@item,callfunc ("Fumbi_Roll",1601,1641); //Item ID's from Swords, 1101 - 1190
+getitem .@item, 1;
+delitem 671,wpnfee;
+mes "You got your weapon! Please come again to try and fumbi!";
+set fumb20,fumb20+1;
+mes "You have (^CD3333"+fumb20+"^000000/^003EFF20^000000)  to try and fumbi a card for 10,000,000 zeny!";
+close;
+stno:
+next;
+mes .@fname$;
+mes "Okay, please come back if you'd like to try and fumbi a Weapon.";
+close;
+guns:
+mes .@fname$;
+mes "All right, so would you like to try and fumbi?";
+menu "Yes",guyes,"No",guno;
+guyes:
+if (countitem(671) <10) { mes "I'm sorry, but it seems you don't have 200,000z.";
+mes "Please come again when you have 200,000z.";
+close;
+} else mes "You have 200,000 zeny! We will now start the fumbing process.";
+next;
+sleep2 1000;
+soundeffect "fumbi_run.wav",0;
+mes "1..";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+mes "2...";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+mes "3...";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+soundeffect "fumbi_start.wav",0;
+mes "4...";
+sleep2 2000;
+soundeffect "fumbi_wpn.wav",0;
+getitem rand(1101,1190), 1; //Item ID's from Swords, 1101 - 1190
+delitem 671,wpnfee;
+mes "You got your weapon! Please come again to try and fumbi!";
+set fumb20,fumb20+1;
+mes "You have (^CD3333"+fumb20+"^000000/^003EFF20^000000)  to try and fumbi a card for 10,000,000 zeny!";
+close;
+guno:
+next;
+mes .@fname$;
+mes "Okay, please come back if you'd like to try and fumbi a Weapon.";
+close;
+bows:
+menu "Yes",boyes,"No",bono;
+boyes:
+if (countitem(671) <10) { mes "I'm sorry, but it seems you don't have 200,000z.";
+mes "Por favor, vuelva cuando tenga 200.000z.";
+close;
+} else mes "Usted tiene 200,000 zeny! Ahora vamos a iniciar el proceso de fumbing.";
+next;
+sleep2 1000;
+soundeffect "fumbi_run.wav",0;
+mes "1..";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+mes "2...";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+mes "3...";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+soundeffect "fumbi_start.wav",0;
+mes "4...";
+sleep2 2000;
+soundeffect "fumbi_wpn.wav",0;
+set .@item,callfunc ("Fumbi_Roll",1701,1743);//Item ID's from Swords, 1101 - 1190
+getitem .@item, 1;
+delitem 671,wpnfee;
+mes "?Tienes tu arma! Por favor, vuelva a intentar fumbi!";
+set fumb20,fumb20+1;
+mes "You have (^CD3333"+fumb20+"^000000/^003EFF20^000000)  to try and fumbi a card for 10,000,000 zeny!";
+close;
+bono:
+next;
+mes .@fname$;
+mes "Okay, please come back if you'd like to try and fumbi a Weapon.";
+close;
+knuc:
+mes .@fname$;
+mes "All right, so would you like to try and fumbi?";
+menu "Yes",knyes,"No",knno;
+knyes:
+if (countitem(671) <10) { mes "I'm sorry, but it seems you don't have 200,000z.";
+mes "Please come again when you have 200,000z.";
+close;
+} else mes "You have 200,000 zeny! We will now start the fumbing process.";
+next;
+sleep2 1000;
+soundeffect "fumbi_run.wav",0;
+mes "1..";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+mes "2...";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+mes "3...";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+soundeffect "fumbi_start.wav",0;
+mes "4...";
+sleep2 2000;
+soundeffect "fumbi_wpn.wav",0;
+set .@item,callfunc ("Fumbi_Roll",1801,1827); //Item ID's from Swords, 1101 - 1190
+getitem .@item, 1;
+delitem 671,wpnfee;
+mes "You got your weapon! Please come again to try and fumbi!";
+set fumb20,fumb20+1;
+mes "You have (^CD3333"+fumb20+"^000000/^003EFF20^000000)  to try and fumbi a card for 10,000,000 zeny!";
+close;
+knno:
+next;
+mes .@fname$;
+mes "Okay, please come back if you'd like to try and fumbi a Weapon.";
+close;
+whip:
+mes .@fname$;
+mes "All right, so would you like to try and fumbi?";
+menu "Yes",whyes,"No",whno;
+whyes:
+if (countitem(671) <10) { mes "I'm sorry, but it seems you don't have 200,000z.";
+mes "Please come again when you have 200,000z.";
+close;
+} else mes "You have 200,000 zeny! We will now start the fumbing process.";
+next;
+sleep2 1000;
+soundeffect "fumbi_run.wav",0;
+mes "1..";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+mes "2...";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+mes "3...";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+soundeffect "fumbi_start.wav",0;
+mes "4...";
+sleep2 2000;
+soundeffect "fumbi_wpn.wav",0;
+set .@item,callfunc ("Fumbi_Roll",1950,1981); //Item ID's from Swords, 1101 - 1190
+getitem .@item, 1;
+delitem 671,wpnfee;
+mes "You got your weapon! Please come again to try and fumbi!";
+set fumb20,fumb20+1;
+mes "You have (^CD3333"+fumb20+"^000000/^003EFF20^000000)  to try and fumbi a card for 10,000,000 zeny!";
+close;
+whno:
+next;
+mes .@fname$;
+mes "Okay, please come back if you'd like to try and fumbi a Weapon.";
+close;
+book:
+mes .@fname$;
+mes "All right, so would you like to try and fumbi?";
+menu "Yes",bkyes,"No",bkno;
+bkyes:
+if (countitem(671) <10) { mes "I'm sorry, but it seems you don't have 200,000z.";
+mes "Please come again when you have 200,000z.";
+close;
+} else mes "You have 200,000 zeny! We will now start the fumbing process.";
+next;
+sleep2 1000;
+soundeffect "fumbi_run.wav",0;
+mes "1..";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+mes "2...";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+mes "3...";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+soundeffect "fumbi_start.wav",0;
+mes "4...";
+sleep2 2000;
+soundeffect "fumbi_wpn.wav",0;
+set .@item,callfunc ("Fumbi_Roll",1550,1577); //Item ID's from Swords, 1101 - 1190
+getitem .@item, 1;
+delitem 671,wpnfee;
+mes "You got your weapon! Please come again to try and fumbi!";
+set fumb20,fumb20+1;
+mes "You have (^CD3333"+fumb20+"^000000/^003EFF20^000000)  to try and fumbi a card for 10,000,000 zeny!";
+close;
+bkno:
+next;
+mes .@fname$;
+mes "Okay, please come back if you'd like to try and fumbi a Weapon.";
+close;
+axes:
+mes .@fname$;
+mes "All right, so would you like to try and fumbi?";
+menu "Yes",axyes,"No",axno;
+axyes:
+if (countitem(671) <10) { mes "I'm sorry, but it seems you don't have 200,000z.";
+mes "Please come again when you have 200,000z.";
+close;
+} else mes "You have 200,000 zeny! We will now start the fumbing process.";
+next;
+sleep2 1000;
+soundeffect "fumbi_run.wav",0;
+mes "1..";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+mes "2...";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+mes "3...";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+soundeffect "fumbi_start.wav",0;
+mes "4...";
+sleep2 2000;
+soundeffect "fumbi_wpn.wav",0;
+set .@item,callfunc ("Fumbi_Roll",1351,1382); //Item ID's from Swords, 1101 - 1190
+getitem .@item, 1;
+delitem 671,wpnfee;
+mes "You got your weapon! Please come again to try and fumbi!";
+set fumb20,fumb20+1;
+mes "You have (^CD3333"+fumb20+"^000000/^003EFF20^000000)  to try and fumbi a card for 10,000,000 zeny!";
+close;
+axno:
+next;
+mes .@fname$;
+mes "Okay, please come back if you'd like to try and fumbi a Weapon.";
+close;
+spea:
+mes .@fname$;
+mes "All right, so would you like to try and fumbi?";
+menu "Yes",spyes,"No",spno;
+spyes:
+if (countitem(671) <10) { mes "I'm sorry, but it seems you don't have 200,000z.";
+mes "Please come again when you have 200,000z.";
+close;
+} else mes "You have 200,000 zeny! We will now start the fumbing process.";
+next;
+sleep2 1000;
+soundeffect "fumbi_run.wav",0;
+mes "1..";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+mes "2...";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+mes "3...";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+soundeffect "fumbi_start.wav",0;
+mes "4...";
+sleep2 2000;
+soundeffect "fumbi_wpn.wav",0;
+set .@item,callfunc ("Fumbi_Roll",1401,1471); //Item ID's from Swords, 1101 - 1190
+getitem .@item, 1;
+delitem 671,wpnfee;
+mes "You got your weapon! Please come again to try and fumbi!";
+set fumb20,fumb20+1;
+mes "You have (^CD3333"+fumb20+"^000000/^003EFF20^000000)  to try and fumbi a card for 10,000,000 zeny!";
+close;
+spno:
+next;
+mes .@fname$;
+mes "Okay, please come back if you'd like to try and fumbi a Weapon.";
+close;
+inst:
+mes .@fname$;
+mes "All right, so would you like to try and fumbi?";
+menu "Yes",inyes,"No",inno;
+inyes:
+if (countitem(671) <10) { mes "I'm sorry, but it seems you don't have 200,000z.";
+mes "Please come again when you have 200,000z.";
+close;
+} else mes "You have 200,000 zeny! We will now start the fumbing process.";
+next;
+sleep2 1000;
+soundeffect "fumbi_run.wav",0;
+mes "1..";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+mes "2...";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+mes "3...";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+soundeffect "fumbi_start.wav",0;
+mes "4...";
+sleep2 2000;
+soundeffect "fumbi_wpn.wav",0;
+set .@item,callfunc ("Fumbi_Roll",1901,1927); //Item ID's from Swords, 1101 - 1190
+getitem .@item, 1;
+delitem 671,wpnfee;
+mes "You got your weapon! Please come again to try and fumbi!";
+set fumb20,fumb20+1;
+mes "You have (^CD3333"+fumb20+"^000000/^003EFF20^000000)  to try and fumbi a card for 10,000,000 zeny!";
+close;
+inno:
+next;
+mes .@fname$;
+mes "Okay, please come back if you'd like to try and fumbi a Weapon.";
+close;
+nothx:
+mes .@fname$;
+mes "Oh okay, well when you have the chance stop by";
+mes "You may get lucky and successfully fumbi weapons and armor!";
+close;
+//==========================================================================
+// Armor Options Start Here
+//                                                                           
+//==========================================================================
+//==========================================================================
+//==========================================================================
+aopt:
+mes .@fname$;
+mes "Okay, so which armor category would you like to choose?";
+next;
+menu "Shields",shie,"Armors",armo,"Footgear",foot,"Garments",garm,"Accessories",accs;
+shie:
+mes .@fname$;
+mes "All right, so would you like to try and fumbi?";
+menu "Yes",shiyes,"No",shino;
+shiyes:
+if(Zeny < 10000000) { mes "I'm sorry, but it seems you don't have 10,000,000z.";
+mes "Please come again when you have 10,000,000z.";
+close;
+} else mes "You have 10,000,000 zeny! We will now start the fumbing process.";
+next;
+sleep2 1000;
+soundeffect "fumbi_run.wav",0;
+mes "1..";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+mes "2...";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+mes "3...";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+soundeffect "fumbi_start.wav",0;
+mes "4...";
+sleep2 2000;
+soundeffect "fumbi_arm.wav",0;
+set .@item,callfunc ("Fumbi_Roll",2101,2135); //Item ID's from Armors, 1101 - 1190
+getitem .@item, 1;
+delitem 671,armfee;
+mes "You got your Armor! Please come again to try and fumbi!";
+set fumb20,fumb20+1;
+mes "You have (^CD3333"+fumb20+"^000000/^003EFF20^000000)  to try and fumbi a card for 10,000,000 zeny!";
+close;
+shino:
+next;
+mes .@fname$;
+mes "Okay, please come back if you'd like to try and fumbi a Armor.";
+close;
+armo:
+mes .@fname$;
+mes "All right, so would you like to try and fumbi?";
+menu "Yes",armyes,"No",armno;
+armyes:
+if(Zeny < 100000) { mes "I'm sorry, but it seems you don't have 100,000z.";
+mes "Please come again when you have 100,000z.";
+close;
+} else mes "You have 100,000 zeny! We will now start the fumbing process.";
+next;
+sleep2 1000;
+soundeffect "fumbi_run.wav",0;
+mes "1..";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+mes "2...";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+mes "3...";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+soundeffect "fumbi_start.wav",0;
+mes "4...";
+sleep2 2000;
+soundeffect "fumbi_arm.wav",0;
+set .@item,callfunc ("Fumbi_Roll",2301,2391); //Item ID's from Armors, 1101 - 1190
+getitem .@item, 1;
+delitem 671,armfee;
+mes "?Tienes tu armadura! Por favor, vuelva a intentar fumbi!";
+set fumb20,fumb20+1;
+mes "Tienes (^CD3333"+fumb20+"^000000/^003EFF20^000000)  para tratar de fumbi una tarjeta de 10.000.000 zeny!";
+close;
+armno:
+next;
+mes .@fname$;
+mes "Bueno, por favor regrese si le gustar?a probar y fumbi una armadura.";
+close;
+foot:
+mes .@fname$;
+mes "Muy bien, por lo que le gustar?a tratar de fumbi?";
+menu "Yes",fooyes,"No",foono;
+fooyes:
+if(Zeny < 100000) { mes "Lo siento, pero parece que no tiene 100,000 z.";
+mes "Por favor, vuelva cuando tenga 100.000z.";
+close;
+} else mes "Usted tiene 100,000 zeny! Ahora vamos a iniciar el proceso de fumbing.";
+next;
+sleep2 1000;
+soundeffect "fumbi_run.wav",0;
+mes "1..";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+mes "2...";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+mes "3...";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+soundeffect "fumbi_start.wav",0;
+mes "4...";
+sleep2 2000;
+soundeffect "fumbi_arm.wav",0;
+set .@item,callfunc ("Fumbi_Roll",2401,2441); //Item ID's from Armors, 1101 - 1190
+getitem .@item, 1;
+delitem 671,armfee;
+mes "?Tienes tu armadura! Por favor, vuelva a intentar fumbi!";
+set fumb20,fumb20+1;
+mes "Tienes (^CD3333"+fumb20+"^000000/^003EFF20^000000)  para tratar de fumbi una tarjeta de 10.000.000 zeny!";
+close;
+foono:
+next;
+mes .@fname$;
+mes "Okay, please come back if you'd like to try and fumbi a Armor.";
+close;
+garm:
+mes .@fname$;
+mes "All right, so would you like to try and fumbi?";
+menu "Yes",garyes,"No",garno;
+garyes:
+if(Zeny < 100000) { mes "I'm sorry, but it seems you don't have 100,000z.";
+mes "Please come again when you have 100,000z.";
+close;
+} else mes "You have 100,000 zeny! We will now start the fumbing process.";
+next;
+sleep2 1000;
+soundeffect "fumbi_run.wav",0;
+mes "1..";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+mes "2...";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+mes "3...";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+soundeffect "fumbi_start.wav",0;
+mes "4...";
+sleep2 2000;
+soundeffect "fumbi_arm.wav",0;
+set .@item,callfunc ("Fumbi_Roll",2501,2546); //Item ID's from Armors, 1101 - 1190
+getitem .@item, 1;
+delitem 671,armfee;
+mes "You got your Armor! Please come again to try and fumbi!";
+set fumb20,fumb20+1;
+mes "Tienes (^CD3333"+fumb20+"^000000/^003EFF20^000000)  para tratar de fumbi una tarjeta de 10.000.000 zeny!";
+close;
+garno:
+next;
+mes .@fname$;
+mes "Bueno, por favor regrese si le gustar?a probar y fumbi una armadura.";
+close;
+accs:
+mes .@fname$;
+mes "Muy bien, por lo que le gustar?a tratar de fumbi?";
+menu "Yes",accyes,"No",accno;
+accyes:
+if(Zeny < 100000) { mes "Lo siento, pero parece que no tiene 100,000 z.";
+mes "Por favor, vuelva cuando tenga 100.000 z.";
+close;
+} else mes "Usted tiene 100,000 zeny! Ahora vamos a iniciar el proceso de fumbing.";
+next;
+sleep2 1000;
+soundeffect "fumbi_run.wav",0;
+mes "1..";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+mes "2...";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+mes "3...";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+soundeffect "fumbi_start.wav",0;
+mes "4...";
+sleep2 2000;
+soundeffect "fumbi_arm.wav",0;
+set .@item,callfunc ("Fumbi_Roll",2601,2762); //Item ID's from Armors, 1101 - 1190
+getitem .@item, 1;
+delitem 671,armfee;
+mes "You got your Armor! Please come again to try and fumbi!";
+set fumb20,fumb20+1;
+mes "You have (^CD3333"+fumb20+"^000000/^003EFF20^000000)  para tratar de fumbi una tarjeta de 10.000.000 zeny!";
+close;
+accno:
+next;
+mes .@fname$;
+mes "Bueno, por favor regrese si le gustar?a probar y fumbi una armadura.";
+close;
+
+OnInIt:
+	setarray $GodItems[0],2410,2629,1530,1161,5013,2630,4121,4128,4129,4131,4132,4134,4135,4137,4142,4143,4144,4145,4146,4147,4148,4168,4263,4276,4302,4305,4318,4324,4330,4342,4352,4357,4359,4361,4363,4365,4367,4372,4374,4376,4386,4399,4403,4407,4408,4419,4425,4430,4441;
+
+//==========================================================================
+// Custom Options Start Here
+//                                                                           
+//==========================================================================
+//==========================================================================
+//==========================================================================
+Custron:
+mes .@fname$;
+mes "Bueno, por lo que la categor?a de Custom te gustar?a elegir?";
+next;
+menu "Wings",shie2,"Auras",armo2;
+shie2:
+mes .@fname$;
+mes "Muy bien, por lo que le gustar?a tratar de fumbi?";
+menu "Yes",shiyes2,"No",shino;
+shiyes2:
+if(Zeny < 10000000) { mes "Lo siento, pero parece que no tiene 10,000,000z.";
+mes "Por favor, vuelva cuando tenga 10,000,000z.";
+close;
+} else mes "Usted tiene 10,000,000 zeny! Ahora vamos a iniciar el proceso de fumbing.";
+next;
+sleep2 1000;
+soundeffect "fumbi_run.wav",0;
+mes "1..";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+mes "2...";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+mes "3...";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+soundeffect "fumbi_start.wav",0;
+mes "4...";
+sleep2 2000;
+soundeffect "fumbi_arm.wav",0;
+set .@item,callfunc ("Fumbi_Roll",19162,19300); //Item ID's from Armors, 1101 - 1190
+getitem .@item, 1;
+delitem 671,armfee;
+mes "?Tienes tu Custom item! Por favor, vuelva a intentar fumbi!";
+set fumb20,fumb20+1;
+mes "Tienes (^CD3333"+fumb20+"^000000/^003EFF20^000000)  para tratar de fumbi una tarjeta de 10.000.000 zeny!";
+close;
+shino2:
+next;
+mes .@fname$;
+mes "Bueno, por favor regrese si le gustar?a probar y fumbi una Custom.";
+close;
+armo2:
+mes .@fname$;
+mes "Muy bien, por lo que le gustar?a tratar de fumbi?";
+menu "Yes",armyes2,"No",armno2;
+armyes2:
+if(Zeny < 10000000) { mes "Lo siento, pero parece que no tiene 100,000z.";
+mes "Por favor, vuelva cuando tenga 10,000,000z.";
+close;
+} else mes "Usted tiene 10,000,000z. zeny! Ahora vamos a iniciar el proceso de fumbing.";
+next;
+sleep2 1000;
+soundeffect "fumbi_run.wav",0;
+mes "1..";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+mes "2...";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+mes "3...";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+soundeffect "fumbi_start.wav",0;
+mes "4...";
+sleep2 2000;
+soundeffect "fumbi_arm.wav",0;
+set .@item,callfunc ("Fumbi_Roll",29051,29068); //Item ID's from Armors, 1101 - 1190
+getitem .@item, 1;
+delitem 671,armfee;
+mes "?Tienes tu Custom! Por favor, vuelva a intentar fumbi!";
+set fumb20,fumb20+1;
+mes "Tienes (^CD3333"+fumb20+"^000000/^003EFF20^000000)  p?rrafo TRATAR de fumbi Una Tarjeta de 10.000.000 zeny!";
+close;
+armno2:
+next;
+mes .@fname$;
+mes "Bueno, por favor regrese si le gustar?a probar y fumbi Custom item.";
+close;
+foot2:
+mes .@fname$;
+mes "Muy bien, por lo que le gustar?a tratar de fumbi?";
+menu "Yes",fooyes,"No",foono;
+fooyes2:
+if(Zeny < 10000000) { mes "Lo siento, pero parece que no tiene 100,000 z.";
+mes "Por favor, vuelva cuando tenga 10,000,000z.";
+close;
+} else mes "Usted tiene 10,000,000 zeny! Ahora vamos a iniciar el proceso de fumbing.";
+next;
+sleep2 1000;
+soundeffect "fumbi_run.wav",0;
+mes "1..";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+mes "2...";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+mes "3...";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+soundeffect "fumbi_start.wav",0;
+mes "4...";
+sleep2 2000;
+soundeffect "fumbi_arm.wav",0;
+set .@item,callfunc ("Fumbi_Roll",2401,2441); //Item ID's from Armors, 1101 - 1190
+getitem .@item, 1;
+delitem 671,armfee;
+mes "?Tienes tu armadura! Por favor, vuelva a intentar fumbi!";
+set fumb20,fumb20+1;
+mes "Tienes (^CD3333"+fumb20+"^000000/^003EFF20^000000)  para tratar de fumbi una tarjeta de 10.000.000 zeny!";
+close;
+foono2:
+next;
+mes .@fname$;
+mes "Bueno, por favor regrese si le gustar?a probar y fumbi una armadura.";
+close;
+garm2:
+mes .@fname$;
+mes "All right, so would you like to try and fumbi?";
+menu "Yes",garyes,"No",garno;
+garyes2:
+if(Zeny < 10000000) { mes "I'm sorry, but it seems you don't have 10,000,000z.";
+mes "Please come again when you have 10,000,000z.";
+close;
+} else mes "You have 10,000,000 zeny! We will now start the fumbing process.";
+next;
+sleep2 1000;
+soundeffect "fumbi_run.wav",0;
+mes "1..";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+mes "2...";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+mes "3...";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+soundeffect "fumbi_start.wav",0;
+mes "4...";
+sleep2 2000;
+soundeffect "fumbi_arm.wav",0;
+set .@item,callfunc ("Fumbi_Roll",29000,29019); //Item ID's from Armors, 1101 - 1190
+getitem .@item, 1;
+delitem 671,armfee;
+mes "You got your Armor! Please come again to try and fumbi!";
+set fumb20,fumb20+1;
+mes "Tienes (^CD3333"+fumb20+"^000000/^003EFF20^000000)  para tratar de fumbi una tarjeta de 10.000.000 zeny!";
+close;
+garno2:
+next;
+mes .@fname$;
+mes "Bueno, por favor regrese si le gustar?a probar y fumbi una armadura.";
+close;
+accs2:
+mes .@fname$;
+mes "Muy bien, por lo que le gustar?a tratar de fumbi?";
+menu "Yes",accyes,"No",accno;
+accyes2:
+if(Zeny < 10000000) { mes "Lo siento, pero parece que no tiene 100,000 z.";
+mes "Por favor, vuelva cuando tenga 100.000 z.";
+close;
+} else mes "Usted tiene 10,000,000 zeny! Ahora vamos a iniciar el proceso de fumbing.";
+next;
+sleep2 1000;
+soundeffect "fumbi_run.wav",0;
+mes "1..";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+mes "2...";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+mes "3...";
+soundeffect "fumbi_start.wav",0;
+sleep2 2000;
+soundeffect "fumbi_start.wav",0;
+mes "4...";
+sleep2 2000;
+soundeffect "fumbi_arm.wav",0;
+set .@item,callfunc ("Fumbi_Roll",19300,19315); //Item ID's from Armors, 1101 - 1190
+getitem .@item, 1;
+delitem 671,armfee;
+mes "?Tienes tu Custom! Por favor, vuelva a intentar fumbi!";
+set fumb20,fumb20+1;
+mes "You have (^CD3333"+fumb20+"^000000/^003EFF20^000000)  para tratar de fumbi una tarjeta de 10.000.000 zeny!";
+close;
+accno2:
+next;
+mes .@fname$;
+mes "Bueno, por favor regrese si le gustar?a probar y fumbi una armadura.";
+close;
+
+OnInIt2:
+	setarray $GodItems[0],2410,2629,1530,1161,5013,2630,4121,4128,4129,4131,4132,4134,4135,4137,4142,4143,4144,4145,4146,4147,4148,4168,4263,4276,4302,4305,4318,4324,4330,4342,4352,4357,4359,4361,4363,4365,4367,4372,4374,4376,4386,4399,4403,4407,4408,4419,4425,4430,4441;
+}
+
+// End
+
+//Check on God items, used in set .@item,callfunc ("Fumbi_Roll",2601,2762);
+function	script	Fumbi_Roll	{
+
+FumbiAction:
+	set .@item,rand(getarg(0),getarg(1));
+
+	for(set .@i,0; .@i<getarraysize($GodItems); set .@i,.@i+1)
+		if(.@item == $GodItems[.@i]) goto FumbiAction;
+
+	return (.@item);
+}
+
+

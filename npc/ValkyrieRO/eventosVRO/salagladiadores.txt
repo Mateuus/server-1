@@ -1,0 +1,1635 @@
+//===== Global Chile ======
+//=== https://www.facebook.com/IntegralesGlobal ===
+darkmall.gat,103,78,5	script	Gladiador Han	420,{
+	
+	if(Sex == 1){
+	if (RangoGladiador == 0) {npctalk "Bienvenido al Salón de los Gladiadores.";}
+	if (RangoGladiador == 1) {npctalk "Bienvenido Espanta Bichos " +strcharinfo(0) + ". ";}
+	if (RangoGladiador == 2) {npctalk "Bienvenido Novato Agresivo " +strcharinfo(0) + ". ";}
+	if (RangoGladiador == 3) {npctalk "Bienvenido Pateador de Porings " +strcharinfo(0) + ". ";}
+	if (RangoGladiador == 4) {npctalk "Bienvenido Espadachín Viajero " +strcharinfo(0) + ". ";}
+	if (RangoGladiador == 5) {npctalk "Bienvenido Espadachín Entrenado " +strcharinfo(0) + ". ";}
+	if (RangoGladiador == 6) {npctalk "Bienvenido Aprendiz de Gladiador " +strcharinfo(0) + ". ";}
+	if (RangoGladiador == 7) {npctalk "Bienvenido Gladiador Iniciado " +strcharinfo(0) + ". ";}
+	if (RangoGladiador == 8) {npctalk "Bienvenido Gladiador Competente " +strcharinfo(0) + ". ";}
+	if (RangoGladiador == 9) {npctalk "Bienvenido Gladiador Experto " +strcharinfo(0) + ". ";}
+	if (RangoGladiador == 10) {npctalk "Bienvenido Gladiador Heróico " +strcharinfo(0) + ". ";}
+	if (RangoGladiador == 11) {npctalk "Bienvenido Gladiador Legendario " +strcharinfo(0) + ". ";}
+
+	goto cont01;}
+else
+	if (RangoGladiador == 0) {npctalk "Bienvenida al Salón de los Gladiadores.";}
+	if (RangoGladiador == 1) {npctalk "Bienvenida Espanta Bichos " +strcharinfo(0) + ". ";}
+	if (RangoGladiador == 2) {npctalk "Bienvenida Novata Agresiva " +strcharinfo(0) + ". ";}
+	if (RangoGladiador == 3) {npctalk "Bienvenida Pateadora de Porings " +strcharinfo(0) + ". ";}
+	if (RangoGladiador == 4) {npctalk "Bienvenida Espadachína Viajera " +strcharinfo(0) + ". ";}
+	if (RangoGladiador == 5) {npctalk "Bienvenida Espadachína Entrenada " +strcharinfo(0) + ". ";}
+	if (RangoGladiador == 6) {npctalk "Bienvenida Aprendiz de Gladiadora " +strcharinfo(0) + ". ";}
+	if (RangoGladiador == 7) {npctalk "Bienvenida Gladiadora Iniciada " +strcharinfo(0) + ". ";}
+	if (RangoGladiador == 8) {npctalk "Bienvenida Gladiadora Competente " +strcharinfo(0) + ". ";}
+	if (RangoGladiador == 9) {npctalk "Bienvenida Gladiadora Experta " +strcharinfo(0) + ". ";}
+	if (RangoGladiador == 10) {npctalk "Bienvenida Gladiadora Heróica " +strcharinfo(0) + ". ";}
+	if (RangoGladiador == 11) {npctalk "Bienvenida Gladiadora Legendaria " +strcharinfo(0) + ". ";}
+
+
+cont01:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿En que te puedo ayudar " +strcharinfo(0) + "?";
+next;
+menu "Rango de " + strcharinfo(0) + "",mirango,"Cambiar Puntos",cambptos,"Cancelar",olvida;
+
+
+cambptos:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Puedes cambiar tus ^0000CCPuntos de Gladiador^000000 por los siguientes objetos.";
+next;
+menu "Cambiar por Armas",cparmas,"Cambiar por Gorros",cpgorros,"Cambiar por Protecciones",cpprotecc,"Cambiar por Objetos Usables",cpusables,"Especiales Ruleta de Estados",esprulest,"Volver",cont01;
+close;
+
+cparmas:
+menu "Carrot Whip (200 Puntos)",arm01,"Edge (400 Puntos)",arm02,"Electric Guitar (200 Puntos)",arm03,"Garrison[2] (200 Puntos)",arm04,"Jungle Carbine[1] (250 Puntos)",arm05,"Kamaitachi (300 Puntos)",arm06,"Loki's Nail (250 Puntos)",arm12,"Mighty Staff (100 Puntos)",arm07,"Minstrel Bow[1] (200 Puntos)",arm08,"Princess Knife (150 Puntos)",arm09,"Roguemaster Bow (300 Puntos)",arm10,"Sashimi (150 Puntos)",arm13,"Tjungkuletti (300 Puntos)",arm14,"Windhawk (300 Puntos)",arm11,"Volver",cambptos;
+close;
+
+arm01:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCCarrot Whip^000000 por ^0000CC200 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",arm01b,"Cancelar",cparmas;
+close;
+
+arm01b:
+if(PuntosGladiador<200)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-200;
+getitem 1974,1;
+close;
+
+arm02:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCEdge^000000 por ^0000CC400 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",arm02b,"Cancelar",cparmas;
+close;
+
+arm02b:
+if(PuntosGladiador<400)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-400;
+getitem 1132,1;
+close;
+
+arm03:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCElectric Guitar^000000 por ^0000CC200 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",arm03b,"Cancelar",cparmas;
+close;
+
+arm03b:
+if(PuntosGladiador<200)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-200;
+getitem 1913,1;
+close;
+
+arm04:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCGarrison[2]^000000 por ^0000CC200 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",arm04b,"Cancelar",cparmas;
+close;
+
+arm04b:
+if(PuntosGladiador<200)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-200;
+getitem 13105,1;
+close;
+
+arm05:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCJungle Carbine[1]^000000 por ^0000CC250 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",arm05b,"Cancelar",cparmas;
+close;
+
+arm05b:
+if(PuntosGladiador<250)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-250;
+getitem 13166,1;
+close;
+
+arm06:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCKamaitachi^000000 por ^0000CC300 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",arm06b,"Cancelar",cparmas;
+close;
+
+arm06b:
+if(PuntosGladiador<300)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-300;
+getitem 13009,1;
+close;
+
+arm07:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCMighty Staff^000000 por ^0000CC100 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",arm07b,"Cancelar",cparmas;
+close;
+
+arm07b:
+if(PuntosGladiador<100)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-100;
+getitem 1613,1;
+close;
+
+arm08:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCMinstrel Bow[1]^000000 por ^0000CC200 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",arm08b,"Cancelar",cparmas;
+close;
+
+arm08b:
+if(PuntosGladiador<200)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-200;
+getitem 1725,1;
+close;
+
+arm09:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCPrincess Knife^000000 por ^0000CC150 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",arm09b,"Cancelar",cparmas;
+close;
+
+arm09b:
+if(PuntosGladiador<150)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-150;
+getitem 1240,1;
+close;
+
+arm10:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCRoguemaster Bow^000000 por ^0000CC300 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",arm10b,"Cancelar",cparmas;
+close;
+
+arm10b:
+if(PuntosGladiador<300)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-300;
+getitem 1719,1;
+close;
+
+arm11:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCWindhawk^000000 por ^0000CC300 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",arm11b,"Cancelar",cparmas;
+close;
+
+arm11b:
+if(PuntosGladiador<300)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-300;
+getitem 1307,1;
+close;
+
+
+arm12:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCLoki's Nail^000000 por ^0000CC250 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",arm12b,"Cancelar",cparmas;
+close;
+
+arm12b:
+if(PuntosGladiador<250)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-250;
+getitem 1262,1;
+close;
+
+
+arm13:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCSashimi^000000 por ^0000CC150 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",arm13b,"Cancelar",cparmas;
+close;
+
+arm13b:
+if(PuntosGladiador<150)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-150;
+getitem 1144,1;
+close;
+
+
+arm14:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCTjungkuletti^000000 por ^0000CC300 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",arm14b,"Cancelar",cparmas;
+close;
+
+arm14b:
+if(PuntosGladiador<300)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-300;
+getitem 1416,1;
+close;
+
+cpgorros:
+menu "Angel Blessing (200 Puntos)",gor01,"Assassin's Mask (100 Puntos)",gor02,"Bandit Beard (100 Puntos)",gor03,"Blue Ribbon[1] (400 Puntos)",gor04,"Bride Mask[1] (200 Puntos)",gor05,"Bucket Hat[1] (150 Puntos)",gor06,"Catfoot Hairpin[1] (200 Puntos)",prot17,"Chullos[1] (300 Puntos)",gor07,"Classic Hat (250 Puntos)",gor14,"Coppola (250 Puntos)",gor08,"Cowboy Hat (200 Puntos)",gor09,"Dokebi's Wig[1] (250 Puntos)",gor10,"Ninja's Scroll (400 Puntos)",gor11,"Sweet Candy (300 Puntos)",gor12,"Teddybear Hat (200 Puntos)",gor13,"Volver",cambptos;
+close;
+
+gor01:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCAngel Blessing^000000 por ^0000CC200 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",gor01b,"Cancelar",cpgorros;
+close;
+
+gor01b:
+if(PuntosGladiador<200)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-200;
+getitem 5207,1;
+close;
+
+gor02:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCAssassin's Mask^000000 por ^0000CC100 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",gor02b,"Cancelar",cpgorros;
+close;
+
+gor02b:
+if(PuntosGladiador<100)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-100;
+getitem 5096,1;
+close;
+
+gor03:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCBandit Beard^000000 por ^0000CC100 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",gor03b,"Cancelar",cpgorros;
+close;
+
+gor03b:
+if(PuntosGladiador<100)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-100;
+getitem 2237,1;
+close;
+
+gor04:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCBlue Ribbon[1]^000000 por ^0000CC400 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",gor04b,"Cancelar",cpgorros;
+close;
+
+gor04b:
+if(PuntosGladiador<400)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-400;
+getitem 5404,1;
+close;
+
+gor05:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCBride Mask[1]^000000 por ^0000CC200 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",gor05b,"Cancelar",cpgorros;
+close;
+
+gor05b:
+if(PuntosGladiador<200)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-200;
+getitem 5169,1;
+close;
+
+gor06:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCBucket Hat[1]^000000 por ^0000CC150 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",gor06b,"Cancelar",cpgorros;
+close;
+
+gor06b:
+if(PuntosGladiador<150)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-150;
+getitem 5120,1;
+close;
+
+gor07:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCChullos[1]^000000 por ^0000CC300 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",gor07b,"Cancelar",cpgorros;
+close;
+
+gor07b:
+if(PuntosGladiador<300)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-300;
+getitem 5243,1;
+close;
+
+gor08:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCCoppola^000000 por ^0000CC250 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",gor08b,"Cancelar",cpgorros;
+close;
+
+gor08b:
+if(PuntosGladiador<250)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-250;
+getitem 5200,1;
+close;
+
+gor09:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCCowboy Hat^000000 por ^0000CC200 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",gor09b,"Cancelar",cpgorros;
+close;
+
+gor09b:
+if(PuntosGladiador<200)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-200;
+getitem 5075,1;
+close;
+
+gor10:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCDokebi's Wig[1]^000000 por ^0000CC250 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",gor10b,"Cancelar",cpgorros;
+close;
+
+gor10b:
+if(PuntosGladiador<250)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-250;
+getitem 5258,1;
+close;
+
+gor11:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCNinja's Scroll^000000 por ^0000CC400 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",gor11b,"Cancelar",cpgorros;
+close;
+
+gor11b:
+if(PuntosGladiador<400)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-400;
+getitem 5362,1;
+close;
+
+gor12:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCSweet Candy^000000 por ^0000CC300 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",gor12b,"Cancelar",cpgorros;
+close;
+
+gor12b:
+if(PuntosGladiador<300)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-300;
+getitem 5412,1;
+close;
+
+gor13:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCTeddybear Hat^000000 por ^0000CC200 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",gor13b,"Cancelar",cpgorros;
+close;
+
+gor13b:
+if(PuntosGladiador<200)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-200;
+getitem 5059,1;
+close;
+
+
+gor14:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCClassic Hat^000000 por ^0000CC250 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",gor14b,"Cancelar",cpgorros;
+close;
+
+gor14b:
+if(PuntosGladiador<250)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-250;
+getitem 5478,1;
+close;
+
+cpprotecc:
+menu "Arm Guard[1] (200 Puntos)",prot01,"Bunny Slipper[1] (200 Puntos)",prot03,"Gandora[1] (400 Puntos)",prot04,"High Heels[1] (200 Puntos)",prot02,"Improved Arm Guard[1] (300 Puntos)",prot05,"Iron Wrist (250 Puntos)",prot06,"Lunatic Brooch[1] (100 Puntos)",prot07,"Mirror Shield[1] (150 Puntos)",prot08,"Novice Shield[1] (100 Puntos)",prot09,"Occult Incense (100 Puntos)",prot10,"Sacred Incense (100 Puntos)",prot11,"Sacred Scripture (200 Puntos)",prot12,"Sprint Mail[1] (400 Puntos)",prot13,"Strong Shield[1] (250 Puntos)",prot14,"Tendrillion Skin[1] (400 Puntos)",prot15,"Thorn Shield[1] (250 Puntos)",prot16,"Volver",cambptos;
+close;
+
+prot01:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCArm Guard[1]^000000 por ^0000CC200 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",prot01b,"Cancelar",cpprotecc;
+close;
+
+prot01b:
+if(PuntosGladiador<200)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-200;
+getitem 2118,1;
+close;
+
+prot02:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCHigh Heels[1]^000000 por ^0000CC200 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",prot02b,"Cancelar",cpprotecc;
+close;
+
+prot02b:
+if(PuntosGladiador<200)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-200;
+getitem 2432,1;
+close;
+
+prot03:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCBunny Slipper[1]^000000 por ^0000CC200 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",prot03b,"Cancelar",cpprotecc;
+close;
+
+prot03b:
+if(PuntosGladiador<200)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-200;
+getitem 2415,1;
+close;
+
+prot04:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCGandora[1]^000000 por ^0000CC400 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",prot04b,"Cancelar",cpprotecc;
+close;
+
+prot04b:
+if(PuntosGladiador<400)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-400;
+getitem 2388,1;
+close;
+
+prot05:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCImproved Arm Guard[1]^000000 por ^0000CC300 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",prot05b,"Cancelar",cpprotecc;
+close;
+
+prot05b:
+if(PuntosGladiador<300)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-300;
+getitem 2120,1;
+close;
+
+prot06:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCIron Wrist^000000 por ^0000CC250 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",prot06b,"Cancelar",cpprotecc;
+close;
+
+prot06b:
+if(PuntosGladiador<250)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-250;
+getitem 2719,1;
+close;
+
+prot07:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCLunatic Brooch[1]^000000 por ^0000CC100 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",prot07b,"Cancelar",cpprotecc;
+close;
+
+prot07b:
+if(PuntosGladiador<100)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-100;
+getitem 2718,1;
+close;
+
+prot08:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCMirror Shield[1]^000000 por ^0000CC150 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",prot08b,"Cancelar",cpprotecc;
+close;
+
+prot08b:
+if(PuntosGladiador<150)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-150;
+getitem 2108,1;
+close;
+
+prot09:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCNovice Shield^000000 por ^0000CC100 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",prot09b,"Cancelar",cpprotecc;
+close;
+
+prot09b:
+if(PuntosGladiador<100)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-100;
+getitem 2113,1;
+close;
+
+prot10:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCOccult Incense^000000 por ^0000CC100 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",prot10b,"Cancelar",cpprotecc;
+close;
+
+prot10b:
+if(PuntosGladiador<100)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-100;
+getitem 2639,1;
+close;
+
+prot11:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCSacred Incense^000000 por ^0000CC100 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",prot11b,"Cancelar",cpprotecc;
+close;
+
+prot11b:
+if(PuntosGladiador<100)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-100;
+getitem 2638,1;
+close;
+
+prot12:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCSacred Scripture^000000 por ^0000CC200 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",prot12b,"Cancelar",cpprotecc;
+close;
+
+prot12b:
+if(PuntosGladiador<200)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-200;
+getitem 2129,1;
+close;
+
+prot13:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCSprint Mail[1]^000000 por ^0000CC400 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",prot13b,"Cancelar",cpprotecc;
+close;
+
+prot13b:
+if(PuntosGladiador<400)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-400;
+getitem 2387,1;
+close;
+
+prot14:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCStrong Shield[1]^000000 por ^0000CC250 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",prot14b,"Cancelar",cpprotecc;
+close;
+
+prot14b:
+if(PuntosGladiador<250)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-250;
+getitem 2125,1;
+close;
+
+prot15:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCTendrillion Skin[1]^000000 por ^0000CC400 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",prot15b,"Cancelar",cpprotecc;
+close;
+
+prot15b:
+if(PuntosGladiador<400)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-400;
+getitem 2544,1;
+close;
+
+prot16:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCThorn Shield[1]^000000 por ^0000CC250 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",prot16b,"Cancelar",cpprotecc;
+close;
+
+prot16b:
+if(PuntosGladiador<250)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-250;
+getitem 2124,1;
+close;
+
+
+prot17:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCCatfoot Hairpin[1]^000000 por ^0000CC200 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",prot17b,"Cancelar",cpprotecc;
+close;
+
+prot17b:
+if(PuntosGladiador<200)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-200;
+getitem 5446,1;
+close;
+
+cpusables:
+menu "Blue Potion x25 (50 Puntos)",usa01,"Bomber Steak (9 Puntos)",usa02,"Box of Gloom (5 Puntos)",usa11,"Clam Soup (9 Puntos)",usa03,"Condensed White Potion x70 (50 Puntos)",usa09,"Dead Branch x25 (30 Puntos)",usa12,"Fried Sweet Potato (9 Puntos)",usa04,"Fruit Mix (9 Puntos)",usa05,"Honey Herbal Tea (9 Puntos)",usa06,"Speed Potion x10 (50 Puntos)",usa07,"Tentacle Cheese Gratin (9 Puntos)",usa08,"Wrapped Mask (100 Puntos)",usa10,"Volver",cambptos;
+close;
+
+
+usa01:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCBlue Potion x25^000000 por ^0000CC50 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",usa01b,"Cancelar",cpusables;
+close;
+
+usa01b:
+if(PuntosGladiador<50)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-50;
+getitem 13810,1;
+close;
+
+usa02:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCBomber Steak^000000 por ^0000CC9 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",usa02b,"Cancelar",cpusables;
+close;
+
+usa02b:
+if(PuntosGladiador<9)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-9;
+getitem 12043,1;
+close;
+
+usa03:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCClam Soup^000000 por ^0000CC9 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",usa03b,"Cancelar",cpusables;
+close;
+
+usa03b:
+if(PuntosGladiador<9)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-9;
+getitem 12053,1;
+close;
+
+usa04:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCFried Sweet Potato^000000 por ^0000CC9 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",usa04b,"Cancelar",cpusables;
+close;
+
+usa04b:
+if(PuntosGladiador<9)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-9;
+getitem 12068,1;
+close;
+
+usa05:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCFruit Mix^000000 por ^0000CC9 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",usa05b,"Cancelar",cpusables;
+close;
+
+usa05b:
+if(PuntosGladiador<9)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-9;
+getitem 12063,1;
+close;
+
+usa06:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCHoney Herbal Tea^000000 por ^0000CC9 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",usa06b,"Cancelar",cpusables;
+close;
+
+usa06b:
+if(PuntosGladiador<9)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-9;
+getitem 12048,1;
+close;
+
+usa07:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCSpeed Potion x10^000000 por ^0000CC50 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",usa07b,"Cancelar",cpusables;
+close;
+
+usa07b:
+if(PuntosGladiador<50)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-50;
+getitem 13995,1;
+close;
+
+usa08:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCTentacle Cheese Gratin^000000 por ^0000CC9 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",usa08b,"Cancelar",cpusables;
+close;
+
+usa08b:
+if(PuntosGladiador<9)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-9;
+getitem 12058,1;
+close;
+
+usa09:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCCondensed White Potion x70^000000 por ^0000CC50 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",usa09b,"Cancelar",cpusables;
+close;
+
+usa09b:
+if(PuntosGladiador<50)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-50;
+getitem 547,70;
+close;
+
+usa10:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCWrapped Mask^000000 por ^0000CC100 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",usa10b,"Cancelar",cpusables;
+close;
+
+usa10b:
+if(PuntosGladiador<100)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-100;
+getitem 12107,1;
+close;
+
+
+usa11:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCBox of Gloom^000000 por ^0000CC5 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",usa11b,"Cancelar",cpusables;
+close;
+
+usa11b:
+if(PuntosGladiador<5)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-5;
+getitem 12029,1;
+close;
+
+
+usa12:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres este ^0000CCDead Branch x25^000000 por ^0000CC30 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",usa12b,"Cancelar",cpusables;
+close;
+
+usa12b:
+if(PuntosGladiador<30)goto nollega;soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí lo tienes, esperamos que te sea útil.";
+set PuntosGladiador,PuntosGladiador-30;
+getitem 14234,1;
+close;
+
+
+esprulest:
+menu "Explosión Frutal (5 Puntos)",des01,"Trio Goblin (5 Puntos)",des02,"Compañera Assassin (10 Puntos)",des03,"Compañero Hunter (10 Puntos)",des04,"Compañera Wizard (10 Puntos)",des05,"Compañero Monk (10 Puntos)",des06,"Compañera Priest (10 Puntos)",des07,"Compañero Knight (10 Puntos)",des08,"Puntos Extra (5 Puntos)",des09,"Zeny Extra (5 Puntos)",des10,"Regalo Extra (5 Puntos)",des11,"Experiencia de Clan Extra (5 Puntos)",des12,"Experiencia Base Extra (5 Puntos)",des13,"Experiencia Job Extra (5 Puntos)",des14,"Poción Extra (5 Puntos)",des15,"Berserker (5 Puntos)",des16,"Cura Extra (5 Puntos)",des17,"Resistencia Estados (5 Puntos)",des18,"Coste SP -50% (5 Puntos)",des19,"Volver",cambptos;
+close;
+
+des01:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres desbloquear ^0000CCExplosión Frutal^000000 en tu Ruleta de Estados por ^0000CC5 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",ace01,"Cancelar",cont01;
+close;
+
+ace01:
+if (DesEspRul01 == 1)goto yadesblo;
+if(PuntosGladiador<5)goto nollega;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "A partir de ahora el especial ^0000CCExplosión Frutal^000000 aparecerá aleatoriamente en tu Ruleta de Estados.";
+set PuntosGladiador,PuntosGladiador-5;
+set DesEspRul01,1;
+next;
+goto cont01;
+close;
+
+des02:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres desbloquear ^0000CCTrio Goblin^000000 en tu Ruleta de Estados por ^0000CC5 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",ace02,"Cancelar",cont01;
+close;
+
+ace02:
+if (DesEspRul02 == 1)goto yadesblo;
+if(PuntosGladiador<5)goto nollega;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "A partir de ahora el especial ^0000CCTrio Goblin^000000 aparecerá aleatoriamente en tu Ruleta de Estados.";
+set PuntosGladiador,PuntosGladiador-5;
+set DesEspRul02,1;
+next;
+goto cont01;
+close;
+
+des03:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres desbloquear ^0000CCCompañera Assassin^000000 en tu Ruleta de Estados por ^0000CC10 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",ace03,"Cancelar",cont01;
+close;
+
+ace03:
+if (DesEspRul03 == 1)goto yadesblo;
+if(PuntosGladiador<10)goto nollega;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "A partir de ahora el especial ^0000CCCompañera Assassin^000000 aparecerá aleatoriamente en tu Ruleta de Estados.";
+set PuntosGladiador,PuntosGladiador-10;
+set DesEspRul03,1;
+next;
+goto cont01;
+close;
+
+des04:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres desbloquear ^0000CCCompañero Hunter^000000 en tu Ruleta de Estados por ^0000CC10 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",ace04,"Cancelar",cont01;
+close;
+
+ace04:
+if (DesEspRul04 == 1)goto yadesblo;
+if(PuntosGladiador<10)goto nollega;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "A partir de ahora el especial ^0000CCCompañero Hunter^000000 aparecerá aleatoriamente en tu Ruleta de Estados.";
+set PuntosGladiador,PuntosGladiador-10;
+set DesEspRul04,1;
+next;
+goto cont01;
+close;
+
+des05:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres desbloquear ^0000CCCompañera Wizard^000000 en tu Ruleta de Estados por ^0000CC10 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",ace05,"Cancelar",cont01;
+close;
+
+ace05:
+if (DesEspRul05 == 1)goto yadesblo;
+if(PuntosGladiador<10)goto nollega;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "A partir de ahora el especial ^0000CCCompañera Wizard^000000 aparecerá aleatoriamente en tu Ruleta de Estados.";
+set PuntosGladiador,PuntosGladiador-10;
+set DesEspRul05,1;
+next;
+goto cont01;
+close;
+
+des06:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres desbloquear ^0000CCCompañero Monk^000000 en tu Ruleta de Estados por ^0000CC10 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",ace06,"Cancelar",cont01;
+close;
+
+ace06:
+if (DesEspRul06 == 1)goto yadesblo;
+if(PuntosGladiador<10)goto nollega;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "A partir de ahora el especial ^0000CCCompañero Monk^000000 aparecerá aleatoriamente en tu Ruleta de Estados.";
+set PuntosGladiador,PuntosGladiador-10;
+set DesEspRul06,1;
+next;
+goto cont01;
+close;
+
+des07:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres desbloquear ^0000CCCompañera Priest^000000 en tu Ruleta de Estados por ^0000CC10 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",ace07,"Cancelar",cont01;
+close;
+
+ace07:
+if (DesEspRul07 == 1)goto yadesblo;
+if(PuntosGladiador<10)goto nollega;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "A partir de ahora el especial ^0000CCCompañera Priest^000000 aparecerá aleatoriamente en tu Ruleta de Estados.";
+set PuntosGladiador,PuntosGladiador-10;
+set DesEspRul07,1;
+next;
+goto cont01;
+close;
+
+des08:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres desbloquear ^0000CCCompañero Knight^000000 en tu Ruleta de Estados por ^0000CC10 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",ace08,"Cancelar",cont01;
+close;
+
+ace08:
+if (DesEspRul08 == 1)goto yadesblo;
+if(PuntosGladiador<10)goto nollega;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "A partir de ahora el especial ^0000CCCompañero Knight^000000 aparecerá aleatoriamente en tu Ruleta de Estados.";
+set PuntosGladiador,PuntosGladiador-10;
+set DesEspRul08,1;
+next;
+goto cont01;
+close;
+
+des09:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres desbloquear ^0000CCPuntos Extra^000000 en tu Ruleta de Estados por ^0000CC5 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",ace09,"Cancelar",cont01;
+close;
+
+ace09:
+if (DesEspRul09 == 1)goto yadesblo;
+if(PuntosGladiador<5)goto nollega;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "A partir de ahora el especial ^0000CCPuntos Extra^000000 aparecerá aleatoriamente en tu Ruleta de Estados.";
+set PuntosGladiador,PuntosGladiador-5;
+set DesEspRul09,1;
+next;
+goto cont01;
+close;
+
+des10:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres desbloquear ^0000CCZeny Extra^000000 en tu Ruleta de Estados por ^0000CC5 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",ace10,"Cancelar",cont01;
+close;
+
+ace10:
+if (DesEspRul10 == 1)goto yadesblo;
+if(PuntosGladiador<5)goto nollega;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "A partir de ahora el especial ^0000CCZeny Extra^000000 aparecerá aleatoriamente en tu Ruleta de Estados.";
+set PuntosGladiador,PuntosGladiador-5;
+set DesEspRul10,1;
+next;
+goto cont01;
+close;
+
+des11:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres desbloquear ^0000CCRegalo Extra^000000 en tu Ruleta de Estados por ^0000CC5 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",ace11,"Cancelar",cont01;
+close;
+
+ace11:
+if (DesEspRul11 == 1)goto yadesblo;
+if(PuntosGladiador<5)goto nollega;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "A partir de ahora el especial ^0000CCRegalo Extra^000000 aparecerá aleatoriamente en tu Ruleta de Estados.";
+set PuntosGladiador,PuntosGladiador-5;
+set DesEspRul11,1;
+next;
+goto cont01;
+close;
+
+des12:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres desbloquear ^0000CCExperiencia de Clan Extra^000000 en tu Ruleta de Estados por ^0000CC5 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",ace12,"Cancelar",cont01;
+close;
+
+ace12:
+if (DesEspRul12 == 1)goto yadesblo;
+if(PuntosGladiador<5)goto nollega;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "A partir de ahora el especial ^0000CCExperiencia de Clan Extra^000000 aparecerá aleatoriamente en tu Ruleta de Estados.";
+set PuntosGladiador,PuntosGladiador-5;
+set DesEspRul12,1;
+next;
+goto cont01;
+close;
+
+des13:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres desbloquear ^0000CCExperiencia Base Extra^000000 en tu Ruleta de Estados por ^0000CC5 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",ace13,"Cancelar",cont01;
+close;
+
+ace13:
+if (DesEspRul13 == 1)goto yadesblo;
+if(PuntosGladiador<5)goto nollega;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "A partir de ahora el especial ^0000CCExperiencia Base Extra^000000 aparecerá aleatoriamente en tu Ruleta de Estados.";
+set PuntosGladiador,PuntosGladiador-5;
+set DesEspRul13,1;
+next;
+goto cont01;
+close;
+
+des14:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres desbloquear ^0000CCExperiencia Job Extra^000000 en tu Ruleta de Estados por ^0000CC5 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",ace14,"Cancelar",cont01;
+close;
+
+ace14:
+if (DesEspRul14 == 1)goto yadesblo;
+if(PuntosGladiador<5)goto nollega;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "A partir de ahora el especial ^0000CCExperiencia Job Extra^000000 aparecerá aleatoriamente en tu Ruleta de Estados.";
+set PuntosGladiador,PuntosGladiador-5;
+set DesEspRul14,1;
+next;
+goto cont01;
+close;
+
+des15:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres desbloquear ^0000CCPoción Extra^000000 en tu Ruleta de Estados por ^0000CC5 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",ace15,"Cancelar",cont01;
+close;
+
+ace15:
+if (DesEspRul15 == 1)goto yadesblo;
+if(PuntosGladiador<5)goto nollega;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "A partir de ahora el especial ^0000CCPoción Extra^000000 aparecerá aleatoriamente en tu Ruleta de Estados.";
+set PuntosGladiador,PuntosGladiador-5;
+set DesEspRul15,1;
+next;
+goto cont01;
+close;
+
+
+des16:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres desbloquear ^0000CCBerserker^000000 en tu Ruleta de Estados por ^0000CC5 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",ace16,"Cancelar",cont01;
+close;
+
+ace16:
+if (DesEspRul16 == 1)goto yadesblo;
+if(PuntosGladiador<5)goto nollega;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "A partir de ahora el especial ^0000CCBerserker^000000 aparecerá aleatoriamente en tu Ruleta de Estados.";
+set PuntosGladiador,PuntosGladiador-5;
+set DesEspRul16,1;
+next;
+goto cont01;
+close;
+
+
+des17:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres desbloquear ^0000CCCura Extra^000000 en tu Ruleta de Estados por ^0000CC5 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",ace17,"Cancelar",cont01;
+close;
+
+ace17:
+if (DesEspRul17 == 1)goto yadesblo;
+if(PuntosGladiador<5)goto nollega;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "A partir de ahora el especial ^0000CCCura HP Extra^000000 y ^0000CCCura SP Extra^000000 aparecerá aleatoriamente en tu Ruleta de Estados.";
+set PuntosGladiador,PuntosGladiador-5;
+set DesEspRul17,1;
+next;
+goto cont01;
+close;
+
+
+des18:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres desbloquear ^0000CCResistencia Estados +20%^000000 en tu Ruleta de Estados por ^0000CC5 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",ace18,"Cancelar",cont01;
+close;
+
+ace18:
+if (DesEspRul18 == 1)goto yadesblo;
+if(PuntosGladiador<5)goto nollega;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "A partir de ahora el especial ^0000CCResistencia Estados +20%^000000 aparecerá aleatoriamente en tu Ruleta de Estados.";
+set PuntosGladiador,PuntosGladiador-5;
+set DesEspRul18,1;
+next;
+goto cont01;
+close;
+
+
+des19:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "¿Quieres desbloquear ^0000CCCoste SP -50%^000000 en tu Ruleta de Estados por ^0000CC5 Puntos de Gladiador^000000?";
+next;
+menu "Aceptar",ace19,"Cancelar",cont01;
+close;
+
+ace19:
+if (DesEspRul19 == 1)goto yadesblo;
+if(PuntosGladiador<5)goto nollega;
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "A partir de ahora el especial ^0000CCCoste SP -50%^000000 aparecerá aleatoriamente en tu Ruleta de Estados.";
+set PuntosGladiador,PuntosGladiador-5;
+set DesEspRul19,1;
+next;
+goto cont01;
+close;
+
+
+olvida:
+close;
+
+nollega:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "No tienes suficientes ^0000CCPuntos de Gladiador^000000.";
+next;
+goto cont01;
+close;
+
+yadesblo:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Este especial ya ha sido desbloqueado.";
+next;
+goto cont01;
+close;
+
+mirango:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Aquí puedes comprobar tu Rango de Gladiador, Modos Desbloqueados y Especiales Desbloqueados en la Ruleta de Estados.";
+next;
+menu "Rango y Modos",rangomodos,"Ruleta de Estados",miruleta,"Volver",cont01;
+close;
+
+rangomodos:
+	mes "[^CC0000 Información sobre " + strcharinfo(0) + " ^000000]";
+	if (Sex == 1){
+	if (RangoGladiador == 0) mes "Tu rango de gladiador es Espectador y tienes un total de "+PuntosGladiador+" Puntos de Gladiador.";
+	if (RangoGladiador == 1) mes "Tu rango de gladiador es Espanta Bichos y tienes un total de "+PuntosGladiador+" Puntos de Gladiador.";
+	if (RangoGladiador == 2) mes "Tu rango de gladiador es Novato Agresivo y tienes un total de "+PuntosGladiador+" Puntos de Gladiador.";
+	if (RangoGladiador == 3) mes "Tu rango de gladiador es Pateador de Porings y tienes un total de "+PuntosGladiador+" Puntos de Gladiador.";
+	if (RangoGladiador == 4) mes "Tu rango de gladiador es Espadachín Viajero y tienes un total de "+PuntosGladiador+" Puntos de Gladiador.";
+	if (RangoGladiador == 5) mes "Tu rango de gladiador es Espadachín Entrenado y tienes un total de "+PuntosGladiador+" Puntos de Gladiador.";
+	if (RangoGladiador == 6) mes "Tu rango de gladiador es Aprendiz de Gladiador y tienes un total de "+PuntosGladiador+" Puntos de Gladiador.";
+	if (RangoGladiador == 7) mes "Tu rango de gladiador es Gladiador Iniciado y tienes un total de "+PuntosGladiador+" Puntos de Gladiador.";
+	if (RangoGladiador == 8) mes "Tu rango de gladiador es Gladiador Competente y tienes un total de "+PuntosGladiador+" Puntos de Gladiador.";
+	if (RangoGladiador == 9) mes "Tu rango de gladiador es Gladiador Experto y tienes un total de "+PuntosGladiador+" Puntos de Gladiador.";
+	if (RangoGladiador == 10) mes "Tu rango de gladiador es Gladiador Heróico y tienes un total de "+PuntosGladiador+" Puntos de Gladiador.";
+	if (RangoGladiador == 11) mes "Tu rango de gladiador es Gladiador Legendario y tienes un total de "+PuntosGladiador+" Puntos de Gladiador.";}
+	if (Sex == 0){
+	if (RangoGladiador == 0) mes "Tu rango de gladiadora es Espectadora y tienes un total de "+PuntosGladiador+" Puntos de Gladiador.";
+	if (RangoGladiador == 1) mes "Tu rango de gladiadora es Espanta Bichos y tienes un total de "+PuntosGladiador+" Puntos de Gladiador.";
+	if (RangoGladiador == 2) mes "Tu rango de gladiadora es Novata Agresiva y tienes un total de "+PuntosGladiador+" Puntos de Gladiador.";
+	if (RangoGladiador == 3) mes "Tu rango de gladiadora es Pateadora de Porings y tienes un total de "+PuntosGladiador+" Puntos de Gladiador.";
+	if (RangoGladiador == 4) mes "Tu rango de gladiadora es Espadachín Viajera y tienes un total de "+PuntosGladiador+" Puntos de Gladiador.";
+	if (RangoGladiador == 5) mes "Tu rango de gladiadora es Espadachín Entrenada y tienes un total de "+PuntosGladiador+" Puntos de Gladiador.";
+	if (RangoGladiador == 6) mes "Tu rango de gladiadora es Aprendiz de Gladiadora y tienes un total de "+PuntosGladiador+" Puntos de Gladiador.";
+	if (RangoGladiador == 7) mes "Tu rango de gladiadora es Gladiadora Iniciada y tienes un total de "+PuntosGladiador+" Puntos de Gladiador.";
+	if (RangoGladiador == 8) mes "Tu rango de gladiadora es Gladiadora Competente y tienes un total de "+PuntosGladiador+" Puntos de Gladiador.";
+	if (RangoGladiador == 9) mes "Tu rango de gladiadora es Gladiadora Experta y tienes un total de "+PuntosGladiador+" Puntos de Gladiador.";
+	if (RangoGladiador == 10) mes "Tu rango de gladiadora es Gladiadora Heróica y tienes un total de "+PuntosGladiador+" Puntos de Gladiador.";
+	if (RangoGladiador == 11) mes "Tu rango de gladiadora es Gladiadora Legendaria y tienes un total de "+PuntosGladiador+" Puntos de Gladiador.";}
+next;
+	mes "[^CC0000 Modos Completados de " + strcharinfo(0) + " ^000000]";
+	if (complemod02 == 1) mes "Modo Cosechador: ^04B404Completado^000000";
+	if (complemod01 == 1) mes "Modo Resident Evil: ^04B404Completado^000000";
+	if (complemod03 == 1) mes "Modo Detonación: ^04B404Completado^000000";
+	if (complemod04 == 1) mes "Modo Multicolor: ^04B404Completado^000000";
+	if (complemod05 == 1) mes "Modo Granja: ^04B404Completado^000000";
+	if (complemod02 == 0) mes "Modo Cosechador: ^DF0101Sin Completar^000000";
+	if (complemod01 == 0) mes "Modo Resident Evil: ^DF0101Sin Completar^000000";
+	if (complemod03 == 0) mes "Modo Detonación: ^DF0101Sin Completar^000000";
+	if (complemod04 == 0) mes "Modo Multicolor: ^DF0101Sin Completar^000000";
+	if (complemod05 == 0) mes "Modo Granja: ^DF0101Sin Completar^000000";
+next;
+goto mirango;
+close;
+
+miruleta:
+	mes "[^CC0000Gladiador Han^000000]";
+	mes "Ahora te mostraré los elementos que has desbloqueado en tu Ruleta de Estados.";
+next;
+	mes "^0000CCEspeciales Desbloqueados:^000000";
+	mes " ";
+	if (DesEspRul01 == 1) mes "- Explosión Frutal";
+	if (DesEspRul02 == 1) mes "- Trio Goblin";
+	if (DesEspRul03 == 1) mes "- Compañera Assasin";
+	if (DesEspRul04 == 1) mes "- Compañero Hunter";
+	if (DesEspRul05 == 1) mes "- Compañera Wizard";
+	if (DesEspRul06 == 1) mes "- Compañero Monk";
+	if (DesEspRul07 == 1) mes "- Compañera Priest";
+	if (DesEspRul08 == 1) mes "- Compañero Knight";
+	if (DesEspRul09 == 1) mes "- Puntos Extra";
+	if (DesEspRul10 == 1) mes "- Zeny Extra";
+	if (DesEspRul11 == 1) mes "- Regalo Extra";
+	if (DesEspRul12 == 1) mes "- Experiencia de Clan Extra";
+	if (DesEspRul13 == 1) mes "- Experiencia Base Extra";
+	if (DesEspRul14 == 1) mes "- Experiencia Job Extra";
+	if (DesEspRul15 == 1) mes "- Poción Extra";
+	if (DesEspRul16 == 1) mes "- Berserker";
+	if (DesEspRul17 == 1) mes "- Cura Extra";
+	if (DesEspRul18 == 1) mes "- Resistencia Estados";
+	if (DesEspRul19 == 1) mes "- Coste SP -50%";
+	mes " ";
+	if (DesEspRul01 == 0 && DesEspRul02 == 0 && DesEspRul03 == 0 && DesEspRul04 == 0 && DesEspRul05 == 0 && DesEspRul06 == 0 && DesEspRul07 == 0 && DesEspRul08 == 0 && DesEspRul09 == 0 && DesEspRul10 == 0 && DesEspRul11 == 0 && DesEspRul12 == 0 && DesEspRul13 == 0 && DesEspRul14 == 0 && DesEspRul15 == 0) mes "No has desbloqueado ningún especial.";
+next;
+goto mirango;
+close;
+
+}
+
+darkmall.gat,118,88,4	script	Enfermera::enfgla	569,{
+	mes "[^CC0000Enfermera^000000]";
+	mes "¡Hola! Yo soy la enfermera del torneo de gladiadores, si te derrotan en un torneo yo curaré todas tus heridas.";
+next;
+	percentheal 100,100;
+	specialeffect2 EF_HEAL;
+	mes "Usted está completamente curado.";
+close;
+}
+
+darkmall.gat,83,102,6	script	Gladiador Matt	686,{
+	mes "[^CC0000Gladiador Matt^000000]";
+	mes "Hay gente que viene aquí a participar y cuando acaba algún torneo tira sus ^0000CCPuntos de Gladiador^000000 como si fuera basura...";
+next;
+	mes "[^CC0000Gladiador Matt^000000]";
+	mes "Si tu también vas a hacer eso te los puedo cambiar por medallas de battleground o 400 Zeny cada uno.";
+next;
+	mes "[^CC0000Gladiador Matt^000000]";
+	mes "También si lo prefieres puedo cambiar tus trofeos por ^0000CC20 Puntos de Gladiador^000000 y un pequeño premio por cada uno.";
+next;
+menu "Puntos de Gladiador por Zeny",ventaptos,"Puntos de Gladiador por Medallas",cambiamedall,"Cambiar Trofeos",cambtrof,"Olvidalo",marcha;
+close;
+
+cambiamedall:
+	mes "[^CC0000Gladiador Matt^000000]";
+	mes "Por cada 4 Puntos de Gladiador te daré 1 medalla de battlegrounds al azar.";
+next;
+	mes "[^CC0000Gladiador Matt^000000]";
+	mes "Tienes ^0000FF" +PuntosGladiador+"^000000 Puntos de Gladiador.";
+	mes "¿Cuantos quieres cambiar?";
+	input @ventaptogladi;
+next;
+	if (@ventaptogladi == 0 || PuntosGladiador < @ventaptogladi ) goto NOTANTOS;
+	if (@ventaptogladi < 4) goto NOTANTOS;
+	set PuntosGladiador,PuntosGladiador-@ventaptogladi;
+	set @ventaptogladi,@ventaptogladi/4;
+medallasini:
+	set @TGbadgerand,rand(1,3);
+	if (@TGbadgerand == 1) {getitem 7828,1; goto medallascomp;}
+	if (@TGbadgerand == 2) {getitem 7829,1; goto medallascomp;}
+	if (@TGbadgerand == 3) {getitem 7773,1; goto medallascomp;}
+
+medallascomp:
+	set @ventaptogladi,@ventaptogladi-1;
+	if (@ventaptogladi >= 1) goto medallasini;
+	soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Matt^000000]";
+	mes "Ahí están tus medallas, dales un buen provecho.";
+close;
+
+
+
+
+ventaptos:
+	mes "[^CC0000Gladiador Matt^000000]";
+	mes "Tienes ^0000FF" +PuntosGladiador+"^000000 Puntos de Gladiador.";
+	mes "¿Cuantos me quieres vender?";
+	input @ventaptogladi;
+	next;
+	if (@ventaptogladi == 0 || PuntosGladiador < @ventaptogladi ) goto NOTANTOS;
+	if (@ventaptogladi < 4) goto NOTANTOS;
+	set @ptogladitotal,400*@ventaptogladi;
+	mes "[^CC0000Gladiador Matt^000000]";
+	mes "De acuerdo, Eso serán ^0000FF "+@ptogladitotal+" Zeny ^000000";
+	next;
+	set PuntosGladiador,PuntosGladiador-@ventaptogladi;
+	set Zeny,Zeny+@ptogladitotal;
+	soundeffect "se_cash_provider.wav",0;
+	mes "[^CC0000Gladiador Matt^000000]";
+	mes "Aquí tienes tu dinero.";
+close;
+
+NOTANTOS:
+	mes "[^CC0000Gladiador Matt^000000]";
+	mes "No puedes venderme esa cantidad de puntos.";
+close;
+
+cambtrof:
+if(TrofeoCosechador==1)goto ventrofcose;
+sigtrof01:
+if(TrofeoResident==1)goto ventrofresi;
+sigtrof02:
+if(TrofeoDetonacion==1)goto ventrofdeto;
+sigtrof03:
+if(TrofeoMulticolor==1)goto ventrofmult;
+sigtrof04:
+if(TrofeoGranja==1)goto ventrofgran;
+sigtrof05:
+	mes "[^CC0000Gladiador Matt^000000]";
+	mes "No tienes ningún trofeo más para poder cambiar por puntos.";
+close;
+
+ventrofcose:
+	mes "[^CC0000Gladiador Matt^000000]";
+	mes "¿Quieres cambiar tu ^0000CCTrofeo Cosechador^000000 por ^0000CC20 Puntos de Gladiador^000000 y un pequeño premio?";
+next;
+menu "Aceptar",acpven01,"Cancelar",sigtrof01;
+
+acpven01:
+	set @TGtrofprem,rand(1,5);
+	if (@TGtrofprem == 1) getitem 12235,5;
+	if (@TGtrofprem == 2) getitem 12235,5;
+	if (@TGtrofprem == 3) getitem 12016,5;
+	if (@TGtrofprem == 4) getitem 12030,5;
+	if (@TGtrofprem == 5) {getitem 7828,12; getitem 7829,12; getitem 7773,12;}
+	set PuntosGladiador,PuntosGladiador+20;
+	set TrofeoCosechador,TrofeoCosechador-1;
+	dispbottom "¡¡Has obtenido 20 Puntos de Gladiador!!";
+	mes "[^CC0000Gladiador Matt^000000]";
+	mes "Muy bien, Aqui tienes tus ^0000CC20 Puntos de Gladiador^000000 y el premio.";
+next;
+goto sigtrof01;
+close;
+
+ventrofresi:
+	mes "[^CC0000Gladiador Matt^000000]";
+	mes "¿Quieres cambiar tu ^0000CCTrofeo Resident Evil^000000 por ^0000CC20 Puntos de Gladiador^000000 y un pequeño premio?";
+next;
+menu "Aceptar",acpven02,"Cancelar",sigtrof02;
+
+acpven02:
+	set @TGtrofprem,rand(1,5);
+	if (@TGtrofprem == 1) getitem 12235,5;
+	if (@TGtrofprem == 2) getitem 12235,5;
+	if (@TGtrofprem == 3) getitem 12016,5;
+	if (@TGtrofprem == 4) getitem 12030,5;
+	if (@TGtrofprem == 5) {getitem 7828,12; getitem 7829,12; getitem 7773,12;}	
+	set PuntosGladiador,PuntosGladiador+20;
+	set TrofeoResident,TrofeoResident-1;
+	dispbottom "¡¡Has obtenido 20 Puntos de Gladiador!!";
+	mes "[^CC0000Gladiador Matt^000000]";
+	mes "Muy bien, Aqui tienes tus ^0000CC20 Puntos de Gladiador^000000 y el premio.";
+next;
+goto sigtrof02;
+close;
+
+ventrofdeto:
+	mes "[^CC0000Gladiador Matt^000000]";
+	mes "¿Quieres cambiar tu ^0000CCTrofeo Detonación^000000 por ^0000CC20 Puntos de Gladiador^000000 y un pequeño premio?";
+next;
+menu "Aceptar",acpven03,"Cancelar",sigtrof03;
+
+acpven03:
+	set @TGtrofprem,rand(1,5);
+	if (@TGtrofprem == 1) getitem 12235,5;
+	if (@TGtrofprem == 2) getitem 12235,5;
+	if (@TGtrofprem == 3) getitem 12016,5;
+	if (@TGtrofprem == 4) getitem 12030,5;
+	if (@TGtrofprem == 5) {getitem 7828,12; getitem 7829,12; getitem 7773,12;}
+	set PuntosGladiador,PuntosGladiador+20;
+	set TrofeoDetonacion,TrofeoDetonacion-1;
+	dispbottom "¡¡Has obtenido 20 Puntos de Gladiador!!";
+	mes "[^CC0000Gladiador Matt^000000]";
+	mes "Muy bien, Aqui tienes tus ^0000CC20 Puntos de Gladiador^000000 y el premio.";
+next;
+goto sigtrof03;
+close;
+
+ventrofmult:
+	mes "[^CC0000Gladiador Matt^000000]";
+	mes "¿Quieres cambiar tu ^0000CCTrofeo Multicolor^000000 por ^0000CC20 Puntos de Gladiador^000000 y un pequeño premio?";
+next;
+menu "Aceptar",acpven04,"Cancelar",sigtrof04;
+
+acpven04:
+	set @TGtrofprem,rand(1,5);
+	if (@TGtrofprem == 1) getitem 12235,5;
+	if (@TGtrofprem == 2) getitem 12235,5;
+	if (@TGtrofprem == 3) getitem 12016,5;
+	if (@TGtrofprem == 4) getitem 12030,5;
+	if (@TGtrofprem == 5) {getitem 7828,12; getitem 7829,12; getitem 7773,12;}
+	set PuntosGladiador,PuntosGladiador+20;
+	set TrofeoMulticolor,TrofeoMulticolor-1;
+	dispbottom "¡¡Has obtenido 20 Puntos de Gladiador!!";
+	mes "[^CC0000Gladiador Matt^000000]";
+	mes "Muy bien, Aqui tienes tus ^0000CC20 Puntos de Gladiador^000000 y el premio.";
+next;
+goto sigtrof04;
+close;
+
+ventrofgran:
+	mes "[^CC0000Gladiador Matt^000000]";
+	mes "¿Quieres cambiar tu ^0000CCTrofeo Granja^000000 por ^0000CC20 Puntos de Gladiador^000000 y un pequeño premio?";
+next;
+menu "Aceptar",acpven05,"Cancelar",sigtrof05;
+
+acpven05:
+	set @TGtrofprem,rand(1,5);
+	if (@TGtrofprem == 1) getitem 12235,5;
+	if (@TGtrofprem == 2) getitem 12235,5;
+	if (@TGtrofprem == 3) getitem 12016,5;
+	if (@TGtrofprem == 4) getitem 12030,5;
+	if (@TGtrofprem == 5) {getitem 7828,12; getitem 7829,12; getitem 7773,12;}
+	set PuntosGladiador,PuntosGladiador+20;
+	set TrofeoGranja,TrofeoGranja-1;
+	dispbottom "¡¡Has obtenido 20 Puntos de Gladiador!!";
+	mes "[^CC0000Gladiador Matt^000000]";
+	mes "Muy bien, Aqui tienes tus ^0000CC20 Puntos de Gladiador^000000 y el premio.";
+next;
+goto sigtrof05;
+close;
+
+marcha:
+	mes "[^CC0000Gladiador Matt^000000]";
+	mes "Espero que luego no los vayas tirando por ahí.";
+close;
+}
+
+darkmall.gat,107,105,4	script	Pilar de Piedra::pilar01	1906,{
+}
+
+darkmall.gat,92,105,4	script	Pilar de Piedra::pilar02	1906,{
+}
+
+darkmall.gat,92,90,4	script	Pilar de Piedra::pilar03	1906,{
+}
+
+darkmall.gat,107,90,4	script	Pilar de Piedra::pilar04	1906,{
+}
+
+darkmall.gat,118,101,4	script	Espadachin Entrenado	953,{
+	mes "[^CC0000Espadachin Entrenado^000000]";
+	mes "Esta vez voy a conseguir llegar a ser ^0000CCAprendiz de Gladiador^000000.";
+	next;
+	mes "[^CC0000Espadachin Entrenado^000000]";
+	mes "He desbloqueado el especial ^0000CCExperiencia Base Extra^000000 de mi Ruleta de Estados, así aceleraré un poco mi entrenamiento.";
+close;
+}
+
+darkmall.gat,118,94,3	script	Reparador del Torneo	851,{
+	
+if (getgmlevel() >= 50) goto continuar;
+mes "[^CC0000Reparador del Torneo^000000]";
+mes "Hola, yo soy el que repara las cosas que se estropean en el Torneo de Gladiadores, si crees que algo no funciona como es debido puedes usar @request para alertar a los GM.";
+next;
+mes "Pero recuerda que este comando solo lo debes usar para casos de emergencia para no molestar excesivamente a los GM";
+close;
+
+continuar:
+mes "[^CC0000Reparador del Torneo^000000]";
+mes "¿Que problema quieres que intente reparar?";
+next;
+menu "Abrir Torneo Gladiadores",torngladi,"Cancelar",olvida;
+
+torngladi:
+set $blogladi,0;
+mes "[^CC0000Reparador del Torneo^000000]";
+mes "Se le ha quitado el bloqueo al Torneo de Gladiadores";
+close;
+
+olvida:
+close;
+
+}
+guild_vs4	mapflag	noloot

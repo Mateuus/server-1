@@ -1,0 +1,666 @@
+//===== eAthena Script =======================================================================
+//= NPC 
+//===== By: =================================================================================
+//= 
+//===== Current Version: ======================================================================
+//= 1.3.1
+//==========================================================================================
+
+prontera,149,286,5	script	Aron Weapon	56,{
+
+set @npcname$,"^0000FF[^000000^FF0000Aron Weapon^000000^0000FF]^000000";
+mes @npcname$;
+mes "Buenas! ^5555FF" + strcharinfo(0) + "^000000!";
+mes "yo me llamo ^5555FF" + @npcname$ + "^000000!";
+mes "y estoy parado como tonto para darte";
+mes "Algunos arma que te seran muy utiles";
+next;
+
+mes "[^0065DFAron Van^^000000]";
+mes "¿Que arma te gustaria crea??,";
+menu "Aron Katar",Katar_V,"Aron Axe",Axe_V,"Aron Lance",Lance_V,"Aron Mace",Mace_V,"Aron Staff",Staff_V,"Aron Bow",Bow_V,"Aron Guitar",Guitar_V,"Aron Microphone",Microphone_V,"Aron Dagger",Dagger_V,"Aron Garrison",Garrison_V,"Aron Meganium Bow",Meganium_V,"Aron Meganium Sword",Sword_V,"Aron DaggerX",DaggerX_V,"Aron Sword",Sword2_V,"Buster Sword",Buster_V,"Ares Voyager",Voyager_V,"thanatos sword",thanatos_V,"Axe of Hermetics",Hermetics_V,"Ninguno",ref8;
+
+Katar_V:
+mes "[^0065DFWeapon Aron^^000000]";
+mes "Necesitas traerme los siguientes items...";
+next;
+mes "1 Blood Blades";
+mes "1 Bloody Branch";
+mes "5 Bloody Edge";
+mes "400 Bloody Rune";
+next;
+
+mes "Ya tienes todos los items?";
+menu "Si.",ref1,"No tengo nada.",ref2;
+
+ref1:
+mes "Ok,Dejame revisar tu Inventario";
+if((countitem(1271)<1))goto falta;
+if((countitem(12103)<1))goto falta;
+if((countitem(7024)<5))goto falta;
+if((countitem(7563)<400))goto falta;
+mes "Bien, si tienes todo lo necesario...";
+next;
+
+mes "[^0065DFWeapon Aron^000000]";
+mes "Procedere a refinar tu Arma";
+delitem 1271,1;
+delitem 12103,1;
+delitem 7024,5;
+delitem 7563,400;
+getitem 28021,1;
+mes "Muy bien!! Ahi tienes tu Nueva Arma";
+close;
+
+Axe_V:
+mes "[^0065DFWeapon Aron^^000000]";
+mes "Necesitas traerme los siguientes items...";
+next;
+mes "1 Orcish Axe";
+mes "200 Live Coal";
+mes "200 Horn";
+mes "10 Biotite";
+mes "100 Blade of Darkness";
+next;
+
+mes "Ya tienes todos los items?";
+menu "Si.",ref3,"No tengo nada.",ref2;
+
+ref3:
+mes "Ok,Dejame revisar tu Inventario";
+if((countitem(1304)<1))goto falta;
+if((countitem(7098)<200))goto falta;
+if((countitem(947)<200))goto falta;
+if((countitem(7297)<10))goto falta;
+if((countitem(7023)<100))goto falta;
+mes "Bien, si tienes todo lo necesario...";
+next;
+
+mes "[^0065DFWeapon Aron^^000000]";
+mes "Procedere a refinar tu Arma";
+delitem 1304,1;
+delitem 7098,200;
+delitem 947,200;
+delitem 7297,10;
+delitem 7023,100;
+getitem 28022,1;
+mes "Muy bien!! Ahi tienes tu Nueva Arma";
+close;
+
+Lance_V:
+mes "[^0065DFWeapon Aron^^000000]";
+mes "Necesitas traerme los siguientes items...";
+next;
+mes "1 Battle Hook";
+mes "4 Fang of Garm";
+mes "2 Skeletal Armor Piece";
+mes "100 Red Bijou";
+mes "30 Metal Fragment";
+next;
+
+mes "Ya tienes todos los items?";
+menu "Si.",ref4,"No tengo nada.",ref2;
+
+ref4:
+mes "Ok,Dejame revisar tu Inventario";
+if((countitem(1421)<1))goto falta;
+if((countitem(7036)<4))goto falta;
+if((countitem(7450)<2))goto falta;
+if((countitem(7447)<100))goto falta;
+if((countitem(7095)<30))goto falta;
+mes "Bien, si tienes todo lo necesario...";
+next;
+
+mes "[^0065DFWeapon Aron^000000]";
+mes "Procedere a refinar tu Arma";
+delitem 1421,1;
+delitem 7036,4;
+delitem 7450,2;
+delitem 7447,100;
+delitem 7095,30;
+getitem 28023,1;
+mes "Muy bien!! Ahi tienes tu Nueva Arma";
+close;
+
+Mace_V:
+mes "[^0065DFWeapon Aron^^000000]";
+mes "Necesitas traerme los siguientes items...";
+next;
+mes "1 Morning Star  [2]";
+mes "200 Red Chile";
+mes "500 Soft Feather";
+mes "50 Steel";
+mes "5 Fragment of Rossata Stone";
+next;
+
+mes "Ya tienes todos los items?";
+menu "Si.",ref5,"No tengo nada.",ref2;
+
+ref5:
+mes "Ok,Dejame revisar tu Inventario";
+if((countitem(1514)<1))goto falta;
+if((countitem(7286)<200))goto falta;
+if((countitem(7063)<500))goto falta;
+if((countitem(999)<50))goto falta;
+if((countitem(7211)<5))goto falta;
+mes "Bien, si tienes todo lo necesario...";
+next;
+
+mes "[^0065DFAron Weapon^000000]";
+mes "Procedere a refinar tu Arma";
+delitem 1514,1;
+delitem 7286,200;
+delitem 7063,500;
+delitem 999,50;
+delitem 7211,5;
+getitem 28024,1;
+mes "Muy bien!! Ahi tienes tu Nueva Arma";
+close;
+
+Staff_V:
+mes "[^0065DFAron Weapon^^000000]";
+mes "Necesitas traerme los siguientes items...";
+next;
+mes "1 Staff of Destruction [1]";
+mes "200 Amethyst";
+mes "400 Flame Heart";
+mes "10 Ba Gua";
+mes "1 Will of Red Darkness";
+next;
+
+mes "Ya tienes todos los items?";
+menu "Si.",ref6,"No tengo nada.",ref2;
+
+ref6:
+mes "Ok,Dejame revisar tu Inventario";
+if((countitem(2000)<1))goto falta;
+if((countitem(719)<200))goto falta;
+if((countitem(994)<400))goto falta;
+if((countitem(7169)<10))goto falta;
+if((countitem(7566)<1))goto falta;
+mes "Bien, si tienes todo lo necesario...";
+next;
+
+mes "[^0065DFAron Weapon^^000000]";
+mes "Procedere a refinar tu Arma";
+delitem 2000,1;
+delitem 719,200;
+delitem 994,400;
+delitem 7169,10;
+delitem 7566,1;
+getitem 28025,1;
+mes "Muy bien!! Ahi tienes tu Nueva Arma";
+close;
+
+Bow_V:
+mes "[^0065DFAron Weapon^^000000]";
+mes "Necesitas traerme los siguientes items...";
+next;
+mes "1 Ixion Wings";
+mes "20 Mother's Nightmare";
+mes "400 Rough Wind";
+mes "1 Binoculars";
+mes "30 3carat Diamond";
+next;
+
+mes "Ya tienes todos los items?";
+menu "Si.",ref7,"No tengo nada.",ref2;
+
+ref7:
+mes "Ok,Dejame revisar tu Inventario";
+if((countitem(1737)<1))goto falta;
+if((countitem(7020)<20))goto falta;
+if((countitem(996)<400))goto falta;
+if((countitem(2296)<1))goto falta;
+if((countitem(732)<30))goto falta;
+mes "Bien, si tienes todo lo necesario...";
+next;
+
+mes "[^0065DFAron Weapon^^000000]";
+mes "Procedere a refinar tu Arma";
+delitem 1737,1;
+delitem 7020,20;
+delitem 996,400;
+delitem 2296,1;
+delitem 732,30;
+getitem 28026,1;
+mes "Muy bien!! Ahi tienes tu Nueva Arma";
+close;
+
+Guitar_V:
+mes "[^0065DFAron Weapon^^000000]";
+mes "Necesitas traerme los siguientes items...";
+next;
+mes "1 Bass Guitar [1]";
+mes "200 Transparent Plate verde";
+mes "5 Tiger Skin";
+mes "3 Broken Crown";
+mes "1000 Trunk";
+next;
+
+mes "Ya tienes todos los items?";
+menu "Si.",ref9,"No tengo nada.",ref2;
+
+ref9:
+mes "Ok,Dejame revisar tu Inventario";
+if((countitem(1919)<1))goto falta;
+if((countitem(7352)<200))goto falta;
+if((countitem(1029)<5))goto falta;
+if((countitem(7754)<3))goto falta;
+if((countitem(1019)<1000))goto falta;
+mes "Bien, si tienes todo lo necesario...";
+next;
+
+mes "[^0065DFAron Weapon^^000000]";
+mes "Procedere a refinar tu Arma";
+delitem 1919,1;
+delitem 7352,200;
+delitem 1029,5;
+delitem 7754,3;
+delitem 1019,1000;
+getitem 28027,1;
+mes "Muy bien!! Ahi tienes tu Nueva Arma";
+close;
+
+Microphone_V:
+mes "[^0065DFAron Weapon^^000000]";
+mes "Necesitas traerme los siguientes items...";
+next;
+mes "1 Electric Wire";
+mes "600 Transparent Celestial Robe";
+mes "500 Clock Hand";
+mes "10 Fang of Garm";
+mes "99 Soft Apron";
+next;
+
+mes "Ya tienes todos los items?";
+menu "Si.",ref10,"No tengo nada.",ref2;
+
+ref10:
+mes "Ok,Dejame revisar tu Inventario";
+if((countitem(1971)<1))goto falta;
+if((countitem(7165)<600))goto falta;
+if((countitem(1095)<500))goto falta;
+if((countitem(7036)<10))goto falta;
+if((countitem(661)<99))goto falta;
+mes "Bien, si tienes todo lo necesario...";
+next;
+
+mes "[^0065DFAron Weapon^^000000]";
+mes "Procedere a refinar tu Arma";
+delitem 1971,1;
+delitem 7165,600;
+delitem 1095,500;
+delitem 7036,10;
+delitem 661,99;
+getitem 28028,1;
+mes "Muy bien!! Ahi tienes tu Nueva Arma";
+close;
+
+Dagger_V:
+mes "[^0065DFAron Weapon^^000000]";
+mes "Necesitas traerme los siguientes items...";
+next;
+mes "1 Damascus  [1]";
+mes "150 Opal";
+mes "100 Research Chart";
+mes "100 Cloud Crumb ";
+mes "5 Phlogopite";
+next;
+
+mes "Ya tienes todos los items?";
+menu "Si.",ref11,"No tengo nada.",ref2;
+
+ref11:
+mes "Ok,Dejame revisar tu Inventario";
+if((countitem(1222)<1))goto falta;
+if((countitem(727)<150))goto falta;
+if((countitem(7347)<100))goto falta;
+if((countitem(7162)<100))goto falta;
+if((countitem(7290)<5))goto falta;
+mes "Bien, si tienes todo lo necesario...";
+next;
+
+mes "[^0065DFAron Weapon^^000000]";
+mes "Procedere a refinar tu Arma";
+delitem 1222,1;
+delitem 727,150;
+delitem 7347,100;
+delitem 7162,100;
+delitem 7290,5;
+getitem 28029,1;
+mes "Muy bien!! Ahi tienes tu Nueva Arma";
+close;
+
+Garrison_V:
+mes "[^0065DFAron Weapon^^000000]";
+mes "Necesitas traerme los siguientes items...";
+next;
+mes "1 Garrison  [1]";
+mes "150 Fragment";
+mes "5 Muscovite";
+mes "100 Dark Crystal Fragment";
+mes "100 Coral Reef";
+next;
+
+mes "Ya tienes todos los items?";
+menu "Si.",ref12,"No tengo nada.",ref2;
+
+ref12:
+mes "Ok,Dejame revisar tu Inventario";
+if((countitem(13104)<1))goto falta;
+if((countitem(7094)<150))goto falta;
+if((countitem(7292)<5))goto falta;
+if((countitem(7315)<100))goto falta;
+if((countitem(7013)<100))goto falta;
+mes "Bien, si tienes todo lo necesario...";
+next;
+
+mes "[^0065DFAron Weapon^^000000]";
+mes "Procedere a refinar tu Arma";
+delitem 13104,1;
+delitem 7094,150;
+delitem 7292,5;
+delitem 7315,100;
+delitem 7013,100;
+getitem 28030,1;
+mes "Muy bien!! Ahi tienes tu Nueva Arma";
+close;
+
+Meganium_V:
+mes "[^0065DFAron Weapon^^000000]";
+mes "Necesitas traerme los siguientes items...";
+next;
+mes "1 Gale Bow  [1]";
+mes "550 Green Bijou";
+mes "2000 Arrow of Wind";
+mes "100 Rough Wind";
+mes "100 Level 5 Lightening Bolt";
+next;
+
+mes "Ya tienes todos los items?";
+menu "Si.",ref13,"No tengo nada.",ref2;
+
+ref13:
+mes "Ok,Dejame revisar tu Inventario";
+if((countitem(1733)<1))goto falta;
+if((countitem(7445)<550))goto falta;
+if((countitem(1755)<2000))goto falta;
+if((countitem(996)<100))goto falta;
+if((countitem(693)<100))goto falta;
+mes "Bien, si tienes todo lo necesario...";
+next;
+
+mes "[^0065DFAron Weapon^^000000]";
+mes "Procedere a refinar tu Arma";
+delitem 1733,1;
+delitem 7445,550;
+delitem 1755,2000;
+delitem 996,100;
+delitem 693,100;
+getitem 28031,1;
+mes "Muy bien!! Ahi tienes tu Nueva Arma";
+close;
+
+Sword_V:
+mes "[^0065DFAron Weapon^^000000]";
+mes "Necesitas traerme los siguientes items...";
+next;
+mes "1 Byeollungum";
+mes "150 Fragment";
+mes "5 Muscovite";
+mes "100 Dark Crystal Fragment";
+mes "100 Yaga's Pestle";
+next;
+
+mes "Ya tienes todos los items?";
+menu "Si.",ref14,"No tengo nada.",ref2;
+
+ref14:
+mes "Ok,Dejame revisar tu Inventario";
+if((countitem(1140)<1))goto falta;
+if((countitem(7094)<150))goto falta;
+if((countitem(7292)<5))goto falta;
+if((countitem(7315)<100))goto falta;
+if((countitem(7762)<100))goto falta;
+mes "Bien, si tienes todo lo necesario...";
+next;
+
+mes "[^0065DFAron Weapon^^000000]";
+mes "Procedere a refinar tu Arma";
+delitem 1140,1;
+delitem 7094,150;
+delitem 7292,5;
+delitem 7315,100;
+delitem 7762,100;
+getitem 28032,1;
+mes "Muy bien!! Ahi tienes tu Nueva Arma";
+close;
+
+DaggerX_V:
+mes "[^0065DFAron Weapon^^000000]";
+mes "Necesitas traerme los siguientes items...";
+next;
+mes "1 Desert Twilight";
+mes "150 Fragment";
+mes "5 Muscovite";
+mes "100 Dark Crystal Fragment";
+mes "200 Coral Reef";
+next;
+
+mes "Ya tienes todos los items?";
+menu "Si.",ref15,"No tengo nada.",ref2;
+
+ref15:
+mes "Ok,Dejame revisar tu Inventario";
+if((countitem(13034)<1))goto falta;
+if((countitem(7094)<150))goto falta;
+if((countitem(7292)<5))goto falta;
+if((countitem(7315)<100))goto falta;
+if((countitem(7013)<200))goto falta;
+mes "Bien, si tienes todo lo necesario...";
+next;
+
+mes "[^0065DFAron Weapon^^000000]";
+mes "Procedere a refinar tu Arma";
+delitem 13034,1;
+delitem 7094,150;
+delitem 7292,5;
+delitem 7315,100;
+delitem 7013,200;
+getitem 32017,1;
+mes "Muy bien!! Ahi tienes tu Nueva Arma";
+close;
+
+Sword2_V:
+mes "[^0065DFAron Weapon^^000000]";
+mes "Necesitas traerme los siguientes items...";
+next;
+mes "1  Solar Sword";
+mes "150 Fragment";
+mes "5 Muscovite";
+mes "100 Dark Crystal Fragment";
+mes "200 Lantern";
+next;
+
+mes "Ya tienes todos los items?";
+menu "Si.",ref16,"No tengo nada.",ref2;
+
+ref16:
+mes "Ok,Dejame revisar tu Inventario";
+if((countitem(1136)<1))goto falta;
+if((countitem(7094)<150))goto falta;
+if((countitem(7292)<5))goto falta;
+if((countitem(7315)<100))goto falta;
+if((countitem(1041)<200))goto falta;
+mes "Bien, si tienes todo lo necesario...";
+next;
+
+mes "[^0065DFAron Weapon^^000000]";
+mes "Procedere a refinar tu Arma";
+delitem 1136,1;
+delitem 7094,150;
+delitem 7292,5;
+delitem 7315,100;
+delitem 1041,200;
+getitem 32018,1;
+mes "Muy bien!! Ahi tienes tu Nueva Arma";
+close;
+
+Buster_V:
+mes "[^0065DFAron Weapon^^000000]";
+mes "Necesitas traerme los siguientes items...";
+next;
+mes "1 Saber";
+mes "150 Fragment";
+mes "5 Muscovite";
+mes "100 Dark Crystal Fragment";
+mes "10 Bloody Edge";
+next;
+
+mes "Ya tienes todos los items?";
+menu "Si.",ref17,"No tengo nada.",ref2;
+
+ref17:
+mes "Ok,Dejame revisar tu Inventario";
+if((countitem(1127)<1))goto falta;
+if((countitem(7094)<150))goto falta;
+if((countitem(7292)<5))goto falta;
+if((countitem(7315)<100))goto falta;
+if((countitem(7024)<10))goto falta;
+mes "Bien, si tienes todo lo necesario...";
+next;
+
+mes "[^0065DFAron Weapon^^000000]";
+mes "Procedere a refinar tu Arma";
+delitem 1127,1;
+delitem 7094,150;
+delitem 7292,5;
+delitem 7315,100;
+delitem 7024,10;
+getitem 29073,1;
+mes "Muy bien!! Ahi tienes tu Nueva Arma";
+close;
+
+Voyager_V:
+mes "[^0065DFAron Weapon^^000000]";
+mes "Necesitas traerme los siguientes items...";
+next;
+mes "1 Crescent Scythe [1]";
+mes "150 Fragment";
+mes "5 Muscovite";
+mes "200 Dark Crystal Fragment";
+mes "5 Dragon Breath Cocktail";
+next;
+
+mes "Ya tienes todos los items?";
+menu "Si.",ref18,"No tengo nada.",ref2;
+
+ref18:
+mes "Ok,Dejame revisar tu Inventario";
+if((countitem(1476)<1))goto falta;
+if((countitem(7094)<150))goto falta;
+if((countitem(7292)<5))goto falta;
+if((countitem(7315)<200))goto falta;
+if((countitem(12080)<5))goto falta;
+mes "Bien, si tienes todo lo necesario...";
+next;
+
+mes "[^0065DFAron Weapon^^000000]";
+mes "Procedere a refinar tu Arma";
+delitem 1476,1;
+delitem 7094,150;
+delitem 7292,5;
+delitem 7315,200;
+delitem 12080,5;
+getitem 29074,1;
+mes "Muy bien!! Ahi tienes tu Nueva Arma";
+close;
+
+thanatos_V:
+mes "[^0065DFAron Weapon^^000000]";
+mes "Necesitas traerme los siguientes items...";
+next;
+mes "1 Mysteltainn  [0]";
+mes "10 Fragment of Despair";
+mes "10 Fragment of Agony";
+mes "10 Fragment of Sorrow";
+mes "10 Fragment of Hatred";
+next;
+
+mes "Ya tienes todos los items?";
+menu "Si.",ref19,"No tengo nada.",ref2;
+
+ref19:
+mes "Ok,Dejame revisar tu Inventario";
+if((countitem(1138)<1))goto falta;
+if((countitem(7439)<10))goto falta;
+if((countitem(7436)<10))goto falta;
+if((countitem(7437)<10))goto falta;
+if((countitem(7438)<10))goto falta;
+mes "Bien, si tienes todo lo necesario...";
+next;
+
+mes "[^0065DFAron Weapon^^000000]";
+mes "Procedere a refinar tu Arma";
+delitem 1138,1;
+delitem 7439,10;
+delitem 7436,10;
+delitem 7437,10;
+delitem 7438,10;
+getitem 29075,1;
+mes "Muy bien!! Ahi tienes tu Nueva Arma";
+close;
+
+Hermetics_V:
+mes "[^0065DFAron Weapon^^000000]";
+mes "Necesitas traerme los siguientes items...";
+next;
+mes "1 Doom Slayer";
+mes "150 Fragment";
+mes "5 Muscovite";
+mes "1000 Dark Crystal Fragment";
+mes "500 Hammer of Blacksmith";
+next;
+
+mes "Ya tienes todos los items?";
+menu "Si.",ref20,"No tengo nada.",ref2;
+
+ref20:
+mes "Ok,Dejame revisar tu Inventario";
+if((countitem(1370)<1))goto falta;
+if((countitem(7094)<150))goto falta;
+if((countitem(7292)<5))goto falta;
+if((countitem(7315)<1000))goto falta;
+if((countitem(1005)<500))goto falta;
+mes "Bien, si tienes todo lo necesario...";
+next;
+
+mes "[^0065DFAron Weapon^^000000]";
+mes "Procedere a refinar tu Arma";
+delitem 1370,1;
+delitem 7094,150;
+delitem 7292,5;
+delitem 7315,1000;
+delitem 1005,500;
+getitem 29076,1;
+mes "Muy bien!! Ahi tienes tu Arma";
+close;
+
+ref2:
+mes "[^0065DFAron Weapon^^000000]";
+mes "Pues si quieres Cambiar tus Armas tienes que conseguirlos";
+close;
+
+ref8:
+mes "[^0065DFAron Weapon^^000000]";
+mes "Vuelve cuando Quieras!";
+close;
+
+
+falta:
+mes "[V^0065DFAron Weapon^^000000]";
+mes "Te faltan conseguir items...";
+mes "traeme lo que te pedi, faltan algunos items solamente,date prisa";
+close;
+}

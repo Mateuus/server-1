@@ -1,0 +1,21 @@
+lroom01,55,67,5	script	Robert	648,{
+
+OnTimer64000:
+	npctalk "¿Qué dijimos acerca de cantar? Hicimos esto, tú tocas la canción.";
+	end;
+OnTimer72000:
+	npctalk "Estoy en desacuerdo.";
+	end;
+}
+
+lroom01,58,67,4	script	Martin	647,{
+
+
+OnTimer69000:
+	npctalk "Pero ¿qué hay de matar a la gente? ¡Puedo repartir daño también!";
+	end;
+OnTimer77000:
+	npctalk "Con mi +12 violín, mi flecha vulcan daños va a ser increíble!";
+	end;
+
+}

@@ -1,0 +1,44 @@
+/* ###################### KOE REWARD NPC ########################### */
+npc_in,30,30,5	script	KOE REWARD	803,{
+		mes "[ ^0000FFKOE REWARD^000000]";
+		mes "Hola ^0000FF"+ strcharinfo(0) +"^000000!";
+		mes "Puede reclamar el premio de participación de KOE si participó en el último KoE durante más de 15 minutos.";
+		mes "- KOE Token: 10x.";
+		mes "daremos bonus cuando el evento se celebre en KOE.";
+	next;
+		mes "[ ^0000FFKOE REWARD^000000]";
+		mes "Su participación total en KOE.";
+		mes "[Total KOE ganado: ^0000FF"+ #KOE_POINTS +" minutos^000000]";
+		
+		menu "Claim Points",Claim, "Later.",Later;
+		
+		Claim:
+			next;
+			mes "[ ^0000FFKOE REWARD^000000]";
+			if(#KOE_POINTS == 0){
+				mes "^FF0000Su tiempo de participación en KOE no es suficiente.^000000";
+				mes "Participa en el evento KOE para ganar puntos KOE.";
+				close;
+			}else{
+				if(#KOE_POINTS > 14){
+					set #KOE_POINTS, #KOE_POINTS - 15;
+					getitembound 50005, #KOE_POINTS,1;  //KOE TOKEN
+					mes "Usted recibe "+ #KOE_POINTS +"x KOE TOKEN";
+					
+					dispbottom "Recibe 10x KOE Token";
+					set #KOE_POINTS,0;
+					close;
+				}else{
+					mes "^FF0000Su tiempo de participación en KoE no es suficiente.^000000";
+					mes "Su tiempo de participación en KoE es ^0000FF"+ #KOE_POINTS +" minutos^000000";
+					close;
+				} 
+			}
+		close;
+		
+		Later:
+		close;
+	
+	
+	end;
+}

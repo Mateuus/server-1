@@ -1,0 +1,84 @@
+//======Name========================================
+// Daily Gem Collection Quest
+//======Version=====================================
+// 1.0
+//======Author(s)===================================
+// Sandbox
+//======Comments====================================
+// In loving memory of AstralRO
+//==================================================
+
+lib_in,142,91,5	script	Kami Gem	693,{
+
+if(#TaskDelay+86400 > gettimetick(2)) goto Ltdelay;
+mes "[ ^000088Kami^000000 ]";
+mes "Saludos, ^008800"+strcharinfo(0)+"^000000. Yo soy la famosa colectora de la gemas, ^880000kami^000000! He recogido todas las piedras de nacimiento disponibles en Rune Midgard!";
+next;
+mes "[ ^000088Kami^000000 ]";
+mes "Tengo que recoger más de ellos, Si me ayudas, te daré algo para compensar su esfuerzo.";
+next;
+
+mes "[ ^000088Kami^000000 ]";
+mes "Usted está en parte (^FF0000"+(#dtq+1)+"^000000/10) de esta tarea diaria, esta es la joya que tendrás que adquirir: ^880000";
+	if(#dtq == 0) mes "3-Carat Diamond (50)";
+	else if(#dtq == 1) mes "Amethyst (50)";
+	else if(#dtq == 2) mes "Aquamarine (50)";
+	else if(#dtq == 3) mes "Sardonyx (50)";
+	else if(#dtq == 4) mes "Pearl (50)";
+	else if(#dtq == 5) mes "Zircon (50)";
+	else if(#dtq == 6) mes "Ruby (50)";
+	else if(#dtq == 7) mes "Sapphire (50)";
+	else if(#dtq == 8) mes "Garnet (50)";
+	else if(#dtq == 9) mes "Topaz (50)";
+mes "^000000";
+next;
+mes "[ ^000088Kami^000000 ]";
+mes "Para cada tarea de terminar, te recompensará con hasta 100 ^0000FFPoring Coin^000000 dependiendo de mi estado de ánimo!"; //Editar a la recompensa que se estaría dando
+menu "Gem on!",-,"Tengo las gemas ya!",Lgotit;
+close;
+
+Lgotit:
+	next;
+	if(#dtq == 0 && countitem(732) < 50) goto Lnenough;
+	else if(#dtq == 1 && countitem(719) < 50) goto Lnenough;
+	else if(#dtq == 2 && countitem(720) < 50) goto Lnenough;
+	else if(#dtq == 3 && countitem(725) < 50) goto Lnenough;
+	else if(#dtq == 4 && countitem(722) < 50) goto Lnenough;
+	else if(#dtq == 5 && countitem(729) < 50) goto Lnenough;
+	else if(#dtq == 6 && countitem(723) < 50) goto Lnenough;
+	else if(#dtq == 7 && countitem(726) < 50) goto Lnenough;
+	else if(#dtq == 8 && countitem(718) < 50) goto Lnenough;
+	else if(#dtq == 9 && countitem(728) < 50) goto Lnenough;
+	mes "[ ^000088Tambunting^000000 ]";
+	mes "Gracias, este se mantendrá en mi baúl lleno de piedras preciosas! Bahahahaha.";
+	if(#dtq == 0) delitem 732,50;
+	else if(#dtq == 1) delitem 719,50;
+	else if(#dtq == 2) delitem 720,50;
+	else if(#dtq == 3) delitem 725,50;
+	else if(#dtq == 4) delitem 722,50;
+	else if(#dtq == 5) delitem 729,50;
+	else if(#dtq == 6) delitem 723,50;
+	else if(#dtq == 7) delitem 726,50;
+	else if(#dtq == 8) delitem 718,50;
+	else if(#dtq == 9) delitem 728,50;
+	getitem 7539,rand(25,100); //Edit to the reward that you would be giving
+	set #dtq,#dtq+1;
+	if(#dtq == 10)  
+	{ set #dtq,0;
+	set #TaskDelay,gettimetick(2);
+	}
+	close;
+	
+
+Lnenough:
+	mes "[ ^000088Kami^000000 ]";	
+	mes "Este monóculo nunca deja de decirme si alguien me está engañando.";
+	close;
+
+Ltdelay:
+	mes "[ ^000088Kami^000000 ]";
+	mes "Yo no necesito ningún gemas por ahora, volver otra vez mañana.";
+	close;
+
+
+}

@@ -1,0 +1,86 @@
+//===== Global Chile ======
+//=== https://www.facebook.com/IntegralesGlobal ===
+
+prontera,147,175,4	script	PvP Warper	10081,{
+cutin "ep14_roki02",2;
+	mes "[^FFA500Zona de Combates^000000]";
+	mes "¡Hola! ^0000FF" + strcharinfo(0) + "^000000.";
+	mes "Te puedo llevar a combatir por tú honor y el de tu Guild.";
+	next;
+	switch( select("^FF0000Directo al PvP^000000","^0055FFSalas de Combates^000000","^FFA500Salas de Gladiadores^000000","Prefiero no ir") )
+	{
+	
+		Case 1:
+		mes "[^FFA500Zona de Combates^000000]";
+		mes " ";
+		mes " ";
+		dispbottom "[Pvp] Suerte, regresa con vida.";
+		cutin "",255;
+		close2;
+	specialeffect2 72;
+	sleep2 2500;
+	specialeffect2 73;
+		warp "guild_vs3",0,0;
+
+		Case 2:
+		mes "[^FFA500Zona de Combates^000000]";
+		mes "En esta zona puedes librar terribles combates en los que dejarás tu alma en el campo de batalla";
+		mes " ";
+		dispbottom "[Zona de Combates] Suerte, regresa con vida.";
+		cutin "",255;
+		close2;
+		warp "arena_4",148,97;
+		npctalk "[" + strcharinfo(0) + "] Entro en la Zona de Combates.";
+		end;
+		break;
+
+		Case 3:
+		mes "[^FFA500Zona de Combates^000000]";
+		mes " ";
+		mes " ";
+		dispbottom "Suerte, regresa con vida.";
+		cutin "",255;
+		close2;
+	specialeffect2 72;
+	sleep2 2500;
+	specialeffect2 73;
+		warp "darkmall",99,97;
+
+		Case 4:
+		mes "[^FFA500Zona de Combates^000000]";
+		mes "Regresa cuando estés dispuesto a dar tu vida en combate";
+						cutin "",255;
+			end;
+OnInit:
+	do {
+		set .userspvp,(getmapusers("pvp_n_3-5")+getmapusers("guild_vs3")+getmapusers("1@ge_st")+getmapusers("pvp_n_1-5")+getmapusers("guild_vs2-1")+getmapusers("pvp_n_1-1")+getmapusers("pvp_n_1-3")+getmapusers("pvp_n_2-3")+getmapusers("pvp_n_3-3"));
+		delwaitingroom;
+		waitingroom "PvP Room [ "+.userspvp+" ]",0;
+		sleep 50;
+	} while(1);
+}		
+	}
+		
+
+
+
+
+
+
+guild_vs2-1	mapflag	nomobloot
+guild_vs2-1	mapflag	nomvploot
+pvp_n_7-5	mapflag	noloot
+guild_vs3	mapflag	noloot
+guild_vs2	mapflag	noloot
+guild_vs1	mapflag	noloot
+guild_vs2-2	mapflag	noloot
+guild_vs2-1	mapflag	noloot
+pvp_n_1-3	mapflag	noloot
+pvp_n_2-3	mapflag	noloot
+pvp_n_3-3	mapflag	noloot
+pvp_n_1-5	mapflag	noloot
+pvp_n_1-1	mapflag	noloot
+guild_vs4	mapflag	noloot
+pvp_n_6-5	mapflag	noloot
+p_track02	mapflag	noloot
+guild_vs4	mapflag	noloot

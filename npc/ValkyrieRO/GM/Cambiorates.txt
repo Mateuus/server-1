@@ -1,0 +1,197 @@
+//===== Global Chile ======
+//=== https://www.facebook.com/IntegralesGlobal ===
+=========================================================
+//= 
+//= 	1.1	El script ajusta los rates a la ultima configuracion establecida 
+//=		cuando el servidor se autolevanta despues de una caida.
+//=		Modificaco el menú de cambio de rates.
+//=
+//=	1.2	Ahora el script tambien modifica el rate de los drops de forma
+//=		global, es decir, el mismo drop para todos los items:
+//=		common, heal, use, equip y mvp, el rate de las cards no es
+//=		modificado.
+//===== Descripcion =============================================================
+//= Desde este NPC un GM de nivel 90 o superior podrá ajustar
+//= los rates del servidor de la siguiente forma
+//=
+//= 1) Restaurar los rates normales
+//= 2) Poner los rates al doble
+//= 3) Poner los rates al triple
+//= 4) Establecer rates a gusto personal
+//= 
+//===== Opciones Configurable ===================================================
+//= Titulo de los carteles @name$;
+//===============================================================================
+
+que_moon,160,20,4	script	Rates	837,{
+
+
+
+
+set @name$,"[^0065DFRates^000000]";
+
+
+if($checarrate == 1) goto Cuerpo; //Verifica si los rates han sido modificados y si lo han sido pasa al cuerpo principal del script
+
+set $baserates,getBattleFlag ("base_exp_rate"); 	//Establece los rates normales del servidor, 
+set $jobrates,getBattleFlag ("job_exp_rate");   	//cuando los rates no han sido modificados nunca
+set $drop,getBattleFlag ("item_rate_common");		//Establecer el drop de todos los items excepto cards
+
+goto Cuerpo;
+
+Cuerpo:
+	if(getgmlevel() < 90) goto noGM;
+	if(getgmlevel() >= 90) goto siGM;
+	noGM:
+		mes @name$;
+		mes "Los rates actuales son";
+		mes "Base Exp: ^0065DF"+getBattleFlag ("base_exp_rate")/100+"x^000000 ";
+		mes " Job Exp: ^0065DF"+getBattleFlag ("job_exp_rate")/100+"x^000000 ";
+		mes "    Drop: ^0065DF"+getBattleFlag ("item_rate_common")/100+"x^000000 ";
+		close;
+	siGM:
+		mes @name$;
+		mes "¿Que deseas hacer?";
+		next;
+		menu
+			"Modificar los Rates",modificar,
+			"Ver los rates actuales",ver,
+			"Nada",nada;
+	
+		modificar:
+			mes @name$;
+			mes "Haz elegido modificar los rates";
+			next;
+			menu
+				"Rates Normales",normal,
+				"Rates Dobles",doble,
+				"Rates Triples",triple,
+				"Definir Rates",cambiarotro;
+	
+			normal:
+				mes @name$;
+				setBattleFlag "base_exp_rate",$baserates;
+				setBattleFlag "job_exp_rate",$jobrates;
+				setBattleFlag "item_rate_common",$drop;
+				setBattleFlag "item_rate_heal",$drop;
+				setBattleFlag "item_rate_use",$drop;
+				setBattleFlag "item_rate_equip",$drop;
+				setBattleFlag "item_rate_mvp",$drop;
+				atcommand "@reloadmobdb";
+				set $checarrate,1;
+				set $lastbaserates,$baserates;//guarda la ultima configuracion de rates
+				set $lastjobrates,$baserates;
+				set $lastdrop,$drop;
+				mes "Haz cambiado los rates, ahora estan normales.";
+				Announce "Los Rates han vuelto a la normalidad.",8;
+				close;
+			doble:
+				mes @name$;
+				setBattleFlag "base_exp_rate",$baserates*2;
+				setBattleFlag "job_exp_rate",$jobrates*2;
+				setBattleFlag "item_rate_common",$drop*2;
+				setBattleFlag "item_rate_heal",$drop*2;
+				setBattleFlag "item_rate_use",$drop*2;
+				setBattleFlag "item_rate_equip",$drop*2;
+				setBattleFlag "item_rate_mvp",$drop*2;
+				atcommand "@reloadmobdb";
+				set $checarrate,1;
+				set $lastbaserates,$baserates*2;//guarda la ultima configuracion de rates
+				set $lastjobrates,$jobrates*2;
+				set $lastdrop,$drop*2;
+				mes "Haz cambiado los rates al doble.";
+				Announce "Los Rates estan al doble!!!",8;
+				close;
+			triple:
+				mes @name$;
+				setBattleFlag "base_exp_rate",$baserates*3;
+				setBattleFlag "job_exp_rate",$jobrates*3;
+				setBattleFlag "item_rate_common",$drop*3;
+				setBattleFlag "item_rate_heal",$drop*3;
+				setBattleFlag "item_rate_use",$drop*3;
+				setBattleFlag "item_rate_equip",$drop*3;
+				setBattleFlag "item_rate_mvp",$drop*3;
+				atcommand "@reloadmobdb";
+				set $checarrate,1;
+				set $lastbaserates,$baserates*3;//guarda la ultima configuracion de rates
+				set $lastjobrates,$jobrates*3;
+				set $lastdrop,$drop*3;
+				mes "Haz cambiado los rates al triple.";
+				Announce "Los Rates estan al triple!!!",8;
+				close;
+			cambiarotro:
+				mes @name$;
+				mes "Especifica los Rates:";
+				next;
+				mes "Base:";
+				next;
+				input .@basexp;
+				next;
+				mes "Job:";
+				next;
+				input .@jobxp;
+				next;
+				mes "Drop:";
+				next;
+				input .@drop;
+				if (.@basexp<1 || .@jobxp<1 || .@drop<1)
+					{
+						mes "No puedes poner un valor menor al 1 por ciento";
+						next;
+						goto cambiarotro;
+					}
+				set .@baserates,.@basexp*100;
+				set .@jobrates,.@jobxp*100;
+				set .@droprates,.@drop*100;
+				setBattleFlag "base_exp_rate",.@baserates;
+				setBattleFlag "job_exp_rate",.@jobrates;
+				setBattleFlag "item_rate_common",.@droprates;
+				setBattleFlag "item_rate_heal",.@droprates;
+				setBattleFlag "item_rate_use",.@droprates;
+				setBattleFlag "item_rate_equip",.@droprates;
+				setBattleFlag "item_rate_mvp",.@droprates;
+				atcommand "@reloadmobdb";
+				set $checarrate,1;
+				set $lastbaserates,.@basexp*100;//guarda la ultima configuracion de rates
+				set $lastjobrates,.@jobxp*100;
+				set $lastdrop,.@drop*100;
+				mes "Haz cambiado los rates a: ";
+				mes "^0065DFBase Exp: "+.@basexp+"x^000000";
+				mes "^0065DF Job Exp: "+.@jobxp+"x^000000";
+				Announce "Se han modificado la Exp. Base: "+.@basexp+"x Job: "+.@jobxp+"x Drop:"+.@drop+"x",8;
+				close;
+		ver:
+			mes @name$;
+			mes "Los rates actuales son";
+			mes "Base Exp: ^0065DF"+getBattleFlag ("base_exp_rate")/100+"x^000000 ";
+			mes " Job Exp: ^0065DF"+getBattleFlag ("job_exp_rate")/100+"x^000000 ";
+			mes "    Drop: ^0065DF"+getBattleFlag ("item_rate_common")/100+"x^000000 ";
+			close;
+		nada:
+			mes @name$;
+			mes "Ok, regresa pronto";
+			close;
+
+OnInit:	    
+	if ($checarrate == 1)
+	{
+		set .@checaratebase,getBattleFlag ("base_exp_rate");//obtiene los rates acutales
+		set .@checaratejob,getBattleFlag ("job_exp_rate");
+		set .@checaratedrop,getBattleFlag ("item_rate_common");
+		if (($lastbaserates != .@checaratebase) || ($lastjobrates != .@checaratejob) || ($lastdrop != .@checaratedrop)) //revisa si los rates actuales son diferentes a los ultimos establecidos
+		{
+        	 	setBattleFlag "base_exp_rate",$lastbaserates; //reajusta los rates a la ultima configuracion
+        	 	setBattleFlag "job_exp_rate",$lastjobrates;
+			setBattleFlag "item_rate_common",$lastdrop;
+			setBattleFlag "item_rate_heal",$lastdrop;
+			setBattleFlag "item_rate_use",$lastdrop;
+			setBattleFlag "item_rate_equip",$lastdrop;
+			setBattleFlag "item_rate_mvp",$lastdrop;
+        	 	atcommand "@reloadmobdb";
+			Announce "Reajustando lor rates a la ultima configuración establecida.",8;
+		}
+	}
+		End;
+	Announce "Los rates estan normales.",8;
+	End;
+}

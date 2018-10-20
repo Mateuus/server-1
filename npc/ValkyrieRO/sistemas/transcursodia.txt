@@ -1,0 +1,68 @@
+//===== Global Chile ======
+//=== https://www.facebook.com/IntegralesGlobal ===
+
+-	script	transcursodia	-1,{
+OnInit:
+
+if(gettime(3)==0) goto dia;
+if(gettime(3)==1) goto noche;
+if(gettime(3)==2) goto noche;
+if(gettime(3)==3) goto noche;
+if(gettime(3)==4) goto dia;
+if(gettime(3)==5) goto dia;
+if(gettime(3)==6) goto dia;
+if(gettime(3)==7) goto noche;
+if(gettime(3)==8) goto noche;
+if(gettime(3)==9) goto noche;
+if(gettime(3)==10) goto dia;
+if(gettime(3)==11) goto dia;
+if(gettime(3)==12) goto dia;
+if(gettime(3)==13) goto noche;
+if(gettime(3)==14) goto noche;
+if(gettime(3)==15) goto noche;
+if(gettime(3)==16) goto dia;
+if(gettime(3)==17) goto dia;
+if(gettime(3)==18) goto dia;
+if(gettime(3)==19) goto noche;
+if(gettime(3)==20) goto noche;
+if(gettime(3)==21) goto noche;
+if(gettime(3)==22) goto dia;
+if(gettime(3)==23) goto dia;
+
+
+OnClock0100:
+if(gettime(3)>=1 || gettime(3)<4) goto noche;
+
+OnClock0400:
+if(gettime(3)>=4 || gettime(3)<7) goto dia;
+
+OnClock0700:
+if(gettime(3)>=7 || gettime(3)<10) goto noche;
+
+OnClock1000:
+if(gettime(3)>=10 || gettime(3)<13) goto dia;
+
+OnClock1300:
+if(gettime(3)>=13 || gettime(3)<16) goto noche;
+
+OnClock1600:
+if(gettime(3)>=16 || gettime(3)<19) goto dia;
+
+OnClock1900:
+if(gettime(3)>=19 || gettime(3)<22) goto noche;
+
+OnClock2200:
+if(gettime(3)>=22 || gettime(3)<24) goto dia;
+end;
+
+noche:
+night;
+	announce "* El sol se esconde tras las montañas y cae la noche. *",bc_all,0x6495ED;
+
+end;
+
+dia:
+day;
+	announce "* Aparece el sol entre las montañas anunciando el amanecer.*",bc_all,0xF0E68C;
+
+end;}

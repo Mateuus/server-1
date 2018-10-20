@@ -1,0 +1,1930 @@
+//===== Global Chile ======
+//=== https://www.facebook.com/IntegralesGlobal ===
+
+-	script	duplicadormob	-1,{
+
+OnInit:
+inicio:
+sleep2 rand(43200000,259200000);
+
+set .DunDupMob,rand(1,5);
+
+if (.DunDupMob == 1) goto AbyssLake;
+if (.DunDupMob == 2) goto AmatsuDungeon;
+if (.DunDupMob == 3) goto Anthell;
+if (.DunDupMob == 4) goto AyothayaDungeon;
+if (.DunDupMob == 5) goto BibilanDungeon;
+if (.DunDupMob == 6) goto CoalMine;
+if (.DunDupMob == 7) goto Culvert;
+if (.DunDupMob == 8) goto EinbechDungeon;
+if (.DunDupMob == 9) goto GeffenTower;
+if (.DunDupMob == 10) goto GlastHeim;
+if (.DunDupMob == 11) goto GonryunDungeon;
+if (.DunDupMob == 12) goto IceDungeon;
+if (.DunDupMob == 13) goto Juperos;
+if (.DunDupMob == 14) goto KielDungeon;
+if (.DunDupMob == 15) goto LabyrinthForest;
+if (.DunDupMob == 16) goto LouyangDungeon;
+if (.DunDupMob == 17) goto MagmaDungeon;
+if (.DunDupMob == 18) goto MoscoviaDungeon;
+if (.DunDupMob == 19) goto NamelessIsland;
+if (.DunDupMob == 20) goto Nilfheim;
+if (.DunDupMob == 21) goto OdinTemple;
+if (.DunDupMob == 22) goto OrcDungeon;
+if (.DunDupMob == 23) goto PayonDungeon;
+if (.DunDupMob == 24) goto Pyramids;
+if (.DunDupMob == 25) goto RachelSanctuary;
+if (.DunDupMob == 26) goto Biolab;
+if (.DunDupMob == 27) goto Sphinx;
+if (.DunDupMob == 28) goto SunkenShip;
+if (.DunDupMob == 29) goto ThanatosTower;
+if (.DunDupMob == 30) goto TurtleDungeon;
+if (.DunDupMob == 31) goto ClockTower;
+if (.DunDupMob == 32) goto Geffenia;
+if (.DunDupMob == 33) goto BrasilisDungeon;
+if (.DunDupMob == 34) goto ToyFactory;
+if (.DunDupMob == 35) goto UmbalaDungeon;
+if (.DunDupMob == 36) goto ComodoDungeon;
+if (.DunDupMob == 37) goto ThorVolcano;
+goto inicio;
+
+AbyssLake:
+announce "Guardias: Se ha detectado un aumento de monstruos en Abyss Lake.",bc_all,0x04B4AE;
+sleep2 9000;
+announce "Guardias: El número de monstruos continuará aumentado hasta que lo podamos solucionar (1 hora y 30 minutos)",bc_all,0x04B4AE;
+
+
+// Abyss Lake - Level 1
+// ========================================
+
+monster "abyss_01",0,0,"Mimic",1191,10,"duplicadormob::OnThisMobDeath001";
+monster "abyss_01",0,0,"Ancient Mimic",1699,10,"duplicadormob::OnThisMobDeath002";
+areamonster "abyss_01",152,205,130,70,"Ferus",1714,10,"duplicadormob::OnThisMobDeath003";
+areamonster "abyss_01",152,205,130,70,"Ferus",1717,25,"duplicadormob::OnThisMobDeath004";
+areamonster "abyss_01",152,205,130,70,"Novus",1715,3,"duplicadormob::OnThisMobDeath005";
+areamonster "abyss_01",152,205,130,70,"Novus",1718,3,"duplicadormob::OnThisMobDeath006";
+areamonster "abyss_01",103,93,85,70,"Ferus",1714,10,"duplicadormob::OnThisMobDeath007";
+areamonster "abyss_01",103,93,85,70,"Ferus",1717,15,"duplicadormob::OnThisMobDeath008";
+areamonster "abyss_01",103,93,85,70,"Novus",1715,3,"duplicadormob::OnThisMobDeath009";
+areamonster "abyss_01",103,93,85,70,"Novus",1718,3,"duplicadormob::OnThisMobDeath010";
+areamonster "abyss_01",195,102,85,70,"Ferus",1714,10,"duplicadormob::OnThisMobDeath011";
+areamonster "abyss_01",195,102,85,70,"Ferus",1717,15,"duplicadormob::OnThisMobDeath012";
+areamonster "abyss_01",195,102,85,70,"Novus",1715,3,"duplicadormob::OnThisMobDeath013";
+areamonster "abyss_01",195,102,85,70,"Novus",1718,3,"duplicadormob::OnThisMobDeath014";
+areamonster "abyss_01",110,170,15,15,"Penomena",1216,15,"duplicadormob::OnThisMobDeath015";
+areamonster "abyss_01",195,147,5,10,"Penomena",1216,5,"duplicadormob::OnThisMobDeath016";
+areamonster "abyss_01",140,100,15,5,"Penomena",1216,10,"duplicadormob::OnThisMobDeath017";
+areamonster "abyss_01",260,40,14,14,"Dragon Egg",1721,3,"duplicadormob::OnThisMobDeath018";
+areamonster "abyss_01",150,160,50,50,"Dragon Egg",1721,5,"duplicadormob::OnThisMobDeath019";
+
+
+// Abyss Lake - Level 2
+// ========================================
+monster "abyss_02",0,0,"Mimic",1191,10,"duplicadormob::OnThisMobDeath020";
+monster "abyss_02",0,0,"Ancient Mimic",1699,10,"duplicadormob::OnThisMobDeath021";
+monster "abyss_02",0,0,"Ferus",1714,50,"duplicadormob::OnThisMobDeath022";
+monster "abyss_02",0,0,"Acidus",1713,10,"duplicadormob::OnThisMobDeath023";
+monster "abyss_02",0,0,"Acidus",1716,60,"duplicadormob::OnThisMobDeath024";
+monster "abyss_02",0,0,"Novus",1715,5,"duplicadormob::OnThisMobDeath025";
+monster "abyss_02",0,0,"Novus",1718,5,"duplicadormob::OnThisMobDeath026";
+monster "abyss_02",0,0,"Dragon Egg",1721,10,"duplicadormob::OnThisMobDeath027";
+
+
+// Abyss Lake - Level 3
+// ========================================
+monster "abyss_03",0,0,"Mimic",1191,10,"duplicadormob::OnThisMobDeath028";
+monster "abyss_03",0,0,"Ancient Mimic",1699,10,"duplicadormob::OnThisMobDeath029";
+monster "abyss_03",0,0,"Ferus",1714,10,"duplicadormob::OnThisMobDeath030";
+monster "abyss_03",0,0,"Ferus",1717,10,"duplicadormob::OnThisMobDeath031";
+monster "abyss_03",0,0,"Acidus",1713,60,"duplicadormob::OnThisMobDeath032";
+monster "abyss_03",0,0,"Acidus",1716,10,"duplicadormob::OnThisMobDeath033";
+monster "abyss_03",0,0,"Dragon Egg",1721,10,"duplicadormob::OnThisMobDeath034";
+
+sleep2 5400000;
+killmonster "abyss_01","duplicadormob::OnThisMobDeath001";
+killmonster "abyss_01","duplicadormob::OnThisMobDeath002";
+killmonster "abyss_01","duplicadormob::OnThisMobDeath003";
+killmonster "abyss_01","duplicadormob::OnThisMobDeath004";
+killmonster "abyss_01","duplicadormob::OnThisMobDeath005";
+killmonster "abyss_01","duplicadormob::OnThisMobDeath006";
+killmonster "abyss_01","duplicadormob::OnThisMobDeath007";
+killmonster "abyss_01","duplicadormob::OnThisMobDeath008";
+killmonster "abyss_01","duplicadormob::OnThisMobDeath009";
+killmonster "abyss_01","duplicadormob::OnThisMobDeath010";
+killmonster "abyss_01","duplicadormob::OnThisMobDeath011";
+killmonster "abyss_01","duplicadormob::OnThisMobDeath012";
+killmonster "abyss_01","duplicadormob::OnThisMobDeath013";
+killmonster "abyss_01","duplicadormob::OnThisMobDeath014";
+killmonster "abyss_01","duplicadormob::OnThisMobDeath015";
+killmonster "abyss_01","duplicadormob::OnThisMobDeath016";
+killmonster "abyss_01","duplicadormob::OnThisMobDeath017";
+killmonster "abyss_01","duplicadormob::OnThisMobDeath018";
+killmonster "abyss_01","duplicadormob::OnThisMobDeath019";
+killmonster "abyss_02","duplicadormob::OnThisMobDeath020";
+killmonster "abyss_02","duplicadormob::OnThisMobDeath021";
+killmonster "abyss_02","duplicadormob::OnThisMobDeath022";
+killmonster "abyss_02","duplicadormob::OnThisMobDeath023";
+killmonster "abyss_02","duplicadormob::OnThisMobDeath024";
+killmonster "abyss_02","duplicadormob::OnThisMobDeath025";
+killmonster "abyss_02","duplicadormob::OnThisMobDeath026";
+killmonster "abyss_02","duplicadormob::OnThisMobDeath027";
+killmonster "abyss_03","duplicadormob::OnThisMobDeath028";
+killmonster "abyss_03","duplicadormob::OnThisMobDeath029";
+killmonster "abyss_03","duplicadormob::OnThisMobDeath030";
+killmonster "abyss_03","duplicadormob::OnThisMobDeath031";
+killmonster "abyss_03","duplicadormob::OnThisMobDeath032";
+killmonster "abyss_03","duplicadormob::OnThisMobDeath033";
+killmonster "abyss_03","duplicadormob::OnThisMobDeath034";
+announce "Guardias: Se ha restablecido el orden en Abyss Lake.",bc_all,0x04B4AE;
+goto inicio;
+
+
+
+AmatsuDungeon:
+announce "Guardias: Se ha detectado un aumento de monstruos en Amatsu Dungeon.",bc_all,0x04B4AE;
+sleep2 9000;
+announce "Guardias: El número de monstruos continuará aumentado hasta que lo podamos solucionar (1 hora y 30 minutos)",bc_all,0x04B4AE;
+
+
+// Amatsu Dungeon - Level 1
+// ========================================
+monster "ama_dun01",0,0,"Miyabi Doll",1404,65,"duplicadormob::OnThisMobDeath035";
+monster "ama_dun01",0,0,"Firelock Soldier",1403,45,"duplicadormob::OnThisMobDeath036";
+monster "ama_dun01",0,0,"Shinobi",1401,2,"duplicadormob::OnThisMobDeath037";
+
+
+// Amatsu Dungeon - Level 2
+// ========================================
+monster "ama_dun02",0,0,"Miyabi Doll",1404,5,"duplicadormob::OnThisMobDeath038";
+monster "ama_dun02",0,0,"Firelock Soldier",1403,20,"duplicadormob::OnThisMobDeath039";
+monster "ama_dun02",0,0,"Shinobi",1401,2,"duplicadormob::OnThisMobDeath040";
+monster "ama_dun02",0,0,"Poison Toad",1402,35,"duplicadormob::OnThisMobDeath041";
+monster "ama_dun02",0,0,"Horong",1129,10,"duplicadormob::OnThisMobDeath042";
+monster "ama_dun02",0,0,"The Paper",1375,1,"duplicadormob::OnThisMobDeath043";
+
+
+// Amatsu Dungeon - Level 3
+// ========================================
+monster "ama_dun03",0,0,"Miyabi Doll",1404,1,"duplicadormob::OnThisMobDeath044";
+monster "ama_dun03",0,0,"Firelock Soldier",1403,25,"duplicadormob::OnThisMobDeath045";
+monster "ama_dun03",0,0,"Shinobi",1401,55,"duplicadormob::OnThisMobDeath046";
+monster "ama_dun03",0,0,"The Paper",1375,20,"duplicadormob::OnThisMobDeath047";
+monster "ama_dun03",0,0,"Tengu",1405,55,"duplicadormob::OnThisMobDeath048";
+monster "ama_dun03",0,0,"Mimic",1191,5,"duplicadormob::OnThisMobDeath049";
+
+sleep2 5400000;
+killmonster "ama_dun01","duplicadormob::OnThisMobDeath035";
+killmonster "ama_dun01","duplicadormob::OnThisMobDeath036";
+killmonster "ama_dun01","duplicadormob::OnThisMobDeath037";
+killmonster "ama_dun02","duplicadormob::OnThisMobDeath038";
+killmonster "ama_dun02","duplicadormob::OnThisMobDeath039";
+killmonster "ama_dun02","duplicadormob::OnThisMobDeath040";
+killmonster "ama_dun02","duplicadormob::OnThisMobDeath041";
+killmonster "ama_dun02","duplicadormob::OnThisMobDeath042";
+killmonster "ama_dun02","duplicadormob::OnThisMobDeath043";
+killmonster "ama_dun03","duplicadormob::OnThisMobDeath044";
+killmonster "ama_dun03","duplicadormob::OnThisMobDeath045";
+killmonster "ama_dun03","duplicadormob::OnThisMobDeath046";
+killmonster "ama_dun03","duplicadormob::OnThisMobDeath047";
+killmonster "ama_dun03","duplicadormob::OnThisMobDeath048";
+killmonster "ama_dun03","duplicadormob::OnThisMobDeath049";
+announce "Guardias: Se ha restablecido el orden en Amatsu Dungeon.",bc_all,0x04B4AE;
+goto inicio;
+
+
+Anthell:
+announce "Guardias: Se ha detectado un aumento de monstruos en Anthell.",bc_all,0x04B4AE;
+sleep2 9000;
+announce "Guardias: El número de monstruos continuará aumentado hasta que lo podamos solucionar (1 hora y 30 minutos)",bc_all,0x04B4AE;
+
+
+// Anthell - Level 1
+// ========================================
+monster "anthell01",0,0,"Familiar",1005,20,"duplicadormob::OnThisMobDeath050";
+monster "anthell01",0,0,"Andre",1095,15,"duplicadormob::OnThisMobDeath051";
+monster "anthell01",0,0,"Piere",1160,50,"duplicadormob::OnThisMobDeath052";
+monster "anthell01",0,0,"Deniro",1105,40,"duplicadormob::OnThisMobDeath053";
+monster "anthell01",0,0,"Vitata",1176,10,"duplicadormob::OnThisMobDeath054";
+monster "anthell01",0,0,"Giearth",1121,1,"duplicadormob::OnThisMobDeath055";
+
+
+// Anthell - Level 2
+// ========================================
+monster "anthell02",0,0,"Familiar",1005,20,"duplicadormob::OnThisMobDeath056";
+monster "anthell02",0,0,"Andre",1095,50,"duplicadormob::OnThisMobDeath057";
+monster "anthell02",0,0,"Piere",1160,15,"duplicadormob::OnThisMobDeath058";
+monster "anthell02",0,0,"Deniro",1105,15,"duplicadormob::OnThisMobDeath059";
+monster "anthell02",0,0,"Vitata",1176,30,"duplicadormob::OnThisMobDeath060";
+monster "anthell02",0,0,"Giearth",1121,3,"duplicadormob::OnThisMobDeath061";
+monster "anthell02",0,0,"Ant Egg",1097,15,"duplicadormob::OnThisMobDeath062";
+
+sleep2 5400000;
+killmonster "anthell01","duplicadormob::OnThisMobDeath050";
+killmonster "anthell01","duplicadormob::OnThisMobDeath051";
+killmonster "anthell01","duplicadormob::OnThisMobDeath052";
+killmonster "anthell01","duplicadormob::OnThisMobDeath053";
+killmonster "anthell01","duplicadormob::OnThisMobDeath054";
+killmonster "anthell01","duplicadormob::OnThisMobDeath055";
+killmonster "anthell02","duplicadormob::OnThisMobDeath056";
+killmonster "anthell02","duplicadormob::OnThisMobDeath057";
+killmonster "anthell02","duplicadormob::OnThisMobDeath058";
+killmonster "anthell02","duplicadormob::OnThisMobDeath059";
+killmonster "anthell02","duplicadormob::OnThisMobDeath060";
+killmonster "anthell02","duplicadormob::OnThisMobDeath061";
+killmonster "anthell02","duplicadormob::OnThisMobDeath062";
+announce "Guardias: Se ha restablecido el orden en Anthell.",bc_all,0x04B4AE;
+goto inicio;
+
+
+AyothayaDungeon:
+announce "Guardias: Se ha detectado un aumento de monstruos en Ayothaya Dungeon.",bc_all,0x04B4AE;
+sleep2 5000;
+announce "Guardias: El número de monstruos continuará aumentado hasta que lo podamos solucionar (1 hora y 30 minutos)",bc_all,0x04B4AE;
+
+
+// Ayothaya Dungeon - Level 1
+// ========================================
+monster "ayo_dun01",0,0,"Leaf Cat",1586,65,"duplicadormob::OnThisMobDeath063";
+monster "ayo_dun01",0,0,"Whisper",1179,10,"duplicadormob::OnThisMobDeath064";
+monster "ayo_dun01",0,0,"Kraben",1587,5,"duplicadormob::OnThisMobDeath065";
+monster "ayo_dun01",0,0,"Ghoul",1036,30,"duplicadormob::OnThisMobDeath066";
+
+
+// Ayothaya Dungeon - Level 2
+// ========================================
+monster "ayo_dun02",0,0,"Tamruan",1584,100,"duplicadormob::OnThisMobDeath067";
+monster "ayo_dun02",0,0,"Whisper",1179,20,"duplicadormob::OnThisMobDeath068";
+monster "ayo_dun02",0,0,"Kraben",1587,20,"duplicadormob::OnThisMobDeath069";
+
+sleep2 5400000;
+killmonster "ayo_dun01","duplicadormob::OnThisMobDeath063";
+killmonster "ayo_dun01","duplicadormob::OnThisMobDeath064";
+killmonster "ayo_dun01","duplicadormob::OnThisMobDeath065";
+killmonster "ayo_dun01","duplicadormob::OnThisMobDeath066";
+killmonster "ayo_dun02","duplicadormob::OnThisMobDeath067";
+killmonster "ayo_dun02","duplicadormob::OnThisMobDeath068";
+killmonster "ayo_dun02","duplicadormob::OnThisMobDeath069";
+announce "Guardias: Se ha restablecido el orden en Ayothaya Dungeon.",bc_all,0x04B4AE;
+goto inicio;
+
+
+BibilanDungeon:
+announce "Guardias: Se ha detectado un aumento de monstruos en Bibilan Dungeon.",bc_all,0x04B4AE;
+sleep2 9000;
+announce "Guardias: El número de monstruos continuará aumentado hasta que lo podamos solucionar (1 hora y 30 minutos)",bc_all,0x04B4AE;
+
+
+// Bibilan Dungeon - Level 1
+// ========================================
+monster "iz_dun00",0,0,"Plankton",1161,65,"duplicadormob::OnThisMobDeath070";
+monster "iz_dun00",0,0,"Marina",1141,45,"duplicadormob::OnThisMobDeath071";
+monster "iz_dun00",0,0,"Kukre",1070,15,"duplicadormob::OnThisMobDeath072";
+monster "iz_dun00",0,0,"Hydra",1068,15,"duplicadormob::OnThisMobDeath073";
+monster "iz_dun00",0,0,"Vadon",1066,15,"duplicadormob::OnThisMobDeath074";
+monster "iz_dun00",0,0,"Black Mushroom",1084,5,"duplicadormob::OnThisMobDeath075";
+
+
+// Bibilan Dungeon - Level 2
+// ========================================
+monster "iz_dun01",0,0,"Plankton",1161,10,"duplicadormob::OnThisMobDeath076";
+monster "iz_dun01",0,0,"Marina",1141,15,"duplicadormob::OnThisMobDeath077";
+monster "iz_dun01",0,0,"Kukre",1070,50,"duplicadormob::OnThisMobDeath078";
+monster "iz_dun01",0,0,"Hydra",1068,30,"duplicadormob::OnThisMobDeath079";
+monster "iz_dun01",0,0,"Vadon",1066,60,"duplicadormob::OnThisMobDeath080";
+monster "iz_dun01",0,0,"Cornutus",1067,15,"duplicadormob::OnThisMobDeath081";
+monster "iz_dun01",0,0,"Black Mushroom",1084,10,"duplicadormob::OnThisMobDeath082";
+
+
+// Bibilan Dungeon - Level 3
+// ========================================
+monster "iz_dun02",0,0,"Hydra",1068,40,"duplicadormob::OnThisMobDeath083";
+monster "iz_dun02",0,0,"Cornutus",1067,60,"duplicadormob::OnThisMobDeath084";
+monster "iz_dun02",0,0,"Black Mushroom",1084,15,"duplicadormob::OnThisMobDeath085";
+monster "iz_dun02",0,0,"Marse",1144,40,"duplicadormob::OnThisMobDeath086";
+monster "iz_dun02",0,0,"Obeaune",1044,40,"duplicadormob::OnThisMobDeath087";
+monster "iz_dun02",0,0,"Merman",1264,1,"duplicadormob::OnThisMobDeath088";
+
+
+// Bibilan Dungeon - Level 4
+// ========================================
+monster "iz_dun03",0,0,"Hydra",1068,10,"duplicadormob::OnThisMobDeath089";
+monster "iz_dun03",0,0,"Phen",1158,45,"duplicadormob::OnThisMobDeath090";
+monster "iz_dun03",0,0,"Marine Sphere",1142,20,"duplicadormob::OnThisMobDeath091";
+monster "iz_dun03",0,0,"Swordfish",1069,40,"duplicadormob::OnThisMobDeath092";
+monster "iz_dun03",0,0,"Marc",1045,40,"duplicadormob::OnThisMobDeath093";
+monster "iz_dun03",0,0,"Merman",1045,3,"duplicadormob::OnThisMobDeath094";
+
+
+// Bibilan Dungeon - Level 5
+// ========================================
+monster "iz_dun04",0,0,"Deviace",1108,3,"duplicadormob::OnThisMobDeath095";
+monster "iz_dun04",0,0,"Marine Sphere",1142,10,"duplicadormob::OnThisMobDeath096";
+monster "iz_dun04",0,0,"Swordfish",1069,10,"duplicadormob::OnThisMobDeath097";
+monster "iz_dun04",0,0,"Merman",1045,52,"duplicadormob::OnThisMobDeath098";
+
+
+
+sleep2 5400000;
+killmonster "iz_dun00","duplicadormob::OnThisMobDeath070";
+killmonster "iz_dun00","duplicadormob::OnThisMobDeath071";
+killmonster "iz_dun00","duplicadormob::OnThisMobDeath072";
+killmonster "iz_dun00","duplicadormob::OnThisMobDeath073";
+killmonster "iz_dun00","duplicadormob::OnThisMobDeath074";
+killmonster "iz_dun00","duplicadormob::OnThisMobDeath075";
+killmonster "iz_dun01","duplicadormob::OnThisMobDeath076";
+killmonster "iz_dun01","duplicadormob::OnThisMobDeath077";
+killmonster "iz_dun01","duplicadormob::OnThisMobDeath078";
+killmonster "iz_dun01","duplicadormob::OnThisMobDeath079";
+killmonster "iz_dun01","duplicadormob::OnThisMobDeath080";
+killmonster "iz_dun01","duplicadormob::OnThisMobDeath081";
+killmonster "iz_dun01","duplicadormob::OnThisMobDeath082";
+killmonster "iz_dun02","duplicadormob::OnThisMobDeath083";
+killmonster "iz_dun02","duplicadormob::OnThisMobDeath084";
+killmonster "iz_dun02","duplicadormob::OnThisMobDeath085";
+killmonster "iz_dun02","duplicadormob::OnThisMobDeath086";
+killmonster "iz_dun02","duplicadormob::OnThisMobDeath087";
+killmonster "iz_dun02","duplicadormob::OnThisMobDeath088";
+killmonster "iz_dun03","duplicadormob::OnThisMobDeath089";
+killmonster "iz_dun03","duplicadormob::OnThisMobDeath090";
+killmonster "iz_dun03","duplicadormob::OnThisMobDeath091";
+killmonster "iz_dun03","duplicadormob::OnThisMobDeath092";
+killmonster "iz_dun03","duplicadormob::OnThisMobDeath093";
+killmonster "iz_dun03","duplicadormob::OnThisMobDeath094";
+killmonster "iz_dun04","duplicadormob::OnThisMobDeath095";
+killmonster "iz_dun04","duplicadormob::OnThisMobDeath096";
+killmonster "iz_dun04","duplicadormob::OnThisMobDeath097";
+killmonster "iz_dun04","duplicadormob::OnThisMobDeath098";
+announce "Guardias: Se ha restablecido el orden en Bibilan Dungeon.",bc_all,0x04B4AE;
+goto inicio;
+
+
+CoalMine:
+announce "Guardias: Se ha detectado un aumento de monstruos en Coal Mine.",bc_all,0x04B4AE;
+sleep2 5000;
+announce "Guardias: El número de monstruos continuará aumentado hasta que lo podamos solucionar (1 hora y 30 minutos)",bc_all,0x04B4AE;
+
+
+// Coal Mine - Level 1
+// ========================================
+monster "mjo_dun01",0,0,"Familiar",1005,30,"duplicadormob::OnThisMobDeath099";
+monster "mjo_dun01",0,0,"Tarou",1175,60,"duplicadormob::OnThisMobDeath100";
+monster "mjo_dun01",0,0,"Martin",1145,20,"duplicadormob::OnThisMobDeath101";
+
+
+// Coal Mine - Level 2
+// ========================================
+monster "mjo_dun02",0,0,"Martin",1145,60,"duplicadormob::OnThisMobDeath102";
+monster "mjo_dun02",0,0,"Drainliar",1111,20,"duplicadormob::OnThisMobDeath103";
+monster "mjo_dun02",0,0,"Skeleton Worker",1169,20,"duplicadormob::OnThisMobDeath104";
+monster "mjo_dun02",0,0,"Giearth",1121,35,"duplicadormob::OnThisMobDeath105";
+
+
+// Coal Mine - Level 3
+// ========================================
+monster "mjo_dun03",0,0,"Martin",1145,5,"duplicadormob::OnThisMobDeath106";
+monster "mjo_dun03",0,0,"Skeleton Worker",1169,70,"duplicadormob::OnThisMobDeath107";
+monster "mjo_dun03",0,0,"Giearth",1121,5,"duplicadormob::OnThisMobDeath108";
+monster "mjo_dun03",0,0,"Myst",1151,35,"duplicadormob::OnThisMobDeath109";
+monster "mjo_dun03",0,0,"Cramp",1209,3,"duplicadormob::OnThisMobDeath110";
+
+
+sleep2 5400000;
+killmonster "mjo_dun01","duplicadormob::OnThisMobDeath099";
+killmonster "mjo_dun01","duplicadormob::OnThisMobDeath100";
+killmonster "mjo_dun01","duplicadormob::OnThisMobDeath101";
+killmonster "mjo_dun02","duplicadormob::OnThisMobDeath102";
+killmonster "mjo_dun02","duplicadormob::OnThisMobDeath103";
+killmonster "mjo_dun02","duplicadormob::OnThisMobDeath104";
+killmonster "mjo_dun02","duplicadormob::OnThisMobDeath105";
+killmonster "mjo_dun03","duplicadormob::OnThisMobDeath106";
+killmonster "mjo_dun03","duplicadormob::OnThisMobDeath107";
+killmonster "mjo_dun03","duplicadormob::OnThisMobDeath108";
+killmonster "mjo_dun03","duplicadormob::OnThisMobDeath109";
+killmonster "mjo_dun03","duplicadormob::OnThisMobDeath110";
+announce "Guardias: Se ha restablecido el orden en Coal Mine.",bc_all,0x04B4AE;
+goto inicio;
+
+
+Culvert:
+announce "Guardias: Se ha detectado un aumento de monstruos en Culvert.",bc_all,0x04B4AE;
+sleep2 5000;
+announce "Guardias: El número de monstruos continuará aumentado hasta que lo podamos solucionar (1 hora y 30 minutos)",bc_all,0x04B4AE;
+
+
+// Culvert - Level 1
+// ========================================
+monster "prt_sewb1",0,0,"Thief Bug Egg",1048,80,"duplicadormob::OnThisMobDeath111";
+monster "prt_sewb1",0,0,"Thief Bug",1051,30,"duplicadormob::OnThisMobDeath112";
+monster "prt_sewb1",0,0,"Familiar",1005,10,"duplicadormob::OnThisMobDeath113";
+monster "prt_sewb1",0,0,"Tarou",1175,10,"duplicadormob::OnThisMobDeath114";
+
+
+// Culvert - Level 2
+// ========================================
+monster "prt_sewb2",0,0,"Thief Bug Egg",1048,20,"duplicadormob::OnThisMobDeath115";
+monster "prt_sewb2",0,0,"Thief Bug",1051,70,"duplicadormob::OnThisMobDeath116";
+monster "prt_sewb2",0,0,"Familiar",1005,10,"duplicadormob::OnThisMobDeath117";
+monster "prt_sewb2",0,0,"Tarou",1175,60,"duplicadormob::OnThisMobDeath118";
+monster "prt_sewb2",0,0,"Spore",1014,20,"duplicadormob::OnThisMobDeath119";
+monster "prt_sewb2",0,0,"Plankton",1161,30,"duplicadormob::OnThisMobDeath120";
+monster "prt_sewb2",0,0,"Thief Bug Female",1053,10,"duplicadormob::OnThisMobDeath121";
+
+
+// Culvert - Level 3
+// ========================================
+monster "prt_sewb3",0,0,"Thief Bug Egg",1048,10,"duplicadormob::OnThisMobDeath122";
+monster "prt_sewb3",0,0,"Thief Bug",1051,20,"duplicadormob::OnThisMobDeath123";
+monster "prt_sewb3",0,0,"Thief Bug Female",1053,65,"duplicadormob::OnThisMobDeath124";
+monster "prt_sewb3",0,0,"Thief Bug Male",1054,65,"duplicadormob::OnThisMobDeath125";
+monster "prt_sewb3",0,0,"Familiar",1005,20,"duplicadormob::OnThisMobDeath126";
+monster "prt_sewb3",0,0,"Tarou",1175,15,"duplicadormob::OnThisMobDeath127";
+monster "prt_sewb3",0,0,"Poison Spore",1077,15,"duplicadormob::OnThisMobDeath128";
+
+
+// Culvert - Level 4
+// ========================================
+monster "prt_sewb4",0,0,"Thief Bug Egg",1048,10,"duplicadormob::OnThisMobDeath129";
+monster "prt_sewb4",0,0,"Thief Bug",1051,20,"duplicadormob::OnThisMobDeath130";
+monster "prt_sewb4",0,0,"Thief Bug Female",1053,20,"duplicadormob::OnThisMobDeath131";
+monster "prt_sewb4",0,0,"Thief Bug Male",1054,70,"duplicadormob::OnThisMobDeath132";
+monster "prt_sewb4",0,0,"Drainliar",1111,20,"duplicadormob::OnThisMobDeath133";
+monster "prt_sewb4",0,0,"Cramp",1209,5,"duplicadormob::OnThisMobDeath134";
+
+
+sleep2 5400000;
+killmonster "prt_sewb1","duplicadormob::OnThisMobDeath111";
+killmonster "prt_sewb1","duplicadormob::OnThisMobDeath112";
+killmonster "prt_sewb1","duplicadormob::OnThisMobDeath113";
+killmonster "prt_sewb1","duplicadormob::OnThisMobDeath114";
+killmonster "prt_sewb2","duplicadormob::OnThisMobDeath115";
+killmonster "prt_sewb2","duplicadormob::OnThisMobDeath116";
+killmonster "prt_sewb2","duplicadormob::OnThisMobDeath117";
+killmonster "prt_sewb2","duplicadormob::OnThisMobDeath118";
+killmonster "prt_sewb2","duplicadormob::OnThisMobDeath119";
+killmonster "prt_sewb2","duplicadormob::OnThisMobDeath120";
+killmonster "prt_sewb2","duplicadormob::OnThisMobDeath121";
+killmonster "prt_sewb3","duplicadormob::OnThisMobDeath122";
+killmonster "prt_sewb3","duplicadormob::OnThisMobDeath123";
+killmonster "prt_sewb3","duplicadormob::OnThisMobDeath124";
+killmonster "prt_sewb3","duplicadormob::OnThisMobDeath125";
+killmonster "prt_sewb3","duplicadormob::OnThisMobDeath126";
+killmonster "prt_sewb3","duplicadormob::OnThisMobDeath127";
+killmonster "prt_sewb3","duplicadormob::OnThisMobDeath128";
+killmonster "prt_sewb4","duplicadormob::OnThisMobDeath129";
+killmonster "prt_sewb4","duplicadormob::OnThisMobDeath130";
+killmonster "prt_sewb4","duplicadormob::OnThisMobDeath131";
+killmonster "prt_sewb4","duplicadormob::OnThisMobDeath132";
+killmonster "prt_sewb4","duplicadormob::OnThisMobDeath133";
+killmonster "prt_sewb4","duplicadormob::OnThisMobDeath134";
+announce "Guardias: Se ha restablecido el orden en Culvert.",bc_all,0x04B4AE;
+goto inicio;
+
+
+EinbechDungeon:
+announce "Guardias: Se ha detectado un aumento de monstruos en Einbech Dungeon.",bc_all,0x04B4AE;
+sleep2 5000;
+announce "Guardias: El número de monstruos continuará aumentado hasta que lo podamos solucionar (1 hora y 30 minutos)",bc_all,0x04B4AE;
+
+
+// Einbech Dungeon - Level 1
+// ========================================
+monster "ein_dun01",0,0,"Pitman",1616,70,"duplicadormob::OnThisMobDeath135";
+monster "ein_dun01",0,0,"Noxious",1620,30,"duplicadormob::OnThisMobDeath136";
+monster "ein_dun01",0,0,"Porcellio",1619,30,"duplicadormob::OnThisMobDeath137";
+monster "ein_dun01",0,0,"Venomous",1619,10,"duplicadormob::OnThisMobDeath138";
+monster "ein_dun01",0,0,"Old Stove",1617,1,"duplicadormob::OnThisMobDeath139";
+
+
+// Einbech Dungeon - Level 2
+// ========================================
+monster "ein_dun02",0,0,"Obsidian",1615,40,"duplicadormob::OnThisMobDeath140";
+monster "ein_dun02",0,0,"Mineral",1614,50,"duplicadormob::OnThisMobDeath141";
+monster "ein_dun02",0,0,"Teddy Bear",1622,30,"duplicadormob::OnThisMobDeath142";
+monster "ein_dun02",0,0,"Old Stove",1617,30,"duplicadormob::OnThisMobDeath143";
+
+
+
+sleep2 5400000;
+killmonster "ein_dun01","duplicadormob::OnThisMobDeath135";
+killmonster "ein_dun01","duplicadormob::OnThisMobDeath136";
+killmonster "ein_dun01","duplicadormob::OnThisMobDeath137";
+killmonster "ein_dun01","duplicadormob::OnThisMobDeath138";
+killmonster "ein_dun01","duplicadormob::OnThisMobDeath139";
+killmonster "ein_dun02","duplicadormob::OnThisMobDeath140";
+killmonster "ein_dun02","duplicadormob::OnThisMobDeath141";
+killmonster "ein_dun02","duplicadormob::OnThisMobDeath142";
+killmonster "ein_dun02","duplicadormob::OnThisMobDeath143";
+announce "Guardias: Se ha restablecido el orden en Einbech Dungeon.",bc_all,0x04B4AE;
+goto inicio;
+
+
+GeffenTower:
+announce "Guardias: Se ha detectado un aumento de monstruos en Geffen Tower.",bc_all,0x04B4AE;
+sleep2 5000;
+announce "Guardias: El número de monstruos continuará aumentado hasta que lo podamos solucionar (1 hora y 30 minutos)",bc_all,0x04B4AE;
+
+
+// Geffen Tower - Level 1
+// ========================================
+monster "gef_dun00",0,0,"Hunter Fly",1035,30,"duplicadormob::OnThisMobDeath144";
+monster "gef_dun00",0,0,"Poporing",1031,15,"duplicadormob::OnThisMobDeath145";
+monster "gef_dun00",0,0,"Poison Spore",1077,25,"duplicadormob::OnThisMobDeath146";
+monster "gef_dun00",0,0,"Red Plant",1078,3,"duplicadormob::OnThisMobDeath147";
+monster "gef_dun00",0,0,"Shining Plant",1083,1,"duplicadormob::OnThisMobDeath148";
+monster "gef_dun00",0,0,"Yellow Plant",1081,1,"duplicadormob::OnThisMobDeath149";
+monster "gef_dun00",0,0,"Green Plant",1080,1,"duplicadormob::OnThisMobDeath150";
+monster "gef_dun00",0,0,"Black Mushroom",1084,6,"duplicadormob::OnThisMobDeath151";
+
+
+// Geffen Tower - Level 2
+// ========================================
+monster "gef_dun01",0,0,"Drainliar",1111,20,"duplicadormob::OnThisMobDeath152";
+monster "gef_dun01",0,0,"Nightmare",1061,30,"duplicadormob::OnThisMobDeath153";
+monster "gef_dun01",0,0,"Zombie",1015,25,"duplicadormob::OnThisMobDeath154";
+monster "gef_dun01",0,0,"Ghoul",1036,40,"duplicadormob::OnThisMobDeath155";
+monster "gef_dun01",0,0,"Jakk",1130,40,"duplicadormob::OnThisMobDeath156";
+monster "gef_dun01",0,0,"Blue Plant",1079,1,"duplicadormob::OnThisMobDeath157";
+monster "gef_dun01",0,0,"Black Mushroom",1084,5,"duplicadormob::OnThisMobDeath158";
+monster "gef_dun01",0,0,"White Plant",1082,10,"duplicadormob::OnThisMobDeath159";
+
+
+// Geffen Tower - Level 3
+// ========================================
+monster "gef_dun02",0,0,"Ghoul",1036,10,"duplicadormob::OnThisMobDeath160";
+monster "gef_dun02",0,0,"Whisper",1179,20,"duplicadormob::OnThisMobDeath161";
+monster "gef_dun02",0,0,"Hunter Fly",1035,10,"duplicadormob::OnThisMobDeath162";
+monster "gef_dun02",0,0,"Marionette",1143,20,"duplicadormob::OnThisMobDeath163";
+monster "gef_dun02",0,0,"Deviruchi",1109,35,"duplicadormob::OnThisMobDeath164";
+monster "gef_dun02",0,0,"Nightmare",1061,40,"duplicadormob::OnThisMobDeath165";
+monster "gef_dun02",0,0,"White Plant",1082,12,"duplicadormob::OnThisMobDeath166";
+monster "gef_dun02",0,0,"Shining Plant",1083,2,"duplicadormob::OnThisMobDeath167";
+
+
+
+sleep2 5400000;
+killmonster "gef_dun00","duplicadormob::OnThisMobDeath144";
+killmonster "gef_dun00","duplicadormob::OnThisMobDeath145";
+killmonster "gef_dun00","duplicadormob::OnThisMobDeath146";
+killmonster "gef_dun00","duplicadormob::OnThisMobDeath147";
+killmonster "gef_dun00","duplicadormob::OnThisMobDeath148";
+killmonster "gef_dun00","duplicadormob::OnThisMobDeath149";
+killmonster "gef_dun00","duplicadormob::OnThisMobDeath150";
+killmonster "gef_dun00","duplicadormob::OnThisMobDeath151";
+killmonster "gef_dun01","duplicadormob::OnThisMobDeath152";
+killmonster "gef_dun01","duplicadormob::OnThisMobDeath153";
+killmonster "gef_dun01","duplicadormob::OnThisMobDeath154";
+killmonster "gef_dun01","duplicadormob::OnThisMobDeath155";
+killmonster "gef_dun01","duplicadormob::OnThisMobDeath156";
+killmonster "gef_dun01","duplicadormob::OnThisMobDeath157";
+killmonster "gef_dun01","duplicadormob::OnThisMobDeath158";
+killmonster "gef_dun01","duplicadormob::OnThisMobDeath159";
+killmonster "gef_dun02","duplicadormob::OnThisMobDeath160";
+killmonster "gef_dun02","duplicadormob::OnThisMobDeath161";
+killmonster "gef_dun02","duplicadormob::OnThisMobDeath162";
+killmonster "gef_dun02","duplicadormob::OnThisMobDeath163";
+killmonster "gef_dun02","duplicadormob::OnThisMobDeath164";
+killmonster "gef_dun02","duplicadormob::OnThisMobDeath165";
+killmonster "gef_dun02","duplicadormob::OnThisMobDeath166";
+killmonster "gef_dun02","duplicadormob::OnThisMobDeath167";
+announce "Guardias: Se ha restablecido el orden en Geffen Tower.",bc_all,0x04B4AE;
+goto inicio;
+
+
+
+GlastHeim:
+announce "Guardias: Se ha detectado un aumento de monstruos en Glast Heim.",bc_all,0x04B4AE;
+sleep2 5000;
+announce "Guardias: El número de monstruos continuará aumentado hasta que lo podamos solucionar (1 hora y 30 minutos)",bc_all,0x04B4AE;
+
+
+// Glast Heim F1 - Level 1
+// ========================================
+monster "gl_cas01",0,0,"Sage Worm",1281,10,"duplicadormob::OnThisMobDeath168";
+monster "gl_cas01",0,0,"Carat",1267,50,"duplicadormob::OnThisMobDeath169";
+monster "gl_cas01",0,0,"Rideword",1195,15,"duplicadormob::OnThisMobDeath170";
+monster "gl_cas01",0,0,"Dark Frame",1260,20,"duplicadormob::OnThisMobDeath171";
+monster "gl_cas01",0,0,"Whisper",1179,10,"duplicadormob::OnThisMobDeath172";
+monster "gl_cas01",0,0,"Owl Baron",1295,6,"duplicadormob::OnThisMobDeath173";
+monster "gl_cas01",0,0,"Owl Duke",1320,20,"duplicadormob::OnThisMobDeath174";
+
+
+// Glast Heim F1 - Level 2
+// ========================================
+monster "gl_cas02",0,0,"Wanderer",1208,40,"duplicadormob::OnThisMobDeath175";
+areamonster "gl_cas02",193,167,5,5,"Raydric",1163,3,"duplicadormob::OnThisMobDeath176";
+areamonster "gl_cas02",193,135,5,5,"Raydric",1163,3,"duplicadormob::OnThisMobDeath177";
+areamonster "gl_cas02",185,11,8,8,"Rideword",1195,4,"duplicadormob::OnThisMobDeath178";
+areamonster "gl_cas02",174,11,8,8,"Evil Druid",1117,4,"duplicadormob::OnThisMobDeath179";
+areamonster "gl_cas02",104,38,4,4,"Abyssmal Knight",1219,1,"duplicadormob::OnThisMobDeath180";
+areamonster "gl_cas02",24,35,4,4,"Abyssmal Knight",1219,1,"duplicadormob::OnThisMobDeath181";
+areamonster "gl_cas02",46,124,15,15,"Rideword",1195,15,"duplicadormob::OnThisMobDeath182";
+areamonster "gl_cas02",16,186,10,10,"Evil Druid",1117,5,"duplicadormob::OnThisMobDeath183";
+areamonster "gl_cas02",133,83,3,3,"Khalitzburg",1132,1,"duplicadormob::OnThisMobDeath184";
+areamonster "gl_cas02",45,177,3,3,"Khalitzburg",1132,1,"duplicadormob::OnThisMobDeath185";
+areamonster "gl_cas02",182,65,3,3,"Khalitzburg",1132,1,"duplicadormob::OnThisMobDeath186";
+areamonster "gl_cas02",173,127,3,3,"Khalitzburg",1132,1,"duplicadormob::OnThisMobDeath187";
+areamonster "gl_cas02",173,167,3,3,"Khalitzburg",1132,1,"duplicadormob::OnThisMobDeath188";
+areamonster "gl_cas02",93,177,3,3,"Abyssmal Knight",1219,1,"duplicadormob::OnThisMobDeath189";
+areamonster "gl_cas02",115,177,3,3,"Abyssmal Knight",1219,1,"duplicadormob::OnThisMobDeath190";
+areamonster "gl_cas02",83,84,2,2,"Mimic",1191,1,"duplicadormob::OnThisMobDeath191";
+areamonster "gl_cas02",83,80,2,2,"Mimic",1191,1,"duplicadormob::OnThisMobDeath192";
+areamonster "gl_cas02",189,20,1,1,"Khalitzburg",1132,1,"duplicadormob::OnThisMobDeath193";
+areamonster "gl_cas02",190,23,1,1,"Wanderer",1208,1,"duplicadormob::OnThisMobDeath194";
+areamonster "gl_cas02",190,38,1,1,"Raydric Archer",1276,1,"duplicadormob::OnThisMobDeath195";
+
+
+// Glast Heim F1 - Inside
+// ========================================
+areamonster "gl_in01",41,155,40,45,"Marionette",1143,5,"duplicadormob::OnThisMobDeath196";
+areamonster "gl_in01",156,147,34,42,"Marionette",1143,5,"duplicadormob::OnThisMobDeath197";
+areamonster "gl_in01",42,48,41,32,"Marionette",1143,5,"duplicadormob::OnThisMobDeath198";
+areamonster "gl_in01",154,44,36,33,"Marionette",1143,5,"duplicadormob::OnThisMobDeath199";
+areamonster "gl_in01",42,154,40,45,"Rideword",1195,2,"duplicadormob::OnThisMobDeath200";
+areamonster "gl_in01",155,143,34,42,"Rideword",1195,1,"duplicadormob::OnThisMobDeath201";
+areamonster "gl_in01",41,47,41,32,"Rideword",1195,3,"duplicadormob::OnThisMobDeath202";
+areamonster "gl_in01",152,44,36,33,"Rideword",1195,2,"duplicadormob::OnThisMobDeath203";
+areamonster "gl_in01",40,150,40,45,"Dark Frame",1260,3,"duplicadormob::OnThisMobDeath204";
+areamonster "gl_in01",153,146,34,42,"Dark Frame",1260,2,"duplicadormob::OnThisMobDeath205";
+areamonster "gl_in01",43,45,41,32,"Dark Frame",1260,2,"duplicadormob::OnThisMobDeath206";
+areamonster "gl_in01",153,44,36,33,"Dark Frame",1260,3,"duplicadormob::OnThisMobDeath207";
+areamonster "gl_in01",41,154,40,45,"Sage Worm",1281,3,"duplicadormob::OnThisMobDeath208";
+areamonster "gl_in01",155,147,34,42,"Sage Worm",1281,5,"duplicadormob::OnThisMobDeath209";
+areamonster "gl_in01",42,47,41,32,"Sage Worm",1281,3,"duplicadormob::OnThisMobDeath210";
+areamonster "gl_in01",153,44,36,33,"Sage Worm",1281,3,"duplicadormob::OnThisMobDeath211";
+monster "gl_in01",0,0,"Wanderer",1208,1,"duplicadormob::OnThisMobDeath212";
+monster "gl_in01",0,0,"Alice",1275,1,"duplicadormob::OnThisMobDeath213";
+
+
+
+sleep2 5400000;
+killmonster "gl_cas01","duplicadormob::OnThisMobDeath168";
+killmonster "gl_cas01","duplicadormob::OnThisMobDeath169";
+killmonster "gl_cas01","duplicadormob::OnThisMobDeath170";
+killmonster "gl_cas01","duplicadormob::OnThisMobDeath171";
+killmonster "gl_cas01","duplicadormob::OnThisMobDeath172";
+killmonster "gl_cas01","duplicadormob::OnThisMobDeath173";
+killmonster "gl_cas01","duplicadormob::OnThisMobDeath174";
+killmonster "gl_cas02","duplicadormob::OnThisMobDeath175";
+killmonster "gl_cas02","duplicadormob::OnThisMobDeath176";
+killmonster "gl_cas02","duplicadormob::OnThisMobDeath177";
+killmonster "gl_cas02","duplicadormob::OnThisMobDeath178";
+killmonster "gl_cas02","duplicadormob::OnThisMobDeath179";
+killmonster "gl_cas02","duplicadormob::OnThisMobDeath180";
+killmonster "gl_cas02","duplicadormob::OnThisMobDeath181";
+killmonster "gl_cas02","duplicadormob::OnThisMobDeath182";
+killmonster "gl_cas02","duplicadormob::OnThisMobDeath183";
+killmonster "gl_cas02","duplicadormob::OnThisMobDeath184";
+killmonster "gl_cas02","duplicadormob::OnThisMobDeath185";
+killmonster "gl_cas02","duplicadormob::OnThisMobDeath186";
+killmonster "gl_cas02","duplicadormob::OnThisMobDeath187";
+killmonster "gl_cas02","duplicadormob::OnThisMobDeath188";
+killmonster "gl_cas02","duplicadormob::OnThisMobDeath189";
+killmonster "gl_cas02","duplicadormob::OnThisMobDeath190";
+killmonster "gl_cas02","duplicadormob::OnThisMobDeath191";
+killmonster "gl_cas02","duplicadormob::OnThisMobDeath192";
+killmonster "gl_cas02","duplicadormob::OnThisMobDeath193";
+killmonster "gl_cas02","duplicadormob::OnThisMobDeath194";
+killmonster "gl_cas02","duplicadormob::OnThisMobDeath195";
+killmonster "gl_in01","duplicadormob::OnThisMobDeath196";
+killmonster "gl_in01","duplicadormob::OnThisMobDeath197";
+killmonster "gl_in01","duplicadormob::OnThisMobDeath198";
+killmonster "gl_in01","duplicadormob::OnThisMobDeath199";
+killmonster "gl_in01","duplicadormob::OnThisMobDeath200";
+killmonster "gl_in01","duplicadormob::OnThisMobDeath201";
+killmonster "gl_in01","duplicadormob::OnThisMobDeath202";
+killmonster "gl_in01","duplicadormob::OnThisMobDeath203";
+killmonster "gl_in01","duplicadormob::OnThisMobDeath204";
+killmonster "gl_in01","duplicadormob::OnThisMobDeath205";
+killmonster "gl_in01","duplicadormob::OnThisMobDeath206";
+killmonster "gl_in01","duplicadormob::OnThisMobDeath207";
+killmonster "gl_in01","duplicadormob::OnThisMobDeath208";
+killmonster "gl_in01","duplicadormob::OnThisMobDeath209";
+killmonster "gl_in01","duplicadormob::OnThisMobDeath210";
+killmonster "gl_in01","duplicadormob::OnThisMobDeath211";
+killmonster "gl_in01","duplicadormob::OnThisMobDeath212";
+killmonster "gl_in01","duplicadormob::OnThisMobDeath213";
+
+announce "Guardias: Se ha restablecido el orden en Glast Heim.",bc_all,0x04B4AE;
+goto inicio;
+
+
+
+
+
+// Respawn de Monstruos
+// ========================================
+
+OnThisMobDeath001:
+sleep2 5000;
+monster "abyss_01",0,0,"Mimic",1191,1,"duplicadormob::OnThisMobDeath001";
+end;
+
+OnThisMobDeath002:
+sleep2 5000;
+monster "abyss_01",0,0,"Ancient Mimic",1699,1,"duplicadormob::OnThisMobDeath002";
+end;
+
+OnThisMobDeath003:
+sleep2 5000;
+areamonster "abyss_01",152,205,130,70,"Ferus",1714,1,"duplicadormob::OnThisMobDeath003";
+end;
+
+OnThisMobDeath004:
+sleep2 5000;
+areamonster "abyss_01",152,205,130,70,"Ferus",1717,1,"duplicadormob::OnThisMobDeath004";
+end;
+
+OnThisMobDeath005:
+sleep2 5000;
+areamonster "abyss_01",152,205,130,70,"Novus",1715,1,"duplicadormob::OnThisMobDeath005";
+end;
+
+OnThisMobDeath006:
+sleep2 5000;
+areamonster "abyss_01",152,205,130,70,"Novus",1718,1,"duplicadormob::OnThisMobDeath006";
+end;
+
+OnThisMobDeath007:
+sleep2 5000;
+areamonster "abyss_01",103,93,85,70,"Ferus",1714,1,"duplicadormob::OnThisMobDeath007";
+end;
+
+OnThisMobDeath008:
+sleep2 5000;
+areamonster "abyss_01",103,93,85,70,"Ferus",1717,1,"duplicadormob::OnThisMobDeath008";
+end;
+
+OnThisMobDeath009:
+sleep2 5000;
+areamonster "abyss_01",103,93,85,70,"Novus",1715,1,"duplicadormob::OnThisMobDeath009";
+end;
+
+OnThisMobDeath010:
+sleep2 5000;
+areamonster "abyss_01",103,93,85,70,"Novus",1718,1,"duplicadormob::OnThisMobDeath010";
+end;
+
+OnThisMobDeath011:
+sleep2 5000;
+areamonster "abyss_01",195,102,85,70,"Ferus",1714,1,"duplicadormob::OnThisMobDeath011";
+end;
+
+OnThisMobDeath012:
+sleep2 5000;
+areamonster "abyss_01",195,102,85,70,"Ferus",1717,1,"duplicadormob::OnThisMobDeath012";
+end;
+
+OnThisMobDeath013:
+sleep2 5000;
+areamonster "abyss_01",195,102,85,70,"Novus",1715,1,"duplicadormob::OnThisMobDeath013";
+end;
+
+OnThisMobDeath014:
+sleep2 5000;
+areamonster "abyss_01",195,102,85,70,"Novus",1718,1,"duplicadormob::OnThisMobDeath014";
+end;
+
+OnThisMobDeath015:
+sleep2 5000;
+areamonster "abyss_01",110,170,15,15,"Penomena",1216,1,"duplicadormob::OnThisMobDeath015";
+end;
+
+OnThisMobDeath016:
+sleep2 5000;
+areamonster "abyss_01",195,147,5,10,"Penomena",1216,1,"duplicadormob::OnThisMobDeath016";
+end;
+
+OnThisMobDeath017:
+sleep2 5000;
+areamonster "abyss_01",140,100,15,5,"Penomena",1216,1,"duplicadormob::OnThisMobDeath017";
+end;
+
+OnThisMobDeath018:
+sleep2 5000;
+areamonster "abyss_01",260,40,14,14,"Dragon Egg",1721,1,"duplicadormob::OnThisMobDeath018";
+end;
+
+OnThisMobDeath019:
+sleep2 5000;
+areamonster "abyss_01",150,160,50,50,"Dragon Egg",1721,1,"duplicadormob::OnThisMobDeath019";
+end;
+
+OnThisMobDeath020:
+sleep2 5000;
+monster "abyss_02",0,0,"Mimic",1191,1,"duplicadormob::OnThisMobDeath020";
+end;
+
+OnThisMobDeath021:
+sleep2 5000;
+monster "abyss_02",0,0,"Ancient Mimic",1699,1,"duplicadormob::OnThisMobDeath021";
+end;
+
+OnThisMobDeath022:
+sleep2 5000;
+monster "abyss_02",0,0,"Ferus",1714,1,"duplicadormob::OnThisMobDeath022";
+end;
+
+OnThisMobDeath023:
+sleep2 5000;
+monster "abyss_02",0,0,"Acidus",1713,1,"duplicadormob::OnThisMobDeath023";
+end;
+
+OnThisMobDeath024:
+sleep2 5000;
+monster "abyss_02",0,0,"Acidus",1716,1,"duplicadormob::OnThisMobDeath024";
+end;
+
+OnThisMobDeath025:
+sleep2 5000;
+monster "abyss_02",0,0,"Novus",1715,1,"duplicadormob::OnThisMobDeath025";
+end;
+
+OnThisMobDeath026:
+sleep2 5000;
+monster "abyss_02",0,0,"Novus",1718,1,"duplicadormob::OnThisMobDeath026";
+end;
+
+OnThisMobDeath027:
+sleep2 5000;
+monster "abyss_02",0,0,"Dragon Egg",1721,1,"duplicadormob::OnThisMobDeath027";
+end;
+
+OnThisMobDeath028:
+sleep2 5000;
+monster "abyss_03",0,0,"Mimic",1191,1,"duplicadormob::OnThisMobDeath028";
+end;
+
+OnThisMobDeath029:
+sleep2 5000;
+monster "abyss_03",0,0,"Ancient Mimic",1699,1,"duplicadormob::OnThisMobDeath029";
+end;
+
+OnThisMobDeath030:
+sleep2 5000;
+monster "abyss_03",0,0,"Ferus",1714,1,"duplicadormob::OnThisMobDeath030";
+end;
+
+OnThisMobDeath031:
+sleep2 5000;
+monster "abyss_03",0,0,"Ferus",1717,1,"duplicadormob::OnThisMobDeath031";
+end;
+
+OnThisMobDeath032:
+sleep2 5000;
+monster "abyss_03",0,0,"Acidus",1713,1,"duplicadormob::OnThisMobDeath032";
+end;
+
+OnThisMobDeath033:
+sleep2 5000;
+monster "abyss_03",0,0,"Acidus",1716,1,"duplicadormob::OnThisMobDeath033";
+end;
+
+OnThisMobDeath034:
+sleep2 5000;
+monster "abyss_03",0,0,"Dragon Egg",1721,1,"duplicadormob::OnThisMobDeath034";
+end;
+
+OnThisMobDeath035:
+sleep2 5000;
+monster "ama_dun01",0,0,"Miyabi Doll",1404,1,"duplicadormob::OnThisMobDeath035";
+end;
+
+OnThisMobDeath036:
+sleep2 5000;
+monster "ama_dun01",0,0,"Firelock Soldier",1403,1,"duplicadormob::OnThisMobDeath036";
+end;
+
+OnThisMobDeath037:
+sleep2 5000;
+monster "ama_dun01",0,0,"Shinobi",1401,1,"duplicadormob::OnThisMobDeath037";
+end;
+
+OnThisMobDeath038:
+sleep2 5000;
+monster "ama_dun02",0,0,"Miyabi Doll",1404,1,"duplicadormob::OnThisMobDeath038";
+end;
+
+OnThisMobDeath039:
+sleep2 5000;
+monster "ama_dun02",0,0,"Firelock Soldier",1403,1,"duplicadormob::OnThisMobDeath039";
+end;
+
+OnThisMobDeath040:
+sleep2 5000;
+monster "ama_dun02",0,0,"Shinobi",1401,1,"duplicadormob::OnThisMobDeath040";
+end;
+
+OnThisMobDeath041:
+sleep2 5000;
+monster "ama_dun02",0,0,"Poison Toad",1402,1,"duplicadormob::OnThisMobDeath041";
+end;
+
+OnThisMobDeath042:
+sleep2 5000;
+monster "ama_dun02",0,0,"Horong",1129,1,"duplicadormob::OnThisMobDeath042";
+end;
+
+OnThisMobDeath043:
+sleep2 5000;
+monster "ama_dun02",0,0,"The Paper",1375,1,"duplicadormob::OnThisMobDeath043";
+end;
+
+OnThisMobDeath044:
+sleep2 5000;
+monster "ama_dun03",0,0,"Miyabi Doll",1404,1,"duplicadormob::OnThisMobDeath044";
+end;
+
+OnThisMobDeath045:
+sleep2 5000;
+monster "ama_dun03",0,0,"Firelock Soldier",1403,1,"duplicadormob::OnThisMobDeath045";
+end;
+
+OnThisMobDeath046:
+sleep2 5000;
+monster "ama_dun03",0,0,"Shinobi",1401,1,"duplicadormob::OnThisMobDeath046";
+end;
+
+OnThisMobDeath047:
+sleep2 5000;
+monster "ama_dun03",0,0,"The Paper",1375,1,"duplicadormob::OnThisMobDeath047";
+end;
+
+OnThisMobDeath048:
+sleep2 5000;
+monster "ama_dun03",0,0,"Tengu",1405,1,"duplicadormob::OnThisMobDeath048";
+end;
+
+OnThisMobDeath049:
+sleep2 5000;
+monster "ama_dun03",0,0,"Mimic",1191,1,"duplicadormob::OnThisMobDeath049";
+end;
+
+OnThisMobDeath050:
+sleep2 5000;
+monster "anthell01",0,0,"Familiar",1005,1,"duplicadormob::OnThisMobDeath050";
+end;
+
+OnThisMobDeath051:
+sleep2 5000;
+monster "anthell01",0,0,"Andre",1095,1,"duplicadormob::OnThisMobDeath051";
+end;
+
+OnThisMobDeath052:
+sleep2 5000;
+monster "anthell01",0,0,"Piere",1160,1,"duplicadormob::OnThisMobDeath052";
+end;
+
+OnThisMobDeath053:
+sleep2 5000;
+monster "anthell01",0,0,"Deniro",1105,1,"duplicadormob::OnThisMobDeath053";
+end;
+
+OnThisMobDeath054:
+sleep2 5000;
+monster "anthell01",0,0,"Vitata",1176,1,"duplicadormob::OnThisMobDeath054";
+end;
+
+OnThisMobDeath055:
+sleep2 5000;
+monster "anthell01",0,0,"Giearth",1121,1,"duplicadormob::OnThisMobDeath055";
+end;
+
+OnThisMobDeath056:
+sleep2 5000;
+monster "anthell02",0,0,"Familiar",1005,1,"duplicadormob::OnThisMobDeath056";
+end;
+
+OnThisMobDeath057:
+sleep2 5000;
+monster "anthell02",0,0,"Andre",1095,1,"duplicadormob::OnThisMobDeath057";
+end;
+
+OnThisMobDeath058:
+sleep2 5000;
+monster "anthell02",0,0,"Piere",1160,1,"duplicadormob::OnThisMobDeath058";
+end;
+
+OnThisMobDeath059:
+sleep2 5000;
+monster "anthell02",0,0,"Deniro",1105,1,"duplicadormob::OnThisMobDeath059";
+end;
+
+OnThisMobDeath060:
+sleep2 5000;
+monster "anthell02",0,0,"Vitata",1176,1,"duplicadormob::OnThisMobDeath060";
+end;
+
+OnThisMobDeath061:
+sleep2 5000;
+monster "anthell02",0,0,"Giearth",1121,1,"duplicadormob::OnThisMobDeath061";
+end;
+
+OnThisMobDeath062:
+sleep2 5000;
+monster "anthell02",0,0,"Ant Egg",1097,1,"duplicadormob::OnThisMobDeath062";
+end;
+
+OnThisMobDeath063:
+sleep2 5000;
+monster "ayo_dun01",0,0,"Leaf Cat",1586,1,"duplicadormob::OnThisMobDeath063";
+end;
+
+
+OnThisMobDeath064:
+sleep2 5000;
+monster "ayo_dun01",0,0,"Whisper",1179,1,"duplicadormob::OnThisMobDeath064";
+end;
+
+OnThisMobDeath065:
+sleep2 5000;
+monster "ayo_dun01",0,0,"Kraben",1587,1,"duplicadormob::OnThisMobDeath065";
+end;
+
+OnThisMobDeath066:
+sleep2 5000;
+monster "ayo_dun01",0,0,"Ghoul",1036,1,"duplicadormob::OnThisMobDeath066";
+end;
+
+OnThisMobDeath067:
+sleep2 5000;
+monster "ayo_dun02",0,0,"Tamruan",1584,1,"duplicadormob::OnThisMobDeath067";
+end;
+
+OnThisMobDeath068:
+sleep2 5000;
+monster "ayo_dun02",0,0,"Whisper",1179,1,"duplicadormob::OnThisMobDeath068";
+end;
+
+OnThisMobDeath069:
+sleep2 5000;
+monster "ayo_dun02",0,0,"Kraben",1587,1,"duplicadormob::OnThisMobDeath069";
+
+
+OnThisMobDeath070:
+sleep2 5000;
+monster "iz_dun00",0,0,"Plankton",1161,1,"duplicadormob::OnThisMobDeath070";
+end;
+
+
+OnThisMobDeath071:
+sleep2 5000;
+monster "iz_dun00",0,0,"Marina",1141,1,"duplicadormob::OnThisMobDeath071";
+end;
+
+
+OnThisMobDeath072:
+sleep2 5000;
+monster "iz_dun00",0,0,"Kukre",1070,1,"duplicadormob::OnThisMobDeath072";
+end;
+
+
+OnThisMobDeath073:
+sleep2 5000;
+monster "iz_dun00",0,0,"Hydra",1068,1,"duplicadormob::OnThisMobDeath073";
+end;
+
+
+OnThisMobDeath074:
+sleep2 5000;
+monster "iz_dun00",0,0,"Vadon",1066,1,"duplicadormob::OnThisMobDeath074";
+end;
+
+
+OnThisMobDeath075:
+sleep2 5000;
+monster "iz_dun00",0,0,"Black Mushroom",1084,1,"duplicadormob::OnThisMobDeath075";
+end;
+
+
+OnThisMobDeath076:
+sleep2 5000;
+monster "iz_dun01",0,0,"Plankton",1161,1,"duplicadormob::OnThisMobDeath076";
+end;
+
+
+OnThisMobDeath077:
+sleep2 5000;
+monster "iz_dun01",0,0,"Marina",1141,1,"duplicadormob::OnThisMobDeath077";
+end;
+
+
+OnThisMobDeath078:
+sleep2 5000;
+monster "iz_dun01",0,0,"Kukre",1070,1,"duplicadormob::OnThisMobDeath078";
+end;
+
+
+OnThisMobDeath079:
+sleep2 5000;
+monster "iz_dun01",0,0,"Hydra",1068,1,"duplicadormob::OnThisMobDeath079";
+end;
+
+
+OnThisMobDeath080:
+sleep2 5000;
+monster "iz_dun01",0,0,"Vadon",1066,1,"duplicadormob::OnThisMobDeath080";
+end;
+
+
+OnThisMobDeath081:
+sleep2 5000;
+monster "iz_dun01",0,0,"Cornutus",1067,1,"duplicadormob::OnThisMobDeath081";
+end;
+
+
+OnThisMobDeath082:
+sleep2 5000;
+monster "iz_dun01",0,0,"Black Mushroom",1084,1,"duplicadormob::OnThisMobDeath082";
+end;
+
+
+OnThisMobDeath083:
+sleep2 5000;
+monster "iz_dun02",0,0,"Hydra",1068,1,"duplicadormob::OnThisMobDeath083";
+end;
+
+
+OnThisMobDeath084:
+sleep2 5000;
+monster "iz_dun02",0,0,"Cornutus",1067,1,"duplicadormob::OnThisMobDeath084";
+end;
+
+
+OnThisMobDeath085:
+sleep2 5000;
+monster "iz_dun02",0,0,"Black Mushroom",1084,1,"duplicadormob::OnThisMobDeath085";
+end;
+
+
+OnThisMobDeath086:
+sleep2 5000;
+monster "iz_dun02",0,0,"Marse",1144,1,"duplicadormob::OnThisMobDeath086";
+end;
+
+
+OnThisMobDeath087:
+sleep2 5000;
+monster "iz_dun02",0,0,"Obeaune",1044,1,"duplicadormob::OnThisMobDeath087";
+end;
+
+
+OnThisMobDeath088:
+sleep2 5000;
+monster "iz_dun02",0,0,"Merman",1264,1,"duplicadormob::OnThisMobDeath088";
+end;
+
+
+OnThisMobDeath089:
+sleep2 5000;
+monster "iz_dun03",0,0,"Hydra",1068,1,"duplicadormob::OnThisMobDeath089";
+end;
+
+
+OnThisMobDeath090:
+sleep2 5000;
+monster "iz_dun03",0,0,"Phen",1158,1,"duplicadormob::OnThisMobDeath090";
+end;
+
+
+OnThisMobDeath091:
+sleep2 5000;
+monster "iz_dun03",0,0,"Marine Sphere",1142,1,"duplicadormob::OnThisMobDeath091";
+end;
+
+
+OnThisMobDeath092:
+sleep2 5000;
+monster "iz_dun03",0,0,"Swordfish",1069,1,"duplicadormob::OnThisMobDeath092";
+end;
+
+
+OnThisMobDeath093:
+sleep2 5000;
+monster "iz_dun03",0,0,"Marc",1045,1,"duplicadormob::OnThisMobDeath093";
+end;
+
+
+OnThisMobDeath094:
+sleep2 5000;
+monster "iz_dun03",0,0,"Merman",1045,1,"duplicadormob::OnThisMobDeath094";
+end;
+
+
+OnThisMobDeath095:
+sleep2 5000;
+monster "iz_dun04",0,0,"Deviace",1108,1,"duplicadormob::OnThisMobDeath095";
+end;
+
+
+OnThisMobDeath096:
+sleep2 5000;
+monster "iz_dun04",0,0,"Marine Sphere",1142,1,"duplicadormob::OnThisMobDeath096";
+end;
+
+
+OnThisMobDeath097:
+sleep2 5000;
+monster "iz_dun04",0,0,"Swordfish",1069,1,"duplicadormob::OnThisMobDeath097";
+end;
+
+
+OnThisMobDeath098:
+sleep2 5000;
+monster "iz_dun04",0,0,"Merman",1045,1,"duplicadormob::OnThisMobDeath098";
+end;
+
+
+OnThisMobDeath099:
+sleep2 5000;
+monster "mjo_dun01",0,0,"Familiar",1005,1,"duplicadormob::OnThisMobDeath099";
+end;
+
+
+OnThisMobDeath100:
+sleep2 5000;
+monster "mjo_dun01",0,0,"Tarou",1175,1,"duplicadormob::OnThisMobDeath100";
+end;
+
+
+OnThisMobDeath101:
+sleep2 5000;
+monster "mjo_dun01",0,0,"Martin",1145,1,"duplicadormob::OnThisMobDeath101";
+end;
+
+
+OnThisMobDeath102:
+sleep2 5000;
+monster "mjo_dun02",0,0,"Martin",1145,1,"duplicadormob::OnThisMobDeath102";
+end;
+
+
+OnThisMobDeath103:
+sleep2 5000;
+monster "mjo_dun02",0,0,"Drainliar",1111,1,"duplicadormob::OnThisMobDeath103";
+end;
+
+
+OnThisMobDeath104:
+sleep2 5000;
+monster "mjo_dun02",0,0,"Skeleton Worker",1169,1,"duplicadormob::OnThisMobDeath104";
+end;
+
+
+OnThisMobDeath105:
+sleep2 5000;
+monster "mjo_dun02",0,0,"Giearth",1121,1,"duplicadormob::OnThisMobDeath105";
+end;
+
+
+OnThisMobDeath106:
+sleep2 5000;
+monster "mjo_dun03",0,0,"Martin",1145,1,"duplicadormob::OnThisMobDeath106";
+end;
+
+
+OnThisMobDeath107:
+sleep2 5000;
+monster "mjo_dun03",0,0,"Skeleton Worker",1169,1,"duplicadormob::OnThisMobDeath107";
+end;
+
+
+OnThisMobDeath108:
+sleep2 5000;
+monster "mjo_dun03",0,0,"Giearth",1121,1,"duplicadormob::OnThisMobDeath108";
+end;
+
+
+OnThisMobDeath109:
+sleep2 5000;
+monster "mjo_dun03",0,0,"Myst",1151,1,"duplicadormob::OnThisMobDeath109";
+end;
+
+
+OnThisMobDeath110:
+sleep2 5000;
+monster "mjo_dun03",0,0,"Cramp",1209,1,"duplicadormob::OnThisMobDeath110";
+end;
+
+
+OnThisMobDeath111:
+sleep2 5000;
+monster "prt_sewb1",0,0,"Thief Bug Egg",1048,1,"duplicadormob::OnThisMobDeath111";
+end;
+
+
+OnThisMobDeath112:
+sleep2 5000;
+monster "prt_sewb1",0,0,"Thief Bug",1051,1,"duplicadormob::OnThisMobDeath112";
+end;
+
+
+OnThisMobDeath113:
+sleep2 5000;
+monster "prt_sewb1",0,0,"Familiar",1005,1,"duplicadormob::OnThisMobDeath113";
+end;
+
+
+OnThisMobDeath114:
+sleep2 5000;
+monster "prt_sewb1",0,0,"Tarou",1175,1,"duplicadormob::OnThisMobDeath114";
+end;
+
+
+OnThisMobDeath115:
+sleep2 5000;
+monster "prt_sewb2",0,0,"Thief Bug Egg",1048,1,"duplicadormob::OnThisMobDeath115";
+end;
+
+
+OnThisMobDeath116:
+sleep2 5000;
+monster "prt_sewb2",0,0,"Thief Bug",1051,1,"duplicadormob::OnThisMobDeath116";
+end;
+
+
+OnThisMobDeath117:
+sleep2 5000;
+monster "prt_sewb2",0,0,"Familiar",1005,1,"duplicadormob::OnThisMobDeath117";
+end;
+
+
+OnThisMobDeath118:
+sleep2 5000;
+monster "prt_sewb2",0,0,"Tarou",1175,1,"duplicadormob::OnThisMobDeath118";
+end;
+
+
+OnThisMobDeath119:
+sleep2 5000;
+monster "prt_sewb2",0,0,"Spore",1014,1,"duplicadormob::OnThisMobDeath119";
+end;
+
+
+OnThisMobDeath120:
+sleep2 5000;
+monster "prt_sewb2",0,0,"Plankton",1161,1,"duplicadormob::OnThisMobDeath120";
+end;
+
+
+OnThisMobDeath121:
+sleep2 5000;
+monster "prt_sewb2",0,0,"Thief Bug Female",1053,1,"duplicadormob::OnThisMobDeath121";
+end;
+
+
+OnThisMobDeath122:
+sleep2 5000;
+monster "prt_sewb3",0,0,"Thief Bug Egg",1048,1,"duplicadormob::OnThisMobDeath122";
+end;
+
+
+OnThisMobDeath123:
+sleep2 5000;
+monster "prt_sewb3",0,0,"Thief Bug",1051,1,"duplicadormob::OnThisMobDeath123";
+end;
+
+
+OnThisMobDeath124:
+sleep2 5000;
+monster "prt_sewb3",0,0,"Thief Bug Female",1053,1,"duplicadormob::OnThisMobDeath124";
+end;
+
+
+OnThisMobDeath125:
+sleep2 5000;
+monster "prt_sewb3",0,0,"Thief Bug Male",1054,1,"duplicadormob::OnThisMobDeath125";
+end;
+
+
+OnThisMobDeath126:
+sleep2 5000;
+monster "prt_sewb3",0,0,"Familiar",1005,1,"duplicadormob::OnThisMobDeath126";
+end;
+
+
+OnThisMobDeath127:
+sleep2 5000;
+monster "prt_sewb3",0,0,"Tarou",1175,1,"duplicadormob::OnThisMobDeath127";
+end;
+
+
+OnThisMobDeath128:
+sleep2 5000;
+monster "prt_sewb3",0,0,"Poison Spore",1077,1,"duplicadormob::OnThisMobDeath128";
+end;
+
+
+OnThisMobDeath129:
+sleep2 5000;
+monster "prt_sewb4",0,0,"Thief Bug Egg",1048,1,"duplicadormob::OnThisMobDeath129";
+end;
+
+
+OnThisMobDeath130:
+sleep2 5000;
+monster "prt_sewb4",0,0,"Thief Bug",1051,1,"duplicadormob::OnThisMobDeath130";
+end;
+
+
+OnThisMobDeath131:
+sleep2 5000;
+monster "prt_sewb4",0,0,"Thief Bug Female",1053,1,"duplicadormob::OnThisMobDeath131";
+end;
+
+
+OnThisMobDeath132:
+sleep2 5000;
+monster "prt_sewb4",0,0,"Thief Bug Male",1054,1,"duplicadormob::OnThisMobDeath132";
+end;
+
+
+OnThisMobDeath133:
+sleep2 5000;
+monster "prt_sewb4",0,0,"Drainliar",1111,1,"duplicadormob::OnThisMobDeath133";
+end;
+
+
+OnThisMobDeath134:
+sleep2 5000;
+monster "prt_sewb4",0,0,"Cramp",1209,1,"duplicadormob::OnThisMobDeath134";
+end;
+
+
+OnThisMobDeath135:
+sleep2 5000;
+monster "ein_dun01",0,0,"Pitman",1616,1,"duplicadormob::OnThisMobDeath135";
+end;
+
+
+OnThisMobDeath136:
+sleep2 5000;
+monster "ein_dun01",0,0,"Noxious",1620,1,"duplicadormob::OnThisMobDeath136";
+end;
+
+
+OnThisMobDeath137:
+sleep2 5000;
+monster "ein_dun01",0,0,"Porcellio",1619,1,"duplicadormob::OnThisMobDeath137";
+end;
+
+
+OnThisMobDeath138:
+sleep2 5000;
+monster "ein_dun01",0,0,"Venomous",1619,1,"duplicadormob::OnThisMobDeath138";
+end;
+
+
+OnThisMobDeath139:
+sleep2 5000;
+monster "ein_dun01",0,0,"Old Stove",1617,1,"duplicadormob::OnThisMobDeath139";
+end;
+
+
+OnThisMobDeath140:
+sleep2 5000;
+monster "ein_dun02",0,0,"Obsidian",1615,1,"duplicadormob::OnThisMobDeath140";
+end;
+
+
+OnThisMobDeath141:
+sleep2 5000;
+monster "ein_dun02",0,0,"Mineral",1614,1,"duplicadormob::OnThisMobDeath141";
+end;
+
+
+OnThisMobDeath142:
+sleep2 5000;
+monster "ein_dun02",0,0,"Teddy Bear",1622,1,"duplicadormob::OnThisMobDeath142";
+end;
+
+
+OnThisMobDeath143:
+sleep2 5000;
+monster "ein_dun02",0,0,"Old Stove",1617,1,"duplicadormob::OnThisMobDeath143";
+end;
+
+
+OnThisMobDeath144:
+sleep2 5000;
+monster "gef_dun00",0,0,"Hunter Fly",1035,1,"duplicadormob::OnThisMobDeath144";
+end;
+
+
+OnThisMobDeath145:
+sleep2 5000;
+monster "gef_dun00",0,0,"Poporing",1031,1,"duplicadormob::OnThisMobDeath145";
+end;
+
+
+OnThisMobDeath146:
+sleep2 5000;
+monster "gef_dun00",0,0,"Poison Spore",1077,1,"duplicadormob::OnThisMobDeath146";
+end;
+
+
+OnThisMobDeath147:
+sleep2 5000;
+monster "gef_dun00",0,0,"Red Plant",1078,1,"duplicadormob::OnThisMobDeath147";
+end;
+
+
+OnThisMobDeath148:
+sleep2 5000;
+monster "gef_dun00",0,0,"Shining Plant",1083,1,"duplicadormob::OnThisMobDeath148";
+end;
+
+
+OnThisMobDeath149:
+sleep2 5000;
+monster "gef_dun00",0,0,"Yellow Plant",1081,1,"duplicadormob::OnThisMobDeath149";
+end;
+
+
+OnThisMobDeath150:
+sleep2 5000;
+monster "gef_dun00",0,0,"Green Plant",1080,1,"duplicadormob::OnThisMobDeath150";
+end;
+
+
+OnThisMobDeath151:
+sleep2 5000;
+monster "gef_dun00",0,0,"Black Mushroom",1084,1,"duplicadormob::OnThisMobDeath151";
+end;
+
+
+OnThisMobDeath152:
+sleep2 5000;
+monster "gef_dun01",0,0,"Drainliar",1111,1,"duplicadormob::OnThisMobDeath152";
+end;
+
+
+OnThisMobDeath153:
+sleep2 5000;
+monster "gef_dun01",0,0,"Nightmare",1061,1,"duplicadormob::OnThisMobDeath153";
+end;
+
+
+OnThisMobDeath154:
+sleep2 5000;
+monster "gef_dun01",0,0,"Zombie",1015,1,"duplicadormob::OnThisMobDeath154";
+end;
+
+
+OnThisMobDeath155:
+sleep2 5000;
+monster "gef_dun01",0,0,"Ghoul",1036,1,"duplicadormob::OnThisMobDeath155";
+end;
+
+
+OnThisMobDeath156:
+sleep2 5000;
+monster "gef_dun01",0,0,"Jakk",1130,1,"duplicadormob::OnThisMobDeath156";
+end;
+
+
+OnThisMobDeath157:
+sleep2 5000;
+monster "gef_dun01",0,0,"Blue Plant",1079,1,"duplicadormob::OnThisMobDeath157";
+end;
+
+
+OnThisMobDeath158:
+sleep2 5000;
+monster "gef_dun01",0,0,"Black Mushroom",1084,1,"duplicadormob::OnThisMobDeath158";
+end;
+
+
+OnThisMobDeath159:
+sleep2 5000;
+monster "gef_dun01",0,0,"White Plant",1082,1,"duplicadormob::OnThisMobDeath159";
+end;
+
+
+OnThisMobDeath160:
+sleep2 5000;
+monster "gef_dun02",0,0,"Ghoul",1036,1,"duplicadormob::OnThisMobDeath160";
+end;
+
+
+OnThisMobDeath161:
+sleep2 5000;
+monster "gef_dun02",0,0,"Whisper",1179,1,"duplicadormob::OnThisMobDeath161";
+end;
+
+
+OnThisMobDeath162:
+sleep2 5000;
+monster "gef_dun02",0,0,"Hunter Fly",1035,1,"duplicadormob::OnThisMobDeath162";
+end;
+
+
+OnThisMobDeath163:
+sleep2 5000;
+monster "gef_dun02",0,0,"Marionette",1143,1,"duplicadormob::OnThisMobDeath163";
+end;
+
+
+OnThisMobDeath164:
+sleep2 5000;
+monster "gef_dun02",0,0,"Deviruchi",1109,1,"duplicadormob::OnThisMobDeath164";
+end;
+
+
+OnThisMobDeath165:
+sleep2 5000;
+monster "gef_dun02",0,0,"Nightmare",1061,1,"duplicadormob::OnThisMobDeath165";
+end;
+
+
+OnThisMobDeath166:
+sleep2 5000;
+monster "gef_dun02",0,0,"White Plant",1082,1,"duplicadormob::OnThisMobDeath166";
+end;
+
+
+OnThisMobDeath167:
+sleep2 5000;
+monster "gef_dun02",0,0,"Shining Plant",1083,1,"duplicadormob::OnThisMobDeath167";
+end;
+
+
+OnThisMobDeath168:
+sleep2 5000;
+monster "gl_cas01",0,0,"Sage Worm",1281,1,"duplicadormob::OnThisMobDeath168";
+end;
+
+
+OnThisMobDeath169:
+sleep2 5000;
+monster "gl_cas01",0,0,"Carat",1267,1,"duplicadormob::OnThisMobDeath169";
+end;
+
+
+OnThisMobDeath170:
+sleep2 5000;
+monster "gl_cas01",0,0,"Rideword",1195,1,"duplicadormob::OnThisMobDeath170";
+end;
+
+
+OnThisMobDeath171:
+sleep2 5000;
+monster "gl_cas01",0,0,"Dark Frame",1260,1,"duplicadormob::OnThisMobDeath171";
+end;
+
+
+OnThisMobDeath172:
+sleep2 5000;
+monster "gl_cas01",0,0,"Whisper",1179,1,"duplicadormob::OnThisMobDeath172";
+end;
+
+
+OnThisMobDeath173:
+sleep2 5000;
+monster "gl_cas01",0,0,"Owl Baron",1295,1,"duplicadormob::OnThisMobDeath173";
+end;
+
+
+OnThisMobDeath174:
+sleep2 5000;
+monster "gl_cas01",0,0,"Owl Duke",1320,1,"duplicadormob::OnThisMobDeath174";
+end;
+
+
+OnThisMobDeath175:
+sleep2 5000;
+monster "gl_cas02",0,0,"Wanderer",1208,1,"duplicadormob::OnThisMobDeath175";
+end;
+
+
+OnThisMobDeath176:
+sleep2 5000;
+areamonster "gl_cas02",193,167,5,5,"Raydric",1163,1,"duplicadormob::OnThisMobDeath176";
+end;
+
+
+OnThisMobDeath177:
+sleep2 5000;
+areamonster "gl_cas02",193,135,5,5,"Raydric",1163,1,"duplicadormob::OnThisMobDeath177";
+end;
+
+
+OnThisMobDeath178:
+sleep2 5000;
+areamonster "gl_cas02",185,11,8,8,"Rideword",1195,1,"duplicadormob::OnThisMobDeath178";
+end;
+
+
+OnThisMobDeath179:
+sleep2 5000;
+areamonster "gl_cas02",174,11,8,8,"Evil Druid",1117,1,"duplicadormob::OnThisMobDeath179";
+end;
+
+
+OnThisMobDeath180:
+sleep2 5000;
+areamonster "gl_cas02",104,38,4,4,"Abyssmal Knight",1219,1,"duplicadormob::OnThisMobDeath180";
+end;
+
+
+OnThisMobDeath181:
+sleep2 5000;
+areamonster "gl_cas02",24,35,4,4,"Abyssmal Knight",1219,1,"duplicadormob::OnThisMobDeath181";
+end;
+
+
+OnThisMobDeath182:
+sleep2 5000;
+areamonster "gl_cas02",46,124,15,15,"Rideword",1195,1,"duplicadormob::OnThisMobDeath182";
+end;
+
+
+OnThisMobDeath183:
+sleep2 5000;
+areamonster "gl_cas02",16,186,10,10,"Evil Druid",1117,1,"duplicadormob::OnThisMobDeath183";
+end;
+
+
+OnThisMobDeath184:
+sleep2 5000;
+areamonster "gl_cas02",133,83,3,3,"Khalitzburg",1132,1,"duplicadormob::OnThisMobDeath184";
+end;
+
+
+OnThisMobDeath185:
+sleep2 5000;
+areamonster "gl_cas02",45,177,3,3,"Khalitzburg",1132,1,"duplicadormob::OnThisMobDeath185";
+end;
+
+
+OnThisMobDeath186:
+sleep2 5000;
+areamonster "gl_cas02",182,65,3,3,"Khalitzburg",1132,1,"duplicadormob::OnThisMobDeath186";
+end;
+
+
+OnThisMobDeath187:
+sleep2 5000;
+areamonster "gl_cas02",173,127,3,3,"Khalitzburg",1132,1,"duplicadormob::OnThisMobDeath187";
+end;
+
+
+OnThisMobDeath188:
+sleep2 5000;
+areamonster "gl_cas02",173,167,3,3,"Khalitzburg",1132,1,"duplicadormob::OnThisMobDeath188";
+end;
+
+
+OnThisMobDeath189:
+sleep2 5000;
+areamonster "gl_cas02",93,177,3,3,"Abyssmal Knight",1219,1,"duplicadormob::OnThisMobDeath189";
+end;
+
+
+OnThisMobDeath190:
+sleep2 5000;
+areamonster "gl_cas02",115,177,3,3,"Abyssmal Knight",1219,1,"duplicadormob::OnThisMobDeath190";
+end;
+
+
+OnThisMobDeath191:
+sleep2 5000;
+areamonster "gl_cas02",83,84,2,2,"Mimic",1191,1,"duplicadormob::OnThisMobDeath191";
+end;
+
+
+OnThisMobDeath192:
+sleep2 5000;
+areamonster "gl_cas02",83,80,2,2,"Mimic",1191,1,"duplicadormob::OnThisMobDeath192";
+end;
+
+
+OnThisMobDeath193:
+sleep2 5000;
+areamonster "gl_cas02",189,20,1,1,"Khalitzburg",1132,1,"duplicadormob::OnThisMobDeath193";
+end;
+
+
+OnThisMobDeath194:
+sleep2 5000;
+areamonster "gl_cas02",190,23,1,1,"Wanderer",1208,1,"duplicadormob::OnThisMobDeath194";
+end;
+
+
+OnThisMobDeath195:
+sleep2 5000;
+areamonster "gl_cas02",190,38,1,1,"Raydric Archer",1276,1,"duplicadormob::OnThisMobDeath195";
+end;
+
+
+OnThisMobDeath196:
+sleep2 5000;
+areamonster "gl_in01",41,155,40,45,"Marionette",1143,1,"duplicadormob::OnThisMobDeath196";
+end;
+
+
+OnThisMobDeath197:
+sleep2 5000;
+areamonster "gl_in01",156,147,34,42,"Marionette",1143,1,"duplicadormob::OnThisMobDeath197";
+end;
+
+
+OnThisMobDeath198:
+sleep2 5000;
+areamonster "gl_in01",42,48,41,32,"Marionette",1143,1,"duplicadormob::OnThisMobDeath198";
+end;
+
+
+OnThisMobDeath199:
+sleep2 5000;
+areamonster "gl_in01",154,44,36,33,"Marionette",1143,1,"duplicadormob::OnThisMobDeath199";
+end;
+
+
+OnThisMobDeath200:
+sleep2 5000;
+areamonster "gl_in01",42,154,40,45,"Rideword",1195,1,"duplicadormob::OnThisMobDeath200";
+end;
+
+
+OnThisMobDeath201:
+sleep2 5000;
+areamonster "gl_in01",155,143,34,42,"Rideword",1195,1,"duplicadormob::OnThisMobDeath201";
+end;
+
+
+OnThisMobDeath202:
+sleep2 5000;
+areamonster "gl_in01",41,47,41,32,"Rideword",1195,1,"duplicadormob::OnThisMobDeath202";
+end;
+
+
+OnThisMobDeath203:
+sleep2 5000;
+areamonster "gl_in01",152,44,36,33,"Rideword",1195,1,"duplicadormob::OnThisMobDeath203";
+end;
+
+
+OnThisMobDeath204:
+sleep2 5000;
+areamonster "gl_in01",40,150,40,45,"Dark Frame",1260,1,"duplicadormob::OnThisMobDeath204";
+end;
+
+
+OnThisMobDeath205:
+sleep2 5000;
+areamonster "gl_in01",153,146,34,42,"Dark Frame",1260,1,"duplicadormob::OnThisMobDeath205";
+end;
+
+
+OnThisMobDeath206:
+sleep2 5000;
+areamonster "gl_in01",43,45,41,32,"Dark Frame",1260,1,"duplicadormob::OnThisMobDeath206";
+end;
+
+
+OnThisMobDeath207:
+sleep2 5000;
+areamonster "gl_in01",153,44,36,33,"Dark Frame",1260,1,"duplicadormob::OnThisMobDeath207";
+end;
+
+
+OnThisMobDeath208:
+sleep2 5000;
+areamonster "gl_in01",41,154,40,45,"Sage Worm",1281,1,"duplicadormob::OnThisMobDeath208";
+end;
+
+
+OnThisMobDeath209:
+sleep2 5000;
+areamonster "gl_in01",155,147,34,42,"Sage Worm",1281,1,"duplicadormob::OnThisMobDeath209";
+end;
+
+
+OnThisMobDeath210:
+sleep2 5000;
+areamonster "gl_in01",42,47,41,32,"Sage Worm",1281,1,"duplicadormob::OnThisMobDeath210";
+end;
+
+
+OnThisMobDeath211:
+sleep2 5000;
+areamonster "gl_in01",153,44,36,33,"Sage Worm",1281,1,"duplicadormob::OnThisMobDeath211";
+end;
+
+
+OnThisMobDeath212:
+sleep2 5000;
+monster "gl_in01",0,0,"Wanderer",1208,1,"duplicadormob::OnThisMobDeath212";
+end;
+
+
+OnThisMobDeath213:
+sleep2 5000;
+monster "gl_in01",0,0,"Alice",1275,1,"duplicadormob::OnThisMobDeath213";
+end;
+
+
+
+
+
+end;}

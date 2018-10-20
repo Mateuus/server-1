@@ -1,0 +1,93 @@
+//===== Global Chile ======
+//=== https://www.facebook.com/IntegralesGlobal ===
+
+prt_in,136,29,3	script	Banco vRo	807,{
+
+	mes "[^CC0000Banco vRo^000000]";
+	mes "Bienvenido al banco de vRo, nosotros cuidaremos de su dinero.";
+	mes " ";
+	mes " ";
+	mes " ";
+	mes "Saldo Actual: ^072F5A"+#CuentaBanco+"^000000z";
+	next;
+menu "Retirar Zeny",retirar,"Ingresar Zeny",ingresar,"Cancelar",cancelar;
+
+retirar:
+input @bancoretira;
+if (@bancoretira > #CuentaBanco) goto nodinero;
+if (@bancoretira < 1) goto fallo;
+if (@bancoretira > 5000000) goto fallo;
+emotion 8,1;
+set #CuentaBanco,#CuentaBanco-@bancoretira;
+set Zeny,Zeny+@bancoretira;
+	mes "[^CC0000Banco vRo^000000]";
+	mes "Retirado: ^072F5A"+@bancoretira+"^000000z";
+	mes "Saldo Actual: ^072F5A"+#CuentaBanco+"^000000z";
+close;
+
+ingresar:
+input @bancoingresa;
+if (@bancoingresa > Zeny) goto nodinero2;
+if (@bancoingresa < 1) goto fallo;
+if (@bancoingresa > 5000000) goto fallo;
+emotion 8;
+set #CuentaBanco,#CuentaBanco+@bancoingresa;
+set Zeny,Zeny-@bancoingresa;
+	mes "[^CC0000Banco vRo^000000]";
+	mes "Ingreso: ^072F5A"+@bancoingresa+"^000000z";
+	mes "Saldo Actual: ^072F5A"+#CuentaBanco+"^000000z";
+close;
+
+cancelar:
+close;
+
+fallo:
+	mes "[^CC0000Banco vRo^000000]";
+	mes "No puedes ingresar o retirar una cantidad inferior a 1z o superior a 5.000.000z.";
+close;
+
+nodinero:
+	mes "[^CC0000Banco vRo^000000]";
+	mes "No posees tanto dinero en tu cuenta bancaria.";
+close;
+
+nodinero2:
+	mes "[^CC0000Banco vRo^000000]";
+	mes "No posees tanto dinero como para hacer ese ingreso.";
+close;
+
+}
+
+aldebaran,160,124,4	duplicate(Banco vRo)	Banco vRo#03	807
+amatsu,102,145,5	duplicate(Banco vRo)	Banco vRo#04	807
+ayothaya,195,177,6	duplicate(Banco vRo)	Banco vRo#05	807
+brasilis,206,232,4	duplicate(Banco vRo)	Banco vRo#06	807
+comodo,183,170,5	duplicate(Banco vRo)	Banco vRo#07	807
+einbech,171,137,5	duplicate(Banco vRo)	Banco vRo#08	807
+brasilis,80,193,4	duplicate(Banco vRo)	Banco vRo#09	807
+geffen,111,68,6	duplicate(Banco vRo)	Banco eRo#10	807
+gonryun,145,115,4	duplicate(Banco vRo)	Banco vRo#11	807
+hugel,106,152,4	duplicate(Banco vRo)	Banco vRo#12	807
+izlude,139,123,4	duplicate(Banco vRo)	Banco vRo#13	807
+jawaii,254,119,4	duplicate(Banco vRo)	Banco vRo#14	807
+lighthalzen,167,83,4	duplicate(Banco vRo)	Banco vRo#15	807
+louyang,229,113,4	duplicate(Banco vRo)	Banco vRo#16	807
+xmas,156,143,4	duplicate(Banco vRo)	Banco vRo#17	807
+manuk,303,324,4	duplicate(Banco vRo)	Banco vRo#18	807
+mid_camp,221,291,4	duplicate(Banco vRo)	Banco vRo#19	807
+morocc,168,97,4	duplicate(Banco vRo)	Banco vRo#20	807
+moscovia,239,203,4	duplicate(Banco vRo)	Banco vRo#21	807
+payon,189,136,4	duplicate(Banco vRo)	Banco vRo#22	807
+rachel,107,136,5	duplicate(Banco vRo)	Banco vRo#23	807
+splendide,186,185,5	duplicate(Banco vRo)	Banco vRo#24	807
+umbala,149,149,5	duplicate(Banco vRo)	Banco vRo#25	807
+veins,201,132,5	duplicate(Banco vRo)	Banco vRo#26	807
+yuno,161,205,4	duplicate(Banco vRo)	Banco vRo#27	807
+malaya,243,221,5	duplicate(Banco vRo)	Banco vRo#29	807
+dicastes01,195,193,5	duplicate(Banco vRo)	Banco vRo#30	807
+dewata,208,190,5	duplicate(Banco vRo)	Banco vRo#31	807
+malangdo,193,125,5	duplicate(Banco vRo)	Banco vRo#32	807
+mora,113,118,5	duplicate(Banco vRo)	Banco vRo#33	807
+eclage,303,256,5	duplicate(Banco vRo)	Banco vRo#34	807
+alberta,44,252,4	duplicate(Banco vRo)	Banco vRo#35	807
+einbroch,51,203,4	duplicate(Banco vRo)	Banco vRo#36	807

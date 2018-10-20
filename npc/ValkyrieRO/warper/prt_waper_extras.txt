@@ -1,0 +1,41 @@
+
+
+
+
+
+
+
+
+prt_vilg02,72,76,0	warp	areswarp9201	1,1,npc_in,41,25
+npc_in.gat,45,26,0	warp	areswarp9202	1,2,prt_vilg02,75,79
+
+
+npc_in,28,43,0	warp	areswarp9203	1,1,prt_in,128,106
+
+prt_in,128,103,0	warp	areswarp9204	1,2,npc_in,27,39
+
+
+
+prt_vilg02,109,62,0	warp	areswarp9205	1,3,prt_in,128,38
+
+prt_in,128,43,0	warp	areswarp9206	1,4,prt_vilg02,106,62
+
+
+
+prt_in,126,122,0	warp	areswarp9207	1,1,prt_in,129,146
+prt_in,132,122,0	warp	areswarp9208	1,1,prt_in,129,146
+
+prt_in,128,142,0	warp	areswarp9209	1,3,prt_in,126,117
+
+
+prt_vilg02,120,125,0	warp	areswarp9210	1,1,prt_in01,131,71
+
+
+prt_in01,133,72,0	warp	areswarp9211	1,1,prt_vilg02,128,38
+
+
+
+
+prt_vilg02,120,125,0	warp	areswarp9212	1,1,prt_in01,168,128
+
+prt_in01,167,124,0	warp	areswarp9213	1,1,prt_vilg02,128,38

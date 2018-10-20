@@ -1,0 +1,42 @@
+//==== SRYX ====//
+-	script	conversion	-1,{
+	OnPCLoginEvent:
+		query_sql ("SELECT `balance` FROM `cp_credits` WHERE `account_id`= '" + getcharid(3) + "'", .@bal);
+		if(.@bal > 0){
+			switch(.@bal){
+				case 5000:
+					set .@usd$, "4.99";
+					break;
+					
+				case 11000:
+					set .@usd$, "9.99";
+					break;
+					
+				case 22500:
+					set .@usd$, "19.99";
+					break;
+					
+				case 57500:
+					set .@usd$, "49.99";
+					break;
+					
+				case 87500:
+					set .@usd$, "74.99";
+					break;
+				
+				case 120000:
+					set .@usd$, "4.99";
+					break;
+					
+				default:
+					set .@usd$, "99.99+";
+					break;
+
+			}
+			set #CASHPOINTS, #CASHPOINTS + .@bal;
+			query_sql ("UPDATE `cp_credits` set `balance` = '0' WHERE `account_id`= '" + getcharid(3) + "'", .@bal);
+			announce "Su donación paypal de $" + .@usd$ + " ( " + .@bal + " Cash Point(s) ) ha sido recibida ¡Muchas gracias!",bc_blue|bc_self;
+			dispbottom "Cash Points: " + #CASHPOINTS;
+		}
+		end;
+}

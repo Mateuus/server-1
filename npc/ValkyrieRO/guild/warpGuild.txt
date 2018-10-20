@@ -1,0 +1,38 @@
+//===== Global Chile ======
+//=== https://www.facebook.com/IntegralesGlobal ===
+
+prontera,165,194,5	script	Vidblainn::Sc03_Flag	722,{
+
+	set .@GID, GetCastleData("schg_cas03",1);
+
+	if (.@GID == 0) {
+		mes "[ Bienvenido Gran Guerrero ]";
+		mes " ";
+		mes "Los Dueños de Castillos";
+		mes "Tienen su mapa especial ;)";
+		mes "deseas ir a el?.";
+		close;
+	}
+	if (getcharid(2) == .@GID) {
+		mes "[ Bienvenido Gran Guerrero ]";
+		mes "Te llevo al Palacio?...";
+		next;
+		if(select("Ir al Palacio.:Salir.") == 1) {
+			close2;
+			if (getcharid(2) == GetCastleData("schg_cas03",1)) {
+				warp "RuheLuft",83,64;
+				end;
+			}
+			end;
+		}
+		close;
+	}
+	mes "Lo siento no eres dueño del castillo";
+	mes "El castillo pertenece a ^ff0000"+GetGuildName(.@GID)+"^000000";
+	mes "y su lider es ^ff0000"+GetGuildMaster(.@GID)+"^000000";
+	close;
+
+OnRecvCastlesc03:
+	FlagEmblem GetCastleData("schg_cas03",1);
+	end;
+}

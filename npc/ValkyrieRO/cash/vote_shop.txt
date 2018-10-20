@@ -1,0 +1,58 @@
+//===== eAthena Script ======================================= 
+//= ZK-VOTE Point Converter & Cash Shop NPCs
+//===== By: ================================================== 
+//= ZRO % Kaneda
+//===== Current Version: ===================================== 
+//= 1.0
+//===== Compatible With: ===================================== 
+//= eAthena SVN
+//===== Description: ========================================= 
+//= Script que Valida los puntos de Votacion
+//= Script para crear el Shop de Items por Puntos
+//============================================================
+
+npc_in,35,42,5	script	Puntos de Votacion	864,{
+
+	set @dia,gettime(5);
+
+	mes "[GM Vella]";
+	mes "^0000FF¿Hola Deseas Validar tus Puntos de Votacion?^000000";
+	next;
+	menu "^008000Si...^000000",L_Puntos,"^004080Ver Puntos Disponibles^000000",L_Puntos,"Salir...",L_END;
+
+L_Puntos:	
+	query_sql("SELECT COUNT(*)  FROM vote_table WHERE account_id = '" + getcharid(3) + "' AND collected = '0'", @punto);
+	
+	if (@punto == 0) goto IMPRIMIR;
+	
+	set #CASHPOINTS,#CASHPOINTS+@punto;
+
+CLEANER:
+	query_sql("SELECT COUNT(*)  FROM vote_table WHERE account_id = '" + getcharid(3) + "' AND collected = '0'", @punto);
+
+	if (@punto == 0) goto IMPRIMIR;
+	query_sql("UPDATE vote_table SET collected = '" + @dia + "' WHERE account_id ='" + getcharid(3) + "'");
+	
+	goto CLEANER;
+
+	
+	
+IMPRIMIR:
+	// Limpia los Registros donde Collected no es igual al Dia de Hoy
+	query_sql("DELETE FROM vote_table WHERE account_id = '" + getcharid(3) + "' AND collected <> '" + @dia + "'");
+	
+	mes "[GM Vella]";
+	mes " ";
+	mes "Ahora tienes :";
+	mes "            ^0000FF" + #CASHPOINTS + "  ^000000puntos de Votacion";
+	close;
+	
+L_END:
+	mes "Que tengas un Buen dia ^^";
+	close;
+}
+
+// NPC QUE GENERA EL SHOP
+//mapa,x,y,posicion	cashshop	Nombre	Sprite_NPC,ITEM:Valor_en_Puntos
+
+//prontera,133,166,6	cashshop	ZKShop BelnyxRO	421,4054:110,4134:123,4047:118,12103:18,12214:12,12210:210,12260:10,2410:800,5550:330

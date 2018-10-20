@@ -1,0 +1,178 @@
+prontera.gat,169,179,5	script	Estilista	122,{
+	mes "[^FF8000Stylist^000000]";
+	mes "Yo soy el mejor estilista de Prontera!!";
+	mes "Yo te puedo cambiar el estilo del cabello o el color!!";
+	mes "Que quieres que te aga?";
+	next;
+	menu "Estilo de pelo",Lstyle,"Color del Pelo",Lcolor,"Color de Ropa",Lcloth,"Nada...voy bien ahora",LCancel;
+
+	Lstyle:
+		mes "[^FF8000Stylist^000000]";
+		mes "Elije el que mas se adapte a tus gustos";
+		next;
+		menu "Cambiar",Lbrowsesty,"Me quedo con este",Lwantsty;
+
+	Lwantsty:
+		mes "[^FF8000Stylist^000000]";
+		mes "Bien!Tienes Buen gusto!";
+ 		next;
+		mes "[^FF8000Stylist^000000]";
+		mes "Por favor selecciona un numero de estilo ^0000FFentre el 0 y 18^000000.";
+		mes "El numero 0, es el estilo defectuoso de tu pelo.";
+ 		next;
+		input @sty;
+		if (@sty>18) close;
+		if (@sty<0) close;
+		setlook 1,@sty;
+		next;
+		mes "[^FF8000Stylist^000000]";
+		mes "Buen estilo,lo deseas cambiar?";
+		next;
+		menu "No ,este me gusta",-,"Cambiame de estilo",Lwantsty;
+		next;
+		mes "[^FF8000Stylist^000000]";
+		mes "Buen gusto!! ven cuando quieras ,vale?";
+		close;
+
+	Lbrowsesty:
+		set @look, -1;
+		mes "[^FF8000Stylist^000000]";
+		mes "Tu dime cuando te quieras quedar con alguno ,vale?";
+		next;
+
+	Lbrowserep:
+		set @look,@look+1;
+		setlook 1,@look;
+		mes "Esta es el estilo numero ^FF9009 "+@look+" ^000000!"; 
+		if(@look == 18) menu "Cambiar de Estilo",Lbrowsesty,"Me gusta esta!",Lstop;
+		if(@look != 18)	menu "Cambiame de Estilo",Lbrowserep,"me gusta este",Lstop;
+		
+	Lcolor:
+		mes "[^FF8000Stylist^000000]";
+		mes "Quieres cambiarte de color de pelo??";
+		next;
+		menu "Si",Lbrowsecolor,"No,me quedo con el que tengo",Lwantcolor;
+
+	Lwantcolor:
+		mes "[^FF8000Stylist^000000]";
+		mes "Elije el color que mas te guste.";
+		next;
+		mes "[^FF8000Stylist^000000]";
+		mes "Por favor selecciona el que mas te guste ^0000FFentre 0 y 20^000000.";
+		mes "El numero 0 es el que tienes ahora.";
+ 		next;
+		mes "[^FF8000Stylist^000000]";
+		mes "0 es default...";
+		mes "1 es blonde...";
+		mes "2 es lavender...";
+		mes "3 es brown...";
+		mes "4 es green...";
+		mes "5 es blue...";
+		mes "6 es white...";
+		mes "7 es black...";
+		mes "8 es red...";
+		mes "and 9-20 are new colors.";
+		input @color;
+		if (@color>8) close;
+		if (@color<0) close;
+		setlook 6,@color;
+		next;
+		mes "[^FF8000Stylist^000000]";
+		mes "Quieres que te cambie a otro color?";
+		next;
+		menu "No,el que tengo ahora me gusta",-,"Cambiame de color, por favor",Lwantcolor;
+		next;
+		mes "[^FF8000Stylist^000000]";
+		mes "Buen gusto!! ven cuando quieras ,vale?";
+		close;
+
+	Lbrowsecolor:
+		set @look, -1;
+		mes "[^FF8000Stylist^000000]";
+		mes "Elije la que mas te guste vale?";
+		next;
+
+	Lbrowsecolorrep:
+		set @look,@look+1;
+		setlook 6,@look;
+		mes "Este es el color numero ^FF9009 "+@look+" ^000000!"; 
+		if(@look == 8) menu "Cambiarme el color",Lbrowsecolor,"me gusta este",Lstop;
+		if(@look != 8)	menu "Cambiar",Lbrowsecolorrep,"Me gusta este",Lstop;
+
+		Lstop:
+			mes "[^FF8000Stylist^000000]";
+			mes "Buen gusto!! Me encanta ^_^";
+			close;
+
+	LCancel:
+		mes "[^FF8000Stylist^000000]";
+		mes "Ven cuando quieras.";
+		close;
+
+	Lcloth:
+
+		if (Class==Job_Taekwon) goto omg;
+		if (Class==Job_Soul_Linker) goto omg;
+		if (Class==Job_Star_Gladiator) goto omg;
+		mes "[^FF8000Stylist^000000]";
+		mes "Deseas cambiarte la ropa?";
+		next;
+		menu "Cambiar",Lbrowsecloth,"Me quedo con el que tengo",Lwantcloth;
+
+	Lwantcloth:
+		mes "[^FF8000Stylist^000000]";
+		mes "Buena elección!!!";
+ 		next;
+		mes "[^FF8000Stylist^000000]";
+		mes "Por favor selecciona un numero ^0000FFentre 0 y 77^000000.";
+		mes "Numero 0, si quieres quedarte el traje que tenias antes.";
+ 		next;
+		input @pal;
+		if (@pal>77) close;
+		if (@pal<0) close;
+		setlook 7,@pal;
+		next;
+		mes "[^FF8000Stylist^000000]";
+		mes "Si quieres cambiar de ropa,selecciona en el menu ,Cambiar de pallete,";
+		next;
+		menu "Esta me gusta",-,"Cambiar de pallete,por favor",Lwantcloth;
+		next;
+		mes "[^FF8000Stylist^000000]";
+		mes "...pasate cuando quieras vale?";
+		close;
+
+	Lbrowsecloth:
+		set @look, -1;
+		mes "[^FF8000Stylist^000000]";
+		mes "Pasate cuando quieras vale??";
+		next;
+
+	Lbrowseclothrep:
+		set @look,@look+1;
+		setlook 7,@look;
+		mes "Esta es la ropa numero ^FF9009 "+@look+" ^000000!"; 
+		if(@look == 77) menu "Back To The Begin",Lbrowsecloth,"Esta me gusta",Lstop;
+		if(@look != 77)	menu "Cambiar de Ropa",Lbrowseclothrep,"Esta me gusta",Lstop;
+
+	omg:
+		set @look, -1;
+		mes "[^FF8000Stylist^000000]";
+		mes "Pasate cuando quieras vale??";
+		next;
+
+	other:
+		set @look,@look+1;
+		setlook 7,@look;
+		mes "Esta es la ropa numero ^FF9009 "+@look+" ^000000!"; 
+		if(@look == 25) menu "Back To The Begin",omg,"Esta me gusta",ostop;
+		if(@look != 25)	menu "Cambiar de Ropa",other,"Esta me gusta",ostop;
+	ostop:
+			
+		mes "[^FF8000Stylist^000000]";
+		mes "Buen gusto!! Me encanta ^_^";
+		close;
+
+
+}
+
+

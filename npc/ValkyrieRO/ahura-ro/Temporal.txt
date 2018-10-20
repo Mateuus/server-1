@@ -1,0 +1,453 @@
+invek,134,110,4	script	Thanatos Temporal	1_F_01,{ // Custom text due to official enchant mechanics
+	disable_items;
+	if (MaxWeight - Weight < 1000) {
+		mes("Tu bolsa esta llena. Procura liberar espacio.");
+		close;
+	}
+	mes("[Thanatos Temporal]"); // Custom text
+	mes("Has venido a mi para encantar tus Temporal Boots. Ten cuidado, si deseas poener slot a una bota encantada, perdera el efecto. Ten en consideración que solo funciona con botas en las cuales tengas equipadas.");
+	next;
+	if (select("¿Cómo funciona el encantamiento?", "Encantar Temporal Boots") == 1) {
+		mes("[Thanatos Temporal]");
+		mes("Para poder encantar tus botas, necesitarás de ^0000FFThanatos Fragments^000000, que puedes conseguir en Thanatos Tower.");
+		next;
+		mes("[Thanatos Temporal]");
+		mes("Solo es posible el encantamiento vía este metodo, y esto sucede para ^0000FFcualquier modo de botas^000000.");
+		next;
+		mes("[Thanatos Temporal]");
+		mes("Pero, una vez que intentes poner una ranura en las botas, el encantamiento será reiniciado. Así que si quieres un socket en tus botas, te aconsejo hacerlo primero antes de encantar. Debes de recordar eso.");
+		next;
+		mes("[Thanatos Temporal]");
+		mes("No doy efecto al azar. Puede elegir el efecto que desea para el elemento.");
+		next;
+		mes("[Thanatos Temporal]");
+		mes("Los primeros encantamientos son efectos pequeños y luego el efecto crece más fuerte.\r"
+			"^FF0000Recuerda: ¡Hay una posibilidad de falla!^000000");
+		next;
+		mes("[Thanatos Temporal]");
+		mes("Para llegar a la última opción de encanamiento, se requerirá de más Thanatos Fragments. No olvides eso.");
+		next;
+		mes("[Thanatos Temporal]");
+		mes("Una vez que el 4to encantamiento haya sido realizado, tendrás la oportunidad de obtener un encantamiento especial en tu 3ra ranura. Claro que... con una cierta cantidad puedo ^0000FFgarantizar el efecto de encantamiento~^000000");
+		next;
+		mes("[Thanatos Temporal]");
+		mes("^FF0000Nuevamente: existe un riesgo de fallar y perder la bota^000000.\r"
+			"Al contrario, si es efecto, ^0000FFel refinamiento y encantamiento son mantenidos.^000000");
+		next;
+		mes("[Thanatos Temporal]");
+		mes("Phew... Bien, eso es todo lo que debes saber.");
+		close;
+	}
+	.@part = EQI_SHOES;
+	if (!getequipisequiped(.@part)) {
+		mes("[Thanatos Temporal]");
+		mes("¿Tienes la bota equipada?");
+		close;
+	}
+	.@equip_refine = getequiprefinerycnt(.@part);
+	.@equip_id = getequipid(.@part);
+	.@equip_name$ = getequipname(.@part);
+	.@card0 = getequipcardid(.@part, 0);
+	.@card3 = getequipcardid(.@part, 3);
+	setarray .@enchant1st[0], Fighting_Spirit4, Expert_Archer1, Spell2, Vitality2, Attack_Delay_1, Luck3;
+	setarray .@enchant2nd[0], Fighting_Spirit5, Expert_Archer2, Spell3, Vitality3, Attack_Delay_2, Luck4;
+	setarray .@enchant3rd[0], Fighting_Spirit6, Expert_Archer3, Spell4, MHP1, Attack_Delay_3, Luck5;
+	setarray .@enchant4th[0], Fighting_Spirit7, Expert_Archer4, Spell5, MHP2, Attack_Delay_4, Luck6;
+	setarray .@enchant_cost[0], 1, 4, 15, 30, 10; // Thanato_Rune costs
+	setarray .@enchant_rate[0], 90, 80, 70, 50, 100; // Enchant Success Rate in %
+	.@random = rand(1, 100);
+	switch (.@equip_id) {
+	case Temporal_Str_Boots:
+	case Temporal_Int_Boots:
+	case Temporal_Agi_Boots:
+	case Temporal_Vit_Boots:
+	case Temporal_Dex_Boots:
+	case Temporal_Luk_Boots:
+	case Temporal_Str_Boots_:
+	case Temporal_Int_Boots_:
+	case Temporal_Agi_Boots_:
+	case Temporal_Vit_Boots_:
+	case Temporal_Dex_Boots_:
+	case Temporal_Luk_Boots_:
+		if (.@card3 == 0) { //4th slot 1st try enchanting
+			.@cost = .@enchant_cost[0];
+			.@scs = .@enchant_rate[0];
+			.@number = 1;
+			mes("[Thanatos Temporal]");
+			mesf("¿Deseas encantar ^0000FF%s^000000? Para el primer encantamiento, necesitarás ^FF0000%d^000000 ^0000FFThanatos Fragment.^000000", .@equip_name$, .@cost);
+			next;
+			.@select = select("Salir", "Fighting Spirit", "Archery", "Spell", "Vitality", "Attack Speed", "Luck");
+			switch (.@select) {
+			case 1:
+				mes("[Thanatos Temporal]");
+				mes("Ok, vuelve cuando estés listo.");
+				close;
+			case 2:
+				.@enchant = .@enchant1st[.@select-2];
+				break;
+			case 3:
+				.@enchant = .@enchant1st[.@select-2];
+				break;
+			case 4:
+				.@enchant = .@enchant1st[.@select-2];
+				break;
+			case 5:
+				.@enchant = .@enchant1st[.@select-2];
+				break;
+			case 6:
+				.@enchant = .@enchant1st[.@select-2];
+				break;
+			case 7:
+				.@enchant = .@enchant1st[.@select-2];
+				break;
+			}
+		} else {
+			if (.@card3 == .@enchant1st[0] || .@card3 == .@enchant1st[1] || .@card3 == .@enchant1st[2] ||
+				.@card3 == .@enchant1st[3] || .@card3 == .@enchant1st[4] || .@card3 == .@enchant1st[5]) {
+				.@cost = .@enchant_cost[1];
+				.@scs = .@enchant_rate[1];
+				.@number = 2;
+			} else if (.@card3 == .@enchant2nd[0] || .@card3 == .@enchant2nd[1] || .@card3 == .@enchant2nd[2] ||
+				.@card3 == .@enchant2nd[3] || .@card3 == .@enchant2nd[4] || .@card3 == .@enchant2nd[5]) {
+				.@cost = .@enchant_cost[2];
+				.@scs = .@enchant_rate[2];
+				.@number = 3;
+			} else if (.@card3 == .@enchant3rd[0] || .@card3 == .@enchant3rd[1] || .@card3 == .@enchant3rd[2] ||
+				.@card3 == .@enchant3rd[3] || .@card3 == .@enchant3rd[4] || .@card3 == .@enchant3rd[5]) {
+				.@cost = .@enchant_cost[3];
+				.@scs = .@enchant_rate[3];
+				.@number = 4;
+			} else if (.@card3 == .@enchant4th[0] || .@card3 == .@enchant4th[1] || .@card3 == .@enchant4th[2] ||
+				.@card3 == .@enchant4th[3] || .@card3 == .@enchant4th[4] || .@card3 == .@enchant4th[5]) {
+				.@card2 = getequipcardid(.@part, 2);
+				.@cost = .@enchant_cost[4];
+				.@scs = .@enchant_rate[4];
+				if (.@card2 != 0) {
+					mes("[Thanatos Temporal]"); // Custom text
+					mes("Tus botas tienen el encantamiento máximo.");
+					mes("Por favor, trae unas botas nuevas si deseas tener un encantamiento.");
+					close;
+				}
+				// 3rd slot random enchanting
+				switch (.@card3) {
+				case Fighting_Spirit7:
+				case Expert_Archer4:
+				case Spell5:
+				case MHP2:
+				case Attack_Delay_4:
+				case Luck6:
+					.@enchant = callfunc("F_Rand", Bears_Power, Runaway_Magic, Speed_Of_Light, Muscle_Fool, Hawkeye, Lucky_Day);
+					mes("[Thanatos Temporal]"); // Custom text
+					mes("Vaya, ya tienes encantado al máximo tu 4to slot. Puedo encantar de manera especial el 3er slot de tus botas. Obviamente, con una cantidad de objetos...");
+					next;
+					mes("[Thanatos Temporal]");
+					mesf("Encantar ^0000FF%s^000000 3er slotp ara obtener encantamiento especial, requiere de ^FF0000%d^000000 ^0000FFThanatos Fragment^000000", .@equip_name$, .@cost);
+					next;
+					if (select("Salir", "¡Aplicar Encantamiento!") == 1) {
+						mes("[Thanatos Temporal]");
+						mes("Ok, vuelve cuando estés listo.");
+						close;
+					}
+					if (countitem(Thanato_Rune) < .@cost) {
+						mesf("Hmm, te faltan %s Thanatos Fragment. Ve a buscar más y podremos seguir hablando sobre más encantamientos.", .@cost - countitem(Thanato_Rune));
+						close;
+					}
+					if (.@random > .@scs) {
+						mes("Arrggg, he fallado. Mejor suerte la próxima vez.");
+						specialeffect2 EF_PHARMACY_FAIL; delitem Thanato_Rune, .@cost; delequip .@part;
+						close;
+					}
+					specialeffect2 EF_REPAIRWEAPON;
+					delitem Thanato_Rune, .@cost;
+					delequip .@part;
+					mes("[Thanatos Temporal]");
+					mes("¡Eso es! Hahaha... lo he conseguido. Realmente soy grandioso haciendo esto. Gracias por creer en mi.");
+					getitem2 .@equip_id, 1, 1, .@equip_refine, 0, .@card0, 0, .@enchant, .@card3;
+					close;
+				}
+			}
+			// 4th slot 2nd try enchanting
+			if (.@card3 == .@enchant1st[0])
+				.@enchant = .@enchant2nd[0];
+			else if (.@card3 == .@enchant1st[1])
+				.@enchant = .@enchant2nd[1];
+			else if (.@card3 == .@enchant1st[2])
+				.@enchant = .@enchant2nd[2];
+			else if (.@card3 == .@enchant1st[3])
+				.@enchant = .@enchant2nd[3];
+			else if (.@card3 == .@enchant1st[4])
+				.@enchant = .@enchant2nd[4];
+			else if (.@card3 == .@enchant1st[5])
+				.@enchant = .@enchant2nd[5];
+			// 4th slot 3rd try enchanting
+			if (.@card3 == .@enchant2nd[0])
+				.@enchant = .@enchant3rd[0];
+			else if (.@card3 == .@enchant2nd[1])
+				.@enchant = .@enchant3rd[1];
+			else if (.@card3 == .@enchant2nd[2])
+				.@enchant = .@enchant3rd[2];
+			else if (.@card3 == .@enchant2nd[3])
+				.@enchant = .@enchant3rd[3];
+			else if (.@card3 == .@enchant2nd[4])
+				.@enchant = .@enchant3rd[4];
+			else if (.@card3 == .@enchant2nd[5])
+				.@enchant = .@enchant3rd[5];
+			// 4th slot 4th try enchanting
+			if (.@card3 == .@enchant3rd[0])
+				.@enchant = .@enchant4th[0];
+			else if (.@card3 == .@enchant3rd[1])
+				.@enchant = .@enchant4th[1];
+			else if (.@card3 == .@enchant3rd[2])
+				.@enchant = .@enchant4th[2];
+			else if (.@card3 == .@enchant3rd[3])
+				.@enchant = .@enchant4th[3];
+			else if (.@card3 == .@enchant3rd[4])
+				.@enchant = .@enchant4th[4];
+			else if (.@card3 == .@enchant3rd[5])
+				.@enchant = .@enchant4th[5];
+			mes("[Thanatos Temporal]");
+			mesf("Encantando ^0000FF%s^000000 4ta ranura con efecto de nivel^0000FF%d^000000. Se necesitan ^FF0000%d^000000 ^0000FFThanatos Runes.^000000", .@equip_name$, .@number, .@cost);
+			next;
+			if (select("Salir", "¡Aplicar Encantamiento!") == 1) {
+				mes("[Thanatos Temporal]");
+				mes("Ok, vuelve cuando estés listo.");
+				close;
+			}
+			if (countitem(Thanato_Rune) < .@cost) {
+				mesf("Hmm, te faltan %d Thanatos Runes. Ve a buscar más y podremos hablar sobre encantar.", .@cost - countitem(Thanato_Rune));
+				close;
+			}
+			if (.@random > .@scs) {
+				mes("Arrggg, he fallado. Mejor suerte la próxima vez.");
+				specialeffect2 EF_PHARMACY_FAIL;
+				delitem Thanato_Rune, .@cost;
+				delequip .@part;
+				close;
+			}
+		}
+		break;
+	default:
+		mes("[Thanatos Temporal]");
+		mes("No estás usando las botas correctas. Recuerda, solo existen 6 tipos diferentes de estas botas.");
+		close;
+	}
+	mes("[Thanatos Temporal]");
+	if (countitem(Thanato_Rune) < .@cost) {
+		mesf("Hmm, te están faltando %d Thanatos Runes. Ve a buscar más para poder encantar.", .@cost - countitem(Thanato_Rune));
+		close;
+	}
+	if (.@random > .@scs) {
+		mes("Arrggg, he fallado. Mejor suerte la próxima vez.");
+		specialeffect2 EF_PHARMACY_FAIL;
+		delitem Thanato_Rune, .@cost;
+		delequip .@part;
+		close;
+	}
+	specialeffect2 EF_REPAIRWEAPON;
+	delitem Thanato_Rune, .@cost;
+	delequip .@part;
+	mesf("Agregando encantamiento número ^630000%d^000000.", .@number);
+	getitem2 .@equip_id, 1, 1, .@equip_refine, 0, .@card0, 0, 0, .@enchant;
+	close;
+}
+
+//====================
+// Temporal Boots
+//====================
+
+
+invek,191,101,4	script	Temporal Boots	4_M_UNCLEKNIGHT,{
+	disable_items;
+	mes("[Temporal Boots]"); // custom check
+	if (MaxWeight - Weight < 1000) {
+		mes("Tus bolsa está llena. Vuelve cuando la hayas liberado.");
+		close;
+	}
+	mes("Tengo la habilidad de transmutar los ^FF0000Thanatos Fragments^000000 en un par de botas que te resultarán muy útiles... las ^FF0000Temporal Boots^000000.");
+	next;
+	mes("[Temporal Boots]");
+	mes("¿Qué deseas hacer mi joven aventurero?");
+	next;
+	switch (select("Crear Temporal Boots", "Mejorar mis Temporal Boots")) {
+	case 1:
+		if (countitem(Thanato_Rune) > 0) {
+			mes("[Temporal Boots]");
+			mes("Aqui tienes tus Temporal Boots. Puedes evolucionar esas botas con solo 5 Thanatos Fragments.");
+			delitem Thanato_Rune, 1;
+			getitem Temporal_Boots, 1;
+			close;
+		}
+		mes("[Temporal Boots]");
+		mes("Requieres de más Thanatos Fragments. Vuelve cuando tengas mas Thanatos Fragments durante tu travesia en la Torre de Thanatos.");
+		close;
+	case 2:
+		.@part = EQI_SHOES;
+		if (!getequipisequiped(.@part)) {
+			mes("[Temporal Boots]");
+			mes("Debes tener equipadas tus ^0000FFTemporal Boots^000000 que deseas evlucionar..");
+			close;
+		}
+		if (!isequipped(Temporal_Boots)) { // check
+			mes("[Temporal Boots]");
+			mes("No llevas equipadas las Temporal Boots. Vuelve a hablar conmigo una vez que las tengas equipadas.");
+			close;
+		}
+		if (countitem(Thanato_Rune) < 5) {
+			mes("[Temporal Boots]");
+			mes("No tiene suficientes fragmentos. Debes tener ^FF00005 Thanatos Fragments^000000 para evolucionar tus botas.");
+			close;
+		}
+		mes("[Temporal Boots]");
+		mes("Puedes intercambiar ^0000FF1 Temporal Boots y  5 Thanatos Fragments^000000 por 1 de las siguienets botas. ^FF0000Botas refinadas, perderan su efecto.^000000.");
+		next;
+		setarray .@type$[0], "Strength", "Intelligence", "Agility", "Vitality", "Dexterity", "Luck";
+		setarray .@equip_type[0], Temporal_Str_Boots, Temporal_Int_Boots, Temporal_Agi_Boots, Temporal_Vit_Boots, Temporal_Dex_Boots, Temporal_Luk_Boots;
+		.@select = select("Cancel", "Str Boots", "Int Boots", "Agi Boots", "Vit Boots", "Dex Boots", "Luk Boots");
+		switch (.@select) {
+		case 1:
+			mes("[Temporal Boots]");
+			mes("Vuelve cuando quieras.");
+			close;
+		case 2:
+		case 3:
+		case 4:
+		case 5:
+		case 6:
+		case 7:
+			mes("[Temporal Boots]");
+			mesf("¿Estas seguro en obtener Temporal ^FF0000%s^000000 Boots? No realizo devoluciones.", .@type$[.@select-2]);
+			next;
+			if (select("Volver a pensarlo", "Si, estoy seguro.") == 2) {
+				mes("[Temporal Boots]");
+				mes("Las botas han sido evolucionadas según lo solicitado.");
+				delequip .@part;
+				delitem Thanato_Rune, 5;
+				getitem2 .@equip_type[.@select-2], 1, 1, 0, 0, 0, 0, 0, 0; // Temporal_Str_Boots, Temporal_Int_Boots, Temporal_Agi_Boots, Temporal_Vit_Boots, Temporal_Dex_Boots, Temporal_Luk_Boots
+				close;
+			}
+			mes("[Temporal Boots]");
+			mes("Ok, vuelve cuando quieras.");
+			close;
+		}
+	}
+}
+
+
+//===========================================
+// Slot Temporal Boots
+//===========================================
+
+invek,188,101,4	script	Thanatos Slot	4_M_JP_DARK_DARIUS,{
+	disable_items;
+	if (MaxWeight - Weight < 1000) {
+		mes("Tu bolsa es demasiado pesada. Reduce un poco de peso y vuelve.");
+		close;
+	}
+	mes("[Thanatos Slots T]");
+	mes("Ese Maestro Mágico siempre dice que las Botas Temporales encantadoras son las mejores. Pero, creo que puedo superar eso!");
+	next;
+	mes("[Thanatos Slots T]");
+	mes("Puedo intentar poner una ranura en tus botas. Pero hay algunos ^FF0000riesgo de fallar.^000000");
+	next;
+	mes("[Thanatos Slots T]");
+	mes("Debes conseguirme ^0000FF2 Dark Thanatos Fragments^000000 o ^0000FF5 Thanatos Fragments^000000 , y intentaré poner una ranura a tus Advanced Temporal Boots.");
+	next;
+	mes("[Thanatos Slots T]");
+	mes("Pero, ten en consideración que existe una ^FF0000posibilidad de fallar y romper las botas^000000. ¿De acuerdo?");
+	next;
+	if (select("Cancelar", "Tomar el riesgo") == 1) {
+		mes("[Thanatos Slots T]");
+		mes("Ok, vuelve cuando quieras.");
+		close;
+	}
+	.@part = EQI_SHOES;
+	if (!getequipisequiped(.@part)) {
+	mes("[Thanatos Slots T]");
+	mes("¿Estás seguro que tienes las botas equipadas?");
+	close;
+	}
+	.@equip_id = getequipid(.@part);
+	switch (.@equip_id) {
+	case Temporal_Str_Boots:
+	case Temporal_Int_Boots:
+	case Temporal_Agi_Boots:
+	case Temporal_Vit_Boots:
+	case Temporal_Dex_Boots:
+	case Temporal_Luk_Boots:
+		mes("[Thanatos Slots T]");
+		mes("The ^FF0000Si tus botas están encantadas o refinadas, serán reiniciadas.^000000\r"
+				"¿Aceptas este riesgo?");
+		next;
+		if (select("Cancelar", "¡Estoy de acuerdo!") == 1) {
+			mes("[Thanatos Slots T]");
+			mes("Ok, vuelve cuando quieras.");
+			close;
+		}
+		mes("[Thanatos Slots T]");
+		mes("Importante, ^FF0000Thanatos Temporal, no encantará ninguna bota que tenga slot.^000000\r"
+				"¿Deseas continuar?");
+		next;
+		if (select("Cancelar", "Comprendo. Proceder.") == 1) {
+			mes("[Thanatos Slots T]");
+			mes("Ok, vuelve cuando desees.");
+			close;
+		}
+		mes("[Thanatos Slots T]");
+		mes("Mi ultima pregunta:\r"
+				"¿Con qué fragmento me pagarás?");
+		next;
+		setarray .@slotpay[0], Dark_Thanatos_Rune, Thanato_Rune;
+		setarray .@slotcost[0], 2, 5;
+		setarray .@slotchance[0], 80, 55; // Custom rates
+		.@select = select("Cancel", "Dark Thanatos Fragments", "Thanatos Fragment");
+		switch (.@select) {
+		case 1:
+			mes("[Thanatos Slots T]");
+			mes("Vuelve cuando quieras.");
+			close;
+		case 2:
+		case 3:
+			.@item = .@slotpay[.@select-2];
+			.@cost = .@slotcost[.@select-2];
+			.@chance = .@slotchance[.@select-2];
+			if (countitem(.@item) < .@cost) {
+				mes("[Thanatos Slots T]");
+				mesf("Requiere ^FF0000%d^000000 ^0000FF%s^000000.", .@cost, getitemname(.@item));
+				close;
+			}
+		}
+		.@random = rand(1, 100);
+		if (.@random > .@chance) {
+			mes("[Thanatos Slots T]");
+			mes("Arrggg, he fallado. Mejor suerte la próxima vez.");
+			specialeffect2 EF_PHARMACY_FAIL;
+			delitem .@item, .@cost;
+			delequip .@part;
+			close;
+		}
+		mes("[Thanatos Slots T]");
+		mesf("Yuhuu~ ha sido un éxito. Aqui vamos... Una ranura ha sido puesta en tus ^FF0000%s^000000. Gracias por creer en mi.", getitemname(.@equip_id));
+		delitem .@item, .@cost;
+		specialeffect2 EF_PHARMACY_OK;
+		delequip .@part;
+		// todo: read aegis name and attach "_" to worn constant
+		if (.@equip_id == Temporal_Str_Boots) {
+			getitem2 Temporal_Str_Boots_, 1, 1, 0, 0, 0, 0, 0, 0;
+		} else if (.@equip_id == Temporal_Int_Boots) {
+			getitem2 Temporal_Int_Boots_, 1, 1, 0, 0, 0, 0, 0, 0;
+		} else if (.@equip_id == Temporal_Agi_Boots) {
+			getitem2 Temporal_Agi_Boots_, 1, 1, 0, 0, 0, 0, .0, 0;
+		} else if (.@equip_id == Temporal_Vit_Boots) {
+			getitem2 Temporal_Vit_Boots_, 1, 1, 0, 0, 0, 0, 0, 0;
+		} else if (.@equip_id == Temporal_Dex_Boots) {
+			getitem2 Temporal_Dex_Boots_, 1, 1, 0, 0, 0, 0, 0, 0;
+		} else if (.@equip_id == Temporal_Luk_Boots) {
+			getitem2 Temporal_Luk_Boots_, 1, 1, 0, 0, 0, 0, 0, 0;
+		}
+		close;
+	default:
+		mes("[Thanatos Slots T]");
+		mes("¡Estas botas no son! Necesito unas ^FF0000Advanced Temporal Boots^000000! Las botas ^0000FFque tienen efectos y no tienen ranuras^000000!");
+		close;
+	}
+}

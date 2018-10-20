@@ -1,0 +1,194 @@
+// -----------------------------------------------
+// -- Panda Script Collections --
+// -- Monster Geffen Tower Race --
+// -----------------------------------------------
+// -- Novice Only Edition --
+// -----------------------------------------------
+// Version I - Initial Release
+// Version II - Added GM commands to control event
+// -----------------------------------------------
+
+-	script	Geffen_Race#main	-1,{
+
+OnGMStart:
+	if(getgmlevel() < 99){ end; }
+	if(( compare(.@atcmd_parameters$[0], "stop"))){ set .event_stop,1; doevent "Geffen_Race#main::OnTimeUp"; end; } 
+	if(.event_start == 1){ dispbottom "Geffen Race is currently on-going."; }
+	if ((compare(.@atcmd_parameters$[0], "start"))){ donpcevent "Geffen_Race#main::OnEventStart"; end; }
+end;
+
+OnMinute45: //event starts every 45 minutes
+	if(.event_start == 1) end; //if event is still running, event will not start
+OnEventStart:
+	set .winner,3;
+	set .event_start,1;
+	donpcevent "Geffen_Race#time::OnEventStart";
+	end;
+
+OnMonsterSummon:
+	//First Floor Mobs
+	monster "gef_tower",52,169,"Novice Hunter",2466,7,strnpcinfo(0)+"::OnMobKill"; //First Floor
+	monster	"gef_tower",66,168,"Novice Hunter",2466,5,strnpcinfo(0)+"::OnMobKill"; //First Floor
+	monster "gef_tower",33,148,"Novice Hunter",2466,5,strnpcinfo(0)+"::OnMobKill"; //First Floor
+
+	//Hydro
+	monster	"gef_tower",52,97,"Novice Hunter",1813,2,strnpcinfo(0)+"::OnMobKill"; //Second Floor
+	monster "gef_tower",52,44,"Novice Hunter",1813,1,strnpcinfo(0)+"::OnMobKill"; //Third Floor
+	monster "gef_tower",113,154,"Novice Hunter",1813,1,strnpcinfo(0)+"::OnMobKill"; //Fourth Floor
+	monster "gef_tower",112,171,"Novice Hunter",1813,1,strnpcinfo(0)+"::OnMobKill"; //Fourth Floor
+	monster "gef_tower",112,103,"Novice Hunter",1813,2,strnpcinfo(0)+"::OnMobKill"; //Fifth Floor
+	monster "gef_tower",111,64,"Novice Hunter",1813,2,strnpcinfo(0)+"::OnMobKill"; //Sixth Floor
+	
+	//Valkyrie
+	monster "gef_tower",52,97,"Novice Hunter",1765,2,strnpcinfo(0)+"::OnMobKill"; //Second Floor
+	monster "gef_tower",52,44,"Novice Hunter",1765,2,strnpcinfo(0)+"::OnMobKill"; //Third Floor
+	monster "gef_tower",113,154,"Novice Hunter",1765,1,strnpcinfo(0)+"::OnMobKill"; //Fourth Floor
+	monster "gef_tower",112,171,"Novice Hunter",1765,1,strnpcinfo(0)+"::OnMobKill"; //Fourth Floor
+	monster "gef_tower",112,122,"Novice Hunter",1765,2,strnpcinfo(0)+"::OnMobKill"; //Fifth Floor
+	monster "gef_tower",111,73,"Novice Hunter",1765,2,strnpcinfo(0)+"::OnMobKill"; //Sixth Floor
+	
+	sleep 5000;
+	enablenpc "Geffen Race Reward";
+	end;
+	
+OnMobKill:
+	end;
+	
+OnTimeUp:
+	if(.event_start == 0){
+		dispbottom "Geffen Tower Race have not started. No event to stop.";
+		end;
+	}
+	if(.event_stop == 1){
+		announce "Geffen Race has been cancelled.",0;
+		stopnpctimer;
+		set .event_stop, 0;
+		set .winner,0;
+		killmonster "geffen","All";
+		removemapflag "gef_tower",mf_noitemconsumption;
+		end;
+	}
+	set .winner,0;
+	set .event_start,0;
+	disablenpc "Geffen Race Reward";
+	announce "Geffen Race has ended.",0;
+	killmonster "gef_tower","All";
+	removemapflag "gef_tower",mf_noitemconsumption;
+	end;
+	
+OnEventReward:
+	set .@winner$, getvariableofnpc(.winner$,"Geffen Race Reward");
+	if(.winner == 3){
+		set .winner,2;
+		announce .@winner$+" won first place in the Geffen Tower Race",0;
+		set .@reward,rand(getarraysize(.reward));
+		getitem .reward[.@reward],1;
+		warp "SavePoint",0,0;
+		end;
+	}
+	if(.winner == 2){
+		set .winner,1;
+		announce .@winner$+" won second place in the Geffen Tower Race",0;
+		set .@reward,rand(getarraysize(.reward));
+		getitem .reward[.@reward],1;
+		warp "SavePoint",0,0;
+		end;
+	}
+	if(.winner == 1){
+		set .winner,0;
+		announce .@winner$+" won third place in the Geffen Tower Race",0;
+		set .@reward,rand(getarraysize(.reward));
+		getitem .reward[.@reward],1;
+		disablenpc "Geffen Race Reward";
+		set .event_start,0;
+		sleep 2000;
+		announce "The Geffen Tower Race has ended!",0;
+		warp "SavePoint",0,0;
+		end;
+	}
+end;
+		
+OnInit:
+	setarray .reward,501,502,503,504,505; //reward here
+	
+	//don't touch anything
+	set .winner,0;
+	set .event_start,0;
+	bindatcmd "race",strnpcinfo(0)+"::OnGMStart";
+	disablenpc "Geffen Race Reward";
+	end;
+	
+}
+
+-	script	Geffen_Race#time	-1,{
+
+OnEventStart:
+	
+	announce "Geffen Tower Race will begin in 5 minutes.",0;
+	initnpctimer;
+	end;
+
+OnTimer60000:
+	
+	announce "Geffen Tower Race will begin in 4 minutes.",0;
+	end;
+
+OnTimer120000:
+	
+	announce "Geffen Tower Race will begin in 3 minutes.",0;
+	end;
+	
+OnTimer180000:
+	
+	announce "Geffen Tower Race will begin in 2 minutes.",0;
+	sleep 2000;
+	announce "Please prepare your novices.",0;
+	end;
+	
+OnTimer240000:
+	
+	announce "Geffen Tower Race will begin in 1 minute.",0;
+	sleep 2000;
+	announce "Please proceed to Geffen to join.",0;
+	end;
+
+	
+OnTimer300000:
+	
+	announce "Geffen Tower Race has begun!",0;
+	sleep 2000;
+	announce "Reach the top to claim the rewards!",0;
+	sleep 2000;
+	announce "Only novices can claim the prize, consumables have been disabled.",0;
+	setmapflag "gef_tower",mf_noitemconsumption;
+	mapwarp "gef_tower","geffen",119,100;
+	donpcevent "Geffen_Race#main::OnMonsterSummon";
+	end;
+	
+OnTimer7200000: //Time Limit (2 hours)
+//OnTimer310000: 
+
+	announce "Nobody has won the Geffen Tower Race",0;
+	stopnpctimer;
+	donpcevent "Geffen_Race#main::OnTimeUp";
+	end;
+
+
+}
+
+gef_tower,109,22,4	script	Geffen Race Reward	123,{
+	if(class != 0){
+		mes "[ Rewarder ]";
+		mes "You're not a novice!";
+		close2;
+		warp "SavePoint",0,0;
+		end;
+	}
+	mes "[ Rewarder ]";
+	mes "Congratulations!";
+	set .winner$,strcharinfo(0);
+	close2;
+	doevent "Geffen_Race#main::OnEventReward";
+	end;
+	
+}

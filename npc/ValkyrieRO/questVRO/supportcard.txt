@@ -1,0 +1,91 @@
+//===== Script eAthena ======================================= 
+//= Support Quest
+//===== por: ================================================== 
+//= Creador de Quests Ragnarok World
+//= v1.0
+//===== Compatible Con: ===================================== 
+//= eAthena SVN
+//===== Descripción: ========================================= 
+//  Quest Creada por el Script Creador de Quests Online de
+//  http://www.ragnarokworld.net
+//============================================================ 
+
+pvp_valk,170,287,5	script	Support Card	54,{
+ 	set @NPCName$, "[^ffff66Support^000000]";
+	mes @NPCName$;
+	mes "???aki esta la card support podra darte resistencia contra atakes con thanatos card";
+	next;
+	mes @NPCName$;
+	mes "Quieres Obtener este Item?";
+	next;
+	switch(select("Si:No:Cancelar")) {
+ 	case 1:
+	mes @NPCName$;
+	mes "Estos son Los Items Necesarios.";
+	mes "  ^ff0066Skeletal Armor Piece^000000 [1]";
+	mes "  ^ff0066Dark Crystal Fragment^000000 [450]";
+	mes "  ^ff0066Dark Mask^000000 [200]";
+	mes "  ^ff0066Kiel Card^000000 [1]";
+	mes "  ^ff0066Gemstone^000000 [1]";
+	mes "  ^ff0066Gold^000000 [10000]";
+	next;
+	if (countitem(7450) < 1) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(7315) < 450) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(7157) < 200) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(4403) < 1) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(7300) < 1) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(969) < 10000) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	mes @NPCName$;
+	mes "Bien! Tienes todos los Items! Felicidades !";
+	mes "el Objeto es Tuyo";
+	delitem 7450,1;
+	delitem 7315,450;
+	delitem 7157,200;
+	delitem 4403,1;
+	delitem 7300,1;
+	delitem 969,10000;
+	getitem 30001,1;
+	close;
+	case 2:
+	mes @NPCName$;
+	mes "de acuerdo, vuelve pronto !";
+	close;
+	case 3:
+	close;
+	}
+
+}
+
+//============================================================
+//===== Creador de Quests Ragnarok World ===========================
+//============================================================

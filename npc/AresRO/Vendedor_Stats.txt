@@ -1,0 +1,119 @@
+//===== eAthena Script =======================================
+//= Stats Seller (Vendedor de Stats) 
+//===== By: =========================
+//= Kutt Katrea (kg.designer@gmail.com)
+//===== Current Version: ===================
+//= 1.1
+//===== Compatible With: =====================
+//= eAthena SVN
+//===== Description: ============================================
+//= Un vendedor de puntos.
+//= Vende puntos de stat y de skill a un precio configurable
+//= Solo vende a Jobs Avanzados
+//= Solo vende si con la compra, no se supera un limite de 
+//= skill points ó Stat Points configurable
+//===== Additional Comments: ==========================================
+//= [20-Julio-2007] V1.0 Primer lanzamiento.
+//= [04-Agosto-2007] V1.1
+//= Agregado el Super Novice a la lista de Jobs que pueden comprar puntos
+//=====================================================================
+
+prontera.gat,149,192,5	script	Vendedor de Stats::stats_seller	897,{
+set	@showname$,"^ff0000[Vendedor de Stats]^000000";
+set	@skillcost,100000;	//Precio de los puntos de skill
+set	@skillpoints,10;	//Cantidad de puntos de skill a vender
+set	@skilllimit,99;		//Máximo de Puntos de Skill que permite tener
+set	@statcost,1700000;	//Precio de los puntos de stat
+set	@statpoints,10000;	//Cantidad de puntos de stat a vender
+set	@statlimit,50000;	//Máximo de puntos de stat que permite tener
+
+mes	@showname$;
+mes	"Saludos, yo te puedo vender puntos de Stats y Skill si eres digno de recibirlos.";
+next;
+
+if	(
+	(Class>=Job_Knight&&Class<=Job_Crusader2)||
+	(Class>=Job_SuperNovice&&Class<=Ninja)||
+	(Class>=Job_Lord_Knight&&Class<=Job_Paladin2)||
+	(Class>=Job_Baby_Knight&&Class<=Job_Super_Baby)||
+	(Class>=Job_Star_Gladiator&&Class<=Job_Soul_Linker)||
+	Class==Job_Gunslinger||Class==Job_Ninja||Class==Job_SuperNovice)	goto Lisupper;
+	
+mes	@showname$;
+mes	"Vuelve cuando tengas mas poder, quieres?";
+close;
+
+Lisupper:
+mes	@showname$;
+mes	"Veo que eres un guerrero de gran poder.";
+mes	"Esta bien, eres digno de recibir mis servicios.";
+mes	"Que deseas comprar?";
+next;
+
+menu
+	"Puntos de Stat",Lstat,
+	"Puntos de Skill",-,
+	"Ninguno",Lnocompra;
+
+mes	@showname$;
+mes	"Tengo un paquete de "+@skillpoints+" puntos de Skill por solo "+@skillcost+" Zeny";
+mes	"Lo quieres?";
+next;
+
+menu
+	"Si",-,
+	"No",Lnocompra;
+
+if	(SkillPoint > @skilllimit)	goto Ltoomuchskpoints;
+if (Zeny < @skillcost)	goto Lnozeny;
+set	Zeny,Zeny-@skillcost;
+set	SkillPoint,SkillPoint+@skillpoints;
+goto Lsuccess;
+
+Lstat:
+mes	@showname$;
+mes	"Tengo un paquete de "+@statpoints+" puntos de Stat por solo "+@statcost+" Zeny";
+mes	"Lo quieres?";
+next;
+
+menu
+	"Si",-,
+	"No",Lnocompra;
+
+if	(StatusPoint > @statlimit)	goto Ltoomuchstatpoints;
+if (Zeny < @statcost)	goto Lnozeny;
+set	Zeny,Zeny-@statcost;
+set	StatusPoint,StatusPoint+@statpoints;
+goto Lsuccess;
+
+Lsuccess:
+mes	@showname$;
+mes	"Ahi tienes";
+next;
+
+mes	@showname$;
+mes	"Ha sido un gusto hacer negocios contigo";
+emotion	e_gg;
+close;
+
+Ltoomuchskpoints:
+mes	@showname$;
+mes	"Ya tienes demasiados puntos de skill. Vuelve cuando hayas gastado algunos.";
+close;
+
+Ltoomuchstatpoints:
+mes	@showname$;
+mes	"Ya tienes demasiados puntos de stats. Vuelve cuando hayas gastado algunos.";
+close;
+
+Lnozeny:
+mes	@showname$;
+mes	"No tienes suficiente Zeny para pagarme.";
+close;
+
+Lnocompra:
+mes	@showname$;
+mes	"Aqui estare, por si cambias de opinion";
+close;
+}
+

@@ -1,0 +1,148 @@
+
+prontera,165,168,3	script	GM List	861,{
+	function get_GM_Title;
+	function get_GM_State;
+	
+	cutin "kafra_09",2;
+	
+	.@size = query_sql( "SELECT `char`.`account_id`,`char`.`char_id`,`char`.`name`,`login`.`lastlogin`,TIMEDIFF( NOW(),`login`.`lastlogin` ),`login`.`group_id` FROM `char` INNER JOIN `login` ON `char`.`account_id` = `login`.`account_id` WHERE `group_id` > "+.min_group_id+" ORDER BY `char`.`online` DESC, `login`.`group_id` DESC LIMIT 10",.@aid,.@cid,.@name$,.@lastlogin$,.@lastlogin_duration$,.@group_id );
+
+	mes "There are total ^FF0000"+.@size+"^000000 GM(s)";
+	while ( .@i < .@size ) {
+		mes get_GM_Title( .@name$[.@i],.@group_id[.@i] )+" - "+get_GM_State( .@aid[.@i],.@cid[.@i],.@name$[.@i] );
+		mes "Last Seen: ^777777"+.@lastlogin_duration$[.@i]+" hours ago^000000";
+		mes "Last Login: ^777777"+.@lastlogin$[.@i]+"^000000";
+		mes " ";
+		.@i++;
+	}
+	close2;
+	cutin "",255;
+	end;
+	
+	OnInit:
+		.min_group_id = 1;
+		.afk_second = 300;
+		end;
+
+	function	get_GM_Title	{
+		switch ( getarg( 1,0 ) ) {
+			default: .@title$ = "";
+			case 1: .@title$ = "(Super Player)";
+			case 2: .@title$ = "(Support)";
+			case 3: .@title$ = "(Script Manager)";
+			case 4: .@title$ = "(Event Manager)";
+			case 10: .@title$ = "(Law Enforcement)";
+			case 99: .@title$ = "(Admin)";
+		}
+		
+		return .@title$ + " " +  getarg( 0,"NULL" );
+	}
+	
+	function	get_GM_State	{
+		.@aid = getarg( 0,0 );
+		.@cid = getarg( 1,0 );
+		.@name$ = getarg( 2,"NULL" );
+		
+		if ( isloggedin( .@aid,.@cid ) ) {
+		
+			.@idle = checkidle( .@name$ );
+			
+			if ( .@idle >= .afk_second && .afk_second ) {
+				.@state$ = "AFK/Away";
+			}
+			else {
+				.@state$ = "Online";
+			}
+		}
+		else {
+			.@state$ = "Offline";
+		}
+		
+		return .@state$;
+	}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-	script	announceer-script	-1,{
+
+OnHour0300:
+OnHour0600:
+OnHour0900:
+OnHour1200:
+	set $@ran, rand(1,8);
+	if ($@ran == 8) set .Map$,"hugel";
+	if ($@ran == 7) set .Map$,"xmas";
+	if ($@ran == 6) set .Map$,"aldebaran";
+	if ($@ran == 5) set .Map$,"izlude";
+	if ($@ran == 4) set .Map$,"payon";
+	if ($@ran == 3) set .Map$,"geffen";
+	if ($@ran == 2) set .Map$,"morocc";
+	if ($@ran == 1) set .Map$,"prontera";
+	sleep2 1000;
+	set $@ran2, rand(1,30);
+	if ($@ran == 44) set .MVPID,"1658";
+	if ($@ran == 43) set .MVPID,"1648";
+	if ($@ran == 42) set .MVPID,"1751";
+	if ($@ran == 41) set .MVPID,"1312";
+	if ($@ran == 40) set .MVPID,"1708";
+	if ($@ran == 39) set .MVPID,"1583";
+	if ($@ran == 38) set .MVPID,"1650";
+	if ($@ran == 37) set .MVPID,"1623";
+	if ($@ran == 36) set .MVPID,"1159";
+	if ($@ran == 35) set .MVPID,"1157";
+	if ($@ran == 34) set .MVPID,"1038";
+	if ($@ran == 33) set .MVPID,"1190";
+	if ($@ran == 32) set .MVPID,"1087";
+	if ($@ran == 31) set .MVPID,"1150";
+	if ($@ran == 30) set .MVPID,"1059";
+	if ($@ran == 29) set .MVPID,"1147";
+	if ($@ran == 28) set .MVPID,"1373";
+	if ($@ran == 27) set .MVPID,"1646";
+	if ($@ran == 26) set .MVPID,"1688";
+	if ($@ran == 25) set .MVPID,"1779";
+	if ($@ran == 24) set .MVPID,"1251";
+	if ($@ran == 23) set .MVPID,"1734";
+	if ($@ran == 22) set .MVPID,"1492";
+	if ($@ran == 21) set .MVPID,"1832";
+	if ($@ran == 20) set .MVPID,"1651";
+	if ($@ran == 19) set .MVPID,"1649";
+	if ($@ran == 18) set .MVPID,"1885";
+	if ($@ran == 17) set .MVPID,"1086";
+	if ($@ran == 16) set .MVPID,"1768";
+	if ($@ran == 15) set .MVPID,"1252";
+	if ($@ran == 14) set .MVPID,"1871";
+	if ($@ran == 13) set .MVPID,"1418";
+	if ($@ran == 12) set .MVPID,"1115";
+	if ($@ran == 11) set .MVPID,"1112";
+	if ($@ran == 10) set .MVPID,"1389";
+	if ($@ran == 9) set .MVPID,"1046";
+	if ($@ran == 8) set .MVPID,"1511";
+	if ($@ran == 7) set .MVPID,"1647";
+	if ($@ran == 6) set .MVPID,"1785";
+	if ($@ran == 5) set .MVPID,"1630";
+	if ($@ran == 4) set .MVPID,"1039";
+	if ($@ran == 3) set .MVPID,"1874";
+	if ($@ran == 2) set .MVPID,"1272";
+	if ($@ran == 1) set .MVPID,"1719";
+	sleep2 1000;
+	announce "MVP Event : The MVP "+getmonsterinfo(0),.MVPID+" has spawned in "+ .Map$ +"!",0;
+	sleep2 1000;
+	monster .Map$,0,0,"MVP Event",.MVPID,1,"randommvpspawn::OnMobKilled";
+	end;
+OnMobKilled:
+	mapannounce .Map$,"MVP Event : The MVP got killed!",0;
+	end;
+}

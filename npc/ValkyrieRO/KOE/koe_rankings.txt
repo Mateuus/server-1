@@ -1,0 +1,49 @@
+arena,62,62,4	script	KOE RANKING	837,{
+	mes "[ ^FF0000KOE TOP KILLER^000000]";
+	
+	if (.@size = getarraysize( $topKOE_name$ )){
+		for ( .@i = 0; .@i < .@size; .@i++ )
+			mes "Top "+( .@i +1 )+". ^0000FF"+ $topKOE_name$[.@i] +" ^000000: ^FF0000["+ $topKOE_points[.@i] +" Kills]^000000.";
+	}else{
+			mes "The king of Emperium no está iniciado.";
+	}
+	close;
+	
+OnPCKillEvent:
+	if (!getmapflag(strcharinfo(3), guild_vs1)) end;
+	topKOE_points++;
+	.@i = 0;
+	
+	while(.@i < .ladderlength){
+		if(topKOE_points > $topKOE_points[.@i]){
+			if( $topKOE_name$[.@i] == strcharinfo(0) ) {
+				$topKOE_points[.@i] = topKOE_points;
+				break;
+			}else if( .@i == .ladderlength - 1 ){
+				$topKOE_points[.@i] = topKOE_points;
+				$topKOE_name$[.@i] = strcharinfo(0);
+				break;
+			}
+			
+			
+			.@K = .@i +1 ;
+			while ( $topKOE_name$[.@K] != strcharinfo(0) && .@K < .ladderlength ) .@K++;
+			if ( .@K < .ladderlength )
+				.@moveamount = .@K - .@i;
+			else 
+				.@moveamount = .ladderlength - 1 - .@i; 
+			copyarray $topKOE_points[.@i +1], $topKOE_points[.@i], .@moveamount;
+			copyarray $topKOE_name$[.@i +1], $topKOE_name$[.@i], .@moveamount;
+			$topKOE_points[.@i] = topKOE_points;
+			$topKOE_name$[.@i] = strcharinfo(0);
+			break;
+		}
+		.@i++;
+	}
+	end;
+	
+	OnInit:
+		.ladderlength = 20; //SET HOW MANY PLAYERS ON THE LADDER
+		waitingroom "[KOE RANKINGS]",0;
+	end;
+}

@@ -1,0 +1,104 @@
+// Modificado por Helly para que solo los terceros jobs puedan utilizarlo y no causar errores a los usuarios o gm
+invek,136,147,5	script	Modista#sc	4_F_SHALOSH,{
+function HasjROCostume;
+function ChangeAppr;
+
+function HasjROCostume {
+	switch(roclass(eaclass()&EAJ_UPPERMASK|EAJL_THIRD)) {
+		case Job_Guillotine_Cross:
+		case Job_Genetic:
+		case Job_Royal_Guard:
+		case Job_Arch_Bishop:
+		case Job_Mechanic:
+		case Job_Rune_Knight:
+		case Job_Ranger:
+		case Job_Warlock:
+		case Job_Minstrel:
+		case Job_Wanderer:
+			return 1;
+		default:
+			return 0;
+	}
+}
+
+function ChangeAppr {
+	if(Zeny < .cost) {
+		mes .n$;
+		mes "No tienes el dinero suficiente.";
+		mes "El Costo del servicio es de "+.cost+"z";
+		cutin "",255;
+		close;
+	}
+	switch(getarg(1)){
+		case 0: // Normal Mode
+			setlook LOOK_BODY2,0;
+			changebase getarg(0);
+			break;
+		case 1: // jRO Mode
+			if(!HasjROCostume()) return;
+			changebase roclass(eaclass()|EAJL_THIRD);
+			setlook LOOK_BODY2,!getlook(LOOK_BODY2);
+			break;
+	}
+	Zeny -= .cost;
+	mes .n$;
+	mes "Aquí tienes.";
+	cutin "",255;
+	close;
+}
+
+// Inicio Script
+	.@TYPE_CHANGEBASE = 0;
+	.@TYPE_SETLOOK = 1;
+	.@eac = eaclass();
+// Verificación tercera Clase
+if (.@eac&EAJL_2){
+	goto 2daClase;
+	}
+	mes .n$;
+	mes "Lamentablemente este servicio es exclusivo para la Segunda Clase de Jobs.";
+	close;
+
+2daClase:
+		cutin "shaloshi01",2;
+	mes .n$;
+	mes "Hola, tengo la habilidad de cambiar de apariencia tu imagen.";
+	mes "Solo necesito la suma de ^FF0000" + callfunc("F_InsertComma",.cost) + "z!^000000";
+	mes "Con esto cubrire los costos de los materiales.";
+	next;
+	mes .n$;
+	mes "Debes tener presente, que este traje solo durara mientras permanezcas conectado!.";
+	mes "Si relogueas o te sales, volverás a la normalidad.";
+	mes "Esto es una manera preventiva.";
+
+	if(HasjROCostume()){
+		next;
+		mes .n$;
+		mes "Hey!.";
+		mes "Tengo un nuevo traje para tu clase.";
+	}
+	mes "¿A que clase deseas cambiar?";
+	next;
+	switch(select(jobname(roclass(eaclass()&EAJ_UPPERMASK)),jobname(roclass(eaclass()&EAJ_UPPERMASK|EAJL_UPPER)),jobname(roclass(eaclass()|EAJL_THIRD)),HasjROCostume() ? getlook(LOOK_BODY2) ? "Usar ropas clásicas." : "Usar ropa alternativa 3era Clase." : "")) {
+		case 1:
+			ChangeAppr(roclass(eaclass()&EAJ_UPPERMASK),.@TYPE_CHANGEBASE);
+			break;
+		case 2:
+			ChangeAppr(roclass(eaclass()&EAJ_UPPERMASK|EAJL_UPPER),.@TYPE_CHANGEBASE);
+			break;
+		case 3:
+			ChangeAppr(roclass(eaclass()|EAJL_THIRD),.@TYPE_CHANGEBASE);
+			break;
+		case 4:
+			mes "Este servicio es Premium.";
+			mes "Se activará durante los próximos días.";
+			close;
+			//ChangeAppr(0,.@TYPE_SETLOOK);
+			//break;
+	}
+	close;
+// Costo del cambio, adaptalo a tu gusto, recuerda que solo las ropas 3er Job se mantienen, las otras se salen al reloguear
+OnInit:
+	.n$ = "[ ^0101DFModista^000000 ]"; // NPC Name
+	.cost = 5000000; // Cost
+}

@@ -1,0 +1,381 @@
+//===== eAthena Script =======================================================================
+//= NPC 
+//===== By: =================================================================================
+//= 
+//===== Current Version: ======================================================================
+//= 1.3.1
+//==========================================================================================
+
+poring_w02,84,92,5	script	Refined Headgers and Wings	845,{
+
+set @npcname$,"^0000FF[^000000^FF0000Emedy^000000^0000FF]^000000";
+mes @npcname$;
+mes "Hola! ^5555FF" + strcharinfo(0) + "^000000!";
+mes "Mi Nombre es ^5555FF" + @npcname$ + "^000000!";
+mes "Estoy aqui para poder brindarte";
+mes "Algunos Headgers y Wings que te podran dar algunos beneficios";
+next;
+
+mes "[^0065DFEmedy^000000]";
+mes "¿Que Headger te gustaria refinar?,";
+menu "Blue Fairy Wings",New_Blue_Fairy_Wings,"Cyan Fairy Wings",New_Cyan_Fairy_Wings,"Purple Fairy Wings",New_Purple_Fairy_Wings,"Red Fairy Wings",New_Red_Fairy_Wings,"White Fairy Wings",New_White_Fairy_Wings,"HighDamon wings",HighDamon_W,"blood death valk",blood_death_valk,"Black death valk",yy_death_valk,"yy death wings",yy_death_wings,"Ninguno",ref8;
+
+New_Blue_Fairy_Wings:
+mes "[^0065DFEmedy^000000]";
+mes "Necesitas traerme los siguientes items...";
+next;
+mes "500 Ice Cubic";
+mes "500 Feather";
+mes "500 Soft Feather";
+mes "1 Stormy Knight";
+mes "1 Angeling Hat";
+mes "10 Aron Cheques";
+next;
+
+mes "Ya tienes todos los items?";
+menu "Si.",ref1,"No tengo nada.",ref2;
+
+ref1:
+mes "Ok,Dejame revisar tu Inventario";
+if((countitem(949)<500))goto falta;
+if((countitem(7063)<500))goto falta;
+if((countitem(1251)<1))goto falta;
+if((countitem(7066)<500))goto falta;
+if((countitem(5132)<1))goto falta;
+if((countitem(7160)<10))goto falta;
+mes "Bien, si tienes todo lo necesario...";
+next;
+
+mes "[^0065DFEmedy2^000000]";
+mes "Procederemos";
+delitem 949,500;
+delitem 7063,500;
+delitem 1251,1;
+delitem 7066,500;
+delitem 5132,1;
+delitem 7160,10;
+getitem 29021,1;
+mes "Muy bien!! Ahi tienes tu Wings";
+close;
+
+New_Cyan_Fairy_Wings:
+mes "[^0065DFEmedy2^000000]";
+mes "Necesitas traerme los siguientes items...";
+next;
+mes "Feather Beret";
+mes "500 Live Coal";
+mes "500 Horn";
+mes "1 Lady Tanee Card";
+mes "1 Angeling Hat";
+mes "10 Aron Cheques";
+next;
+
+mes "Ya tienes todos los items?";
+menu "Si.",ref3,"No tengo nada.",ref2;
+
+ref3:
+mes "Ok,Dejame revisar tu Inventario";
+if((countitem(7098)<500))goto falta;
+if((countitem(947)<500))goto falta;
+if((countitem(4376)<1))goto falta;
+if((countitem(5170)<1))goto falta;
+if((countitem(5132)<1))goto falta;
+if((countitem(7160)<10))goto falta;
+mes "Bien, si tienes todo lo necesario...";
+next;
+
+mes "[^0065DFEmedy^000000]";
+mes "Procederemos";
+delitem 7098,500;
+delitem 947,500;
+delitem 4376,1;
+delitem 5170,1;
+delitem 5132,1;
+delitem 7160,10;
+getitem 29022,1;
+mes "Muy bien!! Ahi tienes tu Wing";
+close;
+
+New_Purple_Fairy_Wings:
+mes "[^0065DFEmedy^000000]";
+mes "Necesitas traerme los siguientes items...";
+next;
+mes "30 Citrin";
+mes "500 Evil Horn";
+mes "500 Black Hair";
+mes "1 Dark Illusion Card";
+mes "1 Angeling Hat";
+mes "10 Aron Cheques";
+next;
+
+mes "Ya tienes todos los items?";
+menu "Si.",ref4,"No tengo nada.",ref2;
+
+ref4:
+mes "Ok,Dejame revisar tu Inventario";
+if((countitem(923)<500))goto falta;
+if((countitem(1020)<500))goto falta;
+if((countitem(4169)<1))goto falta;
+if((countitem(7295)<30))goto falta;
+if((countitem(5132)<1))goto falta;
+if((countitem(7160)<10))goto falta;
+mes "Bien, si tienes todo lo necesario...";
+next;
+
+mes "[^0065DFEmedy^000000]";
+mes "Procederemos";
+delitem 923,500;
+delitem 1020,500;
+delitem 4169,1;
+delitem 7295,30;
+delitem 5132,1;
+delitem 7160,10;
+getitem 29025,1;
+mes "Muy bien!! Ahi tienes tu Wing";
+close;
+
+New_Red_Fairy_Wings:
+mes "[^0065DFEmedy^000000]";
+mes "Necesitas traerme los siguientes items...";
+next;
+mes "500 Burning Hair";
+mes "500 Treasure Box";
+mes "500 Red tinted Feather";
+mes "1 Ifrit Card";
+mes "1 angeling Hat";
+mes "10 Aron Cheques";
+next;
+
+mes "Ya tienes todos los items?";
+menu "Si.",ref5,"No tengo nada.",ref2;
+
+ref5:
+mes "Ok,Dejame revisar tu Inventario";
+if((countitem(7444)<500))goto falta;
+if((countitem(7440)<500))goto falta;
+if((countitem(4430)<1))goto falta;
+if((countitem(7122)<500))goto falta;
+if((countitem(5132)<1))goto falta;
+if((countitem(7160)<10))goto falta;
+mes "Bien, si tienes todo lo necesario...";
+next;
+
+mes "[^0065DFEmedy^000000]";
+mes "Procederemos";
+delitem 7444,500;
+delitem 7440,500;
+delitem 4430,1;
+delitem 7122,500;
+delitem 5132,1;
+delitem 7160,3;
+getitem 20096,1;
+mes "Muy bien!! Ahi tienes tu Wings";
+close;
+
+New_White_Fairy_Wings:
+mes "[^0065DFEmedy^000000]";
+mes "Necesitas traerme los siguientes items...";
+next;
+mes "500 White Mask";
+mes "15 Fragment of Despair";
+mes "500 Zircon";
+mes "1 Angeling Card";
+mes "1 Angeling Hat";
+mes "10 Aron Cheques";
+next;
+
+mes "Ya tienes todos los items?";
+menu "Si.",ref6,"No tengo nada.",ref2;
+
+ref6:
+mes "Ok,Dejame revisar tu Inventario";
+if((countitem(7439)<15))goto falta;
+if((countitem(729)<500))goto falta;
+if((countitem(4054)<1))goto falta;
+if((countitem(7568)<500))goto falta;
+if((countitem(5132)<1))goto falta;
+if((countitem(7160)<10))goto falta;
+mes "Bien, si tienes todo lo necesario...";
+next;
+
+mes "[^0065DFEmedy^000000]";
+mes "Procedere a refinar tu Headger";
+delitem 7439,15;
+delitem 729,500;
+delitem 4054,1;
+delitem 7568,500;
+delitem 5132,1;
+delitem 7160,10;
+getitem 29027,1;
+mes "Muy bien!! Ahi tienes tu Wings";
+close;
+
+HighDamon_W:
+mes "[^0065DFEmedy^000000]";
+mes "Necesitas traerme los siguientes items...";
+next;
+mes "1 Angel Wing";
+mes "500 Soft Feather";
+mes "500 Blue tinted Feather";
+mes "1 Arc Angeling Card";
+mes "1 Angeling Hat";
+mes "10 Aron cheques";
+next;
+
+mes "Ya tienes todos los items?";
+menu "Si.",ref7,"No tengo nada.",ref2;
+
+ref7:
+mes "Ok,Dejame revisar tu Inventario";
+if((countitem(7063)<500))goto falta;
+if((countitem(7441)<500))goto falta;
+if((countitem(4241)<1))goto falta;
+if((countitem(2254)<1))goto falta;
+if((countitem(5132)<1))goto falta;
+if((countitem(7160)<10))goto falta;
+mes "Bien, si tienes todo lo necesario...";
+next;
+
+mes "[^0065DFEmedy^000000]";
+mes "Procedere a refinar tu Headger";
+delitem 7063,500;
+delitem 7441,500;
+delitem 4241,1;
+delitem 2254,1;
+delitem 5132,1;
+delitem 7160,10;
+getitem 3181,1;
+mes "Muy bien!! Ahi tienes tu Headger";
+close;
+
+blood_death_valk:
+mes "[^0065DFEmedy^000000]";
+mes "Necesitas traerme los siguientes items...";
+next;
+mes "50 Scarlet Dyestuff";
+mes "500 Animal Blood";
+mes "250 Dark Mask";
+mes "1 Deviling Card";
+mes "1 Angeling Hat";
+mes "10 Aron Cheques";
+next;
+
+mes "Ya tienes todos los items?";
+menu "Si.",ref9,"No tengo nada.",ref2;
+
+ref9:
+mes "Ok,Dejame revisar tu Inventario";
+if((countitem(702)<500))goto falta;
+if((countitem(975)<50))goto falta;
+if((countitem(4174)<1))goto falta;
+if((countitem(7157)<250))goto falta;
+if((countitem(5132)<1))goto falta;
+if((countitem(7160)<10))goto falta;
+mes "Bien, si tienes todo lo necesario...";
+next;
+
+mes "[^0065DFEmedy^000000]";
+mes "Procedere a refinar tu Headger";
+delitem 702,500;
+delitem 975,50;
+delitem 4174,1;
+delitem 7157,250;
+delitem 5132,1;
+delitem 7160,10;
+getitem 18273,1;
+mes "Muy bien!! Ahi tienes tu Headger";
+close;
+
+yy_death_valk:
+mes "[^0065DFEmedy^000000]";
+mes "Necesitas traerme los siguientes items...";
+next;
+mes "1 Winter Hat";
+mes "500 Piece of Black Cloth";
+mes "500 Crystal Of Darkness";
+mes "1 Maya Purple";
+mes "1 Angeling Hat";
+mes "10 Aron Cheques";
+next;
+
+mes "Ya tienes todos los items?";
+menu "Si.",ref10,"No tengo nada.",ref2;
+
+ref10:
+mes "Ok,Dejame revisar tu Inventario";
+if((countitem(7205)<500))goto falta;
+if((countitem(7799)<500))goto falta;
+if((countitem(4198)<1))goto falta;
+if((countitem(5115)<1))goto falta;
+if((countitem(5132)<1))goto falta;
+if((countitem(7160)<10))goto falta;
+mes "Bien, si tienes todo lo necesario...";
+next;
+
+mes "[^0065DFEmedy^000000]";
+mes "Procedere a refinar tu Headger";
+delitem 7205,500;
+delitem 7799,500;
+delitem 4198,1;
+delitem 5115,1;
+delitem 5132,1;
+delitem 7160,10;
+getitem 18268,1;
+mes "Muy bien!! Ahi tienes tu Headger";
+close;
+
+yy_death_wings:
+mes "[^0065DFEmedy^000000]";
+mes "Necesitas traerme los siguientes items...";
+next;
+mes "1 Censor Bar";
+mes "1 Evil Wing Ears";
+mes "3000 Little Evil Wing";
+mes "1 Bacsojin Card";
+mes "1 Angeling Hat";
+mes "10 Aron Cheques";
+next;
+
+mes "Ya tienes todos los items?";
+menu "Si.",ref11,"No tengo nada.",ref2;
+
+ref11:
+mes "Ok,Dejame revisar tu Inventario";
+if((countitem(5068)<1))goto falta;
+if((countitem(1039)<3000))goto falta;
+if((countitem(4372)<1))goto falta;
+if((countitem(5175)<1))goto falta;
+if((countitem(5132)<1))goto falta;
+if((countitem(7160)<10))goto falta;
+mes "Bien, si tienes todo lo necesario...";
+next;
+
+mes "[^0065DFEmedy^000000]";
+mes "Procedere a refinar tu Headger";
+delitem 5068,1;
+delitem 1039,3000;
+delitem 4372,1;
+delitem 5175,1;
+delitem 5132,1;
+delitem 7160,10;
+getitem 20103,1;
+mes "Muy bien!! Ahi tienes tu Headger";
+close;
+
+ref2:
+mes "[^0065DFEmedy^000000]";
+mes "Pues si quieres refinar tus headgers y Wings tienes que conseguirlos";
+close;
+
+ref8:
+mes "[^0065DFEmedy^000000]";
+mes "Vuelve cuando Quieras!";
+close;
+
+
+falta:
+mes "[V^0065DFEmedy^000000]";
+mes "Te faltan conseguir items...";
+mes "Dedicate a conseguirlos y lo haras rapido";
+close;
+}

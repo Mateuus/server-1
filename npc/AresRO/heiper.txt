@@ -1,0 +1,61 @@
+//Made by Hazer X, works with every vesion.
+prontera.gat,160,184,4	script	Hyper Mode#178	794,{
+	mes "[Hyper Girl]";
+	mes "Do you wish to have the power of a god?,";
+	mes "It's just 10,000,000 zeny.";
+	mes "Do you want me to power you?";
+	next;
+	menu "Power!",POWER,"No, thanks",CANCEL;
+
+POWER:
+	if (Zeny < 10000000) goto NO_ZENYS;
+	set Zeny, Zeny-10000000;
+	skilleffect 384,0; sc_start SC_MELTDOWN,360000,100;
+	skilleffect 383,0; sc_start SC_WINDWALK,360000,100;
+	skilleffect 378,0; sc_start SC_EDP,360000,100;
+	skilleffect 465,0; sc_start SC_KAITE,360000,100; 
+	skilleffect 464,0; sc_start SC_KAUPE,360000,100; 
+	skilleffect 463,0; sc_start SC_KAAHI,360000,100; 
+	skilleffect 462,0; sc_start SC_KAIZEL,360000,100;
+	skilleffect 8,0; sc_start SC_ENDURE,360000,100;
+	skilleffect 33,0; sc_start SC_ANGELUS,360000,100;
+	skilleffect 45,0; sc_start SC_CONCENTRATE,360000,100;
+	skilleffect 74,0; sc_start SC_MAGNIFICAT,360000,100;
+	skilleffect 75,0; sc_start SC_GLORIA,360000,100;
+	skilleffect 459,0; sc_start SC_ADRENALINE2,360000,100;
+	skilleffect 66,0; sc_start SC_IMPOSITIO,360000,100;
+	skilleffect 67,0; sc_start SC_SUFFRAGIUM,360000,100;
+	skilleffect 34,0; sc_start SC_BLESSING,360000,100;
+	skilleffect 29,0; sc_start SC_INCREASEAGI,360000,100;
+	skilleffect 112,0; sc_start SC_WEAPONPERFECTION,360000,100;
+	skilleffect 113,0; sc_start SC_OVERTHRUST,360000,100;
+	skilleffect 114,0; sc_start SC_MAXIMIZEPOWER,360000,100;
+	skilleffect 357,0; sc_start SC_CONCENTRATION,360000,100;
+	skilleffect 355,0; sc_start SC_AURABLADE,360000,100;
+	skilleffect 155,0; sc_start SC_LOUD,360000,100;
+	skilleffect 157,0; sc_start SC_ENERGYCOAT,360000,100;
+	sc_start SC_ASPDPOTION2,360000,0;
+	sc_start SC_STRFood,360000,100;
+	sc_start SC_AGIFood,360000,100;
+	sc_start SC_VITFood,360000,100;
+	sc_start SC_INTFood,360000,100;
+	sc_start SC_DEXFood,360000,100;
+	sc_start SC_LUKFood,360000,100;
+	sc_start SC_HitFood,1200000,100;
+	sc_start SC_FleeFood,1200000,100;
+	sc_start SC_BATKFood,1200000,100;
+	sc_start SC_MATKFood,120000,100;
+	close;
+	end;
+
+NO_ZENYS:
+	mes "[Hyper Girl]";
+	mes "You pretend to save the world with no zeny?.";
+	mes "Sorry, i can't help you.";
+	close;
+
+CANCEL:
+	mes "[Hyper Girl]";
+	mes "Allright. Please come again if you need power.";
+	close;
+}

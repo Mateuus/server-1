@@ -1,0 +1,29 @@
+//===== eAthena Script =======================================
+//= Alexandria Warps Script
+//===== By: ==================================================
+//= Olrox (1.0)
+//===== Current Version: =====================================
+//= 1.0
+//===== Compatible With: =====================================
+//= Any Athena Version
+//===== Description: =========================================
+//= Warp Points for Alexandria and Alexandria indoors
+//===== Additional Comments: =================================
+//= No comment!
+//============================================================
+
+alexandria,142,171,0	warp	alexa001	1,1,alexa_in,88,288
+alexa_in,87,284,0	warp	alexa001-1	1,1,alexandria,146,169
+alexa_in,94,286,0	warp	alexa002	1,1,alexandria,140,173
+alexandria,138,175,0	warp	alexa002-1	1,1,alexa_in,95,289
+alexandria,168,172,0	warp	alexa005	1,1,alexa_in,223,303
+alexa_in,220,303,0	warp	alexa005-1	1,1,alexandria,165,169
+alexa_in,232,294,0	warp	alexa006	1,1,alexa_in,230,224
+alexa_in,230,227,0	warp	alexa006-1	1,1,alexa_in,231,297
+alexa_in,218,216,0	warp	alexa007	1,1,alexandria,180,162
+alexandria,184,162,0	warp	alexa007-1	1,1,alexa_in,221,215
+alexandria,158,151,0	warp	alexa008	1,1,alexa_in,90,145
+alexa_in,90,142	warp	alexa008-1	1,1,alexandria,158,147
+alexa_in,99,151	warp	alexa009	1,1,alexa_in,181,93
+alexa_in,178,93	warp	alexa009-1	1,1,alexa_in,96,151
+

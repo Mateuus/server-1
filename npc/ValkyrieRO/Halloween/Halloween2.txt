@@ -1,0 +1,62 @@
+//===== Global Chile ======
+//=== https://www.facebook.com/IntegralesGlobal ===
+//= Quest Halloween
+	
+prontera,147,164,4	script	Bruja	791,{
+	mes "[^000000Embrujo^000000]";
+	mes "¿No tienes Miedo? entonces.. quieres un Witch's Pumpkin Hat [0]";
+	next;
+	menu "¿Que Necesito?",L_required,"Aqui tengo lo necesario!",L_check,"Salir",L_partir;
+
+	L_required:
+		mes "[^000000Bruja^000000]";
+		mes "^0080FF1^000000 Thara Frog Card";
+ 		mes "^0080FF2^000000 Spring Rabbit Card";
+ 		mes "^0080FF1^000000 Magmaring Card";
+ 		mes "^0080FF50^000000 Iron Ore";
+ 		mes "^0080FF50^000000 Ice Cubic";
+ 		mes "^0080FF50^000000 Yoyo Tail";
+ 		mes "^0080FF50^000000 Mole Claw";
+		mes "10.000.000 zeny";
+		close;
+
+	L_check:
+		if(countitem(4058) < 1) goto L_manque;
+		if(countitem(4227) < 2) goto L_manque;
+		if(countitem(4432) < 1) goto L_manque;
+		if(countitem(1002) < 50) goto L_manque;
+		if(countitem(7066) < 50) goto L_manque;
+		if(countitem(942) < 50) goto L_manque;
+		if(countitem(1018) < 50) goto L_manque;
+		if(Zeny < 10000000) goto L_manque;
+		mes "[^000000Bruja^000000]";
+		mes "gracias";
+		delitem 4058,1;
+  		delitem 4227,2;
+  		delitem 4432,1;
+  		delitem 1002,50;
+  		delitem 7066,50;
+ 		delitem 942,50;
+		delitem 1018,50;		
+		set Zeny, Zeny - 10000000;
+		getitem 18656,1;
+		close;
+
+	L_manque:
+		mes "[^000000Bruja^000000]";
+		mes "Necesitas";
+		if(countitem(4058) < 1) mes "^FF0000"+(1 - countitem(4058)) +"^000000 Thara Frog Card";
+		if(countitem(4227) < 2) mes "^FF0000"+(2 - countitem(4227)) +"^000000 Cookie Card";
+		if(countitem(4432) < 1) mes "^FF0000"+(1 - countitem(4432)) +"^000000 Magmaring Card";
+		if(countitem(1002) < 50) mes "^FF0000"+(50 - countitem(1002)) +"^000000 Iron Ore";
+		if(countitem(7066) < 50) mes "^FF0000"+(50 - countitem(7066)) +"^000000 Ice Cubic";
+		if(countitem(942) < 50) mes "^FF0000"+(50 - countitem(942)) +"^000000 Yoyo Tail";
+		if(countitem(1018) < 50) mes "^FF0000"+(50 - countitem(1018)) +"^000000 Mole Claw";
+		if(Zeny < 10000000) mes "^0000FF"+(10000000 - Zeny)+"^000000 Zeny";
+		close;
+
+	L_partir:
+		mes "[^000000Bruja^000000]";
+		mes "Que tengas un buen día.";
+		close;
+}

@@ -1,0 +1,233 @@
+//Mobs
+//=================================================
+//=db/mobdb2.txt
+3208,Kennet,Kennet Guile,Guilotine Cross Eremes,137,90199,0,170000,169800,14,2020,2320,23,12,45,138,31,19,99,30,10,12,1,1,89,405,180,76,384,288,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+3209,Brooke,Brooke Magaretha,Arc Bishop Magaretha,142,77280,0,170000,186470,1,497,1697,10,74,1,5,77,180,110,39,10,12,1,7,80,1173,150,1152,384,288,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+3210,Wieder,Wieder Keyron,Warlock Catherine,142,77280,0,170000,186470,1,497,1697,10,74,1,5,77,180,110,39,10,12,1,7,80,1173,150,1152,384,288,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+3211,Roots,Roots Damon,Ranger Cecil Damon,133,108690,0,170000,182540,14,1890,2390,59,10,90,62,99,35,98,66,10,12,1,7,82,149,180,76,384,288,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+3212,Chloe,Howard Alt-Eisen,Howard Alt-Eisen,140,91282,0,170000,187800,1,1300,2053,35,60,1,9,97,145,88,40,10,12,1,7,63,1173,180,1152,384,288,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+3213,Seville,Seville Windsor,Rune Seyren Windsor,141,118402,0,170000,186460,1,2100,2530,63,12,90,89,72,20,99,25,10,12,1,8,66,405,170,76,384,288,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+
+2537,Mao,Mao Keyron,Mao Keyron,142,77280,0,170000,186470,1,497,1697,10,74,1,5,77,180,110,39,10,12,1,7,80,1173,150,1152,384,288,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2538,Ren,Ren Guile,Ren Guile,137,90199,0,170000,169800,1,2020,2320,23,12,45,138,31,19,99,30,10,12,1,1,89,405,180,76,384,288,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2540,Farrah,Farrah Sorin,Farrah Sorin,137,90199,0,170000,169800,1,2020,2320,23,12,45,138,31,19,99,30,10,12,1,7,86,405,180,76,384,288,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2543,Nergal,Nergal Alt-Eisen,Nergal Alt-Eisen,140,91282,0,170000,187800,1,1300,2053,35,60,1,9,97,145,88,40,10,12,1,7,63,1173,180,1152,384,288,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2544,Ivan,Ivan Windsor,Ivan Windsor,141,118402,0,170000,186460,1,2100,2530,63,12,90,89,72,20,99,25,10,12,1,8,66,405,170,76,384,288,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+//=================================================
+
+//Skills
+//=================================================
+//=db/mobskilldb2.txt
+//==3209 Arch Bishop
+3209,Arc Bishop Magaretha@AL_TELEPORT,idle,26,1,10000,0,0,yes,self,rudeattacked,,,,,,,,
+3209,Arc Bishop Magaretha@AL_TELEPORT,walk,26,1,5000,0,5000,yes,self,rudeattacked,,,,,,,,
+3209,Arc Bishop Magaretha@AB_JUDEX,attack,2038,7,3000,0,5000,yes,target,always,,,,,,,,
+3209,Arc Bishop Magaretha@AB_JUDEX,chase,2038,7,3000,0,5000,yes,target,always,,,,,,,,
+3209,Arc Bishop Magaretha@AB_ADORAMUS,attack,2040,9,3000,0,5000,yes,target,always,,,,,,,,
+3209,Arc Bishop Magaretha@AB_ADORAMUS,chase,2040,9,3000,0,5000,yes,target,always,,,,,,,,
+3209,Arc Bishop Magaretha@AB_DUPLELIGHT,attack,2054,6,1000,0,5000,yes,self,always,,,,,,,,
+3209,Arc Bishop Magaretha@AB_DUPLELIGHT,chase,2054,6,1000,0,5000,yes,self,always,,,,,,,,
+3209,Arc Bishop Magaretha@AB_HIGHNESSHEAL,attack,2051,10,1000,0,5000,yes,self,myhpltmaxrate,60,,,,,,,
+3209,Arc Bishop Magaretha@AB_HIGHNESSHEAL,chase,2051,10,1000,0,5000,yes,self,myhpltmaxrate,60,,,,,,,
+//=================================================
+//==3213 Rune Knight
+3213,Rune Seyren Windsor@AL_TELEPORT,idle,26,1,10000,0,0,yes,self,rudeattacked,,,,,,,,
+3213,Rune Seyren Windsor@AL_TELEPORT,walk,26,1,5000,0,5000,yes,self,rudeattacked,,,,,,,,
+3213,Rune Seyren Windsor@RK_DEATHBOUND,chase,2003,5,500,1000,5000,no,self,closedattacked,,,,,,,,
+3213,Rune Seyren Windsor@RK_DEATHBOUND,attack,2003,5,500,1000,5000,no,self,closedattacked,,,,,,,,
+3213,Rune Seyren Windsor@RK_DEATHBOUND,chase,2003,5,500,1000,5000,no,self,longrangeattacked,,,,,,,,
+3213,Rune Seyren Windsor@RK_DEATHBOUND,attack,2003,5,500,1000,5000,no,self,longrangeattacked,,,,,,,,
+3213,Rune Seyren Windsor@RK_SONICWAVE,attack,2002,8,1000,0,5000,yes,target,always,,,,,,,,
+3213,Rune Seyren Windsor@RK_HUNDREDSPEAR,attack,2004,6,1000,0,5000,yes,target,always,,,,,,,,
+3213,Rune Seyren Windsor@RK_WINDCUTTER,attack,2005,5,1000,0,5000,yes,target,always,,,,,,,,
+3213,Rune Seyren Windsor@RK_IGNITIONBREAK,attack,2006,10,1000,0,5000,yes,self,always,,,,,,,,
+3213,Rune Seyren Windsor@RK_SONICWAVE,chase,2002,8,1000,0,5000,yes,target,always,,,,,,,,
+3213,Rune Seyren Windsor@RK_HUNDREDSPEAR,chase,2004,6,1000,0,5000,yes,target,always,,,,,,,,
+3213,Rune Seyren Windsor@RK_WINDCUTTER,chase,2005,5,1000,0,5000,yes,target,always,,,,,,,,
+//=================================================
+//==3211 Ranger Cecil
+3211,Ranger Cecil Damon@AL_TELEPORT,idle,26,1,10000,0,0,yes,self,rudeattacked,,,,,,,,
+3211,Ranger Cecil Damon@AL_TELEPORT,walk,26,1,5000,0,5000,yes,self,rudeattacked,,,,,,,,
+3211,Ranger Cecil Damon@RA_ARROWSTORM,attack,2233,6,5000,0,500,yes,target,always,,,,,,,,
+3211,Ranger Cecil Damon@RA_ARROWSTORM,chase,2233,6,5000,0,500,yes,target,always,,,,,,,,
+3211,Ranger Cecil Damon@RA_AIMEDBOLT,attack,2236,8,5000,0,500,yes,target,always,,,,,,,,
+3211,Ranger Cecil Damon@RA_AIMEDBOLT,chase,2236,8,5000,0,500,yes,target,always,,,,,,,,
+//=================================================
+//==2537 Sorcorer
+2537,Mao Keyron@AL_TELEPORT,idle,26,1,10000,0,0,yes,self,rudeattacked,,,,,,,,
+2537,Mao Keyron@AL_TELEPORT,walk,26,1,1000,0,5000,yes,self,rudeattacked,,,,,,,,
+2537,Mao Keyron@SO_EARTHGRAVE,attack,2446,4,1000,0,5000,yes,target,always,,,,,,,,
+2537,Mao Keyron@SO_EARTHGRAVE,chase,2446,4,1000,0,5000,yes,target,always,,,,,,,,
+2537,Mao Keyron@SO_DIAMONDDUST,attack,2447,5,1000,0,5000,yes,target,always,,,,,,,,
+2537,Mao Keyron@SO_DIAMONDDUST,chase,2447,5,1000,0,5000,yes,target,always,,,,,,,,
+2537,Mao Keyron@SO_PSYCHIC_WAVE,attack,2449,7,1000,0,5000,yes,target,always,,,,,,,,
+2537,Mao Keyron@SO_PSYCHIC_WAVE,chase,2449,7,1000,0,5000,yes,target,always,,,,,,,,
+2537,Mao Keyron@SO_CLOUD_KILL,attack,2450,6,1000,0,5000,yes,target,always,,,,,,,,
+2537,Mao Keyron@SO_CLOUD_KILL,chase,2450,6,1000,0,5000,yes,target,always,,,,,,,,
+2537,Mao Keyron@SO_VARETYR_SPEAR,attack,2454,2,1000,0,5000,yes,target,always,,,,,,,,
+2537,Mao Keyron@SO_VARETYR_SPEAR,chase,2454,2,1000,0,5000,yes,target,always,,,,,,,,
+//=================================================
+//==3208 Guilotine Cross Eremes
+3208,Guilotine Cross Eremes@AL_TELEPORT,idle,26,1,10000,0,0,yes,self,rudeattacked,,,,,,,,
+3208,Guilotine Cross Eremes@AL_TELEPORT,walk,26,1,5000,0,5000,yes,self,rudeattacked,,,,,,,,
+3208,Guilotine Cross Eremes@GC_VENOMIMPRESS,attack,2021,8,1000,0,5000,yes,target,always,,,,,,,,
+3208,Guilotine Cross Eremes@GC_VENOMIMPRESS,chase,2021,8,1000,0,5000,yes,target,always,,,,,,,,
+3208,Guilotine Cross Eremes@GC_CROSSIMPACT,attack,2022,4,1000,0,5000,yes,target,always,,,,,,,,
+3208,Guilotine Cross Eremes@GC_CROSSIMPACT,chase,2022,4,1000,0,5000,yes,target,always,,,,,,,,
+3208,Guilotine Cross Eremes@GC_DARKILLUSION,attack,2023,6,1000,0,5000,yes,target,always,,,,,,,,
+3208,Guilotine Cross Eremes@GC_DARKILLUSION,chase,2023,6,1000,0,5000,yes,target,always,,,,,,,,
+3208,Guilotine Cross Eremes@GC_COUNTERSLASH,attack,2029,10,1000,0,5000,yes,self,closedattacked,,,,,,,,
+3208,Guilotine Cross Eremes@GC_COUNTERSLASH,chase,2029,10,1000,0,5000,yes,self,closedattacked,,,,,,,,
+//=================================================
+//==2539 Shadow Chaser
+2539,Kennet Guile@AL_TELEPORT,idle,26,1,10000,0,0,yes,self,rudeattacked,,,,,,,,
+2539,Kennet Guile@AL_TELEPORT,walk,26,1,5000,0,5000,yes,self,rudeattacked,,,,,,,,
+2539,Kennet Guile@SC_FEINTBOMB,attack,2304,9,1000,0,2000,yes,self,closedattacked,,,,,,,,
+2539,Kennet Guile@SC_FEINTBOMB,chase,2304,9,1000,0,2000,yes,self,closedattacked,,,,,,,,
+2539,Kennet Guile@SC_FATALMENACE,attack,2284,2,1000,0,2000,yes,target,always,,,,,,,,
+2539,Kennet Guile@SC_FATALMENACE,chase,2284,2,1000,0,2000,yes,target,always,,,,,,,,
+2539,Kennet Guile@SC_TRIANGLESHOT,attack,2288,6,4000,0,2000,yes,target,always,,,,,,,,
+2539,Kennet Guile@SC_TRIANGLESHOT,chase,2288,6,4000,0,2000,yes,target,always,,,,,,,,
+//=================================================
+//==2540 Sura 
+2540,Farrah Sorin@AL_TELEPORT,idle,26,1,10000,0,0,yes,self,rudeattacked,,,,,,,,
+2540,Farrah Sorin@AL_TELEPORT,walk,26,1,5000,0,5000,yes,self,rudeattacked,,,,,,,,
+2540,Farrah Sorin@SR_SKYNETBLOW,attack,2327,5,4000,0,5000,yes,target,always,,,,,,,,
+2540,Farrah Sorin@SR_SKYNETBLOW,chase,2327,5,4000,0,5000,yes,target,always,,,,,,,,
+2540,Farrah Sorin@SR_EARTHSHAKER,attack,2328,3,4000,0,5000,yes,target,always,,,,,,,,
+2540,Farrah Sorin@SR_EARTHSHAKER,chase,2328,3,4000,0,5000,yes,target,always,,,,,,,,
+2540,Farrah Sorin@SR_TIGERCANNON,attack,2330,7,4000,0,5000,yes,target,always,,,,,,,,
+2540,Farrah Sorin@SR_TIGERCANNON,chase,2330,7,4000,0,5000,yes,target,always,,,,,,,,
+2540,Farrah Sorin@SR_RAMPAGEBLASTER,attack,2332,4,4000,0,5000,yes,target,always,,,,,,,,
+2540,Farrah Sorin@SR_RAMPAGEBLASTER,chase,2332,4,4000,0,5000,yes,target,always,,,,,,,,
+2540,Farrah Sorin@SR_RIDEINLIGHTNING,attack,2518,5,4000,0,5000,yes,target,always,,,,,,,,
+2540,Farrah Sorin@SR_RIDEINLIGHTNING,chase,2518,5,4000,0,5000,yes,target,always,,,,,,,,
+//=================================================
+//==3210 Warlock
+3210,Warlock Catherine@AL_TELEPORT,idle,26,1,10000,0,0,yes,self,rudeattacked,,,,,,,,
+3210,Warlock Catherine@AL_TELEPORT,walk,26,1,5000,0,5000,yes,self,rudeattacked,,,,,,,,
+3210,Warlock Catherine@WL_JACKFROST,chase,2204,3,500,1000,5000,no,self,always,0,,,,,,,
+3210,Warlock Catherine@WL_JACKFROST,attack,2204,3,500,1000,5000,no,self,always,0,,,,,,,
+3210,Warlock Catherine@WL_STASIS,chase,2209,5,500,1000,5000,no,self,always,0,,,,,,,
+3210,Warlock Catherine@WL_STASIS,attack,2209,5,500,1000,5000,no,self,always,0,,,,,,,
+3210,Warlock Catherine@WL_WHITEIMPRISON,chase,2201,5,500,1000,5000,no,self,always,0,,,,,,,
+3210,Warlock Catherine@WL_WHITEIMPRISON,attack,2201,5,500,1000,5000,no,self,always,0,,,,,,,
+3210,Warlock Catherine@WL_DRAINLIFE,attack,2210,4,1000,0,5000,yes,target,always,,,,,,,,
+3210,Warlock Catherine@WL_CRIMSONROCK,attack,2211,6,1000,0,5000,yes,target,always,,,,,,,,
+3210,Warlock Catherine@WL_HELLINFERNO,attack,2212,10,1000,0,5000,yes,target,always,,,,,,,,
+3210,Warlock Catherine@WL_SOULEXPANSION,chase,2202,8,1000,0,5000,yes,target,always,,,,,,,,
+3210,Warlock Catherine@WL_DRAINLIFE,chase,2210,4,1000,0,5000,yes,target,always,,,,,,,,
+3210,Warlock Catherine@WL_CRIMSONROCK,chase,2211,6,1000,0,5000,yes,target,always,,,,,,,,
+3210,Warlock Catherine@WL_HELLINFERNO,chase,2212,10,1000,0,5000,yes,target,always,,,,,,,,
+3210,Warlock Catherine@WL_SOULEXPANSION,chase,2202,8,1000,0,5000,yes,target,always,,,,,,,,
+3210,Warlock Catherine@WL_SIENNAEXECRATE,attack,2207,5,1000,0,5000,yes,target,always,,,,,,,,
+3210,Warlock Catherine@WL_SIENNAEXECRATE,chase,2207,5,1000,0,5000,yes,target,always,,,,,,,,
+//=================================================
+//==2542 Mechanic
+3212,Mechanic Howard Alt-Eisen@AL_TELEPORT,idle,26,1,10000,0,0,yes,self,rudeattacked,,,,,,,,
+3212,Mechanic Howard Alt-Eisen@AL_TELEPORT,walk,26,1,5000,0,5000,yes,self,rudeattacked,,,,,,,,
+3212,Mechanic Howard Alt-Eisen@NC_PILEBUNKER,attack,2257,6,1000,0,5000,yes,target,always,,,,,,,,
+3212,Mechanic Howard Alt-Eisen@NC_PILEBUNKER,chase,2257,6,1000,0,5000,yes,target,always,,,,,,,,
+3212,Mechanic Howard Alt-Eisen@NC_FLAMELAUNCHER,attack,2259,9,1000,0,5000,yes,target,always,,,,,,,,
+3212,Mechanic Howard Alt-Eisen@NC_FLAMELAUNCHER,chase,2259,9,1000,0,5000,yes,target,always,,,,,,,,
+3212,Mechanic Howard Alt-Eisen@NC_COLDSLOWER,attack,2260,10,1000,0,5000,yes,target,always,,,,,,,,
+3212,Mechanic Howard Alt-Eisen@NC_COLDSLOWER,chase,2260,10,1000,0,5000,yes,target,always,,,,,,,,
+3212,Mechanic Howard Alt-Eisen@NC_POWERSWING,attack,2279,8,1000,0,5000,yes,target,always,,,,,,,,
+3212,Mechanic Howard Alt-Eisen@NC_POWERSWING,chase,2279,8,1000,0,5000,yes,target,always,,,,,,,,
+3212,Mechanic Howard Alt-Eisen@NC_AXETORNADO,attack,2280,6,1000,0,5000,yes,target,always,,,,,,,,
+3212,Mechanic Howard Alt-Eisen@NC_AXETORNADO,chase,2280,6,1000,0,5000,yes,target,always,,,,,,,,
+//=================================================
+//==2543 Genetic
+2543,Nergal Alt-Eisen@AL_TELEPORT,idle,26,1,10000,0,0,yes,self,rudeattacked,,,,,,,,
+2543,Nergal Alt-Eisen@AL_TELEPORT,walk,26,1,5000,0,5000,yes,self,rudeattacked,,,,,,,,
+2543,Nergal Alt-Eisen@GN_BLOOD_SUCKER,attack,2480,4,1000,0,5000,yes,target,always,,,,,,,,
+2543,Nergal Alt-Eisen@GN_BLOOD_SUCKER,chase,2480,4,1000,0,5000,yes,target,always,,,,,,,,
+2543,Nergal Alt-Eisen@GN_CRAZYWEED,attack,2483,7,1000,0,5000,yes,target,always,,,,,,,,
+2543,Nergal Alt-Eisen@GN_CRAZYWEED,chase,2483,7,1000,0,5000,yes,target,always,,,,,,,,
+2543,Nergal Alt-Eisen@GN_DEMONIC_FIRE,attack,2485,6,1000,0,5000,yes,target,always,,,,,,,,
+2543,Nergal Alt-Eisen@GN_DEMONIC_FIRE,chase,2485,6,1000,0,5000,yes,target,always,,,,,,,,
+2543,Nergal Alt-Eisen@GN_HELLS_PLANT,attack,2490,8,1000,0,5000,yes,target,always,,,,,,,,
+2543,Nergal Alt-Eisen@GN_HELLS_PLANT,chase,2490,8,1000,0,5000,yes,target,always,,,,,,,,
+//=================================================
+//==2544 Royal Guard
+2544,Ivan Windsor@AL_TELEPORT,idle,26,1,10000,0,0,yes,self,rudeattacked,,,,,,,,
+2544,Ivan Windsor@AL_TELEPORT,walk,26,1,5000,0,5000,yes,self,rudeattacked,,,,,,,,
+2544,Ivan Windsor@LG_CANNONSPEAR,attack,2307,7,1000,0,5000,yes,target,always,,,,,,,,
+2544,Ivan Windsor@LG_CANNONSPEAR,chase,2307,7,1000,0,5000,yes,target,always,,,,,,,,
+2544,Ivan Windsor@LG_BANISHINGPOINT,attack,2308,5,1000,0,5000,yes,target,always,,,,,,,,
+2544,Ivan Windsor@LG_BANISHINGPOINT,chase,2308,5,1000,0,5000,yes,target,always,,,,,,,,
+2544,Ivan Windsor@LG_REFLECTDAMAGE,attack,2311,6,1000,0,5000,yes,self,closedattacked,,,,,,,,
+2544,Ivan Windsor@LG_REFLECTDAMAGE,chase,2311,6,1000,0,5000,yes,self,closedattacked,,,,,,,,
+2544,Ivan Windsor@LG_MOONSLASHER,attack,2320,5,1000,0,5000,yes,self,always,,,,,,,,
+2544,Ivan Windsor@LG_MOONSLASHER,chase,2320,5,1000,0,5000,yes,self,always,,,,,,,,
+2544,Ivan Windsor@LG_EARTHDRIVE,chase,2323,7,1000,0,5000,yes,self,always,,,,,,,,
+2544,Ivan Windsor@LG_EARTHDRIVE,attack,2323,7,1000,0,5000,yes,self,always,,,,,,,,
+//=================================================
+//=================================================
+
+//Spawn
+//=================================================
+//=npc/mobs/dungeons/lhz_dun.txt
+//================================================================================
+// lhz_dun05 - Bio Labs 5 - by Noobie
+//================================================================================
+lhz_dun05,0,0,0,0	monster	Ivan Windsor	2544,20,0,0,0
+lhz_dun05,0,0,0,0	monster	Chloe Alt-Eisen	2542,20,0,0,0
+lhz_dun05,0,0,0,0	monster	Wieder Keyron	2541,20,0,0,0
+lhz_dun05,0,0,0,0	monster	Brooke Magaretha	2534,20,0,0,0
+lhz_dun05,0,0,0,0	monster	Kennet Guile	2539,20,0,0,0
+lhz_dun05,0,0,0,0	monster	Seville Windsor	2535,20,0,0,0
+lhz_dun05,0,0,0,0	monster	Roots Damon	2536,20,0,0,0
+lhz_dun05,0,0,0,0	monster	Mao Keyron	2537,20,0,0,0
+lhz_dun05,0,0,0,0	monster	Ren Guile	2538,20,0,0,0
+lhz_dun05,0,0,0,0	monster	Farrah Sorin	2540,20,0,0,0
+lhz_dun05,0,0,0,0	monster	Nergal Alt-Eisen	2543,20,0,0,0
+
+//Maps
+//=================================================
+//=conf/maps_athena.conf
+map: lhz_dun05
+//=================================================
+//=db/mapindex.txt
+lhz_dun05
+//=================================================
+
+
+
+//Clientside
+//=================================================
+//=mapnametable.txt
+lhz_dun05.rsw#Somatology Laboratory F5#
+//=================================================
+//=mp3nametable.txt
+lhz_dun05.rsw#bgm\\bio5.mp3#
+//=================================================
+
+//Lua
+//=================================================
+//=npcidentity.lua
+	["JT_Brooke"] = 2534,
+	["JT_Seville"] = 2535,
+	["JT_Roots"] = 2536,
+	["JT_Mao"] = 2537,
+	["JT_Ren"] = 2538,
+	["JT_Kennet"] = 2539,
+	["JT_Farrah"] = 2540,
+	["JT_Wieder"] = 2541,
+	["JT_Chloe"] = 2542,
+	["JT_Nergal"] = 2543,
+	["JT_Ivan"] = 2544,
+//=================================================
+//=jobname.lua
+	[jobtbl.JT_Brooke] = "Brooke",
+	[jobtbl.JT_Seville] = "Seville",
+	[jobtbl.JT_Roots] = "Roots",
+	[jobtbl.JT_Mao] = "Mao",
+	[jobtbl.JT_Ren] = "Ren",
+	[jobtbl.JT_Kennet] = "Kennet",
+	[jobtbl.JT_Farrah] = "Farrah",
+	[jobtbl.JT_Wieder] = "Wieder",
+	[jobtbl.JT_Chloe] = "Chloe",
+	[jobtbl.JT_Nergal] = "Nergal",
+	[jobtbl.JT_Ivan] = "Ivan",
+//=================================================

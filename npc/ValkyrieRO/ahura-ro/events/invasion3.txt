@@ -1,0 +1,85 @@
+-	script	Invasion	-1,{
+	
+OnInit:
+// Map Lists
+//setarray .Map$[0],"invek","alberta","aldebaran","geffen","einbroch";
+
+
+// Normal Mob ID + Count
+setarray .MobCount[0],1713,1634,1098,1250,1716,1717,1618;
+setarray .MobSpawn[0],30,6,15,3,20,15,2;
+
+
+// BOSS Mob ID + Count
+setarray .BossCount[0],1002,1087;
+
+// Invasion Duration ( Minutes )
+set .Duration,60;
+end;
+
+OnWhisperGlobal:
+//OnMinute13:
+awake strnpcinfo(0);
+
+	set .RandomMap$,.Map$[ rand( getarraysize(.Map$) ) ];
+		killmonster .RandomMap$,"All";
+
+		
+		mapannounce ""+.RandomMap$+"",""+.RandomMap$+" se encuentra bajo una terrible invasión.",bc_map,"0x00ff99";
+			for( .@i=0; .@i < getarraysize( .MobCount ); .@i++ ){
+	monster .RandomMap$,125,125,"Fiction :(",.MobCount[.@i],.MobSpawn[.@i],strnpcinfo(0)+"::OnKilled";
+		}
+			sleep ( .Duration * 10000 );
+
+			killmonster .RandomMap$,"All";
+		
+					mapannounce ""+.RandomMap$+"", "La invasión ha finalizado.",bc_map,"0x00ff99";
+end;
+
+OnKilled:
+
+switch (rand(2)) {
+
+        case 0:
+                set .@p_inv, 0;
+                set Inv, Inv + .@p_inv;
+		break;
+
+	case 1:
+
+                set .@p_inv, 1;
+                set Inv, Inv + .@p_inv;
+		break;
+
+
+} // End switch
+dispbottom "Puntos de Invasión obtenido(s) : "+.@p_inv+"";
+dispbottom "Puntos de Invasión Total(es) : "+Inv+"";
+
+
+
+if( !mobcount( .RandomMap$,strnpcinfo(0)+"::OnKilled" ) ){
+	mapannounce ""+.RandomMap$+"", "¡ALERTA: EL JEFE HA APARECIDO!.",bc_map,"0x00ff99";
+	//for( set .@i,0; .@i < getarraysize( .BossCount )){
+
+		set.@a,rand(getarraysize(.BossCount));
+		monster .RandomMap$,0,0,"Fiction <3~",.BossCount[.@i],1,strnpcinfo(0)+"::OnBossKilled";
+					
+}else
+	mapannounce ""+.RandomMap$+"", "Mobs Restantes : "+mobcount( .RandomMap$,strnpcinfo(0)+"::OnKilled" ),0;
+end;
+
+OnBossKilled:
+
+                set .@p_inv, 25;
+                set Inv, Inv + .@p_inv;
+
+dispbottom "Puntos de Invasión obtenido(s) : "+.@p_inv+"";
+dispbottom "Puntos de Invación Totales: "+Inv;
+mapannounce ""+.RandomMap$+"",strcharinfo(0)+" ha eliminado al Jefe Final de la Invasión!",0;
+if( !mobcount( .RandomMap$,strnpcinfo(0)+"::OnBossKilled" ) ){
+	mapannounce ""+.RandomMap$+"", "La invasión ha finalizado.",0;
+	awake strnpcinfo(0);
+}
+end;
+}

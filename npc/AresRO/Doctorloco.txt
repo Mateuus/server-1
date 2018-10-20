@@ -1,0 +1,65 @@
+//(=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=)
+//(       (c)2005 RagMods Modification Team presents        )
+//(       ______  __    __                                  )
+//(      /\  _  \/\ \__/\ \                     v 1.00.00   )
+//(    __\ \ \_\ \ \ ,_\ \ \___      __    ___      __      )
+//(  /'__`\ \  __ \ \ \/\ \  _ `\  /'__`\/' _ `\  /'__`\    )
+//( /\  __/\ \ \/\ \ \ \_\ \ \ \ \/\  __//\ \/\ \/\ \_\.\_  )
+//( \ \____\\ \_\ \_\ \__\\ \_\ \_\ \____\ \_\ \_\ \__/.\_\ )
+//(  \/____/ \/_/\/_/\/__/ \/_/\/_/\/____/\/_/\/_/\/__/\/_/ )
+//(                                                         )
+//(            -- [s] [c] [r] [i] [p] [t] [s] --            )
+//(   _   _   _   _   _   _   _     _   _   _   _   _   _   )
+//(  / \ / \ / \ / \ / \ / \ / \   / \ / \ / \ / \ / \ / \  )
+//( ( e | s | p | a | ñ | o | l ) ( A | t | h | e | n | a ) )
+//(  \_/ \_/ \_/ \_/ \_/ \_/ \_/   \_/ \_/ \_/ \_/ \_/ \_/  )
+//(                                                         )
+//(    Advanced JaMMa RO (c) 2006-2007 The Reyes Project    )
+//(=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=)
+//===== eAthena Script ======================================
+//= Cambio de Tamaño.
+//===========================================================
+//===== By ==================================================
+//= [ReYeS]
+//===== Version =============================================
+//= 1.0
+//===== Compatible With =====================================
+//= eAthena SVN and Freya SVN
+//===== Description =========================================
+//= NPC que te Cambia de Tamaño por 10000z.
+//===== Comments ============================================
+//= 1.0 - Initial beta release                      [Reyes]
+//===========================================================
+prontera.gat,169,151,5	script	Dr.LoCo	121,{
+mes "[^ff0000Dr.LoCo^000000]";
+mes "Hola ^0000CD"+strcharinfo(0)+"^000000";
+mes "¿Quieres cambiar de estatura?";
+next;
+menu "Yes",L_YES,"No",L_NO;
+
+L_YES:
+mes "[^ff0000Dr.LoCo^000000]";
+mes "Ok,elige el tamaño que quieres pero recuerda que cada uno tiene su precio...";
+next;
+menu "Gigante",Giant,"Pequeño",Small,"Normal",normal;
+
+Giant:
+atcommand strcharinfo(0)+ "@size 2";
+set Zeny,Zeny-10000;
+close;
+
+normal:
+atcommand strcharinfo(0)+ "@size 0";
+set Zeny,Zeny-10000;
+close;
+
+Small:
+atcommand strcharinfo(0)+ "@size 1";
+set Zeny,Zeny-10000;
+close;
+
+L_NO:
+mes "[^ff0000Dr.LoCo^000000]";
+mes "OK,Suerte...";
+close;
+}

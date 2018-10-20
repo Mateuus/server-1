@@ -1,0 +1,58 @@
+//===== eAthena Script =======================================
+//= Identifer
+//===== By ===================================================
+//= llchrisll
+//===== Version ==============================================
+//= 1.0
+//===== Compatible With ======================================
+//= Every eAthena SVN 
+//===== Description ==========================================
+//= This NPC identifies all your items against a fee.              
+//===== Comments =============================================
+//= None yet... 
+//===========================================================
+npc_in,18,42,5	script	Mr Identifier	897,{
+cutin "heri2",2;
+set .@n$,"[Identifier]";
+set .@cost,1000; // 5k Zeny per Item
+set @count,0;
+
+getinventorylist;
+
+for( set @i,0; @i < @inventorylist_count; set @i,@i + 1) {
+	if(@inventorylist_identify[@i] == 0) {
+		set @count,@count+1;
+	}
+}
+mes .@n$;
+if(@count == 0) {
+cutin "heri3",2;
+	mes "Parece que usted no tiene ningún item no identificados.";
+cutin "",255;
+	end;
+}
+mes "tienes "+@count+" Items no identificados en su inventario.";
+mes "Identificando los items que le costaría "+( set(@pay,@count*.@cost) )+" Zeny.";
+next;
+cutin "heri3",2;
+mes .@n$;
+mes "¿Desea continuar?";
+if(select("- Si:- No") - 1) close;
+if(Zeny < @pay) {
+	mes "Lo siento, pero me parece que no tiene suficiente dinero.";
+cutin "",255;
+	close;
+}
+//getinventorylist;
+for( set @i,0; @i < @inventorylist_count; set @i,@i + 1) {
+	if(!@inventorylist_identify[@i]) {
+		delitem2 @inventorylist_id[@i],1,0,0,0,0,0,0,0;
+		getitem @inventorylist_id[@i],1;
+	}
+}
+set Zeny,Zeny - @pay;
+mes .@n$;
+mes "Sus items han sido identificados.";
+cutin "",255;
+close;
+}

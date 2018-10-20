@@ -1,0 +1,547 @@
+//===== Global Chile ======
+//=== https://www.facebook.com/IntegralesGlobal ===
+//--------------------------------------------
+//GVG
+//--------------------------------------------
+arena_4,137,123,3	script	GvG Arena#w-1::w1	768,{
+	
+	if(getgmlevel()>80) goto L_GM_Menu;
+L_Normal:
+	if(getcharid(2)==0)goto L_No_G;
+	if(getcharid(0)==$@des[1])goto L_MENUDES;
+	if(getcharid(0)==$@ades[1])goto L_MENUADES;
+	if(getcharid(2)==$@des[0])goto L_INSDES;
+	if(getcharid(2)==$@ades[0])goto L_INSADES;
+	mes "[ ^0065DFGVG Arena^000000 ]";
+	mes "Este es el nuevo sistema de GvG";
+	mes "Es un nuevo tipo de eventos original";
+	menu
+	"Leer Instrucciones",L_INS,
+	"Inscribir desafío de Guild",L_IDES,
+	"Salir",Salir;
+	
+L_MENUDES:
+	mes "[ ^0065DFGVG Arena^000000 ]";
+	mes "Ya inscribiste tu desafío";
+	close;
+L_MENUADES:
+	mes "[ ^0065DFGVG Arena^000000 ]";
+	mes "Ya aceptaste el desafío";
+	close;
+L_YINS:
+	mes "[ ^0065DFGVG Arena^000000 ]";
+	mes "Ya estás inscrito con tu guild no puedes hacerlo nuevamente";
+	close;
+L_INSDES:
+	set @temp_var,1;	
+	while(7>=@temp_var){
+	if($@des[@temp_var]==getcharid(0))goto L_YINS;
+	set @temp_var,@temp_var+1;		
+	}
+	mes "[ ^0065DFGVG Arena^000000 ]";
+	mes "Deseas inscribirte para participar con tu guild";
+	menu 
+	"Si",-,
+	"Salir",Salir;
+	if($@pdes>=$@players_gvg)goto L_GLLENA;
+	set $@pdes,$@pdes+1;
+	set $@des[$@pdes],getcharid(0);
+	mes "Ya estás inscrito";
+	announce "Inscrito "+strcharinfo(0)+" para la guild "+strcharinfo(2)+"",16;
+	mes "Están inscritos "+$@pdes+" Miembros";
+	close;
+	
+L_INSADES:
+	set @temp_var,1;	
+	while(7>=@temp_var){
+	if($@pdes[@temp_var]==getcharid(0))goto L_YINS;
+	set @temp_var,@temp_var+1;
+	}
+	mes "[ ^0065DFGVG Arena^000000 ]";
+	mes "Deseas inscribirte para participar con tu guild";
+	menu 
+	"Si",-,
+	"Salir",Salir;
+	if($@pades>=$@players_gvg)goto L_GLLENA;
+	set $@pades,$@pades+1;
+	set $@ades[$@pades],getcharid(0);
+	mes "Ya estás inscrito";
+	announce "Inscrito "+strcharinfo(0)+" para la guild "+strcharinfo(2)+"",16;
+	mes "Están inscritos "+$@pades+" Miembros";
+	close;
+L_GLLENA:
+	mes "Lo siento ya se ha agotado el límite para participar con tu guild";
+	close;
+L_INS:
+	mes "A continuación las instrucciones de GvG";
+	next;
+	mes "[ ^0065DFGVG Arena^000000 ]";
+	mes "Paso 1: Inscribir guild desafiando un GvG Battle";
+	mes "Paso 2: Seleccionar el número de participantes (Max 7, Min 3)";
+	next;
+	mes "[ ^0065DFGVG Arena^000000 ]";
+	mes "Paso 3: Seleccionar el número de rondas (1-3-5)";
+	mes "Paso 4: Esperar Guild desafiante";
+	next;
+	mes "[ ^0065DFGVG Arena^000000 ]";
+	mes "Paso 5: Si eres guild que quiere competir inscribete en la cola";
+	mes "Paso 6: Tendras 3 minutos para que la guild ingrese a la arena si no quedaran descalificados";
+	mes "Si los participantes no están completos para iniciar el duelo pierden por Default";
+	next;
+	goto Salir;
+Salir:
+	mes "[ ^0065DFGVG Arena^000000 ]";
+	mes "Adios y Suerte";
+	close;
+L_No_G:
+	mes "[ ^0065DFGVG Arena^000000 ]";
+	mes "No perteneces a ninguna Guild";
+	mes "Para acceder a está área necesitas una Guild";
+	mes "Adiós";
+	close;
+	
+L_GM_Menu:
+	mes "[ ^0065DFGVG Guild^000000 ]";
+	mes "Hola Maestro ^008800"+strcharinfo(0)+"^000000,";
+	mes "¿Que deseas Hacer?";
+	next;
+	menu
+	"NPC Normal",L_Normal,
+	"Ver Variables",L_VAR,
+	"Ver Cola de Espera",L_COLA,
+	"Reset Variables",L_RES,
+	"Salir",Salir;
+	close;
+L_COLA:
+	mes "[ ^0065DFGVG Guild^000000 ]";
+	mes "Está la siguiente lista de espera:";
+		set @num,$@pcdes2;
+L_Loop:
+		if($@cgdes[@num]>0)	mes "Guild: "+getguildname($@cgdes[@num]);
+		if(@num==$@pcdes) goto L_LoopEnd;
+		if($@pcdes<0)goto L_LoopEnd;
+		set @num,@num+1;
+		if(@num>$@tope_cola9)set @num,0;
+		goto L_Loop;
+L_LoopEnd:
+close;
+
+L_RES:
+	// status evento
+	callfunc "Reset_Var_Battle";
+	mes "[ ^0065DFGVG Guild^000000 ]";
+	mes "Variables reseteadas";
+	close;
+//----------------------
+L_VAR:
+	mes "[ ^0065DFGVG Guild^000000 ]";
+	mes "$@desafio = "+$@desafio;
+	mes "$@des[0] = "+$@des[0];
+	mes "$@des[1] = "+$@des[1];
+	mes "$@des[2] = "+$@des[2];
+	mes "$@ades[0] = "+$@ades[0];
+	mes "$@ades[1] = "+$@ades[1];
+	mes "$@ades[2] = "+$@ades[2];
+	mes "$@pades = "+$@pades;
+	mes "$@players_gvg = "+$@players_gvg;
+	mes "$@rondas = "+$@rondas;
+	mes "$@gvgscore[0] = "+$@gvgscore[0];
+	mes "$@gvgscore[1] = "+$@gvgscore[1];
+	mes "User Guild A = "+getmapguildusers("bat_b01",$@des[0]);
+	mes "User Guild B = "+getmapguildusers("bat_b01",$@ades[0]);
+	mes "$@cgdes[1] =" +$@cgdes[1];
+	mes "$@cudes[1] =" +$@cudes[1];
+	mes "$@pcdes = "+$@pcdes;
+	mes "$@salir = "+$@salir;
+	close;
+//-------------------------
+L_YACOLA:
+	mes "Lo siento tu guild ya está inscrita en la cola de desafíos.";
+	mes "Adiós";
+L_FullCola:
+	mes "Ya hay un desafío en curso y la cola de desafíos está llena intentalo más tarde";
+	mes "Adios";
+	close;
+L_CDES:
+	set @cont_char,0;
+	while(@cont_char<=$@tope_cola9){
+	if($@cgdes[@cont_char]==getcharid(2))goto L_YACOLA;
+	set @cont_char,@cont_char+1;
+	}
+	//para no repetirse en la cola de espera
+		
+	if($@pcdes+1>$@tope_cola9){
+	if($@cgdes[0]>0)goto L_FullCola;
+	set $@pcdes,0;
+	goto L_CONT;
+	}else
+	if($@pcdes+1==$@pcdes2 && $@cgdes[$@pcdes2]>0)goto L_FullCola;
+	set $@pcdes,$@pcdes+1;
+L_CONT:
+	set $@cgdes[$@pcdes],getcharid(2);
+	set $@cudes[$@pcdes],getcharid(0);
+	mes "Ya hay un desafío en curso";
+	mes "Por lo que quedarás registrado en la cola de desafíos";
+	mes "Adiós.";
+	close;
+L_ADES:
+	if($@desafio>1) goto L_CDES;
+	if($@buffer_npc==1)goto L_Buffer_On;
+	set $@desafio,$@desafio+1;
+	set $@ades[1],getcharid(0);
+	set $@ades[0],getcharid(2);
+	mes "Has aceptado el Reto.";
+	mes "Desafío de ["+$@players_gvg+" VS "+$@players_gvg+"] a ["+$@rondas+" Rondas]";
+	mes "Entre ["+getguildname($@des[0])+"] vs ["+getguildname($@ades[0])+"]";
+	announce "GvG ["+getguildname($@des[0])+"] vs ["+getguildname($@ades[0])+"] de ["+$@players_gvg+" vs "+$@players_gvg+"] a ["+$@rondas+" Rounds] ",8;
+	set $@pades,1;
+	close;
+L_Buffer_On:
+	mes "Alguien registro la guild antes que tu.";
+	mes "Intenta nuevamente";
+	mes "Salir";
+	close;
+L_IDES:
+	if($@desafio>0) goto L_ADES;
+	mes "Seleccionar número de Rondas";
+	menu
+		"1 Ronda",-,
+		"3 Rondas",-,
+		"5 Rondas",-;
+	if(@menu==1)set @rondas_temp,1;
+	if(@menu==2)set @rondas_temp,3;
+	if(@menu==3)set @rondas_temp,5;
+	mes "El próximo paso es el número de participantes";
+	next;
+	mes "[ ^0065DFGVG Guild^000000 ]";
+	mes "Ahora selecciona el número de participantes";
+	menu
+		"3 vs 3",-,
+		"4 vs 4",-,
+		"5 vs 5",-,
+		"6 vs 6",-,
+		"7 vs 7",-;
+	set @players_gvg_temp,@menu+2;
+	mes "Ahora estás esperando el desafío";
+	if($@desafio>0)goto L_Tarde;
+	set $@desafio,1;
+	set $@des[1],getcharid(0);
+	set $@des[0],getcharid(2);
+	set $@rondas,@rondas_temp;
+	set $@players_gvg,@players_gvg_temp;
+	announce "La Guild ["+getguildname($@des[0])+"] está esperando desafío ["+$@players_gvg+" vs "+$@players_gvg+"] a "+$@rondas+" Rounds",8;
+	next;
+	mes "[ ^0065DFGVG Guild^000000 ]";
+	mes "Desafío de ["+$@players_gvg+" VS "+$@players_gvg+"] a ["+$@rondas+" Rondas]"; 
+	mes "Los participantes de tu guild que se registren para ingresar al salón de batalla";
+	//inicio tiempo espera
+	donpcevent "#timer_gvgarena::OnActiveTimerGvGArena";
+	set $@pdes,1;
+	close;
+	//inicio en reset:
+L_Tarde:
+	mes "Alguien al mismo tiempo que tu inscribio el desafío primero";
+	mes "Intentalo más tarde o apuntate en la cola de desafíos";
+	mes "Adios";
+	close;
+OnInit:
+waitingroom "Guild VS Guild",0;;
+	callfunc "Reset_Var_Battle";
+end;	
+}//@FIN
+
+//-----------
+//Timer GvG
+//-----------
+	-	script	#timer_gvgarena	-1,{
+	end;
+OnActiveTimerGvGArena:
+sleep 15000;
+initnpctimer;
+announce "Queda 1 minuto para el desafío ["+getguildname($@des[0])+"]["+$@players_gvg+" vs "+$@players_gvg+"]["+$@rondas+" Rounds]",16;
+end;
+OnTimer60000:
+stopnpctimer;
+if($@pdes==$@pades && $@pdes==$@players_gvg){
+	callfunc "start_battle_gvg";
+}else if($@pades==0){
+	announce "No hay retadores desafío ha expirado por exceso de tiempo",16;
+	callfunc "Reset_Var_Battle";
+	mapwarp "bat_b01","izlude",125+rand(0,5),110+rand(0,5);
+	//Nadie fue el retador
+	//funcion desabilitar por 15 minutos
+}else if($@pdes<$@pades){
+	announce "El número de participantes de la guild local está incompleto",8;
+	sleep 5000;
+	announce "La Guild "+getguildname($@pdes[0])+" Gana por Default",16;
+	callfunc "ganador_rondas",1;
+	goto OnActiveTimerGvGArena;
+}else{// fin ciclos
+	announce "El número de participantes de la guild desafiante está incompleto",8;
+	sleep 5000;
+	announce "La Guild "+getguildname($@des[0])+" gana por Default",16;
+	callfunc "ganador_rondas",0;
+	goto OnActiveTimerGvGArena;
+};//fin
+end;
+}//@FIN
+//funcion start battle
+
+
+	function	script	start_battle_gvg	{
+	set $@gvgscore[0],0;
+	set $@gvgscore[1],0;
+	set $@num_ronda,1;
+	set $@fin_salir,0;
+	while($@num_ronda<=$@rondas && $@fin_salir==0){
+	announce "Inicio de GvG Arena! "+$@gvgscore[0]+" ["+getguildname($@des[0])+"] vs "+$@gvgscore[1]+" ["+getguildname($@ades[0])+"] de ["+$@players_gvg+" vs "+$@players_gvg+"][Ronda "+$@num_ronda+" de "+$@rondas+"] ",8;
+	sleep 5000;
+	callfunc "warp_equipos";
+	callfunc "on_battle";
+	sleep 5000;
+	set $@num_ronda,$@num_ronda+1;
+	if($@num_ronda<$@rondas && $@fin_salir==0){
+		announce "Quedan 15 Segundos para la siguiente Ronda",16;
+		sleep 15000;
+		}//fin else
+		callfunc "comprobar_score";
+		sleep 3000;
+		
+	}//fin while
+	
+	announce "Resultado Final! "+$@gvgscore[0]+" ["+getguildname($@des[0])+"] vs "+$@gvgscore[1]+" ["+getguildname($@ades[0])+"] de ["+$@players_gvg+" vs "+$@players_gvg+"]",8;
+		//funcion acomodar
+		if($@gvgscore[0]>=$@gvgscore[1])callfunc "ganador_rondas",0;
+			else callfunc "ganador_rondas",1;
+			//inicio ciclo conteo batalla
+			donpcevent "#timer_gvgarena::OnActiveTimerGvGArena";
+	
+	return;
+}
+//WArps
+
+
+function	script	warp_equipos	{
+	set $@temp,1;
+	while($@temp<=$@players_gvg){
+	warpchar "bat_b01",330+rand(0,5),150+rand(0,5),$@des[$@temp];
+	warpchar "bat_b01",60+rand(0,5),150+rand(0,5),$@ades[$@temp];
+	set $@temp,$@temp+1;
+	}
+	return;
+}//@FIN WARP
+
+//funcion batalla
+	function	script	on_battle	{
+	set $@salir,0;
+	set $@time_limit,0;
+	while($@salir<1){
+		if(getmapguildusers("bat_b01",$@des[0])<1 && $@salir==0){
+			set $@gvgscore[1],$@gvgscore[1]+1;
+			announce "La Guild ["+getguildname($@ades[0])+"] Gana el Round "+$@num_ronda,8;
+			set $@salir,$@salir+1;
+		sleep 5000;
+		set $@time_limit,$@time_limit+5000;
+		}
+		if(getmapguildusers("bat_b01",$@ades[0])<1 && $@salir==0){
+			set $@gvgscore[0],$@gvgscore[0]+1;
+			announce "La Guild ["+getguildname($@des[0])+"] Gana el Round "+$@num_ronda,8;
+			set $@salir,$@salir+1;
+		}
+		if($@time_limit>300000 && $@salir==0){
+			announce "Este Round quedo Empatado!! Draw Round!! "+$@num_ronda,8;
+			set $@salir,$@salir+1;
+		}//if de tiempo limite
+		sleep 5000;
+		set $@time_limit,$@time_limit+5000;
+	}//fin while
+	return;
+	
+}//@FIN ONBATTLE
+
+//Reset Variables
+	function	script	Reset_Var_Battle	{
+	
+	// status evento
+	set $@desafio,0;
+	//Participantes 1
+	set $@des[0],0;
+	set $@des[1],0;
+	set $@des[2],0;
+	set $@des[3],0;
+	set $@des[4],0;
+	set $@des[5],0;
+	set $@des[6],0;
+	set $@des[7],0;
+	set $@pdes,0;
+	// participantes 2
+	set $@ades[0],0;
+	set $@ades[1],0;
+	set $@ades[2],0;
+	set $@ades[3],0;
+	set $@ades[4],0;
+	set $@ades[5],0;
+	set $@ades[6],0;
+	set $@ades[7],0;
+	set $@pades,0;
+	// Rondas y Players
+	set $@round,1;
+	set $@players_gvg,2;
+	//Cola
+	//10 Guild en cola
+	set $@pcdes2,0;
+	set $@pcdes,-1;
+	set $@cgdes[0],0;
+	set $@cudes[0],0;
+	set $@cgdes[1],0;
+	set $@cudes[1],0;
+	set $@cgdes[2],0;
+	set $@cudes[2],0;
+	set $@cgdes[3],0;
+	set $@cudes[3],0;
+	set $@cgdes[4],0;
+	set $@cudes[4],0;
+	set $@cgdes[5],0;
+	set $@cudes[5],0;
+	set $@cgdes[6],0;
+	set $@cudes[6],0;
+	set $@cgdes[7],0;
+	set $@cudes[7],0;
+	set $@cgdes[8],0;
+	set $@cudes[8],0;
+	set $@cgdes[9],0;
+	set $@cudes[9],0;
+	//Var de Ejecucion
+	set $@gvgscore[0],0;
+	set $@gvgscore[1],0;
+	set $@num_ronda,1;
+	set $@tope_cola9,9;
+	return;
+}// fin reset
+
+
+//Ganador Rondas
+function	script	ganador_rondas	{
+	switch(getarg(0)){
+	//------------------------ganador local
+	case 0:
+	
+	if($@cgdes[$@pcdes2]<1){
+	set $@pades,0;
+	set $@ades[0],0;
+	set $@ades[1],0;
+	set $@ades[2],0;
+	set $@ades[4],0;
+	set $@ades[5],0;
+	set $@ades[6],0;
+	set $@ades[7],0;
+	set $@cgdes[$@pcdes2],0;
+	set $@cudes[$@pcdes2],0;
+	set $@pcdes2,0;
+	set $@pcdes,-1;
+	
+	}else{
+	set $@ades[0],$@cgdes[$@pcdes2];
+	set $@ades[1],$@cudes[$@pcdes2];
+	set $@ades[2],0;
+	set $@ades[4],0;
+	set $@ades[5],0;
+	set $@ades[6],0;
+	set $@ades[7],0;
+	set $@pades,1;
+	set $@cgdes[$@pcdes2],0;
+	set $@cudes[$@pcdes2],0;
+	set $@pcdes2,$@pcdes2+1;
+	if($@pcdes2>$@tope_cola9)set $@pcdes2,0;
+	}
+	break;
+	//------------------------ganador visita
+	case 1:
+	//cambio visitante por local
+	set $@des[0],$@ades[0];
+	set $@des[1],$@ades[1];
+	set $@des[2],$@ades[2];
+	set $@des[3],$@ades[3];
+	set $@des[4],$@ades[4];
+	set $@des[5],$@ades[5];
+	set $@des[6],$@ades[6];
+	set $@des[7],$@ades[7];
+	set $@pdes,$@pades;
+	//si no hay cola
+	if($@cgdes[$@pcdes2]<1){
+	set $@pades,0;
+	set $@ades[0],0;
+	set $@ades[1],0;
+	set $@ades[2],0;
+	set $@ades[4],0;
+	set $@ades[5],0;
+	set $@ades[6],0;
+	set $@ades[7],0;
+	set $@cgdes[$@pcdes2],0;
+	set $@cudes[$@pcdes2],0;
+	set $@pcdes2,0;
+	set $@pcdes,-1;
+	
+	}else{
+	set $@ades[0],$@cgdes[$@pcdes2];
+	set $@ades[1],$@cudes[$@pcdes2];
+	set $@ades[2],0;
+	set $@ades[4],0;
+	set $@ades[5],0;
+	set $@ades[6],0;
+	set $@ades[7],0;
+	set $@pades,1;
+	//consumir cola
+	set $@cgdes[$@pcdes2],0;
+	set $@cudes[$@pcdes2],0;
+	set $@pcdes2,$@pcdes2+1;
+	if($@pcdes2>$@tope_cola9)set $@pcdes2,0;
+	}
+	break;	
+	}//fin casos
+	if($@pades==0)announce "La Guild ["+getguildname($@des[0])+"] está esperando desafío ["+$@players_gvg+" vs "+$@players_gvg+"] a "+$@rondas+" Rounds",8;
+	else announce "GvG ["+getguildname($@des[0])+"] vs ["+getguildname($@ades[0])+"] de ["+$@players_gvg+" vs "+$@players_gvg+"] a ["+$@rondas+" Rounds] ",8;
+	return;
+}
+
+//Comprobar score de triunfo
+	function	script	comprobar_score	{
+//inicio Func
+switch($@rondas){
+case 1:
+		return;
+case 3:
+		if($@gvgscore[0]==2 || $@gvgscore[1] == 2){
+		set $@fin_salir,1;
+		return;
+		}//fin @IF
+case 5:
+		if($@gvgscore[0]==3 || $@gvgscore[1] == 3){
+		set $@fin_salir,1;
+		return;
+		}//fin @IF
+		
+case 7:
+		if($@gvgscore[0]==4 || $@gvgscore[1] == 4){
+		set $@fin_salir,1;
+		return;
+		}//fin @IF
+
+}//@fin Switch
+		return;
+
+}//Fin Function
+
+//-------------------
+//map flags
+//-------------------
+bat_b01.gat	mapflag	nobranch
+bat_b01.gat	mapflag	nowarpto
+bat_b01.gat	mapflag	nowarp
+bat_b01.gat	mapflag	noicewall
+bat_b01.gat	mapflag	nomemo
+bat_b01.gat	mapflag	noteleport
+bat_b01.gat	mapflag	nosave
+bat_b01.gat	mapflag	monster_noteleport
+bat_b01.gat	mapflag	restricted	6
+bat_b01.gat	mapflag	restricted	5

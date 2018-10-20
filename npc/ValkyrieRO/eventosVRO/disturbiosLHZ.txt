@@ -1,0 +1,34 @@
+//===== Global Chile ======
+//=== https://www.facebook.com/IntegralesGlobal ===
+
+-	script	disturbioslhz	-1,{
+
+OnInit:
+inicio:
+sleep2 rand(43200000,259200000);
+	monster "quiz_02",314,57,"Disturbios LHZ",2260,1;
+announce "Guardias de Lighthalzen: ¡¡La ciudad de Lighthalzen está siendo atacada por un gran grupo de ladrones, necesitamos refuerzos!!",bc_all,0xFA58AC;
+monster "lighthalzen",0,0,"Ladron",1851,500,"disturbioslhz::OnMyMobDead";
+set $@MonDistLHZ,501;
+
+OnMyMobDead:
+set $@MonDistLHZ,$@MonDistLHZ-1;
+if ($@MonDistLHZ <= 0) {announce "Guardias de Lighthalzen: ¡¡Bien hecho soldados, hemos conseguido expulsar a los ladrones de Lighthalzen!!",bc_all,0xFA58AC; goto inicio;}
+
+set @DropDistLHZ,rand(1,200);
+
+if (@DropDistLHZ >= 200) {getitem 5537,1; end;}
+if (@DropDistLHZ >= 199) {getitem 1719,1; end;}
+if (@DropDistLHZ >= 197) {getitem 7444,1; end;}
+if (@DropDistLHZ >= 192) {getitem 969,1; end;}
+if (@DropDistLHZ >= 181) {getitem 12053,1; end;}
+if (@DropDistLHZ >= 175) {getitem 12058,1; end;}
+if (@DropDistLHZ >= 169) {getitem 12068,1; end;}
+if (@DropDistLHZ >= 163) {getitem 12043,1; end;}
+if (@DropDistLHZ >= 157) {getitem 12048,1; end;}
+if (@DropDistLHZ >= 151) {getitem 12063,1; end;}
+if (@DropDistLHZ >= 1) {getitem 7071,1;
+if (@DisfrazDisLHZ == 0 )dispbottom "Te disfrazas para hacerte pasar por un Guardia de Lighthalzen ";
+set @DisfrazDisLHZ,1; disguise 868; sleep2 2700000; undisguise;
+end;}
+end;}

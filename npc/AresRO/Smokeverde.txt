@@ -1,0 +1,97 @@
+//===== Script eAthena ======================================= 
+//= Valkyrie S Quest
+//===== por: ================================================== 
+//= Creador de Quests Ragnarok World
+//= v1.0
+//===== Compatible Con: ===================================== 
+//= eAthena SVN
+//===== Descripción: ========================================= 
+//  Quest Creada por el Script Creador de Quests Online de
+//  http://www.ragnarokworld.net
+//============================================================ 
+
+odin_tem03,277,234,5	script	Valkyrie S	811,{
+ 	set @NPCName$, "[^336600Valkyrie S^000000]";
+	mes @NPCName$;
+	mes "Hola viajero que buscas por esta colinas.";
+	next;
+	mes @NPCName$;
+	mes "tengo un problema con mi enemiga Randgris";
+	next;
+	mes @NPCName$;
+	mes "me gustaria que me ayudes a conseguir unos item para vencerla, te dare una aura que la consegui en una batalla, te llenara de ponder 70+ AllStats su nombre ^339966Wind Power^000000.";
+	next;
+	mes @NPCName$;
+	mes "Quieres Obtener este Item?";
+	next;
+	switch(select("Si:No:Cancelar")) {
+ 	case 1:
+	mes @NPCName$;
+	mes "Estos son Los Items Necesarios.";
+	mes "  ^66cc66Hill Wind Card^000000 [15]";
+	mes "  ^66cc66Rough Wind^000000 [200]";
+	mes "  ^66cc66Wind Stone^000000 [100]";
+	mes "  ^66cc66Gold Coin^000000 [2000]";
+	mes "  ^66cc66littlemoonlightcard^000000 [1]";
+	mes "  ^66cc66Harpy Feather^000000 [25]";
+	next;
+	if (countitem(4345) < 15) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(996) < 200) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(7523) < 100) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(671) < 2000) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(30002) < 1) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(7115) < 25) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	mes @NPCName$;
+	mes "Bien! Tienes todos los Items! Felicidades !";
+	mes "el Objeto es Tuyo";
+	delitem 4345,15;
+	delitem 996,200;
+	delitem 7523,100;
+	delitem 671,2000;
+	delitem 30002,1;
+	delitem 7115,25;
+	getitem 27003,1;
+	close;
+	case 2:
+	mes @NPCName$;
+	mes "de acuerdo, vuelve pronto !";
+	close;
+	case 3:
+	close;
+	}
+
+}
+
+//============================================================
+//===== Creador de Quests Ragnarok World ===========================
+//============================================================

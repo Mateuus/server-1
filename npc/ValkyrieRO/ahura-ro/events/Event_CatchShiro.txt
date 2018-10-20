@@ -1,0 +1,36 @@
+// Evento Rice Cake
+// Para capturar el PET Rice Cake
+
+-	script	Shiro_Event	HIDDEN_NPC,{
+	end;
+
+OnWhisperGlobal:
+	if( getgmlevel() < 4 ) end;
+	if( @whispervar0$ != "Shiro" ) end;
+	if( $@ShiroEvent ) end;
+
+OnClock1930:
+	set $@Shiro, rand(25);
+	set $@ShiroEvent, 1;
+	announce "[ Shiro esta visitando " + $@WoG_nam$[$@Shiro] + " - Intenta capturarlo! ]",0;
+	monster $@WoG_map$[$@Shiro],0,0,"Shiro",1586,1,"Shiro_Event::OnMyMobDead";
+	initnpctimer;
+	end;
+	
+OnTimer90000:
+	killmonster $@WoG_map$[$@Shiro],"Shiro_Event::OnMyMobDead";
+	announce "[ Shiro ha escapado!! Mejor suerte la proxima vez ]",0;
+	goto OnStopEvent;
+
+OnMyMobDead:
+	set #CASH, #CASH + 500;
+	doevent "DoTreasure::OnTreasureOpen";
+	announce "[ Shiro ha sido atrapado por " + strcharinfo(0) + " - Woo! Felicidades!! ]",0;
+	dispbottom "- Has ganado 500 puntos de Cash por atrapar a Shiro -";
+
+OnStopEvent:
+	set $@Shiro, 0;
+	set $@ShiroEvent, 0;
+	stopnpctimer;
+	end;
+}

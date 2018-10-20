@@ -1,0 +1,44 @@
+//===== rAthena Script =======================================
+//= Stat Point Seller
+//===== By: ==================================================
+//= Bahmut
+//===== Current Version: =====================================
+//= 1.0
+//===== Description: =========================================
+//= Sells Stat Points to Players
+//=  - 1 Stat Point for 10,000 zeny
+//=  - 10 Stat Points for 10,000 zeny
+//============================================================
+
+prontera,133,194,4	script	Todas las habilidades	10009,{
+
+	.@Price = 0;	// Zeny required for heal
+	.@Buffs = 0;	// Also buff players? (1: yes / 0: no)
+	.@Delay = 1;	// Heal delay, in seconds
+
+	if (@HD > gettimetick(2))
+		end;
+	if (.@Price) {
+		message strcharinfo(0), "Healing costs " + callfunc("F_InsertComma",.@Price) + " Zeny.";
+		if (Zeny < .@Price)
+			end;
+		if (select("^0055FFHeal^000000:^777777Cancel^000000") == 2)
+			end;
+		Zeny -= .@Price;
+	}
+	specialeffect2 99;
+	//atcommand "@allstats";
+        atcommand "@allskill";
+	//atcommand "@blevel 999";
+	//atcommand "@jlevel 150";
+
+	if (.@Buffs) {
+		//specialeffect2 EF_INCAGILITY;
+		//sc_start SC_INCREASEAGI,240000,10;
+		//specialeffect2 EF_BLESSING;
+		//sc_start SC_BLESSING,240000,10;
+	}
+	if (.@Delay)
+		@HD = gettimetick(2) + .@Delay;
+	end;
+}

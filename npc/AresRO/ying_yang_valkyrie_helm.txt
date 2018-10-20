@@ -1,0 +1,97 @@
+//===== Script eAthena ======================================= 
+//= Ying yang Quest
+//===== por: ================================================== 
+//= Creador de Quests Ragnarok World
+//= v1.0
+//===== Compatible Con: ===================================== 
+//= eAthena SVN
+//===== Descripción: ========================================= 
+//  Quest Creada por el Script Creador de Quests Online de
+//  http://www.ragnarokworld.net
+//============================================================ 
+
+poring_w02,97,101,5	script	Ying yang	739,{
+ 	set @NPCName$, "[^003366Ying yang^000000]";
+	set @cost, 100000000;
+	mes @NPCName$;
+	mes "Hola..Te gustaria tener un Ying yang valkyrie helm.";
+	next;
+	mes @NPCName$;
+	mes "Añade 40 puntos AllStats.";
+	mes "Te Reduce 30% Delay.";
+	mes "10% Ante Demi-Human.";
+	next;
+	mes @NPCName$;
+	mes "Quieres Obtener este Item?";
+	next;
+	switch(select("si:no:Cancelar")) {
+ 	case 1:
+	mes @NPCName$;
+	mes "Estos son Los Items Necesarios.";
+	mes "  ^990099Black Dyestuff^000000 [50]";
+	mes "  ^990099White Dyestuff^000000 [50]";
+	mes "  ^990099Black_Valkyrie_Helm^000000 [1]";
+	mes "  ^990099White_Valkyrie_Helm^000000 [1]";
+	mes "  ^990099Gold Coin^000000 [3000]";
+	mes "  ^990099100000000 Zeny^000000";
+	next;
+	if (countitem(983) < 50) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(982) < 50) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(20148) < 1) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(20159) < 1) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(671) < 3000) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (Zeny < @cost) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	mes @NPCName$;
+	mes "Bien! Tienes todos los Items! Felicidades !";
+	mes "el Objeto es Tuyo";
+	delitem 983,50;
+	delitem 982,50;
+	delitem 20148,1;
+	delitem 20159,1;
+	delitem 671,3000;
+	set Zeny,Zeny-@cost;
+	getitem 15125,1;
+	close;
+	case 2:
+	mes @NPCName$;
+	mes "de acuerdo, vuelve pronto !";
+	close;
+	case 3:
+	close;
+	}
+
+}
+
+//============================================================
+//===== Creador de Quests Ragnarok World ===========================
+//============================================================

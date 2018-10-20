@@ -1,0 +1,93 @@
+//===== Global Chile ======
+//=== https://www.facebook.com/IntegralesGlobal ===
+
+vip_lounge,68,139,5	script	Tienda de Ropa	817,{
+set .@name$,"[Tienda de Ropa]";
+
+	if(.Suit != 0){
+		mes .@name$;
+		mes "Hola! Vienes a que te quite el Traje?";
+		next;
+			if(select("Si:No") == 2){
+				mes .@name$;
+				mes "Jejejeee! pues si te ves bien con ese traje puesto!";
+				close;
+
+			} else {
+				mes .@name$;
+				mes "Awww! bueno sera como gustes...";
+				next;
+					switch (.Suit) {
+					case 1: // .Suit = 1 --> Traje de Bodas
+						sc_end SC_Wedding;
+						set .Suit,0;
+						break;
+				
+					case 2: // .Suit = 2 --> Traje de Navidad
+						sc_end SC_XMAS;
+						set .Suit,0;
+						break;
+				
+					case 3: // .Suit = 3 --> Traje de Verano
+						sc_end SC_SUMMER;
+						set .Suit,0;
+						break;
+
+					}
+
+				mes .@name$;
+				mes "Listo... ya le quite el traje u.u";
+				mes "Vuelva cuando quiera otro!";
+				close;
+
+			}
+
+	}
+
+mes .@name$;
+mes "Hola! soy la encargada de la Tienda de Ropa.";
+mes "Te interesaria ver nuestros diseños?";
+next;
+	if(select("Dale!:No gracias...") == 2) close;
+
+	mes .@name$;
+	mes "Elija uno de Nuestros Diseños:";
+	next;
+		switch(select("Traje de Bodas:Traje de Navidad:Traje de Verano")){
+
+		case 1:
+			mes .@name$;
+			mes "Has Elejido: Traje de Bodas.";
+			mes "Duracion: 1 Hora.";
+			mes "	";
+			mes "Disfruta de tu Traje!... Suerte.";
+			sc_start SC_Wedding,3600000,1;
+			set .Suit,1;
+			close;
+
+		case 2:
+			mes .@name$;
+			mes "Has elejido: Traje de Navidad.";
+			mes "Duracion: 1 Hora.";
+			mes "	";
+			mes "Disfruta de tu Traje!... Suerte.";
+			sc_start SC_XMAS,3600000,1;
+			set .Suit,2;
+			close;
+
+		case 3:
+			mes .@name$;
+			mes "Has elejido: Traje de Verano.";
+			mes "Duracion: 1 Hora.";
+			mes "	";
+			mes "Disfruta de tu Traje!... Suerte.";
+			sc_start SC_SUMMER,3600000,1;
+			set .Suit,3;
+			close;
+	
+		}
+	OnInit:
+	waitingroom "Tienda de Ropa",0;
+	end;
+	
+}

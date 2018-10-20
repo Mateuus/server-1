@@ -1,0 +1,479 @@
+
+//===== rAthena Script =======================================
+//= Automated MVP Ladder and rewrad system
+//===== By: ==================================================
+//= pajodex
+//===== Current Version: =====================================
+//= 3.0
+//===== Compatible With: =====================================
+//= rAthena Project (pajodex)
+//===== Description: =========================================
+/*
+
+MVP will drop an item only at specific maps.
+if players are on a party item will be given randomly to any online party members 
+
+NEW~
+- MVP Ladder which is fully automated.
+- Just leave it on and NPC will do the rest.
+- Easy configure
+- Added @mvpreset command to reset the ladder. It will also reset the 
+  monthly and weekly if it is on the '.day' and '.week' at settings 
+
+
+*/
+//=====******** Note ********=================================
+//= if you find bugs or problem, please do tell DM me at
+//= Discord (pajodex#1328) or rAthena (pajodex) 
+//= open for suggestions
+//===== Additional Comments: =================================
+// 1.0 - Initial release (MVP Kill standalone)
+// 2.0 - Added SQL based with ladder
+//		 Added automatic reward system
+//		 Added functions
+//		 Added bitwise variables
+//		 Optimization
+// 2.1 - Cleaned the script
+//		 updated title
+// 2.2 - Fixed error on reward if players are offline	
+// 2.3 - Added nobranch mapflags to all maps listed (Sukea23 via discord)
+// 2.4 - Ranking fixed (reported by Sukea23)
+// 3.0 - Script optimization and re-work
+//		 added new ranker feature : view your rank
+//		 added mvp ladder points system
+//		 added simple mvp ladder shop
+// -------------------------------------------------------
+// 		How to use F_MVPReward:
+// 		F_MVPReward ( <Num of players to get reward (default : 10)>, etc...)
+// 		This will allow you to set the number of players to receive
+// 		the rewards. For small population server, you can set this to 5 or 
+// 		any amount as you wish.
+// 		This update is in-response to Holograma's question in the post:
+// 		https://rathena.org/board/topic/114565-utility-automated-mvp-ladder-reward-system/?tab=comments#comment-341725
+// -------------------------------------------------------
+//===== Credits goes to: =====================================
+//= hurtsky
+//= secret
+//= sader1992
+//= Stolao
+//= Euphy 
+//=============================================================
+arena,36,62,3	script	MVP Ladder	837,{
+function	F_CheckMvpLadder;
+function	F_CheckRank;
+function	F_MVPReset;
+function	F_MVPReward;
+
+	mes .nm$;
+	mes "Hola "+strcharinfo(0)+",";
+	mes " ";
+	mes "¿Como puedo ayudarte?";
+	next;
+	switch(select("My Status",(.Option&1) ? "Daily Ranking":"" ,(.Option&2) ? "Weekly Ranking":"",(.Option&4) ? "Monthly Ranking":"","All Time Ranking",( getgmlevel() >= 99 ) ? "^ff0000[ GM ] Reset ladder^000000":"" ,(.Option&16) ? "Open MVP Ladder Shop":"","Information","Nothing...")) {
+		mes .nm$;
+		case 1:
+			mes "You've got:";
+			if(.Option&1) 
+			{
+				query_sql( "SELECT day_kills, find_in_set( day_kills, ( SELECT group_concat( day_kills order by day_kills desc ) from mvp_ranking ) ) from mvp_ranking where char_id = "+ getcharid(0), .@dkill_count, .@rank );
+				if (.@dkill_count == 0) {
+					F_CheckRank ( "daily" );
+				} else {
+				mes " ~ ^FF0000" +.@dkill_count+ "^000000 kills and ranks ^FF0000" +.@rank+ "^000000 place today.";
+				}
+			}
+			if(.Option&2)
+			{
+				query_sql( "SELECT week_kills, find_in_set( week_kills, ( SELECT group_concat( week_kills order by week_kills desc ) from mvp_ranking ) ) from mvp_ranking where char_id = "+ getcharid(0), .@wkill_count, .@rank );
+				if (.@wkill_count == 0) {
+					F_CheckRank ( "weekly" );
+				} else {
+				mes " ~ ^FF0000" +.@wkill_count+ "^000000 kills and ranks ^FF0000" +.@rank+ "^000000 place this week.";
+				}
+			}
+			if(.Option&4) 
+			{
+				query_sql( "SELECT month_kills, find_in_set( month_kills, ( SELECT group_concat( month_kills order by month_kills desc ) from mvp_ranking ) ) from mvp_ranking where char_id = "+ getcharid(0), .@mkill_count, .@rank );
+				if (.@mkill_count == 0) {
+					F_CheckRank ( "monthly" );
+				} else {
+				mes " ~ ^FF0000" +.@mkill_count+ "^000000 kills and ranks ^FF0000" +.@rank+ "^000000 place this month.";
+				}
+			}
+			query_sql( "SELECT all_kills, find_in_set( all_kills, ( SELECT group_concat( all_kills order by all_kills desc ) from mvp_ranking ) ) from mvp_ranking where char_id = "+ getcharid(0), .@akill_count, .@rank );
+			mes " ~ Over all score of ^FF0000" +.@akill_count+ "^000000 kills and ranks ^FF0000" +.@rank+ "^000000 place all time.";
+			close;
+					
+		case 2:
+            F_CheckMvpLadder ( "day_kills" );
+			close;
+			
+		case 3:
+			F_CheckMvpLadder ( "week_kills" );
+			close;
+			
+		case 4:
+			F_CheckMvpLadder ( "month_kills" );
+			close;
+			
+		case 5:
+			F_CheckMvpLadder ( "all_kills" );
+			close;
+			
+		case 6:
+			switch(select((.Option&1) ? "Reset daily records":"",(.Option&2) ? "Reset weekly records":"",(.Option&4) ? "Reset monthly records":"","Reset everything")) {
+				case 1:
+					F_MVPReset ( "day_kills" );
+					close;
+					
+				case 2:
+					F_MVPReset ( "week_kills" );
+					close;
+		
+				case 3:
+					F_MVPReset ( "month_kills" );
+					close;
+				
+				case 4:
+					if ( select( "Confirm","Cancel" ) == 1 ) {
+						query_sql "TRUNCATE TABLE `mvp_ranking`";
+						close;
+					}
+			}
+			break;
+			
+		case 7:
+			if(!#MVP_LADDER_POINTS) {
+				mes "You don't have any mvp points, you cant purchase anything.";
+				close;
+			} else 
+			mes "You currently have "+ #MVP_LADDER_POINTS +" mvp ladder points.";
+			callshop "mvp_ladder_shop_q",1;
+			npcshopattach "mvp_ladder_shop_q";
+			end;
+		
+		case 8:
+			// Information menu part
+			mes .nm$;
+			mes "Mvp ladder will automatically reset every day, week, and month.";
+			next;
+			mes .nm$;
+			mes "Before the ladder resets, the TOP MVP Hunter will be rewarded via ^FF0000RODex^000000 (mail) during the next day 12:00 A.M.";
+			next;
+			mes .nm$;
+			mes "Note that only MVPs on their respective maps will be counted in the ladder. MVP Arena or else where will not.";
+			next;
+			if(.Option&16) {
+			mes .nm$;
+			mes "You can also gain 'MVP ladder points' for killing mvps for "+ .point +" points per kill";
+			next;
+			mes .nm$;
+			mes "If you are in a party, points will be divided equally to each party members.";
+			next;
+			mes .nm$;
+			mes "Points can be used in MVP Ladder shop to buy items.";
+			next;
+			}
+			mes .nm$;
+			mes "Goodluck ~";
+			close;
+		
+		default:		
+			close;
+	}
+
+OnBuyItem:
+	for(set .@i,0; .@i<getarraysize(@bought_nameid); set .@i,.@i+1)
+		for(set .@j,0; .@j<getarraysize(.Shop); set .@j,.@j+2)
+			if (@bought_nameid[.@i] == .Shop[.@j]) {
+				set .@cost, .@cost+(.Shop[.@j+1]*@bought_quantity[.@i]);
+				break;
+			}
+	if (.@cost > #MVP_LADDER_POINTS) {
+		mes .nm$;
+		mes "You don't have enough points to purchase anything in ladder shop.";
+		next;
+		mes .nm$;
+		mes "You only have "+ #MVP_LADDER_POINTS +" points left.";
+	}
+	else {
+		mes .nm$;
+		mes "Items purchased:";
+		mes "-----------------------------------";
+		for(set .@i,0; .@i<getarraysize(@bought_nameid); set .@i,.@i+1) {
+			getitem @bought_nameid[.@i], @bought_quantity[.@i];
+			mes "  ^777777"+@bought_quantity[.@i]+"x "+getitemname(@bought_nameid[.@i])+"^000000";
+		}
+		mes "-----------------------------------";
+		#MVP_LADDER_POINTS = #MVP_LADDER_POINTS - .@cost;
+		next;
+		mes .nm$;
+		mes "You only have "+ #MVP_LADDER_POINTS +" points left.";
+		
+	}
+	deletearray @bought_nameid[0], getarraysize(@bought_nameid);
+	deletearray @bought_quantity[0], getarraysize(@bought_quantity);
+	close;
+	
+OnReward:
+OnClock0000:
+	if(.Option&4 && gettime(DT_DAYOFMONTH) == .day ){
+		F_MVPReward ( 10, "month_kills" ,  .MailTitle$[2] ,  .Prize_m[.@i * 3 + 2] ,  .Prize_m[.@i * 3] ,  .Prize_m[.@i * 3 + 1] , "Monthly");
+		sleep 5000;
+		query_sql("UPDATE `mvp_ranking` SET `month_kills` = '0'");
+	}
+	if(.Option&2 && gettime(DT_DAYOFWEEK) == .week ){
+		F_MVPReward ( 10, "week_kills" ,  .MailTitle$[1] ,  .Prize_w[.@i * 3 + 2] ,  .Prize_w[.@i * 3] ,  .Prize_w[.@i * 3 + 1] , "Weekly");
+		sleep 5000;
+		query_sql("UPDATE `mvp_ranking` SET `week_kills` = '0'");
+	}
+	if (.Option&1) {
+		F_MVPReward ( 10, "day_kills" ,  .MailTitle$[0] ,  .Prize_d[.@i * 3 + 2] ,  .Prize_d[.@i * 3] ,  .Prize_d[.@i * 3 + 1] , "Daily");
+		sleep 5000;
+		query_sql("UPDATE `mvp_ranking` SET `day_kills` = '0'");
+	}
+	end;
+
+OnNPCKillEvent:
+if ( .Option&8 && getgmlevel() >= .gm ) end; // If gm = event wont happen
+if ( getmonsterinfo( killedrid, MOB_MVPEXP )) {
+	for (.@a = 0; .@a < getarraysize(.t_maps$); ++.@a) {
+		if ( strcharinfo(3) == .t_maps$[.@a]) { 
+			if ( !getcharid(1) ) {	
+				if (rand(100) < .chance) 
+					getitem .s_rwd[0], .s_rwd[1];
+				if(.Option&16) {
+				#MVP_LADDER_POINTS = #MVP_LADDER_POINTS + .point;	
+				dispbottom "You got "+ .point +" ladder points. Total: "+ #MVP_LADDER_POINTS;
+				}
+				announce "[ System ] : Player ["+ strcharinfo(0) +"] has killed "+ getmonsterinfo( killedrid, MOB_NAME ) +" alone at "+ strcharinfo(3), bc_all;
+			}
+			else {				
+				getpartymember getcharid(1), 1;
+				getpartymember getcharid(1), 2;
+				for ( .@i = 0; .@i < $@partymembercount; ++.@i ) {
+					if ( isloggedin( $@partymemberaid[.@i], $@partymembercid[.@i] ) ) {
+						if(.Option&16) {
+						attachrid $@partymemberaid[.@i];
+						#MVP_LADDER_POINTS = #MVP_LADDER_POINTS + (.point / $@partymembercount);
+						dispbottom "--------------------------------------------";
+						dispbottom "You got "+ (.point / $@partymembercount) +" mvp ladder points. Total: "+ MVP_LADDER_POINTS;
+						dispbottom "--------------------------------------------";
+						}
+						.@partymemberaid[.@c] = $@partymemberaid[.@i];
+						++.@c;
+					}
+				}
+				if (rand(100) < .chance) 
+					getitem .p_rwd[0], .p_rwd[1], .@partymemberaid[ rand( .@c ) ];
+				
+				announce "[ System ] : Player ["+ strcharinfo(0) +"] of party ["+ strcharinfo(1) +"] has killed "+ getmonsterinfo( killedrid, MOB_NAME ) +" at "+ strcharinfo(3), bc_all;
+			}
+		query_sql( "INSERT INTO `mvp_ranking` SET `char_id`='"+ getcharid(0) +"',`name`='"+ strcharinfo(0) +"', `day_kills` = '1', `week_kills` = '1', `month_kills` = '1', `all_kills` = '1' ON DUPLICATE KEY UPDATE `day_kills` = `day_kills` + 1, `week_kills`=`week_kills` + 1, `month_kills` = `month_kills` + 1,`all_kills` = `all_kills` + 1" );
+		end;
+		}
+	}
+	if ( getcharid(1) ) {
+		announce "[ System ] : Player ["+ strcharinfo(0) +"] of party ["+ strcharinfo(1) +"] has killed "+ getmonsterinfo( killedrid, MOB_NAME ) +" at "+ strcharinfo(3), bc_all;
+		} 
+		else {
+		announce "[ System ] : Player ["+ strcharinfo(0) +"] has killed "+ getmonsterinfo( killedrid, MOB_NAME ) +" alone at "+ strcharinfo(3), bc_all;
+		}
+	end;
+	}
+	end;
+	
+OnInit:
+	// Add sql table dont touch :)
+	query_sql("CREATE TABLE IF NOT EXISTS `mvp_ranking` (`char_id` int(11) unsigned NOT NULL DEFAULT '0', `name` varchar(30) NOT NULL DEFAULT '',`day_kills` int(11) unsigned NOT NULL default '0',`week_kills` int(11) unsigned NOT NULL default '0',`month_kills` int(11) unsigned NOT NULL default '0',`all_kills` int(11) unsigned NOT NULL default '0',PRIMARY KEY  (`char_id`)) ENGINE=MyISAM");
+
+// ------------------------------------------------------------- //
+// --------------- All configurations starts here -------------- //
+// ------------------------------------------------------------- //	
+
+// =========== Ladder Shop ================== //
+	
+	// Start Ladder points config
+	// <Item ID>, <point cost>
+	setarray .Shop[0],		
+		671, 20, 
+		671, 30, 
+		671, 60, 
+		671, 120, 
+		671, 240;
+		
+	// end Ladder points config
+	
+// =========== Ladder settings ============== //
+	// Bitwise Variables 
+	// 1 = enable daily reward and record
+	// 2 = enable weekly reward and record
+	// 4 = enable monthly reward and record
+	// 8 = disable gm in ranking (must always be on)
+	// 16 = enable mvp ladder points
+	.Option = 1|2|4|8|16;	
+	
+	// Day of the month to automatically get reward
+	.day = 1;
+	
+	// Day of the week
+	.week = SUNDAY; 
+	
+	// Mail titles
+	setarray .MailTitle$, 
+		"Daily TOP MVP Hunter",
+		"Weekly TOP MVP Hunter",
+		"Monthly TOP MVP Hunter";
+	
+	// daily top 10 reward <ID>,<AMOUNT>,<ZENY>
+	setarray .Prize_d,  
+			671,3,1000, // top 1
+			671,2,1000,
+			671,2,1000,
+			671,2,1000,
+			671,2,1000,
+			671,2,1000,
+			671,2,1000,
+			671,2,1000,
+			671,2,1000,
+			671,1,1000;	// top 10	
+	
+	// weekly top 10 reward <ID>,<AMOUNT>,<ZENY>
+	setarray .Prize_w,   
+			671,3,10000, // top 1
+			671,2,10000,
+			671,2,10000,
+			671,2,10000,
+			671,2,10000,
+			671,2,10000,
+			671,2,10000,
+			671,2,10000,
+			671,2,10000,
+			671,1,10000; // top 10
+			
+	// monthly top 10 reward <ID>,<AMOUNT>,<ZENY>
+	setarray .Prize_m, 
+			671,3,100000, // top 1
+			671,2,100000,
+			671,2,100000,
+			671,2,100000,
+			671,2,100000,
+			671,2,100000,
+			671,2,100000,
+			671,2,100000,
+			671,2,100000,
+			671,1,1000; // top 10
+	
+// ========== Settings for MVP Kill Event ========= //
+	
+	// NPC Name
+	.nm$ = "[ ^FF0000MVP Ranker^000000 ]";
+	
+	// Drop rate chances
+	.chance = 70;	
+	
+	// Party reward <ID>,<AMOUNT>;
+	setarray .p_rwd, 671, 1;	
+	
+	// Solo reward <ID>,<AMOUNT>;
+	setarray .s_rwd, 671, 1;	
+	
+	// GM level to stop event trigger (note: must enable option 8)
+	.gm = 10; 
+	
+	
+	
+	// ladder points received for every MVP kills 
+	.point = 100;
+	
+	// MVP Map list
+	setarray .t_maps$[0],
+		"moc_pryd06", "lhz_dun03", "gld2_prt",
+		"abbey02", "ayo_dun02", "lhz_dun04",
+		"ra_fild02", "xmas_fild01", "dic_dun02", 
+		"beach_dun", "iz_dun05", "tur_dun04",
+		"lhz_dun02", "jupe_core", "moc_fild22",
+		"anthell02", "odin_tem03", "gon_dun03",
+		"gef_fild02", "thana_boss", "gef_fild10",
+		"ein_dun02", "gef_fild14", "moc_pryd04",
+		"dew_dun01", "in_sphinx5", "niflheim",
+		"moc_fild17", "xmas_dun02", "ice_dun03",
+		"kh_dun02", "treasure02", "moc_prydn2",
+		"pay_dun04", "ra_san05", "mosk_dun03",
+		"ama_dun03", "thor_v03", "gef_dun01",
+		"mjolnir_04", "abyss_03", "dic_dun03",
+		"prt_sewb4", "pay_fild11", "gef_dun02",
+		"gl_chyard", "ra_fild03", "ra_fild04",
+		"ve_fild01", "ve_fild02", "lou_dun03",
+		"prt_maze03","bra_dun02";
+   
+	// use @mvpreset command to reset the ladder. It will also reset the ...
+	// ... montly and weekly if it is on the .day and .week settings from above
+	bindatcmd("mvpreset" ,strnpcinfo(0)+"::OnReward",99,99);
+	
+	// sets mapflag to listed maps
+	for(.@i = 0; .@i < getarraysize(.t_maps$); ++.@i)
+		setmapflag .t_maps$[.@i], mf_nobranch;
+		
+	// ladder shop settings
+	npcshopdelitem "mvp_ladder_shop_q", 607;
+	
+	for(.@i = 0; .@i < getarraysize(.Shop); .@i = .@i + 2)
+		npcshopadditem "mvp_ladder_shop_q", .Shop[.@i], .Shop[.@i + 1];
+		
+	waitingroom "MVP LADDER!",0;
+	end;
+
+// ---------------------------------------------------------------------
+// Don't touch anything from here or else you will ruin the whole script
+// Unless you know what you are doing
+// ---------------------------------------------------------------------
+
+	function	F_CheckMvpLadder	{
+    query_sql("SELECT `char_id`, CAST(`" + getarg(0) + "` AS SIGNED) FROM `mvp_ranking` WHERE `" + getarg(0) + "` ORDER BY CAST(`" + getarg(0) + "` AS SIGNED) DESC LIMIT 20",.@cid,.@value);
+    query_sql("DELETE FROM `mvp_ranking` WHERE `name` NOT IN ( SELECT `name` FROM `char` )");
+    for(set .@i,0; .@i<getarraysize(.@cid); set .@i,.@i+1) {
+        query_sql("SELECT `name` FROM `char` WHERE char_id = "+.@cid[.@i]+";",.@j$);
+        set .@name$[.@i], .@j$;
+    }
+		if (!getarraysize(.@cid))
+			mes "The rankings are empty.";
+		else for(set .@i,0; .@i<getarraysize(.@cid); set .@i,.@i+1)
+			mes "["+(.@i+1)+"] "+.@name$[.@i]+" ~ ^FF0000"+.@value[.@i]+"^000000 kills";
+    return;
+	}
+
+	function	F_MVPReset	{
+		if ( select( "Confirm","Cancel" ) == 1 ) {
+			query_sql("UPDATE `mvp_ranking` SET `"+getarg(0)+"` = '0'");
+		} 
+	return;
+	}
+	
+	function	F_MVPReward	{
+		query_sql("SELECT `char_id`, `name` FROM `mvp_ranking` WHERE `"+getarg(1)+"` ORDER BY CAST(`"+getarg(1)+"` AS SIGNED) DESC LIMIT "+ getarg(0) +" ",.@cid,.@name$);
+		for(.@i = 0; .@i<getarraysize(.@cid); ++.@i) {
+			.@name$[.@c] = .@char[.@i];
+			query_sql("INSERT INTO `mail` (`send_name`,`send_id`,`dest_name`,`dest_id`,`title`,`message`,`time`,`status`,`zeny`,`type`) VALUES ('no-reply','0','"+.@name$[.@c]+"','"+.@cid[.@i]+"','*"+getarg(2)+"*','Congratulations~ % You have ranked #"+(.@i+1)+" in the "+getarg(2)+"!!! % % % % % % [ Your reward is attached in this mail ]',UNIX_TIMESTAMP(NOW()),1,"+getarg(3)+",0)");
+			query_sql("SELECT `id` FROM `mail` WHERE `send_name` = 'no-reply' ORDER BY CAST(`id` AS SIGNED) DESC LIMIT 1",.@id);
+			query_sql("INSERT INTO `mail_attachments` (`id`,`nameid`, `amount`, `identify`) VALUES ('"+.@id+"',"+getarg(4)+","+getarg(5)+",'1')");
+		}
+		announce "Congratulations to our "+getarg(6)+" TOP "+getarg(0)+" MVP Hunters!! Relog and check your mails for rewards.",bc_blue|bc_all;
+		return;
+	}
+	
+	function	F_CheckRank	{
+		mes "~ No "+ getarg(0) +" records found";
+		return;
+	}
+
+}
+
+-	shop	mvp_ladder_shop_q	-1,607:-1,608:-1
+
+
+
+
+
+
+

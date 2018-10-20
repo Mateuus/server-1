@@ -1,0 +1,122 @@
+//===== eAthena & Freya Script ===============================
+//= Drogador NPC
+//===== Creado Por ===========================================
+//= [Stinger]
+//===== Modificado por =======================================
+//= 2Wire
+//===== Descripcion: =========================================
+//= Encanta armas con elementos.
+//============================================================
+prt_in.gat,58,54,4	script	Drogador	60,{
+M_Menu:
+mes "[ ^0065DFDrogador^000000 ]";
+mes "¿Deseas algun tipo de encantamiento?  Pueden incrementar tu fuerza de manera sorprendente.";
+next;
+mes "[ ^0065DFDrogador^000000 ]";
+mes "Puedo transformar tu arma a Elemental por solo 20.000z:";
+next;
+if(Zeny < 20000) goto M_NotEnough;
+mes "[ ^0065DFDrogador^000000 ]";
+mes "Porfavor selecciona uno:";
+menu "Aspersio - Elemento Holy (Holy Water)",M_Holy,"Flame Launcher - Elemento Fuego (Red Blood)",M_Fire,"Frost Weapon - Elemento Agua (Crystal Blue)",M_Cold,"Windy Loader - Elemento Viento (Wind of Venture)",M_Wind,"Seismic Weapon - Elemento Tierra (Green Live)",M_Earth;
+
+M_Holy:
+if(countitem(523) < 1) goto LNotEnoughH;
+next;
+sc_start 37,240000,1;
+skilleffect 68,0;
+delitem 523,1;
+set Zeny, Zeny - 20000;
+mes "[ ^0065Drogador^000000 ]";
+mes "Listo. Que tengas un lindo dia.";
+emotion 21;
+close;
+
+
+M_Fire:
+if((countitem(990) < 1)) goto LNotEnoughF;
+next;
+sc_start 96,240000,5;
+skilleffect 280,0;
+set Zeny, Zeny - 20000;
+delitem 990,1;
+mes "[ ^0065DFDrogador^000000 ]";
+mes "Listo. Que tengas un lindo dia.";
+emotion 21;
+close;
+
+M_Cold:
+if((countitem(991) < 1)) goto LNotEnoughA;
+next;
+sc_start 97,240000,5;
+skilleffect 281,0;
+delitem 991,1;
+set Zeny, Zeny - 20000;
+mes "[ ^0065DFDrogador^000000 ]";
+mes "Listo. Que tengas un lindo dia.";
+emotion 21;
+close;
+
+M_Wind:
+if((countitem(992) < 1)) goto LNotEnoughV;
+next;
+sc_start 98,240000,5;
+skilleffect 282,0;
+delitem 992,1;
+set Zeny, Zeny - 20000;
+mes "[ ^0065DFDrogador^000000 ]";
+mes "Listo. Que tengas un lindo dia.";
+emotion 21;
+close;
+
+M_Earth:
+if((countitem(993) < 1)) goto LNotEnoughT;
+next;
+sc_start 99,240000,5;
+skilleffect 283,0;
+delitem 992,1;
+set Zeny, Zeny - 20000;
+mes "[ ^0065DFDrogador^000000 ]";
+mes "Listo. Que tengas un lindo dia.";
+emotion 21;
+close;
+
+LNotEnoughH:
+next;
+mes "[ ^0065DFDrogador^000000 ]";
+mes "Primero necesitas un ^5533FFHoly Water^000000, luego podre hacer tu arma ^5533FFElemental Holy^000000.";
+close;
+
+LNotEnoughF:
+next;
+mes "[ ^0065DFDrogador^000000 ]";
+mes "Primero necesitas un ^5533FFRed Blood^000000, luego podre hacer tu arma ^5533FFElemental Fuego^000000.";
+close;
+
+LNotEnoughA:
+next;
+mes "[ ^0065DFDrogador^000000 ]";
+mes "Primero necesitas un ^5533FFCrystal Blue^000000, luego podre hacer tu arma ^5533FFElemental Agua^000000.";
+close;
+
+LNotEnoughV:
+next;
+mes "[ ^0065DFDrogador^000000 ]";
+mes "Primero necesitas un ^5533FFWind Of Verdure^000000, luego podre hacer tu arma ^5533FFElemental Viento^000000.";
+close;
+
+
+LNotEnoughT:
+next;
+mes "[ ^0065DFDrogador^000000 ]";
+mes "Primero necesitas un ^5533FFGreen Live^000000, luego podre hacer tu arma ^5533FFElemental Tierra^000000.";
+close;
+
+M_NotEnough:
+next;
+mes "[ ^0065DFDrogador^000000 ]";
+mes "No tienes el dinero suficiente. Lo siento.";
+close;
+
+
+}

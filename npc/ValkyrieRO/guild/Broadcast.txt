@@ -1,0 +1,80 @@
+//===== Global Chile ======
+//=== https://www.facebook.com/IntegralesGlobal ===
+
+prontera,164,174,5	script	Broadcast	837,{
+
+
+set .@n$,"[ ^008888Broadcast^000000 ]";
+
+if ( .Broad > gettimetick(2) ){
+	mes .@n$;
+	mes "Faltan: " + callfunc("Time2Str",.Broad) + ". Para Hacer otro Anuncio.";
+	close;
+}
+mes .@n$;
+mes "Hola! "+strcharinfo(0)+" ";
+mes "Yo puedo Enviar un Mensaje a Todo el Servidor por 100000 Zeny...";
+next;
+menu "Enviar Mensaje",m2,"No, Gracias",no;
+
+
+OnInit:
+	setarray .@m0$[0], "¡","B","r","o","a","d","c","a","s","t","!";
+	setarray .@m1$[0], "¡","B","r","o","a","d","c","a","s","t","!";
+	do {
+		if (.@i == 2)
+			set .@i, 0;
+		// Efecto nº 1 - Añadir una palabra nueva a la anterior
+		for (set .@c, 0; .@c < getarraysize(getd(".@m" + .@i + "$")); set .@c, .@c+ 1) {
+			set .@f$, .@f$ + getd(".@m" + .@i + "$[" + .@c + "]");
+			waitingroom .@f$,0;
+			sleep 350;
+			delwaitingroom;
+		} // End loop
+		// Efecto nº 2 - Hacer una animación de aparición y vacío
+		for (set .@c, 0; .@c < 6; set .@c, .@c + 1) {
+			waitingroom "",0;
+			sleep 250;
+			delwaitingroom;
+			waitingroom .@f$,0;
+			sleep 250;
+			delwaitingroom;
+		} // End loop
+		waitingroom .@f$,0;
+		sleep 3000; // 3 segundos cambio de mensaje
+		set .@f$, "";
+		delwaitingroom;
+		set .@i, .@i + 1;
+	} while(1); // End loop
+end;
+
+
+m2:
+	
+	if(Zeny < 500000) goto sL_Zeny;
+	set Zeny, Zeny - 500000;
+	mes .@n$;
+	mes "Ok, Escribe tu Mensaje...";
+	input $mensaje$;
+	next;
+	mes .@n$;
+	mes "Porfavor, Espere un Momento...";
+	next;
+	announce ""+strcharinfo(0)+": "+$mensaje$+" ",bc_all,0x00FF80;
+	mes .@n$;
+	mes "Listo, Tu Mensaje ha sido Enviado.";
+	mes "Buen Dia...";
+	close2;
+	set .Broad, gettimetick(2) + 120;
+	end;
+
+sL_Zeny:
+	mes .@n$;
+	mes "Lo Siento, No tienes Suficiente Zeny para Usar mis Servicios.!!";
+	close;
+
+no:
+	mes .@n$;	
+	mes "Ok, Regresa Pronto.";
+	close;
+}

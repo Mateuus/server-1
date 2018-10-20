@@ -1,0 +1,48 @@
+npc_in,30,30,5	script	Cambio Medallas a Cash	10114,{
+set .@npcname$, "^FFBC00[Canbiador de Medallas]^000000";
+mes .@npcname$;
+mes "Hola,Yo soy el encargado para cambiar Bravery o Valor Badge por ^00C12BCash Points^000000.";
+switch(select("Cambiar Bravery o Valor por Cash point:Informacion:Nada, adiós")) {
+	case 1:
+		next;
+		mes .@npcname$;
+		mes "Cuántas Valor Badge deseas intercambiar?";
+		input @accoins;
+		if (@accoins < 0) close;
+		next;
+		mes .@npcname$;
+		mes "Cuántas Bravery Badge deseas intercambiar?";		
+		input @dccoins;
+		if (@dccoins < 0) close;
+		next;
+		set @cash2coin, ((@accoins*30)+(@dccoins*60));
+		mes .@npcname$;
+		mes "Entonces quieres cambiar "+@accoins+" Valor Badge y "+@dccoins+" Bravery Badge...";
+		mes "Eso equivale a "+@cash2coin+" ^00C12BCash Points^000000";
+		switch(select("Medallas a Cash")) {
+		case 1:
+			if (countitem(7828) < @dccoins) || (countitem(7829) < @accoins) { next; mes .@npcname$; mes "Lo siento no tienes las Medallas que has especificado"; close; }
+			set #CASHPOINTS, #CASHPOINTS + @cash2coin;
+			delitem 7828, @dccoins;
+			delitem 7829, @accoins;
+			dispbottom "[Imperius] Añadidos "+@cash2coin+" Cash points. Cash points actuales "+#CASHPOINTS+".";
+			close;
+			
+		}
+	case 2:
+	
+	case 3:
+		next;
+		mes .@npcname$;
+		mes "Existen dos tipos de Medallas";
+		mes "Sus valores son por unidad son:";
+		mes "Valor:  8 Cash Points";
+		mes "Bravery: 10 Cash Points";
+		close;
+	case 4:
+		next;
+		mes .@npcname$;
+		mes "Bueno como desees... Adiós";
+		close;
+	}
+}

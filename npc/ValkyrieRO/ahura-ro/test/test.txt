@@ -1,0 +1,125 @@
+jupe_ele,41,48,4	script	DarkThanatos	4_NFWISP,{
+.@party_id = getcharid(1);
+
+if( !.@party_id ){
+	mes "Necesitas una Party.";
+}else if( getpartyleader( .@party_id,2 ) != getcharid(0) ){
+	mes "No eres el lider de la Party..";
+}else{
+	@tier = select( "Dark Thanatos" ) - 1;
+	mes "Debes traerme la Ambrosia.";
+	mes "1 x "+getitemname( .ambrosia[@tier] );
+	npcshopattach "nectar_shop",1;
+	callshop "nectar_shop",2;
+	end;
+}
+close;
+
+OnSellItem:
+	if( getmapusers( .Map$ ) ){
+		mes "Alguien se encuentra utilizando "+.npc_name$+" en este momento. Intentelo nuevamente mas tarde.";
+	}else if( @sold_nameid == .ambrosia[@tier] ){
+		mes "Intercambio completado satisfactoriamente.";
+		delitem @sold_nameid,1;
+		killmonster .Map$,"All";
+		warpparty .Map$,49,8,getcharid(1);
+		.tier = @tier;
+	Dark_Thana = monster( .Map$,49,50,"--ja--",3500,1,.npc_name$+"::OnMVPKill" );
+		initnpctimer;
+		//end;
+
+
+
+	}else{
+		mes "Arrastra 1 x "+getitemname( .ambrosia[@tier] )+" a la ventana de tu derecha.";
+		mes "Luego pulsa Sell para ser trasladado al mapa.";
+	}
+	close;
+	
+OnMVPKill:
+	mapannounce .Map$,"Felicidades han completado esta Tier. La Bonus Tier no entrega Bios Sample, pero seran recompensados con un Treasure Chest.",0;
+	monster .Map$,50,50,"--ja--",1324,1,.npc_name$+"::OnBoxKill";
+	end;
+	
+OnBoxKill:
+	deletearray @reward;
+	@label$ = .npc_name$+"::OnBoxKill";
+	@size = getd( ".tier_reward_"+.tier+"_size" );
+	copyarray @reward[0],getd( ".tier_reward_"+.tier+"[0]" ),@size;
+	doevent "Tier_Reward::OnTalk";
+	end;
+
+	 OnTimer60000:
+		 .@map$ = strnpcinfo(4);
+		 
+		
+		 .@max_hp = getmonsterinfo( 3500,UDT_MAXHP );
+		 .@hp = getunitdata( Dark_Thana,UDT_HP );
+
+		getmapxy(@evt_map$, @evt_x, @evt_y, UNITTYPE_MOB);
+		 //.@x = getunitdata( Dark_Thana,6 );
+		// .@y = getunitdata( 'Dark_Thana,7 );
+		
+		 .@element = rand( 3501,3504 );
+		
+		// TODO: required mob controller script commands or other alternatives workaround.
+		 Dark_Thana = monster( @evt_map$,@evt_x,@evt_y,"--ja--",.@element,1,.@npc_name$+"::OnDarkThana" );
+		 setunitdata( Dark_Thana,UDT_HP,.@hp  );
+		
+		initnpctimer;
+		switch ( .@element ) {
+			 case 3501:
+				 mapannounce .@map$,"¡Thanatos a cambiado de elemento y kit de habilidades!",bc_map;
+				 break;
+			 case 3502:
+				 mapannounce .@map$,"¡Thanatos a cambiado de elemento y kit de habilidades!",bc_map;
+				break;
+			 case 3503:
+				 mapannounce .@map$,"¡Thanatos a cambiado de elemento y kit de habilidades!",bc_map;
+				 break;
+			 case 3504:
+				 mapannounce .@map$,"¡Thanatos a cambiado de elemento y kit de habilidades!",bc_map;
+				 break;
+		 }
+		 end;
+	
+
+OnInit:
+//map user for mvp killing
+.Map$ = "guild_vs1-4";
+
+// ambrosia item id
+setarray .ambrosia,
+	32704,	// item id for clear ambrosia
+	32705,	// item id for yellow ambrosia
+	32706;	// item id for red ambrosia
+
+// tier reward
+setarray  .tier_reward_2,5745,14613,12391,12403,17139,616,6241,6240,12210,6234,6230,604,13811,13812,13813,12116,12114,12115,12117,617,610,24022,17294,5604;
+
+// .tier monster
+setarray .tier_2_mob,3500;
+
+.nectar_size = getarraysize( .nectar );
+.tier_reward_2_size = getarraysize( .tier_reward_2 );
+
+.npc_name$ = strnpcinfo(0);
+setmapflag .Map$,mf_partylock;
+setmapflag .Map$,mf_nomobloot;
+setmapflag .Map$,mf_nomvploot;
+// setmapflag .Map$,mf_nocommand;
+mapwarp .@map$,"invek",147,161;
+end;
+
+}
+
+
+jupe_ele,42,38,6	script	asdsaf	4_NFWISP,{
+
+.costume=atcommand("@costume Summer");
+if ( .costume ) { end;}
+
+atcommand "@costume";
+end;
+
+		}

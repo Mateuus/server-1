@@ -1,0 +1,74 @@
+///===== eAthena Script =======================================
+//= NPC User Broadcast
+//===== EDITED: ==================================================
+//= Lazy RO
+//===== Current Version: =====================================
+//= 1.1
+//===== Compatible With: =====================================
+//= 9909 Tested
+//===== Test NPC in: =====================================
+//= eAthena SVN TXT 9811 [trunk]
+//============================================================
+//=   1.0 Primera versión
+//=   1.1 [Fix Bugs]
+//===============================================================================================
+
+prontera.gat,147,175,5	script	Broadcast	910,{
+
+   mes "[^0000FF NPC Broadcast ^000000]";
+   mes "Hola, ^0000A0 " + strcharinfo(0) + " ^000000.";
+   mes "Soy el Anuciador del Servidor CamuRO.";
+   mes "Me encargo de enviar mensajes a todo el Server";
+   mes "Con un simple costo de 100000 Zenys";
+   next;
+   menu "¿Deseas enviar un mensaje?",insms,"No, gracias",noserv;
+   
+insms:
+   next;
+   mes "[^0000FF NPC Broadcast ^000000]";
+   mes "Por favor introduce el mensaje que deseas mandar.";
+   next;
+   input @sms$;
+   next;
+   mes "[^0000FF NPC Broadcast ^000000]";
+   mes "OK. Solo te confirmo que este bien escrito tu mensaje";
+   mes ".";
+   mes ".";
+   mes " ^0000FF" + @sms$ + "^000000.";
+   next;
+   menu "Esta bien, Envialo",sendsms,"No, quiero cambiarlo",insms;
+   
+sendsms:
+   next;
+   mes "[^0000FF NPC Broadcast ^000000]";
+   mes "Ok. Seran 100000 Zenys";
+   next;
+   mes "[Recibiendo Dinero...]";
+   if(zeny <= 100000) goto nozeny;
+   set zeny, zeny-100000;
+   next;
+   mes "[Conectando...]";
+   next;
+   mes "[Enviando mensaje...]";
+   next;
+   mes "[...]";
+   next;
+   mes "[Mensaje Enviado]";
+   announce strcharinfo(0) + " : "+ @sms$,0;
+   close;
+   
+nozeny:
+   next;
+   mes "[^0000FF NPC Broadcast ^000000]";
+   mes "Ohh lo siento,";
+   mes "mis servicios no son gratuitos,";
+   mes "vuelve cuando tengas para pagarme";
+   close;
+   
+noserv:
+   next;
+   mes "[^0000FF NPC Broadcast ^000000]";
+   mes "Regresa cuando me necesites,";
+   mes "Adios!, ^0000A0 " + strcharinfo(0) + " ^000000.";
+   close;
+}

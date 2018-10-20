@@ -1,0 +1,1026 @@
+//===== eAthena Script =======================================
+//= PointsSeller
+//===== By: ==================================================
+//= waixiew
+//============================================================
+izlude_in,66,123,5	script	PointSeller	107,{
+mes "[PointSeller]";
+	mes "Yo soy un PointSeller.";
+	mes "¿Cómo puedo ayudarle?";
+	next;
+	mes "[PointSeller]";
+	mes "Te puedo vender algunos puntos de habilidad";
+	next;
+	mes "[PointSeller]";
+	mes "";
+	mes "^FF3355 1m Por 1 skillpoints^000000";
+	next;
+	menu "Sí, quiero skills",L1,"No gracias^000000",LEnd;
+
+L0:
+mes "Type in the amount PLEASE! ";
+set @stamount,"0";
+input @stamount;
+if(@stamount < 1) goto DD;
+if(zeny < (1000000* @stamount)) goto NO;
+set Zeny,(zeny - (1000000* @stamount));
+set StatusPoint,(StatusPoint +(10* @stamount));
+goto TY;
+
+L1:
+mes "Escriba la cantidad FAVOR!";
+set @skamount,"0";
+input @skamount;
+if(@skamount < 1) goto DD;
+if(zeny < (1000000* @skamount)) goto NO;
+set Zeny,(zeny - (1000000* @skamount));
+set SkillPoint,(SkillPoint +(1* @skamount));	
+goto TY;
+
+TY:
+mes "Muchas gracias";
+mes "Por favor, venga otra vez!";
+close;
+
+DD:
+mes "Vete idiota!";
+mes "No me molestan!";
+close;
+
+NO:
+mes "Por favor, ven con el zeny!";
+close;
+
+LEnd:
+mes "Vuelve cuando usted cambia de opinión!";
+close;	
+}
+
+//===== eAthena Script ======================================================================
+//= Emperium Wars
+//===== Original By =========================================================================
+//= Toxic Aka Hellflaem
+//===== Credit =========================================================================
+//= Hellflaem
+//= ~AnnieRuru~ (Support)
+//= diedlikeahero (poring Ball)
+//= Aeromas
+//= Any one I forgot.
+//===== Current Version: ====================================================================
+//= 2.0
+//===== Compatible With: ====================================================================
+//= Any eAthena
+//===== Description: ========================================================================
+//= This is just a fun little gvg game,
+//= Any one person from 2 different guilds can play it.
+//= First guild to kill the other emp 5 times wins.
+//= Killing your own Emp takes away points.
+//===== Comments================================================================
+//= Edit it to your servers likings.
+//===========================================================================================
+prontera,165,149,3	script	Emperium Wars::empwar	723,{
+
+set $npcname$,"[Emperium Wars]";
+
+mes $npcname$;
+mes "Hello "+strcharinfo(0)+" what do you want?";
+next;
+switch(select("Sign up:Enter:Information:Nothing")) {
+
+	case 1:
+		if (($state_match == 1) && ($@guildID1!=0) && ($@guildID2!=0) && (getguildname($@guildID1)!="null") && (getguildname($@guildID2)!="null")) {
+		mes $npcname$;
+		mes "Sorry "+strcharinfo(0)+" , Two Guilds are signed up for this event already.";
+		close;
+		}
+
+		mes $npcname$;
+		mes "Hello "+strcharinfo(0)+" , Two Guilds are needed for this event.";
+		mes "Would you like to Sign up yours?";
+		mes "If so Please do so now.";
+		next;
+		switch(select("Guild 1:Guild 2:Nothing")) {
+
+			case 1:
+				// If a match is in play
+				if ($state_match == 1) {
+				mes $npcname$;
+				mes "The Sign Ups are currently unavailable because a match is in progress. Don't hesitate to try again in a few minutes!";
+				close;
+				}
+
+				// Does the player belong to a guild?
+				if (getcharid(2)==0) {
+				mes $npcname$;
+				mes "This Event is for Guilds, and you're not in a Guild. Come back with a Guild!";
+				close;
+				}
+
+				// If a team is already subscribed, and that team still exists
+				if (($@guildID1!=0) && (getguildname($@guildID1)!="null")) {
+
+				// if the player belongs to that team that's already subscribed
+				if ($@guildID1==getcharid(2)) {
+				mes $npcname$;
+				mes "Do you wish to unsubscribe your team?";
+				next;
+				if (select("Yes, we want to stop the match.","No, we're staying.")==2) close;
+
+				// if the player wishes to unsubscribe their team
+				announce "Team " + GetGuildName($@guildID1) + " has disbanded. We need another Guild to sign up now!",bc_yellow|bc_map;
+				set $@guildID1, 0;
+				close;
+				}
+				mes $npcname$;
+				mes "A Guild is already subscribed! It's Team "+getguildname($@guildID1)+".";
+				close;
+				}
+
+
+				// if there are no teams subscribed and that the subscriptions are open
+				mes $npcname$;
+				mes "Do you wish to subscribe your team?";
+				next;
+				if (select("Yes, we want to subscribe.","No.")==2) close;
+
+				// Team subscription
+				if ($@guildID1==0 || (getguildname($@guildID1)=="null")) {
+				set $@guildID1, getcharid(2);
+				initnpctimer;
+				mes $npcname$;
+				mes "Your Guild is now subscribed, good luck!";
+				announce "" + getguildname($@guildID1) + " Guild has subscribed For the Emperium War!",bc_yellow|bc_map;
+				doevent "empwar::OnSubscriptionguild";
+				close;
+
+				} else {
+
+				mes $npcname$;
+				mes "I'm sorry! Another Guild has subscribed before you...";
+				close;
+				}
+				end;
+
+
+			case 2:
+				// If a match is in play
+				if ($state_match == 1) {
+				mes $npcname$;
+				mes "The Sign ups are currently unavailable because a match is in progress. Don't hesitate to try again in a few minutes!";
+				close;
+				}
+	
+				// Does the player belong to a group?
+				if (getcharid(2)==0) {
+				mes $npcname$;
+				mes "This Event is for Guilds, and you're not in a Guild. Come back with a Guild!";
+				close;
+				}
+	
+				// Is the group of the player subscribed as the other guild already?
+				if (getcharid(2)==$@guildID1) {
+				mes $npcname$;
+				mes "Hey! A player from the opposing Guild! Get ready to face off one of the best Guild!";
+				mes "The formidable " + GetGuildName($@guildID2) + "";
+				close;
+				}
+
+				// If a team is already subscribed, and that team still exists
+				if (($@guildID2!=0) && (getguildname($@guildID2)!="null")) {
+				// if the player belongs to that team that's already subscribed
+				if ($@guildID2==getcharid(2)) {
+				mes $npcname$;
+				mes "Do you wish to unsubscribe your guild?";
+				next;
+				if (select("Yes, we want to stop the match.","No, we're staying.")==2) close;
+					
+				// if the player wishes to unsubscribe their team
+				announce "Team "+getguildname($@guildID2)+" has disbanded. We need another Guild to sign up!",bc_yellow|bc_map;
+				set $@guildID2, 0;
+				close;
+				}
+				mes $npcname$;
+				mes "A Guild is already subscribed! It's Team "+getguildname($@guildID2)+".";
+				close;
+				}
+	
+				// if there are no teams subscribed and that the subscriptions are open
+				mes $npcname$;
+				mes "Do you wish to subscribe your Guild?";
+				next;
+				if (select("Yes, we want to subscribe.","No.")==2) close;
+
+				// Team subscription
+				if ($@guildID2==0 || (getguildname($@guildID2)=="null")) {
+				set $@guildID2, getcharid(2);
+				initnpctimer;
+				mes $npcname$;
+				mes "Your Guild is now subscribed, good luck!";
+				announce ""+getguildname($@guildID2)+" Guild has subscribed to the Emperium War!",bc_yellow|bc_map;
+				doevent "empwar::OnSubscriptionguild";
+				close;
+			
+				} else {
+		
+				mes $npcname$;
+				mes "I'm sorry! Another Guild has subscribed before you...";
+				close;
+				}
+				end;
+
+			
+			case 3:
+				mes $npcname$;
+				mes "Bye.";
+				close;
+
+
+
+		}//2nd switch
+
+	case 2:
+		if (($@guildID1!=0) && ($@guildID2!=0) && (getguildname($@guildID1)!="null") && (getguildname($@guildID2)!="null")) {
+
+		if ((getcharid(2)==$@guildID1) && ($state_match == 1)) {
+		savepoint "bat_a01",171,340;
+		set @gave,0;
+		set @gotheal,0;
+		warp "bat_a01.gat", 171, 340; 
+		end;
+		}
+
+		if ((getcharid(2)==$@guildID2) && ($state_match == 1)) {
+		savepoint "bat_a01",155,48;
+		set @gave,0;
+		set @gotheal,0;
+		warp "bat_a01.gat", 155, 48;
+		end;
+
+		}
+
+		mes $npcname$;
+		mes "Your not in one of the Signed up guilds and/or the Game is over.";
+		close;
+
+		}
+		mes $npcname$;
+		mes "I can only warp you when there is two Guilds signed up.";
+		close;
+
+	case 3:
+		mes $npcname$;
+		mes "This Game is GvG";
+		mes "A Guild Must Kill the other Guilds Emperium 5 times";
+		mes "Before the other guild does.";
+		mes "If your Guild wins the people in your Guild on the";
+		mes "map when it ends gets the Prize by talking with one of the Exit npcs.";
+		mes "Good Luck.";
+		close;
+
+	case 4:
+		mes $npcname$;
+		mes "Bye.";
+		close;
+
+}//First switch
+
+end;
+
+OnSubscriptionguild:
+	if (($@guildID1!=0) && ($@guildID2!=0) && (getguildname($@guildID1)!="null") && (getguildname($@guildID2)!="null")) {
+		announce "Emperium War : We have 2 Guilds signed up now : "+getguildname($@guildID1)+" and "+getguildname($@guildID2)+".",bc_yellow|bc_map;
+		announce "Emperium War : The members of each Guild can come Enter the War now.",bc_yellow|bc_map;
+		set $state_match, 1;
+		donpcevent "empwar::OnBegin";
+	}
+		end;
+
+OnTimer800000:
+	if (($@guildID1!=0) && ($@guildID2!=0) && (getguildname($@guildID1)!="null") && (getguildname($@guildID2)!="null")) {
+	stopnpctimer;
+	end;
+	}
+	stopnpctimer;
+	set $@guildID2, 0;
+	set $@guildID1, 0;
+	end;
+
+OnBegin:
+	if (.points2 >= 5) {
+	Announce "The Emperium War is over!",8;
+	Announce "The Winner of Emperium War is the [" + GetGuildName($@guildID2) + "] guild.",0;
+	set $@Ewgid,getcharid(2);
+	donpcevent "empwar::OnEnded";
+	end;
+	}
+	
+	if (.points1 >= 5) {
+	Announce "The Emperium War is over!",8;
+	Announce "The Winner of Emperium War is the [" + GetGuildName($@guildID1) + "] guild.",0;
+	set $@Ewgid,getcharid(2);
+	donpcevent "empwar::OnEnded";
+	end;
+	}
+
+	initnpctimer;
+	MapRespawnGuildID "bat_a01",$@Ewgid,7;
+	monster "bat_a01",173,346,"EMPERIUM",1288,1,"empwar::OnEmpDead1";
+	monster "bat_a01",165,50,"EMPERIUM",1288,1,"empwar::OnEmpDead2";
+	end;
+
+OnEmpDead2:
+	if ( getcharid(2) == $@guildID2 ) {
+	stopnpctimer;
+	set .points2, .points2 -1;
+	dispbottom "Stop killing your own emp";
+	Announce "The [" + GetGuildName($@guildID2) + "] guild has lost a Point for killing there own Emperium and now has [" + .points2 + "] Points!.",0;
+	goto OnBegin;
+	end;
+	
+	} else {
+
+	stopnpctimer;
+	set .points1, .points1 +1 ;
+	Announce "The [" + GetGuildName($@guildID1) + "] guild has [" + .points1 + "] Points!.",0;
+	goto OnBegin;
+	}
+	end;
+
+OnEmpDead1:
+	if ( getcharid(2) == $@guildID1 ) {
+	stopnpctimer;
+	set .points1, .points1 -1;
+	dispbottom "Stop killing your own emp";
+	Announce "The [" + GetGuildName($@guildID1) + "] guild has lost a Point for killing there own Emperium and now has [" + .points1 + "] Points!.",0;
+	goto OnBegin;
+	end;
+
+	} else {
+
+	stopnpctimer;
+	set .points2, .points2 +1 ;
+	Announce "The [" + GetGuildName($@guildID2) + "] guild has [" + .points2 + "] Points!.",0;
+	goto OnBegin;
+	}
+	end;
+
+OnEnded:
+	stopnpctimer;
+	set $state_match, 0;
+	set .points1, 0;
+	set .points2, 0;
+	set $@guildID2, 0;
+	set $@guildID1, 0;
+	killmonsterall "bat_a01";
+	end;
+
+OnTime9000000:
+	Announce "The Emperium War is over, No one was the winner!",8;
+	set $@Ewgid, 0;
+	donpcevent "empwar::OnEnded";
+	end;
+
+}
+
+//Exit
+bat_a01,149,351,5	script	Exit::Ewexit	88,{
+
+set $rewarditem, 7539;
+
+	if((getcharid(2) == $@Ewgid) && (@gave == 0)){
+		getitem $rewarditem,rand(10,50);
+		savepoint "new_1-1",51,106;
+		set @gave,1;
+		warp "new_1-1.gat", 51, 106;
+		end;
+	}
+		savepoint "new_1-1",51,106;
+		warp "new_1-1.gat", 51, 106;
+		end;
+
+} // end of script
+
+
+bat_a01,148,349,5	script	Healer::Emphealer	742,{
+
+	if(@gotheal == 0) {
+	percentheal 100,100;
+	mes ""+strcharinfo(0)+",healed.";
+	set @gotheal, 1;
+	close;
+	}
+	mes ""+strcharinfo(0)+", was healed already.";
+	close;
+}
+
+//duplicates
+bat_a01,363,266,6	duplicate(Ewexit)	Exit#2	88,
+bat_a01,353,60,6	duplicate(Ewexit)	Exit#3	88,
+bat_a01,138,57,6	duplicate(Ewexit)	Exit#4	88,
+bat_a01,142,57,6	duplicate(Emphealer)	Healer#2	88,
+
+bat_a01	mapflag	nowarpto
+bat_a01	mapflag	nowarp
+bat_a01	mapflag	nosave
+
+
+//===== eAthena Script ======================================= 
+//= Banker Script 
+//===== By: ================================================== 
+//= Kutt Katrea 
+//= Basado en "Banker Script" by Syrus22
+//===== Current Version: ===================================== 
+//= 1.0
+//===== Compatible With: ===================================== 
+//= eAthena SVN
+//===== Description: ========================================= 
+//= Un sistema de banco para guardar y compartir Zeny
+//= entre personajes de la misma cuenta.
+//===== Additional Comments: ================================= 
+//= Syrus22 - Hay una cuota opcional al principio del script. 
+//= Basta cambiar el primer comando set para activarla con
+//= el precio deseado.
+//= 
+//= Kutt Katrea - Implementación de variables @max para evitar
+//= el error por overflow (dinero negativo en el banco) y la
+//= pérdida de Zeny en caso de retirar más Zeny del que se
+//= puede cargar.
+//= Implementadoun sistema simple para recuperar Zeny en caso de
+//= haber sufrido del error por overflow
+//============================================================
+ 
+izlude_in,70,107,5	script	Banquera#01::Banco	110,{
+
+set @kosten,500000000;
+set @cost,1000000;
+set @max_storage,2000000000;
+set @max_hold,2000000000;
+set @max_deposit,(@max_storage-#bankstorage);
+set @max_withdrawal,(@max_hold-Zeny);
+set @npc_show_name$,"^004400[Banquera]^000000";
+
+if ( #bankstorage >= 0 ) goto Lnormal;
+	mes "[Banquera]";
+	mes "Bienvenido al sistema de transacciones financieras de Lexus Ragnarok Online";
+	mes "Desde nuestro sistema podras hacer varias transacciones para poder manipular tu economia";
+	mes "Pon atencion en la transaccion que haras, porque no hay reembolsos en perdidas de ningun tipo.";
+	set #bankstorage,@max_storage;
+	next;
+
+Lnormal:
+	mes @npc_show_name$;
+	mes "Bienvenido al sistema de transacciones financieras de Lexus Ragnarok Online";
+	mes "Desde nuestro sistema podras hacer varias transacciones para poder manipular tu economia";
+	mes "Pon atencion en la transaccion que haras, porque no hay reembolsos en perdidas de ningun tipo.";
+if (#bankstorage > 0) 
+	mes "Actualmente tienes: ^FF0000" + #bankstorage + "^000000 Zeny en el banco.";
+	mes "¿Que transacción quieres hacer?";
+	next;
+
+if (#bankstorage > 0) menu "Cambia mis Mithril Coin en zeny",cheke,"Cambia mi zeny a Mithril(s)",money,"Depósito de zeny en efectivo",Ldeposit,"Retiro de zeny en efectivo",Lwithdrawl,"Cancelar",Lcancel;
+	menu "Cambia mis Mithril Coin en zeny",cheke,"Cambia mi Zeny a Mithril(s)",money,"Depósito de Zeny en efectivo",Ldeposit,"Cancelar",Lcancel;
+
+Ldeposit:
+if (#bankstorage==@max_storage) goto Lnodeposit;
+	mes @npc_show_name$;
+	mes "¿Cuanto quieres depositar?";
+	mes "Lo máximo que puedes depositar es ^0000FF" + @max_deposit + "^000000 Zeny";
+	if (@cost > 0) goto Ldepocost;
+	goto Ldepocont;
+
+Lnodeposit:
+	mes @npc_show_name$;
+	mes "Lo siento, pero no puedes depositar más zeny";
+	close;
+
+	Ldepocost:
+		mes "¡Ah! Y no olvides que hay un cargo de ^FF0000" + @cost + "^000000 Zeny en cada transacción.";
+		goto Ldepocont;
+
+Ldepocont:
+	next;
+	input @deposit;
+	if (@deposit < 1) goto Lrealamount;
+	if (@deposit > Zeny) goto Lneedzeny;
+	if (@deposit > (Zeny - @cost)) goto Lneedzeny2;
+	if (@deposit > @max_deposit) goto Lnomorespace;
+	set Zeny,Zeny - @deposit;
+	set Zeny,Zeny - @cost;
+	set #bankstorage,#bankstorage + @deposit;
+	mes @npc_show_name$;
+	mes "Muchas gracias. Tu zeny está en buenas manos.";
+	emotion e_thx;
+	close;
+	
+
+Lnomorespace:
+	mes @npc_show_name$;
+	mes "Solo puedo guardar hasta ^0000FF" + @max_deposit + "^000000 más de Zeny";
+	mes "Elige otra cantidad.";
+	next;
+	goto Ldeposit;
+
+
+Lwithdrawl:
+	mes @npc_show_name$;
+	mes "Tienes ^0000FF" + #bankstorage + "^000000 guardado.";
+	mes "¿Cuanto quieres retirar?";
+	mes "Lo máximo es ^0000FF" + @max_withdrawal + "^000000 Zeny.";
+	if (@cost > 0) goto Lwithcost;
+	goto Lwithcont;
+
+	Lwithcost:
+		mes "¡Ah! Y no olvides que hay un cargo de ^FF0000" + @cost + "^000000 Zeny en cada transacción.";
+		goto Lwithcont;
+
+Lwithcont:
+	next;
+	input @withdrawl;
+	if (@withdrawl < 1) goto Lrealamount;
+	if (@withdrawl > #bankstorage) goto Lneedzeny3;
+	if ((@withdrawl + Zeny) > @max_hold) goto Lnoholdspace;
+	if ((@cost > Zeny) && ((Zeny + @withdrawl) > @cost)) goto Lcostask; 
+	if (@cost > Zeny) goto Lneedzeny2;
+	goto Lwithcont2;
+
+	Lcostask:
+		mes @npc_show_name$;
+		mes "No tienes suficiente Zeny para pagar la cuota de transacción.";
+		mes "¿Quieres que tome la cuota directamente de tu retiro?";
+		next;
+		menu "Si, Por favor.",Lwithtake,"No, gracias.",Lcancel;
+
+	Lwithtake:
+		mes @npc_show_name$;
+		mes "Bien, entonces...";
+		set @withdrawl,@withdrawl - @cost;
+		set #bankstorage,#bankstorage - @cost;
+		set @cost,0;
+		next;
+		goto Lwithcont2;
+
+	Lnoholdspace:
+		mes @npc_show_name$;
+		mes "No puedes cargar tanto dinero, escoge otra cantidad:";
+		next;
+		goto Lwithcont;
+		
+
+Lwithcont2:
+	set Zeny,Zeny - @cost;
+	set Zeny,Zeny + @withdrawl;
+	set #bankstorage,#bankstorage - @withdrawl;
+	mes @npc_show_name$;
+	mes "Aqui está tu Zeny. Que tengas un buen dia.";
+	emotion e_thx;
+	close;
+
+Lrealamount:
+	mes @npc_show_name$;
+	mes "No me gastes bromas. La proxima vez, elije una cantidad real, por favor.";
+	close;
+
+Lneedzeny:
+	mes @npc_show_name$;
+	mes "No tienes suficiente Zeny para cubrir ese depósito.";
+	close;
+
+Lneedzeny2:
+	mes @npc_show_name$;
+	mes "No tienes suficiente Zeny para la cuota de transacción";
+	close;
+
+Lneedzeny3:
+	mes @npc_show_name$;
+	mes "No tienes tanto Zeny en tu cuenta";
+	close;
+
+Lcancel:
+	mes @npc_show_name$;
+	mes "Vuelve pronto.";
+	close;
+
+cheke:
+	mes @npc_show_name$;
+	mes "Debo comenzar diciendote que cada cheque tiene un valor exacto de ^FF0000500 Millones de zeny^000000";
+	mes "Y soy yo el unico en Midgar que puede dartelos";
+	next;
+	mes @npc_show_name$;
+	mes "Cada dia que me pongo de pie aqui a trabajar y llega gente que no se da cuenta";
+	mes "y me regala parte de su zeny, como amigo te digo que calcules tus transacciones,";
+	mes "porque yo no me hare responsable si no haces tus restas y sumas pertinentes. Yo nunca pierdo";
+	next;
+	mes @npc_show_name$;
+	mes "Cuantos Mithril Coin deseas convertir en zeny?";
+	mes "Recuerda que verificare que tengas los Mithril Coin indicados";
+	input @pcoin;
+	if(countitem(674)<@pcoin)goto falta;
+	next;
+	mes @npc_show_name$;
+	mes "Revisare en el sistema que tengas los Mithril Coin que dices.....";
+	next;
+	mes @npc_show_name$;
+	mes ".......";
+	next;
+	mes @npc_show_name$;
+	mes "...........";
+	next;
+	mes @npc_show_name$;
+	mes "Bien te dare tu zeny";	
+	set Zeny,Zeny+@pcoin*500000000;
+	delitem 674,@pcoin;
+	next;
+	mes @npc_show_name$;
+	mes "Ahí esta tu zeny, vuelve cuando quieras";
+	close;
+money:
+	mes @npc_show_name$;
+	mes "Cuantos Mithril Coin deseas obtener?";
+	next;
+	mes @npc_show_name$;
+	mes "Recuerda que puedes tener hasta 2 Billones de zeny";
+	next;
+	menu "1 Mithril Coin",unico,"2 Mithril Coin",dos,"3 Mithril Coin",tercero,"4 Mithril Coin",maximo;
+
+unico:
+	if(Zeny <= @kosten) goto falta;
+	set Zeny,Zeny - @kosten;
+	getitem 674,1;
+	close;
+dos:
+	if(Zeny <= @kosten) goto falta;
+	set Zeny,Zeny - @kosten*2;
+	getitem 674,2;
+	close;
+tercero:
+	if(Zeny <= @kosten) goto falta;
+	set Zeny,Zeny - @kosten*3;
+	getitem 674,3;
+	close;
+
+maximo:
+	if(Zeny <= @kosten) goto falta;
+	set Zeny,Zeny - @kosten*4;
+	getitem 674,4;
+	close;
+
+no:
+	mes "Bien, vuelve cuando quieras";
+	close;
+
+falta:
+	next;
+	mes "A mi nadie me engaña, no tienes lo necesario para efectuar la transaccion";
+	close;
+
+}
+
+morocc,146,85,7	duplicate(Banco)	Banquera#02	860
+geffen,128,64,3	duplicate(Banco)	Banquera#03	861
+izlude,118,103,7	duplicate(Banco)	Banquera#04	860
+poring_w01,99,111,7	duplicate(Banco)	Banquera#05	861
+//============================================================
+
+aldebaran,139,144,5	script	Assaulter Plate	63,{
+
+	soundeffect "siroma_move.wav",0;
+
+ mes "[Assaulter Plate]";
+ mes "Buenas, Yo soy el forjador.";
+ next;
+	soundeffect "siroma_move.wav",0;
+
+ mes "[Assaulter Plate]";
+ mes "Yo puedo crearte una armadura que no existe en el RO,";
+ mes "Ademas lleva 1 sloot y es sagrada,";
+ mes "Solo tienes que traerme ciertos items";
+ mes "Es un poco dificil quieres crearla?.";
+ next;
+ menu "Si, Claro.",-,"No, Despues.",M_EXIT;
+
+	soundeffect "siroma_move.wav",0;
+
+ mes "[Assaulter Plate]";
+ mes "Los items que necesito para crearlo son:";
+ mes "1 Howard Alt-Eisen Card,";
+ mes "1 Lord's Clothes [1] ,";
+ mes "1 Legion Plate Armor [1],";
+ mes "5,000,000z .";
+ next;
+
+	soundeffect "siroma_move.wav",0;
+
+ mes "[Assaulter Plate]";
+ mes "conseguiste los items?";
+ next;
+
+	soundeffect "siroma_move.wav",0;
+
+ menu "Si, porsupuesto.",-,"No, es dificil.",M_EXIT;
+ 
+ if(countitem(4362) < 1 || countitem(2318) < 1 || countitem(2342) < 1 ||   Zeny<5000000) GOTO L_NOITEM;
+ delitem 4362,1;
+ delitem 2318,1;
+ delitem 2342,1;
+ set Zeny,Zeny-5000000;
+ getitem 2376,1;
+	soundeffect "siroma_move.wav",0;
+
+ mes "[Assaulter Plate]";
+ mes "Genial, seras mas poderoso.";
+ close;
+	soundeffect "siroma_move.wav",0;
+
+L_NOITEM:
+ mes "[Assaulter Plate]";
+ mes "Disculpa, no puedo continuar puesto que te faltan items o zenny";
+ mes "vuelve cuando tengas todo";
+ close;
+
+M_EXIT:
+ mes "[Assaulter Plate]";
+ mes callfunc("F_Bye");
+
+ close;
+}
+
+//===== eAthena Script =======================================
+//= Adoption NPC (Compatible)
+//= ( Creado para el proyecto GuiaRO )
+//===== By: =========================
+//= Kutt Katrea (kg.designer@gmail.com)
+//===== Current Version: ===================
+//= 1.0Compatible
+//===== Compatible With: =====================
+//= eAthena SVN
+//===== Description: ============================================
+//= Un NPC para adopción alternativo, reemplaza al NPC de adopción normal.
+//= Permite adoptar tanto a Novices como a First Jobs.
+//= El nivel base máximo para adoptar puede ser configurado en el archivo: [.adopt_lv]
+//= Autocontenido. Todo el proceso lo efectua un solo NPC.
+//===== Additional Comments: ==========================================
+//= V 1.0: Lanzamiento inicial.
+//= V 1.0C: Versión compatible. Usa "atcommand" en lugar de "adoption".
+//=====================================================================
+// Esta obra está licenciada bajo una Licencia Creative Commons Atribución-No Comercial-Compartir Obras Derivadas Igual 3.0 Unported.
+// http://creativecommons.org/licenses/by-nc-sa/3.0/
+//=====================================================================
+prt_church,83,122,0	warp	prtch03	1,2,prt_church,164,171
+prt_church,162,171,0	warp	prtch01-3	1,2,prt_church,86,122
+
+prt_church.gat,172,177,6	script	Adopcion::adoption_agent	61,{
+	set @charid, getcharid(0);
+	
+	if ( .aip == 0 ) goto L_initAdoption;
+	if ( getnpctimer(0) > 120000 ) goto L_cancel;
+
+	if ( @charid != .own_id && @charid != .partner_id && @charid != .child_id) goto L_adoptionInProgress;
+	if ( .aip == 1 ) goto L_talkToPartner;
+	if ( .aip == 2 ) goto L_talkToChild;
+
+L_cancel:	
+	if ( @charid !=.own_id && @charid !=.partner_id && @charid!=.child_id) goto L_cancelAnnounce;
+	mes .show_name$;
+	mes "Los siento, pero su adopción se cancelo por retraso";
+	next;
+	
+L_cancelAnnounce:
+	set .aip, 0;
+	set .own_id, 0;
+	set .partner_id, 0;
+	set .child_id, 0;
+	npctalk "La adopcion anterior se canceló por retraso.";
+	
+L_initAdoption:
+	if ( Upper == 2 ) goto L_isBaby;
+	
+	mes .show_name$;
+	mes "Hola, yo dirijo este centro de adopción.";
+	mes "¿Que necesitas?";
+	next;
+	menu "Informes",L_informes,"Adoptar",L_adopt,"Nada",-;
+
+L_comeBack:
+	mes .show_name$;
+	mes "Vuelve cuando quieras";
+	close;
+
+L_informes:
+	mes .show_name$;
+	mes "Para poder adoptar es necesario que los padres sean una pareja casada y que ambos tengan nivel base 70 o más.";
+	mes "El personaje a adoptar debe ser Novice o Primer Job (no renacido) de nivel base máximo " + .adopt_lv + ".";
+	close;
+
+L_adopt:
+	mes .show_name$;
+	mes "Para adoptar necesitan estar aqui tu pareja y el personaje a ser adoptado";
+	mes "Además, solo puedes adoptar una sola vez.";
+	next;
+	if ( select("Continuar la adopción", "Cancelar la adopción") - 1 ) goto L_comeBack;
+
+	if ( BaseLevel >= 70 ) goto L_checkMarriage;
+	mes .show_name$;
+	mes "Debes tener al menos Nivel Base 70 para poder adoptar";
+	close2;
+	goto L_flagstozero;
+	
+L_checkMarriage:
+	if ( getchildid() ) goto L_hasAdopted;
+	set @partner_id, getpartnerid();
+	if ( ! @partner_id ) goto L_noMarried;
+	if ( ! ispartneron() ) goto L_partnerOffline;
+
+	if ( .aip ) goto L_adoptionInProgress;
+	set .aip, 1;
+	set .own_id, @charid; 
+	set .own_name$, strcharinfo(0);
+	set .partner_id, @partner_id;
+
+L_getChildName:
+	mes .show_name$;
+	mes "¿Podrias decirme el nombre del personaje que quieren adoptar?";
+	next;
+	input .child_name$;
+	set .child_id, getcharid(0, .child_name$);
+
+	if ( .child_id ) goto L_gotoTalkToPartner;
+	
+	mes .show_name$;
+	mes "Ese jugador no existe o no esta en línea";
+	next;
+	if ( select("Elegir otro nombre", "Cancelar adopción") - 1 ) goto L_cancelByOwn;
+	goto L_getChildName;
+
+L_gotoTalkToPartner:
+	if ( .child_id == .own_id ) goto L_cantAdoptYourself;
+	if ( .child_id == .partner_id ) goto L_cantAdoptYourPartner;
+	
+	npctalk "La pareja de " + .own_name$ + ", ¿puede hablar conmigo, por favor?. Tienes 2 minutos.";
+	initnpctimer;
+
+L_needToTalkPartner:
+	mes .show_name$;
+	mes "Ahora, necesito hablar con tu pareja.";
+	close;
+
+L_talkToPartner:
+	if ( @charid == .partner_id ) goto L_partnerAccept;
+	if ( @charid == .own_id ) goto L_needToTalkPartner;
+
+	mes .show_name$;
+	mes "En un momento te llamo, no desesperes.";
+	close;
+	
+L_partnerAccept:
+	stopnpctimer;
+	mes .show_name$;
+	mes "Tu pareja dice que quieren adoptar a ^0000FF" + .child_name$ + "^000000";
+	mes "¿Estas de acuerdo?";
+	next;
+	if ( select("Si", "No") -1 )	goto L_cancelByPartner;
+	
+	if ( BaseLevel >= 70 ) goto L_checkAccept;
+	mes .show_name$;
+	mes "Debes tener al menos Nivel Base 70 para poder adoptar";
+	close2;
+	goto L_cancelByRequirements;
+	
+L_checkAccept:
+	set .partner_name$, strcharinfo(0);
+	set .aip, 2;
+	npctalk "¿Puede " + .child_name$ + " hablar conmigo?. Tienes 2 minutos.";
+	initnpctimer;
+
+L_needToTalkChild:
+	mes .show_name$;
+	mes "Para terminar, necesito hablar con su futuro hijo, " + .child_name$;
+	close;
+
+L_talkToChild:
+	if (@charid != .child_id ) goto L_needToTalkChild;
+	stopnpctimer;
+	mes .show_name$;
+	mes "^0000FF" + .own_name$ + "^000000 y ^0000FF" + .partner_name$ + "^000000 desean adoptarte.";
+	mes "¿Los aceptas como padres?";
+	next;
+	if ( select("Si", "No") - 1 ) goto L_cancelBySon;
+
+	if ( Class > Job_Thief ) goto L_cancelByJob;
+	if ( BaseLevel > .adopt_lv ) goto L_cancelByLevel;
+	
+	mes .show_name$;
+	mes "Procederé a terminar el trámite";
+	next;
+	
+	if ( ! getcharid(0, .own_name$) ) goto L_cancelByNotBothOnline;
+	if ( ! getcharid(0, .partner_name$) ) goto L_cancelByNotBothOnline;
+
+	atcommand "@adopt " + .own_name$ + " " + .partner_name$ + " " +  .child_name$;
+	announce .own_name$ + " y " + .partner_name$ + " han adoptado a " + .child_name$, bc_all;
+
+	set .aip, 0;
+	set .own_id, 0;
+	set .partner_id, 0;
+	set .child_id, 0;
+	
+	mes .show_name$;
+	mes "Que sean una familia muy feliz";
+	next;
+	goto L_comeBack;
+
+L_cantAdoptYourself:
+	mes .show_name$;
+	mes "¡No puedes adoptarte a ti mismo!";
+	next;
+	goto L_cancelByOwn;
+
+L_cantAdoptYourPartner:
+	mes .show_name$;
+	mes "¡No puedes adoptar a tu pareja!";
+	next;
+	goto L_cancelByOwn;
+
+L_cancelByJob:
+	mes .show_name$;
+	mes "Lo siento, solo es posible adoptar Novices y First Job.";
+	close2;
+	goto L_cancelByRequirements;
+
+L_cancelByLevel:
+	mes .show_name$;
+	mes "Lo siento, tu nivel es demasiado alto para ser adoptado.";
+	close2;
+	goto L_cancelByRequirements;
+
+L_cancelByNotBothOnline:
+	mes .show_name$;
+	mes "Lo siento, ambos padres deben estar online para terminar el trámite.";
+	close2;
+	goto L_cancelByRequirements;
+	
+L_cancelByPartner:
+	npctalk .own_name$ + ", tu pareja no esta de acuerdo en adoptar a " + .child_name$;
+	goto L_cancelByOwn;
+
+L_cancelBySon:
+	npctalk .child_name$ + " no quiere ser adoptado por " + .own_name$ + " y " + .partner_name$;
+
+L_cancelByOwn:
+	set .aip, 0;
+	set .own_id, 0;
+	set .partner_id, 0;
+	set .child_id, 0;
+	mes .show_name$;
+	mes "El tramite de adopción se ha cancelado";
+	close;
+	
+L_adoptionInProgress:
+	mes .show_name$;
+	mes "Hay una adopción en proceso, ¿puedes esperar un momento?";
+	mes "Espera a que termine para poder seguir con tu trámite.";
+	close;
+
+L_noMarried:
+	mes .show_name$;
+	if ( Sex )
+	mes "Lo siento, pero para adoptar necesitas estar casado";
+	else
+	mes "Lo siento, pero para adoptar necesitas estar casada";
+	close;
+
+L_partnerOffline:
+	mes .show_name$;
+	mes "La adopción no puede continuar si tu pareja no esta en línea.";
+	close;
+
+L_hasAdopted:
+	mes .show_name$;
+	mes "Lo siento, pero solo puedes adoptar una vez";
+	close;
+
+L_isBaby:
+	mes .show_name$;
+	if ( Sex )
+	mes "¿Como te tratan tus padres, pequeño?";
+	else
+	mes "¿Como te tratan tus padres, pequeña?";
+	close;
+
+OnTimer120000:
+	npctalk "La adopcion se canceló por retraso.";
+	goto L_flagstozero;
+	
+L_cancelByRequirements:
+	npctalk "La adopcion se canceló por incumplimiento de requisitos.";
+
+L_flagstozero:
+	set .aip, 0;
+	set .own_id, 0;
+	set .partner_id, 0;
+	set .child_id, 0;
+	end;
+
+OnInit:
+	set .show_name$, "^ff0000Adoption^000000";
+	set .adopt_lv, 20;
+}

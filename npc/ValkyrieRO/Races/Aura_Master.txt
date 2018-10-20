@@ -1,0 +1,120 @@
+//NPC CAMBIADOR DE AURAS--
+
+prontera,141,181,5	script	Aura Master	922,{
+    set .@auramax, 95; // Máximo número de auras
+    set @acost, 1;
+
+    if(#CASHPOINTS < 1) {
+        mes "^0000FF[Aura Master]^000000";
+        mes "Hola, yo proporciono el servicio de cambio de ^0000FFAuras000000, pero cada cambio tiene un costo de ^0000FF50 Cash000000, regresa cuando tengas la cantidad requerida y con gusto te Atiendo.";
+        next;
+        mes "^0000FF[Aura Master]000000";
+        mes "Para mayor informacion de acuerdo a el tipo de ^0000FFAura000000 que puedes elegir, porfavor visita el ^0000FFforo000000 en la seccion de ^0000FFGuias000000 para mayor informacion.";
+        emotion e_sry;
+        close;
+        }
+
+
+    mes "^0000FF[Aura Master]^000000";
+    mes "Bienvenido al ^0000FFSistema de Cambio de Auras de Lexus Ro ^000000, me alegra poder Atenderte hoy.";
+    next;
+    mes "^0000FF[Aura Master]^000000";
+    mes "Antes de continuar con el servicio, te tengo que recordar que la Cuota del servicio son ^0000FF1 Cash^000000 para poder realizarte el cambio.";
+    next;
+     menu "^0000FFMe gustaria mas informacion.^000000",-,"^ff0000Deseo Cambiar mi Aura.^000000",A_CHN,"Deseo quitarme el Aura",A_REM,"No deseo nada por Ahora",A_EXI;
+        mes "^0000FF[Aura Master]^000000";
+        mes "El Sistema de Cambio de Auras es una forma de cambiar el 'efecto' de como se te ve el aura que te rodea, no reemplaza el Aura original, solo le agrega un efecto permanente alrrededor tuyo.";
+        next;
+        mes "^0000FF[Aura Master]^000000";
+        mes "Dicho efecto es permanente y no desaparecera, no proporciona ningun extra a tus stats, es solo un complemento estetico, si deseas mayor informacion acerca de cuantas y cuales...";
+        next;
+        mes "^0000FF[Aura Master]^000000";
+        mes "Auras tenemos disponibles para ofrecerte, te recomiendo visitar el ^0000FFforo000000 en la seccion de ^0000FFGuias^000000.";
+        close;
+
+    A_CHN:
+
+    mes "^0000FF[Aura Master]^000000";
+    mes "Muy bien has elegido ^ff0000Cambiar tu Aura^000000 lo cual tendra un costo de ^0000FF50 Cash^000000.";
+    next;
+    menu "Continuar.",-,"Cancelar.",A_EXI;
+    set #CASHPOINTS, #CASHPOINTS - @acost;
+    mes "^0000FF[Aura Master]^000000";
+    mes "Ingresa el numero de Aura que deseas, recuerda que para estilos e imagenes de las Auras que te ofrecemos puedes visitar el ^0000FFforo^000000";
+    next;
+    mes "^0000FF[Aura Master]^000000";
+    mes "Ingresa un numero entre el 1 y el 95, una vez ecojas alguna no podras cambiar de opinion asi que asegurate saver que quieres.";
+    input .@aura, -10000, 10000;
+    if (.@aura < 1 || .@aura > .@auramax) {
+        mes "Lo siento pero tiene que ser un valor entre ^FF00001 ~ " +.@auramax +"^000000 no valen ni mayor ni 0, ni negativo, por favor inténtelo de nuevo.";
+        close;
+    } // End if
+    close2;
+    mes "^0000FF[Aura Master]^000000";
+    mes "Muy bien ahora permiteme mientras preparo tu Aura";
+    sleep2 800;
+    specialeffect2 346;
+    sleep2 3000;
+    specialeffect2 650;
+    sleep2 6000;
+    npctalk "Solo tomara un momento no vayas a hacer nada!";
+    specialeffect2 500;
+    specialeffect2 221;
+    sleep2 2500;
+    atcommand "@aura " +.@aura +" " +strcharinfo(0);
+    close;
+
+        A_EXI:
+        mes "^0000FF[Aura Master]^000000";
+        mes " ";
+        mes "Que tengas un buen dia~";
+        close;
+
+        //A_OK:
+        //mes "^0000FF[Aura Master]^000000";
+        //mes "Me alegro que sea de tu agrado, recuerda que puedes remover el Aura sin ningun costo.";
+        //close;
+
+        A_REM:
+        mes "^0000FF[Aura Master]^000000";
+        mes "Estas seguro que deseas remover tu Aura actual?";
+        next;
+        menu "Si.",-,"No.",A_EXI;
+        atcommand "@aura 0";
+        mes "^0000FF[Aura Master]^000000";
+        mes "Aqui tienes, que tengas un buen dia~";
+        close;
+}
+
+//	
+//	{ 691, -1, 679 },
+//	{ 757, 203, -1 },
+//	{ 783, 242, 485 },
+//	{ 822, -1, 486 },
+//	{ 827,  -1,  -1 },
+//	{ 827, 239, 418 },
+//	{ 828,  -1,  -1 },
+//	{ 828, 239, -1 },
+//	{ 828, 397, -1 },
+//	{ 829, 239, 418 },
+//	{ 397, 881,  -1 },
+//	{ -1, 294, 828 },
+//	{ 398,  -1,  -1 },
+//	{ 404, 404,  -1 },
+//	{ 691,  -1,  -1 },
+//	{ 691, 829, 486 },
+//	{ 397, 881, 418 },
+//	{ 397, 881, 680 },
+//	{ -1, 881, 828 },
+//	{ 679, 881, 828 },
+//	{ 679, 881, -1 },
+//	{ 398, 679,  -1 },
+//	{ 398, 697, 828 },
+//	{ 398, -1, 418 },
+//	{ 398, 679, 485 },
+//	{ -1, 828, 397 },
+//	{ 690, 691, 679 },
+//	{ 690, 691, -1 },
+//	{ 239, 240, 241 },
+//	{ 240, 241, 242 },
+//	{ 240, 241, 294 },

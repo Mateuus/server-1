@@ -1,0 +1,25 @@
+prontera,142,228,6	script	Evolucionador	558,{
+	mes "Evolucionador";
+	mes "Hola, yo te evoluciono";
+	mes "los homunculos por dinero";
+next;
+	mes "Cuesta:";
+	mes "5.000.000 zeny";
+	mes "Te interesa?";
+next;
+	menu "Si",s1,"No",n1;
+
+s1:
+	if (Zeny < 5000000) goto falta;
+	set Zeny,Zeny-5000000;
+	mes "Listo tu homunculo";
+	mes "esta evolucionado.";
+	atcommand "@homevolution";
+close;
+
+
+n1:
+	mes "Ok, adios";
+end;
+
+}

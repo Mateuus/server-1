@@ -1,0 +1,49 @@
+// Instance Database
+//
+// Structure of Database:
+// ID,Name,LimitTime,IdleTimeOut,EnterMap,EnterX,EnterY,Map2,...,Map255
+//
+// EnterMap is considered as Map1
+
+1,Endless Tower,14400,300,1@tower,50,355,2@tower,3@tower,4@tower,5@tower,6@tower
+2,Sealed Catacomb,7200,300,1@cata,100,224,2@cata
+3,Orc's Memory,3600,300,1@orcs,179,15,2@orcs
+4,Nidhoggur's Nest,14400,300,1@nyd,32,36,2@nyd
+5,Mistwood Maze,7200,300,1@mist,89,29
+6,Culvert,3600,300,1@pump,63,98,2@pump
+7,Octopus Cave,3600,300,1@cash,199,99
+8,Bangungot Hospital 2F,3600,300,1@ma_h,40,157
+9,Buwaya Cave,3600,300,1@ma_c,35,57
+10,Bakonawa Lake,7200,300,1@ma_b,64,51
+11,Wolfchev's Laboratory,14400,300,1@lhz,45,148
+12,Old Glast Heim,3600,300,1@gl_k,150,20,2@gl_k
+13,Eclage Interior,1200,300,1@ecl,60,50
+14,Sara's Memories,3600,300,1@sara,250,155
+15,Geffen Magic Tournament,7200,300,1@gef,119,209,1@gef_in,1@ge_st
+16,Horror Toy Factory,3600,300,1@xm_d,111,22
+17,Faceworm's Nest,3600,300,1@face,112,374
+18,Nightmarish Jitterbug,3300,300,1@jtb,16,18
+19,Ghost Palace,3600,300,1@spa,42,196
+20,Airship Assault,7200,300,1@air1,244,28,1@air2
+21,Charleston Crisis,7200,300,1@mcd,127,282
+22,Isle of Bios,3600,300,1@dth1,17,93,1@dth2,1@dth3
+23,Remnant Of Azit,7200,300,1@ffp,257,246
+24,Dead Branch Room,7200,300,pvp_n_1-3,99,95
+25,Wave Mode Forest,3600,300,1@def01,46,64
+26,Wave Mode Sky,3600,300,1@def01,46,64
+27,Endless Cellar,7200,300,1@new,96,395,2@new,3@new,4@new,5@new
+28,Temple of Demon God,7200,300,1@eom,102,16
+29,Room of Consciousness,7200,300,1@mir,101,8
+30,Devil's Tower,7200,300,1@tnm1,29,82,1@tnm2,1@tnm3
+31,Infinite Space,7200,300,1@infi,29,4
+32,Fenrir and Sarah,3600,300,1@glast,367,304
+33,Central Laboratory,3600,300,1@lab,120,30
+34,Last room,3600,300,1@uns,142,30
+35,Poring Village,7200,300,1@begi,102,24
+36,Sky Fortress,7200,300,1@sthb,56,68,1@sthd,1@sthc
+37,Morse's Cave,7200,300,1@rev,24,181
+
+101,LV1 Elite MVP Ladder,3600,300,1@ldr,103,90
+102,LV2 Elite MVP Ladder,3600,300,2@ldr,103,90
+103,LV3 Elite MVP Ladder,3600,300,3@ldr,103,90
+104,LV4 Elite MVP Ladder,3600,300,4@ldr,103,90

@@ -1,0 +1,59 @@
+//===== Global Chile ======
+//=== https://www.facebook.com/IntegralesGlobal ===
+
+vip_lounge,163,65,5	script	Banco eRo	807,{
+
+	mes "[^CC0000Banco eRo^000000]";
+	mes "Bienvenido al banco de eRo, nosotros cuidaremos de su dinero.";
+	mes " ";
+	mes " ";
+	mes " ";
+	mes "Saldo Actual: ^072F5A"+#CuentaBanco+"^000000z";
+	next;
+menu "Retirar Zeny",retirar,"Ingresar Zeny",ingresar,"Cancelar",cancelar;
+
+retirar:
+input @bancoretira;
+if (@bancoretira > #CuentaBanco) goto nodinero;
+if (@bancoretira < 1) goto fallo;
+if (@bancoretira > 5000000) goto fallo;
+emotion 8,1;
+set #CuentaBanco,#CuentaBanco-@bancoretira;
+set Zeny,Zeny+@bancoretira;
+	mes "[^CC0000Banco eRo^000000]";
+	mes "Retirado: ^072F5A"+@bancoretira+"^000000z";
+	mes "Saldo Actual: ^072F5A"+#CuentaBanco+"^000000z";
+close;
+
+ingresar:
+input @bancoingresa;
+if (@bancoingresa > Zeny) goto nodinero2;
+if (@bancoingresa < 1) goto fallo;
+if (@bancoingresa > 5000000) goto fallo;
+emotion 8;
+set #CuentaBanco,#CuentaBanco+@bancoingresa;
+set Zeny,Zeny-@bancoingresa;
+	mes "[^CC0000Banco eRo^000000]";
+	mes "Ingreso: ^072F5A"+@bancoingresa+"^000000z";
+	mes "Saldo Actual: ^072F5A"+#CuentaBanco+"^000000z";
+close;
+
+cancelar:
+close;
+
+fallo:
+	mes "[^CC0000Banco eRo^000000]";
+	mes "No puedes ingresar o retirar una cantidad inferior a 1z o superior a 5.000.000z.";
+close;
+
+nodinero:
+	mes "[^CC0000Banco eRo^000000]";
+	mes "No posees tanto dinero en tu cuenta bancaria.";
+close;
+
+nodinero2:
+	mes "[^CC0000Banco eRo^000000]";
+	mes "No posees tanto dinero como para hacer ese ingreso.";
+close;
+
+}

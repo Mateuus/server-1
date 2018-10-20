@@ -1,0 +1,69 @@
+prontera,172,181,5	script	Dress Change	625,{
+cutin "nines01",2;
+	mes "[Dress Chager]";
+	mes "Hola. Soy un cambiador de vestidos ¿Quieres probar mis servicios?";
+	mes "Puedo personalizar la apariencia de tu personajes.";
+	next;
+	mes "¿Quieres?";
+	menu "^ff0000[>]^000000 ^0065DF[Nuevo traje]^000000",berubah_a,"^ff0000[>]^000000 ^008000[Aspecto Original]^000000",berubah_b,"^ff0000[>]^000000 [Salir]",h_bye;
+	
+	
+
+	
+berubah_a:
+	next;
+	if(Class == 4061 || Class == 4062 || Class == 4063 || Class == 4064 || Class == 4065 || Class == 4073 || Class == 4078 || Class == Job_Minstrel_T || Job_Wanderer_T || Class == 4079){
+		atcommand "@bodystyle 1";
+	specialeffect2 98;	// Some fancy effect
+		mes "[Dress Chager]";
+		mes "Hay a su nuevo traje";
+		mes "Gracias !";
+		cutin "",2;
+		close;
+	}else{
+
+		mes "En este momento usted no es un Trascendente Job.";
+		mes "Vuelve mas tarde.";
+		cutin "",2;
+		close;
+
+	}
+	
+berubah_b:
+	next;
+	if(Class == 4061 || Class == 4062 || Class == 4063 || Class == 4064 || Class == 4065 || Class == 4073 || Class == 4078 || Class == Job_Minstrel_T || Job_Wanderer_T || Class == 4079){
+		atcommand "@bodystyle 0";
+	specialeffect2 100;	// Some fancy effect
+		mes "[Dress Chager]";
+		mes "Allí su Antiguo Traje";
+		mes "Gracias !";
+		cutin "",2;
+		close;
+	}else{
+
+		mes "En este momento usted no es un Trascendente Job.";
+		mes "Vuelve mas tarde.";
+		cutin "",2;
+		close;
+	}
+	
+	
+h_bye:
+	next;
+	mes "[Dress Chager]";
+	mes "¡Hasta luego!";
+	cutin "",2;
+	close;
+
+h_no:
+	next;
+	mes "[Dress Chager]";
+	mes "Ok, gracias.";
+	mes "Por favor ven de nuevo.";
+	emotion e_gg;
+	cutin "",2;
+	close;
+	
+
+
+}

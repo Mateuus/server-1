@@ -1,0 +1,73 @@
+//===== Script eAthena ======================================= 
+//= Butterfly  Quest
+//===== por: ================================================== 
+//= Creador de Quests Ragnarok World
+//= v1.0
+//===== Compatible Con: ===================================== 
+//= eAthena SVN
+//===== Descripción: ========================================= 
+//  Quest Creada por el Script Creador de Quests Online de
+//  http://www.ragnarokworld.net
+//============================================================ 
+
+poring_w02,127,45,3	script	Butterfly Brow Wing 	828,{
+ 	set @NPCName$, "[^Butterfly ^000000]";
+	set @cost, 10000000;
+	mes @NPCName$;
+	mes "Quieres Obtener este Item? Bonus stat Wing: +20 All stats..!!";
+	next;
+	switch(select("Si:No:No, Grasias.")) {
+ 	case 1:
+	mes @NPCName$;
+	mes "Estos son Los Items Necesarios.";
+	mes "  ^Fluff^000000 [250]";
+	mes "  ^Zargon^000000 [250]";
+	mes "  ^Chrysalis^000000 [150]";
+	mes "  ^10000000 Zeny^000000";
+	next;
+	if (countitem(914) < 250) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(912) < 250) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(915) < 150) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (Zeny < @cost) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	mes @NPCName$;
+	mes "Bien! Tienes todos los Items! Felicidades !";
+	mes "el Objeto es Tuyo";
+	delitem 914,250;
+	delitem 912,250;
+	delitem 915,150;
+	set Zeny,Zeny-@cost;
+	getitem 29002,1;
+	close;
+	case 2:
+	mes @NPCName$;
+	mes "de acuerdo, vuelve pronto !";
+	close;
+	case 3:
+	close;
+	}
+
+}
+
+//============================================================
+//===== Creador de Quests Ragnarok World ===========================
+//============================================================

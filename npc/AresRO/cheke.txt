@@ -1,0 +1,66 @@
+
+prontera.gat,145,167,5	script	Cajero	706,{
+	cutin "god_tialpi01",2;
+	soundeffect "siroma_move.wav",0;
+	mes "^0000FF[^000000^FF0000Cajero^000000^0000FF]^000000";
+	mes "Hola ^5555FF" + strcharinfo(0) + "^000000!...";
+	mes "¿Qué es lo que deseas?";
+	next;
+	menu "Cambiar mi dinero a Cheque",CD,"Cambiar mi Cheque a dinero",CM;
+CD:
+    soundeffect "siroma_move.wav",0;
+	mes "^0000FF[^000000^FF0000Cajero^000000^0000FF]^000000";
+	mes "Bueno, por 10.000.000 Zeny te dare un Cheque la cual sirve para que sigas ahorrando.";
+	mes "Y cuando necesites el dinero de vuelta me traes el Cheque y yo te devolvere el dinero.";
+	mes "¿Quieres hacer la transacción?";
+	next;
+	menu "Si",-,"No gracias",No;
+	soundeffect "siroma_move.wav",0;
+	if (zeny<10000000) goto Lnotiene;
+	set zeny,zeny-10000000;
+	mes "^0000FF[^000000^FF0000Cajero^000000^0000FF]^000000";
+	mes "Muy bien, ahi tienes tu Cheque.";
+	mes "Espero no la pierdas.";
+	getitem 671,1;
+	cutin "",255;
+close;
+
+	LNotiene:
+	soundeffect "siroma_move.wav",0;
+	mes "^0000FF[^000000^FF0000Cajero^000000^0000FF]^000000";
+	mes "Lo lamento, no tienes lo que pido.";
+	mes "vuelve cuando lo tengas.";
+	cutin "",255;
+	close;
+
+No:
+	soundeffect "siroma_move.wav",0;
+	mes "^0000FF[^000000^FF0000Cajero^000000^0000FF]^000000";
+	mes "Vuelve cuando quieras hacerlo.";
+	cutin "",255;
+	close;
+
+CM:
+	soundeffect "siroma_move.wav",0;
+	mes "^0000FF[^000000^FF0000Cajero^000000^0000FF]^000000";
+	mes "Asi que quieres que te regrese tu dinero.";
+	mes "¿Estas seguro de esto?";
+	next;
+	menu "Si",-,"No gracias",No2;
+	soundeffect "siroma_move.wav",0;
+	if(countitem(671) < 1) goto Lnotiene;
+	delitem 671, 1;
+	mes "^0000FF[^000000^FF0000Cajero^000000^0000FF]^000000";
+	mes "Muy bien, ahi tienes tu dinero.";
+	mes "Espero que lo gastes como se debe.";
+	set zeny,zeny+10000000;
+	cutin "",255;
+	close;
+
+No2:
+	soundeffect "siroma_move.wav",0;
+	mes "^0000FF[^000000^FF0000Cajero^000000^0000FF]^000000";
+	mes "Vuelve cuando quieras hacerlo.";
+	cutin "",255;
+	close;
+}

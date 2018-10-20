@@ -1,0 +1,220 @@
+/////////////////////////////////////////////////
+// Quest Warper NPC
+// By: Tizme
+/////////////////////////////////////////////////
+//Function:
+//To warp players to the NPC's that create quest items.
+/////////////////////////////////////////////////
+//Version 1.0
+/////////////////////////////////////////////////
+
+
+poring_w02.gat,123,127,1	script	Quest Warp	868,{
+waitingroom "[Quest Warper]",0;
+mes "[Emzit]";
+mes "Hello how may I be of service?";
+next;
+menu "Can you help me complete my quest?",L_start,"Nervermind.",L_End;
+L_start:
+mes "[Emzit]";
+mes " It just so happens I can take you to the quest master, which item are you working on?";
+next;
+menu "Kitsune Mask",L_warp2,"Bao Bao",L_warp3,"Crescent Moon Hairpin",L_warp3,"Fashion Sunglasses",L_warp3,"Heart Hairpin",L_warp3,
+"Hat of the Sun God",L_warp4,"Mage Hat",L_warp4,"Magician Hat",L_warp4,"Sunday Hat",L_warp4,"Antlers",L_warp5,"Boy's Cap",L_warp6,"Bunney Band",L_warp7,
+"Mr. Smile",L_warp8,"Alarm Mask",L_warp9,"Opera Masque",L_warp10,"Sakkat",L_warp10,"Doctor Band",L_warp10,"Feather Bonnet",L_warp10,"Blue Bandana",L_warp11,
+"Bulb Band",L_warp11,"Cross Hat",L_warp11,"Striped Hairband",L_warp11,"Greif for Greed",L_warp12,"Mine Hat",L_warp12,"Opera Phantom Mask",L_warp12,
+"Parcel Hat",L_warp12,"Indian Headband",L_warp13,"Flower Hairpin",L_warp14,"Giant Band Aid",L_warp14,"X Hairpin",L_warp14,"Decorative Mushroom",L_warp15,
+"Headset",L_warp16,"Tulip Hairpin",L_warp17,"Welding Mask",L_warp18,"Crunch Toast",L_warp19,"Next Page",L_Next;
+L_Next:
+menu "Ancient Queen's Crown",L_warp20,"Crown of Mistress",L_warp20,
+"Decorative Golden Bell",L_warp20,"Angel Wing Ears",L_warp21,"EVil Wing Ears",L_warp21,"Hot-blooded Headband",L_warp22,"Blush",L_warp23,"Cake Hat",L_warp23,
+"Candle",L_warp23,"Chef Hat",L_warp23,"Raccoon Hat",L_warp23,"Rainbow Eggshell",L_warp23,"Spore Hat",L_warp23,"Wonder Nutshell",L_warp23,"Beanie",L_warp24,
+"Cowboy Hat",L_warp24,"Party Hat",L_warp24,"Straw Hat",L_warp24,"Sombrero",L_warp24,"Sea-otter Hat",L_warp25,"Teddybear Hat",L_warp26,"Blue Fish",L_warp27,
+"Drooping Cat",L_warp27,"Lazy Smokie",L_warp27,"Smokie Leaf",L_warp27,"Stop Post",L_warp28,"Binoculars",L_warp29,"Black Cat Ears",L_warp30,
+"Deviruchi Hat",L_warp31,"Helm of Angel",L_warp31,"Ear Muffs",L_warp32,"Pretend Murdered",L_warp33,"Model Training Hat",L_warp34,"Oxygen Mask",L_warp35,
+"Ph.D Hat",L_warp36,"Red Ribbon",L_warp37,"Not right now",L_End;
+L_warp2:
+mes "[Emzit]";
+mes "Let me use some fox fire magic!";
+close2;
+warp "pay_dun03.gat",48,85;
+L_warp3:
+mes "[Emzit]";
+mes "Time to bust out the fashion!";
+close2;
+warp "alberta.gat",119,52;
+L_warp4:
+mes "[Emzit]";
+mes "Protection from the sun FTW!";
+close2;
+warp "alberta.gat",134,78;
+L_warp5:
+mes "[Emzit]";
+mes "Become one with nature!";
+close2;
+warp "alberta.gat",121,52;
+L_warp6:
+mes "[Emzit]";
+mes "Ten HUT!";
+close2;
+warp "alberta_in.gat",27,144;
+L_warp7:
+mes "[Emzit]";
+mes " Bounce! Bounce! How cute!";
+close2;
+warp "alberta.gat",24,232;
+L_warp8:
+mes "[Emzit]";
+mes "Say Cheese!";
+close2;
+warp "alberta.gat",114,53;
+L_warp9:
+mes "[Emzit]";
+mes " RING RING WAKE UP!";
+close2;
+warp "alde_alche.gat",88,180;
+L_warp10:
+mes "[Emzit]";
+mes "YIPPIE!";
+close2;
+warp "aldeba_in.gat",151,166;
+L_warp11:
+mes "[Emzit]";
+mes " Keep your hair out of your eyes!";
+close2;
+warp "comodo.gat",227,158;
+L_warp12:
+mes "[Emzit]";
+mes "This sure looks rare!";
+close2;
+warp "comodo.gat",274,137;
+L_warp13:
+mes "[Emzit]";
+mes "Oye ah ah oh Oye ah ah oh!";
+close2;
+warp "comodo.gat",237,217;
+L_warp14:
+mes "[Emzit]";
+mes "Awww how cute!";
+close2;
+warp "geffen.gat",128,147;
+L_warp15:
+Mes "[Emzit]";
+mes " EWW theirs a fungi amungi!";
+close2;
+warp "geffen.gat",67,85;
+L_warp16:
+mes "[Emzit]";
+mes " My Ipod owns!";
+close2;
+warp "geffen_in.gat",30,71;
+L_warp17:
+mes "[Emzit]";
+mes "I love this flower!";
+close2;
+warp "geffen.gat",83,189;
+L_warp18:
+mes "[Emzit]";
+mes "This mask has for sure saved my vision!";
+close2;
+warp "geffen_in.gat",144,166;
+L_warp19:
+mes "[Emzit]";
+mes " CRUNCH CRUNCH CRUNCH!";
+close2;
+warp "yuno.gat",223,115;
+L_warp20:
+mes "[Emzit]";
+mes "Here you are you majesty";
+close2;
+warp "yuno_in03.gat",20,18;
+L_warp21:
+mes "[Emzit]";
+mes "You know, Red Bull gives you wings!";
+close2;
+warp "yuno.gat",240,51;
+L_warp22:
+mes "[Emzit]";
+mes " AHHHHHHH ARGGGG";
+close2;
+warp "yuno.gat",299,187;
+L_warp23:
+mes "[Emzit]";
+mes "Celebrate good times!";
+close2;
+warp "xmas.gat",117,295;
+L_warp24:
+mes "[Emzit]";
+mes "Keep your head warm!";
+close2;
+warp "xmas_in.gat",34,29;
+L_warp25:
+mes "[Emzit]";
+mes "ARF ARF ARF";
+close2;
+warp "xmas.gat",182,266;
+L_warp26:
+mes "[Emzit]";
+mes "So soft! So cute! I cannot resist!";
+close2;
+warp "xmas.gat",174,155;
+L_warp27:
+mes "[Emzit]";
+mes "By the creed of the Desert Wolf!";
+close2;
+warp "morocc.gat",272,78;
+L_warp28:
+mes "[Emzit]";
+mes " STOP in the name of love!";
+close2;
+warp "morocc_in.gat",141,101;
+L_warp29:
+mes "[Emzit]";
+mes "He is in my sight!";
+close2;
+warp "morocc_in.gat",75,162;
+L_warp30:
+mes "[Emzit]";
+mes "Aww a cute little kitty!";
+close2;
+warp "payon.gat",115,130;
+L_warp31:
+mes "[Emzit]";
+mes "I see you have mastered your skills, howabout we work on your looks!";
+close2;
+warp "payon_in01.gat",55,11;
+L_warp32:
+mes "[Emzit]";
+mes "The key to success, is silence!";
+close2;
+warp "payon_in01.gat",17,9;
+L_warp33:
+mes "[Emzit]";
+mes "Haha I look dead, but it is you who will die!";
+close2;
+warp "payon.gat",153,169;
+L_warp34:
+mes "[Emzit]";
+mes " THINK! THINK! THINK!";
+close2;
+warp "payon_in03.gat",7,192;
+L_warp35:
+mes "[Emzit]";
+mes "The key to survival is oxygen!";
+close2;
+warp "payon_in02.gat",24,70;
+L_warp36:
+mes "[Emzit]";
+mes "The doctor is in!";
+close2;
+warp "prt_in.gat",37,107;
+L_warp37:
+mes "[Emzit]";
+mes "You cannot resist my cuteness!";
+close2;
+warp "prontera.gat",164,231;
+L_End:
+mes "[Emzit]";
+mes " Alright See you later";
+close;
+}

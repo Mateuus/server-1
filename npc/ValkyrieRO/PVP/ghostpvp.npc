@@ -1,0 +1,899 @@
+//Créditos a DanielArt
+//Modificaciones GM Sanguiman Egesius RO
+-	script	Versus	-1,{
+OnInit:
+set .System, 1; //Toggle PvP System (0:Disable|1:Enable)
+set .ServerType, 1; //Are you using TXT or SQL? (0:TXT|1:SQL)
+set .GMLevel, 90; //GM levels above or equal this level will be ignored by the system
+setarray .PvPMap$[0],"All"; //"pvp_y_1-2","guild_vs1","pvp_n_1-5","guild_vs2-1","pvp@tower","pvp_n_1-3","pvp_n_2-3","pvp_n_3-3","prtg_cas02","prtg_cas03","payg_cas02","payg_cas03"; //List all pvp maps here (Index 0:"All" to enable all maps)
+set .Top, 10; //What is the length of the list?
+set .Reset, 3; //Allow players to reset their PvP statistics? (0:Disable|1:Zeny|2:Cashpoint|3:Skull)
+set .ZenyFee, 0; //How much zeny you want to charge to reset their pvp stat?
+set .CashFee, 0; //How much cashpoint you want to charge to reset their pvp stat?
+set .SkullFee, 0; //How much skull you want to charge to reset their pvp stat?
+set .AnnouncerFee, 5; //How much cashpoint per announcer? (DotA announcer is set as default)
+set .MaxZeny, 2000000000; //What is the max zeny of the server?
+set .Zeny, 1000; //Earn zeny each kill? (0:Disable)
+set .Cash, 0; //How much #CASHPOINT every kill? (0:Disable)
+set .Skull, 1; //Collect player's skull each kill? (0:Disable|1:Enable)
+setarray .ItemID[0], 0; //Get items each kill? (0:Disable)
+setarray .Amount[0], 0; //How many items per kill?
+set .Feed, 10; //How many kills before feeding is called? (10:Recommended)
+set .Penalty, 2; //What is the penalty for the feedee? (0:Disable|1:Kill Rollback|2:Server Kick|3:Server Block)
+set .Kick, 2; //Who to kick? (0:Feedee|1:Feeder|2:Both)
+set .Rollback, 10; //How many times should the kill count rollback when feeding is called? (10:Recommended)
+set .Broadcast, 0; //Where do you want to broadcast? (0:bc_all|1:bc_map)
+set .Streak, 1; //Show number of killing streak in broadcast? e.g. Ghost is Beyond Godlike(8)
+set .Multiple, 1; //Show number of multiple kill in broadcast? e.g. Makizushi just got an Ownage(5)
+set .Nemesis, 1; //Show number of nemesis in broadcast? e.g. Epoque is owning Jguy(9)
+set .Feeder, 1; //Show number of feed in broadcast? e.g. Cookies is feeding `KeiKun(10)
+set .RandomKillWord, 1; //Randomize the kill words? e.g. Arcenciel "Kill Word" jTynne (0:Disable|Default:"pwned")
+setarray .KillWord$[0], "ha pwned", "ha machacado", "ha disintegrado", "ha sodomizado"; //Enable above setting for this to work
+set .KColor$, "0xFACC2E"; //Kill Broadcast Color | e.g. Jguy pwned Mercurial 
+set .KSColor$, "0xFACC2E"; //Killing Streak Broadcast Color | e.g. jTynne is on a Killing Spree
+set .MKColor$, "0x33FF00"; //Multiple Kill Broadcast Color | e.g. Mercurial just got a Double Kill
+set .ESColor$, "0xFF6060"; //End Streak Broadcast Color | e.g. BrianL just ended Jguy's Killing Spree
+set .NMColor$, "0x0099FF"; //Nemesis Broadcast Color | e.g. Xazax is owning Cookies
+set .PBColor$, "0xFF6060"; //Payback Broadcast Color | e.g. Makizushi just have a payback againts lilcooldude69
+set .FDColor$, "0xFF00CC"; //Feeder Broadcast Color | e.g. Cookies is feeding Z3R0
+setarray .KSDotA$[0], "esta en un Killing Spree", "es Dominating", "ha hecho un Mega-Kill", "es Unstoppable", "es Wicked Sick", "ha hecho un M-m-m-m....Monster Kill", "es Godlike", "es Beyond Godlike";
+setarray .KSHoN$[0], "es un Serial Killer", "es un Ultimate Warrior", "es Legendary", "esta en un Onslaught!", "es Savage Sick", "es Dominating", "ha hecho un Bloodbath", "es Immortal"; //Took out #9. Champion of Newearth
+setarray .MKDotA$[0], "ha hecho un Double Kill", "ha hecho un Triple Kill", "just got un Ultra Kill", "esta en un Rampage", "ha Owning sus enemigos";
+setarray .MKHoN$[0], "ha hecho un Double Tap", "ha hecho un Hat Trick", "just got un Quad Kill", "unnihilated sus enemigos", "ha hecho un Genocide";
+setarray .ESDotA$[0], "Killing Spree", "Dominating", "Mega-Kill", "Unstoppable", "Wicked Sick", "Monster Kill", "Godlike", "Beyond Godlike";
+setarray .ESHoN$[0], "Serial Killer", "Ultimate Warrior", "Legendary", "Onslaught", "Savage Sick", "Dominating", "Bloodbath", "Immortal"; //Took out #9. Champion of Newearth
+setarray .EMDotA$[0], "Double Kill", "Triple Kill", "Ultra Kill", "Rampage", "Ownage";
+setarray .EMHoN$[0], "Double Tap", "Hat Trick", "Quad Kill", "unnihilation", "Genocide";
+if(.System > 1){ set .System, 1; }
+if(.System < 0){ set .System, 0; }
+if(.ServerType > 1){ set .ServerType, 1; }
+if(.ServerType < 0){ set .ServerType, 0; }
+if(.GMLevel > 99){ set .GMLevel, 99; }
+if(.GMLevel < 0){ set .GMLevel, 0; }
+if((.PvPMap$[0] == "ALL")||(.PvPMap$[0] == "ALl")||(.PvPMap$[0] == "AlL")||(.PvPMap$[0] == "aLL")||(.PvPMap$[0] == "aLl") || (.PvPMap$[0] == "alL")){ setarray .PvPMap$[0], "All"; }
+if(.Ladder > 1){ set .Ladder, 1; }
+if(.Ladder < 0){ set .Ladder, 0; }
+if(.Top < 0){ set .Top, 0; }
+if(.Reset > 3){ set .Reset, 0; }
+if(.Reset < 0){ set .Reset, 0; }
+if((.Reset == 1)&&(.ZenyFee <= 0)){ set .Reset, 0; }
+if((.Reset == 1)&&(.ZenyFee >= .MaxZeny)){ set .Reset, 0; }
+if((.Reset == 2)&&(.CashFee <= 0)){ set .Reset, 0; }
+if((.Reset == 3)&&(.SkullFee <= 0)){ set .Reset, 0; }
+if(.Zeny > .MaxZeny){ set .Zeny, 0; }
+if(.Zeny < 0){ set .Zeny, 0; }
+if(.Cash < 0){ set .Cash, 0; }
+if(.Broadcast > 1){ set .Broadcast, 1; }
+if(.Broadcast < 0){ set .Broadcast, 0; }
+if(.Feed < 1){ set .Feed, 0; }
+if(.Penalty > 3){ set .Penalty, 3; }
+if(.Penalty < 1){ set .Penalty, 0; }
+if(.Rollback < 1){ set .Rollback, 0; }
+if(.Streak > 1){ set .Streak, 1; }
+if(.Streak < 1){ set .Streak, 0; }
+if(.Multiple > 1){ set .Multiple, 1; }
+if(.Multiple < 1){ set .Multiple, 0; }
+if(.Nemesis > 1){ set .Nemesis, 1; }
+if(.Nemesis < 0){ set .Nemesis, 0; }
+if(.Feeder > 1){ set .Feeder, 1; }
+if(.Feeder < 1){ set .Feeder, 0; }
+if(.RandomKillWord > 1){ set .RandomKillWord, 1; }
+if(.RandomKillWord < 0){ set .RandomKillWord, 0; }
+function getbattlefixflag;
+end;
+
+OnPCKillEvent:
+getmapxy(.@mapa$,.@x,.@y,0);
+if(getbattlefixflag(.@mapa$) == 0) end;
+function KDR;
+if(.System){
+if(getgmlevel() >= .GMLevel){ end; }
+if(.PvPMap$[0] != "All"){
+		getmapxy(@map$,.@x,.@y,0);
+		if(@map$ != "pvp_y_1-2" || @map$ != "guild_vs1" || @map$ != "pvp_n_1-5" || @map$ != "guild_vs2-1" || @map$ != "pvp@tower" || @map$ != "pvp_n_1-3" || @map$ != "pvp_n_2-3" || @map$ != "pvp_n_3-3" || @map$ != "prtg_cas02" || @map$ != "prtg_cas03" || @map$ != "payg_cas02" || @map$ != "payg_cas03")
+		{ dispbottom "[PvP System] Player vs. Player no es valido en este mapa."; end; }
+}
+getmapxy(@map$,.@x,.@y,0); if (@map$ == "prontera") { dispbottom "[PvP System] Player vs. Player no es valido en este mapa."; end; }
+if((@nm == .Feed) && (.Penalty)){
+callsub OnClearData;
+	switch(.Penalty){
+	case 0: break;
+	case 1: callsub OnRollback; break;
+	case 2: callsub OnRollback;
+		if(.Kick == 0){ atcommand "@kick "+strcharinfo(0); }
+		if(.Kick == 1){ atcommand "@kick "+rid2name(killedrid); }
+		if(.Kick == 2){ atcommand "@kick "+strcharinfo(0); atcommand "@kick "+rid2name(killedrid); }
+		break;
+	case 3: callsub OnRollback;
+		if(.Kick == 0){ atcommand "@block "+strcharinfo(0); }
+		if(.Kick == 1){ atcommand "@block "+rid2name(killedrid); }
+		if(.Kick == 2){ atcommand "@block "+strcharinfo(0);	atcommand "@block "+rid2name(killedrid); }
+		break;
+	default: break;
+	}
+}
+if(@nm < .Feed){
+	if(.Zeny && ((Zeny + .Zeny) < .MaxZeny)){ set Zeny, Zeny + .Zeny; }
+	if(.Cash){ dispbottom "[Point System] +1 Cash Points"; set #CASHPOINT, #CASHPOINT + .Cash; }
+	if(.Skull) { 
+		getnameditem 7420,rid2name(killedrid);
+	}
+	for(set .@i, 0; .@i < getarraysize(.ItemID); set .@i, .@i + 1){ 
+		if(.ItemID){ getitem .ItemID[.@i], .Amount[.@i];
+	}
+}
+}
+if(.RandomKillWord){ announce "[ "+strcharinfo(0)+" ] "+.KillWord$[rand(0, getarraysize(.KillWord$) - 1)]+" la cabeza de [ "+rid2name(killedrid)+" ]", ((.Broadcast)?bc_all:bc_map), .KColor$; } 
+else { announce "[ "+strcharinfo(0)+" ] ha pwned la cabeza de [ "+rid2name(killedrid)+" ]", ((.Broadcast)?bc_all:bc_map), .KColor$; }
+set Kill, Kill + 1; 
+if(@ks < 10){ set @ks, @ks + 1; }
+if(@mk < 6){ set @mk, @mk + 1; } 
+if(!NemesisKilled){ set NemesisKilled, killedrid; }
+if(NemesisKilled == killedrid){ set @nm, @nm + 1; }
+deltimer "Versus::OnMKReset"; 
+addtimer 18000, "Versus::OnMKReset"; 
+callsub OnRecordStreak; 
+callsub OnAnnounce; 
+callsub OnDeath;
+end;
+} end;
+
+OnPCDieEvent:
+getmapxy(.@mapa$,.@x,.@y,0);
+if(getbattlefixflag(.@mapa$) == 0) end;
+function KDR;
+if(.System){
+if(getgmlevel() >= .GMLevel){ end; }
+if(.PvPMap$[0] != "All"){ 
+		getmapxy(.@map$,.@x,.@y,0);
+		if(.@map$ != "pvp_y_1-2" || .@map$ != "guild_vs1" || .@map$ != "pvp_n_1-5" || .@map$ != "guild_vs2-1" || .@map$ != "pvp@tower" || .@map$ != "pvp_n_1-3" || .@map$ != "pvp_n_2-3" || .@map$ != "pvp_n_3-3" || .@map$ != "prtg_cas02" || .@map$ != "prtg_cas03" || .@map$ != "payg_cas02" || .@map$ != "payg_cas03")
+		{ message strcharinfo(0),"[PvP System] Player vs. Player no es valido en este mapa."; end; }
+}getmapxy(@map$,.@x,.@y,0); if (@map$ == "prontera") { message strcharinfo(0),"[PvP System] Player vs. Player no es valido en este mapa."; end; }
+} end;
+
+OnPCLogoutEvent:
+if(.System){
+if(getgmlevel() >= .GMLevel){ end; }
+if((.ServerType) && (Kill)){ set @Kill,Kill; set @Death,Death; query_sql("REPLACE INTO `pvp_rank` (`char_id`, `account_id`, `char`, `kill`, `death`, `kdr`, `killingstreak`, `multikill`,  `nemesiskill`, `feedcount`,`killingspree`, `dominating`, `megakill`, `unstoppable`, `wickedsick`, `monsterkill`, `godlike`, `beyondgodlike`, `doublekill`, `triplekill`, `ultrakill`, `rampage`, `ownage`) VALUES ("+getcharid(0)+","+getcharid(3)+", '"+rid2name(getcharid(3))+"', "+@Kill+", "+@Death+", '"+KDR(@Kill,@Death)+"', "+KillingStreak+", "+MultiKill+",  "+NemesisKill+", "+FeedCount+", "+KillingSpree+", "+Dominating+", "+MegaKill+", "+Unstoppable+", "+WickedSick+", "+MonsterKill+", "+Godlike+", "+BeyondGodlike+", "+DoubleKill+", "+TripleKill+", "+UltraKill+", "+Rampage+", "+Ownage+")"); }
+if(.PvPMap$[0] != "All"){
+		getmapxy(.@map$,.@x,.@y,0);
+		if(.@map$ != "pvp_y_1-2" || .@map$ != "guild_vs1" || .@map$ != "pvp_n_1-5" || .@map$ != "guild_vs2-1" || .@map$ != "pvp@tower" || .@map$ != "pvp_n_1-3" || .@map$ != "pvp_n_2-3" || .@map$ != "pvp_n_3-3" || .@map$ != "prtg_cas02" || .@map$ != "prtg_cas03" || .@map$ != "payg_cas02" || .@map$ != "payg_cas03")
+		{ message strcharinfo(0),"[PvP System] Player vs. Player no es valido en este mapa."; end; }
+}
+callsub OnClearData; 
+deltimer "Versus::OnMKReset";
+} end;
+
+OnRecordStreak:
+function KDR;
+if(@ks > 2){
+	set KillingStreak, KillingStreak + 1;
+	switch(@ks){
+	case 0:	case 1:	case 2: break; 
+	case 3: set KillingSpree, KillingSpree + 1; break; 
+	case 4: set Dominating, Dominating + 1; break;
+	case 5: set MegaKill, MegaKill + 1; break; 
+	case 6: set Unstoppable, Unstoppable + 1; break; 
+	case 7: set WickedSick, WickedSick + 1; break;
+	case 8: set MonsterKill, MonsterKill + 1; break; 
+	case 9: set Godlike, Godlike + 1; break; 
+	case 10: set BeyondGodlike, BeyondGodlike + 1; break;
+	default: break;
+	}
+}
+if(@mk > 1){
+	set MultiKill, MultiKill + 1;
+	switch(@mk){
+	case 0:	case 1: break; 
+	case 2: set DoubleKill, DoubleKill + 1; break; 
+	case 3: set TripleKill, TripleKill + 1; break;
+	case 4: set UltraKill, UltraKill + 1; break;
+	case 5: set Rampage, Rampage + 1; break; 
+	case 6: set Ownage, Ownage + 1; break;
+	default: break;
+	}
+}
+if((@nm > 3) && (@nm < .Feed)){ set NemesisKill, NemesisKill + 1; }
+if(@nm >= .Feed){
+	set FeedCount, FeedCount + 1;
+}
+return;
+
+OnAnnounce:
+if((@ks == 1) && (#FirstBlood == 1)){
+	if(#Announcer == 0){ announce "[ "+strcharinfo(0)+" ] ha hecho su primer asesinato.", ((.Broadcast)?bc_all:bc_map), .KSColor$; }
+	if(#Announcer > 1){ announce "[ "+strcharinfo(0)+" ] ha sido asesinado por primera vez.", ((.Broadcast)?bc_all:bc_map), .KSColor$; }
+	set #FirstBlood, 0;
+	soundeffectall ""+#Announcer+"_KS"+1+".wav", 0, strcharinfo(3);
+}
+if(@ks > 2){
+	if(#Announcer == 0){ announce "[ "+strcharinfo(0)+" ] "+.KSDotA$[@ks - 3]+" [ "+((.Streak)?"("+@ks+")":"")+" ]", ((.Broadcast)?bc_all:bc_map), .KSColor$; }
+	if(#Announcer > 1){ announce "[ "+strcharinfo(0)+" ] "+.KSHoN$[@ks - 3]+" [ "+((.Streak)?"("+@ks+")":"")+" ]", ((.Broadcast)?bc_all:bc_map), .KSColor$; }
+	soundeffectall ""+#Announcer+"_KS"+@ks+".wav", 0, strcharinfo(3);
+}
+if(@mk > 1){
+	if(#Announcer == 0){ announce "[ "+strcharinfo(0)+" ] "+.MKDotA$[@mk - 2]+" [ "+((.Multiple)?"("+@mk+")":"")+" ]", ((.Broadcast)?bc_all:bc_map), .MKColor$; }
+	if(#Announcer > 1){ announce "[ "+strcharinfo(0)+" ] "+.MKHoN$[@mk - 2]+" [ "+((.Multiple)?"("+@mk+")":"")+" ]", ((.Broadcast)?bc_all:bc_map), .MKColor$; }
+	sleep2 1500;
+	soundeffectall ""+#Announcer+"_MK"+@mk+".wav", 0, strcharinfo(3);
+}
+if((@nm > 3) && (@nm < .Feed)){
+	announce "[ "+strcharinfo(0)+" ] esta owneando a "+rid2name(NemesisKilled)+" "+((.Nemesis)?"("+@nm+")":"")+"", ((.Broadcast)?bc_all:bc_map), .NMColor$;
+	sleep2 2000;
+	if(#Announcer > 0){ soundeffectall #Announcer+"_Nemesis.wav", 0, strcharinfo(3); } else { soundeffectall "1_Nemesis.wav", 0;}
+}
+if(@nm >= .Feed){
+	announce "[ "+rid2name(NemesisKilled)+" ] esta alimentando a [  "+strcharinfo(0)+" ] "+((.Feeder)?"("+@nm+")":"")+"", ((.Broadcast)?bc_all:bc_map), .FDColor$;
+	sleep2 1500;
+	soundeffectall "Feeder.wav", 0, strcharinfo(3);
+} return;
+
+OnDeath:
+if(@ks > 2){
+	if(#Announcer == 0){ message rid2name(killedrid),"Has sido asesinado por [ "+strcharinfo(0)+" ] Rank: "+.ESDotA$[@ks - 3]+" "+((.Streak)?"("+@ks+")":"")+""; }
+	if(#Announcer > 1){ message rid2name(killedrid),"Has sido asesinado por [ "+strcharinfo(0)+" ] Rank: "+.ESDotA$[@ks - 3]+" "+((.Streak)?"("+@ks+")":"")+""; }
+}
+if(@nm > 3){
+	soundeffectall #Announcer+"_Payback.wav", 0, rid2name(killedrid);
+	announce "[ "+rid2name(killedrid)+" ] se las ha cobrado con [ "+strcharinfo(0)+" ] "+((.Nemesis)?"("+@nm+")":"")+"", ((.Broadcast)?bc_all:bc_map), .PBColor$;
+}
+attachrid(killedrid); 
+	callsub OnClearData;
+return;
+
+OnMKReset: set @mk, 0; end;
+OnClearData: sleep2 3000; set NemesisKilled, 0; set @ks, 0; set @mk, 0; set @nm, 0; return;
+
+OnRollback:
+if(.Zeny){ set Zeny, Zeny - (.Zeny * .Rollback); }
+if(.Cash){ dispbottom "[Point System] -"+(.Cash * .Rollback)+" Cash Points"; set #CASHPOINT, #CASHPOINT - (.Cash * .Rollback); }
+if(.Skull){ delitem 7420, .Rollback; }
+for(set .@i, 0; .@i < getarraysize(.ItemID); set .@i, .@i + 1){ if(.ItemID){ delitem .ItemID[.@i], .Amount[.@i] * .Rollback; }}
+if((Kill - .Rollback) > 0){ set Kill, Kill - .Rollback; } else { set Kill, 0; }
+if((KillingSpree - 1) > 0){ set KillingSpree, KillingSpree - 1; } else { set KillingSpree, 0; }
+if((Dominating - 1) > 0){ set Dominating, Dominating - 1; } else { set Dominating, 0; }
+if((MegaKill - 1) > 0){ set MegaKill, MegaKill - 1; } else { set MegaKill, 0; }
+if((Unstoppable - 1) > 0){ set Unstoppable, Unstoppable - 1; } else { set Unstoppable, 0; }
+if((WickedSick - 1) > 0){ set WickedSick, WickedSick - 1; } else { set WickedSick, 0; }
+if((MonsterKill - 1) > 0){ set MonsterKill, MonsterKill - 1; } else { set MonsterKill, 0; }
+if((Godlike - 1) > 0){ set Godlike, Godlike - 1; } else { set Godlike, 0; }
+if((BeyondGodlike - 1) > 0){ set BeyondGodlike, BeyondGodlike - 1; } else { set BeyondGodlike, 0; }
+if((DoubleKill - 1) > 0){ set DoubleKill, DoubleKill - 1; } else { set DoubleKill, 0; }
+if((TripleKill - 1) > 0){ set TripleKill, TripleKill - 1; } else { set TripleKill, 0; }
+if((UltraKill - 1) > 0){ set UltraKill, UltraKill - 1; } else { set UltraKill, 0; }
+if((Rampage - 1) > 0){ set Rampage, Rampage - 1; } else { set Rampage, 0; }
+if((Ownage - 1) > 0){ set Ownage, Ownage - 1; } else { set Ownage, 0; }
+if((NemesisKill - (.Rollback - 3)) > 0){ set NemesisKill, NemesisKill - (.Rollback - 3); } else { set NemesisKill, 0; }
+announce "[Anti-Feed] Your kill count has been rollbacked "+.Rollback+" times.",bc_self,0xFF0000;
+return;
+//Ghost's KDR Algorithm
+function	KDR	{
+	if(getarg(0) >= getarg(1)){
+		if(getarg(1)){
+			set .@i, getarg(0)/getarg(1);
+			if((getarg(0)%getarg(1)) == 0){ return .@i+".00"; }
+			set .@j, (getarg(0)%getarg(1))*100/getarg(1);
+			return .@i+"."+.@j;
+		} else {
+			return getarg(0)+".00";
+		}
+	}
+	if(getarg(0) < getarg(1)){
+		if(getarg(0)){ 
+			set .@i, (getarg(0)*10)/getarg(1);
+			set .@j, ((getarg(0)*10)%getarg(1))*10/getarg(1);
+			return "0."+.@i +.@j;
+		} else {
+			return "0.00";
+		}
+	}
+}
+function	getbattlefixflag	{
+	if(getarg(0) == "")
+		return 0;
+	else
+		return 1;
+}
+end;
+}
+-	script	price_first	-1,{
+OnClock0000:
+set $pvpdo,0;
+end;
+OnPCLoginEvent:
+	if ($pvpfirst$== strcharinfo(0)) {
+		if($pvpdo == 1) {
+			end;
+		}
+		cutin "moc2_dan01",2;
+		mes "[^cc6600PvP System^000000]";
+		mes "Aqui tienes tu recompenza ser el Top 1 en el PvP Rank.";
+		set $pvpdo,1;
+		getitem 7711,1;
+		getitem 671,1;
+		set Zeny,Zeny + 100000;
+		dispbottom "Zeny Gained: 100,000z";
+		close2;
+		cutin "",255;
+		end;
+	}
+end;
+}
+-	cashshop	pvp_shop1	111,7420:1,12106:100,14234:30,12103:125,5457:350,658:200,12259:700,12261:400,7711:100
+//poring_w02,80,82,4	duplicate(Healer)	Healer#Speci	569
+//:^cc6600Tienda PvP^000000
+
+prontera,160,195,4	script	PvP System	10403,{
+function PvPWarp; function KDR;
+mes "[^cc6600PvP System^000000]";
+mes "¿Que puedo hacer por ti?";
+	switch(select("^5533ffIr a PvP^000000:PvP Ranking:^ff0000Elegir voz de anunciador^000000:^cc6600Tienda PvP^000000")){
+		case 1: //PvP Warp
+next;
+if (BaseLevel < 80) {
+				mes "^0000FF[PvP System]^000000";
+				mes "Lo siento no eres level Base  ^ff000080^000000.";
+				emotion ET_SORRY;
+				close;
+			}
+				switch(select("Sala PVP *^ff0000Todos los niveles^000000* ^5533ff["+getmapusers("pvp_y_1-2")+" User/s]^000000:Sala GVG *^ff0000Guild Arena^000000* ^5533ff["+getmapusers("guild_vs1")+" User/s] ^000000:Sala PVP *Sorpresa* ^5533ff["+getmapusers("guild_vs2-1.gat")+" User/s] ^000000:Sala PVP *Incógnito* ^5533ff["+getmapusers("pvp@tower.gat")+" User/s] ^000000:Sala PVP *Novice* ^5533ff["+getmapusers("pvp_n_1-3.gat")+" User/s] ^000000:Sala PVP *1st Job* ^5533ff["+getmapusers("pvp_n_2-3.gat")+" User/s] ^000000:Sala PVP *2nd Job* ^5533ff["+getmapusers("pvp_n_3-3.gat")+" User/s] ^000000:^777777Cancelar^000000")) {
+					case 1: PvPWarp(strcharinfo(0),"pvp_y_1-2","Normal","Sin reglas especiales.",0);
+					case 2: PvPWarp(strcharinfo(0),"guild_vs1","Guild Arena","Bonus por matar.",5);
+					case 3: PvPWarp(strcharinfo(0),"guild_vs2-1","Sorpresa","Desbloquea efectos.",8);
+					case 4: PvPWarp(strcharinfo(0),"pvp@tower","Incognito","Todo anonimo",1);
+					case 5: PvPWarp(strcharinfo(0),"pvp_n_1-3","Novice","Solo Novice pueden entrar",2);
+					case 6: PvPWarp(strcharinfo(0),"pvp_n_2-3","1st Job","Solo clases 1st job",3);
+					case 7: PvPWarp(strcharinfo(0),"pvp_n_3-3","2nd Job","Solo clases 2nd job",4);
+					case 8:
+						close2;
+												end;
+				}
+		case 2: //Player Ranking
+			next; 
+				if(select("Ver PvP Rank","Mis estadisticas") == 1) {
+					if(select("Ranking","Glosario") == 1) {
+						if(getvariableofnpc(.ServerType, "Versus")){
+							mes "[Top "+getvariableofnpc(.Top, "Versus")+" PvP Players]";
+							mes "^0000FFKill^000000 | ^FF0000Death^000000 | ^FF22FFKDR^000000 | ^00FF00KS^000000 | ^666666MK^000000";
+							query_sql "SELECT `char`, `kill`, `death`, `kdr`, `killingstreak`, `multikill` FROM `pvp_rank` ORDER BY `pvp_rank`.`kill` DESC LIMIT "+getvariableofnpc(.Top, "Versus")+"", .@char$, .@kill, .@death, .@kdr$, .@sk, .@mk;
+							for(set .@i, 0; .@i < getarraysize(.@char$); set .@i, .@i + 1){
+								mes .@i+1+". "+.@char$[.@i]+" ^0000FF"+.@kill[.@i]+"^000000 ^FF0000"+.@death[.@i]+"^000000 ^FF22FF"+.@kdr$[.@i]+"^000000 ^00FF00"+.@sk[.@i]+"^000000 ^666666"+.@mk[.@i]+"^000000 ";
+								set $pvpfirst$,.@char$[0];
+							}
+							close2; cutin "",255; end;
+						} else { 
+							mes "Top "+getvariableofnpc(.Top, "Versus")+" ranking is not yet implemented for this server type."; 
+						}
+					}
+					mes "[^cc6600PvP System^000000]";
+					mes "^5533ffKDR^000000:";
+					mes "Kill Death Rate, se refiere a tu porcentaje de asesinatos y muertes totales.";
+					mes "^5533ffKS^000000:";
+					mes "Kill Streak, se refiere a cuantas muertes consecutivas hiciste en una racha menor a 5 segundos entre personajes.";
+					mes "^5533ffMK^000000:";
+					mes "Multi-Kill Streak, se refiere a cuantos personajes has matado simultaneamente (numero maximo).";
+					close2;
+					cutin "",255;
+					end;
+				}
+					set @Kill,Kill; set @Death,Death;
+					mes strcharinfo(0)+" estadisticas PvP:"; mes "^666666Kill:^000000 "+@Kill+" ^666666Death:^000000 "+@Death+" ^666666KDR:^000000 "+KDR(@Kill,@Death)+"^000000";
+					mes "^666666Killing Streak:^000000 "+KillingStreak+" ^666666Multi-Kills:^000000 "+MultiKill+"";
+					switch(select("Killing Streak:Multi-Kill Streak:Nemesis Streak:"+(getvariableofnpc(.Reset, "Versus")?"Reset":"")+"")){
+						case 1: //Killing Streak
+							next;
+							setarray .LSDotA$[0], ""+KillingSpree+"", ""+Dominating+"", ""+MegaKill+"", ""+Unstoppable+"", ""+WickedSick+"", ""+MonsterKill+"", ""+Godlike+"", ""+BeyondGodlike+"";
+							mes "Killing Streak Stats";
+							switch(#Announcer){
+							case 0:
+								for(set .@i, 0; .@i < getarraysize(.LSDotA$); set .@i, .@i + 1){
+									mes "^666666"+getvariableofnpc(.ESDotA$[.@i], "Versus")+"^000000: "+ .LSDotA$[.@i];
+								 }
+								close2; cutin "",255; end;
+							default:
+								for(set .@i, 0; .@i < getarraysize(.LSDotA$); set .@i, .@i + 1){
+									mes "^666666"+getvariableofnpc(.ESHoN$[.@i], "Versus")+"^000000: "+ .LSDotA$[.@i];
+								 }
+								close2; cutin "",255; end;
+							}
+							close2; cutin "",255; end;
+						case 2: //Multi-Kill
+							next;
+							setarray .LMDotA$[0], ""+DoubleKill+"", ""+TripleKill+"", ""+UltraKill+"", ""+Rampage+"", ""+Ownage+"";
+							mes "Multi-Kill Stats";
+							switch(#Announcer){
+							case 0:
+								for(set .@i, 0; .@i < getarraysize(.LMDotA$); set .@i, .@i + 1){
+									mes "^666666"+getvariableofnpc(.EMDotA$[.@i], "Versus")+"^000000: "+ .LMDotA$[.@i];
+								 }
+								close2; cutin "",255; end;
+							default:
+								for(set .@i, 0; .@i < getarraysize(.LMDotA$); set .@i, .@i + 1){
+									mes "^666666"+getvariableofnpc(.EMHoN$[.@i], "Versus")+"^000000: "+ .LMDotA$[.@i];
+								 }
+								close2; cutin "",255; end;
+							}
+						case 3:	//Nemesis
+							next;
+							mes "Nemesis Stat";
+							mes "^666666Nemesis Kill^000000: "+NemesisKill;
+							mes "^666666Feed Count^000000: "+FeedCount;
+							close2; cutin "",255; end;
+						case 4: //Reset Stat
+							next;
+							set .Reset, getvariableofnpc(.Reset, "Versus");
+							set .ZenyFee, getvariableofnpc(.ZenyFee, "Versus");
+							set .CashFee, getvariableofnpc(.CashFee, "Versus");
+							set .SkullFee, getvariableofnpc(.SkullFee, "Versus");
+							mes "[^cc6600PvP System^000000]"; mes "¿Estas seguro de reiniciar tus estadisticas?";
+							if(.Reset == 1){ mes "^FF0000Reset Fee:^000000 "+.ZenyFee+" Zeny"; }
+							if(.Reset == 2){ mes "^FF0000Reset Fee:^000000 "+.CashFee+" Cash Points"; }
+							if(.Reset == 3){ mes "^FF0000Reset Fee:^000000 "+.SkullFee+" Skull"; }
+							switch(select("No:Yes")){
+								case 1: close2; cutin "",255; end;
+								case 2:
+								switch(.Reset){
+									case 0: break;
+									case 1:
+										if(Zeny < .ZenyFee){ next; mes "[^cc6600PvP System^000000]"; mes "No tienes ningun Zeny."; close2; cutin "",255; end; }
+										set Zeny, Zeny - .ZenyFee; break;
+									case 2:
+										if(#CASHPOINTS < .CashFee){ next; mes "[^cc6600PvP System^000000]"; mes "No tienes ningun Cash Points."; close2; cutin "",255; end; }
+										set #CASHPOINTS, #CASHPOINTS - .CashFee; break;
+									case 3:
+										if(countitem(7420) < .SkullFee){ next; mes "[^cc6600PvP System^000000]"; mes "No tienes ningun Skull."; close2; cutin "",255; end; }
+										delitem 7420, .SkullFee; break;
+									default: break;
+								}
+							if(getvariableofnpc(.ServerType, "Versus")){ query_sql "DELETE FROM `pvp_rank` WHERE `pvp_rank`.`char_id` = "+getcharid(0)+""; }
+							callsub OnPvPReset; announce "[PvP System] Tus estadisticas PvP han sido reiniciadas.",bc_self,0xFF0000; close2; cutin "",255; end;
+							}
+							close2; cutin "",255; end;
+					}
+		case 3: //Announcer Setting
+			next; mes "[^cc6600PvP System^000000]"; mes "¿Que anunciador deseas?";
+			if(getvariableofnpc(.AnnouncerFee, "Versus")){ set .AnnouncerFee, getvariableofnpc(.AnnouncerFee, "Versus"); }
+			L_Announce:
+			switch(select(""+((#Announcer == 0)?"^FF0000DotA^000000":"DotA")+":"+((#Announcer == 1)?"^FF0000HoN^000000":"HoN")+":"+((#Announcer == 2)?"^FF0000Ms. Pudding^000000":"Ms. Pudding")+":"+((#Announcer == 3)?"^FF0000Flamboyant^000000":"Flamboyant")+":"+((#Announcer == 4)?"^FF0000English^000000":"English")+":"+((#Announcer == 5)?"^FF0000Balls of Steel^000000":"Balls of Steel")+":"+((#Announcer == 6)?"^FF0000BreakyCPK^000000":"BreakyCPK")+"")){
+				case 1: //DotA
+					if(#Announcer == 0){ goto L_Announce; }
+					soundeffect "0_KS1.wav", 0;
+					set #Announcer, 0;
+					announce "[PvP System] DotA ha sido configurado como tu anunciador.",bc_self,0xFF0000;
+					close2; cutin "",255; end;
+				case 2: //HoN
+					if(#Announcer == 1){ goto L_Announce; }
+					if((.AnnouncerFee) && (!#Hon)){
+					next; mes "[^cc6600PvP System^000000]"; mes "¿Deseas comprar al anunciador HoN por el precio de "+.AnnouncerFee+" Cash Points?";
+					switch(select("No:Yes")){
+						case 1: close2; cutin "",255; end;
+						case 2: 
+						if(#CASHPOINTS < .AnnouncerFee){ next; mes "[^cc6600PvP System^000000]"; mes "No tienes ningun Cash Points."; close2; cutin "",255; end; }
+						set #CASHPOINTS, #CASHPOINTS - .AnnouncerFee;
+						set #Hon, 1;
+					 }
+					}
+					soundeffect "1_KS1.wav", 0;
+					set #Announcer, 1;
+					announce "[PvP System] HoN ha sido configurado como tu anunciador.",bc_self,0xFF0000;
+					close2; cutin "",255; end;
+				case 3: //Ms. Pudding
+					if(#Announcer == 2){ goto L_Announce; }
+					if((.AnnouncerFee) && (!#MsPudding)){
+					next; mes "[^cc6600PvP System^000000]"; mes "¿Deseas comprar al anunciador Ms. Pudding por el precio de "+.AnnouncerFee+" Cash Points?";
+					switch(select("No:Yes")){
+						case 1: close2; cutin "",255; end;
+						case 2: 
+						if(#CASHPOINTS < .AnnouncerFee){ next; mes "[^cc6600PvP System^000000]"; mes "No tienes ningun Cash Points."; close2; cutin "",255; end; }
+						set #CASHPOINTS, #CASHPOINTS - .AnnouncerFee;
+						set #MsPudding, 1;
+					 }
+					}
+					soundeffect "2_KS1.wav", 0;
+					set #Announcer, 2;
+					announce "[PvP System] Ms. Pudding ha sido configurado como tu anunciador.",bc_self,0xFF0000;
+					close2; cutin "",255; end;		
+				case 4: //Flamboyant
+					if(#Announcer == 3){ goto L_Announce; }
+					if((.AnnouncerFee) && (!#Flamboyant)){
+					next; mes "[^cc6600PvP System^000000]"; mes "¿Deseas comprar al anunciador Flamboyant por el precio de "+.AnnouncerFee+" Cash Points?";
+					switch(select("No:Yes")){
+						case 1: close2; cutin "",255; end;
+						case 2: 
+						if(#CASHPOINTS < .AnnouncerFee){ next; mes "[^cc6600PvP System^000000]"; mes "No tienes ningun Cash Points."; close2; cutin "",255; end; }
+						set #CASHPOINTS, #CASHPOINTS - .AnnouncerFee;
+						set #Flamboyant, 1;
+					 }
+					}
+					soundeffect "3_KS1.wav", 0;
+					set #Announcer, 3;
+					announce "[PvP System] Flamboyant ha sido configurado como tu anunciador.",bc_self,0xFF0000;
+					close2; cutin "",255; end;			
+				case 5: //English
+					if(#Announcer == 4){ goto L_Announce; }
+					if((.AnnouncerFee) && (!#English)){
+					next; mes "[^cc6600PvP System^000000]"; mes "¿Deseas comprar al anunciador English por el precio de "+.AnnouncerFee+" Cash Points?";
+					switch(select("No:Yes")){
+						case 1: close2; cutin "",255; end;
+						case 2: 
+						if(#CASHPOINTS < .AnnouncerFee){ next; mes "[^cc6600PvP System^000000]"; mes "No tienes ningun Cash Points."; close2; cutin "",255; end; }
+						set #CASHPOINTS, #CASHPOINTS - .AnnouncerFee;
+						set #English, 1;
+					 }
+					}
+					soundeffect "4_KS1.wav", 0;
+					set #Announcer, 4;
+					announce "[PvP System] English ha sido configurado como tu anunciador.",bc_self,0xFF0000;
+					close2; cutin "",255; end;
+				case 6: //Balls of Steel
+					if(#Announcer == 5){ goto L_Announce; }
+					if((.AnnouncerFee) && (!#BallsofSteel)){
+					next; mes "[^cc6600PvP System^000000]"; mes "¿Deseas comprar al anunciador Balls of Steel por el precio de "+.AnnouncerFee+" Cash Points?";
+					switch(select("No:Yes")){
+						case 1: close2; cutin "",255; end;
+						case 2: 
+						if(#CASHPOINTS < .AnnouncerFee){ next; mes "[^cc6600PvP System^000000]"; mes "No tienes ningun Cash Points."; close2; cutin "",255; end; }
+						set #CASHPOINTS, #CASHPOINTS - .AnnouncerFee;
+						set #BallsofSteel, 1;
+					 }
+					}
+					soundeffect "5_KS1.wav", 0;
+					set #Announcer, 5;
+					announce "[PvP System] Balls of Steel ha sido configurado como tu anunciador.",bc_self,0xFF0000;
+					close2; cutin "",255; end;
+				case 7: //BreakyCPK
+					if(#Announcer == 6){ goto L_Announce; }
+					if((.AnnouncerFee) && (!#BreakyCPK)){
+					next; mes "[^cc6600PvP System^000000]"; mes "¿Deseas comprar al anunciador BreakyCPK por el precio de "+.AnnouncerFee+" Cash Points?";
+					switch(select("No:Yes")){
+						case 1: close2; cutin "",255; end;
+						case 2: 
+						if(#CASHPOINTS < .AnnouncerFee){ next; mes "[^cc6600PvP System^000000]"; mes "No tienes ningun Cash Points."; close2; cutin "",255; end; }
+						set #CASHPOINTS, #CASHPOINTS - .AnnouncerFee;
+						set #BreakyCPK, 1;
+					 }
+					}
+					soundeffect "6_KS1.wav", 0;
+					set #Announcer, 6;
+					announce "[PvP System] BreakyCPK ha sido configurado como tu anunciador.",bc_self,0xFF0000;
+					close2; cutin "",255; end;
+			default: close2; cutin "",255; end;
+			}
+		case 4:
+			next;
+			mes "[^cc6600PvP System^000000]";
+			mes "En esta tienda podras encontrar muchos items de valor, todo lo compras con las skulls que obtienes al matar a otro personaje.";
+			next;
+			mes "[^cc6600PvP System^000000]";
+			mes "Ahora transformare todas tus Skulls en Game Ticket para poder usar la tienda.";
+			set @skulls,countitem(7420);
+			delitem 7420,@skulls;
+			getitem 7859,@skulls;
+next;
+mes "¿Quieres cambiar tus Game Ticket?";
+next;
+if (select("Sí:No") == 2) close;
+for (set .@c, 0; .@c < getarraysize($@itemspc); set .@c, .@c + 1)
+	set .@menu$, .@menu$ + getitemname($@itemspc[.@c]) + " -> ^FF0000" + $@preciospc[.@c] + " " + getitemname($@monedaid) + "^000000." + ":";
+mes .@nombre$;
+mes "Elige el item que quieras comprar, también puedes probarlo.";
+next;
+set .@pos, select(.@menu$);
+mes .@nombre$;
+mes "¿Qué quieres hacer ahora?";
+next;
+switch (select("Probarme el item:Comprarlo:Salir")) {
+	case 1:
+		mes .@nombre$;
+		mes "Ya lo tienes probándolo en este momento, compruébalo y cierra la ventana para quitar la vista previa.";
+		addtimer 2500,strnpcinfo(3)+"::OnCerrar";
+		switch (getiteminfo($@itemspc[.@pos - 1],5)) {
+			case 256: // Top Headgear
+				set @eqid, getequipid(EQI_HEAD_TOP);
+				unequip EQI_HEAD_TOP;
+				changelook 5, getiteminfo($@itemspc[.@pos - 1],11);
+				set @i, 1;
+				break;
+
+			case 512: // Mid Headgear
+				set @eqid, getequipid(EQI_HEAD_MID);
+				unequip EQI_HEAD_MID;
+				changelook 4, getiteminfo($@itemspc[.@pos - 1],11);
+				set @i, 2;
+				break;
+
+			case 1: // Low Headgear
+				set @eqid, getequipid(EQI_HEAD_LOW);
+				unequip EQI_HEAD_LOW;
+				changelook 3, getiteminfo($@itemspc[.@pos - 1],11);
+				set @i, 3;
+				break;
+
+			default:
+				mes "^FF0000Este objeto no se puede probar...^000000";
+				close;
+		} // End switch
+		dispbottom "Te estás probando el item " + getitemname($@itemspc[.@pos - 1]) + ", dale a close para terminar.";
+		close2;
+		OnCerrar:
+		switch (@i) {
+			case 1:
+				changelook 5, 0;
+				equip @eqid;
+				break;
+
+			case 2:
+				changelook 4, 0;
+				equip @eqid;
+				break;
+
+			case 3:
+				changelook 3, 0;
+				equip @eqid;
+				break;
+
+			default:
+				break;
+		} // End switch
+		deltimer strnpcinfo(3)+"::OnCerrar";
+		set @i, 0;
+		set @eqid, 0;
+		end;
+		break;
+
+	case 2:
+		mes .@nombre$;
+		switch ($@zoc) {
+			case 0: // Usar monedas (items)
+				if (countitem($@monedaid) < $@preciospc[.@pos - 1])
+					mes "Lo siento pero no tienes suficientes ^FF0000" + getitemname($@monedaid) + "^000000.";
+				else {
+					mes "Aquí tienes tu item.";
+					getitem $@itemspc[.@pos - 1],1;
+					delitem $@monedaid, $@preciospc[.@pos - 1];
+				} // End if
+				break;
+				
+			case 1: // Usar CashPoints
+				if (#CASHPOINTS < $@preciospc[.@pos - 1])
+					mes "Lo siento pero no tienes suficientes ^FF0000Cash Points^000000.";
+				else {
+					mes "Aquí tienes tu item.";
+					getitem $@itemspc[.@pos - 1],1;
+					set #CASHPOINTS, #CASHPOINTS - $@preciospc[.@pos - 1];
+				} // End if
+				dispbottom "Tienes " + #CASHPOINTS + " Cash Points.";
+				break;
+				
+			case 2: // Usar Zeny
+				if (Zeny < $@preciospc[.@pos - 1])
+					mes "Lo siento pero no tienes suficientes ^FF0000Zeny^000000.";
+				else {
+					mes "Aquí tienes tu item.";
+					getitem $@itemspc[.@pos - 1],1;
+					set Zeny, Zeny - $@preciospc[.@pos - 1];
+				} // End if
+				break;
+				
+			default:
+				mes "Ha habido un error, no se ha detectado el tipo de Game Ticket para comprar, avisa a un administrador.";
+				close;
+		} // End switch
+		break;
+
+	case 3:
+		mes .@nombre$;
+		mes "Vuelve cuando quieras.";
+		break;
+} // End switch
+close;
+} // End Script
+ 
+OnPvPReset:
+set Kill, 0;
+set Death, 0;
+set KillingStreak, 0; 
+set MultiKill, 0;
+set KillingSpree, 0;
+set Dominating, 0;
+set MegaKill, 0;
+set Unstoppable, 0;
+set WickedSick, 0;
+set MonsterKill, 0;
+set Godlike, 0;
+set BeyondGodlike, 0;
+set DoubleKill, 0;
+set TripleKill, 0;
+set UltraKill, 0;
+set Rampage, 0;
+set Ownage, 0;
+set NemesisKill, 0;
+set FeedCount, 0;
+return;
+		function	PvPWarp	{
+			switch (getarg(4)) {
+				case 1:
+					switch (rand(1,2)) {
+						case 1: disguise 1246; break;
+						case 2: disguise 1265; break;
+					}
+					atcommand "@fakename Incognito";
+					break;
+				case 2:
+					if ((Class != 0) || (Class != 4001) || (Class != 4023)) {
+						mes "[^cc6600PvP System^000000]";
+						mes "No tienes permitido entrar a esta sala.";
+						close2;
+						cutin "",255;
+						end;
+					}
+					close2;
+					sc_start SC_INCMHPRATE,500000,20000;
+					sc_start SC_INCHITRATE,500000,200;
+					sc_start SC_STRFOOD,500000,10;
+					sc_start SC_AGIFOOD,500000,10;
+					sc_start SC_VITFOOD,500000,10;
+					sc_start SC_INTFOOD,500000,10;
+					sc_start SC_DEXFOOD,500000,10;
+					sc_start SC_LUKFOOD,500000,10;
+					percentheal 100,100;
+					warp getarg(1),0,0;
+					end;
+				case 3:
+					if(Class > 6 && Class < 4002 || Class > 4007 && Class < 4024 || Class > 4029 && Class < 4046 || Class != 4046) {
+						mes "[^cc6600PvP System^000000]";
+						mes "No tienes permitido entrar a esta sala.";
+						close2;
+						cutin "",255;
+						end;
+					}
+					break;
+				case 4:
+					if ((Class != 7) || (Class != 8) || (Class != 9) || (Class != 10) || (Class != 11) || (Class != 12) || (Class != 14) || (Class != 15) || (Class != 16) || (Class != 17) || (Class != 18) || (Class != 19) || (Class != 20) || (Class != 23) || (Class != 24) || (Class != 25) || (Class != 4047) || (Class != 4049) || (Class != 4030) || (Class != 4031) || (Class != 4032) || (Class != 4033) || (Class != 4034) || (Class != 4035) || (Class != 4037) || (Class != 4038) || (Class != 4039) || (Class != 4040) || (Class != 4041) || (Class != 4042) || (Class != 4043) || (Class != 4045)) {
+						mes "[^cc6600PvP System^000000]";
+						mes "No tienes permitido entrar a esta sala.";
+						close2;
+						cutin "",255;
+						end;
+					}
+					break;
+				case 5:
+					set @PVPModo,2;
+						break;
+				case 8:
+					set @PVPModo,4;
+						break;
+				default:
+					break;
+			}
+			mes "[^5533ff"+getarg(2)+"^000000]";
+			mes "Descripcion:";
+			mes "^"+getarg(3)+"^000000";
+				if(select("Entrar a la sala ^5533ff"+getarg(2)+"^000000","^777777Salir^000000") == 2) {
+					close2;
+					cutin "",255;
+					end;
+				}
+				specialeffect2 908;
+				sleep2 100;
+				warp getarg(1),0,0;
+				close2;
+				cutin "",255;
+				end;
+		}
+//Ghost's KDR Algorithm
+function	KDR	{
+if(getarg(0) >= getarg(1)){
+		if(getarg(1)){
+			set .@i, getarg(0)/getarg(1);
+			if((getarg(0)%getarg(1)) == 0){ return .@i+".00"; }
+			set .@j, (getarg(0)%getarg(1))*100/getarg(1);
+			return .@i+"."+.@j;
+		} else {
+			return getarg(0)+".00";
+		}
+	}
+	if(getarg(0) < getarg(1)){
+		if(getarg(0)){ 
+			set .@i, (getarg(0)*10)/getarg(1);
+			set .@j, ((getarg(0)*10)%getarg(1))*10/getarg(1);
+		return "0."+.@i +.@j;
+		} else {
+			return "0.00";
+		}
+	 }
+}
+OnInit:
+	do {
+		set .userspvp,(getmapusers("pvp_y_1-2")+getmapusers("guild_vs1")+getmapusers("pvp_n_3-5")+getmapusers("pvp_n_1-5")+getmapusers("guild_vs2-1")+getmapusers("pvp_n_1-1")+getmapusers("pvp_n_1-3")+getmapusers("pvp_n_2-3")+getmapusers("pvp_n_3-3"));
+		delwaitingroom;
+		waitingroom "PvP Room [ "+.userspvp+" ]",0;
+		sleep 50;
+	} while(1);
+}
+pvp@tower,112,91,3	script	Salida PVP::WarpPVP	4_CENERE,{
+cutin "ep13_shadow_edq",2;
+mes "[^CC0000Warper PvP^000000]";
+mes "¿Quieres salir de esta Sala de PVP?";
+next;
+	if (select("Si, quiero irme.","No gracias.") == 2) {
+		mes "[^CC0000Warper PvP^000000]";
+		mes "Vuelve conmigo cuando desees salir.";
+		close2;
+		cutin "",255;
+		end;
+	}
+	//specialeffect2 72;
+	//sleep2 2500;
+	//specialeffect2 73;
+	//percentheal -100,0;
+	set EspiritualActivo,0;
+	undisguise;
+	cutin "",255;
+	//killmonsterall "pvp_n_1-5";
+	//sc_end SC_ALL;
+	//atcommand "@fakename ";
+	warp "Save",0,0;
+	end;
+}
+
+-	script	PoringConf	-1,{
+OnInit:
+	set $@zoc, 0; // Zeny, Cash Point o usar otra moneda (items) [0 - Usar otras monedas, ver $@monedaid | 1 - Usar #CASHPOINTS | 2 - Usar Zenys]
+
+	set $@monedaid, 7859; // ID de la moneda a usar, por defecto id 7539 = Poring Coin
+
+	setarray $@itemspc[0], 5132, // ID de los items
+
+						18936,
+						30022,
+						30021,
+						30060;
+
+	setarray $@preciospc[0], 4, // Precio de los ID [Según valor de $@zoc = 0 - Usar monedas como Poring Coin (item) | $@zoc = 1 - Valor en Cash Points | $@zoc = 2 - Valor en Zeny]
+
+							100,
+							350,
+							500,
+							1000;
+end;
+} // End Script
+
+//1@ge_st,130,48,4	duplicate(WarpPVP)	Warper PVP#02	869
+//pvp_n_1-5,100,134,4	duplicate(WarpPVP)	Warper PVP#03	869
+//guild_vs2-1,50,91,4	duplicate(WarpPVP)	Warper PVP#04	869
+//pvp_n_1-1,98,180,4	duplicate(WarpPVP)	Warper PVP#06	869
+//pvp_n_1-3,100,146,4	duplicate(WarpPVP)	Warper PVP#07	869
+//pvp_n_2-3,100,146,4	duplicate(WarpPVP)	Warper PVP#08	869
+//pvp_n_3-3,100,146,4	duplicate(WarpPVP)	Warper PVP#09	869
+//pvp_n_3-5,99,134,4	duplicate(WarpPVP)	Warper PVP#10	869
+
+pvp_n_3-5	mapflag	pvp	off
+pvp_n_3-5	mapflag	noexppenalty
+//guild_vs3	mapflag	allow_bg_items
+//pvp@tower	mapflag	pvp_noguild
+//guild_vs3	mapflag	gvg	off
+pvp_n_3-5	mapflag	gvg	off
+pvp_n_3-5	mapflag	gvg
+pvp@tower	mapflag	noreturn
+pvp@tower	mapflag	noteleport
+pvp@tower	mapflag	nowarp
+pvp@tower	mapflag	nobranch
+pvp@tower	mapflag	pvp
+pvp@tower	mapflag	gvg	off
+
+
+ars_dun06	mapflag	noreturn
+ars_dun06	mapflag	noteleport
+ars_dun06	mapflag	nowarp
+ars_dun06	mapflag	nobranch
+ars_dun06	mapflag	pvp
+ars_dun06	mapflag	gvg	off
+
+guild_vs2-1	mapflag	noexppenalty
+guild_vs1	mapflag	noreturn
+guild_vs1	mapflag	noteleport
+guild_vs1	mapflag	nowarp
+guild_vs1	mapflag	nobranch
+
+//^cc6600Shop PvP^000000:

@@ -1,0 +1,85 @@
+//===== Script eAthena ======================================= 
+//= Aris Wings Gold Quest
+//===== por: ================================================== 
+//= Creador de Quests Ragnarok World
+//= v1.0
+//===== Compatible Con: ===================================== 
+//= eAthena SVN
+//===== Descripción: ========================================= 
+//  Quest Creada por el Script Creador de Quests Online de
+//  http://www.ragnarokworld.net
+//============================================================ 
+
+poring_w02,146,84,3	script	Aris Wings Gold	834,{
+ 	set @NPCName$, "[^0000ffAris Wings Gold^000000]";
+	mes @NPCName$;
+	mes "Hola..aki tengo unas bonitas las amarillas ella pora el combate cuerpo a cuerpo.";
+	next;
+	mes @NPCName$;
+	mes "Estas alas te Masterizan en el combate Cuerpo a Cuerpo.";
+	mes "-15% Resistencia a Melee Physical Attacks.";
+	mes "-10% de probabilidad de castear Reflect Shield Cuando recibes ataques.";
+	mes "-Gain immunity to the Stun status";
+	mes "-Añade la skill ^009900Double Atack^000000 lvl 1";
+	mes "-50 All Stats.";
+	mes "-ATK + 300";
+	mes "-MATK + 15%";
+	next;
+	mes @NPCName$;
+	mes "Quieres Obtener este Item?";
+	next;
+	switch(select("Si:No:Cancelar")) {
+ 	case 1:
+	mes @NPCName$;
+	mes "Estos son Los Items Necesarios.";
+	mes "  ^99cc99Yellow Bijou^000000 [300]";
+	mes "  ^99cc99Yellow Plate^000000 [200]";
+	mes "  ^99cc99High Wizard Card^000000 [1]";
+	mes "  ^99cc99Gold Coin^000000 [1000]";
+	next;
+	if (countitem(7448) < 300) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(7149) < 200) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(4365) < 1) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(671) < 1000) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	mes @NPCName$;
+	mes "Bien! Tienes todos los Items! Felicidades !";
+	mes "el Objeto es Tuyo";
+	delitem 7448,300;
+	delitem 7149,200;
+	delitem 4365,1;
+	delitem 671,1000;
+	getitem 29023,1;
+	close;
+	case 2:
+	mes @NPCName$;
+	mes "de acuerdo, vuelve pronto !";
+	close;
+	case 3:
+	close;
+	}
+
+}
+
+//============================================================
+//===== Creador de Quests Ragnarok World ===========================
+//============================================================

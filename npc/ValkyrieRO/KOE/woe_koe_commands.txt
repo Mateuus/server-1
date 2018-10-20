@@ -1,0 +1,144 @@
+-	script	TIME_COMMAND_2	-1,{
+	end;
+
+	OnInit:
+		bindatcmd "joinkoe",strnpcinfo(0)+"::OnAtcommand";
+	end;
+ 
+	OnAtcommand:
+		if(.start != 1){
+			if (!getcharid(2)){
+					mes "[^0000FFAdmin Sky^000000]";
+					mes "Oppsss! ^FF0000" + strcharinfo(0) + "^000000 you must have a guild to participate in KOE Event..";
+					close;
+			}else{
+				setarray .Map$[0],"guild_vs1";
+				if(strcharinfo(3) == .Map$[0] || strcharinfo(0) == .Map$[1]){
+					message strcharinfo(0),"You can't use Warp Command Inside KOE";
+					end;
+				}else{
+					switch(rand(1,4)){
+						case 1:	warp "guild_vs1", 50, 88; end;
+						case 2:	warp "guild_vs1", 88, 50; end;
+						case 3:	warp "guild_vs1", 50, 11; end;
+						case 4:	warp "guild_vs1", 11, 50; end;
+					}
+				}
+			}
+		}else{
+			dispbottom "the KOE Event is not enabled.";
+			end;
+		}
+	end;
+}
+
+// EVENT TIME KOE REWARD POINTS 
+-	script	KOE_START_TIME_EVENT	-1,{
+	//end;
+	
+	OnPCLoadMapEvent:
+		.@mymap$ = strcharinfo(3);
+		if(.@mymap$ == "guild_vs1"){
+			attachnpctimer ""+strcharinfo(0)+"";
+			dispbottom "Your KOE Time Event is Started.";
+			initnpctimer;
+		}
+	
+		//CHECK IF THE EVENT MAP IS ACTIVE
+		OnTimer10000:
+			getmapxy( .@map$, .@x, .@y, 0 );
+			if(@map$ == .@map$ && @x == .@x && @y == .@y) {
+				set @afk, @afk + 1;
+			}else{
+				set @afk, 0;
+			}
+			set @map$, .@map$; set @x, .@x; set @y, .@y;
+			if(@afk == 2){
+				dispbottom "KOE Event time is stopped because you were idle for 2 minutes. go outside this room to start again.";
+				stopnpctimer;
+				end;
+			}
+			
+			.@mymap$ = strcharinfo(3);
+			if("guild_vs1" != .@mymap$){
+				dispbottom "Your KOE Time Event is Stop.";
+				stopnpctimer;
+				end;
+			}
+		end;
+
+		//TIMER CHECKER
+		OnTimer60000:
+			if(.start == 1){
+				disablenpc "KOE IS ENDED PLEASE CLAIM YOUR PRICE.";
+			}else{
+				.@mymap$ = strcharinfo(3);
+				if(.@mymap$ == "guild_vs1"){
+					set @koe_timer, @koe_timer + 1; 
+					if(@koe_timer == 1){
+						//RESET TIME
+						set @koe_timer,0;
+						//SET WOE POINTS
+						set #KOE_POINTS, #KOE_POINTS + 1;
+						dispbottom "You received 1 KOE Participation.";
+					}
+					stopnpctimer;
+					initnpctimer;
+				}
+			}
+		end;
+	end;
+}
+
+
+prontera,188,196,4	script	KING OF EMPERIUM	837,{
+	mes "[ ^FF0000KOE TOP KILLER^000000]";
+	
+	if (.@size = getarraysize( $topKOE_name$ )){
+		for ( .@i = 0; .@i < .@size; .@i++ )
+			mes "Top "+( .@i +1 )+". ^0000FF"+ $topKOE_name$[.@i] +" ^000000: ^FF0000["+ $topKOE_points[.@i] +" Kills]^000000.";
+	}else
+			mes "No Rank For Today.";
+	close;
+	
+OnPCKillEvent:
+	if (!getmapflag(strcharinfo(3), guild_vs1)) end;
+	topKOE_points++;
+	.@i = 0;
+	
+	while(.@i < .ladderlength){
+		if(topKOE_points > $topKOE_points[.@i]){ // if found
+			if( $topKOE_name$[.@i] == strcharinfo(0) ) { // update your own points
+				$topKOE_points[.@i] = topKOE_points;
+				break;
+			}else if( .@i == .ladderlength - 1 ){ // last position of the ladder, just overwrite the value
+				$topKOE_points[.@i] = topKOE_points;
+				$topKOE_name$[.@i] = strcharinfo(0);
+				break;
+			}
+			
+			// if more points, but somehow its not your own name
+			.@j = .@i +1 ; // save the index
+			while ( $topKOE_name$[.@j] != strcharinfo(0) && .@j < .ladderlength ) .@j++;
+			if ( .@j < .ladderlength ) // found your name
+				.@moveamount = .@j - .@i; // save amount to move
+			else // if not found ...
+				.@moveamount = .ladderlength - 1 - .@i; // means move the whole ladder from the last index
+			copyarray $topKOE_points[.@i +1], $topKOE_points[.@i], .@moveamount;
+			copyarray $topKOE_name$[.@i +1], $topKOE_name$[.@i], .@moveamount;
+			$topKOE_points[.@i] = topKOE_points;
+			$topKOE_name$[.@i] = strcharinfo(0);
+			break;
+		}
+		.@i++;
+	}
+	end;
+	
+	OnInit:
+		.ladderlength = 20;
+		waitingroom "[KOE RANKINGS]",0;
+	end;
+}
+
+
+

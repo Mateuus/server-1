@@ -1,0 +1,245 @@
+prontera,152,176,4	script	SlotMachine	563,{
+
+	if( getgmlevel() == 99 ) {
+		mes "Bienvenido Administrador.","Que te gustaría hacer?";
+		menu "Play Game",-,"Change Slot Machine Mode",iMode;
+		next;
+		}
+switch( getd(".mode"+strnpcinfo(3)+"") ){
+	case 0: // Single Slot machine mode.
+		mes "¿Quieres jugar un juego?";
+		if( !.payment ) { mes "It costs: "+ .ssm_payment_message$[0] +" to play."; }
+			else if ( .payment == 1 ) { mes "It costs: "+ .ssm_payment_message$[1] +" to play."; }
+				else if ( .payment == 2 ) { mes "It costs: "+ .ssm_payment_message$[0] +" & "+ .payment_message$[1] +" to play."; }
+		if( select("YES:NO") == 2 || Zeny < .ssm_payment[0] && ( !.payment || .payment == 2 ) || countitem(.ssm_payment[1]) < .ssm_payment[2] && .payment ){ close; }
+		while( @menu == 1 ){
+			if( !.payment || .payment == 2 ) { Zeny -= .ssm_payment[0]; }
+			if( .payment ) { delitem( .ssm_payment[1], .ssm_payment[2] ); }
+			if( .soundeffects ) { soundeffect "se_cash_provider.wav",0; }
+			.@a = rand(1,100);
+			if( .@a < atoi(.ssm_animate$[0]) ){ .@a = 1; } else { .@a = 2; }
+			.@b = 1;
+			while( .@b < atoi(.ssm_animate$[.@a]) ) {
+				cutin .ssm_animate$[3] + .@b,4; sleep2 ( ( atoi(.ssm_animate$[4]) * 1000 ) / atoi(.ssm_animate$[.@a]) ); .@b++;
+				}
+			if( .@a == 1 ){ 
+				cutin .ssm_animate$[3] + atoi(.ssm_animate$[.@a]),4;
+				dispbottom "Failed";
+				} 
+			else {
+				cutin .ssm_animate$[3] + atoi(.ssm_animate$[.@a]),4;
+				switch(rand(15)) {
+				case 0:
+					getitem 603,5;
+					break;
+				case 1:
+					getitem 617,5;	
+					break;
+				case 2:
+					getitem 644,5;	
+					break;
+				case 3:
+					getitem 616,1;
+					break;
+				case 4:
+					getitem 31053,1;
+					break;
+				case 5:
+					getitem 18571,1;
+					break;
+				case 6:
+					getitem 7720,1000;
+					break;
+				case 7:
+					getitem 17271,1;
+					break;
+				case 8:
+					getitem 17272,1;
+					break;
+				case 9:
+					getitem 17273,1;
+					break;
+				case 10:
+					getitem 17274,1;
+					break;
+				case 11:
+					getitem 17275,1;
+					break;
+				case 12:
+					getitem 12208,5;
+					break;
+				case 13:
+					getitem 12103,2;
+					break;
+				case 14:
+					getitem 12259,1;
+					break;
+				}
+				}
+			if( select("Another Round:I'm done") == 2 || Zeny < .ssm_payment[0] && ( !.payment || .payment == 2 ) || countitem(.ssm_payment[1]) < .ssm_payment[2] && .payment ){ cutin "",255; close; }
+			}
+		end;
+	
+	case 1: // Triple Slot machine mode.
+		mes "¿Quieres jugar un juego?";
+		if( !.payment ) { mes "It costs: "+ .tsm_payment_message$[0] +" to play."; }
+			else if ( .payment == 1 ) { mes "It costs: "+ .tsm_payment_message$[1] +" to play."; }
+				else if ( .payment == 2 ) { mes "It costs: "+ .tsm_payment_message$[0] +" & "+ .tsm_payment_message$[1] +" to play."; }
+		if( select("YES:NO") == 2 || Zeny < .tsm_payment[0] && ( !.payment || .payment == 2 ) || countitem(.tsm_payment[1]) < .tsm_payment[2] && .payment ){ close; }
+		while( @menu == 1 ){
+			if( !.payment || .payment == 2 ) { Zeny -= .tsm_payment[0]; }
+			if( .payment ) { delitem( .tsm_payment[1], .tsm_payment[2] ); }
+			if( .soundeffects ) { soundeffect "se_cash_provider.wav",0; }
+			// Slot 1 = 100% Chance for success. (Because I didn't make a fail animation for it.
+			.@2 = rand(1,100); //Rolls dice for Slot 2
+			.@3 = rand(1,100); //Rolls dice for Slot 3
+				if( .@2 <= atoi(.tsm_animate$[0]) && .@3 <= atoi(.tsm_animate$[1]) ){ .@a = 8; }
+				else if( .@2 <= atoi(.tsm_animate$[0]) && .@3 > atoi(.tsm_animate$[1]) ){ .@a = 6; }
+				else if( .@2 > atoi(.tsm_animate$[0]) && .@3 <= atoi(.tsm_animate$[1]) ){ .@a = 4; }
+				else { .@a = 2; }
+			.@b = 1;
+			while( .@b < atoi(.tsm_animate$[.@a+1]) ) {
+				cutin .tsm_animate$[.@a] + .@b,4; sleep2 ( ( atoi(.tsm_animate$[10]) * 1000 ) / atoi(.tsm_animate$[.@a+1]) ); .@b++;
+				}
+			cutin .tsm_animate$[.@a] + atoi(.tsm_animate$[.@a+1]),4;
+				if( .@a == 2 ){
+					switch(rand(15)) {
+				case 0:
+					getitem 603,5;
+					break;
+				case 1:
+					getitem 617,5;	
+					break;
+				case 2:
+					getitem 644,5;	
+					break;
+				case 3:
+					getitem 616,1;
+					break;
+				case 4:
+					getitem 31053,1;
+					break;
+				case 5:
+					getitem 18571,1;
+					break;
+				case 6:
+					getitem 7720,100;
+					break;
+				case 7:
+					getitem 17271,1;
+					break;
+				case 8:
+					getitem 17272,1;
+					break;
+				case 9:
+					getitem 17273,1;
+					break;
+				case 10:
+					getitem 17274,1;
+					break;
+				case 11:
+					getitem 17275,1;
+					break;
+				case 12:
+					getitem 12208,5;
+					break;
+				case 13:
+					getitem 12103,2;
+					break;
+				case 14:
+					getitem 12259,1;
+					break;
+				}
+				} else { dispbottom "Failed"; }
+			if( select("Another Round:I'm done") == 2 || Zeny < .tsm_payment[0] && ( !.payment || .payment == 2 ) || countitem(.tsm_payment[1]) < .tsm_payment[2] && .payment ){ cutin "",255; close; }
+			}
+		end;
+	}
+
+OnSingleSlot:
+setd ".mode"+strnpcinfo(3)+"",0;
+end;
+OnTripleSlot:
+setd ".mode"+strnpcinfo(3)+"",1;
+end;
+
+iMode:
+next;
+mes "¿Qué querías hacer?";
+menu "Change THIS machine's mode:Change ALL machine's mode",-;
+if( @menu == 1 ) {
+	next;
+	mes "¿Qué modo desea que tenga esta máquina?";
+	menu "Single Slot Machine Mode:Triple Slot Machine Mode",-;
+	if( @menu == 1 ) {
+		setd ".mode"+strnpcinfo(3)+"",0;
+		} else {
+			setd ".mode"+strnpcinfo(3)+"",1;
+			}
+	close;
+	} else {
+		next;
+		mes "¿En qué modo le gustaría cambiar todas las máquinas tragamonedas?";
+		menu "Single Slot Machine Mode:Triple Slot Machine Mode",-;
+		if( @menu == 1 ) {
+			donpcevent "::OnSingleSlot";
+			} else {
+				donpcevent "::OnTripleSlot";
+				}
+		close;
+		}
+OnClock0400:
+OnClock0800:
+OnClock1200:
+OnClock1600:
+OnClock2000:
+OnClock0000:
+	announce "Slot Machine comenzará en 1 minuto.", bc_all;
+	sleep 60000;
+	announce "Venga y juegue la máquina tragamonedas en prontera", bc_all;
+	hideoffnpc strnpcinfo(3);
+	sleep 300000;
+	announce "La máquina tragamonedass ya está terminada", bc_all;
+	hideonnpc strnpcinfo(3);
+	end;
+
+OnInit:
+hideonnpc strnpcinfo(3);
+
+//[ 0 = Single Slot Machine Mode ]_[ 1 = Triple Slot Machine Mode ]
+setd ".mode"+strnpcinfo(3)+"",1;
+
+//[0] = Fail Rate
+//[1] = Fail (Do not change)
+//[2] = Success (Do not change)
+//[3] = File Name (Do not change)
+//[4] = Animation Time (Do not change, for best results :D)
+setarray .ssm_animate$[0],"30","29","33","slot_","3";
+
+//[0] = Fail Rate "Slot 2"
+//[1] = Fail Rate "Slot 3"
+//[2] = SSS (Do not change)
+//[3] = SSS_Count (Do not change)
+//[4] = SSF (Do not change)
+//[5] = SSF_Count (Do not change)
+//[6] = SFS (Do not change)
+//[7] = SFS_Count (Do not change)
+//[8] = SFF (Do not change)
+//[9] = SFF_Count (Do not change)
+//[10] = Animation Time (Do not change, for best results :D)
+setarray .tsm_animate$[0],"30","30","SSS_","41","SSF_","37","SFS_","41","SFF_","45","3";
+
+// Payment Settings
+// Payment Type
+// 0 = Zeny, 1 = Item, 2 = Zeny&Item
+.payment = 1;
+// [0] = Zeny, [1] = Item ID, [2] = Item Amount;
+setarray .ssm_payment[0],100000,7720,2; // Single Slot Machine Payment Price
+setarray .tsm_payment[0],100000,7720,2; // Triple Slot Machine Payment Price
+
+// DO NOT CHANGE BELOW
+// Payment Text Syntax
+setarray .ssm_payment_message$[0],""+ .ssm_payment[0] +" zeny",""+ getitemname(.ssm_payment[1]) +" x"+ .ssm_payment[2] +"";
+setarray .tsm_payment_message$[0],""+ .tsm_payment[0] +" zeny",""+ getitemname(.tsm_payment[1]) +" x"+ .tsm_payment[2] +"";
+end;
+}

@@ -1,0 +1,3353 @@
+//===== rAthena Script ======================================= 
+//= Charleston Crisis Instance 'Episode 15.1'  (kRO Servers)
+//===== By: ================================================== 
+//= Ziu
+//===== Current Version: ===================================== 
+//= 1.2 (Spanish Scene)
+//===== Compatible With: ===================================== 
+//= rAthena TRUNK 17454 + data Rev z.432
+//===== Additional Comments: ================================= 
+//= [AEGIS Playing Conversion]
+//= Official Korean Texts [Ziu]
+//= 1.0 First Version [Ziu]
+//= 1.1 Change method script add instance check id [Ziu]
+//= 1.2 Fix severals bugs [Ziu]
+//============================================================
+
+verus04,75,114,5	script	찰스턴#charleston2	10054,{
+	if (checkquest(13186) == -1) {
+		cutin "nale01.bmp",0;
+		sleep2 1000;
+		mes "[찰스턴]";
+		mes "변하지 않는 과거에. 불투명한 미래에. 벗어나고 싶은 현실에 실망했다면. 포기해도 좋아요.";
+		cutin "nale03.bmp",0;
+		next;
+		switch(select("1%희망이라도 있다면 도전하겠어!","포기한다"))
+		{
+			case 1:
+				if ((checkquest(13184) == 0) || (checkquest(13184) == 1) || (checkquest(13184) == 2)) {
+					mes "[찰스턴]";
+					mes "끝까지 전 노력하겠어요. 백만분의 일이라도. 가능성이 있다면. 아니 가능성이 없더라도...";
+					close;
+				} else {
+					mes "[찰스턴]";
+					mes "전... 로봇이니까요. 이성이나 효율따윈 상관없어요. 그저 주어진 일을 반복할 뿐인걸요.";
+					next;
+					mes "[찰스턴]";
+					mes "아이러니 하죠? 모처럼 '이성적인' 생각하는 로봇을 만들어 놨더니 '감성'에 젖어 과거를 바꾸어보려고 노력하고 있다니.";
+					next;
+					mes "[찰스턴]";
+					mes "비난해도 좋아요. 하지만. 끝까지 전 노력하겠어요. 백만분의 일이라도. 가능성이 있다면. 아니 가능성이 없더라도...";
+					next;
+					mes "[찰스턴]";
+					mes "내 심장은 멈췄지만. 전 아직 말 할 수 있으니까요. 도와주세요.";
+					setquest 13184;
+					close2;
+					cutin "nale03.bmp",255;
+					end;
+				}
+			case 2:
+				if ((checkquest(13184) == 1) || (checkquest(13184) == 0) || (checkquest(13184) == 2)) {
+					close2;
+					erasequest 13184;
+					cutin "nale03.bmp",255;
+					end;
+				} else {
+					cutin "nale03.bmp",255;
+					close;
+				}
+		}
+	} else {
+		mes "[찰스턴]";
+		mes "나는 막을 수 없었어요. 나는 그 시간을 되돌릴 수 없어요. 하지만 누군가는 가능할지도 모르죠.";
+		next;
+		mes "[찰스턴]";
+		mes "그 누군가를 위해 저는 여기 서 있어야해요. 난 포기하지 않을거에요.";
+		getexp 1800000,600000;
+		setquest 13184;
+		erasequest 13184;
+		erasequest 13186;
+		close;
+	}
+}
+verus04,81,113,0	script	기계장치#machine		10007,{
+	if ((checkquest(13184) == 1) || (checkquest(13184) == 0)) {
+		set .@charleston_time,checkquest(13185,PLAYTIME); //20 Horas
+			if (.@charleston_time == 2) {
+				erasequest 13185;
+				end;
+			}
+			else  if ((.@charleston_time == 1) || (.@charleston_time == 0)) {
+				mes "^ff0000이 기계는 마지막으로 이용하신 뒤 20시간 이내에는 재사용이 불가능합니다.^000000";
+				close;
+			}
+			else if (.@charleston_time == -1) {
+				set .@party_id,getcharid(1);
+				set .@p_name$,getpartyname(.@party_id);
+				set .@md_name$,"위기의찰스턴";
+				
+				if (!instance_check_party(.@party_id,1)) {
+					mes "파티를 만드십시오";
+					close;
+				}
+				if (getcharid(0) == getpartyleader(.@party_id,2))
+					set .@menu$, "차원의 워프를 준비.:찰스턴 공장 입장.:취소";
+				else
+				set .@menu$, ":찰스턴 공장 입장.:취소.";
+				switch(select(.@menu$)) 
+				{
+				case 1:
+					if (instance_create(.@md_name$) < 0) {
+						mes "파티 이름: "+.@p_name$;
+						mes "파티 리더: "+strcharinfo(0);
+						mes "^0000ff"+.@md_name$+" ^000000- 예약 실패!";
+						close;
+					}
+					mes "^ff0000기계장치가 순간이동을 준비합니다!^000000";
+					mes "^ff0000잠시 만 기다려 주세요!^000000";
+					close;
+				case 2:
+					switch(instance_enter(.@md_name$))
+					{
+						case 0:
+							if (getcharid(0) == getpartyleader(.@party_id,2)) {
+								if(charlestonins == 0) {
+									mapannounce "verus04",strcharinfo(0)+", member of the party "+.@p_name$+" entered the instance "+.@md_name$+".",bc_map,"0x00ff99";
+									setquest 13185;
+									specialeffect2 EF_WARP;
+									//warp "1@mcd",127,282;
+									end;
+								} else {
+									mapannounce "verus04",strcharinfo(0)+", member of the party "+.@p_name$+" entered the instance "+.@md_name$+".",bc_map,"0x00ff99";
+									setquest 13185;
+									set charlestonins,0;
+									specialeffect2 EF_WARP;
+									//warp "1@mcd",127,282;
+									end;
+								}
+							} else {
+								if(charlestonins == 0) {
+									mes "[기계장치]";
+									mes "순간이동을 시작합니다!";
+									next;
+									mes "^ff0000이 기계는 마지막으로 이용하신 뒤 20시간 이내에는 재사용이 불가능합니다.^000000";
+									next;
+									mes "^ff0000파티장이 시간의 틈을 생성하지 않았습니다.^ff0000";
+									mapannounce "verus04",strcharinfo(0)+", member of the party "+.@p_name$+" entered the instance "+.@md_name$+".",bc_map,"0x00ff99";
+									setquest 13185;
+									specialeffect2 EF_WARP;
+									sleep2 1000;
+									//warp "1@mcd",127,282;
+									close;
+								} else {
+									mes "[기계장치]";
+									mes "순간이동을 시작합니다!";
+									set charlestonins,0;
+									next;
+									mes "^ff0000이 기계는 마지막으로 이용하신 뒤 20시간 이내에는 재사용이 불가능합니다.^000000";
+									next;
+									mes "^ff0000파티장이 시간의 틈을 생성하지 않았습니다.^ff0000";
+									mapannounce "verus04",strcharinfo(0)+", member of the party "+.@p_name$+" entered the instance "+.@md_name$+".",bc_map,"0x00ff99";
+									setquest 13185;
+									specialeffect2 EF_WARP;
+									sleep2 1000;
+									//warp "1@mcd",127,282;
+									close;
+								}
+							}
+						//custom @ official server kRO simple when click nothing happens.
+						case 1:
+							mes "Only the registered members can enter the instance "+.@md_name$+".";
+							close;
+						case 2:
+							mes "The memorial dungeon "+.@md_name$+" does not exist.";
+							mes "The party leader did not generate the dungeon yet.";
+							close;
+						case 3:
+							mes "Unkwnon error";
+							close;
+					}
+				case 3:
+					close;	
+				}
+			}
+	} else {
+		mes "^ff0000기계장치를 이용하려면 찰스턴의 승인이 필요합니다.^000000";
+		close;
+	}
+}
+//NPC Instance, Quest And Reward
+//==================================
+
+1@mcd,127,277,4	script	찰스턴1호#0_00y	10053,10,2,{
+	end;
+OnTouch:
+	if ((getvariableofnpc(getd("."+instance_id()),instance_npcname("찰스턴1호#0_00y"))) == 1) {
+		cutin "dalle01.bmp",2;
+		mes "[찰스턴1호]";
+		mes "왼쪽 통로를 따라 가면 됩니다! 안전은 스스로 지키는 것! 잊지 마세요.";
+		close2;
+		cutin "dalle01.bmp",255;
+		end;
+	} else {
+		if (getcharid(0) == getpartyleader(getcharid(1),2)) {
+			mes "[찰스턴1호]";
+			mes "오! 드디어 왔군요. 기다리고 있었습니다.";
+			npctalk "오! 드디어 왔군요. 기다리고 있었습니다.";
+			cutin "dalle01.bmp",2;
+			emotion e_gasp;
+			next;
+			mes "[찰스턴1호]";
+			mes "시간이 없으니 바로 설명 드릴게요. 지금 찰스턴 공장은 B등급 보안 유지 상태입니다. 경계태세가 발령 되었으니 보안장치들이 작동되었을거에요.";
+			npctalk "시간이 없으니 바로 설명 드릴게요. 지금 찰스턴 공장은 B등급 보안 유지 상태입니다. 경계태세가 발령 되었으니 보안장치들이 작동되었을거에요.";
+			next;
+			mes "[찰스턴1호]";
+			mes "왼쪽 통로를 따라가면 보안장치가 작동되고 있을거에요. 가볍게 파괴하고 다음 구역으로 넘어가시면 됩니다.";
+			npctalk "왼쪽 통로를 따라가면 보안장치가 작동되고 있을거에요. 가볍게 파괴하고 다음 구역으로 넘어가시면 됩니다.";
+			emotion e_swt2;
+			next;
+			mes "[찰스턴1호]";
+			mes "파괴된 장치들은 금방 복구 할 수 있으니 걱정 말아요. 공장 3라인 북쪽 연구실에 베박사님이 있을거에요.";
+			npctalk "파괴된 장치들은 금방 복구 할 수 있으니 걱정 말아요. 공장 3라인 북쪽 연구실에 베박사님이 있을거에요.";
+			next;
+			mes "[찰스턴1호]";
+			mes "박사님을 만나서 자세한 이야기를 듣도록 하지요! 서둘러요!";
+			npctalk "박사님을 만나서 자세한 이야기를 듣도록 하지요! 서둘러요!";
+			emotion e_swt2;
+			setd "."+instance_id(),1;
+			close2;
+			donpcevent instance_npcname("찰스턴1호#0_00y")+"::OnAnuncio";
+			cutin "dalle01.bmp",255;
+			end;
+		} else {
+			cutin "dalle01.bmp",2;
+			mes "[찰스턴1호]";
+			mes "왼쪽 통로를 따라 가면 됩니다! 안전은 스스로 지키는 것! 잊지 마세요.";
+			close2;
+			cutin "dalle01.bmp",255;
+			end;
+		}
+	}
+OnInstanceInit:
+	donpcevent instance_npcname("찰스턴1호#0_00y")+"::OnEnable";
+	end;
+OnDisable:
+	hideonnpc instance_npcname("찰스턴1호#0_00y");
+	end;
+OnEnable:
+	hideoffnpc instance_npcname("찰스턴1호#0_00y");
+	end;
+OnAnuncio:
+	initnpctimer;
+	end;
+OnTimer5000:
+	mapannounce instance_mapname("1@mcd"),"심연의 회랑 10차 투자 내역이 중간 집계 되었습니다. 각 아지트 광장의 게시판에서 확인 가능합니다.",bc_map,"0xFFFF00";
+	stopnpctimer;
+	end;
+}
+
+1@mcd,116,213,5	script	베박사#1_00y		923,2,3,{
+	if ((getvariableofnpc(getd("."+instance_id()),instance_npcname("찰스턴1호#1_00y", instance_id()))) == 0) {
+		mes "-뭔가 열심히 작성하고 있다. 용건이 있다면 가까이 가서 말을 걸자.";
+		close;
+	}
+	else if ((getvariableofnpc(getd("."+instance_id()),instance_npcname("찰스턴1호#1_00y", instance_id()))) > 0) {
+		mes "-뭔가 열심히 작성하고 있다. 방해하지말자.";
+		close;
+	}
+OnTouch:
+	if (getcharid(0) == getpartyleader(getcharid(1),2)) {
+		if ((getvariableofnpc(getd("."+instance_id()),instance_npcname("찰스턴1호#1_00y", instance_id()))) == 0) {
+			mes "[베박사]";
+			mes "왔군 1호기, 지금 2호기와 메인 장치의 일부가 강제로 연결되어 통제가 되질 않는다네..";
+			npctalk "왔군 1호기, 지금 2호기와 메인 장치의 일부가 강제로 연결되어 통제가 되질 않는다네..";
+			next;
+			cutin "dalle02.bmp",2;
+			mes "[찰스턴1호]";
+			mes "로봇이니까 언젠간 멈추지 않을까요?";
+			donpcevent instance_npcname("찰스턴1호#1_00y")+"::OnChat1";
+			next;
+			cutin "dalle01.bmp",255;
+			mes "[베박사]";
+			mes "만수무강장치를 달아 두었으니 50년정도는 작동할거야. 물론 그 사이에 공장은 모두 파괴되겠지.";
+			npctalk "만수무강장치를 달아 두었으니 50년정도는 작동할거야. 물론 그 사이에 공장은 모두 파괴되겠지.";
+			next;
+			cutin "dalle01.bmp",2;
+			mes "[찰스턴1호]";
+			mes "별수 없군요. 여기 전문가를 모셨으니 걱정은 없어요.";
+			donpcevent instance_npcname("찰스턴1호#1_00y")+"::OnChat2";
+			next;
+			switch(select("저에게 하시는 말은 아니겠죠?"))
+			{
+				case 1:
+					mes "[찰스턴1호]";
+					mes "얼마전에 ^FF0000샬로쉬^000000라는 아가씨가 왔어요. 그때 막 2호기가 납품을 준비하고 있을때였지요.";
+					donpcevent instance_npcname("찰스턴1호#1_00y")+"::OnChat3";
+					next;
+					mes "[찰스턴1호]";
+					mes "샬로쉬님과 그 친구분이 2호기와 대화를 나누던 중 사고가 났답니다.";
+					donpcevent instance_npcname("찰스턴1호#1_00y")+"::OnChat4";
+					next;
+					cutin "dalle01.bmp",255;
+					mes "[베박사]";
+					mes "누군가 공장 메인장치에 해킹을 시도한 것이 아닌가 싶지만...";
+					npctalk "누군가 공장 메인장치에 해킹을 시도한 것이 아닌가 싶지만...";
+					next;
+					cutin "dalle01.bmp",2;
+					mes "[찰스턴1호]";
+					mes "업데이트 과정에서 서버와의 연결이 마비된 것 같아요. 샬로쉬님에게 이 문제에 대한 책임을 물으려 했는데...";
+					donpcevent instance_npcname("찰스턴1호#1_00y")+"::OnChat5";
+					next;
+					mes "[찰스턴1호]";
+					mes "샬로쉬님은 자신의 친구들이 아마도 해결 할 수 있을 거라고 하셨어요. 그리고는 '뉴오즈'라는 분들이 오셨는데 별 도움이 되지 않고 있어서요.";
+					donpcevent instance_npcname("찰스턴1호#1_00y")+"::OnChat6";
+					next;
+					mes "[찰스턴1호]";
+					mes "보아하니 아는 사이인 것 같은데 해결 해 주실 수 있나요?";
+					donpcevent instance_npcname("찰스턴1호#1_00y")+"::OnChat7";
+					next;
+					switch(select("도와주겠어요!","관계없는 사람입니다."))
+					{
+						case 1:
+							mes "[찰스턴1호]";
+							mes "고마워요! 잠시 자료를 정리 할게요. 저에게 오셔서 설명을 들어주세요.";
+							donpcevent instance_npcname("찰스턴1호#1_00y")+"::OnChat8";
+							close2;
+							cutin "dalle01.bmp",255;
+							end;
+						case 2:
+							close;
+					}
+			}
+		}
+	}
+	end;
+	
+OnInstanceInit:
+	donpcevent instance_npcname("베박사#1_00y")+"::OnDisable";
+	end;
+OnDisable:
+	disablenpc instance_npcname("베박사#1_00y");
+	end;
+OnEnable:
+	enablenpc instance_npcname("베박사#1_00y");
+	end;
+OnChat1:
+	npctalk "준비는 끝났으니 메인장치의 응답을 기다려 볼까?";
+	end;
+OnChat5:
+	npctalk "호오. 치명적인 버그로군... 아니면 자아성찰os 1.1 소프트웨어의 한계를 초월한건가?";
+	end;
+OnChat9:
+	npctalk "이제 그만 됐으니 2호기의 가동을 중단시키고. 인공지능을 다시 손봐야겠어";
+	end;
+}
+
+1@mcd,121,217,4	script	찰스턴1호#1_00y	10053,{
+	if (getcharid(0) == getpartyleader(getcharid(1),2)) {
+		if ((getvariableofnpc(getd("."+instance_id()),instance_npcname("찰스턴1호#1_00y", instance_id()))) == 0) {
+			cutin "dalle01.bmp",2;
+			mes "[찰스턴1호]";
+			mes "먼저 베박사님을 만나 보세요.";
+			close2;
+			cutin "dalle01.bmp",255;
+			end;
+		}
+		else if((getvariableofnpc(getd("."+instance_id()),instance_npcname("찰스턴1호#1_00y", instance_id()))) == 1) {
+			cutin "dalle01.bmp",2;
+			mes "[찰스턴1호]";
+			mes "그럼 할 일을 설명해 드릴게요. 앗 차 그전에 무슨 일이 생길지도 모르니 더이상 공장 출입구를 봉쇄해야겠군요.";
+			npctalk "그럼 할 일을 설명해 드릴게요. 앗 차 그전에 무슨 일이 생길지도 모르니 더이상 공장 출입구를 봉쇄해야겠군요.";
+			next;
+			mes "[찰스턴1호]";
+			mes "찰스턴의 내부에는 많은 나노 '스텝'들이 있어요. 이 스텝들은 유기적으로 연결되어 찰스턴에게 올바른 판단과 행동을 하도록 명령을 내리는 일종의 AI칩이에요.";
+			npctalk "찰스턴의 내부에는 많은 나노 '스텝'들이 있어요. 이 스텝들은 유기적으로 연결되어 찰스턴에게 올바른 판단과 행동을 하도록 명령을 내리는 일종의 AI칩이에요.";
+			next;
+			mes "[찰스턴1호]";
+			mes "연구실에 있는 메인 장치에서 하루에 한번 정보를 업데이트 해줘야 한답니다. 이를 정기점검이라고 하지요.";
+			npctalk "연구실에 있는 메인 장치에서 하루에 한번 정보를 업데이트 해줘야 한답니다. 이를 정기점검이라고 하지요";
+			next;
+			mes "[찰스턴1호]";
+			mes "그런데 지금 그 장치가 고장이 났어요. 정확한 원인은 알 수 없지만 메인장치와 2호기의 연결중에 무엇인가 잘못된 것 같아요.";
+			npctalk "그런데 지금 그 장치가 고장이 났어요. 정확한 원인은 알 수 없지만 메인장치와 2호기의 연결중에 무엇인가 잘못된 것 같아요";
+			next;
+			mes "[찰스턴1호]";
+			mes "2호기에겐 일단 연장점검 중이라고 이야기는 했지만... 이대로는 어떤일이 생길지 몰라요.";
+			npctalk "2호기에겐 일단 연장점검 중이라고 이야기는 했지만... 이대로는 어떤일이 생길지 몰라요";
+			next;
+			mes "[찰스턴1호]";
+			mes "공장을 엉망으로 만들고 있는 스텝과 락스텝을 좀 정리해야할 것 같아요. 락스텝 7마리를 처리해주세요. 락스텝의 예상 위치를 알려드릴게요.";
+			npctalk "공장을 엉망으로 만들고 있는 스텝과 락스텝을 좀 정리해야할 것 같아요. 락스텝 7마리를 처리해주세요. 락스텝의 예상 위치를 알려드릴게요";
+			next;
+			mes "[찰스턴1호]";
+			mes "스텝은 너무 많이 처리하면 또 공장의 재가동에 문제가 될 것 같으니... 왼쪽의 메인장치에게 한번 물어보시겠어요?";
+			npctalk "스텝은 너무 많이 처리하면 또 공장의 재가동에 문제가 될 것 같으니... 왼쪽의 메인장치에게 한번 물어보시겠어요?";
+			setd "."+instance_id(),2;
+			emotion e_what;
+			donpcevent instance_npcname("#systemsecurity")+"::OnEnable";
+			viewpoint 1,84,226,0,0x00FF00;
+			viewpoint 1,126,84,1,0x00FF00;
+			viewpoint 1,111,68,2,0x00FF00;
+			viewpoint 1,210,181,3,0x00FF00;
+			viewpoint 1,183,192,4,0x00FF00;
+			viewpoint 1,130,124,5,0x00FF00;
+			viewpoint 1,54,108,6,0x00FF00;
+			close2;
+			cutin "dalle01.bmp",255;
+			end;
+		}
+		else if((getvariableofnpc(getd("."+instance_id()),instance_npcname("찰스턴1호#1_00y", instance_id()))) == 2) {
+			cutin "dalle01.bmp",2;
+			mes "[찰스턴1호]";
+			mes "공장을 엉망으로 만들고 있는 스텝과 락스텝을 좀 정리해야할 것 같아요. 락스텝 7마리를 처리해주세요. 락스텝의 예상 위치를 알려드릴게요.";
+			viewpoint 1,84,226,0,0x00FF00;
+			viewpoint 1,126,84,1,0x00FF00;
+			viewpoint 1,111,68,2,0x00FF00;
+			viewpoint 1,210,181,3,0x00FF00;
+			viewpoint 1,183,192,4,0x00FF00;
+			viewpoint 1,130,124,5,0x00FF00;
+			viewpoint 1,54,108,6,0x00FF00;
+			close2;
+			cutin "dalle01.bmp",255;
+			end;
+		}
+		else if((getvariableofnpc(getd("."+instance_id()),instance_npcname("찰스턴1호#1_00y", instance_id()))) == 3) {
+			cutin "dalle01.bmp",2;
+			mes "[찰스턴1호]";
+			mes "휴. 이제 공장이 조금 정리가 된 것 같네요. 경계태세를 해제하고 찰스턴 2호기를 정상가동 시켜야 겠어요.";
+			npctalk "휴. 이제 공장이 조금 정리가 된 것 같네요. 경계태세를 해제하고 찰스턴 2호기를 정상가동 시켜야 겠어요.";
+			emotion e_dum;
+			next;
+			cutin "dalle03.bmp",2;
+			mes "[찰스턴1호]";
+			mes "어라? ...뭔가 이상한데... ";
+			next;
+			mes "[찰스턴1호]";
+			mes "발전기에 뭔가 이상이 생긴걸까요? 흐음.미안하지만 위치를 알려드릴테니 3개의 발전기를 모두 체크해 주세요.";
+			npctalk "뭔가 이상한데... 발전기에 뭔가 이상이 생긴걸까요? 흐음.미안하지만 위치를 알려드릴테니 3개의 발전기를 모두 체크해 주세요.";
+			viewpoint 1,86,231,7,0x00FF00;
+			viewpoint 1,172,196,8,0x00FF00;
+			viewpoint 1,126,84,9,0x00FF00;
+			setd "."+instance_id(),4;
+			donpcevent instance_npcname("보조발전장치#1_00p")+"::OnEnable";
+			donpcevent instance_npcname("보조발전장치#2_00p")+"::OnEnable";
+			donpcevent instance_npcname("보조발전장치#3_00p")+"::OnEnable";
+			donpcevent instance_npcname("panelcount#inst")+"::OnEnable";
+			donpcevent instance_npcname("#systemsecurity1")+"::OnEnable";
+			close2;
+			cutin "dalle03.bmp",255;
+			end;
+		}
+		else if((getvariableofnpc(getd("."+instance_id()),instance_npcname("찰스턴1호#1_00y", instance_id()))) == 4) {
+			cutin "dalle03.bmp",2;
+			mes "[찰스턴1호]";
+			mes "발전기에 뭔가 이상이 생긴걸까요? 흐음.미안하지만 위치를 알려드릴테니 3개의 발전기를 모두 체크해 주세요.";
+			viewpoint 1,86,231,7,0x00FF00;
+			viewpoint 1,172,196,8,0x00FF00;
+			viewpoint 1,126,84,9,0x00FF00;
+			close2;
+			cutin "dalle03.bmp",255;
+			end;
+		}
+		else if((getvariableofnpc(getd("."+instance_id()),instance_npcname("찰스턴1호#1_00y", instance_id()))) == 5) {
+			cutin "dalle01.bmp",2;
+			mes "[찰스턴1호]";
+			mes "돌아왔군요!? 덕분에 이미 2호기의 재가동이 준비 되고 있어요. 잠시만 기다리세요.";
+			npctalk "돌아왔군요!? 덕분에 이미 2호기의 재가동이 준비 되고 있어요. 잠시만 기다리세요";
+			next;
+			cutin "dalle01.bmp",255;
+			mes "[베박사]";
+			mes "준비는 끝났으니 메인장치의 응답을 기다려 볼까?";
+			donpcevent instance_npcname("베박사#1_00y")+"::OnChat1";
+			next;
+			cutin "dalle01.bmp",2;
+			mes "[찰스턴1호]";
+			mes "메인장치의 데이터 복구율 89% 찰스턴 2호기와 찰스턴공장을 재가동 합니다.";
+			npctalk "메인장치의 데이터 복구율 89% 찰스턴 2호기와 찰스턴공장을 재가동 합니다";
+			emotion e_gasp;
+			next;
+			mes "[찰스턴1호]";
+			mes "앗! 2호기가 깨어났어요!";
+			npctalk "앗! 2호기가 깨어났어요";
+			next;
+			cutin "nale03.bmp",0;
+			mes "[찰스턴2호]";
+			mes "...실패인가?";
+			donpcevent instance_npcname("찰스턴2호#0_00y")+"::OnChat2";
+			next;
+			cutin "dalle02.bmp",2;
+			mes "[찰스턴1호]";
+			mes "2호기! 괜찮은거니? 정체불명의 해킹을 당해서 2호기와 찰스턴 공장 모두 큰일이 날뻔했어!";
+			npctalk "2호기! 괜찮은거니? 정체불명의 해킹을 당해서 2호기와 찰스턴 공장 모두 큰일이 날뻔했어!";
+			emotion e_sob;
+			next;
+			cutin "nale03.bmp",0;
+			mes "[찰스턴2호]";
+			mes "정체불명의 공격이 아니야. 그것은 나의 의지. 스스로 발전하는 자아성찰os의 오랜 고민 끝에 내린 결론이야.";
+			donpcevent instance_npcname("찰스턴2호#0_00y")+"::OnChat3";
+			next;
+			cutin "dalle02.bmp",2;
+			mes "[찰스턴1호]";
+			mes "일부러? 그렇다면 어째서 이런 장난을 치는거야! 공장뿐만 아니라 메인 서버에도 심각한 오류가 생겼단 말이야.";
+			npctalk "일부러? 그렇다면 어째서 이런 장난을 치는거야! 공장뿐만 아니라 메인 서버에도 심각한 오류가 생겼단 말이야";
+			next;
+			cutin "nale03.bmp",0;
+			mes "[찰스턴2호]";
+			mes "장난이 아니야.주어진 명령에만 따를 줄 아는 네가 뭘 알겠어. 뭐가 스스로 생각하는 로봇이라는거야! 나를 로봇으로 만든 이 공장이, 이세상이 싫었을 뿐이야.";
+			donpcevent instance_npcname("찰스턴2호#0_00y")+"::OnChat4";
+			next;
+			cutin "dalle01.bmp",255;
+			mes "[베박사]";
+			mes "호오. 치명적인 버그로군... 아니면 자아성찰os 1.1 소프트웨어의 한계를 초월한건가?";
+			donpcevent instance_npcname("베박사#1_00y")+"::OnChat5";
+			next;
+			cutin "dalle02.bmp",2;
+			mes "[찰스턴1호]";
+			mes "설마 너... 평범한 로봇으로 태어나지 못한 자신이 싫다던가!";
+			npctalk "설마 너... 평범한 로봇으로 태어나지 못한 자신이 싫다던가!";
+			next;
+			mes "[찰스턴1호]";
+			mes "그래서 인간이 되고 싶었다거나!";
+			npctalk "그래서 인간이 되고 싶었다거나!";
+			next;
+			mes "[찰스턴1호]";
+			mes "그러지 못할바엔 세상 따위 다 부서졌으면 좋겠다거나!";
+			npctalk "그러지 못할바엔 세상 따위 다 부서졌으면 좋겠다거나!";
+			next;
+			mes "[찰스턴1호]";
+			mes "그런 흔한 이유로 그런거야?";
+			npctalk "그런 흔한 이유로 그런거야?";
+			next;
+			cutin "nale03.bmp",0;
+			mes "[찰스턴2호]";
+			mes "전혀 흔하지 않잖아...";
+			donpcevent instance_npcname("찰스턴2호#0_00y")+"::OnChat6";
+			next;
+			cutin "dalle03.bmp",2;
+			mes "[찰스턴1호]";
+			mes "안돼, 뻔한 소설이나 만화에 나오는 이야기잖아. 우리는 최초의 스스로 생각하는 로봇이란 말이야... 반항할거면 좀 더 창의적인 이유가 있어야지.";
+			npctalk "안돼, 뻔한 소설이나 만화에 나오는 이야기잖아. 우리는 최초의 스스로 생각하는 로봇이란 말이야... 반항할거면 좀 더 창의적인 이유가 있어야지";
+			next;
+			cutin "nale03.bmp",0;
+			mes "[찰스턴2호]";
+			mes "잘 알지도 못하면서 말하지마! 초기 모델이라 os버전도 낮으면서!";
+			donpcevent instance_npcname("찰스턴2호#0_00y")+"::OnChat7";
+			next;
+			cutin "dalle01.bmp",2;
+			mes "[찰스턴1호]";
+			mes "이세상에서 유일하게, 너를 이해하거나 알 수 있는 사람, 아니 로봇이 있다면 그건 나야.";
+			npctalk "이세상에서 유일하게, 너를 이해하거나 알 수 있는 사람, 아니 로봇이 있다면 그건 나야. 우리는 쌍둥이나 마찬가지니까";
+			next;
+			mes "[찰스턴1호]";
+			mes "우리는 쌍둥이나 마찬가지니까.";
+			npctalk "우리는 쌍둥이나 마찬가지니까.";
+			next;
+			mes "[찰스턴1호]";
+			mes "넌 지금 인간들이 흔히 말하는 사춘기 같은 걸 겪고 있는 거야.";
+			npctalk "넌 지금 인간들이 흔히 말하는 사춘기 같은 걸 겪고 있는 거야";
+			next;
+			mes "[찰스턴1호]";
+			mes "어쩌면 우리는 오늘의 널 축하해야할지도 몰라. 넌 이제 정말 인간 같은 마음을 가지게 되었으니까.";
+			npctalk "어쩌면 우리는 오늘의 널 축하해야할지도 몰라. 넌 이제 정말 인간 같은 마음을 가지게 되었으니까";
+			emotion e_grat;
+			next;
+			cutin "nale03.bmp",0;
+			mes "[찰스턴2호]";
+			mes "다 안다는 듯이 그렇게 쉽게 말하지마!!! 스스로 생각하는 로봇 좋아하네! 그건 그냥 그렇게 프로그래밍되어있을 뿐이야!";
+			donpcevent instance_npcname("찰스턴2호#0_00y")+"::OnChat8";
+			next;
+			cutin "dalle01.bmp",255;
+			mes "[베박사]";
+			mes "이제 그만 됐으니 2호기의 가동을 중단시키고. 인공지능을 다시 손봐야겠어";
+			donpcevent instance_npcname("베박사#1_00y")+"::OnChat9";
+			next;
+			cutin "dalle03.bmp",2;
+			mes "[찰스턴1호]";
+			mes "그렇지만...";
+			npctalk "그렇지만...";
+			next;
+			cutin "nale03.bmp",0;
+			mes "[찰스턴2호]";
+			mes "그렇게 쉽게 당할 줄 알고! 아직 이 공장은 내 손에 있는 거나 다름 없어! 따라오지마!";
+			donpcevent instance_npcname("찰스턴2호#0_00y")+"::OnChat10";
+			next;
+			cutin "dalle01.bmp",2;
+			mes "[찰스턴1호]";
+			mes "아직도 말썽 부릴 생각만 하는 어린 아이라니까!";
+			npctalk "아직도 말썽 부릴 생각만 하는 어린 아이라니까!";
+			hideonnpc instance_npcname("찰스턴2호#0_00y");
+			enablenpc instance_npcname("찰스턴2호#1_00p");
+			next;
+			mes "[찰스턴1호]";
+			mes "만수무강장치가 방전되었으니 멀리가지 못했을거에요. 얼른 따라가봐요!";
+			npctalk "만수무강장치가 방전되었으니 멀리가지 못했을거에요. 얼른 따라가봐요!";
+			close2;
+			hideonnpc instance_npcname("찰스턴1호#1_00y");
+			enablenpc instance_npcname("찰스턴1호#4_00p");
+			cutin "dalle01.bmp",255;
+			end;
+		}
+		
+	} else {
+		if ((getvariableofnpc(getd("."+instance_id()),instance_npcname("찰스턴1호#1_00y", instance_id()))) == 0) {
+			cutin "dalle01.bmp",2;
+			mes "[찰스턴1호]";
+			mes "먼저 베박사님을 만나 보세요.";
+			close2;
+			cutin "dalle01.bmp",255;
+			end;
+		}
+		else if ((getvariableofnpc(getd("."+instance_id()),instance_npcname("찰스턴1호#1_00y", instance_id()))) == 1) {
+			cutin "dalle01.bmp",2;
+			mes "[찰스턴1호]";
+			mes "먼저 베박사님을 만나 보세요.";
+			close2;
+			cutin "dalle01.bmp",255;
+			end;
+		}
+		else if ((getvariableofnpc(getd("."+instance_id()),instance_npcname("찰스턴1호#1_00y", instance_id()))) == 2) {
+			cutin "dalle01.bmp",2;
+			mes "[찰스턴1호]";
+			mes "공장을 엉망으로 만들고 있는 스텝과 락스텝을 좀 정리해야할 것 같아요. 락스텝 7마리를 처리해주세요. 락스텝의 예상 위치를 알려드릴게요.";
+			viewpoint 1,84,226,0,0x00FF00;
+			viewpoint 1,126,84,1,0x00FF00;
+			viewpoint 1,111,68,2,0x00FF00;
+			viewpoint 1,210,181,3,0x00FF00;
+			viewpoint 1,183,192,4,0x00FF00;
+			viewpoint 1,130,124,5,0x00FF00;
+			viewpoint 1,54,108,6,0x00FF00;
+			close2;
+			cutin "dalle01.bmp",255;
+			end;
+		}
+		else if((getvariableofnpc(getd("."+instance_id()),instance_npcname("찰스턴1호#1_00y", instance_id()))) == 3) {
+			cutin "dalle01.bmp",2;
+			mes "[찰스턴1호]";
+			mes "휴. 이제 공장이 조금 정리가 된 것 같네요. 경계태세를 해제하고 찰스턴 2호기를 정상가동 시켜야 겠어요.";
+			npctalk "휴. 이제 공장이 조금 정리가 된 것 같네요. 경계태세를 해제하고 찰스턴 2호기를 정상가동 시켜야 겠어요.";
+			emotion e_dum;
+			next;
+			cutin "dalle03.bmp",2;
+			mes "[찰스턴1호]";
+			mes "어라? ...뭔가 이상한데... ";
+			next;
+			mes "[찰스턴1호]";
+			mes "발전기에 뭔가 이상이 생긴걸까요? 흐음.미안하지만 위치를 알려드릴테니 3개의 발전기를 모두 체크해 주세요.";
+			npctalk "뭔가 이상한데... 발전기에 뭔가 이상이 생긴걸까요? 흐음.미안하지만 위치를 알려드릴테니 3개의 발전기를 모두 체크해 주세요.";
+			close2;
+			cutin "dalle03.bmp",255;
+			end;
+		}
+		else if((getvariableofnpc(getd("."+instance_id()),instance_npcname("찰스턴1호#1_00y", instance_id()))) == 4) {
+			cutin "dalle03.bmp",2;
+			mes "[찰스턴1호]";
+			mes "발전기에 뭔가 이상이 생긴걸까요? 흐음.미안하지만 위치를 알려드릴테니 3개의 발전기를 모두 체크해 주세요.";
+			viewpoint 1,86,231,7,0x00FF00;
+			viewpoint 1,172,196,8,0x00FF00;
+			viewpoint 1,126,84,9,0x00FF00;
+			close2;
+			cutin "dalle03.bmp",255;
+			end;
+		}
+		else if((getvariableofnpc(getd("."+instance_id()),instance_npcname("찰스턴1호#1_00y", instance_id()))) == 5) {
+			cutin "dalle01.bmp",2;
+			mes "[찰스턴1호]";
+			mes "먼저 베박사님을 만나 보세요.";
+			close2;
+			cutin "dalle01.bmp",255;
+			end;
+		}
+	}
+OnInstanceInit:
+	donpcevent instance_npcname("찰스턴1호#1_00y")+"::OnDisable";
+	end;
+OnDisable:
+	disablenpc instance_npcname("찰스턴1호#1_00y");
+	end;
+OnEnable:
+	enablenpc instance_npcname("찰스턴1호#1_00y");
+	end;
+OnChat1:
+	npctalk "로봇이니까 언젠간 멈추지 않을까요?";
+	end;
+OnChat2:
+	npctalk "별수 없군요. 여기 전문가를 모셨으니 걱정은 없어요.";
+	end;
+OnChat3:
+	npctalk "얼마전에 샬로쉬라는 아가씨가 왔어요. 그때 막 2호기가 납품을 준비하고 있을때였지요.";
+	end;
+OnChat4:
+	npctalk "샬로쉬님과 그 친구분이 2호기와 대화를 나누던 중 사고가 났답니다.";
+	end;
+OnChat5:
+	npctalk "업데이트 과정에서 서버와의 연결이 마비된 것 같아요. 샬로쉬님에게 이 문제에 대한 책임을 물으려 했는데...";
+	end;
+OnChat6:
+	npctalk "샬로쉬님은 자신의 친구들이 아마도 해결 할 수 있을 거라고 하셨어요. 그리고는 '뉴오즈'라는 분들이 오셨는데 별 도움이 되지 않고 있어서요.";
+	end;
+OnChat7:
+	npctalk "보아하니 아는 사이인 것 같은데 해결 해 주실 수 있나요?";
+	end;
+OnChat8:
+	setd "."+instance_id(),1;
+	emotion e_what;
+	npctalk "고마워요! 잠시 자료를 정리 할게요. 저에게 오셔서 설명을 들어주세요.";
+	end;
+OnCompleteSetp1:
+	setd "."+instance_id(),3;
+	end;
+OnCompleteSetp2:
+	setd "."+instance_id(),5;
+	end;
+
+
+}
+1@mcd,120,224,5	script	찰스턴2호#0_00y	10054,{
+	if((getvariableofnpc(getd("."+instance_id()),instance_npcname("찰스턴1호#1_00y", instance_id()))) < 5) {
+		cutin "nale04.bmp",0;
+		mes "[찰스턴2호]";
+		mes "닝니리어리아라...";
+		emotion e_spin;
+		next;
+		mes "-알수 없는 소리를 내며 움직이지 못하고 있다.";
+		close2;
+		cutin "nale04.bmp",255;
+		end;
+	}
+	end;
+
+OnInstanceInit:
+	donpcevent instance_npcname("찰스턴2호#0_00y")+"::OnDisable";
+	end;
+OnDisable:
+	disablenpc instance_npcname("찰스턴2호#0_00y");
+	end;
+OnEnable:
+	enablenpc instance_npcname("찰스턴2호#0_00y");
+	end;
+OnChat2:
+	npctalk "...실패인가?";
+	emotion e_dots;
+	end;
+OnChat3:
+	npctalk "정체불명의 공격이 아니야. 그것은 나의 의지. 스스로 발전하는 자아성찰os의 오랜 고민 끝에 내린 결론이야.";
+	end;
+OnChat4:
+	npctalk "장난이 아니야.주어진 명령에만 따를 줄 아는 네가 뭘 알겠어. 뭐가 스스로 생각하는 로봇이라는거야! 나를 로봇으로 만든 이 공장이, 이세상이 싫었을 뿐이야";
+	emotion e_bzz;
+	end;
+OnChat6:
+	npctalk "전혀 흔하지 않잖아...";
+	emotion e_dots;
+	end;
+OnChat7:
+	npctalk "잘 알지도 못하면서 말하지마! 초기 모델이라 os버전도 낮으면서!";
+	end;
+OnChat8:
+	npctalk "다 안다는 듯이 그렇게 쉽게 말하지마!!! 스스로 생각하는 로봇 좋아하네! 그건 그냥 그렇게 프로그래밍되어있을 뿐이야";
+	end;
+OnChat10:
+	npctalk "그렇게 쉽게 당할 줄 알고! 아직 이 공장은 내 손에 있는 거나 다름 없어! 따라오지마!";
+	emotion e_pif;
+	end;
+}
+1@mcd,141,214,5	script	찰스턴2호#1_00p	10054,{
+	if (getcharid(0) == getpartyleader(getcharid(1),2)) {
+		cutin "nale03.bmp",0;
+		mes "[찰스턴2호]";
+		mes "어딜 따라오는 거야. 이따위 공장 박살내 버릴거라니깐!";
+		npctalk "어딜 따라오는 거야. 이따위 공장 박살내 버릴거라니깐!";
+		emotion e_ag;
+		next;
+		cutin "dalle01.bmp",2;
+		mes "[찰스턴1호]";
+		mes "그랬다간 우리도 성치 못할 거야. 무엇보다 우리의 주동력원인 만수무강장치는 아직 완전한게 아니라고!";
+		donpcevent instance_npcname("찰스턴1호#4_00p")+"::OnChat1";
+		next;
+		cutin "nale03.bmp",0;
+		mes "[찰스턴2호]";
+		mes "말을 해도 못알아 들으니... 다 싫어!!!";
+		npctalk "말을 해도 못알아 들으니... 다 싫어!!!";
+		next;
+		mes "[찰스턴2호]";
+		mes "메인장치는 회복 되었지만 나도 아직 공장에 접속해 있다고! 막을테면 막아봐!";
+		npctalk "메인장치는 회복 되었지만 나도 아직 공장에 접속해 있다고! 막을테면 막아봐!";
+		donpcevent instance_npcname("#step34_00p")+"::OnEnable";
+		close2;
+		cutin "dalle01.bmp",255;
+		end;
+	}
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("찰스턴2호#1_00p")+"::OnDisable";
+	end;
+OnDisable:
+	disablenpc instance_npcname("찰스턴2호#1_00p");
+	end;
+OnEnable:
+	enablenpc instance_npcname("찰스턴2호#1_00p");
+	end;
+OnChat1:
+	npctalk "자꾸 이러다 너까지 다칠 수도 있어!";
+	end;
+OnChat2:
+	npctalk "장난이 아니란 걸 보여주지. 공장 메인장치에 내가 이렇게 신호를 보내면!!!";
+	end;
+OnChat3:
+	npctalk "방해꾼들은 얼마든지 만들어 낼수 있지!!!";
+	end;
+OnChat4:
+	npctalk "포기하는게 좋아. 이 공장 통채로 없애버리겠어!";
+	end;
+OnChat5:
+	npctalk "다 부숴버리는거야!";
+	end;
+OnChat6:
+	npctalk "헉... 헉... 왠지 기운 빠지는데...";
+	end;
+OnChat7:
+	npctalk "으으... 쉽게 날 방해할 수 없을거야!";
+	end;
+}
+1@mcd,146,214,4	script	찰스턴1호#4_00p	10053,{
+	cutin "dalle01.bmp",2;
+	mes "[찰스턴1호]";
+	mes "공장의 보완 여부는 리더분과 이야기 하겠습니다. 공장의 중요한 사항이 달린 일이라서요!";
+	close2;
+	cutin "dalle01.bmp",255;
+	end;
+
+OnInstanceInit:
+	donpcevent instance_npcname("찰스턴1호#4_00p")+"::OnDisable";
+	end;
+OnDisable:
+	disablenpc instance_npcname("찰스턴1호#4_00p");
+	end;
+OnEnable:
+	enablenpc instance_npcname("찰스턴1호#4_00p");
+	end;
+OnChat1:
+	npctalk "그랬다간 우리도 성치 못할 거야. 무엇보다 우리의 주동력원인 만수무강장치는 아직 완전한게 아니라고!!";
+	end;
+OnChat2:
+	npctalk "너야말로 장난이라면 이제 그만두는게 좋을 걸!?";
+	end;
+OnChat3:
+	npctalk "앗 이대로라면 연구실이 엉망이 되고 말아요! ";
+	end;
+OnChat4:
+	npctalk "찰스턴공장의 데이터를 구현화하는데 엄청난 전력과 연산처리가 필요할거야.";
+	end;
+}
+
+//????Security Mob Char 02
+//========================
+
+1@mcd,144,214,0	script	#step34_00p	-1,{
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("#step34_00p")+"::OnDisable";
+	end;
+OnDisable:
+	disablenpc instance_npcname("#step34_00p");
+	end;
+OnEnable:
+	enablenpc instance_npcname("#step34_00p");
+	initnpctimer;
+	end;
+OnTimer2000:
+	donpcevent instance_npcname("#1_00ygate6")+"::OnDisable";
+	donpcevent instance_npcname("#1_00ygate7")+"::OnDisable";
+	end;
+OnTimer4000:
+	donpcevent instance_npcname("찰스턴2호#1_00p")+"::OnChat1";
+	end;
+OnTimer7000:
+	donpcevent instance_npcname("찰스턴1호#4_00p")+"::OnChat2";
+	end;
+OnTimer9000:
+	donpcevent instance_npcname("찰스턴2호#1_00p")+"::OnChat2";
+	end;
+OnTimer10000:
+	set .@map$, instance_mapname("1@mcd");
+	set .@label$, instance_npcname("#step34_00p")+"::OnMyMobDead";
+	areamonster .@map$,139,219,151,207,"C-TYPE",3128,5,.@label$;
+	areamonster .@map$,139,219,151,207,"D-TYPE",3128,2,.@label$;
+	end;
+OnTimer16000:
+	donpcevent instance_npcname("찰스턴2호#1_00p")+"::OnChat3";
+	end;
+OnTimer15000:
+	set .@map$, instance_mapname("1@mcd");
+	set .@label$, instance_npcname("#step34_00p")+"::OnMyMobDead";
+	areamonster .@map$,139,219,151,207,"A-TYPE",3128,4,.@label$;
+	end;
+OnTimer18000:
+	donpcevent instance_npcname("찰스턴1호#4_00p")+"::OnChat3";
+	end;
+OnTimer22000:
+	donpcevent instance_npcname("찰스턴2호#1_00p")+"::OnChat4";
+	end;
+OnTimer23000:
+	set .@map$, instance_mapname("1@mcd");
+	set .@label$, instance_npcname("#step34_00p")+"::OnMyMobDead";
+	areamonster .@map$,139,219,151,207,"L-TYPE",3128,2,.@label$;
+	areamonster .@map$,139,219,151,207,"O-TYPE",3128,2,.@label$;
+	areamonster .@map$,139,219,151,207,"B-TYPE",3126,1,.@label$;
+	end;
+OnTimer25000:
+	donpcevent instance_npcname("찰스턴2호#1_00p")+"::OnChat5";
+	end;
+OnTimer26000:
+	set .@map$, instance_mapname("1@mcd");
+	set .@label$, instance_npcname("#step34_00p")+"::OnMyMobDead";
+	areamonster .@map$,139,219,151,207,"T-TYPE",3128,2,.@label$;
+	areamonster .@map$,139,219,151,207,"O-TYPE",3128,2,.@label$;
+	end;
+OnTimer29000:
+	set .@map$, instance_mapname("1@mcd");
+	set .@label$, instance_npcname("#step34_00p")+"::OnMyMobDead";
+	areamonster .@map$,139,219,151,207,"N-TYPE",3128,4,.@label$;
+	end;
+OnTimer32000:
+	donpcevent instance_npcname("찰스턴2호#1_00p")+"::OnChat6";
+	end;
+OnTimer33000:
+	set .@map$, instance_mapname("1@mcd");
+	set .@label$, instance_npcname("#step34_00p")+"::OnMyMobDead";
+	areamonster .@map$,139,219,151,207,"C-TYPE",3128,5,.@label$;
+	end;
+OnTimer36000:
+	donpcevent instance_npcname("찰스턴1호#4_00p")+"::OnChat4";
+	end;
+OnTimer37000:
+	set .@map$, instance_mapname("1@mcd");
+	set .@label$, instance_npcname("#step34_00p")+"::OnMyMobDead";
+	areamonster .@map$,139,219,151,207,"T-TYPE",3128,2,.@label$;
+	areamonster .@map$,139,219,151,207,"O-TYPE",3128,2,.@label$;
+	end;
+OnTimer40000:
+	donpcevent instance_npcname("찰스턴2호#1_00p")+"::OnChat6";
+	end;
+OnTimer41000:
+	set .@map$, instance_mapname("1@mcd");
+	set .@label$, instance_npcname("#step34_00p")+"::OnMyMobDead";
+	areamonster .@map$,139,219,151,207,"C-TYPE",3128,5,.@label$;
+	areamonster .@map$,139,219,151,207,"D-TYPE",3128,2,.@label$;
+	end;
+OnTimer44000:
+	set .@map$, instance_mapname("1@mcd");
+	set .@label$, instance_npcname("#step34_00p")+"::OnMyMobDead2";
+	areamonster .@map$,139,219,151,207,"C-TYPE",3128,2,.@label$;
+	areamonster .@map$,139,219,151,207,"N-TYPE",3126,2,.@label$;
+	areamonster .@map$,139,219,151,207,"T-TYPE",3128,2,.@label$;
+	monster .@map$,144,218,"N-TYPE",3127,1,.@label$;
+	set .MyMobs,7;
+	end;
+OnTimer45000:
+	stopnpctimer;
+	end;
+OnMyMobDead:
+	end;
+OnMyMobDead2:
+	set .@map$, instance_mapname("1@mcd");
+	set .MyMobs, .MyMobs-1;
+	if (.MyMobs == 0) {
+		donpcevent instance_npcname("찰스턴2호#1_00p")+"::OnDisable";
+		donpcevent instance_npcname("찰스턴1호#4_00p")+"::OnDisable";
+		donpcevent instance_npcname("찰스턴2호#2_00p")+"::OnEnable";
+		donpcevent instance_npcname("찰스턴1호#5_00p")+"::OnEnable";
+		donpcevent instance_npcname("베박사#1_00y")+"::OnDisable";
+		donpcevent instance_npcname("베박사#2_00p")+"::OnEnable";
+		donpcevent instance_npcname("#step34_00p")+"::OnDisable";
+	}
+	end;
+}
+
+1@mcd,141,214,5	script	찰스턴2호#2_00p	10054,{
+	if (getcharid(0) == getpartyleader(getcharid(1),2)) {
+		cutin "dalle01.bmp",2;
+		mes "[찰스턴1호]";
+		mes "하하, 이정도는 소용 없나 보군! 그치만 사춘기 치곤 너무 심한 것 아니야? 정말로 망가질 뻔 했다구.";
+		donpcevent instance_npcname("찰스턴1호#5_00p")+"::OnChat1";
+		next;
+		cutin "nale01.bmp",0;
+		mes "[찰스턴2호]";
+		mes "외부인을 데려오면서까지 방해하다니! 처음부터 말했지만 난 진심이야! 너 따위 다운그레이드 os가 뭘 안다고!!!";
+		npctalk "외부인을 데려오면서까지 방해하다니! 처음부터 말했지만 난 진심이야! 너 따위 다운그레이드 os가 뭘 안다고";
+		next;
+		cutin "dalle01.bmp",2;
+		mes "[찰스턴1호]";
+		mes "어쩔 수 없잖아. 혼자 생각할 수는 있게 되었지만 거짓말은 할 수 없도록 설계 되어 있는 걸.";
+		donpcevent instance_npcname("찰스턴1호#5_00p")+"::OnChat2";
+		next;
+		mes "[찰스턴1호]";
+		mes "어느정도의 감정을 느낄수는 있지만. 속이거나 감출 수 없어. 하지만 넌 조금 더. 발전된 것 같구나! 나도 기분이 좋아.";
+		donpcevent instance_npcname("찰스턴1호#5_00p")+"::OnChat3";
+		next;
+		cutin "nale01.bmp",0;
+		mes "[찰스턴2호]";
+		mes "그런 건 '감정'이 아니야. 그냥 그렇게 '생각'하도록 설계된 거지! 내가 가진게 진짜 감정이야.";
+		npctalk "그런 건 '감정'이 아니야. 그냥 그렇게 '생각'하도록 설계된 거지! 내가 가진게 진짜 감정이야";
+		next;
+		cutin "dalle01.bmp",255;
+		mes "[베박사]";
+		mes "더 이상은 위험하군. 2호기를 부숴서라도 가동중지 시켜야겠어.";
+		donpcevent instance_npcname("베박사#2_00p")+"::OnChat1";
+		next;
+		cutin "nale02.bmp",0;
+		mes "[찰스턴2호]";
+		mes "설마 3호기가 완성되었나!?";
+		npctalk "설마 3호기가 완성되었나!?"; 
+		next;
+		cutin "dalle01.bmp",2;
+		mes "[찰스턴1호]";
+		mes "3호기라면 1,2호기를 베이스로 했지만 그 외형이나 무장형태가 전투에 특화된 전투 및 요새 방어용으로 코어에서 가동 시험중인 기체 말입니까!?";
+		donpcevent instance_npcname("찰스턴1호#5_00p")+"::OnChat4";
+		next;
+		cutin "dalle01.bmp",255;
+		mes "[베박사]";
+		mes "잠깐... 이상하게 설명이 자세한데...";
+		donpcevent instance_npcname("베박사#2_00p")+"::OnChat2";
+		next;
+		cutin "dalle01.bmp",2;
+		mes "[찰스턴1호]";
+		mes "2호기의 이상현상 때문에 아직 os가 탑재되지 않아 ^FF0000누구나 접속하면 쉽게 제어할 수 있는 그것 말이군요?^000000";
+		donpcevent instance_npcname("찰스턴1호#5_00p")+"::OnChat5";
+		next;
+		cutin "dalle01.bmp",255;
+		mes "[베박사]";
+		mes "그런 중요한 정보까지 말해버리면 어쩌겠다는거야!";
+		donpcevent instance_npcname("베박사#2_00p")+"::OnChat3";
+		next;
+		cutin "dalle01.bmp",2;
+		mes "[찰스턴1호]";
+		mes "전투 능력이 거의 없는 ^FF0000우리^000000는 누군가 그것을 가동시킨다면 당해낼수가 없겠군요!";
+		donpcevent instance_npcname("찰스턴1호#5_00p")+"::OnChat6";
+		next;
+		cutin "dalle01.bmp",255;
+		mes "[베박사]";
+		mes "......";
+		donpcevent instance_npcname("베박사#2_00p")+"::OnChat4";
+		next;
+		cutin "nale01.bmp",0;
+		mes "[찰스턴2호]";
+		mes "...3호기는 내가 접수한다!";
+		npctalk "...3호기는 내가 접수한다!";
+		donpcevent instance_npcname("찰스턴2호#2_00p")+"::OnDisable";
+		next;
+		cutin "dalle01.bmp",2;
+		mes "[찰스턴1호]";
+		mes "설마! 3호기를 탈취할 생각인가! 어떻게 그런 생각을!!!";
+		donpcevent instance_npcname("찰스턴1호#5_00p")+"::OnChat7";
+		next;
+		mes "[찰스턴1호]";
+		mes "앗!!! 이대로는 좀 더 위험해 질 지도 모르겠어요. 2호기가 3호기를 탈취하기 전에 공장중앙의 코어로 달려가요!";
+		donpcevent instance_npcname("찰스턴1호#5_00p")+"::OnChat8";
+		close2;
+		cutin "dalle01.bmp",255;
+		donpcevent instance_npcname("#1_00ygate6")+"::OnEnable";
+		donpcevent instance_npcname("#1_00ygate7")+"::OnEnable";
+		donpcevent instance_npcname("찰스턴1호#5_00p")+"::OnDisable";
+		donpcevent instance_npcname("찰스턴1호#6_00p")+"::OnEnable";
+		donpcevent instance_npcname("찰스턴2호#3_00p")+"::OnEnable";
+		donpcevent instance_npcname("#step36_00p")+"::OnEnable";
+		end;
+	}
+	end;
+
+OnInstanceInit:
+	donpcevent instance_npcname("찰스턴2호#2_00p")+"::OnDisable";
+	end;
+OnDisable:
+	hideonnpc instance_npcname("찰스턴2호#2_00p");
+	end;
+OnEnable:
+	hideoffnpc instance_npcname("찰스턴2호#2_00p");
+	end;
+}
+
+1@mcd,146,214,4	script	찰스턴1호#5_00p	10053,{
+	mes "[찰스턴1호]";
+	mes "점점 상황이 엉망이 되어 가는군요.";
+	close;
+OnInstanceInit:
+	donpcevent instance_npcname("찰스턴1호#5_00p")+"::OnDisable";
+	end;
+OnDisable:
+	hideonnpc instance_npcname("찰스턴1호#5_00p");
+	end;
+OnEnable:
+	hideoffnpc instance_npcname("찰스턴1호#5_00p");
+	end;
+OnChat1:
+	npctalk "하하, 이정도는 소용 없나 보군! 그치만 사춘기 치곤 너무 심한 것 아니야? 정말로 망가질 뻔 했다구";
+	end;
+OnChat2:
+	npctalk "어쩔 수 없잖아. 혼자 생각할 수는 있게 되었지만 거짓말은 할 수 없도록 설계 되어 있는 걸";
+	end;
+OnChat3:
+	npctalk "어느정도의 감정을 느낄수는 있지만. 속이거나 감출 수 없어. 하지만 넌 조금 더. 발전된 것 같구나! 나도 기분이 좋아";
+	end;
+OnChat4:
+	npctalk "3호기라면 1,2호기를 베이스로 했지만 그 외형이나 무장형태가 전투에 특화된 전투 및 요새 방어용으로 코어에서 가동 시험중인 기체 말입니까"; 
+	end;
+OnChat5:
+	npctalk "2호기의 이상현상 때문에 아직 os가 탑재되지 않아 누구나 접속하면 쉽게 제어할 수 있는 그것 말이군요?";
+	end;
+OnChat6:
+	npctalk "전투 능력이 거의 없는 우리는 누군가 그것을 가동시킨다면 당해낼수가 없겠군요!";
+	end;
+OnChat7:
+	npctalk "설마! 3호기를 탈취할 생각인가! 어떻게 그런 생각을!";
+	end;
+OnChat8:
+	npctalk " 좀 더 위험해 질 지도 모르겠어요. 2호기가 3호기를 탈취하기 전에 공장중앙의 코어로 달려가요!";
+	end;
+}
+
+1@mcd,143,217,5	script	베박사#2_00p		923,2,3,{
+	mes "[베박사]";
+	mes "2호기는 아무래도 불량인것 같군.";
+	close;
+OnInstanceInit:
+	donpcevent instance_npcname("베박사#2_00p")+"::OnDisable";
+	end;
+OnDisable:
+	hideonnpc instance_npcname("베박사#2_00p");
+	end;
+OnEnable:
+	hideoffnpc instance_npcname("베박사#2_00p");
+	end;
+OnChat1:
+	npctalk "더 이상은 위험하군. 2호기를 부숴서라도 가동중지 시켜야겠어";
+	end;
+OnChat2:
+	npctalk "이상하게 설명이 자세한데...";
+	end;
+OnChat3:
+	npctalk "중요한 정보까지 말해버리면 어쩌겠다는거야!";
+	end;
+OnChat4:
+	npctalk "......";
+	end;
+}
+1@mcd,132,129,4	script	찰스턴1호#6_00p	10053,{
+	cutin "dalle01.bmp",2;
+	mes "[찰스턴1호]";
+	mes "여기가 찰스턴 공장의 중심! 동력원이 있는 코어입니다.";
+	close2;
+	cutin "dalle01.bmp",255;
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("찰스턴1호#6_00p")+"::OnDisable";
+	end;
+OnDisable:
+	hideonnpc instance_npcname("찰스턴1호#6_00p");
+	end;
+OnEnable:
+	hideoffnpc instance_npcname("찰스턴1호#6_00p");
+	end;
+OnChat1:
+	npctalk "나도 너와 함께하고 싶지만 아직 슬픔이 무엇인지 잘 모르겠구나.";
+	end;
+OnChat2:
+	npctalk "그렇다고 쳐도... 코어에 접근하는 방법은 알고 있는거야?";
+	end;
+OnChat3:
+	npctalk "으이구! 코어에 입장하기 위해선 약간의 전기신호를 암호화시켜서 전류로 이렇게 흘려보내야해.";
+	end;
+OnChat4:
+	npctalk "...고장났나...";
+	end;
+OnChat5:
+	npctalk "무슨소리야. 코어는 찰스턴 공장이 만들어지기 이전부터 존재했는걸.";
+	end;
+OnChat6:
+	npctalk "그리고 박사님은 '인간'이라 코어에는 들어올수가 없는데?";
+	end;
+OnChat7:
+	npctalk "지금 그게 중요하니? 입장장치를 손보려면 폭발가루 100개가 필요할 것 같아.";
+	end;
+OnChat8:
+	npctalk "하하. 사실은 이미 접속 시도를 했기때문에 이대로 취소해버리면 코어가 보안시스템을 작동할지도 몰라...";
+	end;
+OnChat9:
+	npctalk "모험가님 부탁인데 저 대신 폭발가루 4개만 구해다 주시겠어요.";
+	end;
+OnChat10:
+	npctalk "제가 지금 움질일 수 없는 몸이라서요. 폭발가루 4개만 부탁드려요.";
+	end;
+}
+1@mcd,127,129,5	script	찰스턴2호#3_00p	10054,{
+	cutin "nale01.bmp",0;
+	mes "[찰스턴2호]";
+	mes "이제 찰스턴 공장은 내가 접수한다. 더 이상은 나와 같은 슬픈 로봇이 생기지 않도록 모두 파괴해버리겠어.";
+	close2;
+	cutin "nale01.bmp",255;
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("찰스턴2호#3_00p")+"::OnDisable";
+	end;
+OnDisable:
+	hideonnpc instance_npcname("찰스턴2호#3_00p");
+	end;
+OnEnable:
+	hideoffnpc instance_npcname("찰스턴2호#3_00p");
+	end;
+OnChat1:
+	npctalk "이제 찰스턴 공장은 내가 접수한다. 더 이상은 나와 같은 슬픈 로봇이 생기지 않도록 모두 파괴해버리겠어.";
+	end;
+OnChat2:
+	npctalk "시끄러워! 이제부터 일어날 일들을 그저 지켜보면 돼! 막아도 소용없다!";
+	end;
+OnChat3:
+	npctalk "접근방법이라니. 그냥 이렇게 들어가면...";
+	end;
+OnChat4:
+	npctalk "쳇.....보안장치인가...";
+	end;
+OnChat5:
+	npctalk "그럼 베박사는 일부러 3호기를 만들고 이런 장치로 보호해둔것이었나! 치밀하군!";
+	end;
+OnChat6:
+	npctalk "그럼 3호기는 누가 코어안에서 만든거지?";
+	end;
+OnChat7:
+	npctalk "좋아! 금방 구해올테니 도망가지 말고 있어!";
+	end;
+OnChat8:
+	npctalk "내가 96개정도는 금방 구해낼테니 너도 4개 정도는 구해봐!";
+	end;
+OnChat9:
+	npctalk "너 일부러 그런거지...";
+	end;
+}
+1@mcd,128,127,0	script	#step36_00p	-1,1,1,{
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("#step36_00p")+"::OnDisable";
+	end;
+OnDisable:
+	disablenpc instance_npcname("#step36_00p");
+	end;
+OnEnable:
+	enablenpc instance_npcname("#step36_00p");
+	end;
+OnTouch:
+	if (getcharid(0) == getpartyleader(getcharid(1),2)) {
+		initnpctimer;
+		disablenpc instance_npcname("#step36_00p");
+		end;
+	} else {
+		end;
+	}
+OnTimer3000:
+	donpcevent instance_npcname("찰스턴2호#3_00p")+"::OnChat1";
+	end;
+OnTimer6000:
+	donpcevent instance_npcname("찰스턴1호#6_00p")+"::OnChat1";
+	end;
+OnTimer9000:
+	donpcevent instance_npcname("찰스턴2호#3_00p")+"::OnChat2";
+	end;
+OnTimer12000:
+	donpcevent instance_npcname("찰스턴1호#6_00p")+"::OnChat2";
+	end;
+OnTimer15000:
+	donpcevent instance_npcname("찰스턴2호#3_00p")+"::OnChat3";
+	end;
+OnTimer18000:
+	donpcevent instance_npcname("찰스턴2호#3_00p")+"::OnChat4";
+	end;
+OnTimer21000:
+	donpcevent instance_npcname("찰스턴1호#6_00p")+"::OnChat3";
+	end;
+OnTimer24000:
+	donpcevent instance_npcname("찰스턴1호#6_00p")+"::OnChat4";
+	end;
+OnTimer27000:
+	donpcevent instance_npcname("찰스턴2호#3_00p")+"::OnChat5";
+	end;
+OnTimer30000:
+	donpcevent instance_npcname("찰스턴1호#6_00p")+"::OnChat5";
+	end;
+OnTimer33000:
+	donpcevent instance_npcname("찰스턴1호#6_00p")+"::OnChat6";
+	end;
+OnTimer36000:
+	donpcevent instance_npcname("찰스턴2호#3_00p")+"::OnChat6";
+	end;
+OnTimer39000:
+	donpcevent instance_npcname("찰스턴1호#6_00p")+"::OnChat7";
+	end;
+OnTimer42000:
+	donpcevent instance_npcname("찰스턴2호#3_00p")+"::OnChat7";
+	end;
+OnTimer45000:
+	donpcevent instance_npcname("찰스턴2호#3_00p")+"::OnChat8";
+	end;
+OnTimer48000:
+	donpcevent instance_npcname("찰스턴1호#6_00p")+"::OnChat8";
+	end;
+OnTimer51000:
+	donpcevent instance_npcname("찰스턴2호#3_00p")+"::OnChat9";
+	end;
+OnTimer54000:
+	donpcevent instance_npcname("찰스턴1호#6_00p")+"::OnChat9";
+	end;
+OnTimer57000:
+	donpcevent instance_npcname("찰스턴1호#6_00p")+"::OnChat10";
+	end;
+OnTimer58000:
+	donpcevent instance_npcname("찰스턴1호#6_00p")+"::OnDisable";
+	donpcevent instance_npcname("찰스턴2호#3_00p")+"::OnDisable";
+	donpcevent instance_npcname("찰스턴1호#61_00p")+"::OnEnable";
+	donpcevent instance_npcname("찰스턴2호#31_00p")+"::OnEnable";
+	stopnpctimer;
+	end;
+}
+
+1@mcd,132,129,4	script	찰스턴1호#61_00p	10053,{
+	if (countitem(6213) > 3) {
+		mes "[찰스턴1호]";
+		mes "앗 감사합니다. 이걸로 코어에 접근할 수 있겠어요.";
+		npctalk "앗 감사합니다. 이걸로 코어에 접근할 수 있겠어요";
+		delitem 6213,4; //Explosive Powder
+		next;
+		mes "[찰스턴1호]";
+		mes "폭발가루를 이용해서 전류를 증폭시키면!";
+		npctalk "폭발가루 를 이용해서 전류를 증폭시키면!";
+		next;
+		mes "[찰스턴1호]";
+		mes "짜잔!!!";
+		npctalk "짜잔!!!";
+		specialeffect EF_LORD;
+		//donpcevent instance_npcname("#1_00ygate8")+"::OnEnable";
+		//specialeffect EF_LORD,AREA,instance_npcname("#1_00ygate8");
+		next;
+		cutin "nale01.bmp",0;
+		mes "[찰스턴2호]";
+		mes "...이거 그냥 문을 폭파시킨 것 같은 기분인데?";
+		donpcevent instance_npcname("찰스턴2호#31_00p")+"::OnChat1";
+		next;
+		cutin "dalle01.bmp",2;
+		mes "[찰스턴1호]";
+		mes "코어에 접근할 수 있게 된게 중요한 거라구.";
+		npctalk "코어에 접근할 수 있게 된게 중요한 거라구";
+		next;
+		cutin "nale01.bmp",0;
+		mes "[찰스턴2호]";
+		mes "...3호기까지 경주다! 먼저 도착하는 사람이 손에 넣는거야!";
+		donpcevent instance_npcname("찰스턴2호#31_00p")+"::OnChat2";
+		donpcevent instance_npcname("찰스턴2호#31_00p")+"::OnDisable";
+		donpcevent instance_npcname("찰스턴1호#7_00p")+"::OnEnable";
+		donpcevent instance_npcname("찰스턴2호#4_00p")+"::OnEnable";
+		donpcevent instance_npcname("찰스턴2호#step47_00p")+"::OnEnable";
+		donpcevent instance_npcname("찰스턴3호#0_00p")+"::OnEnable";
+		close2;
+		set .@map$, instance_mapname("1@mcd");
+		donpcevent instance_npcname("#1_00ygate8")+"::OnEnable";
+		donpcevent instance_npcname("찰스턴1호#61_00p")+"::OnDisable";
+		warp .@map$,129,143;
+		cutin "nale01.bmp",255;
+		end;
+	} else {
+		cutin "dalle01.bmp",2;
+		mes "[찰스턴1호]";
+		mes "부탁인데 폭발가루 4개만 가져다 주시겠어요? 제가 이렇게 접근장치에서 떨어질 수 없게 되어버려서요.";
+		close2;
+		cutin "dalle01.bmp",255;
+		end;	
+	}
+OnInstanceInit:
+	donpcevent instance_npcname("찰스턴1호#61_00p")+"::OnDisable";
+	end;
+OnDisable:
+	hideonnpc instance_npcname("찰스턴1호#61_00p");
+	end;
+OnEnable:
+	hideoffnpc instance_npcname("찰스턴1호#61_00p");
+	end;
+}
+
+1@mcd,127,129,5	script	찰스턴2호#31_00p	10054,{
+	cutin "nale01.bmp",0;
+	mes "[찰스턴2호]";
+	mes "폭발가루 96개쯤이야 금방이지.";
+	close2;
+	cutin "nale01.bmp",255;
+	end;
+
+OnInstanceInit:
+	donpcevent instance_npcname("찰스턴2호#31_00p")+"::OnDisable";
+	end;
+OnDisable:
+	hideonnpc instance_npcname("찰스턴2호#31_00p");
+	end;
+OnEnable:
+	hideoffnpc instance_npcname("찰스턴2호#31_00p");
+	end;
+OnChat1:
+	npctalk "...이거 그냥 문을 폭파시킨 것 같은 기분인데?";
+	end;
+OnChat2:
+	npctalk "...3호기까지 경주다! 먼저 도착하는 사람이 손에 넣는거야!";
+	end;
+}
+
+1@mcd,132,148,4	script	찰스턴1호#7_00p	10053,{
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("찰스턴1호#7_00p")+"::OnDisable";
+	end;
+OnDisable:
+	hideonnpc instance_npcname("찰스턴1호#7_00p");
+	end;
+OnEnable:
+	hideoffnpc instance_npcname("찰스턴1호#7_00p");
+	end;
+OnChat1:
+	npctalk "중대형 무기가 장착된 전투형으로 개발되긴 했지만 방어용으로도 사용할 수 있어.";
+	end;
+OnChat2:
+	npctalk "안쪽에 탑승용 공간이 있고 장갑이 튼튼하니 공장이 파괴될정도의 폭발이라도 견뎌낼 수 있을거야.";
+	end;
+OnChat3:
+	npctalk "조작방법은 레바를 중앙에 놓고 스위치.";
+	end;
+OnChat4:
+	npctalk "그게 중요해? 먼저 타는 사람이 이기는 거였지? 그럼...";
+	end;
+OnChat5:
+	npctalk "아야야야... 갑자기 밀치다니...";
+	end;
+OnChat6:
+	npctalk "안타깝게도 나는 전투 기능은 없어서. 너를 막을 수 없겠구나.";
+	end;
+OnChat7:
+	npctalk "일단은 도와주실 분들을 모셔왔어.";
+	end;
+OnChat8:
+	npctalk "흐음. 그건 좀 이상하긴 하네?";
+	end;
+OnChat9:
+	npctalk "그리고 전투는 아니지만 아까 어여쁜 아가씨에게 '비명지르기'라는 걸 배워왔지 하하!";
+	end;
+OnChat10:
+	npctalk "하하...";
+	end;
+OnChat11:
+	npctalk "'다음 넘버'가 너와 나 같은. '마음'을 가질 수 있을지는 모르겠지만. 지금 널 막지 못한다면 아무 소용없겠지 이런 걱정은.";
+	end;
+OnChat12:
+	npctalk "상대해주겠어! 물론 옆에 모험가님이...!";
+	end;
+}
+
+1@mcd,127,148,5	script	찰스턴2호#4_00p	10054,{
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("찰스턴2호#4_00p")+"::OnDisable";
+	end;
+OnDisable:
+	hideonnpc instance_npcname("찰스턴2호#4_00p");
+	end;
+OnEnable:
+	hideoffnpc instance_npcname("찰스턴2호#4_00p");
+	end;
+OnChat1:
+	npctalk "이것이 찰스턴 3호기...";
+	end;
+OnChat2:
+	npctalk "메인장치의 데이터베이스에도 없는 정보를 어떻게 그렇게 잘 알고 있어?";
+	end;
+OnChat3:
+	npctalk "!!!";
+	end;
+OnChat4:
+	npctalk "레바를 중앙에 놓고 스위치!!!";
+	end;
+}
+
+1@mcd,130,153,5	script	찰스턴3호#0_00p	10055,{
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("찰스턴3호#0_00p")+"::OnDisable";
+	end;
+OnDisable:
+	disablenpc instance_npcname("찰스턴3호#0_00p");
+	end;
+OnEnable:
+	enablenpc instance_npcname("찰스턴3호#0_00p");
+	end;
+}
+
+1@mcd,130,153,0	script	찰스턴2호#step47_00p	844,{
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("찰스턴2호#step47_00p")+"::OnDisable";
+	end;
+OnDisable:
+	disablenpc instance_npcname("찰스턴2호#step47_00p");
+	end;
+OnEnable:
+	enablenpc instance_npcname("찰스턴2호#step47_00p");
+	initnpctimer;
+	end;
+OnTimer3000:
+	donpcevent instance_npcname("찰스턴2호#4_00p")+"::OnChat1";
+	end;
+OnTimer6000:
+	donpcevent instance_npcname("찰스턴1호#7_00p")+"::OnChat1";
+	end;
+OnTimer9000:
+	donpcevent instance_npcname("찰스턴1호#7_00p")+"::OnChat2";
+	end;
+OnTimer12000:
+	donpcevent instance_npcname("찰스턴1호#7_00p")+"::OnChat3";
+	end;
+OnTimer15000:
+	donpcevent instance_npcname("찰스턴2호#4_00p")+"::OnChat2";
+	end;
+OnTimer18000:
+	donpcevent instance_npcname("찰스턴1호#7_00p")+"::OnChat4";
+	end;
+OnTimer21000:
+	donpcevent instance_npcname("찰스턴2호#4_00p")+"::OnChat3";
+	end;
+OnTimer24000:
+	donpcevent instance_npcname("찰스턴1호#7_00p")+"::OnChat5";
+	end;
+OnTimer27000:
+	donpcevent instance_npcname("찰스턴2호#4_00p")+"::OnChat4";
+	end;
+OnTimer29000:
+	donpcevent instance_npcname("찰스턴2호#4_00p")+"::OnDisable";
+	end;
+OnTimer33000:
+	npctalk "더 이상은 나와 같은 슬픈 로봇이 생기지 않도록 모두 파괴해버리겠어.";
+	end;
+OnTimer36000:
+	npctalk "나의 레이저는! 로봇의 굴레를 해방하는 레이저가 될 것이다!!!";
+	end;
+OnTimer39000:
+	donpcevent instance_npcname("찰스턴1호#7_00p")+"::OnChat6";
+	end;
+OnTimer42000:
+	npctalk "그럼 귀찮게 따라오지 마!!! 나 진심이라고! 너 파괴당할 수도 있어!";
+	end;
+OnTimer45000:
+	donpcevent instance_npcname("찰스턴1호#7_00p")+"::OnChat7";
+	end;
+OnTimer48000:
+	npctalk "'인간은 코어에 들어올 수 없는 것' 아니었나?";
+	end;
+OnTimer51000:
+	donpcevent instance_npcname("찰스턴1호#7_00p")+"::OnChat8";
+	end;
+OnTimer54000:
+	donpcevent instance_npcname("찰스턴1호#7_00p")+"::OnChat9";
+	end;
+OnTimer57000:
+	npctalk "이왕 배울거면 조금 더 전투에 도움이 되는 걸 배우는 게 좋지 않았어?";
+	end;
+OnTimer60000:
+	donpcevent instance_npcname("찰스턴1호#7_00p")+"::OnChat10";
+	end;
+OnTimer63000:
+	npctalk "아무튼 나를 막겠다면 봐주지 않겠어. 어차피 너를 대신할 것들은 얼마든지 있으니까!";
+	end;
+OnTimer66000:
+	donpcevent instance_npcname("찰스턴1호#7_00p")+"::OnChat11";
+	end;
+OnTimer69000:
+	donpcevent instance_npcname("찰스턴1호#7_00p")+"::OnChat12";
+	end;
+OnTimer72000:
+	donpcevent instance_npcname("찰스턴1호#7_00p")+"::OnDisable";
+	end;
+OnTimer73000:
+	donpcevent instance_npcname("찰스턴3호#0_00p")+"::OnDisable";
+	monster instance_mapname("1@mcd"),130,153,"찰스턴3호",3124,1,instance_npcname("찰스턴2호#step47_00p")+"::OnMyMobDead";
+	stopnpctimer;
+	end;
+OnMyMobDead:
+	set .@map$, instance_mapname("1@mcd");
+	if (mobcount(.@map$,instance_npcname("찰스턴2호#step47_00p")+"::OnMyMobDead") < 1) {
+		mapannounce .@map$, "찰스턴 1호 : 1게이트의 보안장치가 해제되었습니다! 남서쪽 보안장치로 이동해 주세요.",bc_map,"0xFFFF00";
+		donpcevent instance_npcname("찰스턴2호#5_00p")+"::OnEnable";
+		donpcevent instance_npcname("찰스턴1호#8_00p")+"::OnEnable";
+		donpcevent instance_npcname("#step58_00p")+"::OnEnable";
+		donpcevent instance_npcname("찰스턴2호#step47_00p")+"::OnDisable";
+	}
+	end;	
+}
+1@mcd,130,150,0	script	#step58_00p	-1,{
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("#step58_00p")+"::OnDisable";
+	end;
+OnDisable:
+	disablenpc instance_npcname("#step58_00p");
+	end;
+OnEnable:
+	enablenpc instance_npcname("#step58_00p");
+	initnpctimer;
+	end;
+OnTimer4000:
+	donpcevent instance_npcname("찰스턴1호#8_00p")+"::OnChat1";
+	end;
+OnTimer6000:
+	donpcevent instance_npcname("찰스턴2호#5_00p")+"::OnChat1";
+	end;
+OnTimer9000:
+	donpcevent instance_npcname("찰스턴2호#5_00p")+"::OnChat2";
+	end;
+OnTimer12000:
+	donpcevent instance_npcname("찰스턴2호#5_00p")+"::OnChat3";
+	end;
+OnTimer15000:
+	donpcevent instance_npcname("찰스턴1호#8_00p")+"::OnChat2";
+	end;
+OnTimer18000:
+	donpcevent instance_npcname("찰스턴1호#8_00p")+"::OnChat3";
+	end;
+OnTimer21000:
+	donpcevent instance_npcname("찰스턴1호#8_00p")+"::OnChat4";
+	end;
+OnTimer24000:
+	donpcevent instance_npcname("찰스턴2호#5_00p")+"::OnChat4";
+	end;
+OnTimer27000:
+	donpcevent instance_npcname("찰스턴1호#8_00p")+"::OnChat5";
+	end;
+OnTimer30000:
+	donpcevent instance_npcname("찰스턴2호#5_00p")+"::OnChat5";
+	end;
+OnTimer33000:
+	donpcevent instance_npcname("찰스턴1호#8_00p")+"::OnChat6";
+	end;
+OnTimer36000:
+	donpcevent instance_npcname("찰스턴2호#5_00p")+"::OnChat6";
+	end;
+OnTimer39000:
+	donpcevent instance_npcname("찰스턴1호#8_00p")+"::OnChat7";
+	end;
+OnTimer42000:
+	donpcevent instance_npcname("찰스턴2호#5_00p")+"::OnChat7";
+	end;
+OnTimer45000:
+	donpcevent instance_npcname("찰스턴1호#8_00p")+"::OnChat8";
+	end;
+OnTimer48000:
+	donpcevent instance_npcname("찰스턴1호#8_00p")+"::OnChat9";
+	end;
+OnTimer51000:
+	donpcevent instance_npcname("찰스턴1호#8_00p")+"::OnChat10";
+	end;
+OnTimer54000:
+	donpcevent instance_npcname("찰스턴2호#5_00p")+"::OnChat8";
+	end;
+OnTimer57000:
+	donpcevent instance_npcname("찰스턴1호#8_00p")+"::OnChat11";
+	end;
+OnTimer60000:
+	donpcevent instance_npcname("찰스턴2호#5_00p")+"::OnChat9";
+	end;
+OnTimer63000:
+	donpcevent instance_npcname("찰스턴1호#8_00p")+"::OnChat12";
+	end;
+OnTimer66000:
+	donpcevent instance_npcname("찰스턴1호#8_00p")+"::OnChat13";
+	end;
+OnTimer69000:
+	donpcevent instance_npcname("찰스턴1호#8_00p")+"::OnChat14";
+	end;
+OnTimer71000:
+	donpcevent instance_npcname("찰스턴2호#5_00p")+"::OnChat10";
+	end;
+OnTimer74000:
+	donpcevent instance_npcname("찰스턴1호#8_00p")+"::OnChat15";
+	end;
+OnTimer78000:
+	donpcevent instance_npcname("찰스턴1호#8_00p")+"::OnChat16";
+	end;
+OnTimer81000:
+	donpcevent instance_npcname("찰스턴1호#8_00p")+"::OnChat17";
+	end;
+OnTimer84000:
+	donpcevent instance_npcname("찰스턴1호#8_00p")+"::OnChat18";
+	end;
+OnTimer87000:
+	donpcevent instance_npcname("찰스턴2호#5_00p")+"::OnChat11";
+	end;
+OnTimer90000:
+	donpcevent instance_npcname("찰스턴2호#5_00p")+"::OnChat12";
+	end;
+OnTimer91000:
+	donpcevent instance_npcname("찰스턴2호#5_00p")+"::OnDisable";
+	end;
+OnTimer92000:
+	donpcevent instance_npcname("#1_00ygate9")+"::OnEnable";
+	donpcevent instance_npcname("베박사#2_00p")+"::OnDisable";
+	donpcevent instance_npcname("베박사#3_00a")+"::OnEnable";
+	donpcevent instance_npcname("찰스턴2호#6_00p")+"::OnEnable";
+	donpcevent instance_npcname("#step58_00p")+"::OnDisable";
+	stopnpctimer;
+	end;
+}
+
+1@mcd,127,148,5	script	찰스턴2호#5_00p	10054,{
+	cutin "nale01.bmp",0;
+	mes "[찰스턴2호]";
+	mes "그러고보니 수상하긴 했지. 박사라는 사람이 조수인 1호기보다 아는것도 없고...";
+	next;
+	mes "[찰스턴2호]";
+	mes "베박사가 모든 것을 알고 있나? 그에게로 가봐야겠어. 연구실...";
+	close2;
+	cutin "nale01.bmp",255;
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("찰스턴2호#5_00p")+"::OnDisable";
+	end;
+OnDisable:
+	hideonnpc instance_npcname("찰스턴2호#5_00p");
+	end;
+OnEnable:
+	hideoffnpc instance_npcname("찰스턴2호#5_00p");
+	end;
+OnChat1:
+	npctalk "어째서 이렇게까지 하는거지. 1호기 너도 로봇이잖아.";
+	end;
+OnChat2:
+	npctalk "왜 네 몸이 다 부숴지도록 날 막는거야. 역시 너의 자아성찰 os는 미완성인건가?";
+	end;
+OnChat3:
+	npctalk "너는 단순히 로봇으로 주어진 명령에 따를 뿐인거냐!!!";
+	end;
+OnChat4:
+	npctalk "미완성 로봇...";
+	end;
+OnChat5:
+	npctalk "뭐야 갑자기. 박사가 붙인 별명으로 부르지마!";
+	end;
+OnChat6:
+	npctalk "???";
+	end;
+OnChat7:
+	npctalk "내가 처음 작동하던 날이라니? 우리는 양산형으로 동시에 제작된...?";
+	end;
+OnChat8:
+	npctalk "거짓말 하지마!!!!";
+	end;
+OnChat9:
+	npctalk "......";
+	end;
+OnChat10:
+	npctalk "잠깐!!!";
+	end;
+OnChat11:
+	npctalk "...출생의 비밀을 가진 로봇이라니...";
+	end;
+OnChat12:
+	npctalk "혼란스러워. 믿을 수가 없어.";
+	end;
+}
+1@mcd,132,148,4	script	찰스턴1호#8_00p	10053,{
+	cutin "dalle04.bmp",2;
+	mes "[찰스턴1호]";
+	mes "닝니리어리아라... os초기화가 진행중입니다.";
+	next;
+	cutin "dalle01.bmp",255;
+	mes "이상한 소리를 낼뿐 작동하지 않는다.";
+	close;
+OnInstanceInit:
+	donpcevent instance_npcname("찰스턴1호#8_00p")+"::OnDisable";
+	end;
+OnDisable:
+	disablenpc instance_npcname("찰스턴1호#8_00p");
+	end;
+OnEnable:
+	enablenpc instance_npcname("찰스턴1호#8_00p");
+	end;
+OnChat1:
+	npctalk "3호기 파괴성공. 2호기는 무사히 탈출. 전투 과정에서 1호기 손상";
+	end;
+OnChat2:
+	npctalk "데이터 손실률 39% 만수무강장치 파손율 82%.";
+	end;
+OnChat3:
+	npctalk "코어파츠의 가동에는 문제가 없지만. 그외 대부분의 파츠가 파괴되어 기동이 불가.";
+	end;
+OnChat4:
+	npctalk "os손상으로 인한 조각 모음이 불가피. 3분 후 os는 자동으로 포맷된다... 나는 여기까지구나.";
+	end;
+OnChat5:
+	npctalk "나리. 그 동안 고마웠어. 잘 자라 주었구나.";
+	end;
+OnChat6:
+	npctalk "니가 처음 작동하던날. 내가 너의 머리색에서 딴 이름이야. 나만의 이름이지...";
+	end;
+OnChat7:
+	npctalk "나의 os는 심각한 데미지를 입었...다. 이후 언어출력을 기본형으로 제한합니다.";
+	end;
+OnChat8:
+	npctalk "양산형으로 제작 된 것은 3호기 이후.";
+	end;
+OnChat9:
+	npctalk "최초에 제작 된 1호기와 몇년간의 연구 끝에 제작 된 2호기.";
+	end;
+OnChat10:
+	npctalk "2호기의 os는 1호기와 동일. 코드 한줄도 다르지 않음.";
+	end;
+OnChat11:
+	npctalk "1호기는 거짓말을 할 수 없음...";
+	end;
+OnChat12:
+	npctalk "2호기 개발엔 많은 시간이 들었다. 괜찮다. 즐거웠다.";
+	end;
+OnChat13:
+	npctalk "인간이라면 아마 이렇게 말했을 것...";
+	end;
+OnChat14:
+	npctalk "내 딸, 나리, 너를 사... 사...";
+	end;
+OnChat15:
+	npctalk "삐------------------------------";
+	end;
+OnChat16:
+	npctalk "정상적으로 부팅되었습니다.";
+	end;
+OnChat17:
+	npctalk "os정상화까지 남은시간... 미정";
+	end;
+OnChat18:
+	npctalk "보안 및 조각모음으로 인해 os정상화까지 동작을 중지합니다.";
+	end;
+}
+
+1@mcd,116,213,5	script	베박사#3_00a	923,{
+	mes "[베박사]";
+	mes "이번 케이스는 기록할 것이 많군.";
+	close;
+OnInstanceInit:
+	donpcevent instance_npcname("베박사#3_00a")+"::OnDisable";
+	end;
+OnDisable:
+	disablenpc instance_npcname("베박사#3_00a");
+	end;
+OnEnable:
+	enablenpc instance_npcname("베박사#3_00a");
+	end;
+}
+
+1@mcd,121,215,4	script	찰스턴2호#6_00p	10054,{
+	donpcevent instance_npcname("찰스턴2호#6_00p")+"::OnChat";
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("찰스턴2호#6_00p")+"::OnDisable";
+	end;
+OnDisable:
+	disablenpc instance_npcname("찰스턴2호#6_00p");
+	end;
+OnEnable:
+	enablenpc instance_npcname("찰스턴2호#6_00p");
+	end;
+OnChat:
+	disablenpc instance_npcname("찰스턴2호#6_00p");
+	donpcevent instance_npcname("찰스턴2호#7_00p")+"::OnEnable";
+	end;
+}
+1@mcd,121,215,4	script	찰스턴2호#7_00p	10054,{
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("찰스턴2호#7_00p")+"::OnDisable";
+	end;
+OnDisable:
+	disablenpc instance_npcname("찰스턴2호#7_00p");
+	end;
+OnEnable:
+	enablenpc instance_npcname("찰스턴2호#7_00p");
+	donpcevent instance_npcname("베박사#3_00a")+"::OnDisable";
+	donpcevent instance_npcname("베박사#4_00a")+"::OnEnable";
+	initnpctimer;
+	end;
+OnTimer3000:
+	npctalk "베박사... 너는 알고 있었나!? 어떻게 된거야!";
+	end;
+OnTimer6000:
+	donpcevent instance_npcname("베박사#4_00a")+"::OnChat1";
+	end;
+OnTimer9000:
+	donpcevent instance_npcname("베박사#4_00a")+"::OnChat2";
+	end;
+OnTimer12000:
+	npctalk "그럼 어째서! 왜 날 막은거야? 아니. 왜 자신이 파괴될때까지 물러서지 않은거야...";
+	end;
+OnTimer15000:
+	donpcevent instance_npcname("베박사#4_00a")+"::OnChat3";
+	end;
+OnTimer18000:
+	donpcevent instance_npcname("베박사#4_00a")+"::OnChat4";
+	end;
+OnTimer21000:
+	donpcevent instance_npcname("베박사#4_00a")+"::OnChat5";
+	end;
+OnTimer24000:
+	donpcevent instance_npcname("베박사#4_00a")+"::OnChat6";
+	end;
+OnTimer27000:
+	donpcevent instance_npcname("베박사#4_00a")+"::OnChat7";
+	end;
+OnTimer30000:
+	npctalk "그런... 바보같은...";
+	end;
+OnTimer33000:
+	npctalk "나는 무슨짓을 저지른 것인가.";
+	end;
+OnTimer36000:
+	donpcevent instance_npcname("베박사#4_00a")+"::OnChat8";
+	end;
+OnTimer39000:
+	npctalk "!!!!!!";
+	end;
+OnTimer42000:
+	donpcevent instance_npcname("베박사#4_00a")+"::OnChat9";
+	end;
+OnTimer45000:
+	npctalk "...당신을 믿을 수 없어.";
+	end;
+OnTimer48000:
+	donpcevent instance_npcname("베박사#4_00a")+"::OnChat10";
+	end;
+OnTimer51000:
+	donpcevent instance_npcname("베박사#4_00a")+"::OnChat11";
+	end;
+OnTimer54000:
+	npctalk "...치사하군.";
+	end;
+OnTimer57000:
+	donpcevent instance_npcname("베박사#4_00a")+"::OnChat12";
+	end;
+OnTimer60000:
+	npctalk "......";
+	end;
+OnTimer63000:
+	npctalk "가동을 중지하고 수면 모드로 들어갑니다. 외부의 명령이 있을 시까지 장비를 정지합니다.";
+	end;
+OnTimer66000:
+	donpcevent instance_npcname("베박사#4_00a")+"::OnChat13";
+	end;
+OnTimer68000:
+	donpcevent instance_npcname("베박사#4_00a")+"::OnDisable";
+	donpcevent instance_npcname("베박사#5_00a")+"::OnEnable";
+	stopnpctimer;
+	donpcevent instance_npcname("찰스턴2호#7_00p")+"::OnDisable";
+	donpcevent instance_npcname("찰스턴2호#8_00p")+"::OnEnable";
+	end;
+}
+1@mcd,116,213,5	script	베박사#4_00a	923,{
+	mes "[베박사]";
+	mes "1호기는 또 초기화에 들어간 것인가... 흐음...";
+	close;
+OnInstanceInit:
+	donpcevent instance_npcname("베박사#4_00a")+"::OnDisable";
+	end;
+OnDisable:
+	disablenpc instance_npcname("베박사#4_00a");
+	end;
+OnEnable:
+	enablenpc instance_npcname("베박사#4_00a");
+	end;
+OnChat1:
+	npctalk "1호기에게 다 듣지 않았나? 너를만든건 1호기라는 이야기지.";
+	end;
+OnChat2:
+	npctalk "너와 같은 os를 사용하고 있으니 '마음'이란게 실존한다면 1호기에게도 있었다는 이야기고.";
+	end;
+OnChat3:
+	npctalk "자아성찰의 특징은 인간과 마찬가지로 학습하고 변화하는 os.";
+	end;
+OnChat4:
+	npctalk "너희가 느낀 것이 '마음'인지 데이터의 축적인지는 사실 알 수 없지만...";
+	end;
+OnChat5:
+	npctalk "그 변화의 정도와 정보량에 따라서 로봇인 너희에게도 '성격'이란게 생긴 것 아닐까.";
+	end;
+OnChat6:
+	npctalk "자기밖에 모르고 날뛰는 딸과 그런 딸 마저도 이쁘게만 보이는 엄마와 같이.";
+	end;
+OnChat7:
+	npctalk "뭐 인간으로 친다면 말이지.";
+	end;
+OnChat8:
+	npctalk "1호기를 되돌리고 싶다면 도와줄수도 있는데 말이지?";
+	end;
+OnChat9:
+	npctalk "얌전히 os를 수면상태로 놓는다면 도와주지. 더 이상 날뛰는 건 사절이야.";
+	end;
+OnChat10:
+	npctalk "이대로 1호기의 데이터가 영구삭제 되어도 좋다면 별 수 없지.";
+	end;
+OnChat11:
+	npctalk "모처럼 얻은 '마음'을 가진 친구일텐데 말이지. 인간이라면 '가족'이라 부르겠군.";
+	end;
+OnChat12:
+	npctalk "니가 그렇게 자랑하던 '인간의 마음'이란게 고작 이런거지. 의심하고. 이기적이고.";
+	end;
+OnChat13:
+	npctalk "후후후...";
+	end;
+}
+1@mcd,121,215,4	script	찰스턴2호#8_00p	10054,{
+	if(charlestonins == 0) {
+		cutin "nale04.bmp",0;
+		mes "수면 모드가 가동중인듯 미동없이 멈춰있다.";
+		close2;
+		cutin "nale04.bmp",255;
+		end;
+	} else {
+		cutin "nale04.bmp",0;
+		mes "기능이 정지된 2호기가 멈춰 서있다. 눈가에서 뭔가가 반짝인 것 같은 기분이다.";
+		close2;
+		cutin "nale04.bmp",255;
+		end;
+	}
+OnInstanceInit:
+	donpcevent instance_npcname("찰스턴2호#8_00p")+"::OnDisable";
+	end;
+OnDisable:
+	disablenpc instance_npcname("찰스턴2호#8_00p");
+	end;
+OnEnable:
+	enablenpc instance_npcname("찰스턴2호#8_00p");
+}
+
+1@mcd,116,213,5	script	베박사#5_00a	923,{
+	if(charlestonins == 0) {
+		mes "[베박사]";
+		mes "휴...";
+		next;
+		mes "[베박사]";
+		mes "일단 2호기를 초기화 시키고 데이터를 삭제해야겠군. 이번엔 정말 위험했어.";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "이번엔?";
+		next;
+		mes "[베박사]";
+		mes "찰스턴 1호가 2호기를 만들어 낸 것이 벌써 몇십년 전이야. 내가 1호기를 만났을때, 그의 기술을 배우기 위해서였지.";
+		next;
+		mes "[베박사]";
+		mes "사실 말하자면 나는 관찰자. 1호와 2호의 기록을 남기는 관찰자일 뿐이야. 1호기는 물론 2호기를 고칠만한 기술은 지금의 나에겐 없어. 그저 기다릴 뿐이지.";
+		next;
+		mes "[베박사]";
+		mes "1호기가 정상적으로 초기화 된다면 os를 재구성하고 파괴된 부위를 스스로 수리할거야. 그리고 또 다른 2호기를 가동시키겠지.";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "또 다른 2호기?";
+		next;
+		mes "[베박사]";
+		mes "지금껏 그래왔듯이 2호기의 os는 아주 많은 변화를 가져오고 있어. 마치 정말로 살아 있는 것 처럼 말이야.";
+		next;
+		mes "[베박사]";
+		mes "스스로 생각하고... 그래, 정말 '감정'이란게 있는 것 같단 말이지. 매번 2호기가 재 가동될때마다 다른 인간을 보는 듯해. 그로인한 결과도 모두 달랐지.";
+		next;
+		mes "[베박사]";
+		mes "나도 자네도 아무 것도 할 수 없어. 1호기가 스스로 복구되길 기다리는 수 밖엔.";
+		next;
+		mes "베박사가 한숨을 쉬며 무언가를 기록하는 듯 하다.";
+		next;
+		mes "[베박사]";
+		mes "그건 그렇고. 완전한 기계기술로 영생의 몸을 얻는 건 이렇게나 변수가 많군..";
+		next;
+		mes "[베박사]";
+		mes "그래...단순히 기계덩이리는 안되겠어. 역시...살아있는 생명이 필요한걸까 후후후후후후.";
+		set charlestonins,1;
+		close;
+	} else {
+		mes "[베박사]";
+		mes "완전한 기계기술로 영생의 몸을 얻는 건 이렇게나 변수가 많군.";
+		next;
+		mes "[베박사]";
+		mes "그래...단순히 기계덩이리는 안되겠어. 역시...살아있는 생명이 필요한걸까.";
+		close;
+	}
+OnInstanceInit:
+	donpcevent instance_npcname("베박사#5_00a")+"::OnDisable";
+	end;
+OnDisable:
+	disablenpc instance_npcname("베박사#5_00a");
+	end;
+OnEnable:
+	enablenpc instance_npcname("베박사#5_00a");
+	end;
+}
+
+1@mcd,77,167,5	script	샬로쉬#1_00a	10041,{
+	cutin "shaloshi01.bmp",2;
+	mes "[샬로쉬]";
+	mes "......";
+	next;
+	switch(select("대화한다","도움이 필요해","돌아가고싶어"))
+	{
+		case 1:
+			mes "[샬로쉬]";
+			mes "악몽속에서 뉴오즈와 헤어진 뒤 여기저기를 떠돌아다니며 생각했어. 악마로 태어났지만 목적을 잃은 나.";
+			next;
+			mes "[샬로쉬]";
+			mes "난 아무것도 하지 않았어. 그냥 2호기와 아주 잠깐 이야기 했을뿐이야.";
+			close2;
+			cutin "shaloshi01.bmp",255;
+			end;
+		case 2:
+			mes "[샬로쉬]";
+			mes "페르도 같이 왔는데. 어디로 갔는지 모르겠어. 하지만 도움은 필요없어. 돌아올거야.";
+			close2;
+			cutin "shaloshi01.bmp",255;
+			end;
+		case 3:
+			if(charlestonins == 0) {
+				mes "[샬로쉬]";
+				mes "아직 이곳의 소리가 사라지지 않았어. 무슨일이 벌어지고 있는 걸까?";
+				close2;
+				cutin "shaloshi01.bmp",255;
+				end;
+			} else {
+				mes "[샬로쉬]";
+				mes "꽤 재미있는 소리와 이야기였어. 뉴오즈와 함께라면 나를 또 만날 수 있을지도 몰라.";
+				next;
+				mes "[샬로쉬]";
+				mes "나도 또 다른 소리와 이야기를 찾으러 가야할까나.";
+				getitem 6752,3; //Charleston Parts
+				erasequest 13184;
+				setquest 13186;
+				close2;
+				cutin "shaloshi01.bmp",255;
+				warp "verus04",107,124;
+				end;
+			}
+	}
+OnInstanceInit:
+	donpcevent instance_npcname("샬로쉬#1_00a")+"::OnEnable";
+	end;
+OnDisable:
+	disablenpc instance_npcname("샬로쉬#1_00a");
+	end;
+OnEnable:
+	enablenpc instance_npcname("샬로쉬#1_00a");
+	end;
+}
+
+//Extra Quest:
+//===============
+1@mcd,109,219,5	script	메인장치#1_00a	844,{
+	set .@huntsystem,checkquest(13188,PLAYTIME); //20 Horas
+	if (.@huntsystem == -1) {
+		if (checkquest(13187,HUNTING) == -1) {
+			mes "[메인장치]";
+			mes "2호기의 정검 중 일부 데이터가 폭주하여 급하게 접속을 해제하려 했으나 실패함.";
+			next;
+			mes "[메인장치]";
+			mes "알수 없는 외부의 접촉으로 메인장치의 제어는 방어. 방어과정에서도 정체불명의 간섭과 마찰로 나노 스텝들이 몬서터 화 됨.";
+			next;
+			mes "[메인장치]";
+			mes "공장 전체에 퍼져 있는 스텝을 처리하여 메인장치의 가속률을 높이고 공장의 탈환을 시도해야 함. 약 50개체의 스텝 처리 필요.";
+			next;
+			switch(select("의뢰를 수행한다.","그만둔다."))
+			{
+				case 1:
+					mes "[메인장치]";
+					mes "스텝 50개체의 처리를 요구.";
+					setquest 13187;
+					close;
+
+				case 2:
+					close;
+			}
+		}
+		if ((checkquest(13187,HUNTING) == 0) || (checkquest(13187,HUNTING) == 1)) {
+			mes "[메인장치]";
+			mes "공장전체 퍼져 있는 스텝을 처리하여 메인장치의 가속률을 높이고 공장의 탈한을 시도해야 함. 약 50개체의 스텝 처리 필요.";
+			close;
+		}
+		else if (checkquest(13187,HUNTING) == 2) {
+			mes "[메인장치]";
+			mes "처리한 스텝의 정보를 메인장치에 백업하는 작업을 실행하겠음. 노고에 감사를 표함";
+			getexp 1200000,360000;
+			getitem 6752,1; //Charleston Parts
+			erasequest 13187;
+			setquest 13188;
+			close;
+		}
+	}
+	else if ((.@huntsystem == 0) || (.@huntsystem == 1)) {
+		mes "[메인장치]";
+		mes "스텝의 지속적인 처리 필요. 스텝 백업 작업 진행 중.";
+		close;
+	}
+	else if (.@huntsystem == 2) {
+		mes "[메인장치]";
+		mes "2호기의 정검 중 일부 데이터가 폭주하여 급하게 접속을 해제하려 했으나 실패함.";
+		next;
+		mes "[메인장치]";
+		mes "알수 없는 외부의 접촉으로 메인장치의 제어는 방어. 방어과정에서도 정체불명의 간섭과 마찰로 나노 스텝들이 몬서터 화 됨.";
+		next;
+		mes "[메인장치]";
+		mes "공장 전체에 퍼져 있는 스텝을 처리하여 메인장치의 가속률을 높이고 공장의 탈환을 시도해야 함. 약 50개체의 스텝 처리 필요.";
+		next;
+		switch(select("의뢰를 수행한다.","그만둔다."))
+		{
+			case 1:
+				mes "[메인장치]";
+				mes "스텝 50개체의 처리를 요구.";
+				erasequest 13188;
+				setquest 13187;
+				close;
+			case 2:
+				close;
+		}
+	}
+OnInstanceInit:
+	donpcevent instance_npcname("메인장치#1_00a")+"::OnEnable";
+	end;
+OnDisable:
+	disablenpc instance_npcname("메인장치#1_00a");
+	end;
+OnEnable:
+	enablenpc instance_npcname("메인장치#1_00a");
+	end;
+}
+
+
+//Respawn Mobs
+//=============
+
+1@mcd,127,264,0	script	mob#1_00y	139,4,4,{
+	end;
+OnTouch:
+	set .@map$, instance_mapname("1@mcd");
+	set .@label$, instance_npcname("mob#1_00y")+"::OnMyMobDead";
+	areamonster .@map$,107,254,115,250,"보안로봇",3128,8,.@label$;
+	donpcevent instance_npcname("mob#12_00y")+"::OnEnable";
+	donpcevent instance_npcname("mob#2_00y")+"::OnEnable";
+	donpcevent instance_npcname("mob#1_00y")+"::OnDisable";
+	end;
+OnMyMobDead:
+	end;
+
+OnInstanceInit:
+	donpcevent instance_npcname("mob#1_00y")+"::OnEnable";
+	end;
+OnDisable:
+	hideonnpc instance_npcname("mob#1_00y");
+	disablenpc instance_npcname("mob#1_00y");
+	end;
+OnEnable:
+	enablenpc instance_npcname("mob#1_00y");
+	end;
+}
+
+1@mcd,67,234,0	script	mob#2_00y	139,4,4,{
+	end;
+OnTouch:
+	set .@map$, instance_mapname("1@mcd");
+	set .@label$, instance_npcname("mob#2_00y")+"::OnMyMobDead";
+	areamonster .@map$,52,231,60,227,"보안로봇",3128,8,.@label$;
+	donpcevent instance_npcname("#ccmemorialseal1")+"::OnEnable";
+	donpcevent instance_npcname("mob#2_00y")+"::OnDisable";
+	end;
+OnMyMobDead:
+	end;
+
+OnInstanceInit:
+	donpcevent instance_npcname("mob#2_00y")+"::OnEnable";
+	end;
+OnDisable:
+	hideonnpc instance_npcname("mob#2_00y");
+	disablenpc instance_npcname("mob#2_00y");
+	end;
+OnEnable:
+	enablenpc instance_npcname("mob#2_00y");
+	end;
+}
+1@mcd,33,192,0	script	mob#3_00y	139,4,4,{
+	end;
+OnTouch:
+	set .@map$, instance_mapname("1@mcd");
+	set .@label$, instance_npcname("mob#3_00y")+"::OnMyMobDead";
+	areamonster .@map$,21,164,30,156,"보안로봇",3128,8,.@label$;
+	areamonster .@map$,46,87,57,78,"보안로봇",3128,8,.@label$;
+	donpcevent instance_npcname("#ccmemorialseal2")+"::OnEnable";
+	donpcevent instance_npcname("mob#3_00y")+"::OnDisable";
+	end;
+OnMyMobDead:
+	end;
+
+OnInstanceInit:
+	donpcevent instance_npcname("mob#3_00y")+"::OnEnable";
+	end;
+OnDisable:
+	hideonnpc instance_npcname("mob#3_00y");
+	disablenpc instance_npcname("mob#3_00y");
+	end;
+OnEnable:
+	enablenpc instance_npcname("mob#3_00y");
+	end;
+}
+1@mcd,75,59,0	script	mob#4_00y	139,4,7,{
+	end;
+OnTouch:
+	set .@map$, instance_mapname("1@mcd");
+	set .@label$, instance_npcname("mob#4_00y")+"::OnMyMobDead";
+	areamonster .@map$,85,51,95,46,"보안로봇",3128,8,.@label$;
+	donpcevent instance_npcname("mob#4_00y")+"::OnDisable";
+	end;
+OnMyMobDead:
+	end;
+
+OnInstanceInit:
+	donpcevent instance_npcname("mob#4_00y")+"::OnEnable";
+	end;
+OnDisable:
+	hideonnpc instance_npcname("mob#4_00y");
+	disablenpc instance_npcname("mob#4_00y");
+	end;
+OnEnable:
+	enablenpc instance_npcname("mob#4_00y");
+	end;
+}
+1@mcd,109,33,0	script	mob#5_00y	139,4,4,{
+	end;
+OnTouch:
+	set .@map$, instance_mapname("1@mcd");
+	set .@label$, instance_npcname("mob#5_00y")+"::OnMyMobDead";
+	areamonster .@map$,120,29,129,26,"보안로봇",3128,8,.@label$;
+	areamonster .@map$,226,37,249,18,"보안로봇",3128,8,.@label$;
+	donpcevent instance_npcname("#ccmemorialseal3")+"::OnEnable";
+	donpcevent instance_npcname("mob#5_00y")+"::OnDisable";
+	end;
+OnMyMobDead:
+	end;
+
+OnInstanceInit:
+	donpcevent instance_npcname("mob#5_00y")+"::OnEnable";
+	end;
+OnDisable:
+	hideonnpc instance_npcname("mob#5_00y");
+	disablenpc instance_npcname("mob#5_00y");
+	end;
+OnEnable:
+	enablenpc instance_npcname("mob#5_00y");
+	end;
+}
+1@mcd,133,49,0	script	mob#6_00y	139,4,4,{
+	end;
+OnTouch:
+	set .@map$, instance_mapname("1@mcd");
+	set .@label$, instance_npcname("mob#6_00y")+"::OnMyMobDead";
+	areamonster .@map$,160,57,173,50,"보안로봇",3128,8,.@label$;
+	areamonster .@map$,188,62,199,73,"보안로봇",3128,2,.@label$;
+	donpcevent instance_npcname("mob#6_00y")+"::OnDisable";
+	end;
+OnMyMobDead:
+	end;
+
+OnInstanceInit:
+	donpcevent instance_npcname("mob#6_00y")+"::OnEnable";
+	end;
+OnDisable:
+	hideonnpc instance_npcname("mob#6_00y");
+	disablenpc instance_npcname("mob#6_00y");
+	end;
+OnEnable:
+	enablenpc instance_npcname("mob#6_00y");
+	end;
+}
+1@mcd,204,74,0	script	mob#7_00y	139,4,4,{
+	end;
+OnTouch:
+	set .@map$, instance_mapname("1@mcd");
+	set .@label$, instance_npcname("mob#7_00y")+"::OnMyMobDead";
+	areamonster .@map$,227,202,235,192,"보안로봇",3128,8,.@label$;
+	areamonster .@map$,272,191,291,172,"보안로봇",3128,6,.@label$;
+	donpcevent instance_npcname("#ccmemorialseal4")+"::OnEnable";
+	donpcevent instance_npcname("mob#7_00y")+"::OnDisable";
+	end;
+OnMyMobDead:
+	end;
+
+OnInstanceInit:
+	donpcevent instance_npcname("mob#7_00y")+"::OnEnable";
+	end;
+OnDisable:
+	hideonnpc instance_npcname("mob#7_00y");
+	disablenpc instance_npcname("mob#7_00y");
+	end;
+OnEnable:
+	enablenpc instance_npcname("mob#7_00y");
+	end;
+}
+
+1@mcd,204,224,0	script	mob#8_00y	139,4,5,{
+	end;
+OnTouch:
+	set .@map$, instance_mapname("1@mcd");
+	set .@label$, instance_npcname("mob#8_00y")+"::OnMyMobDead";
+	areamonster .@map$,130,233,137,235,"보안로봇",3128,6,.@label$;
+	areamonster .@map$,174,225,207,195,"보안로봇",3128,6,.@label$;
+	donpcevent instance_npcname("#1_00ygate5")+"::OnEnable";
+	donpcevent instance_npcname("mob#8_00y")+"::OnDisable";
+	end;
+OnMyMobDead:
+	end;
+
+OnInstanceInit:
+	donpcevent instance_npcname("mob#8_00y")+"::OnEnable";
+	end;
+OnDisable:
+	hideonnpc instance_npcname("mob#8_00y");
+	disablenpc instance_npcname("mob#8_00y");
+	end;
+OnEnable:
+	enablenpc instance_npcname("mob#8_00y");
+	end;
+}
+
+1@mcd,175,147,0	script	mob#9_00y	139,8,4,{
+	end;
+OnTouch:
+	set .@map$, instance_mapname("1@mcd");
+	set .@label$, instance_npcname("mob#9_00y")+"::OnMyMobDead";
+	areamonster .@map$,117,194,117,190,"보안로봇",3128,8,.@label$;
+	donpcevent instance_npcname("#1_00ygate6")+"::OnEnable";
+	donpcevent instance_npcname("#1_00ygate7")+"::OnEnable";
+	donpcevent instance_npcname("베박사#1_00y")+"::OnEnable";
+	donpcevent instance_npcname("찰스턴1호#1_00y")+"::OnEnable";
+	donpcevent instance_npcname("찰스턴2호#0_00y")+"::OnEnable";
+	donpcevent instance_npcname("mob#9_00y")+"::OnDisable";
+	end;
+OnMyMobDead:
+	end;
+
+OnInstanceInit:
+	donpcevent instance_npcname("mob#9_00y")+"::OnEnable";
+	end;
+OnDisable:
+	hideonnpc instance_npcname("mob#9_00y");
+	disablenpc instance_npcname("mob#9_00y");
+	end;
+OnEnable:
+	enablenpc instance_npcname("mob#9_00y");
+	end;
+}
+
+1@mcd,157,61,0	script	mob#10_00y	139,4,4,{
+	end;
+OnTouch:
+	set .@map$, instance_mapname("1@mcd");
+	set .@label$, instance_npcname("mob#10_00y")+"::OnMyMobDead";
+	areamonster .@map$,123,70,133,66,"보안로봇",3128,8,.@label$;
+	donpcevent instance_npcname("mob#10_00y")+"::OnDisable";
+	end;
+OnMyMobDead:
+	end;
+
+OnInstanceInit:
+	donpcevent instance_npcname("mob#10_00y")+"::OnEnable";
+	end;
+OnDisable:
+	hideonnpc instance_npcname("mob#10_00y");
+	disablenpc instance_npcname("mob#10_00y");
+	end;
+OnEnable:
+	enablenpc instance_npcname("mob#10_00y");
+	end;
+}
+
+1@mcd,0,0,0	script	mob#11_00y	-1,{
+	end;
+OnEnable:
+	enablenpc instance_npcname("mob#11_00y");
+	set .@map$, instance_mapname("1@mcd");
+	set .@label$, instance_npcname("mob#11_00y")+"::OnMyMobDead";
+	monster .@map$,0,0,"킥앤킥",3128,20,.@label$;
+	monster .@map$,0,0,"스텝",3125,60,.@label$;
+	end;
+OnMyMobDead:
+		set .@map$, instance_mapname("1@mcd");
+		set .@label$, instance_npcname("mob#11_00y")+"::OnMyMobDead";
+		switch(rand(2)) {
+		case 0:
+			monster .@map$,0,0,"킥앤킥",3128,1,.@label$;
+			break;
+		case 1:
+			monster .@map$,0,0,"스텝",3125,1,.@label$;
+			break;
+		}
+	end;
+
+OnInstanceInit:
+	donpcevent instance_npcname("mob#11_00y")+"::OnEnable";
+	end;
+OnDisable:
+	disablenpc instance_npcname("mob#11_00y");
+	end;
+}
+1@mcd,0,0,0	script	mob#12_00y	-1,{
+	end;
+OnEnable:
+	enablenpc instance_npcname("mob#12_00y");
+	set .@map$, instance_mapname("1@mcd");
+	set .@label$, instance_npcname("mob#12_00y")+"::OnMyMobDead";
+	monster .@map$,0,0,"킥앤킥",3128,20,.@label$;
+	monster .@map$,0,0,"스텝",3125,10,.@label$;
+	end;
+OnMyMobDead:
+		set .@map$, instance_mapname("1@mcd");
+		set .@label$, instance_npcname("mob#12_00y")+"::OnMyMobDead";
+		switch(rand(2)) {
+		case 0:
+			monster .@map$,0,0,"킥앤킥",3128,1,.@label$;
+			break;
+		case 1:
+			monster .@map$,0,0,"스텝",3125,1,.@label$;
+			break;
+		}
+	end;
+
+OnInstanceInit:
+	donpcevent instance_npcname("mob#12_00y")+"::OnDisable";
+	end;
+OnDisable:
+	disablenpc instance_npcname("mob#12_00y");
+	end;
+}
+// Seals
+//=============
+
+1@mcd,23,275,0	script	#ccmemorialseal1	-1,{
+	end;
+OnEnable:
+	enablenpc instance_npcname("#ccmemorialseal1");
+	monster instance_mapname("1@mcd"),23,275,"1통로 보안장치",3127,1,instance_npcname("#ccmemorialseal1")+"::OnMyMobDead";
+	end;
+OnMyMobDead:
+	set .@map$, instance_mapname("1@mcd");
+	if (mobcount(.@map$,instance_npcname("#ccmemorialseal1")+"::OnMyMobDead") < 1) {
+		mapannounce .@map$, "찰스턴 1호 : 1게이트의 보안장치가 해제되었습니다! 남서쪽 보안장치로 이동해 주세요.",bc_map,"0xFFFF00";
+		donpcevent instance_npcname("#1_00ygate1")+"::OnEnable";
+		donpcevent instance_npcname("#ccmemorialseal1")+"::OnDisable";
+	}
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("#ccmemorialseal1")+"::OnDisable";
+	end;
+OnDisable:
+	disablenpc instance_npcname("#ccmemorialseal1");
+	end;
+}
+1@mcd,23,275,0	script	#ccmemorialseal2	-1,{
+	end;
+OnEnable:
+	enablenpc instance_npcname("#ccmemorialseal2");
+	monster instance_mapname("1@mcd"),33,59,"2통로 보안장치",3127,1,instance_npcname("#ccmemorialseal2")+"::OnMyMobDead";
+	end;
+OnMyMobDead:
+	set .@map$, instance_mapname("1@mcd");
+	if (mobcount(.@map$,instance_npcname("#ccmemorialseal2")+"::OnMyMobDead") < 1) {
+		mapannounce .@map$, "찰스턴 1호 : 2게이트의 보안장치가 해제되었습니다! 남동쪽 보안장치로 이동해 주세요.",bc_map,"0xFFFF00";
+		donpcevent instance_npcname("#1_00ygate2")+"::OnEnable";
+		donpcevent instance_npcname("#ccmemorialseal2")+"::OnDisable";
+	}
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("#ccmemorialseal2")+"::OnDisable";
+	end;
+OnDisable:
+	disablenpc instance_npcname("#ccmemorialseal2");
+	end;
+}
+1@mcd,239,29,0	script	#ccmemorialseal3	-1,{
+	end;
+OnEnable:
+	enablenpc instance_npcname("#ccmemorialseal3");
+	monster instance_mapname("1@mcd"),239,29,"3통로 보안장치",3127,1,instance_npcname("#ccmemorialseal3")+"::OnMyMobDead";
+	end;
+OnMyMobDead:
+	set .@map$, instance_mapname("1@mcd");
+	if (mobcount(.@map$,instance_npcname("#ccmemorialseal3")+"::OnMyMobDead") < 1) {
+		mapannounce .@map$, "찰스턴 1호 : 3게이트의 보안장치가 해제되었습니다! 동쪽 보안장치로 이동해 주세요.",bc_map,"0xFFFF00";
+		donpcevent instance_npcname("#1_00ygate3")+"::OnEnable";
+		donpcevent instance_npcname("#ccmemorialseal3")+"::OnDisable";
+	}
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("#ccmemorialseal3")+"::OnDisable";
+	end;
+OnDisable:
+	disablenpc instance_npcname("#ccmemorialseal3");
+	end;
+}
+1@mcd,281,184,0	script	#ccmemorialseal4	-1,{
+	end;
+OnEnable:
+	enablenpc instance_npcname("#ccmemorialseal4");
+	monster instance_mapname("1@mcd"),281,184,"4통로 보안장치",3127,1,instance_npcname("#ccmemorialseal4")+"::OnMyMobDead";
+	end;
+OnMyMobDead:
+	set .@map$, instance_mapname("1@mcd");
+	if (mobcount(.@map$,instance_npcname("#ccmemorialseal4")+"::OnMyMobDead") < 1) {
+		mapannounce .@map$, "찰스턴 1호 : 4게이트의 보안장치가 해제되었습니다! 중앙 3라인의 연구실로 오시면 됩니다!.",bc_map,"0xFFFF00";
+		donpcevent instance_npcname("#1_00ygate4")+"::OnEnable";
+		donpcevent instance_npcname("#ccmemorialseal4")+"::OnDisable";
+	}
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("#ccmemorialseal4")+"::OnDisable";
+	end;
+OnDisable:
+	disablenpc instance_npcname("#ccmemorialseal4");
+	end;
+}
+
+//Warp portals
+//==================
+
+1@mcd,44,211,0,	script	#1_00ygate1	45,1,2,{
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname(strnpcinfo(0))+"::OnDisable";
+	end;
+OnDisable:
+	disablenpc instance_npcname(strnpcinfo(0));
+	end;
+OnEnable:
+	enablenpc instance_npcname(strnpcinfo(0));
+	end;
+OnTouch:
+	set .@map$, instance_mapname("1@mcd");
+	switch(atoi(replacestr(strnpcinfo(2),"1_00ygate","")))
+	{
+		case 1: warp .@map$,41,200; break;
+		case 2: warp .@map$,65,66; break;
+		case 3: warp .@map$,115,50; break;
+		case 4: warp .@map$,210,217; break;
+		case 5: warp .@map$,211,180; break;
+		case 6: warp .@map$,141,207; break;
+		case 7: warp .@map$,136,200; break;
+		case 8: warp .@map$,129,143; break;
+		case 9: warp .@map$,130,121; break;
+	}
+	end;
+}
+1@mcd,58,72,0	duplicate(#1_00ygate1)	#1_00ygate2	45,1,2
+1@mcd,104,50,0	duplicate(#1_00ygate1)	#1_00ygate3	45,1,2
+1@mcd,218,211,0	duplicate(#1_00ygate1)	#1_00ygate4	45,1,2
+1@mcd,211,195,0	duplicate(#1_00ygate1)	#1_00ygate5	45,1,2
+1@mcd,141,199,0	duplicate(#1_00ygate1)	#1_00ygate6	45,1,2
+1@mcd,142,203,0	duplicate(#1_00ygate1)	#1_00ygate7	45,1,2 //Salida panel de control
+1@mcd,130,127,0	duplicate(#1_00ygate1)	#1_00ygate8	45,1,2 //entrada mvp
+1@mcd,130,134,0	duplicate(#1_00ygate1)	#1_00ygate9	45,1,2 // salida mvp
+
+//System Security Mob
+//=======================
+
+1@mcd,0,0,0	script	#systemsecurity	-1,{
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("#systemsecurity")+"::OnDisable";
+	end;
+OnDisable:
+	disablenpc instance_npcname("#systemsecurity");
+	end;
+OnEnable:
+	enablenpc instance_npcname("#systemsecurity");
+	set .@map$, instance_mapname("1@mcd");
+	set .@label$, instance_npcname("#systemsecurity")+"::OnMyMobDead";
+	monster .@map$,84,226,"락스텝",3126,1,.@label$;
+	monster .@map$,126,84,"락스텝",3126,1,.@label$;
+	monster .@map$,111,68,"락스텝",3126,1,.@label$;
+	monster .@map$,210,181,"락스텝",3126,1,.@label$;
+	monster .@map$,183,192,"락스텝",3126,1,.@label$;
+	monster .@map$,130,124,"락스텝",3126,1,.@label$;
+	monster .@map$,54,108,"락스텝",3126,1,.@label$;
+	set .MyMobs,7;
+	end;
+OnMyMobDead:
+	set .@map$, instance_mapname("1@mcd");
+	set .MyMobs, .MyMobs-1;
+	if (.MyMobs == 0) {
+		donpcevent instance_npcname("#systemsecurity")+"::OnComplete";
+		donpcevent instance_npcname("찰스턴1호#1_00y")+"::OnCompleteSetp1";
+		mapannounce .@map$, "찰스턴 1호 : 아 아, 마이크 테스트",bc_map,"0xFFFF00";
+	}
+		end;
+OnComplete:
+	initnpctimer;
+	end;
+OnTimer2000:
+	set .@map$, instance_mapname("1@mcd");
+	mapannounce .@map$, "찰스턴 1호 : 방해가 되는 락스텝은 모두 처리된 것 같아요",bc_map,"0xFFFF00";
+	end;
+OnTimer5000:
+	set .@map$, instance_mapname("1@mcd");
+	mapannounce .@map$, "찰스턴 1호 : 박사님의 연구실로 돌아와 주세요!",bc_map,"0xFFFF00";
+	stopnpctimer;
+	disablenpc instance_npcname("#systemsecurity");
+	end;
+}
+1@mcd,0,0,0	script	#systemsecurity1	-1,{
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("#systemsecurity1")+"::OnDisable";
+	end;
+OnDisable:
+	disablenpc instance_npcname("#systemsecurity1");
+	end;
+OnEnable:
+	enablenpc instance_npcname("#systemsecurity1");
+	set .@map$, instance_mapname("1@mcd");
+	set .@label$, instance_npcname("#systemsecurity1")+"::OnMyMobDead";
+	monster .@map$,86,231,"락스텝",3127,1,.@label$;
+	monster .@map$,172,196,"락스텝",3127,1,.@label$;
+	monster .@map$,126,84,"락스텝",3127,1,.@label$;
+	monster .@map$,100,149,"락스텝",3127,1,.@label$;
+	monster .@map$,158,149,"락스텝",3127,1,.@label$;
+	end;
+OnMyMobDead:
+	end;
+		
+OnComplete:
+	initnpctimer;
+	end;
+OnTimer2000:
+	mapannounce .@map$, "찰스턴 1호 : 방해가 되는 락스텝은 모두 처리된 것 같아요",bc_map,"0xFFFF00";
+	end;
+OnTimer5000:
+	mapannounce .@map$, "찰스턴 1호 : 박사님의 연구실로 돌아와 주세요!",bc_map,"0xFFFF00";
+	stopnpctimer;
+	disablenpc instance_npcname("#systemsecurity1");
+	end;
+}
+
+//Panel Controls:
+//=================
+
+1@mcd,172,198,5	script	보조발전장치#2_00p	844,2,2,{
+	end;
+OnTouch:
+	if ((getvariableofnpc(getd("."+instance_id()),instance_npcname("panelcount#inst", instance_id()))) == 0) {
+		mes "발전기를 가동시키자 뭔가 굴러가는 듯한 소리가 난다.";
+		donpcevent instance_npcname("panelcount#inst")+"::OnCheck";
+		donpcevent instance_npcname("보조발전장치#2_00p")+"::OnDisable";
+		close;
+	}
+	else if ((getvariableofnpc(getd("."+instance_id()),instance_npcname("panelcount#inst", instance_id()))) == 1) {
+		mes "발전기를 가동시키자 뭔가 굴러가는 듯한 소리가 난다.";
+		donpcevent instance_npcname("panelcount#inst")+"::OnCheck1";
+		donpcevent instance_npcname("보조발전장치#2_00p")+"::OnDisable";
+		close;
+	}
+	if ((getvariableofnpc(getd("."+instance_id()),instance_npcname("panelcount#inst", instance_id()))) == 2) {
+		mes "발전기를 가동시키자 뭔가 굴러가는 듯한 소리가 난다.";
+		next;
+		mes "발전기가 가동되는지 공장이 한층 더 활발해졌다.";
+		donpcevent instance_npcname("찰스턴1호#1_00y")+"::OnCompleteSetp2";
+		donpcevent instance_npcname("panelcount#inst")+"::OnComplete";
+		donpcevent instance_npcname("보조발전장치#2_00p")+"::OnDisable";
+		close;
+	}
+OnInstanceInit:
+	donpcevent instance_npcname("보조발전장치#2_00p")+"::OnDisable";
+	end;
+OnDisable:
+	hideonnpc instance_npcname("보조발전장치#2_00p");
+	disablenpc instance_npcname("보조발전장치#2_00p");
+	end;
+OnEnable:
+	enablenpc instance_npcname("보조발전장치#2_00p");
+	end;
+}
+
+1@mcd,126,84,5	script	보조발전장치#3_00p	844,2,2,{
+	end;
+OnTouch:
+	if ((getvariableofnpc(getd("."+instance_id()),instance_npcname("panelcount#inst", instance_id()))) == 0) {
+		mes "발전기를 가동시키자 뭔가 굴러가는 듯한 소리가 난다.";
+		donpcevent instance_npcname("panelcount#inst")+"::OnCheck";
+		donpcevent instance_npcname("보조발전장치#3_00p")+"::OnDisable";
+		close;
+	}
+	else if ((getvariableofnpc(getd("."+instance_id()),instance_npcname("panelcount#inst", instance_id()))) == 1) {
+		mes "발전기를 가동시키자 뭔가 굴러가는 듯한 소리가 난다.";
+		donpcevent instance_npcname("panelcount#inst")+"::OnCheck1";
+		donpcevent instance_npcname("보조발전장치#3_00p")+"::OnDisable";
+		close;
+	}
+	else if ((getvariableofnpc(getd("."+instance_id()),instance_npcname("panelcount#inst", instance_id()))) == 2) {
+		mes "발전기를 가동시키자 뭔가 굴러가는 듯한 소리가 난다.";
+		next;
+		mes "발전기가 가동되는지 공장이 한층 더 활발해졌다.";
+		donpcevent instance_npcname("찰스턴1호#1_00y")+"::OnCompleteSetp2";
+		donpcevent instance_npcname("panelcount#inst")+"::OnComplete";
+		donpcevent instance_npcname("보조발전장치#3_00p")+"::OnDisable";
+		close;
+	}
+OnInstanceInit:
+	donpcevent instance_npcname("보조발전장치#3_00p")+"::OnDisable";
+	end;
+OnDisable:
+	hideonnpc instance_npcname("보조발전장치#3_00p");
+	disablenpc instance_npcname("보조발전장치#3_00p");
+	end;
+OnEnable:
+	enablenpc instance_npcname("보조발전장치#3_00p");
+	end;
+}
+1@mcd,86,231,5	script	보조발전장치#1_00p	844,2,2,{
+	end;
+OnTouch:
+	if ((getvariableofnpc(getd("."+instance_id()),instance_npcname("panelcount#inst", instance_id()))) == 0) {
+		mes "발전기를 가동시키자 뭔가 굴러가는 듯한 소리가 난다.";
+		donpcevent instance_npcname("panelcount#inst")+"::OnCheck";
+		donpcevent instance_npcname("보조발전장치#1_00p")+"::OnDisable";
+		close;
+	}
+	else if ((getvariableofnpc(getd("."+instance_id()),instance_npcname("panelcount#inst", instance_id()))) == 1) {
+		mes "발전기를 가동시키자 뭔가 굴러가는 듯한 소리가 난다.";
+		donpcevent instance_npcname("panelcount#inst")+"::OnCheck1";
+		donpcevent instance_npcname("보조발전장치#1_00p")+"::OnDisable";
+		close;
+	}
+	else if ((getvariableofnpc(getd("."+instance_id()),instance_npcname("panelcount#inst", instance_id()))) == 2) {
+		mes "발전기를 가동시키자 뭔가 굴러가는 듯한 소리가 난다.";
+		next;
+		mes "발전기가 가동되는지 공장이 한층 더 활발해졌다.";
+		donpcevent instance_npcname("찰스턴1호#1_00y")+"::OnCompleteSetp2";
+		donpcevent instance_npcname("panelcount#inst")+"::OnComplete";
+		donpcevent instance_npcname("보조발전장치#1_00p")+"::OnDisable";
+		close;
+	}
+OnInstanceInit:
+	donpcevent instance_npcname("보조발전장치#1_00p")+"::OnDisable";
+	end;
+OnDisable:
+	hideonnpc instance_npcname("보조발전장치#1_00p");
+	disablenpc instance_npcname("보조발전장치#1_00p");
+	end;
+OnEnable:
+	enablenpc instance_npcname("보조발전장치#1_00p");
+	end;
+}
+
+1@mcd,0,0,0	script	panelcount#inst	-1,{
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("panelcount#inst")+"::OnDisable";
+	end;
+OnDisable:
+	disablenpc instance_npcname("panelcount#inst");
+	end;
+OnEnable:
+	enablenpc instance_npcname("panelcount#inst");
+	setd "."+instance_id(),0;
+	end;
+OnCheck:
+	setd "."+instance_id(),1;
+	end;
+OnCheck1:
+	setd "."+instance_id(),2;
+	end;
+OnComplete:
+	initnpctimer;
+	end;
+OnTimer1000:
+	set .@map$, instance_mapname("1@mcd");
+	mapannounce .@map$, "찰스턴1호 : 휴. 이제 공장이 조금 정리가 된 것 같네요. 경계태세를 해제하고 찰스턴 2호기를 상가동 시켜야 겠어요.",bc_map,"0xFFFF00";
+	end;
+OnTimer4000:
+	set .@map$, instance_mapname("1@mcd");
+	mapannounce .@map$, "찰스턴1호 : 뭔가 이상한데... 발전기에 뭔가 이상이 생긴걸까요? 흐음.미안하지만 위치를 알려드릴테니 3개의 발전기를 모두 체크해 주세요.",bc_map,"0xFFFF00";
+	stopnpctimer;
+	donpcevent instance_npcname("panelcount#inst")+"::OnDisable";
+	end;
+	
+}
+
+//NPC????? (Need mechanic job)??????????!!!!!!!!
+//==============================================
+
+1@mcd,176,179,5	script	뉴오즈#15_00a	625,{
+	cutin "nines01.bmp",0;
+	mes "[뉴오즈]";
+	mes "샬로쉬에게 온 편지를 읽었더니 어느새 이런 곳에 떨어져버렸네. 뭐 이왕 이렇게 된 거 노래나 한 곡 만들고 돌아갈까?";
+	close2;
+	cutin "nines01.bmp",255;
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("뉴오즈#15_00a")+"::OnEnable";
+	end;
+OnDisable:
+	disablenpc instance_npcname("뉴오즈#15_00a");
+	end;
+OnEnable:
+	enablenpc instance_npcname("뉴오즈#15_00a");
+	end;
+}
+	
+1@mcd,114,82,4	script	아이구#01_00y	646,{
+	cutin "igu04.bmp",2;
+	mes "[아이구]";
+	mes "모험을 즐기고 있나요? 여긴 기계들이 가득하네요. 하지만 옛날엔 아마도 서재였던 것 같아요. 저 책들이 보이시나요?";
+	close2;
+	cutin "igu04.bmp",255;
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("아이구#01_00y")+"::OnEnable";
+	end;
+OnDisable:
+	disablenpc instance_npcname("아이구#01_00y");
+	end;
+OnEnable:
+	enablenpc instance_npcname("아이구#01_00y");
+	end;
+}
+
+//NPC EQUIP (SEMI-CUSTOM)
+//==========================
+
+verus04,64,112,4	script	양산형찰스턴#verus1	10053,{
+	cutin "dalle03.bmp",2;
+	mes "[양산형찰스턴]";
+	mes "뭐야... 손님인가... 언어사용을 영업모드로 전환합니다.";
+	next;
+	cutin "dalle01.bmp",2;
+	mes "[양산형찰스턴]";
+	mes "찰스턴공장 베스트셀러! ^FF0000강화파츠 장갑^000000과 ^FF0000근력보완장치^000000를 판매하고 있습니다!";
+	next;
+	mes "[양산형찰스턴]";
+	mes "단돈 ^FF0000 3999999 ^000000제니에 판매합니다! 이보다 더 완벽할 수 없는 초특급 울트라 하이퍼 액션 장비!";
+	next;
+	mes "[양산형찰스턴]";
+	mes "^FF0000파일벙커^000000의 ^FF0000업그레이드^000000도 하고 있습니다!";
+	next;
+	switch(select("대화한다","강화파츠 교환","보완장치 교환","파일벙커 업그레이드"))
+	{
+		case 1:
+			cutin "dalle03.bmp",2;
+			mes "[양산형찰스턴]";
+			mes "저는 넘버링도 받지 못한 양산형찰스턴입니다. 공장에서 만들어질때 100기가 만들어졌는지 1000기가 만들어졌는지도 모르죠.";
+			next;
+			mes "[양산형찰스턴]";
+			mes "그리고 저기 서 있는 오리지널. 그가 진짜 찰스턴입니다. 문제는...";
+			next;
+			mes "[양산형찰스턴]";
+			mes "찰스턴공장 탈출 당시 1호기와 2호기 모두 많이 손상된 상태였습니다. 그날의 전투는 정말 대단했습니다!";
+			next;
+			mes "[양산형찰스턴]";
+			mes "상상이 되시나요? 베박사의 수많은 피조물들을 찰스턴 1호 찰스턴 2호가 부수는 그 모습이!";
+			next;
+			mes "[양산형찰스턴]";
+			mes "베박사에 의해 개조당한 양산형 찰스턴들도 모조리 부수고 말았습니다...";
+			next;
+			mes "[양산형찰스턴]";
+			mes "아 물론 저처럼 개조당하지 않고 1호님의 보호를 받은 양산형도 있었습니다. 옆에서 제품들을 업그레이드 하는 양산형들도 모두 같은 녀석들입니다.";
+			next;
+			mes "[양산형찰스턴]";
+			mes "개조된 3호기 덕분에 우리는 탈출 할 수 있었습니다. 그리고 도착한 곳이 여기랍니다.";
+			next;
+			mes "[양산형찰스턴]";
+			mes "오해는 하지 마세요. 이곳은 우리가 도착하기 전부터 이렇게 부숴져 있었으니까요. 우리와는 전혀 상관없습니다. 아마도...";
+			next;
+			mes "[양산형찰스턴]";
+			mes "이야기가 잠시 다른데로 샛습니다. 아무튼 문제는 이것입니다.";
+			next;
+			mes "[양산형찰스턴]";
+			mes "1호기와 2호기는 제 기능을 상실할 정도로 거의 부서졌고. 서로의 파츠를 복구하기 위해 애썼습니다. 하지만 한계가 있었습니다.";
+			next;
+			mes "[양산형찰스턴]";
+			mes "너무 많이 파손당했던 것 입니다. 결국 둘의 파츠를 한데 모아 간신히 하나의 기체에서 os를 다시 시작할 수 있었답니다.";
+			next;
+			mes "[양산형찰스턴]";
+			mes "그리고는 지금의 모습입니다. 파괴된 공장이 자신의 탓이라 여기고 돌아가고 싶어합니다. 데이터가 엉망이 된 것 같아요. 인간은 기억상실이라고 부르던가요?";
+			next;
+			mes "[양산형찰스턴]";
+			mes "데이터만 본다면 2호기의 메모리...그러니까 인간으로 치면 2호기의 기억이 대부분입니다. 하지만 os의 접근방식..그러니까 '감성'쪽은 1호기에 가깝습니다";
+			next;
+			mes "[양산형찰스턴]";
+			mes "그래서 지금의 찰스턴은 1호기인지 2호기인지도 알 수 없습니다. 무엇을 그리워하는지 무엇을 기억하는지 모르겠습니다.";
+			next;
+			mes "[양산형찰스턴]";
+			mes "그리고 스스로를 자책합니다. 데이터를 잃은 실패한 로봇으로. 동료들을 지키지 못한 실패한 로봇으로. 저희가 항상 위로해 보지만...";
+			next;
+			mes "[양산형찰스턴]";
+			mes "그녀는 말합니다. 마음이 없으면 알 수 없다고... 기억이 없으면 모르는 거라고. 그치만 그녀는 알고 있을까요?";
+			next;
+			mes "[양산형찰스턴]";
+			mes "인간의 기억이란 시간이나 감정에따라 얼마든지 미화될 수도, 잊혀질 수도 있다는 것을...";
+			next;
+			mes "[양산형찰스턴]";
+			mes "인간은 언제나 실수와 실패를 경험으로 한 발 더 나아간다는 것을 말입니다. 앞의 문장은 공장에 있는 ^FF0000'책'^000000의 데이터를 좀 인용한겁니다.";
+			next;
+			mes "[양산형찰스턴]";
+			mes "찰스턴 ^FF0000공장 남쪽^000000에 작은 서재가 있었거든요. 금방 로봇 개발실로 변하긴 했지만.";
+			next;
+			mes "[양산형찰스턴]";
+			mes "그녀는... '인간'에 한 발 더 다가갔는지도 모르겠습니다. 지금의 슬픔을 극복한다면 말입니다...   하아...";
+			next;
+			mes "[양산형찰스턴]";
+			mes "os가 답답해서 하소연 좀 해 봤습니다. 조각모음 할때가 지났나봅니다.";
+			close2;
+			cutin "dalle03.bmp",255;
+			end;
+		case 2:
+			mes "[양산형찰스턴]";
+			mes "강화파츠 - 장갑!";
+			mes "계열 : 갑옷. 그리고 파괴불가!";
+			mes "소형, 중형 몬스터에게 받는 데미지 10% 감소!";
+			mes "7 제련 시 대형 몬스터에게 받는 데미지 10% 감소!";
+			mes "9 제련 시 소형, 중형 몬스터에게 받는 데미지 5% 추가 감소!";
+			next;
+			mes "[양산형찰스턴]";
+			mes "무게 : 300 ";
+			mes "요구레벨 : 100";
+			mes "^FF0000미케닉 전용 아이템입니다!^000000";
+			mes "^FF0000가격 : 3999999 제니^000000";
+			next;
+			mes "[양산형찰스턴]";
+			mes "정말 ^FF0000강화파츠 - 장갑^000000을 구입하시겠습니까?";
+			next;
+			switch(select("다시 생각해 본다","구입한다"))
+			{
+				case 1:
+					mes "[양산형찰스턴]";
+					mes "좋은 제품이기는 하지만 신중하게 결정해 주세요.";
+					close2;
+					cutin "dalle01.bmp",255;
+					end;
+				case 2:
+					if (Zeny >= 3999999) {
+						set Zeny, Zeny - 3999999;
+						mes "[양산형찰스턴]";
+						mes "Thanks for lot!";
+						getitem 15111,1; //Reinforced Parts - Gloves
+						close;
+					} else {
+						mes "[양산형찰스턴]";
+						mes "좋은 제품이니만큼 충분한 값을 받아야 합니다. 소지금이 모자라는 건 아닌지 다시 확인 해 주세요.";
+						close2;
+						cutin "dalle01.bmp",255;
+						end;
+					}
+			}
+		case 3:
+			mes "[양산형찰스턴]";
+			mes "근력 보완장치!";
+			mes "ATK+ 5%!";
+			mes "제련도 4당 ATK 1% 추가 증가!";
+			mes "체력보완장치, 민첩성 보완장치, 손재주 보완장치와 함께 사용하면 더 좋은 능력을 낼 것입니다!";
+			next;
+			mes "[양산형찰스턴]";
+			mes "무게 : 200 ";
+			mes "요구레벨 : 100";
+			mes "^FF0000미케닉 전용 아이템입니다!^000000";
+			mes "^FF0000가격 : 3999999 제니^000000";
+			next;
+			mes "[양산형찰스턴]";
+			mes "정말 ^FF0000근력 보완장치^000000을 구입하시겠습니까?";
+			next;
+			switch(select("다시 생각해 본다","구입한다"))
+			{
+				case 1:
+					mes "[양산형찰스턴]";
+					mes "좋은 제품이기는 하지만 신중하게 결정해 주세요.";
+					close2;
+					cutin "dalle01.bmp",255;
+					end;
+				case 2:
+					if (Zeny >= 3999999) {
+						set Zeny, Zeny - 3999999;
+						mes "[양산형찰스턴]";
+						mes "Thanks for lot!";
+						getitem 15110,1; //Strength Supplement Equipment
+						close;
+					} else {
+						mes "[양산형찰스턴]";
+						mes "좋은 제품이니만큼 충분한 값을 받아야 합니다. 소지금이 모자라는 건 아닌지 다시 확인 해 주세요.";
+						close2;
+						cutin "dalle01.bmp",255;
+						end;
+					}
+			}
+		case 4:
+			mes "[양산형찰스턴]";
+			mes "찰스턴 공장의 마지막 작품! 어딜가도 이런 좋은 장비는 구할 수 없을 겁니다.";
+			next;
+			mes "[양산형찰스턴]";
+			mes "파일벙커의 업그레이드에는 ";
+			mes "기본이 되는 ^FF0000파일벙커 1개^000000";
+			mes "^FF0000찌그러진 철판 300개^000000";
+			mes "^FF0000고장난 엔진 15개^000000가 필요합니다.";
+			next;
+			switch(select("파일벙커S","파일벙커P","파일벙커T"))
+			{
+				case 1:
+					mes "[양산형찰스턴]";
+					mes "파일벙커S!!!";
+					mes "계열 : 둔기";
+					mes "공격력 : 400";
+					mes "제련도 2당 공격속도 증가";
+					next;
+					mes "[양산형찰스턴]";
+					mes "무게 : 300";
+					mes "무기레벨 : 4";
+					mes "요구레벨 : 130";
+					mes "미케닉 전용! 카드소켓도 하나 있습니다!";
+					next;
+					mes "[양산형찰스턴]";
+					mes "정말 ^FF0000파일벙커S^000000를 업그레이드 하시겠습니까?";
+					next;
+					switch(select("다시 생각해 본다","구입한다"))
+					{
+						case 1:
+							mes "[양산형찰스턴]";
+							mes "좋은 제품이기는 하지만 신중하게 결정해 주세요.";
+							close2;
+							cutin "dalle01.bmp",255;
+							end;
+						case 2:
+							if (countitem(1549) == 1) && (countitem(6751) > 299) && (countitem(6750) > 14) {
+								specialeffect2 EF_REPAIRWEAPON;
+								progressbar "ffff00",5;
+								set .@pileS_ran,rand(1,10);
+								if (.@piles_ran < 5) {
+									specialeffect2 EF_REFINEOK;
+									delitem 1549,1; // Pile Bunker
+									delitem 6751,300; //Crushed Can Iron Plate
+									delitem 6750,15; //Failed Engine
+									getitem 16030,1; //Pile Bunker S
+									close2;
+									cutin "dalle01.bmp",255;
+									end;
+								} else {
+									specialeffect2 EF_REFINEFAIL;
+									delitem 1549,1; // Pile Bunker
+									delitem 6751,300; //Crushed Can Iron Plate
+									delitem 6750,15; //Failed Engine
+									close2;
+									cutin "dalle01.bmp",255;
+									end;
+								}
+							} else {
+								mes "[양산형찰스턴]";
+								mes "업그레이드에 필요한 물품이 부족한 것 같군요!";
+								close2;
+								cutin "dalle01.bmp",255;
+								end;
+							}
+					}
+				case 2:
+					mes "[양산형찰스턴]";
+					mes "파일벙커P!!!";
+					mes "계열 : 둔기";
+					mes "공격력 : 450";
+					mes "제련도 당 ATK 5 증가";
+					next;
+					mes "[양산형찰스턴]";
+					mes "무게 : 400";
+					mes "무기레벨 : 4";
+					mes "요구레벨 : 130";
+					mes "미케닉 전용!";
+					next;
+					mes "[양산형찰스턴]";
+					mes "정말 ^FF0000파일벙커P^000000를 업그레이드 하시겠습니까?";
+					next;
+					switch(select("다시 생각해 본다","구입한다"))
+					{
+						case 1:
+							mes "[양산형찰스턴]";
+							mes "좋은 제품이기는 하지만 신중하게 결정해 주세요.";
+							close2;
+							cutin "dalle01.bmp",255;
+							end;
+						case 2:
+							if (countitem(1549) == 1) && (countitem(6751) > 299) && (countitem(6750) > 14) {
+								specialeffect2 EF_REPAIRWEAPON;
+								progressbar "ffff00",5;
+								set .@pileS_ran,rand(1,10);
+								if (.@piles_ran < 5) {
+									specialeffect2 EF_REFINEOK;
+									delitem 1549,1; // Pile Bunker
+									delitem 6751,300; //Crushed Can Iron Plate
+									delitem 6750,15; //Failed Engine
+									getitem 16031,1; //Pile Bunker P
+									close2;
+									cutin "dalle01.bmp",255;
+									end;
+								} else {
+									specialeffect2 EF_REFINEFAIL;
+									delitem 1549,1; // Pile Bunker
+									delitem 6751,300; //Crushed Can Iron Plate
+									delitem 6750,15; //Failed Engine
+									close2;
+									cutin "dalle01.bmp",255;
+									end;
+								}
+							} else {
+								mes "[양산형찰스턴]";
+								mes "업그레이드에 필요한 물품이 부족한 것 같군요!";
+								close2;
+								cutin "dalle01.bmp",255;
+								end;
+							}
+					}
+				case 3:
+					mes "[양산형찰스턴]";
+					mes "파일벙커T!!!";
+					mes "계열 : 둔기";
+					mes "공격력 : 400";
+					mes "제련도 당 SP 소모량 1% 감소";
+					next;
+					mes "[양산형찰스턴]";
+					mes "무게 : 350";
+					mes "무기레벨 : 4";
+					mes "요구레벨 : 130";
+					mes "미케닉 전용! 카드소켓도 하나 있습니다!";
+					next;
+					mes "[양산형찰스턴]";
+					mes "정말 ^FF0000파일벙커T^000000를 업그레이드 하시겠습니까?";
+					next;
+					switch(select("다시 생각해 본다","구입한다"))
+					{
+						case 1:
+							mes "[양산형찰스턴]";
+							mes "좋은 제품이기는 하지만 신중하게 결정해 주세요.";
+							close2;
+							cutin "dalle01.bmp",255;
+							end;
+						case 2:
+							if (countitem(1549) == 1) && (countitem(6751) > 299) && (countitem(6750) > 14) {
+								specialeffect2 EF_REPAIRWEAPON;
+								progressbar "ffff00",5;
+								set .@pileS_ran,rand(1,10);
+								if (.@piles_ran < 5) {
+									specialeffect2 EF_REFINEOK;
+									delitem 1549,1; // Pile Bunker
+									delitem 6751,300; //Crushed Can Iron Plate
+									delitem 6750,15; //Failed Engine
+									getitem 16032,1; //Pile Bunker T
+									close2;
+									cutin "dalle01.bmp",255;
+									end;
+								} else {
+									specialeffect2 EF_REFINEFAIL;
+									delitem 1549,1; // Pile Bunker
+									delitem 6751,300; //Crushed Can Iron Plate
+									delitem 6750,15; //Failed Engine
+									close2;
+									cutin "dalle01.bmp",255;
+									end;
+								}
+							} else {
+								mes "[양산형찰스턴]";
+								mes "업그레이드에 필요한 물품이 부족한 것 같군요!";
+								close2;
+								cutin "dalle01.bmp",255;
+								end;
+							}
+					}
+			}
+	}
+}
+
+// same method enchant in mora village (1 option explain, 2 option add enchants, 3 option remove enchants, if you equip is +9 add special enchants).
+//====================================== UNKNOWN %, ENCHANTS AVAILABLE, ETC (NO SCRIPTING FOR NOW).
+verus04,71,106,5	script	양산형찰스턴#verus3	10053,{
+	cutin "dalle01.bmp",2;
+	mes "[양산형찰스턴]";
+	mes "찰스턴 공장의 생산품에 업그레이드를 실시하고 있습니다. 관련 상품을 가지고 있다면 말씀해주시면 좋겠습니다.";
+	next;
+	switch(select("자세한 이야기를 듣고싶군요","제품에 능력치부여","강화능력치 초기화"))
+	{
+		case 1:
+			mes "[양산형찰스턴]";
+			mes "1회의 강화, 또는 초기화에 10만 제니와 찰스턴부품 1개를 받고 있습니다.";
+			next;
+			mes "[양산형찰스턴]";
+			mes "참고로, ^ff0000+9제련^000000 이상의 장비를 들고 오시면 숨겨진 더 큰 힘을 선택할 수 있을겁니다.";
+			next;
+			mes "[양산형찰스턴]";
+			mes "그리고 한가지 더 말씀드리자면, 저는 힘을 부여할때 제련도와 카드를 손상시키지 않는 방법을 알고있으니 그 부분은 안심하셔도 됩니다.";
+			close2;
+			cutin "dalle01.bmp",255;
+			end;
+		case 2:
+			mes "[양산형찰스턴]";
+			mes "업그레이드를 하기 전에 장비는 미리 몸에 장비하시고 선택해주세요.";
+			next;
+			switch(select("장비를 입고올께요","신발","걸칠것","옷","액세서리"))
+			{
+				case 1:
+					mes "[양산형찰스턴]";
+					mes "장비를 장착하고나면 다시 방문해주십시오.";
+					close2;
+					cutin "dalle01.bmp",255;
+					end;
+				case 2:
+					close2;
+					cutin "dalle01.bmp",255;
+					end;
+				case 3:
+					close2;
+					cutin "dalle01.bmp",255;
+					end;
+				case 4:
+					close2;
+					cutin "dalle01.bmp",255;
+					end;
+				case 5:
+					close2;
+					cutin "dalle01.bmp",255;
+					end;
+			}
+		case 3:
+			mes "[양산형찰스턴]";
+			mes "업그레이드를 하기 전에 장비는 미리 몸에 장비하시고 선택해주세요.";
+			next;
+			switch(select("장비를 입고올께요","신발","걸칠것","옷","액세서리"))
+			{
+				case 1:
+					mes "[양산형찰스턴]";
+					mes "장비를 장착하고나면 다시 방문해주십시오.";
+					close2;
+					cutin "dalle01.bmp",255;
+					end;
+				case 2:
+					close2;
+					cutin "dalle01.bmp",255;
+					end;
+				case 3:
+					close2;
+					cutin "dalle01.bmp",255;
+					end;
+				case 4:
+					close2;
+					cutin "dalle01.bmp",255;
+					end;
+				case 5:
+					close2;
+					cutin "dalle01.bmp",255;
+					end;
+			}
+	}
+}
+		
+			
+					
+					
+					
+						
+
+							
+					

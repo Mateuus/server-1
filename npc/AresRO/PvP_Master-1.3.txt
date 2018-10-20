@@ -1,0 +1,399 @@
+//|==================================================================================|
+//|      ___           ___           ___           ___           ___       	     |
+//|     /\  \         /\  \         /\  \         /|  |         /\  \      	     |
+//|    |::\  \       /::\  \       /::\  \       |:|  |        /::\  \     	     |
+//|    |:|:\  \     /:/\:\  \     /:/\:\  \      |:|  |       /:/\:\  \    	     |
+//|  __|:|\:\  \   /:/  \:\  \   /:/  \:\  \   __|:|  |      /:/ /::\  \   	     |
+//| /::::|_\:\__\ /:/__/ \:\__\ /:/__/ \:\__\ /\ |:|__|____ /:/_/:/\:\__\  	     |
+//| \:\--\  \/__/ \:\  \ /:/  / \:\  \ /:/  / \:\/:::::/__/ \:\/:/  \/__/  	     |
+//|  \:\  \        \:\  /:/  /   \:\  /:/  /   \::/__/       \::/__/       	     |
+//|   \:\  \        \:\/:/  /     \:\/:/  /     \:\  \        \:\  \       	     |
+//|    \:\__\        \::/  /       \::/  /       \:\__\        \:\__\      	     |
+//|     \/__/         \/__/         \/__/         \/__/         \/__/      	     |
+//| ================================================================================ |
+//| Desenvolved by Mooka | eAthena | Please, Don't Remove Credits.	             |
+//| -------------------------------------------------------------------------------- |
+//| Traducted By Hifflus .                                                            |
+//| ================================================================================ |
+//| v1.0   = Script Desenvolved.    			~> Mooka 		     |
+//| v1.1   = Ranking Adicioned.     			~> Mooka 		     |
+//| v1.2   = New Arena System. 		        	~> Mooka		     |
+//| v1.2a  = Annouce System Modified .  		~> Mooka 	       	     |
+//| v1.2b  = Kill monster sound Added.  		~> Mooka 	       	     |
+//| v1.3   = PVP System by guilds Added.         	~> Mooka 	       	     |
+//| v1.3a  = New Ranking SQL Ranking system.	  	~> Mooka	       	     |
+//| v1.3b  = Dead's Ranking Added.       		~> Mooka		     |
+//| ================================================================================ |
+//|  Obs.! The MapFlag is in the final of script !				     |
+//| ================================================================================ |
+prontera.gat,159,182,5	script	PvP Master	409,{
+//| ================================================================================ |
+if ( $pm_time > $time_conf ) set $pm_time,0;					  // |	
+if ( $time_info < 0 ) set $time_info,$time_conf;				  // |
+if ( $arena > $amount_arena )  set $arena,1;					  // |
+//| ================================================================================ |
+//| Configurations:                                                        	     |
+//|                        						  	     |
+//| Obs.! Don't Add the ".gat" in final.			         	     |	  
+set $arena$[0],"2@cata";// Map 1 PvP. 					     |
+set $arena$[1],"pvp_n_2-5";// Map 2 PvP.					     |
+//|                        						  	     |
+set $garena$[0],"guild_vs1";// Map 1 GvG. 					     |
+set $garena$[1],"guild_vs2";// Map 1 GvG.					     |
+//| 										     |
+//|~> NPC name.					              			     |
+set .npcname$,"[ ^FF0000 PvP Warper ^000000 ]";				    	  // |
+//| 										     |
+//|~> Use Annouce System ? 0 = No, 1 = Yes.				             |
+set $announceinfo,1;								  // |
+//| 										     |
+//|~> How many Arena?.	OBS. ! Don't Remove the "-1".				     |
+set $amount_arena,2-1;  							  // |
+set $amount_garena,2-1;  							  // |
+//| 										     |
+//|~> Configuration of the time to change Arena.				     |
+set $time_conf,30;								  // |
+//| 										     |
+//|~> Activate the Monster Kill sound ? 0 = No; 1 = Yes. ( Remember ! put the sound in the folder data/wav )
+set $sound,1;									  // | 
+//| 										     |
+//| Ranking - Limit will be showed(ranking positions).	( Max is 127		     |
+//|										     |
+set $limit,10;									  // |
+//| 										     |
+//| ================================================================================ |
+
+Begin:
+	mes .npcname$;
+	mes "^008B8BPvP: ^FFA500"+getmapusers($arena$[$arena])+"^008B8B Players .";
+	mes "^008B8BGvG: ^FFA500"+getmapusers($garena$[$garena])+"^008B8B Players .";
+	mes "^008B8BTime: ^FFA500"+$time_info+"^008B8B Minutos Restantes .";
+	mes "^008B8BPvP Leader: ^FFA500"+$PvP_Lider$+"^008B8B .";
+	mes "^008B8BGvG Leader: ^FFA500"+$Guild_Lider$+"^000000 .";
+
+
+				switch(select("- PvP ^0000FF["+getmapusers($arena$[$arena])+"]^000000","- GvG ^0000FF["+getmapusers($arena$[$arena])+"]^000000","- Ranking","- Remote commands","- Sair")) {
+case 1: warp $arena$[$arena],0,0; end;
+case 2: warp $garena$[$garena],0,0; end;
+case 3:
+				switch(select("- PvP","- PvP ( Mortes )","- GvG","- GvG ( Mortes )","- My Ranking Position")) {
+case 1: 
+		deletearray @name$[0],getarraysize(@name$);deletearray @points[0],getarraysize(@points);set @ind,0;
+					query_sql "SELECT `name` FROM `pvpm_player` ORDER BY `kills` DESC LIMIT 127",@name$;
+					query_sql "SELECT `kills` FROM `pvpm_player` ORDER BY `kills` DESC LIMIT 127",@points;
+	dispbottom "======= Ranking PvP =======";
+				for(set @ind,0;@ind != $limit;set @ind,@ind+1) { dispbottom ""+(@ind+1)+"º | "+@name$[@ind]+" | Points: "+@points[@ind]+""; }
+						close2; goto Begin;
+case 2:
+		deletearray @name$[0],getarraysize(@name$);deletearray @points[0],getarraysize(@points);
+					query_sql "SELECT `name` FROM `pvpm_player` ORDER BY `deaths` ASC LIMIT 127",@name$;
+					query_sql "SELECT `deaths` FROM `pvpm_player` ORDER BY `deaths` ASC LIMIT 127",@points;
+	dispbottom "======= Ranking PvP - Dies =======";
+				for(set @ind,0;@ind != $limit;set @ind,@ind+1) { dispbottom ""+(@ind+1)+"º | "+@name$[@ind]+" | Points: "+@points[@ind]+""; }
+						close2; goto Begin;
+case 3:
+		deletearray @name$[0],getarraysize(@name$);deletearray @points[0],getarraysize(@points);
+					query_sql "SELECT `name` FROM `pvpm_guild` ORDER BY `kills` DESC LIMIT 127",@name$;
+					query_sql "SELECT `kills` FROM `pvpm_guild` ORDER BY `kills` DESC LIMIT 127",@points;
+	dispbottom "======= Ranking GvG =======";
+				for(set @ind,0;@ind != $limit;set @ind,@ind+1) { dispbottom ""+(@ind+1)+"º | "+@name$[@ind]+" | Points: "+@points[@ind]+""; }
+						close2; goto Begin;
+case 4:
+			deletearray @name$[0],getarraysize(@name$);deletearray @points[0],getarraysize(@points);
+					query_sql "SELECT `name` FROM `pvpm_guild` ORDER BY `deaths` ASC LIMIT 127",@name$;
+					query_sql "SELECT `deaths` FROM `pvpm_guild` ORDER BY `deaths` ASC LIMIT 127",@points;
+	dispbottom "======= Ranking PvP - Dies =======";
+				for(set @ind,0;@ind != $limit;set @ind,@ind+1) { dispbottom ""+(@ind+1)+"º | "+@name$[@ind]+" | Points: "+@points[@ind]+""; }
+						close2; goto Begin;
+case 5:
+				switch(select("- My Ranking Position of PVP","- My Ranking Position of PvP ( Dies )","- My Ranking Position of GvG","- My Ranking Position of GvG ( Dies )","- Begin")) {
+
+case 1:
+					query_sql "SELECT `name` FROM `pvpm_player` ORDER BY `kills` DESC LIMIT 127",@name$;
+				for(set @ind,0;@ind <= 125;set @ind,@ind+1) {
+			if (  @name$ == strcharinfo(0) ) { dispbottom "Alert: Your Actual Position is "+(@ind+1)+"º in ranking !"; close2; goto Begin; }
+					}
+	dispbottom "Alert: You are not in Ranking";
+						close2; goto Begin;
+case 2:
+					query_sql "SELECT `name` FROM `pvpm_player` ORDER BY `deaths` ASC LIMIT 127",@name$;
+				for(set @ind,0;@ind <= 125;set @ind,@ind+1) {
+			if (  @name$ == strcharinfo(0) ) { dispbottom "AAlert: Your Actual Position is "+(@ind+1)+"º in ranking !"; close2; goto Begin; }
+					}
+	dispbottom "Alert: You are not in Ranking";
+						close2; goto Begin;
+case 3:
+					query_sql "SELECT `name` FROM `pvpm_guild` ORDER BY `kills` DESC LIMIT 127",@name$;
+				for(set @ind,0;@ind <= 125;set @ind,@ind+1) {
+			if (  @name$ == strcharinfo(2) ) { dispbottom "Alert: Your Actual Position is "+(@ind+1)+"º in ranking !"; close2; goto Begin; }
+					}
+	dispbottom "Alert: You are not in Ranking";
+						close2; goto Begin;
+case 4:
+					query_sql "SELECT `name` FROM `pvpm_guild` ORDER BY `deaths` ASC LIMIT 127",@name$;
+				for(set @ind,0;@ind <= 125;set @ind,@ind+1) {
+			if (  @name$ == strcharinfo(2) ) { dispbottom "Alert: Your Actual Position is "+(@ind+1)+"º in ranking !"; close2; goto Begin; }
+					}
+	dispbottom "Alert: You are not in Ranking";
+case 5:						close2; goto Begin;
+
+			}
+		}
+
+case 4:
+	mes .npcname$;
+	mes "IN ^FF0000PM Bar^000000 put: ^0000FFnpc:cmd^000000";
+	mes "After that, send a msg for it, you'll receive the commands list.";
+	close2; goto Begin;
+
+case 5: 
+	close;
+	}
+}
+
+-	script	cmd	-1,{
+
+OnWhisperGlobal:
+			if ( ( @whispervar0$ == "!pvp" ) | ( @whispervar0$ == "|00!pvp" ) ) {
+					getmapxy @map$,@x,@y,0;
+			if ( @map$ == $arena$[$arena] ) {
+	dispbottom "Alert: You can't use this function in Arena.";
+						end;
+					}
+							warp $arena$[$arena],0,0;
+						end;
+		} else if ( ( @whispervar0$ == "!gvg" ) | ( @whispervar0$ == "|00!gvg" ) ) {
+			if ( getcharid(2) == 0 ) {
+	dispbottom "Alert: Sorry, but you need to be in a guild to enter in this Arena.";
+						end;
+					}
+					getmapxy @map$,@x,@y,0;
+			if ( @map$ == $garena$[$garena] ) {
+	dispbottom "Alert: You can't use this function in Arena.";
+						end;
+					}
+							warp $garena$[$garena],0,0;
+						end;
+			} else if( ( @whispervar0$ == "!ranking:pvp" ) | ( @whispervar0$ == "|00!ranking:pvp" ) ) {
+		deletearray @name$[0],getarraysize(@name$);deletearray @points[0],getarraysize(@points);set @ind,0;
+					query_sql "SELECT `name` FROM `pvpm_player` ORDER BY `kills` DESC LIMIT 127",@name$;
+					query_sql "SELECT `kills` FROM `pvpm_player` ORDER BY `kills` DESC LIMIT 127",@points;
+	dispbottom "======= PvP Ranking =======";
+				for(set @ind,0;@ind != $limit;set @ind,@ind+1) { dispbottom ""+(@ind+1)+"º | "+@name$[@ind]+" | Pontos: "+@points[@ind]+""; }
+						end;
+			} else if( ( @whispervar0$ == "!ranking:pvp:die" ) | ( @whispervar0$ == "|00!ranking:pvp:die" ) ) {
+		deletearray @name$[0],getarraysize(@name$);deletearray @points[0],getarraysize(@points);
+					query_sql "SELECT `name` FROM `pvpm_player` ORDER BY `deaths` ASC LIMIT 127",@name$;
+					query_sql "SELECT `deaths` FROM `pvpm_player` ORDER BY `deaths` ASC LIMIT 127",@points;
+	dispbottom "======= PvP Ranking - Dies =======";
+				for(set @ind,0;@ind != $limit;set @ind,@ind+1) { dispbottom ""+(@ind+1)+"º | "+@name$[@ind]+" | Pontos: "+@points[@ind]+""; }
+						end;
+			} else if( ( @whispervar0$ == "!ranking:gvg" ) | ( @whispervar0$ == "|00!ranking:gvg" ) ) {
+		deletearray @name$[0],getarraysize(@name$);deletearray @points[0],getarraysize(@points);
+					query_sql "SELECT `name` FROM `pvpm_guild` ORDER BY `kills` DESC LIMIT 127",@name$;
+					query_sql "SELECT `kills` FROM `pvpm_guild` ORDER BY `kills` DESC LIMIT 127",@points;
+	dispbottom "======= GvG Ranking =======";
+				for(set @ind,0;@ind != $limit;set @ind,@ind+1) { dispbottom ""+(@ind+1)+"º | "+@name$[@ind]+" | Pontos: "+@points[@ind]+""; }
+						end;
+			} else if( ( @whispervar0$ == "!ranking:gvg:die" ) | ( @whispervar0$ == "|00!ranking:gvg:die" ) ) {
+			deletearray @name$[0],getarraysize(@name$);deletearray @points[0],getarraysize(@points);
+					query_sql "SELECT `name` FROM `pvpm_guild` ORDER BY `deaths` ASC LIMIT 127",@name$;
+					query_sql "SELECT `deaths` FROM `pvpm_guild` ORDER BY `deaths` ASC LIMIT 127",@points;
+	dispbottom "======= PvP Ranking - Dies =======";
+				for(set @ind,0;@ind != $limit;set @ind,@ind+1) { dispbottom ""+(@ind+1)+"º | "+@name$[@ind]+" | Pontos: "+@points[@ind]+""; }
+						end;
+			} else if( ( @whispervar0$ == "!ranking:me:pvp" ) | ( @whispervar0$ == "|00!ranking:me:pvp" ) ) {
+					query_sql "SELECT `name` FROM `pvpm_player` ORDER BY `kills` DESC LIMIT 127",@name$;
+				for(set @ind,0;@ind <= 125;set @ind,@ind+1) {
+			if (  @name$ == strcharinfo(0) ) { dispbottom "Alert: Your Actual Postition is "+(@ind+1)+"º in ranking !"; end; }
+					}
+	dispbottom "Alert: You are not in the Ranking.";
+						end;
+			} else if( ( @whispervar0$ == "!ranking:me:pvp:die" ) | ( @whispervar0$ == "|00!ranking:me:pvp:die" ) ) {
+					query_sql "SELECT `name` FROM `pvpm_player` ORDER BY `deaths` ASC LIMIT 127",@name$;
+				for(set @ind,0;@ind <= 125;set @ind,@ind+1) {
+			if ( @name$ == strcharinfo(0) ) { dispbottom "Alert: Your Actual Postition is "+(@ind+1)+"º in ranking !"; end; }
+					}
+	dispbottom "Alert: You are not in the Ranking.";
+						end;
+			} else if( ( @whispervar0$ == "!ranking:me:gvg" ) | ( @whispervar0$ == "|00!ranking:me:gvg" ) ) {
+					query_sql "SELECT `name` FROM `pvpm_guild` ORDER BY `kills` DESC LIMIT 127",@name$;
+				for(set @ind,0;@ind <= 125;set @ind,@ind+1) {
+			if (  @name$ == strcharinfo(2) ) { dispbottom "Alert: Your Actual Postition is "+(@ind+1)+"º in ranking !"; end; }
+					}
+	dispbottom "Alert: You are not in the Ranking.";
+						end;
+			} else if( ( @whispervar0$ == "!ranking:me:gvg:die" ) | ( @whispervar0$ == "|00!ranking:me:gvg:die" ) ) {
+					query_sql "SELECT `name` FROM `pvpm_guild` ORDER BY `deaths` ASC LIMIT 127",@name$;
+				for(set @ind,0;@ind <= 125;set @ind,@ind+1) {
+			if (  @name$ == strcharinfo(2) ) { dispbottom "Alert: Your Actual Postition is "+(@ind+1)+"º in ranking !"; end; }
+					}
+	dispbottom "Alert: You are not in the Ranking.";
+						end;
+		} else if( ( @whispervar0$ == "!exit" ) | ( @whispervar0$ == "|00!exit" ) ) {
+					getmapxy @map$,@x,@y,0;
+			if ( @map$ != $arena$[$arena] ) {
+			if ( @map$ != $garena$[$garena] ) {
+	dispbottom "Alert: This function just can be used in the arenas.";
+						end;
+					}}
+							warp "prontera.gat",150,150;
+						end;
+		} else if( ( @whispervar0$ == "!time" ) | ( @whispervar0$ == "|00!time" ) ) {
+	dispbottom "Alert: "+$time_info+" Minutes Left .";
+						end;
+		} else if( ( @whispervar0$ == "!pvplider" ) | ( @whispervar0$ == "|00!pvpleader" ) ) {
+	dispbottom "Alert: "+$PvP_Lider$+" Is actual Leader .";
+						end;
+		} else if( ( @whispervar0$ == "!gvglider" ) | ( @whispervar0$ == "|00!gvgleader" ) ) {
+	dispbottom "Alert: "+$Guild_Lider$+"  is the actual Leader Guild .";
+						end;
+	 	} else { 
+	dispbottom "Alert: - Command List -";
+	dispbottom "!pvp --------------------[ Take you to the PvP ]";
+	dispbottom "!gvg --------------------[ Take you to the GvG ]";
+	dispbottom "!ranking:pvp(:die) ------[ Show the Ranking of PvP (:Ranking of dies) ]";
+	dispbottom "!ranking:gvg(:die) ------[ Show the Ranking of GvG (:Ranking of dies) ]";
+	dispbottom "!ranking:me:pvp(:die) -------[ Show your position in the Ranking of PvP (:Ranking - dies)  ]";
+	dispbottom "!ranking:me:gvg(:die) -------[ Show your position in the Ranking of GvG (:Ranking - dies)  ]";
+	dispbottom "!time -----------------------[ Show the time left to change Arena ]";
+	dispbottom "!pvpleader -------------------[ Show the Leader of PvP ]";
+	dispbottom "!gvgleader -------------------[ Show the Leader of GvG ]";
+	dispbottom "!exit -------------------[ Get out of Arena ]";
+						end;
+	}
+}
+-	script	timerpm	-1,{
+
+OnInit:
+OnTimer1200000:
+
+					initnpctimer;
+		set $pm_time,$pm_time + 1;
+		set $time_info,$time_info - 1;
+			if ( $pm_time == $time_conf ) {
+					sleep 1000;MapAnnounce $arena$[$arena],"The map will be changed in 3 seconds",bc_map,0xFF7F50;MapAnnounce $garena$[$garena],"The map will be changed in 3 seconds",bc_map,0xFF7F50;
+					sleep 1000;MapAnnounce $arena$[$arena],"The map will be changed in 2 seconds",bc_map,0xFF7F50;MapAnnounce $garena$[$garena],"The map will be changed in 2 seconds",bc_map,0xFF7F50;
+					sleep 1000;MapAnnounce $arena$[$arena],"The map will be changed in 1 second",bc_map,0xFF7F50;MapAnnounce $garena$[$garena],"The map will be changed in 1 second",bc_map,0xFF7F50;
+					sleep 1000;
+		set $arena,$arena + 1;
+		set $garena,$garena + 1;
+		set $pm_time,0; 
+		set $time_info,$time_conf;
+			if ( $arena > $amount_arena )  set $arena,0;
+			if ( $garena > $amount_garena )  set $garena,0;
+		set .@ind_garena,0;
+				for(set .@ind_arena,0;.@ind_arena <= $amount_arena;set .@ind_arena,.@ind_arena+1) { mapwarp $arena$[.@ind_arena],$arena$[$arena],0,0; }
+				for(set .@ind_garena,0;.@ind_garena <= $amount_garena;set .@ind_garena,.@ind_garena + 1) { mapwarp $garena$[.@ind_garena],$garena$[$garena],0,0; }
+					sleep 3000;MapAnnounce $arena$[$arena],"Map of Arena will be changed",bc_all,0xFF7F50;
+					sleep 3000;MapAnnounce $garena$[$garena],"Map of Arena will be changed",bc_all,0xFF7F50;
+	}
+						end;
+}
+
+-	script	OnPCKillEvent	-1,{
+
+					getmapxy @map$,@x,@y,0;
+			if ( @map$ == $arena$[$arena] ) goto PvP;
+			if ( @map$ == $garena$[$garena] ) goto GvG;
+						end;
+PvP:
+		set @CID,getcharid(0);set @name$,"";set @points,0;
+					query_sql "SELECT `kills` FROM `pvpm_player` WHERE `char_id`="+@CID+"",@points;
+					query_sql "SELECT `name` FROM `pvpm_player` WHERE `char_id`="+@CID+"",@name$;
+			if ( @name$ == "" ) { query_sql "INSERT INTO `pvpm_player` (`char_id`,`name`,`kills`) VALUES ("+@CID+",'"+strcharinfo(0)+"',1)"; dispbottom "PvP Score: 1"; end; }
+					query_sql "UPDATE `pvpm_player` SET `kills` = `kills` +1 WHERE `char_id`="+@CID+"";
+		set @points,@points+1;
+	dispbottom "PvP Score: "+@points;
+			if ( ( @points > $PvP_Lider ) & ( $PvP_Lider$ != strcharinfo(0) ) ) {
+								set $PvP_Lider$,strcharinfo(0);
+								set $PvP_Lider,@points;
+								if ( $announceinfo == 1 ) Announce ""+strcharinfo(0)+" | Became Leader of PvP !",bc_all,0xFF7F50; }
+		set sik,sik + 1;
+			if ( sik == 100 ) { set sik2,sik2 + 100; set sik,0; }
+			if ( $announceinfo == 0 ) end;
+			if ( @points == sik2 ) Announce ""+strcharinfo(0)+" | Did "+@points+" Points in PvP !",bc_all,0xFF7F50;				
+			if ( ( @points == sik2 ) & ( $sound == 1 ) ) soundeffectall "monsterkill.wav",0;
+						end;
+GvG:
+		set @GID,getcharid(2);set @name$,"";set @points,0;
+					query_sql "SELECT `kills` FROM `pvpm_guild` WHERE `guild_id`="+@GID+"",@gpoints;
+					query_sql "SELECT `name` FROM `pvpm_guild` WHERE `guild_id`="+@GID+"",@name$;
+			if ( @name$ == "" ) { query_sql "INSERT INTO `pvpm_guild` (`guild_id`,`name`,`kills`) VALUES ("+@GID+",'"+strcharinfo(2)+"',1)"; dispbottom "Guild Score: 1"; end; }
+					query_sql "UPDATE `pvpm_guild` SET `kills` = `kills` + 1 WHERE `guild_id`="+@GID+"";
+		set @gpoints,@gpoints+1;
+	dispbottom "Guild Score: "+@gpoints;
+			if ( ( @gpoints > $Guild_Lider ) & ( $Guild_Lider$ != strcharinfo(2) ) ) {
+								set $Guild_Lider$,strcharinfo(2);
+								set $Guild_Lider,@gpoints;
+								if ( $announceinfo == 1 ) Announce ""+strcharinfo(2)+" | Became Leader of GvG !",bc_all,0xFF7F50;	}		set sik,sik + 1;
+			if ( sik == 1000 ) { set sik2,sik2 + 1000; set sik,0; }
+			if ( $announceinfo == 0 ) end;
+			if ( @gpoints == sik2 ) Announce ""+strcharinfo(0)+" | Did "+@gpoints+" Points in GvG !",bc_all,0xFF7F50;				
+			if ( ( @gpoints == sik2 ) & ( $sound == 1 ) ) soundeffectall "monsterkill.wav",0;
+						end;
+}
+
+-	script	OnPCDieEvent	-1,{
+
+					getmapxy @map$,@x,@y,0;
+			if ( @map$ == $arena$[$arena] ) goto PvP;
+			if ( @map$ == $garena$[$garena] ) goto GvG;
+						end;
+PvP:
+		set @CID,getcharid(0);set @name$,"";set @points,0;
+					query_sql "SELECT `deaths` FROM `pvpm_player` WHERE `char_id`="+@CID+"",@points;
+					query_sql "SELECT `name` FROM `pvpm_player` WHERE `char_id`="+@CID+"",@name$;
+			if ( @name$ == "" ) { query_sql "INSERT INTO `pvpm_player` (`char_id`,`name`,`deaths`) VALUES ("+@CID+",'"+strcharinfo(0)+"',1)"; dispbottom "PvP Score: 1"; end; }
+					query_sql "UPDATE `pvpm_player` SET `deaths` = `deaths` + 1 WHERE `char_id`="+@CID+"";
+						end;
+GvG:
+		set @GID,getcharid(2);set @name$,"";set @points,0;
+					query_sql "SELECT `deaths` FROM `pvpm_guild` WHERE `guild_id`="+@GID+"",@gpoints;
+					query_sql "SELECT `name` FROM `pvpm_guild` WHERE `guild_id`="+@GID+"",@name$;
+			if ( @name$ == "" ) { query_sql "INSERT INTO`pvpm_guild` (`guild_id`,`name`,`deaths`) VALUES ("+@GID+",'"+strcharinfo(2)+"',1)"; dispbottom "Guild Score: 1"; end; }
+					query_sql "UPDATE `pvpm_guild` SET `deaths` = `deaths` + 1 WHERE `guild_id`="+@GID+"";
+						end;
+}
+
+//============== MAP FLAG ===============
+
+guild_vs1.gat	mapflag	nosave
+guild_vs1.gat	mapflag	noteleport
+guild_vs1.gat	mapflag	nomemo
+guild_vs1.gat	mapflag	pvp
+guild_vs2.gat	mapflag	gvg	off
+guild_vs1.gat	mapflag	nopenalty
+guild_vs1.gat	mapflag	nobranch
+guild_vs1.gat	mapflag	water
+
+guild_vs2.gat	mapflag	nosave
+guild_vs2.gat	mapflag	noteleport
+guild_vs2.gat	mapflag	nomemo
+guild_vs2.gat	mapflag	pvp
+guild_vs2.gat	mapflag	gvg	off
+guild_vs2.gat	mapflag	nopenalty
+guild_vs2.gat	mapflag	nobranch
+guild_vs2.gat	mapflag	water
+
+guild_vs2-1.gat	mapflag	nosave
+guild_vs2-1.gat	mapflag	noteleport
+guild_vs2-1.gat	mapflag	nomemo
+guild_vs2-1.gat	mapflag	pvp
+guild_vs2-1.gat	mapflag	gvg	off
+guild_vs2-1.gat	mapflag	nopenalty
+guild_vs2-1.gat	mapflag	nobranch
+guild_vs2-1.gat	mapflag	pvp_noguild
+guild_vs2-1.gat	mapflag	water
+
+guild_vs3.gat	mapflag	nosave
+guild_vs3.gat	mapflag	noteleport
+guild_vs3.gat	mapflag	nomemo
+guild_vs3.gat	mapflag	pvp
+guild_vs2.gat	mapflag	gvg	off
+guild_vs3.gat	mapflag	nopenalty
+guild_vs3.gat	mapflag	nobranch
+guild_vs3.gat	mapflag	pvp_noguild
+guild_vs3.gat	mapflag	water
+
+//============== MAP FLAG ===============

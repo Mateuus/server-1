@@ -1,0 +1,65 @@
+//===== Script eAthena ======================================= 
+//= Adin Black fairy Quest
+//===== por: ================================================== 
+//= Creador de Quests Ragnarok World
+//= v1.0
+//===== Compatible Con: ===================================== 
+//= eAthena SVN
+//===== Descripción: ========================================= 
+//  Quest Creada por el Script Creador de Quests Online de
+//  http://www.ragnarokworld.net
+//============================================================ 
+
+glast_01,345,274,5	script	Adin Black fairy	802,{
+ 	set @NPCName$, "[^333333Adin Black fairy^000000]";
+	mes @NPCName$;
+	mes "Quieres Obtener este Item?";
+	mes "pero seguir tu aventura?";
+	next;
+	switch(select("Si:No:Cancelar")) {
+ 	case 1:
+	mes @NPCName$;
+	mes "Estos son Los Items Necesarios.";
+	mes "  ^ff00ccGold Coin^000000 [200]";
+	mes "  ^ff00ccCursed Water^000000 [300]";
+	mes "  ^ff00ccLittle Evil Wing^000000 [300]";
+	next;
+	if (countitem(671) < 200) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(12020) < 300) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(1039) < 300) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	mes @NPCName$;
+	mes "Bien! Tienes todos los Items! Felicidades !";
+	mes "el Objeto es Tuyo";
+	delitem 671,200;
+	delitem 12020,300;
+	delitem 1039,300;
+	getitem 3180,1;
+	close;
+	case 2:
+	mes @NPCName$;
+	mes "de acuerdo, vuelve pronto !";
+	close;
+	case 3:
+	close;
+	}
+
+}
+
+//============================================================
+//===== Creador de Quests Ragnarok World ===========================
+//============================================================

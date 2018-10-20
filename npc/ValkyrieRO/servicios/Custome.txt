@@ -1,0 +1,77 @@
+//===== Global Chile ======
+//=== https://www.facebook.com/IntegralesGlobal ===
+
+prontera,166,67,4	script	Custome	864,{
+	mes "[^FFA500Custome^000000]";
+	mes "¡Hola! ^0000FF" + strcharinfo(0) + "^000000.";
+	mes "Yo puedo convertir cualquiera de tus Headgear en Custome items.";
+	next;
+	mes "[^FFA500Custome^000000]";
+	mes "Selecciona que item quieres convertir";
+	mes "^FF0000Advertencia:^000000 Los bonus, refine y cartas serán removidos.";
+	mes "^FF0000Advertencia:^000000 Si no sabes lo que es pregunta a un GM o revisa información en el foro.";
+	next;
+
+	setarray .@Position$[1],"Top","Mid","Low";
+	setarray .@Position[1],     1,    9,   10;
+
+	set .@Menu$,"";
+	for( set .@i, 1; .@i < 4; set .@i, .@i + 1 )
+	{
+		if( getequipisequiped(.@Position[.@i]) )
+			set .@Menu$, .@Menu$ + .@Position$[.@i] + "-" + "[" + getequipname(.@Position[.@i]) + "]";
+
+		set .@Menu$, .@Menu$ + ":";
+	}
+
+	set .@Part, .@Position[ select(.@Menu$) ];
+	if( !getequipisequiped(.@Part) )
+	{
+		mes "[^FFA500Custome^000000]";
+		mes "No estás vistiendo nada";
+		close;
+	}
+	
+	mes "[^FFA500Custome^000000]";
+	mes "¿Quieres convertir " + getitemname(getequipid(.@Part)) + " en custome?";
+	next;
+	if( select("Sí, por favor:No, lo siento.") == 2 )
+	{
+		mes "[^FFA500Custome^000000]";
+		mes "Regresa cuando necesites de mis servicios.";
+		close;
+	}
+
+	mes "[^FFA500Custome^000000]";
+	mes "Para poder convertir " + getitemname(getequipid(.@Part)) + " necesitas estas cosas.";
+	mes "10 Valor Badge";
+	mes "^0000FF1.500.000^000000 millones de Zeny";
+	next;
+	mes "[^FFA500Custome^000000]";
+	mes "¿Tienes lo que se necesita?";
+	next;
+	if( select("Sí, lo tengo:No") == 2 )
+	{
+		mes "[^FFA500Custome^000000]";
+		mes "Regresa cuando tengas lo que te pedí.";
+		close;
+	}
+	if(countitem(7829) < 10 || Zeny < 1500000)
+	{
+	mes "[^FFA500Custome^000000]";
+	mes "Regresa cuando tengas los items.";
+	close;
+	}
+	else {
+	delitem 7829, 10;
+	set Zeny, Zeny - 5000000;
+	costume .@Part; // Convert the Headgear
+	mes "[^FFA500Custome^000000]";
+	mes "Listo, disfrutalo.";
+	close;
+	}
+
+	OnInit:
+	waitingroom "Custome",0;
+	end;
+}

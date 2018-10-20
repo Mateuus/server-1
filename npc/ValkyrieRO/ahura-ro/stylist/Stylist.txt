@@ -1,0 +1,351 @@
+//===== *Athena Script =======================================
+//= Race Master Script
+//===== By: ==================================================
+//= KamiShi, full edit by Darkness
+//===== Current Version: =====================================
+//= 1.4a (+ Mejoras en script - Darkness)
+//= 1.5 - Adaptation script for c.version (No zeny, item cost) full working [Darkness]
+//===== Compatible With: =====================================
+//= rAthena / Hercules
+//===== Description: =========================================
+//= Stylist
+//= Supports human colors and races colors. If you don't have races 
+//= it will only show human options.
+//= Save slots (1,2,3) paletteSaveSlot1, paletteSaveSlot2, paletteSaveSlot3.
+function	script	resetSavedSets	{
+	set paletteClothesSlot1, $RacePals[race_id*4+2];
+	set paletteHairSlot1, $RacePals[race_id*4];
+	set paletteClothesSlot2,$RacePals[race_id*4+2];
+	set paletteHairSlot2,$RacePals[race_id*4];
+	set paletteClothesSlot3,$RacePals[race_id*4+2];
+	set	paletteHairSlot3,$RacePals[race_id*4];
+	return;
+}
+
+
+invek,136,142,5	script	Premium Stylist#h1-1::Estilista	4_ELEPHANT,{
+	callsub RaceDye,$RacePals[race_id*4],$RacePals[race_id*4+1],$RacePals[race_id*4+2],$RacePals[race_id*4+3];
+	disable_items;// Para evitar exploits
+	
+RaceDye:
+	// *******************
+	// CONF: MAX human hair style
+	set .@maxH, 67;
+	// NPC NAME
+	set .NombreNpc$,"[^FF8000 Estilista^000000]";
+	// Detecction doram
+	// disable if you not have a emulator 2016 updated.
+	if(Class == 4218){
+	mes .NombreNpc$;
+	mes "I am sorry, my friend Stylist doram it may help you.";
+	close;
+	}
+	//CUTIN
+	//cutin "morae_sd",2;//Custom Cutin vRO
+	
+	//Script
+	INICIO:
+	mes .NombreNpc$;
+	emotion e_swt2,0;
+	mes "Hola!,";
+	mes "Soy un estilista bastante poco común en Midgard";
+	next;
+	dispbottom "========== Estilo Actual ========== ";
+	dispbottom "Color Ropa: N°: "+callfunc("getlook2",7)+" ";
+	dispbottom "Color Pelo: N°: "+callfunc("getlook2",6)+" ";
+	dispbottom "Estilo Pelo: N°: "+getlook(1)+" ";
+	dispbottom "================================= ";
+	POTRO:
+	mes .NombreNpc$;
+	mes "¿Cómo te puedo ayudar?";
+	next;
+	switch(select("- Color Ropa:- Color Pelo:- Estilo Pelo:- Mis Favoritos"))
+	{
+		case 1:
+			npctalk "Recuerda guardar tus gustos favoritos !";
+			mes .NombreNpc$;
+			mes "Estos son mis estilos";
+			mes "Tengo una variedad entre ^0000FF"+(getarg(2))+" y "+(getarg(3))+"^000000.";
+
+			browse1:
+			callfunc("setlook2", 7, .@style);
+			dispbottom "Color Ropa: #'"+.@style+"'.";
+			switch(select("^FF6500-> Siguiente^000000:^0404B4<- Atrask^000000:^FF0000- Este!^000000: ^D800D8[!]^000000 Elegir un número:- Ver referencias: ^31B404[+]^000000 Añadir a Favoritos")){
+				
+				case 1:
+					set .@style, .@style+1;
+					if (.@style >= getarg(3)) set .@style, getarg(2);
+					goto browse1;
+					
+				case 2:
+					set .@style, .@style-1;
+					if (.@style <= getarg(2)) set .@style, getarg(3)-1;
+					goto browse1;
+				case 3:
+					next;
+					mes .NombreNpc$;
+					mes "¿Estás seguro?";
+					next;
+					menu "- No, lo siento",browse1,"- Es Perfecto!",terminar;
+					
+					terminar:
+					next;
+					mes .NombreNpc$;
+					mes "¡GENIAL!, luces muy bien.";
+					emotion e_lv,0;
+					cutin "",255;
+					close;
+					
+				case 4:
+				if (getarg(3) == 693) {
+					set @d,4;
+					}
+					
+					chose1:
+					set @d,4;
+					input (.@style, getarg(2), getarg(3));
+					if(.@style < getarg(2) || .@style >= getarg(3))
+					{
+						mes "^FF0000Ups!^000000 Este color no esta en el rango.";
+						goto chose1;
+					}
+					goto browse1;
+				case 5:
+				next;
+				if (race_id){
+				mes .NombreNpc$;
+				mes "Estas son las referencias:";
+				mes "Tengo entre ^0000FF"+(getarg(2))+" y "+(getarg(3))+"^000000.";
+				mes " ";
+				mes " -----   REFERENCIAS  -----";
+				mes "Ro Basic Unicolor : ^0000C6"+(@d)+"^000000  - ^C60000"+(@d+32*1)+"^000000";
+				mes "Ro Basic Analogico : ^0000C6"+(@d+32*1)+"^000000  - ^C60000"+(@d+32*2)+"^000000";
+				mes "Ro Basic Complementario : ^0000C6"+(@d+32*2)+"^000000  - ^C60000"+(@d+32*3)+"^000000";
+				
+				mes "Dark Unicolor : ^0000C6"+(@d+32*3)+"^000000  - ^C60000"+(@d+32*4)+"^000000";
+				mes "Light Unicolor : ^0000C6"+(@d+32*4)+"^000000  - ^C60000"+(@d+32*5)+"^000000";
+				mes "Gold Autumn : ^0000C6"+(@d+32*5)+"^000000  - ^C60000"+(@d+32*6)+"^000000";
+				mes "Dark Gold : ^0000C6"+(@d+32*6)+"^000000  - ^C60000"+(@d+32*7)+"^000000";
+				mes "Chicos Malos: ^0000C6"+(@d+32*7)+"^000000  - ^C60000"+(@d+32*8)+"^000000";
+				
+				mes "Dark Analogic : ^0000C6"+(@d+32*8)+"^000000  - ^C60000"+(@d+32*9)+"^000000";
+				mes "Light Analogic : ^0000C6"+(@d+32*9)+"^000000  - ^C60000"+(@d+32*10)+"^000000";
+				mes "Gold : ^0000C6"+(@d+32*10)+"^000000  - ^C60000"+(@d+32*11)+"^000000";
+				mes "Silver : ^0000C6"+(@d+32*11)+"^000000  - ^C60000"+(@d+32*12)+"^000000";
+				
+				mes "Dark Complementario : ^0000C6"+(@d+32*12)+"^000000  - ^C60000"+(@d+32*13)+"^000000";
+				mes "Light Complementario : ^0000C6"+(@d+32*13)+"^000000  - ^C60000"+(@d+32*14)+"^000000";
+				mes "Red Passion : ^0000C6"+(@d+32*14)+"^000000  - ^C60000"+(@d+32*15)+"^000000";
+				mes "Full Mix : ^0000C6"+(@d+32*15)+"^000000  - ^C60000"+(@d+32*16)+"^000000";
+				
+				mes "Paradize : ^0000C6"+(@d+32*16)+"^000000  - ^C60000"+(@d+32*17)+"^000000";
+				mes "Snow : ^0000C6"+(@d+32*17)+"^000000  - ^C60000"+(@d+32*18)+"^000000";
+				mes "Dark Neon : ^0000C6"+(@d+32*18)+"^000000  - ^C60000"+(@d+32*19)+"^000000";
+				mes "Black And White : ^0000C6"+(@d+32*19)+"^000000  - ^C60000"+(@d+32*20)+"^000000";
+				
+				mes "Aleatorio : ^0000C6"+(@d+32*20)+"^000000  - ^C60000"+(@d+690)+"^000000";
+			}else{
+				mes .NombreNpc$;
+				mes "Estas son las referencias";
+				mes "Tengo entre ^0000FF"+(getarg(2))+" y "+(getarg(3))+"^000000.";
+				mes " ";
+				mes " -----   REFERENCIAS  -----";
+				mes "Ro Basic Unicolor : ^0000C6"+(@d)+"^000000  - ^C60000"+(@d+32*1)+"^000000";
+				mes "Ro Basic Analogic : ^0000C6"+(@d+32*1)+"^000000  - ^C60000"+(@d+32*2)+"^000000";
+				mes "Ro Basic Complementary : ^0000C6"+(@d+32*2)+"^000000  - ^C60000"+(@d+32*3)+"^000000";
+				
+				mes "Dark Unicolor : ^0000C6"+(@d+32*3)+"^000000  - ^C60000"+(@d+32*4)+"^000000";
+				mes "Light Unicolor : ^0000C6"+(@d+32*4)+"^000000  - ^C60000"+(@d+32*5)+"^000000";
+				mes "Gold Autumn : ^0000C6"+(@d+32*5)+"^000000  - ^C60000"+(@d+32*6)+"^000000";
+				mes "Dark Gold : ^0000C6"+(@d+32*6)+"^000000  - ^C60000"+(@d+32*7)+"^000000";
+				mes "BadBoys: ^0000C6"+(@d+32*7)+"^000000  - ^C60000"+(@d+32*8)+"^000000";
+				
+				mes "Dark Analogic : ^0000C6"+(@d+32*8)+"^000000  - ^C60000"+(@d+32*9)+"^000000";
+				mes "Light Analogic : ^0000C6"+(@d+32*9)+"^000000  - ^C60000"+(@d+32*10)+"^000000";
+				mes "Gold : ^0000C6"+(@d+32*10)+"^000000  - ^C60000"+(@d+32*11)+"^000000";
+				mes "Silver : ^0000C6"+(@d+32*11)+"^000000  - ^C60000"+(@d+32*12)+"^000000";
+				
+				mes "Dark Complementario : ^0000C6"+(@d+32*12)+"^000000  - ^C60000"+(@d+32*13)+"^000000";
+				mes "Light Complementario : ^0000C6"+(@d+32*13)+"^000000  - ^C60000"+(@d+32*14)+"^000000";
+				mes "Red Passion : ^0000C6"+(@d+32*14)+"^000000  - ^C60000"+(@d+32*15)+"^000000";
+				mes "Full Mix : ^0000C6"+(@d+32*15)+"^000000  - ^C60000"+(@d+32*16)+"^000000";
+				
+				mes "Paradize : ^0000C6"+(@d+32*16)+"^000000  - ^C60000"+(@d+32*17)+"^000000";
+				mes "Snow: ^0000C6"+(@d+32*17)+"^000000  - ^C60000"+(@d+32*18)+"^000000";
+				mes "Dark Neon : ^0000C6"+(@d+32*18)+"^000000  - ^C60000"+(@d+32*19)+"^000000";
+				mes "Black And White : ^0000C6"+(@d+32*19)+"^000000  - ^C60000"+(@d+32*20)+"^000000";
+				
+				mes "Aleatorio: ^0000C6"+(@d+32*20)+"^000000  - ^C60000"+(@d+690)+"^000000";
+				}
+				next;
+					goto browse1;
+				case 6:
+					switch(select("^31B404[+]^000000 Favorito 1:^31B404[+]^000000 Favorito 2:^31B404[+]^000000 Favorito 3")){
+						
+						case 1:
+							set paletteClothesSlot1, .@style;
+							break;
+							
+						case 2:
+							set paletteClothesSlot2, .@style;
+							break;
+							
+						case 3:
+							set paletteClothesSlot3, .@style;
+							break;
+
+					}
+					mes .NombreNpc$;
+					mes "^31B404[+]^000000 Agregar a favoritos #"+.@style+" de ropa";
+					emotion e_ok,0;
+					goto browse1;
+					
+			}
+			cutin "",255;
+			close;
+
+		case 2:
+			npctalk "Recuerda guardar tus favoritos";
+			mes .NombreNpc$;
+			mes "Estos son mis colores de pelo que tengo disponible.";
+			mes "Tengo entre ^0000FF"+(getarg(0))+" y "+(getarg(1))+"^000000.";
+
+			browse2:
+			callfunc("setlook2",6,.@style);
+			dispbottom "Color Pelo: #'"+.@style+"'.";
+			
+			switch(select("^FF6500-> Siguiente^000000:^0404B4<- Atras^000000:^FF0000- Me Gusta!^000000: ^D800D8[!]^000000 Escoger un número:- Ver referencias: ^31B404[+]^000000 Agregar a Favoritos")){
+				
+				case 1:
+					set .@style, .@style+1;
+					if (.@style >= getarg(1)) set .@style, getarg(0);
+					goto browse2;
+					
+				case 2:
+					set .@style, .@style-1;
+					if (.@style <= getarg(0)) set .@style, getarg(1)-1;
+					goto browse2;
+				
+				case 3:
+					next;
+					mes .NombreNpc$;
+					mes "Are you sure?";
+					next;
+					menu "- No, lo siento",browse2,"- ¡Es perfecto!",terminar;
+					
+				case 4:
+					chose2:
+					input (.@style, getarg(0), getarg(1));
+					if(.@style < getarg(0) || .@style >= getarg(1))
+					{
+						mes "^FF0000Ups!^000000 Este numero no está dentro del rango.";
+						goto chose2;
+					}
+					goto browse2;		
+				case 5:
+					switch(select("^31B404[+]^000000 Favorito 1:^31B404[+]^000000 Favorito 2:^31B404[+]^000000 Favorito 3")){
+						
+						case 1:
+							set paletteHairSlot1, .@style;
+							break;
+							
+						case 2:
+							set paletteHairSlot2, .@style;
+							break;
+							
+						case 3:
+							set paletteHairSlot3, .@style;
+							break;
+
+					}
+					mes .NombreNpc$;
+					mes "^31B404[+]^000000 Agregado a favoritos el color de pelo: #"+.@style+" .";
+					emotion e_ok,0;
+					goto browse2;
+			}
+			cutin "",255;
+			close;
+
+		case 3:
+
+			//npctalk "¡No olvides guardar tus diseños favoritos!";
+			mes .NombreNpc$;
+			mes "Escoge tu estilo de pelo.";
+			mes "Tengo una variedad entre ^0000FF0 y "+.@maxH+"^000000.";
+
+			browse3:
+			setlook 1,.@style+1;
+			dispbottom "Estilo de Pelo: #'"+.@style+"'.";
+			
+			switch(select("^FF6500-> Siguiente^000000:^0404B4<- Atras^000000:^FF0000- ¡Me gusta!^000000: ^D800D8[!]^000000 Escoger un número.")){
+				
+				case 1:
+					set .@style, .@style+1;
+					if (.@style > .@maxH) set .@style, 0;
+					goto browse3;
+					
+				case 2:
+					set .@style, .@style-1;
+					if (.@style <= 0) set .@style, .@maxH;
+					goto browse3;
+				
+				case 3:
+					next;
+					mes .NombreNpc$;
+					mes "¿Estás seguro?";
+					next;
+					menu "- No, lo siento",browse2,"- ¡Es perfecto!",terminar;
+					
+				case 4:
+				next;
+				mes .NombreNpc$;
+				mes "Elige el estilo de pelo:";
+				mes "Tengo una variedad de ^0000FF0 y "+.@maxH+"^000000.";
+				chosex3:
+				input .@style;
+				if(.@style < 0 || .@style > .@maxH)
+				{
+					mes "^FF0000Ups!^000000 este estilo no está en el rango.";
+					goto chosex3;
+				}
+				goto browse3;
+			}
+			cutin "",255;
+			close;
+			
+		case 4:
+			mes .NombreNpc$;
+			mes "A continuación te muestro tus colores favoritos:";
+			mes "^5300FFFav.1^000000 : ^D800D8"+paletteClothesSlot1+"^000000 of Cloth, ^FF661C"+paletteHairSlot1+"^000000 of hair color";
+			mes "^5300FFFav.2^000000 : ^D800D8"+paletteClothesSlot2+"^000000 of Cloth, ^FF661C"+paletteHairSlot2+"^000000 of hair color";
+			mes "^5300FFFav.3^000000 : ^D800D8"+paletteClothesSlot3+"^000000 of Cloth, ^FF661C"+paletteHairSlot3+"^000000 of hair color";
+			mes "Cual quieres usar?";
+			next;
+				switch(select("^31B404[Select]^000000 My Favorite 1:^31B404[Select]^000000 My Favorite2:^31B404[Select]^000000 My Favorite 3")){
+				case 1:
+					callfunc("setlook2", 7, paletteClothesSlot1);
+					callfunc("setlook2", 6, paletteHairSlot1);
+					break;
+					
+				case 2:
+					callfunc("setlook2", 7, paletteClothesSlot2);
+					callfunc("setlook2", 6, paletteHairSlot2);
+					break;
+					
+				case 3:
+					callfunc("setlook2", 7, paletteClothesSlot3);
+					callfunc("setlook2", 6, paletteHairSlot3);
+					break;
+
+			}
+			mes .NombreNpc$;
+			mes "You look great";
+			cutin "",255;
+			close;
+			
+	}
+}
+
+// --------- NPC Clones ---------
+
+//morocc,149,84,7	duplicate(Estilista)	Premium Stylist#h1-2	509

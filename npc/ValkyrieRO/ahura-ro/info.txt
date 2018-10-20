@@ -1,0 +1,1223 @@
+prontera,171,171,3	script	Informaciones	4_F_KAFRA3,{
+
+.@npcn$ =  "^FF0000[Informaciones]^000000";
+
+mes .@npcn$;
+mes "Bienvenido ^0000ee"+strcharinfo(0)+ "^000000.";
+mes "En que te puedo ayudar ? ";
+next;
+if (select("Informacion", "Salir") == 2 ) { close;}
+
+mes .@npcn$;
+mes "Bienvenido al Punto Central de Ahura-RO";
+mes "Aqui encontrarás a los personajes principales de la temporada estacional";
+next;
+mes .@npcn$;
+mes "Como también encontrarás especialistas en la magia del encantamiento";
+mes "Herreros expertos en refinación, entre otros.";
+next;
+mes .@npcn$;
+mes "Dime, que paradero te gustaria conocer ?";
+next;
+switch (select("Encantamiento:Herreria:Mercado:Desafio MvP:Hombre misterioso") ) {
+	
+	case 1:
+		mes .@npcn$;
+		mes "He marcado un punto ^FF0000Rojo^000000 en tu mini mapa.";
+		viewpoint 0,130,100,1,0xFF0000;
+		close;
+		
+	case 2:
+		mes .@npcn$;
+		mes "He marcado un punto ^0000eeAzul^000000 en tu mini mapa.";
+		viewpoint 0,182,96,1,0x0000ee;
+		close;
+		
+	case 3:
+		mes .@npcn$;
+		mes "He marcado un punto ^b2305fRosado^000000 en tu mini mapa.";
+		viewpoint 0,183,195,1,0xb2305f;
+		close;
+		
+	case 4:
+		mes .@npcn$;
+		mes "He marcado un punto ^b2305fMorado^000000 en tu mini mapa.";
+		viewpoint 0,99,139,1,0x6b3653;
+		close;
+		
+	case 5:
+		mes "He marcado un punto ^b2305fMorado^000000 en tu mini mapa.";
+		viewpoint 0,158,132,1,0x6b3653;
+		close;
+	}
+}
+
+invek,150,58,4	duplicate(Informaciones)	Informaciones#infxz	4_F_KAFRA2
+		
+
+
+invek,144,48,4	script	Istructor Jukken	4_M_JOB_KNIGHT2,{
+
+.@npcn2$ =  "^FF0000[Instructor Jukken]^000000";
+
+			npctalk "Jukken: Soldados, todos somos de diferentes naciones, pero todos estamos aqui por una razon!.";
+				sleep 3500;
+			showscript "Jukken: Vamos a mostrarle a la armada el poder de la union.", getnpcid(0);
+				sleep 2000;
+			showscript "Jukken: Que comience la marcha de la victoria !! ", getnpcid(0);
+				sleep 1500;
+			donpcevent "Soldado#fb1::OnTalk1";
+				sleep 500;
+			donpcevent "Soldado#fb2::OnTalk2";
+				sleep 100;
+			donpcevent "Soldado#fb3::OnTalk3";
+				sleep 100;
+			donpcevent "Soldado#fb4::OnTalk4";
+				sleep 500;
+			donpcevent "Soldado#fb5::OnTalk5";
+				sleep 500;
+			donpcevent "Soldado#fb6::OnTalk6";
+				sleep 100;
+			donpcevent "Soldado#fb7::OnTalk7";
+				sleep 300;
+			donpcevent "Soldado#fb8::OnTalk8";
+				sleep 600;
+			donpcevent "Soldado#fb9::OnTalk9";
+				sleep 100;
+			donpcevent "Soldado#fb10::OnTalk10";
+				sleep 500;
+			donpcevent "Soldado#fb11::OnTalk11";
+				sleep 200;
+			donpcevent "Soldado#fb12::OnTalk12";
+				sleep 100;
+			donpcevent "Soldado#fb13::OnTalk13";
+				sleep 500;
+			donpcevent "Soldado#fb14::OnTalk14";
+				sleep 500;
+			donpcevent "Soldado#fb15::OnTalk15";
+				sleep 3000;
+end;
+/*
+mes .@npcn2$;
+mes "Cuando fui explorador de la terrible torre de Thanatos, sabria que este día llegaria.";
+next;
+mes .@npcn2$;
+mes "Me encuentro preparado.";
+mes "Peleare hasta la muerte con tal de proteger esta ciudad.";
+next;
+mes .@npcn2$;
+mes "Pero... continuo estando un poco nervioso.";
+mes "Deberia comenzar a dominar mis emociones, si es que deseo no aterrorizar a nadie mas.";
+close;
+*/
+
+					
+						}
+
+
+
+
+
+invek,144,44,0	script	Soldado#fb1	4_M_RUSKNIGHT,{
+end;
+
+OnTalk1:
+	showscript "Hasta el final ~", getnpcid(0);
+	end;
+
+OnTalk2:
+	showscript "Por mi futuro!", getnpcid(0);
+	end;
+
+OnTalk3:
+	showscript "Por mi hogar~", getnpcid(0);
+	end;
+
+OnTalk4:
+	showscript "Tengo mi armadura~", getnpcid(0);
+	end;
+
+OnTalk5:
+	showscript "Tengo mi arma~", getnpcid(0);
+	end;
+
+OnTalk6:
+	showscript "Tengo mi casco~", getnpcid(0);
+	end;
+OnTalk7:
+	showscript "Listo para un nuevo dia~", getnpcid(0);
+	end;
+OnTalk8:
+	showscript "Estoy preparado~", getnpcid(0);
+	end;
+OnTalk9:
+	showscript "Venceremos~", getnpcid(0);
+	end;
+OnTalk10:
+	showscript "El agua es pura~", getnpcid(0);
+	end;
+OnTalk11:
+	showscript "Nunca me rendire~", getnpcid(0);
+	end;
+OnTalk12:
+	showscript "La victoria sera nuestra~", getnpcid(0);
+	end;
+OnTalk13:
+	showscript "Hasta la muerte~", getnpcid(0);
+	end;
+OnTalk14:
+	showscript "Waaahh~!", getnpcid(0);
+	end;
+OnTalk15:
+	showscript "Por el honor!~", getnpcid(0);
+	end;
+
+}
+
+
+invek,142,44,0	duplicate(Soldado#fb1)	Soldado#fb2	4_M_EIN_SOLDIER
+invek,146,44,0	duplicate(Soldado#fb1)	Soldado#fb3	4_M_EIN_SOLDIER
+invek,146,40,0	duplicate(Soldado#fb1)	Soldado#fb4	4_M_MOC_SOLDIER
+invek,140,44,0	duplicate(Soldado#fb1)	Soldado#fb5	4_M_RUSKNIGHT
+invek,140,36,0	duplicate(Soldado#fb1)	Soldado#fb6	4_M_EIN_SOLDIER
+invek,148,44,0	duplicate(Soldado#fb1)	Soldado#fb7	4_M_EIN_SOLDIER
+invek,140,40,0	duplicate(Soldado#fb1)	Soldado#fb8	4_M_EIN_SOLDIER
+invek,142,40,0	duplicate(Soldado#fb1)	Soldado#fb9	4_M_EIN_SOLDIER
+invek,144,40,0	duplicate(Soldado#fb1)	Soldado#fb10	4_M_EIN_SOLDIER
+invek,148,36,0	duplicate(Soldado#fb1)	Soldado#fb11	4_M_EIN_SOLDIER
+invek,148,40,0	duplicate(Soldado#fb1)	Soldado#fb12	4_M_EIN_SOLDIER
+invek,142,36,0	duplicate(Soldado#fb1)	Soldado#fb13	4_M_EIN_SOLDIER
+invek,144,36,0	duplicate(Soldado#fb1)	Soldado#fb14	4_M_EIN_SOLDIER
+invek,146,36,0	duplicate(Soldado#fb1)	Soldado#fb15	4_M_EIN_SOLDIER
+
+
+invek,140,106,0	script	Letrero	HIDDEN_NPC,{
+
+.@npcn2$ =  "^FF0000[Letrero]^000000";
+
+mes .@npcn2$;
+mes "Invek es una ciudad primitiva de los soldados de la Alianza.";
+mes "Construida hace más de 500 años.";
+mes "La leyenda cuenta que ^1e767aMigrohk^000000 fue quien decidio establecer una isla en este lugar.";
+next;
+mes .@npcn2$;
+mes "Actualmente esta siendo un refugio de la ciudad de Prontera.";
+mes "La cual ha sido terriblemente invadida por las fuerzas de Thanatos.";
+mes "Esperamos que esto llegue a un fin lo antes posible.";
+close;
+
+	}
+invek,134,210,0	script	Cartel	HIDDEN_NPC,{
+.@npcn2$ =  "^FF0000[Letrero]^000000";
+
+mes .@npcn2$;
+mes "Desafia a una serie de MvPs, y obten recompensas unicas.";
+mes "Entra al warp para ingresar al desafio.";
+close;
+}
+
+invek,157,109,3	script	Guardia	4_M_SAKRAYROYAL,{
+end;
+}
+
+invek,143,109,5	script	Guardia2	4_M_CHAOS,{
+end;
+}
+
+
+// Clock Tower
+
+aldebaran,0,0,0	script	ControlReloj	HIDDEN_NPC,{
+	end;
+
+OnInit:
+	if( gettime(3) >= 7 && gettime(3) < 19 )
+		day;
+	else
+		night;
+	end;
+
+OnClock0000:
+OnClock0100:
+OnClock0200:
+OnClock0300:
+OnClock0400:
+OnClock0500:
+OnClock0600:
+OnClock0700:
+OnClock0800:
+OnClock0900:
+OnClock1000:
+OnClock1100:
+	set .Sufijo$, "a.m.";
+	goto L_Bells;
+	end;
+
+OnClock1200:
+OnClock1300:
+OnClock1400:
+OnClock1500:
+OnClock1600:
+OnClock1700:
+OnClock1800:
+OnClock1900:
+OnClock2000:
+OnClock2100:
+OnClock2200:
+OnClock2300:
+	set .Sufijo$, "p.m.";
+	goto L_Bells;
+	end;
+	
+L_Bells:
+	set .Count, 0;
+	set .Hour, gettime(3);
+
+	if( .Hour == 7 ) day;
+	if( .Hour == 19 ) night;
+	
+	if( .Hour > 12 ) set .NHour, .Hour - 12;
+	else if( .Hour == 0 ) set .NHour, 12;
+	else set .NHour, .Hour;
+	
+	announce "[Aldebaran Clock Tower - " + .NHour + " " + .Sufijo$ + "]",0,0x00CCFF;
+	initnpctimer;
+	end;
+
+OnTimer1000:
+OnTimer3000:
+OnTimer5000:
+OnTimer7000:
+OnTimer9000:
+OnTimer11000:
+OnTimer13000:
+OnTimer15000:
+OnTimer17000:
+OnTimer19000:
+OnTimer21000:
+OnTimer23000:
+	soundeffectall "effect\\ef_angelus.wav",0,"prontera";
+	soundeffectall "effect\\ef_angelus.wav",0,"morocc";
+	soundeffectall "effect\\ef_angelus.wav",0,"payon";
+	soundeffectall "effect\\ef_angelus.wav",0,"aldebaran";
+	soundeffectall "effect\\ef_angelus.wav",0,"geffen";
+	soundeffectall "effect\\ef_angelus.wav",0,"izlude";
+
+	set .Count, .Count + 1;
+	if( .Count >= .NHour )
+	{
+		stopnpctimer;
+		set .Count, 0;
+	}
+
+	end;
+}
+
+invek,160,132,5	script	Hombre Misterioso	4_M_BARMUND,{
+
+.@mist$  =  "^FF0000[Hombre Misterioso]^000000";
+
+
+mes .@mist$;
+mes "Mis largas travesias me han permitido conocer personas realmente interesantes.";
+mes "Por un pequeño valor puedo darte algunas pistas o decirte directamente donde se encuentran.";
+mes "Pero...";
+next;
+mes .@mist$;
+mes "Esto tiene un costo asociado, el cual dependerá de tu elección.";
+mes "^36246cPista Básica -> 25,000,000 Zeny^000000";
+mes "^6c2436Ubicación Real -> 10 Creditos^000000";
+next;
+mes .@mist$;
+switch(select("Pista Basica:Ubicación Real:Salir")){
+
+	case 1:
+			mes "¿Qué Deseas saber?";
+				if(select("Equipo","Alas")==1){
+		next;
+		mes .@mist$;
+		mes "¿Cual equipo te gustaria conocer?";
+		switch(select("Valkyrie's Armor:Valkyrie' Circlet:Valkyrie's Manteau:Nile Rose:Valkyrie's Ring:Valkyrie's Shield:Valkyrie's Shoes:Sigruns Wings")){
+
+		case 1:
+				if (Zeny < 25000000){
+					next;
+					mes .@mist$;
+					mes "No tienes el zeny suficiente";
+					next;
+					mes "^05486c["+strcharinfo(0)+"]^000000";
+					mes "** Recibes una estocada ** ";
+					percentheal -99,-99;
+					next;
+					mes .@mist$;
+					mes "No intentes engañarme";
+					close;
+						} // FIN IF Zeny
+
+					next;
+					mes .@mist$;
+				mes "Solo te puedo contar que se encuentra en el interior de Gonryun, y su nombre es Rhiper";
+				Zeny-=25000000;
+				close;
+
+		case 2:
+				if (Zeny < 25000000){
+					next;
+					mes .@mist$;
+					mes "No tienes el zeny suficiente";
+					next;
+					mes "^05486c["+strcharinfo(0)+"]^000000";
+					mes "** Recibes una estocada ** ";
+					percentheal -99,-99;
+					next;
+					mes .@mist$;
+					mes "No intentes engañarme";
+					close;
+						} // FIN IF Zeny
+
+					next;
+					mes .@mist$;				
+				mes "Solo te puedo contar que se encuentra en la torre de Geffen, y su nombre es Emhilet";
+				Zeny-=25000000;
+				close;
+
+		case 3:
+
+				if (Zeny < 25000000){
+					next;
+					mes .@mist$;
+					mes "No tienes el zeny suficiente";
+					next;
+					mes "^05486c["+strcharinfo(0)+"]^000000";
+					mes "** Recibes una estocada ** ";
+					percentheal -99,-99;
+					next;
+					mes .@mist$;
+					mes "No intentes engañarme";
+					close;
+						} // FIN IF Zeny
+
+					next;
+					mes .@mist$;				
+				mes "Solo te puedo contar que se encuentra en el interior de Niffheim, y su nombre es Mhanie";
+				Zeny-=25000000;
+				close;
+
+				
+		case 4:
+
+				if (Zeny < 25000000){
+					next;
+					mes .@mist$;
+					mes "No tienes el zeny suficiente";
+					next;
+					mes "^05486c["+strcharinfo(0)+"]^000000";
+					mes "** Recibes una estocada ** ";
+					percentheal -99,-99;
+					next;
+					mes .@mist$;
+					mes "No intentes engañarme";
+					close;
+						} // FIN IF Zeny
+
+					next;
+					mes .@mist$;
+				mes "Solo te puedo contar que se encuentra en Shadow Workshop, y su nombre es Moily";
+				Zeny-=25000000;
+				close;
+
+		case 5:
+
+				if (Zeny < 25000000){
+					next;
+					mes .@mist$;
+					mes "No tienes el zeny suficiente";
+					next;
+					mes "^05486c["+strcharinfo(0)+"]^000000";
+					mes "** Recibes una estocada ** ";
+					percentheal -99,-99;
+					next;
+					mes .@mist$;
+					mes "No intentes engañarme";
+					close;
+						} // FIN IF Zeny
+
+					next;
+					mes .@mist$;
+				mes "Solo te puedo contar que se encuentra en el interior de Einbroch, y su nombre es Phiroz";
+				Zeny-=25000000;
+				close;
+
+
+		case 6:
+
+				if (Zeny < 25000000){
+					next;
+					mes .@mist$;
+					mes "No tienes el zeny suficiente";
+					next;
+					mes "^05486c["+strcharinfo(0)+"]^000000";
+					mes "** Recibes una estocada ** ";
+					percentheal -99,-99;
+					next;
+					mes .@mist$;
+					mes "No intentes engañarme";
+					close;
+						} // FIN IF Zeny
+					next;
+					mes .@mist$;
+				mes "Solo te puedo contar que se encuentra en el interior de Ayothaya, y su nombre es Ahiri";
+				Zeny-=25000000;
+				close;
+
+		case 7:
+
+				if (Zeny < 25000000){
+					next;
+					mes .@mist$;
+					mes "No tienes el zeny suficiente";
+					next;
+					mes "^05486c["+strcharinfo(0)+"]^000000";
+					mes "** Recibes una estocada ** ";
+					percentheal -99,-99;
+					next;
+					mes .@mist$;
+					mes "No intentes engañarme";
+					close;
+						} // FIN IF Zeny
+					next;
+					mes .@mist$;
+				mes "Solo te puedo contar que se encuentra en el interior de Yuno, y su nombre es August.";
+				Zeny-=25000000;
+				close;
+
+		case 8:
+
+				if (Zeny < 25000000){
+					next;
+					mes .@mist$;
+					mes "No tienes el zeny suficiente";
+					next;
+					mes "^05486c["+strcharinfo(0)+"]^000000";
+					mes "** Recibes una estocada ** ";
+					percentheal -99,-99;
+					next;
+					mes .@mist$;
+					mes "No intentes engañarme";
+					close;
+						} // FIN IF Zeny
+					next;
+					mes .@mist$;
+				mes "Solo te puedo contar que se encuentra en las alcantarillas de Alchemist Realm, y su nombre es Patric.";
+				Zeny-=25000000;
+				close;
+
+					} // FIN SWITCH
+		} // FIN IF MENU
+
+
+			next;
+			mes .@mist$;
+			mes "¿Cual Ala te interesa conocer?";
+			switch(select("Devil Wings:Angel Wings:Fallen Wings:Angeling Wings:Artic Wings:Demon Wings:Phoenix Wings:Gargoyle Wings:Wb Wings:Bb Wings:Torn Wings:Icarus Wings:Dragon Wings")){
+
+
+		case 1:
+				if (Zeny < 25000000){
+					next;
+					mes .@mist$;
+					mes "No tienes el zeny suficiente";
+					next;
+					mes "^05486c["+strcharinfo(0)+"]^000000";
+					mes "** Recibes una estocada ** ";
+					percentheal -99,-99;
+					next;
+					mes .@mist$;
+					mes "No intentes engañarme";
+					close;
+						} // FIN IF Zeny
+
+					next;
+					mes .@mist$;
+				mes "Solo te puedo contar que se encuentra en Arcadia, y su nombre es Devil Wings";
+				Zeny-=25000000;
+				close;
+
+		case 2:
+				if (Zeny < 25000000){
+					next;
+					mes .@mist$;
+					mes "No tienes el zeny suficiente";
+					next;
+					mes "^05486c["+strcharinfo(0)+"]^000000";
+					mes "** Recibes una estocada ** ";
+					percentheal -99,-99;
+					next;
+					mes .@mist$;
+					mes "No intentes engañarme";
+					close;
+						} // FIN IF Zeny
+
+					next;
+					mes .@mist$;				
+				mes "Solo te puedo contar que se encuentra en Geffenia, y su nombre es Angel Wings";
+				Zeny-=25000000;
+				close;
+
+		case 3:
+
+				if (Zeny < 25000000){
+					next;
+					mes .@mist$;
+					mes "No tienes el zeny suficiente";
+					next;
+					mes "^05486c["+strcharinfo(0)+"]^000000";
+					mes "** Recibes una estocada ** ";
+					percentheal -99,-99;
+					next;
+					mes .@mist$;
+					mes "No intentes engañarme";
+					close;
+						} // FIN IF Zeny
+
+					next;
+					mes .@mist$;				
+				mes "Solo te puedo contar que se encuentra en Invek, y su nombre es Fallen Wings";
+				Zeny-=25000000;
+				close;
+
+				
+		case 4:
+
+				if (Zeny < 25000000){
+					next;
+					mes .@mist$;
+					mes "No tienes el zeny suficiente";
+					next;
+					mes "^05486c["+strcharinfo(0)+"]^000000";
+					mes "** Recibes una estocada ** ";
+					percentheal -99,-99;
+					next;
+					mes .@mist$;
+					mes "No intentes engañarme";
+					close;
+						} // FIN IF Zeny
+
+					next;
+					mes .@mist$;
+				mes "Solo te puedo contar que se encuentra en los Bosques de Payon 04, y su nombre es Angeling Wings";
+				Zeny-=25000000;
+				close;
+
+		case 5:
+
+				if (Zeny < 25000000){
+					next;
+					mes .@mist$;
+					mes "No tienes el zeny suficiente";
+					next;
+					mes "^05486c["+strcharinfo(0)+"]^000000";
+					mes "** Recibes una estocada ** ";
+					percentheal -99,-99;
+					next;
+					mes .@mist$;
+					mes "No intentes engañarme";
+					close;
+						} // FIN IF Zeny
+
+					next;
+					mes .@mist$;
+				mes "Solo te puedo contar que se encuentra en las Cavernas Heladas de Nivel 3, y su nombre es Artic Wings";
+				Zeny-=25000000;
+				close;
+
+
+		case 6:
+
+				if (Zeny < 25000000){
+					next;
+					mes .@mist$;
+					mes "No tienes el zeny suficiente";
+					next;
+					mes "^05486c["+strcharinfo(0)+"]^000000";
+					mes "** Recibes una estocada ** ";
+					percentheal -99,-99;
+					next;
+					mes .@mist$;
+					mes "No intentes engañarme";
+					close;
+						} // FIN IF Zeny
+					next;
+					mes .@mist$;
+				mes "Solo te puedo contar que se encuentra en las afueras del Laboratorio nivel 3, y su nombre es Demon Wings";
+				Zeny-=25000000;
+				close;
+
+		case 7:
+
+				if (Zeny < 25000000){
+					next;
+					mes .@mist$;
+					mes "No tienes el zeny suficiente";
+					next;
+					mes "^05486c["+strcharinfo(0)+"]^000000";
+					mes "** Recibes una estocada ** ";
+					percentheal -99,-99;
+					next;
+					mes .@mist$;
+					mes "No intentes engañarme";
+					close;
+						} // FIN IF Zeny
+					next;
+					mes .@mist$;
+				mes "Solo te puedo contar que se encuentra en los ardientes campos de thor, y su nombre es Phoenix Wings";
+				Zeny-=25000000;
+				close;
+
+		case 8:
+
+				if (Zeny < 25000000){
+					next;
+					mes .@mist$;
+					mes "No tienes el zeny suficiente";
+					next;
+					mes "^05486c["+strcharinfo(0)+"]^000000";
+					mes "** Recibes una estocada ** ";
+					percentheal -99,-99;
+					next;
+					mes .@mist$;
+					mes "No intentes engañarme";
+					close;
+						} // FIN IF Zeny
+					next;
+					mes .@mist$;
+				mes "Solo te puedo contar que se encuentra en las alcantarillas de Glast Heim, y su nombre es Gargoyle Wings";
+				Zeny-=25000000;
+				close;
+
+		case 9:
+
+				if (Zeny < 25000000){
+					next;
+					mes .@mist$;
+					mes "No tienes el zeny suficiente";
+					next;
+					mes "^05486c["+strcharinfo(0)+"]^000000";
+					mes "** Recibes una estocada ** ";
+					percentheal -99,-99;
+					next;
+					mes .@mist$;
+					mes "No intentes engañarme";
+					close;
+						} // FIN IF Zeny
+
+					next;
+					mes .@mist$;
+				mes "Solo te puedo contar que se encuentra en los bosques de Luluka, y su nombre es Torn Wings";
+				Zeny-=25000000;
+				close;
+
+		case 10:
+
+				if (Zeny < 25000000){
+					next;
+					mes .@mist$;
+					mes "No tienes el zeny suficiente";
+					next;
+					mes "^05486c["+strcharinfo(0)+"]^000000";
+					mes "** Recibes una estocada ** ";
+					percentheal -99,-99;
+					next;
+					mes .@mist$;
+					mes "No intentes engañarme";
+					close;
+						} // FIN IF Zeny
+
+					next;
+					mes .@mist$;
+				mes "Solo te puedo contar que se encuentra en Suei Long Gon, y su nombre es White Wings";
+				Zeny-=25000000;
+				close;
+
+		case 11:
+
+				if (Zeny < 25000000){
+					next;
+					mes .@mist$;
+					mes "No tienes el zeny suficiente";
+					next;
+					mes "^05486c["+strcharinfo(0)+"]^000000";
+					mes "** Recibes una estocada ** ";
+					percentheal -99,-99;
+					next;
+					mes .@mist$;
+					mes "No intentes engañarme";
+					close;
+						} // FIN IF Zeny
+
+					next;
+					mes .@mist$;
+				mes "Solo te puedo contar que se encuentra en El Mes Plateau, y su nombre es Black Wings";
+				Zeny-=25000000;
+				close;
+
+		case 12:
+					next;
+					mes .@mist$;
+				mes "Información no disponible.";
+				mes "Por favor vuelve a consultar más adelante.";
+				close;
+
+		case 13:
+					next;
+					mes .@mist$;
+				mes "Información no disponible.";
+				mes "Por favor vuelve a consultar más adelante.";
+				close;
+	
+		} // FIN SWITCH PISTA BASICA
+
+	case 2:
+
+		mes "¿Qué Deseas saber?";
+		if(select("Equipo","Alas")==1){
+
+		next;
+		mes .@mist$;
+		mes "¿Cual equipo te gustaria conocer?";
+		switch(select("Valkyrie's Armor:Valkyrie' Circlet:Valkyrie's Manteau:Nile Rose:Valkyrie's Ring:Valkyrie's Shield:Valkyrie's Shoes:Sigruns Wings")){
+
+		case 1:
+				if (countitem(30002) < 10) {
+					next;
+					mes .@mist$;
+					mes "No tienes el credito suficiente";
+					next;
+					mes "^05486c["+strcharinfo(0)+"]^000000";
+					mes "** Recibes una estocada ** ";
+					percentheal -99,-99;
+					next;
+					mes .@mist$;
+					mes "No intentes engañarme";
+					close;
+						} // FIN IF Zeny
+					next;
+					mes .@mist$;
+				delitem 30002,10;
+				mes "Se encuentra en: ^6c2436gon_in,182,24^000000";
+				close;
+		case 2:
+
+				if (countitem(30002) < 10) {
+					next;
+					mes .@mist$;
+					mes "No tienes el credito suficiente";
+					next;
+					mes "^05486c["+strcharinfo(0)+"]^000000";
+					mes "** Recibes una estocada ** ";
+					percentheal -99,-99;
+					next;
+					mes .@mist$;
+					mes "No intentes engañarme";
+					close;
+						} // FIN IF Zeny
+					next;
+					mes .@mist$;
+				delitem 30002,10;
+				mes "Se encuentra en: ^6c2436geffen_in,160,124^000000";
+				close;
+
+		case 3:
+
+
+				if (countitem(30002) < 10) {
+					next;
+					mes .@mist$;
+					mes "No tienes el credito suficiente";
+					next;
+					mes "^05486c["+strcharinfo(0)+"]^000000";
+					mes "** Recibes una estocada ** ";
+					percentheal -99,-99;
+					next;
+					mes .@mist$;
+					mes "No intentes engañarme";
+					close;
+						} // FIN IF Zeny
+					next;
+					mes .@mist$;
+				delitem 30002,10;
+				mes "Se encuentra en: ^6c2436nif_in,28,103^000000";
+				close;
+
+		case 4:
+
+				if (countitem(30002) < 10) {
+					next;
+					mes .@mist$;
+					mes "No tienes el credito suficiente";
+					next;
+					mes "^05486c["+strcharinfo(0)+"]^000000";
+					mes "** Recibes una estocada ** ";
+					percentheal -99,-99;
+					next;
+					mes .@mist$;
+					mes "No intentes engañarme";
+					close;
+						} // FIN IF Zeny
+					next;
+					mes .@mist$;
+				delitem 30002,10;
+				mes "Se encuentra en: ^6c2436s_atelier,64,62^000000";
+				close;
+		case 5:
+
+				if (countitem(30002) < 10) {
+					next;
+					mes .@mist$;
+					mes "No tienes el credito suficiente";
+					next;
+					mes "^05486c["+strcharinfo(0)+"]^000000";
+					mes "** Recibes una estocada ** ";
+					percentheal -99,-99;
+					next;
+					mes .@mist$;
+					mes "No intentes engañarme";
+					close;
+						} // FIN IF Zeny
+					next;
+					mes .@mist$;
+				delitem 30002,10;
+				mes "Se encuentra en: ^6c2436ein_in01,174,284^000000";
+				close;
+		case 6:
+
+				if (countitem(30002) < 10) {
+					next;
+					mes .@mist$;
+					mes "No tienes el credito suficiente";
+					next;
+					mes "^05486c["+strcharinfo(0)+"]^000000";
+					mes "** Recibes una estocada ** ";
+					percentheal -99,-99;
+					next;
+					mes .@mist$;
+					mes "No intentes engañarme";
+					close;
+						} // FIN IF Zeny
+					next;
+					mes .@mist$;
+				delitem 30002,10;
+				mes "Se encuentra en: ^6c2436ayo_in02,74,179^000000";
+				close;
+		case 7:
+
+				if (countitem(30002) < 10) {
+					next;
+					mes .@mist$;
+					mes "No tienes el credito suficiente";
+					next;
+					mes "^05486c["+strcharinfo(0)+"]^000000";
+					mes "** Recibes una estocada ** ";
+					percentheal -99,-99;
+					next;
+					mes .@mist$;
+					mes "No intentes engañarme";
+					close;
+						} // FIN IF Zeny
+					next;
+					mes .@mist$;
+				delitem 30002,10;
+				mes "Se encuentra en: ^6c2436yuno_in03,168,190^000000";
+				close;
+		case 8:
+
+				if (countitem(30002) < 10) {
+					next;
+					mes .@mist$;
+					mes "No tienes el credito suficiente";
+					next;
+					mes "^05486c["+strcharinfo(0)+"]^000000";
+					mes "** Recibes una estocada ** ";
+					percentheal -99,-99;
+					next;
+					mes .@mist$;
+					mes "No intentes engañarme";
+					close;
+						} // FIN IF Zeny
+					next;
+					mes .@mist$;
+				delitem 30002,10;
+				mes "Se encuentra en: ^6c2436alde_alche,145,12^000000";
+				close;
+					} // FIN SWITCH
+
+		} // FIN IF MENU
+					next;
+					mes .@mist$;
+			mes "¿Cual Ala te interesa conocer?";
+			switch(select("Devil Wings:Angel Wings:Fallen Wings:Angeling Wings:Artic Wings:Demon Wings:Phoenix Wings:Gargoyle Wings:Wb Wings:Bb Wings:Torn Wings:Icarus Wings:Dragon Wings")){
+
+
+		case 1:
+				if (countitem(30002) < 10) {
+					next;
+					mes .@mist$;
+					mes "No tienes el credito suficiente";
+					next;
+					mes "^05486c["+strcharinfo(0)+"]^000000";
+					mes "** Recibes una estocada ** ";
+					percentheal -99,-99;
+					next;
+					mes .@mist$;
+					mes "No intentes engañarme";
+					close;
+						} // FIN IF Zeny
+					next;
+					mes .@mist$;
+				delitem 30002,10;
+				mes "Se encuentra en: ^6c2436gon_dun03,116,255^000000";
+				close;
+		case 2:
+
+				if (countitem(30002) < 10) {
+					next;
+					mes .@mist$;
+					mes "No tienes el credito suficiente";
+					next;
+					mes "^05486c["+strcharinfo(0)+"]^000000";
+					mes "** Recibes una estocada ** ";
+					percentheal -99,-99;
+					next;
+					mes .@mist$;
+					mes "No intentes engañarme";
+					close;
+						} // FIN IF Zeny
+					next;
+					mes .@mist$;
+				delitem 30002,10;
+				mes "Se encuentra en: ^6c2436gefenia03,36,36^000000";
+				close;
+
+		case 3:
+
+
+				if (countitem(30002) < 10) {
+					next;
+					mes .@mist$;
+					mes "No tienes el credito suficiente";
+					next;
+					mes "^05486c["+strcharinfo(0)+"]^000000";
+					mes "** Recibes una estocada ** ";
+					percentheal -99,-99;
+					next;
+					mes .@mist$;
+					mes "No intentes engañarme";
+					close;
+						} // FIN IF Zeny
+					next;
+					mes .@mist$;
+				delitem 30002,10;
+				mes "Se encuentra en: ^6c2436invek,113,44^000000";
+				close;
+
+		case 4:
+
+				if (countitem(30002) < 10) {
+					next;
+					mes .@mist$;
+					mes "No tienes el credito suficiente";
+					next;
+					mes "^05486c["+strcharinfo(0)+"]^000000";
+					mes "** Recibes una estocada ** ";
+					percentheal -99,-99;
+					next;
+					mes .@mist$;
+					mes "No intentes engañarme";
+					close;
+						} // FIN IF Zeny
+					next;
+					mes .@mist$;
+				delitem 30002,10;
+				mes "Se encuentra en: ^6c2436pay_fild04,205,124^000000";
+				close;
+		case 5:
+
+				if (countitem(30002) < 10) {
+					next;
+					mes .@mist$;
+					mes "No tienes el credito suficiente";
+					next;
+					mes "^05486c["+strcharinfo(0)+"]^000000";
+					mes "** Recibes una estocada ** ";
+					percentheal -99,-99;
+					next;
+					mes .@mist$;
+					mes "No intentes engañarme";
+					close;
+						} // FIN IF Zeny
+					next;
+					mes .@mist$;
+				delitem 30002,10;
+				mes "Se encuentra en: ^6c2436ice_dun03,114,201^000000";
+				close;
+		case 6:
+
+				if (countitem(30002) < 10) {
+					next;
+					mes .@mist$;
+					mes "No tienes el credito suficiente";
+					next;
+					mes "^05486c["+strcharinfo(0)+"]^000000";
+					mes "** Recibes una estocada ** ";
+					percentheal -99,-99;
+					next;
+					mes .@mist$;
+					mes "No intentes engañarme";
+					close;
+						} // FIN IF Zeny
+					next;
+					mes .@mist$;
+				delitem 30002,10;
+				mes "Se encuentra en: ^6c2436lhz_fild03,279,156^000000";
+				close;
+		case 7:
+
+				if (countitem(30002) < 10) {
+					next;
+					mes .@mist$;
+					mes "No tienes el credito suficiente";
+					next;
+					mes "^05486c["+strcharinfo(0)+"]^000000";
+					mes "** Recibes una estocada ** ";
+					percentheal -99,-99;
+					next;
+					mes .@mist$;
+					mes "No intentes engañarme";
+					close;
+						} // FIN IF Zeny
+					next;
+					mes .@mist$;
+				delitem 30002,10;
+				mes "Se encuentra en: ^6c2436thor_v01,161,151^000000";
+				close;
+		case 8:
+
+				if (countitem(30002) < 10) {
+					next;
+					mes .@mist$;
+					mes "No tienes el credito suficiente";
+					next;
+					mes "^05486c["+strcharinfo(0)+"]^000000";
+					mes "** Recibes una estocada ** ";
+					percentheal -99,-99;
+					next;
+					mes .@mist$;
+					mes "No intentes engañarme";
+					close;
+						} // FIN IF Zeny
+					next;
+					mes .@mist$;
+				delitem 30002,10;
+				mes "Se encuentra en: ^6c2436gl_sew01,99,65^000000";
+				close;
+		case 9:
+
+				if (countitem(30002) < 10) {
+					next;
+					mes .@mist$;
+					mes "No tienes el credito suficiente";
+					next;
+					mes "^05486c["+strcharinfo(0)+"]^000000";
+					mes "** Recibes una estocada ** ";
+					percentheal -99,-99;
+					next;
+					mes .@mist$;
+					mes "No intentes engañarme";
+					close;
+						} // FIN IF Zeny
+					next;
+					mes .@mist$;
+				delitem 30002,10;
+				mes "Se encuentra en: ^6c2436lou_dun03,133,145^000000";
+				close;
+		case 10:
+
+				if (countitem(30002) < 10) {
+					next;
+					mes .@mist$;
+					mes "No tienes el credito suficiente";
+					next;
+					mes "^05486c["+strcharinfo(0)+"]^000000";
+					mes "** Recibes una estocada ** ";
+					percentheal -99,-99;
+					next;
+					mes .@mist$;
+					mes "No intentes engañarme";
+					close;
+						} // FIN IF Zeny
+					next;
+					mes .@mist$;
+				delitem 30002,10;
+				mes "Se encuentra en: ^6c2436yuno_fild03,297,247^000000";
+				close;
+		case 11:
+
+				if (countitem(30002) < 10) {
+					next;
+					mes .@mist$;
+					mes "No tienes el credito suficiente";
+					next;
+					mes "^05486c["+strcharinfo(0)+"]^000000";
+					mes "** Recibes una estocada ** ";
+					percentheal -99,-99;
+					next;
+					mes .@mist$;
+					mes "No intentes engañarme";
+					close;
+						} // FIN IF Zeny
+					next;
+					mes .@mist$;
+				delitem 30002,10;
+				mes "Se encuentra en: ^6c2436um_fild01,87,130^000000";
+				close;
+		case 12:
+					next;
+					mes .@mist$;
+				mes "Información no disponible.";
+				mes "Por favor vuelve a consultar más adelante.";
+				close;
+		case 13:
+					next;
+					mes .@mist$;
+				mes "Información no disponible.";
+				mes "Por favor vuelve a consultar más adelante.";
+				close;
+
+		} // FIN SWITCH PISTA AVANZADA
+
+		case 3:
+			close;
+
+			} // FIN SWITCH PRINCIPAL
+
+				} // FIN SCRIPT
+
+
+invek,154,173,5	script	Treasure Hunter Guild	4_M_RUSKING,{
+
+mes "¿Deseas visitar nuestro Gremio?";
+if (select("Si","No")==2) { close;}
+
+warp "yuno_in01",120,163;
+end;
+}
+
+invek,158,175,5	script	Verano	4_M_SIT_NOVICE,{
+
+.costume=atcommand("@costume Summer");
+if ( .costume ) { end;}
+
+atcommand "@costume";
+end;
+
+		}

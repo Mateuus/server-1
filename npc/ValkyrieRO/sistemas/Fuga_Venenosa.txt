@@ -1,0 +1,208 @@
+//=== Global Chile ======
+//=== https://www.facebook.com/IntegralesGlobal ===
+//=== - Party Quest - Fuga Venenosa - ====
+
+payon.gat,83,101,4	script	Excavador Estresado	848,{
+	
+if (.BloqueoPuerta == 1) goto PuertaAbierta;
+mes "[^CC0000Excavador Estresado^000000]";
+mes "Tengo que arreglar esto...";
+next;
+mes "[^CC0000Excavador Estresado^000000]";
+mes "Como le explico yo esto al jefe...";
+next;
+menu "¿Necesitas Ayuda?",explica,"Ignorarlo",cancelar;
+
+explica:
+mes "[^CC0000Excavador Estresado^000000]";
+mes "¿Eh?";
+mes "¿Eres un aventurero experimentado?";
+next;
+mes "[^CC0000Excavador Estresado^000000]";
+mes "Necesito un grupo de aventureros que sean capaces de ayudarme, no me importa si son experimentados o no.";
+next;
+mes "[^2A445CParty Quest^000000]";
+mes "^2A445CNombre:^000000 Fuga Venenosa";
+mes "^2A445CNivel Necesario:^000000 30~60";
+next;
+menu "Entrar",continua,"Informacion",info,"Cancelar",cancelar;
+
+
+
+continua:
+if (getmapusers("pvp_n_4-3.gat") >= 1) goto ocupado;
+set $@PQ2INICIO,0;
+npctalk "La puerta permanecerá abierta durante los próximos 30 segundos, entrad aventureros.";
+set .BloqueoPuerta,1;
+killmonster "pvp_n_4-3","Excavador Estresado::OnThisMobDeath001";
+close2;
+sleep 30000;
+set .BloqueoPuerta,0;
+npctalk "Puerta cerrada.";
+end;
+
+PuertaAbierta:
+if(countitem(7093)>0)goto sincogwheel;
+if (BaseLevel >= 30 && BaseLevel <= 60) goto entrar;
+mes "[^CC0000Excavador Estresado^000000]";
+mes "No cumples los requisitos para entrar aquí, lo siento.";
+close;
+
+entrar:
+warp "pvp_n_4-3.gat",99,82;
+if ($@PQ2INICIO == 1) end;
+set $@PQ2INICIO,1;
+sleep2 30000;
+set $@PQCOGS,0;
+set $@ToxiAire,100;
+set $@PQToxicidad,0;
+set $@PQ2INICIO,0;
+mapannounce "pvp_n_4-3","Excavador Estresado: Tened cuidado con las mutaciones, iran apareciendo por los cuatro lados.",bc_yellow;
+sleep2 9000;
+mapannounce "pvp_n_4-3","Excavador Estresado: Cada vez que consigais un engranaje (Cogwheel) llevarlo al arbol central, allí encontrareis una maquinaria oculta.",bc_yellow;
+sleep2 9000;
+mapannounce "pvp_n_4-3","Excavador Estresado: A medida que vaya bajando la toxicidad los monstruos se volverán más rabiosos.",bc_yellow;
+sleep2 9000;
+mapannounce "pvp_n_4-3","Excavador Estresado: Cuidad vuestros traseros.",bc_yellow;
+sleep2 9000;
+monster "pvp_n_4-3",98,59,"Mutacion",1015,20,"Excavador Estresado::OnThisMobDeath001";
+end;
+
+sincogwheel:
+mes "[^CC0000Excavador Estresado^000000]";
+mes "Lo siento, no puedo dejarte pasar con Cogwheel en tu bolsillo.";
+close;
+
+OnThisMobDeath001:
+if (BaseLevel > 59 && $@PQCOGS > 9) {dispbottom "Tu nivel sobrepasa el permitido por esta quest, el respawn será deshabilitado"; end;}
+set .@DropEngranaje,rand(1,10);
+if (.@DropEngranaje == 1) {set $@PQCOGS,$@PQCOGS+1; set $@PQToxicidad,$@PQToxicidad+rand(5,10); getitem 7093,1;}
+set .@LanzadorMutacion2,rand(1,9);
+set .@LanzadorMutacion,.@LanzadorMutacion2+$@PQToxicidad;
+if (.@LanzadorMutacion >= 80) {monster "pvp_n_4-3",0,0,"Mutacion",1036,1,"Excavador Estresado::OnThisMobDeath001"; end;}
+if (.@LanzadorMutacion >= 70) {monster "pvp_n_4-3",0,0,"Mutacion",1152,1,"Excavador Estresado::OnThisMobDeath001"; end;}
+if (.@LanzadorMutacion >= 60) {monster "pvp_n_4-3",0,0,"Mutacion",1153,1,"Excavador Estresado::OnThisMobDeath001"; end;}
+if (.@LanzadorMutacion >= 50) {monster "pvp_n_4-3",0,0,"Mutacion",1016,1,"Excavador Estresado::OnThisMobDeath001"; end;}
+if (.@LanzadorMutacion >= 40) {monster "pvp_n_4-3",0,0,"Mutacion",1071,1,"Excavador Estresado::OnThisMobDeath001"; end;}
+if (.@LanzadorMutacion >= 30) {monster "pvp_n_4-3",0,0,"Mutacion",1169,1,"Excavador Estresado::OnThisMobDeath001"; end;}
+if (.@LanzadorMutacion >= 20) {monster "pvp_n_4-3",0,0,"Mutacion",1028,1,"Excavador Estresado::OnThisMobDeath001"; end;}
+if (.@LanzadorMutacion >= 1) {monster "pvp_n_4-3",0,0,"Mutacion",1015,1,"Excavador Estresado::OnThisMobDeath001"; end;}
+end;
+
+
+info:
+mes "[^CC0000Excavador Estresado^000000]";
+mes "Ha habido un escape de veneno en un subterráneo de Payon y todo mi grupo ha sido infectado...";
+next;
+mes "[^CC0000Excavador Estresado^000000]";
+mes "Necesito algun grupo de aventureros capaz de luchar contra las mutaciones de mis compañeros y arrebatarles los engranajes para cerrar las valvulas.";
+close;
+
+ocupado:
+mes "[^CC0000Excavador Estresado^000000]";
+mes "Ya hay algunos aventureros dentro, vuelve a intentarlo más tarde.";
+close;
+
+cancelar:
+close;
+}
+
+pvp_n_4-3.gat,99,96,4	script	Maquinaria Oculta	111,{
+
+if ($@ToxiAire == 0) end;
+if(countitem(7093)>0)goto engranaje;
+mes "[^CC0000"+strcharinfo(0)+"^000000]";
+mes "No tengo ningún engranaje para hacerlo funcionar.";
+close;
+
+engranaje:
+mes "[^CC0000"+strcharinfo(0)+"^000000]";
+mes "¿Debo colocar mi engranaje aquí?";
+next;
+menu "Colocar",coloca,"Cancelar",cancelar;
+
+coloca:
+delitem 7093,1;
+atcommand "@me coloca el engranaje";
+mapannounce "pvp_n_4-3","Maquinaria Oculta: Engranaje colocado cerrando valvulas...",bc_yellow;
+mes "[^CC0000"+strcharinfo(0)+"^000000]";
+mes "Engranaje colocado.";
+close2;
+sleep2 5000;
+set $@ToxiAire,$@ToxiAire-10;
+mapannounce "pvp_n_4-3","Maquinaria Oculta: Algunas valvulas han sido cerradas [Toxicidad Restante "+$@ToxiAire+"%]",bc_yellow;
+if ($@ToxiAire == 0) {mapannounce "pvp_n_4-3","Excavador Estresado: ¡Buen Trabajo! ¡Habeis cerrado todas las valvulas!",bc_yellow;
+killmonster "pvp_n_4-3","Excavador Estresado::OnThisMobDeath001";
+sleep2 5000;
+mapannounce "pvp_n_4-3","Excavador Estresado: Hablad con mi compañero a la derecha de ese lugar, él os sacará de ahí.",bc_yellow;
+set $@PQ2Completa,1;
+sleep2 3000;
+mapannounce "pvp_n_4-3","Excavador Estresado: Teneis 30 segundos para salir de aquí antes de que las valvulas vuelvan a abrirse.",bc_yellow;
+sleep2 30000;
+areawarp "pvp_n_4-3",1,1,300,300,"payon",75,105;
+set $@PQ2Completa,0;
+set .BloqueoPuerta,0;
+
+end;}
+
+cancelar:
+close;
+}
+
+pvp_n_4-3.gat,150,99,4	script	Excavador Envenenado	848,{
+
+if ($@PQ2Completa == 1) goto finpq;
+mes "[^CC0000Excavador Envenenado^000000]";
+mes "...";
+close;
+
+finpq:
+mes "[^CC0000Excavador Envenenado^000000]";
+mes "Gracias por salvarme, como agradecimiento dejadme que os recompense con un pequeño detalle.";
+next;
+dispbottom "¡Experiencia extra por completar la misión!";
+getexp 5000,5000;
+set @PremiosPQ,rand(1,11);
+if (@PremiosPQ == 1) getitem 12235,rand(5,10);
+if (@PremiosPQ == 2) getitem 12110,rand(5,10);
+if (@PremiosPQ == 3) getitem 12219,rand(5,10);
+if (@PremiosPQ == 4) getitem 14534,rand(5,10);
+if (@PremiosPQ == 5) getitem 12350,rand(5,10);
+if (@PremiosPQ == 6) goto equipo;
+if (@PremiosPQ == 7) getitem 12300,rand(5,10);
+if (@PremiosPQ == 8) goto figure;
+if (@PremiosPQ == 9) getitem 5411,1;
+if (@PremiosPQ == 10) getitem 12002,rand(5,10);
+if (@PremiosPQ == 11) getitem 12216,rand(5,10);
+sleep2 3000;
+warp "payon.gat",75,105;
+close2;
+end;
+
+equipo:
+set @PremiosPQ,rand(1,6);
+if (@PremiosPQ == 1) getitem 1313,1;
+if (@PremiosPQ == 2) getitem 1749,1;
+if (@PremiosPQ == 3) getitem 13052,1;
+if (@PremiosPQ == 4) getitem 16006,1;
+if (@PremiosPQ == 5) getitem 1652,1;
+if (@PremiosPQ == 6) getitem 13425,1;
+sleep2 3000;
+warp "payon.gat",75,105;
+close2;
+end;
+
+figure:
+set @PremiosPQ,rand(1,7);
+if (@PremiosPQ == 1) getitem 2767,1;
+if (@PremiosPQ == 2) getitem 2769,1;
+if (@PremiosPQ == 3) getitem 2768,1;
+if (@PremiosPQ == 4) getitem 2771,1;
+if (@PremiosPQ == 5) getitem 2765,1;
+if (@PremiosPQ == 6) getitem 2766,1;
+if (@PremiosPQ == 7) getitem 2770,1;
+sleep2 3000;
+warp "payon.gat",75,105;
+close2;
+end;
+}

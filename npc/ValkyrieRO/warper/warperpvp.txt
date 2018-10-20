@@ -1,0 +1,33 @@
+//===== Global Chile ======
+//=== https://www.facebook.com/IntegralesGlobal ===
+
+guild_vs3,13,50,5	script	Warp PVP	728,{
+	mes "[Antiguo Luchador]";
+	mes "Buen día aventurero";
+	mes "Yo soy responsable de muchas luchas";
+	next;
+	mes "[Maroll Battle Recruiter]";
+	mes "¿Deseas Salir de mis dominios?";
+	next;
+	if( select("Si:No") == 2 )
+	{
+		mes "[Antiguo Luchador]";
+		mes "Creo que eres bastante Valiente";
+		close;
+	}
+/* Available only for eAmod-B
+	if( bg_logincount() > 0 )
+	{
+		mes "[Antiguo Luchador]";
+		mes "Vuelve cuando seas Valiente";
+		close;
+	}
+*/
+	mes "[Antiguo Luchador]";
+	mes "Ok,Vamos!.";
+	close2;
+	warp "prontera",155,67;
+	end;
+}
+
+guild_vs2,49,92,5	duplicate(Warp PVP)	Warp PVP#09	728

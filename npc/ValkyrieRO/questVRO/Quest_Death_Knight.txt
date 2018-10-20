@@ -1,0 +1,493 @@
+//===== rAthena Script Death Knight=======================================
+//= Wandering poet NPC
+//===== By: ==================================================
+//= by MouseJstr
+//===== Current Version: =====================================
+//= 0.2a
+//===== Compatible With: =====================================
+//= rAthena 1.0 Final +
+//===== Description: =========================================
+
+//------- Death Knight----
+pvp_valk,98,104,5	script	Death Knight	998,{
+	if(countitem(7914)>0) goto T_SG_done;
+	mes "[^CC0000Death Knight^000000]";
+	mes "Disculpa...";
+	next;
+	if(countitem(7730)>0) goto T_SG_done1;
+	mes "[^CC0000Death Knight^000000]";
+	mes "Creo que te eh visto antes...,";
+	next;
+	if(countitem(7806)>0) goto Termilamierda;
+	mes "[^CC0000Death Knight^000000]";
+	mes "A no Disculpa te confundi con alguien mas... pero andas en busqueda de informacion...,";
+	mes "Yo te puedo dar la ubicacion de La forjadora de el Cursed Sword y El Dark Crescent... ";
+	next;
+	mes "[^CC0000Death Knight^000000]";
+	mes "Pero para informarte  y que puedas hacer la quest, ya que yo soy le único";
+	mes "que puede darte la ubicacion de Fenrir, para que forje la preciada Sword...";
+	next;
+	mes "[^CC0000Death Knight^000000]";
+	mes "Solo pido un pequeño Incentivo";
+	mes "- Cracked Diamond x15";
+	mes "- Gold x10";
+	mes "- 500,000 Zeny";
+	mes "Y así te daré esa información que tanto quieres..";
+	next;
+	mes "[^CC0000Death Knight^000000]";
+	mes "Entonces que decides?..";
+	Menu "Si te dare lo que pides",T_SG_DK1,"No, es demasiado..",T_SG_DK1no;
+T_SG_DK1:
+	next;
+	if(countitem(733)<15) goto falta1;
+	if(countitem(969)<10) goto falta1;
+	if(Zeny<=500000) goto falta1;
+	next;
+	mes "umm que bien traiste todo...";
+	next;
+	delitem 733,15;
+	delitem 969,10;
+	set Zeny,zeny-500000;
+	getitem 7914,1;
+	next;
+	mes "[^CC0000Death Knight^000000]";
+	mes " Muy bien "+strcharinfo(0)+" aqui te va la informacion...";
+	mes "Mr. Fenrir te recívira con mucho gusto...";
+	next;
+	mes "[^CC0000Death Knight^000000]";
+	mes "ahh..,se me olvidaba Mr. Fenrir Se encuentra en la ciudad de los Muertos";
+	mes "IfeheimlN..,iNfeleimh..,Nifeimlhe..(1g3o)..";
+	next;
+	mes "[^CC0000Death Knight^000000]";
+	mes "Que tengas suerte en tu busqueda..."; 
+	close;
+falta1:
+	mes "[^CC0000Death Knight^000000]";
+	mes "Veamos tus progresos:";
+	mes "Gold: ^CC0000"+countitem(969)+"^000000/10";
+	mes "Cracked Diamond: ^CC0000"+countitem(733)+"^000000/15";
+	mes "Zeny: ^CC0000"+Zeny+"^000000/50.000.000";
+	mes "Vuelve cuando hayas conseguido todo...";
+	close;
+T_SG_DK1no:
+	next;
+	mes "[^CC0000Death Knight^000000]";
+	mes "Ok "+strcharinfo(0)+" tu te lo pierdes...";
+	close;
+T_SG_done:
+	mes "[^CC0000Death Knight^000000]";
+	mes "Mr. Fenrir Se encuentra en la ciudad de los Muertos";
+	mes "IfeheimlN..,iNfeleimh..,Nifeimlhe..";
+    	mes "No hay nada más que pueda decirte.";
+        close;
+T_SG_done1:
+
+	mes "[^CC0000Death Knight^000000]";
+	mes "Ya veo Ya encontraste al Sagaz Forjador del Midgrad";
+	close;
+
+Termilamierda:
+	mes "[^CC0000Death Knight^000000]";
+	mes "Hola "+strcharinfo(0)+" ";
+	mes "Que hay de nuevo..";
+	next;
+	if(countitem(12080)>0) goto T_LA_M_DECOTAIL;
+	mes "[^CC0000Death Knight^000000]";
+	mes "Con que ya puedes hacer Auras";
+	mes "Viste te sirvio de mucha ayuda mi información";
+	next;
+	mes "[^CC0000Death Knight^000000]";
+    	mes "Cualquier quest que recuerde te aviso";
+	mes "sigue buscando más quest.";
+	next;
+	mes "[^CC0000Death Knight^000000]";
+	mes "Mmm... Creo aver recordar una  quest Pero Traeme 1 Dragon Breath Cocktail para darte la información.";
+        close;
+
+T_LA_M_DECOTAIL:
+	mes "[^CC0000Death Knight^000000]";
+	mes "MMM Gracias por el Dragon Breath Cocktail";
+	mes "no me lo podré tomar todo, ok amos con lo de la quest";
+	next; 
+	mes "[^CC0000Death Knight^000000]";
+	mes "mmm Recuerdo que la Quest trata de un Forjador del Valhaja llamado Aesir";
+	mes "Dicen que el es Capar de crear Magnificos items como o mejores que Fenrir";
+	next;
+	mes "[^CC0000Death Knight^000000]";
+	mes "Segun la historia son dos grandes Amigos, y desde pequeños empezaron a entrar al mundo de la herrería";
+	mes "se hicieron Grandes forjadores pero al final  tomaron caminos diferentes";
+	next;
+	mes "[^CC0000Death Knight^000000]";
+	mes "Se dice que la quest de Aesir Inicia en una cuidad devastada por el Demonio de demonios";
+	mes "Es todo lo que se.";
+	close;
+
+OnPCLoadMapEvent:
+	showevent 1,0;
+	end;
+}
+
+//------- Mr. Fenrir
+
+nif_in,28,103,5	script	Mr.Fenrir	10191,{
+	if(countitem(7914)>0) goto T_SG_Fr1;
+	mes "[^CC0000Forjador Fenrir^000000]";
+	mes "..";
+	next;
+	if(countitem(7730)>0) goto T_HOLFF_Fr1;
+	mes "[^CC0000Forjador Fenrir^000000]";
+	mes "....";
+	Next;
+	if(countitem(7806)>0) goto L_SI_QUEST_HAFF;
+	mes "[^CC0000Forjador Fenrir^000000]";
+	mes "No me pareces conocido";
+	mes "Solo atiendo personas con referencias...";
+	close;
+T_SG_Fr1:	
+	mes "[^CC0000Forjador Fenrir^000000]";
+	mes "Hola "+strcharinfo(0)+" tu eres de quien me hablo Death Knigth";
+	mes "Bueno me presento yo soy capaz de crear el ^E510F5Dark Crescent^000000.";
+	next;
+	mes "[^CC0000Forjador Fenrir^000000]";
+	mes "Yo soy el Gran Creador de los Cursed Sword y Dark Crescent";
+	next;
+	mes "[^CC0000Forjador Fenrir^000000]";
+	mes "Eres tan persistente y valiente para hacer mi quest";
+	mes "Te atreves a aceptar el reto?";
+	menu "Si",L_Si,"No",L_No;
+L_Si:
+	next;
+	mes "Bueno solo hay un problema me hace falta mi";
+	mes "God Anvil y solo lo puedes encontrar en un lugar";
+	next;
+	mes "tengo un viejo Amigo Llamado Holffar,";
+	mes "El es un Gran herrero te podra conseguir el Anvil";
+	next;	
+	mes "LLevale esta identificacion y asi vera que te envie a buscar mi anvil";
+	delitem 7914,1;
+	getitem 7730,1;
+	next;
+	mes "Lo Podras encontrar al Suroeste de Geffen donde esta la herreria";
+	close;
+
+L_SI_QUEST_HAFF:
+	mes "[^CC0000Forjador Fenrir^000000]";	
+	mes "Muchisimas gracias por traerme mi Gold Anvil...";
+	mes "Ahora tienes el derecho de forjar las Auras.";
+	next;
+	mes "[^CC0000Forjador Fenrir^000000]";
+	mes "Estos Son los Auras que puedo Crear";
+	menu "Cursed Sword",QUEST1,"Dark Crescent",QUEST2,"Chaos Devil Aura",QUEST3;
+
+	QUEST1:
+	next;
+	mes "[^CC0000Forjador Fenrir^000000]";
+	mes "Esta aura añade:";
+	mes "^FF811BIncrease Allstats + 60^000000";
+	mes "- Increases Speed Movement by 60%.";
+	mes "- Increases Physical damage against Demi-Humans by 25%.";
+	mes "-----------";
+	next;
+	mes "[^CC0000Forjador Fenrir^000000]";
+	mes "Necesitaras esto para hacer la Cursed Sword:";
+	mes "1 Broad Sword [1]";
+	mes "5 Elemental Sword [3]";
+	mes "20 Blade Lost in Darkness";
+	mes "50 Crystal of Darkness";
+	mes "100 Dark Crystal Fragment";
+	mes "3 Hand of God";
+	mes "1 Dark Lord Card";
+	mes "200 Cursed Seal";
+	mes "10 Blood Thirst";   
+	mes "20m";
+	menu "Me faltan items todiavia",m_falta1,"Tengo todo",T_todo1;
+T_todo1:
+	next;
+	mes "[^CC0000Forjador Fenrir^000000]";
+	mes "Veamos:";
+	mes "Broad Sword [1]: ^CC0000"+countitem(1160)+"^000000/1";
+	mes "Elemental Sword [3]: ^CC0000"+countitem(13414)+"^000000/5";
+	mes "Blade Lost in Darkness: ^CC0000"+countitem(7023)+"^000000/20";
+	mes "Crystal of Darkness: ^CC0000"+countitem(7799)+"^000000/50";
+	mes "Dark Crystal Fragment: ^CC0000"+countitem(7315)+"^000000/100";
+	mes "Hand of God: ^CC0000"+countitem(1009)+"^000000/3";
+	mes "Dark Lord Card: ^CC0000"+countitem(4168)+"^000000/1";
+	mes "Cursed Seal: ^CC0000"+countitem(7442)+"^000000/200";
+	mes "Blood Thirst: ^CC0000"+countitem(6470)+"^000000/10";
+	mes "Zeny: ^CC0000"+Zeny+"^000000/20.000.000";
+	next;
+	if(countitem(1160)<1) goto falta;
+	if(countitem(13414)<5) goto falta;
+	if(countitem(7023)<20) goto falta;
+	if(countitem(7799)<50) goto falta;
+	if(countitem(7315)<100) goto falta;
+	if(countitem(1009)<3) goto falta;
+	if(countitem(4168)<1) goto falta;
+	if(countitem(7442)<200) goto falta;
+	if(countitem(6470)<10) goto falta;
+	if(Zeny<=20000000) goto falta;
+	next;
+	mes "[^CC0000Forjador Fenrir^000000]";
+	mes "Tienes todo, asi que aqui esta tu Cursed Sword Aura";
+	next;
+	delitem 1160,1;
+	delitem 13414,5;
+	delitem 7023,20;
+	delitem 7799,50;
+	delitem 7315,100;
+	delitem 1009,3;
+	delitem 4168,1;
+	delitem 7442,200;
+	delitem 6470,10;
+	set Zeny,zeny-20000000;
+	specialeffect2 578;
+	specialeffect2 103;
+	specialeffect2 101;
+	getitem 30403,1;
+	goto F_SG_final;
+
+	QUEST2:
+	next;
+	mes "[^CC0000Forjador Fenrir^000000]";
+	mes "Necesitaras esto para hacer el Dark Crescent:";
+	mes "777 Nine Tails";
+	mes "100 Feather";
+	mes "12 Cobaltblue Dyestuffs";
+	mes "5 Crescent Scythe [1]";
+	mes "100 Dark Crystal Fragment";
+	mes "5 Death Guidance [2]";
+	mes "13 Baphomet Card";
+	mes "200 Cursed Seal";
+	mes "30 Blood Thirst";   
+	mes "20m";
+	menu "Me faltan items todiavia",m_falta1,"Tengo todo",T_todo2;
+T_todo2:
+	next;
+	mes "[^CC0000Forjador Fenrir^000000]";
+	mes "Veamos:";
+	mes "Nine Tails: ^CC0000"+countitem(1022)+"^000000/777";
+	mes "Feather: ^CC0000"+countitem(949)+"^000000/100";
+	mes "Cobaltblue Dyestuffs: ^CC0000"+countitem(978)+"^000000/12";
+	mes "Crescent Scythe [1]: ^CC0000"+countitem(1476)+"^000000/5";
+	mes "Dark Crystal Fragment: ^CC0000"+countitem(7315)+"^000000/100";
+	mes "Death Guidance [2]: ^CC0000"+countitem(1186)+"^000000/5";
+	mes "Baphomet Card: ^CC0000"+countitem(4147)+"^000000/13";
+	mes "Cursed Seal: ^CC0000"+countitem(7442)+"^000000/200";
+	mes "Blood Thirst: ^CC0000"+countitem(6470)+"^000000/30";
+	mes "Zeny: ^CC0000"+Zeny+"^000000/200.000.000";
+	next;
+	if(countitem(1022)<777) goto falta;
+	if(countitem(949)<100) goto falta;
+	if(countitem(978)<12) goto falta;
+	if(countitem(1476)<5) goto falta;
+	if(countitem(7315)<100) goto falta;
+	if(countitem(1186)<5) goto falta;
+	if(countitem(4147)<13) goto falta;
+	if(countitem(7442)<200) goto falta;
+	if(countitem(6470)<30) goto falta;
+	if(Zeny<=20000000) goto falta;
+	next;
+	mes "[^CC0000Forjador Fenrir^000000]";
+	mes "Tienes todo, asi que aqui esta tu Dark Crescent";
+	next;
+	delitem 1022,777;
+	delitem 949,100;
+	delitem 978,12;
+	delitem 1476,5;
+	delitem 7315,100;
+	delitem 1186,5;
+	delitem 4147,13;
+	delitem 7442,200;
+	delitem 6470,30;
+	set Zeny,zeny-20000000;
+	specialeffect2 578;
+	specialeffect2 103;
+	specialeffect2 101;
+	getitem 30282,1;
+	goto F_SG_finalmoon;
+
+	QUEST3:
+	next;
+	mes "Necesitaras esto para hacer el Chaos Devil Aura:";
+	mes "500 Skull";
+	mes "250 Skel-Bone";
+	mes "10 white Dyestuffs";
+	mes "3 Black Dyestuffs";
+	mes "9 Bloody Edge";
+	mes "3 Skeletal Armor Piece";
+	mes "9 Fragment of Hatred";
+	mes "200 Animal Gore";
+	mes "70 Fragment of Darkness";
+	mes "300 Cursed Water";
+	mes "3 Bloody Eater [2]";  
+	mes "1 Dark Bacilium";   
+	mes "80m";
+	menu "Me faltan items todiavia",m_falta1,"Tengo todo",T_todo3;
+
+T_todo3:
+	next;
+	mes "[^CC0000Forjador Fenrir^000000]";
+	mes "Veamos:";
+	mes "Skull: ^CC0000"+countitem(7005)+"^000000/500";
+	mes "Skel Bone: ^CC0000"+countitem(932)+"^000000/250";
+	mes "White Dyestuffs: ^CC0000"+countitem(982)+"^000000/10";
+	mes "Black Dyestuffs: ^CC0000"+countitem(983)+"^000000/3";
+	mes "Bloody Edge: ^CC0000"+countitem(7024)+"^000000/9";
+	mes "Skeletal Armor Piece: ^CC0000"+countitem(7450)+"^000000/3";
+	mes "Fragment of Hatred: ^CC0000"+countitem(7438)+"^000000/9";
+	mes "Animal Gore: ^CC0000"+countitem(702)+"^000000/200";
+	mes "Fragment of Darkness: ^CC0000"+countitem(7798)+"^000000/70";
+	mes "Cursed Water: ^CC0000"+countitem(12020)+"^000000/300";
+	mes "Bloody Eater [2]: ^CC0000"+countitem(1182)+"^000000/3";
+	mes "Dark Bacilium: ^CC0000"+countitem(5808)+"^000000/1";
+	mes "Zeny: ^CC0000"+Zeny+"^000000/80.000.000";
+	next;
+	if(countitem(7005)<500) goto falta;
+	if(countitem(932)<250) goto falta;
+	if(countitem(982)<10) goto falta;
+	if(countitem(983)<3) goto falta;
+	if(countitem(7024)<9) goto falta;
+	if(countitem(7450)<3) goto falta;
+	if(countitem(7438)<9) goto falta;
+	if(countitem(702)<200) goto falta;
+	if(countitem(7798)<70) goto falta;
+	if(countitem(12020)<300) goto falta;
+	if(countitem(1182)<3) goto falta;
+	if(countitem(5808)<1) goto falta;
+	if(Zeny<=80000000) goto falta;
+	next;
+	mes "[^CC0000Forjador Fenrir^000000]";
+	mes "Tienes todo, asi que aqui esta tu Chaos Devil Aura";
+	next;
+	delitem 7005,500;
+	delitem 932,250;
+	delitem 982,10;
+	delitem 983,3;
+	delitem 7024,9;
+	delitem 7450,3;
+	delitem 7438,9;
+	delitem 702,200;
+	delitem 7798,70;
+	delitem 12020,300;
+	delitem 1182,3;
+	delitem 5808,1;
+	set Zeny,zeny-80000000;
+	specialeffect2 578;
+	specialeffect2 103;
+	specialeffect2 101;
+	getitem 30281,1;
+	goto F_SG_Bone;
+	
+falta:
+	mes "[^CC0000Forjador Fenrir^000000]";
+	mes "La quest es demasiado para ti.....";
+	mes "Regresa cuando hayas conseguido todo";
+	close;
+m_falta1:
+	next;
+	mes "[^CC0000Forjador Fenrir^000000]";
+	mes "Vamos regresa con todo y te forjare la Aura";
+	close;
+L_No:
+	mes "[^CC0000Forjador Fenrir^000000]";
+	mes "Eres muy inesperto todavía..., esta quest no esta a tu nivel";
+	close;
+T_HOLFF_Fr1:
+	next;
+	mes "[^CC0000Forjador Fenrir^000000]";
+	mes "Vamos encuentra a Holffar";
+	mes "y Regresa con el Anvil";
+	menu "Repiteme la ubicación..",Ubi_again,"Hare lo posible por encontrale",P_porencontrale,"Ya le encontre",Ya_LOencontro;
+Ubi_again:
+	next;
+	mes "[^CC0000Forjador Fenrir^000000]";
+	mes "Lo Podras encontrar al Suroeste de Geffen donde esta la herrería..";
+	close;
+P_porencontrale:
+	next;
+	mes "[^CC0000Forjador Fenrir^000000]";
+	mes "Vamos los encontraras se encuentra al suroeste de Geffen en la herrería..";
+	mes "El es un señor ya mayor de edad vamos encuentralo...";
+	close;
+Ya_LOencontro:
+	next;
+	mes "[^CC0000Forjador Fenrir^000000]";
+	mes "llevale lo que pide te esperare con el ^CC0000God Anvil^000000 ok ^_^";
+	close;
+F_SG_final:
+	atcommand "@kami "+strcharinfo(0)+" ha terminado La quest de Fenrir, ha forjado el Cursed Sword...";
+	mes "Felicidades por terminar la quest...";
+	close;
+F_SG_Bone:
+	atcommand "@kami "+strcharinfo(0)+" ha terminado La quest de Fenrir,Ha Forjado el Dark Crescent...";
+	close;
+F_SG_finalmoon:
+	atcommand "@kami "+strcharinfo(0)+" ha terminado La quest de Fenrir,Ha Forjado la Chaos Devil Aura...";
+	close;
+
+}
+
+
+//------- Mr. Holffar
+geffen,179,56,3	script	Forjador Holffar	10190,{
+	if(countitem(7730)>0) goto tengolam;
+	mes "[^CC0000Forjador Holffar^000000]";
+	mes "Me das un Segundo";
+	next;
+	if(countitem(7806)>0) goto Termilaptm;
+	mes "[^CC0000Forjador Holffar^000000]";
+	mes "Forjo, forjo.. Forjo ???...";
+	next;
+	mes "[^CC0000Forjador Holffar^000000]";
+	mes "No puedo atenderte lo siento me encuentro ocupado. ??";
+	close;
+tengolam:
+	mes "Hola soy "+strcharinfo(0)+" fui enviado por tu amigo [Fenrir]";
+	mes "Para que le enviaras su ^0000FFGOD Anvil^000000.";
+	next;
+	mes "[^CC0000Forjador Holffar^000000]";
+	mes "Ya veo pero primero me tienes que traer los siguientes items para entregarte el ^0000FFGOD Anvil^000000.";
+	next;
+	mes "[^CC0000Forjador Holffar^000000]";
+	mes "Solo necesito:";
+	mes "^FF00001 Emperium Anvil^000000";
+	mes "^FF00003 Emperuim^000000";
+	mes "^FF000030 cursed seal^000000";
+	mes "y 10m de zenys";
+	mes "Tienes los items?";
+	next;
+	menu "Si",L_Sih,"No",L_Noh;
+L_sih: 
+	if(countitem(7442)<30) goto cursedseal;
+	if(countitem(989)<1) goto cursedseal;;
+	if(countitem(714)<3) goto cursedseal;
+	if(Zeny<=10000000) goto cursedseal;
+	next;
+	mes "Tienes todo toma tu GOD anvil";
+	next;
+	delitem 7442,30;
+	delitem 989,1;
+	delitem 714,3;
+	set Zeny,zeny-10000000;
+	delitem 7730,1;
+	getitem 7806,1;
+	goto final_Hondail;
+
+cursedseal:
+	mes "[^CC0000Forjador Holffar^000000]";
+	mes "Te hacen falta Items regresa cuando los tengas";
+	close;
+final_Hondail:
+	mes "[^CC0000Forjador Holffar^000000]";
+	mes "Gracias por realizar la quest llevale el Anvil a Fenrir para que pueda hacer los hats";
+	close;
+Termilaptm:
+	mes "[^CC0000Forjador Holffar^000000]";
+	mes "Gracias por forjar el Anvil,Llevaselo a Fenrir lo mas pronto posible para que pueda hacer los hats";
+	close;
+L_Noh:
+	mes "[^CC0000Forjador Holffar^000000]";
+	mes "Bueno entonces para que me molestas -.-, vuele cuando tengas los item";
+	end;
+}
+

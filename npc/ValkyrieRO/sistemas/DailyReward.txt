@@ -1,0 +1,237 @@
+//===== EinherjarRO Scripts ================================== 
+//= Daily Prize, OnPCLoginEvent
+//===== By: ================================================== 
+//= Stolao
+//===== Current Version: ===================================== 
+//= 1.7B
+//===== Compatible With: ===================================== 
+//= rAthena SVN
+//===== Description: ========================================= 
+//= A reward system for players who play more frequently
+//===== Todo: ================================================
+//= Maybe make .MinWait an array mins,days,weeks,months,years;
+//= Show time till login rewards, if .Rest is defined
+//= Make Logging out then it continue count
+//===== Additional Comments: =================================
+//= For Older See Old Versions
+//= 1.70 Removed all "set"
+//= 1.71 Added CheckWeight
+//= 1.72 Fixed Tabulation
+//= 1.73 Added .Rest Option
+//= 1.74 Added Cutin Support
+//= 1.75 Fixed Typos (Thanks Everade)
+//= 1.76 Fixed Bug with skipping 1st day on first time through
+//= 1.77 Wrong Day in Mes
+//= 1.78 Fixed Cutins Being a Day Off
+//= 1.79 No Rewards for Autotraders option added
+//= 1.7A No Rewards for Autotraders option added
+//= 1.7B Tabulation Cleanup
+//===== Contact Info: ========================================
+//= [Stolao] 
+//= Email: Taingram11@gmail.com
+//============================================================
+-	script	LOGIN	-1,{
+OnWhisperGlobal:
+OnLoginCmnd:
+OnPCLoginEvent:
+	if(.Rest) message strcharinfo(0),"[Daily Rewards]: para recoger la recompensa usted debe permanecer conectado durante "+  .Rest +" minutos";
+	.@i = (gettime(7) * 365 * 24 * 60) + (gettime(8) * 24 * 60) + (gettime(3) * 60) +gettime(2);
+	if(.@i >= (#LastDailyReward + .MinWait)){
+		sleep2 1000 + .Rest * 60000;
+		if(checkvending() & 2 && .Mode & 64){
+			message strcharinfo(0),"[Daily Rewards]: Los proveedores pueden no recibir recompensas.";
+			end;
+		}
+		if(.@i < #LastDailyReward + .MaxWait)
+			#DRewardCon += 1;
+		else	#DRewardCon = 1;
+		if(#DRewardCon >= getarraysize(.Rewards$)){
+			if(.Reset)
+				#DRewardCon = 1;
+			else	.@g = getarraysize(.Rewards$)-1;
+		} else	.@g = #DRewardCon;
+		explode(.@XT$,.Rewards$[.@g],",");
+		for(.@x = 0; .@x < getarraysize(.@XT$); .@x++)
+			.@TT[.@x] = atoi(.@XT$[.@x]);
+		if(.Mode & 1 && .@TT[4] > 0){
+			for(.@x = 4; .@x <= getarraysize(.@TT) - 1 ; .@x += 2){
+				.@itms[getarraysize(.@itms)] = .@TT[.@x];
+				.@qnts[getarraysize(.@qnts)] = .@TT[.@x + 1];
+			}
+			if(checkweight2(.@itms,.@qnts)){
+				for(.@x = 0; .@x < getarraysize(.@itms) && .@x < getarraysize(.@qnts); .@x++){
+					if(.Mode & 32)
+						getitembound  .@itms[.@x], .@qnts[.@x], Bound_Account;
+					else	getitem  .@itms[.@x], .@qnts[.@x];
+				}
+			} else {
+				message strcharinfo(0),"[Daily Rewards]: No se puede llevar a los premios, por favor utilice el almacenamiento y relog.";
+				if(#DRewardCon) #DRewardCon -= 1;
+				end;
+			}
+		}
+		if(.Mode & 16){
+			cutin .Cutins$[#DRewardCon],4;
+		}
+		if(.Mode & 2){
+			if(.@TT[0]){
+				zeny += .@TT[0];
+				message strcharinfo(0),"[Daily Rewards]: Recibido "+ .@TT[0] +"z";
+			}
+			if(.@TT[1]){
+				setd getd(.Points$[0]),getd(.Points$[0]) + .@TT[1];
+				message strcharinfo(0),"[Daily Rewards]: Recibido "+ .@TT[1] +" "+.Points$[1];
+			}
+		}
+		if(.Mode & 4 && (.@TT[3] || .@TT[4]))
+			getexp .@TT[3], .@TT[4];
+		if(.Mode & 8){
+			for(.@x = 0; .@x < getarraysize(.BuffInfo); .@x += 4){
+				if(#DRewardCon % .BuffInfo[.@x + 1] == 0)
+					sc_start .BuffInfo[.@x], .BuffInfo[.@x + 2] * 60000, .BuffInfo[.@x + 3];
+			}
+		}
+		message strcharinfo(0),"[Daily Rewards]: Que haya recogido su recompensa al día, durante "+callfunc("F_InsertPlural",#DRewardCon,"day")+" en una fila.";
+		#LastDailyReward = .@i;
+		@Login_Time = 0;
+	} else {
+		.@days = (#LastDailyReward + .MinWait - .@i)/60/24;
+		.@hours = ((#LastDailyReward + .MinWait - .@i)/60)%24;
+		.@mins = (#LastDailyReward + .MinWait - .@i)%60;
+		message strcharinfo(0),"[Daily Rewards]: Tienes "+ ((.@days) ? .@days +" Days " : "") +""+ ((.@hours) ? .@hours +" Hours " : "") +""+ ((.@mins) ? .@mins +" Minutes " : "") +"hasta su próximo recompensa.";
+	}
+end;
+OnInit:
+	// Basic Settings
+	//   1: Item | 2: Points | 4: Exp  
+	//   8: Gain Buffs Every X Consecutive Days logged in
+	//   16: Show Cutins | 32: Account Bound Items
+	//   64: No Rewards ffor Autotraders
+	//     (a bit value, e.g. 3 = Items & Points from Multi)
+	.Mode = 1|2|4|8|16|64;
+
+	// To disable the command '@loginreward' comment the next lines
+	// * Needs extra commands for typos
+	bindatcmd("relog"	,"LOGIN::OnLoginCmnd",0,99);
+
+	// Minimum minutes between collecting daily reward
+	//   Day: 22*60 - 24*60
+	//   Week: 10080
+	.MinWait = 1320;
+
+	// Minutes before losing the consecutive reward
+	//   Day: 48*60 - 50*60
+	//   Week: 20160
+	.MaxWait = 3000;
+
+	// Reset
+	//   [0] Repeat last day
+	//   [1] reset when reach end of days
+	.Reset = 1;
+
+	// Number of mins after logging before collecting prize
+	.Rest = 0;
+
+	// Point Type
+	//   [0] Points earned
+	//   [1] Point name in mes
+	setarray .Points$,"#KAFRAPOINTS","K-Points";
+
+	// Consecutive Days Buff
+	// Each buff contains 4 variables (32 Total Max)
+	// <Type>,<Days>,<Duration>,<Rate>, // Buff 1
+	// <Type>,<Days>,<Duration>,<Rate>, // Buff 2
+	//   ...;
+	//
+	//  Example: 188,7,45,3
+	//    -Every 7th consecutive day logged in Player gains +3 Str for 45 mins
+	//
+	//  Type is 188, which references which SC_ to use, SC_INCSTR in this example
+	//     -For a full list of SC_ visit the db/const.txt
+	//  Days is days buff is applied, in this example 7, so every 7th day, 14,21,28....
+	//  Duration is buff duration is Minuits, in this example 45 mins
+	//  Rate is buff strength, in this example player gains 3 Str
+	setarray .BuffInfo
+				,260,2,360,1	// Life Insurance for 360 Mins Every 2nd Day
+				,198,3,120,10	// +10% Hp for 120 Mins Every 3th Day
+				,196,5,120,25	// +25 Flee for 120 Mins Every 5th Day
+				,257,7,240,50;	// +50% Exp for 240 Mins Every 7th Day
+
+	// Daily Prize items (max 128 days):
+	//   "<Zeny>|<Points>|<BaseExp>|<JobExp>|<itemID-1>|<amount-1>|<itemID-2>|<amount-2>...etc", // Day 1
+	//   "<Zeny>|<Points>|<BaseExp>|<JobExp>|<itemID-1>|<amount-1>|<itemID-2>|<amount-2>...etc"  // Day 2
+	//   ...;
+	// Total length of any days string must be 255 or shorter
+	// * If players login longer than the last set
+	//   day, they will keep getting the last prize.
+	setarray .Rewards$[1],
+		"0,0,0,0,12208,1",			// Day 1: Battle Manual
+		"0,0,0,0,12211,5",					// Day 2: Kafra Card
+		"0,0,0,0,671,10",			// Day 3: Gold Coin
+		"0,0,0,0,12522,10",			// Day 4: 10 Blessing Scroll Lv 10
+		"0,0,0,0,12210,1",					// Day 5: 1 Bubble Gum
+		"0,0,0,0,7621,2",			// Day 6: 2 Token Of Siegfried
+		"0,0,0,0,12263,1",					// Day 7: 1 Field Manual 50%
+		"0,0,0,0,12103,1",					// Day 8: 1 Bloody Branch
+		"0,0,0,0,12214,2",			// Day 9: 2 Convex Mirror
+		"0,0,0,0,671,15",			// Day 10: 15 Gold Coin
+		"0,0,0,0,12522,10",			// Day 11: 10 Blessing Scroll Lv 10
+		"0,0,0,0,12216,10",			// Day 12: 10 Agi Scroll Lv 10
+		"0,0,0,0,14533,1",			// Day 13: 1 Field Manual 100% 
+		"0,0,0,0,12214,3",			// Day 14: 3 Convex Mirror
+		"0,0,0,0,616,3",			// Day 15: 3 Old Card Album
+		"0,0,0,0,12522,10",			// Day 16: 10 Blessing Scroll Lv 10
+		"0,0,0,0,12211,10",			// Day 17: 10 Kafra Card
+		"0,0,0,0,12103,2",			// Day 18: 2 Bloody Branch
+		"0,0,0,0,671,20",			// Day 19: 20 Gold Coin
+		"0,0,0,0,14533,1",			// Day 20: 1 Field Manual 100%
+		"0,0,0,0,12210,2",			// Day 21: 5 Convex Mirror
+		"0,0,0,0,7621,5",			// Day 22: 5 Token Of Siegfried
+		"0,0,0,0,7228,1",			// Day 23: 1 Gold Bullion
+		"0,0,0,0,12103,3",			// Day 24: 3 Bloody Branch
+		"0,0,0,0,7829,300",			// Day 25: 300 Valor Badge
+		"0,0,0,0,14171,2",			// Day 26: 2 Aspersio 5 Scroll Box
+		"0,0,0,0,5942,1",			// Day 27: Hats
+		"0,0,0,0,5776,1",			// Day 28: Blazing Sun
+		"0,0,0,0,12250,5",			// Day 29: 5 Steamed Tongue
+		"0,0,0,0,5934,1",			// Day 30: 1 Happy Balloon
+		"0,0,0,0,12246,1";			// Day 31: 1 Mystical Card Album
+
+	// Cutin Array
+	//	Shows a cuting for each date
+	//	
+	setarray .Cutins$[1],
+			"Dia1",
+			"Dia2",
+			"Dia3",
+			"Dia4",
+			"Dia5",
+			"Dia6",
+			"Dia7",
+			"Dia8",
+			"Dia9",
+			"Dia10",
+			"Dia11",
+			"Dia12",
+			"Dia13",
+			"Dia14",
+			"Dia15",
+			"Dia16",
+			"Dia17",
+			"Dia18",
+			"Dia19",
+			"Dia20",
+			"Dia21",
+			"Dia22",
+			"Dia23",
+			"Dia24",
+			"Dia25",
+			"Dia26",
+			"Dia27",
+			"Dia28",
+			"Dia29",
+			"Dia30",
+			"Dia31";
+
+end;
+}

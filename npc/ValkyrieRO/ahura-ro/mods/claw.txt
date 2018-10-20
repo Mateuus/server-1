@@ -1,0 +1,96 @@
+//= Nova http://www.novaragnarok.com
+//============================================================
+
+invek,132,162,2	script	Maquina	2_DROP_MACHINE,{
+    set .@n$,"[ ^FF0000Maquina^000000 ]";
+    mes .@n$;
+    mes "Instrucciones:";
+	mes "Esta maquina funciona con Gold Coins.";
+	mes "Con 250 Gold Coins, podrás reclamar un Hat al azar de la maquina.";
+	mes "Con 500 Gold Coins, podrás reclamar un Hat especifico de la maquina.";
+	mes "Esta maquina se renueva una vez al mes.";
+    next;
+	
+		switch(select("Hat Aleatorio",""+.hat1$+"",""+.hat2$+"",""+.hat3$+"",""+.hat4$+"")) {
+			case 1:
+				mes .@n$;
+				mes "¿Deseas gastar 250 Gold Coins?";
+				next;
+				switch(select("Si","No")) {
+					case 1:
+						if (countitem(7517) < 250) { 
+						mes .@n$;
+					mes "No tienes suficientes Gold Coins."; 
+						close; }
+						if (checkweight(.@pickedhat,1) == 0 ) { 
+						mes .@n$;
+						mes "Se ha detectado que tienes sobre peso en tu inventario."; close; }
+						set .HatRandomArray,rand(1,4);
+						delitem 7517,250;
+						if(.HatRandomArray==1) { getitem .hatid1,1; }
+						if(.HatRandomArray==2) { getitem .hatid2,1; }
+						if(.HatRandomArray==3) { getitem .hatid3,1; }
+						if(.HatRandomArray==4) { getitem .hatid4,1; }
+						mes .@n$;
+						mes ".....";
+						next;
+						mes "Se ha seleccionado un Hat.";
+						close;
+					case 2:                 
+						mes .@n$;
+						mes "¡Vuelve cuando quieras!";
+							close;
+				}
+				end;
+			case 2:
+				.@pickedhat = .hatid1;
+				.@pickedname$ = .hat1$;
+				break;
+			case 3:
+				.@pickedhat = .hatid2;
+				.@pickedname$ = .hat2$;
+				break;
+			case 4:
+				.@pickedhat = .hatid3;
+				.@pickedname$ = .hat3$;
+				break;
+			case 5:
+				.@pickedhat = .hatid4;
+				.@pickedname$ = .hat4$;
+				break;
+		}
+            
+		mes .@n$;
+		mes "¿Estas seguro de querer comprar?: ";
+		mes "<ITEM>"+.@pickedname$+"<INFO>"+.@pickedhat+"</INFO></ITEM> ?";
+		next;
+		
+			switch(select("Comprar por 500 Gold Coins","Cancelar")) {
+				case 1:
+					if (countitem(7517) < 500) { mes .@n$;
+					mes "No tienes suficientes Gold Coins."; close; }
+					if (checkweight(.@pickedhat,1) == 0 ) { mes .@n$; 
+					mes "Se ha detectado que tienes sobre peso en tu inventario."; close; }
+					delitem 7517,500;
+					getitem .@pickedhat,1;
+					mes .@n$;
+					mes "La Maquina te ha entregado "+.@pickedname$+". Disfrutalo.";
+					close;	
+				case 2:
+					mes .@n$;
+					mes "¡Vuelve cuando quieras!";
+					close;
+			}
+	
+OnInit:
+	.hatid1 = 5766;
+	.hatid2 = 5457;
+	.hatid3 = 18702;
+	.hatid4 = 5500;
+	.hat1$ = getitemname(.hatid1);
+	.hat2$ = getitemname(.hatid2);
+	.hat3$ = getitemname(.hatid3);
+	.hat4$ = getitemname(.hatid4);
+	end;
+	
+}

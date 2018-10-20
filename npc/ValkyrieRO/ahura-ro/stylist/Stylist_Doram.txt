@@ -1,0 +1,237 @@
+//===== rAthena Script =======================================
+//= Race Master Script
+//===== By: ==================================================
+//= KamiShi full edit by Darkness
+//===== Current Version: =====================================
+//= 1.4a ( Raza Doram y limites de peinados, colores + Mejoras en script)
+//= 1.5 - Adaptation script for c.version (No zeny, item cost) full working [Darkness]
+//===== Compatible With: =====================================
+//= rAthena / Hercules
+//=====
+//= Save slots (1,2,3) paletteSaveSlot1, paletteSaveSlot2, paletteSaveSlot3.
+prt_in,41,97,3	script	Stylist Doram#h2-1::Estilista_Doram	546,{
+	callsub RaceDye,$RacePals[race_id*4],$RacePals[race_id*4+1],$RacePals[race_id*4+2],$RacePals[race_id*4+3];
+	disable_items;// Para evitar exploits
+	
+RaceDye:
+	// Nombre NPC
+	set .NombreNpc$,"[^FF8000 PREMIUM Stylist Doram ^000000]";
+	// **********************
+	// detect human
+	if(Class > 4218) || (Class < 4218){
+	mes .NombreNpc$;
+	mes "Hey you no are a doram!.";
+	close;
+	}
+	// ****************************
+	// CONF
+	// MAX hair style Doram (Max 6 = Official)
+	set .@maxPeinadosDoram, 6;
+	// MAX hair colour (Max 8 = Official)
+	set .@maxColoresPeinadosDoram, 8;
+
+	//Script
+	INICIO:
+	mes .NombreNpc$;
+	mes "Welcome!,";
+	mes "I'm the expert stylist Midgard";
+	next;
+
+	POTRO:
+	mes .NombreNpc$;
+	mes "how can I help you?";
+	next;
+	switch(select("- Clothes color:- Hair color:- Hair style"))
+	{
+		case 1:
+			mes .NombreNpc$;
+			mes "These are my styles";
+			mes "They are between ^0000FF"+(getarg(2))+" and "+(getarg(3))+"^000000.";
+
+			browse1:
+			callfunc("setlook2", 7, .@style);
+			dispbottom "Clothes color: #'"+.@style+"'.";
+			switch(select("^FF6500-> Next^000000:^0404B4<- Back^000000:^FF0000- I like this!^000000: ^D800D8[!]^000000 Choose by number:- See references: ^31B404[+]^000000 Add to my favorites")){
+				
+				case 1:
+					set .@style, .@style+1;
+					if (.@style >= getarg(3)) set .@style, getarg(2);
+					goto browse1;
+					
+				case 2:
+					set .@style, .@style-1;
+					if (.@style <= getarg(2)) set .@style, getarg(3)-1;
+					goto browse1;
+				case 3:
+					next;
+					mes .NombreNpc$;
+					mes "Are you sure?";
+					next;
+					menu "- No, sorry",browse1,"- Is perfect!",terminar;
+					
+					terminar:
+					next;
+					mes .NombreNpc$;
+					mes "PERFECT! you look great";
+					emotion e_lv,0;
+					close;
+					
+				case 4:
+				if (getarg(3) == 693) {
+					set @d,4;
+					}
+					
+					chose1:
+					set @d,4;
+					input (.@style, getarg(2), getarg(3));
+					if(.@style < getarg(2) || .@style >= getarg(3))
+					{
+						mes "^FF0000Ups!^000000 This color is not in the range.";
+						goto chose1;
+					}
+					goto browse1;
+				case 5:
+				next;
+				if (race_id){
+				mes .NombreNpc$;
+				mes "These are the references";
+				mes "They are between ^0000FF"+(getarg(2))+" and "+(getarg(3))+"^000000.";
+				mes " ";
+				mes " -----   REFERENCES  -----";
+				mes "Ro Basic Unicolor : ^0000C6"+(@d)+"^000000  - ^C60000"+(@d+32*1)+"^000000";
+				mes "Ro Basic Analogico : ^0000C6"+(@d+32*1)+"^000000  - ^C60000"+(@d+32*2)+"^000000";
+				mes "Ro Basic Complementario : ^0000C6"+(@d+32*2)+"^000000  - ^C60000"+(@d+32*3)+"^000000";
+				
+				mes "Dark Unicolor : ^0000C6"+(@d+32*3)+"^000000  - ^C60000"+(@d+32*4)+"^000000";
+				mes "Light Unicolor : ^0000C6"+(@d+32*4)+"^000000  - ^C60000"+(@d+32*5)+"^000000";
+				mes "Gold Autumn : ^0000C6"+(@d+32*5)+"^000000  - ^C60000"+(@d+32*6)+"^000000";
+				mes "Dark Gold : ^0000C6"+(@d+32*6)+"^000000  - ^C60000"+(@d+32*7)+"^000000";
+				mes "Chicos Malos: ^0000C6"+(@d+32*7)+"^000000  - ^C60000"+(@d+32*8)+"^000000";
+				
+				mes "Dark Analogic : ^0000C6"+(@d+32*8)+"^000000  - ^C60000"+(@d+32*9)+"^000000";
+				mes "Light Analogic : ^0000C6"+(@d+32*9)+"^000000  - ^C60000"+(@d+32*10)+"^000000";
+				mes "Gold : ^0000C6"+(@d+32*10)+"^000000  - ^C60000"+(@d+32*11)+"^000000";
+				mes "Silver : ^0000C6"+(@d+32*11)+"^000000  - ^C60000"+(@d+32*12)+"^000000";
+				
+				mes "Dark Complementario : ^0000C6"+(@d+32*12)+"^000000  - ^C60000"+(@d+32*13)+"^000000";
+				mes "Light Complementario : ^0000C6"+(@d+32*13)+"^000000  - ^C60000"+(@d+32*14)+"^000000";
+				mes "Red Passion : ^0000C6"+(@d+32*14)+"^000000  - ^C60000"+(@d+32*15)+"^000000";
+				mes "Full Mix : ^0000C6"+(@d+32*15)+"^000000  - ^C60000"+(@d+32*16)+"^000000";
+				
+				mes "Paradize : ^0000C6"+(@d+32*16)+"^000000  - ^C60000"+(@d+32*17)+"^000000";
+				mes "Snow : ^0000C6"+(@d+32*17)+"^000000  - ^C60000"+(@d+32*18)+"^000000";
+				mes "Dark Neon : ^0000C6"+(@d+32*18)+"^000000  - ^C60000"+(@d+32*19)+"^000000";
+				mes "Black And White : ^0000C6"+(@d+32*19)+"^000000  - ^C60000"+(@d+32*20)+"^000000";
+				
+				mes "Random : ^0000C6"+(@d+32*20)+"^000000  - ^C60000"+(@d+690)+"^000000";
+			}else{
+				mes .NombreNpc$;
+				mes "These are the references";
+				mes "They are between ^0000FF"+(getarg(2))+" and "+(getarg(3))+"^000000.";
+				mes " ";
+				mes " -----   REFERENCES  -----";
+				mes "Ro Basic Unicolor : ^0000C6"+(@d)+"^000000  - ^C60000"+(@d+32*1)+"^000000";
+				mes "Ro Basic Analogic : ^0000C6"+(@d+32*1)+"^000000  - ^C60000"+(@d+32*2)+"^000000";
+				mes "Ro Basic Complementary : ^0000C6"+(@d+32*2)+"^000000  - ^C60000"+(@d+32*3)+"^000000";
+				
+				mes "Dark Unicolor : ^0000C6"+(@d+32*3)+"^000000  - ^C60000"+(@d+32*4)+"^000000";
+				mes "Light Unicolor : ^0000C6"+(@d+32*4)+"^000000  - ^C60000"+(@d+32*5)+"^000000";
+				mes "Gold Autumn : ^0000C6"+(@d+32*5)+"^000000  - ^C60000"+(@d+32*6)+"^000000";
+				mes "Dark Gold : ^0000C6"+(@d+32*6)+"^000000  - ^C60000"+(@d+32*7)+"^000000";
+				mes "BadBoys: ^0000C6"+(@d+32*7)+"^000000  - ^C60000"+(@d+32*8)+"^000000";
+				
+				mes "Dark Analogic : ^0000C6"+(@d+32*8)+"^000000  - ^C60000"+(@d+32*9)+"^000000";
+				mes "Light Analogic : ^0000C6"+(@d+32*9)+"^000000  - ^C60000"+(@d+32*10)+"^000000";
+				mes "Gold : ^0000C6"+(@d+32*10)+"^000000  - ^C60000"+(@d+32*11)+"^000000";
+				mes "Silver : ^0000C6"+(@d+32*11)+"^000000  - ^C60000"+(@d+32*12)+"^000000";
+				
+				mes "Dark Complementario : ^0000C6"+(@d+32*12)+"^000000  - ^C60000"+(@d+32*13)+"^000000";
+				mes "Light Complementario : ^0000C6"+(@d+32*13)+"^000000  - ^C60000"+(@d+32*14)+"^000000";
+				mes "Red Passion : ^0000C6"+(@d+32*14)+"^000000  - ^C60000"+(@d+32*15)+"^000000";
+				mes "Full Mix : ^0000C6"+(@d+32*15)+"^000000  - ^C60000"+(@d+32*16)+"^000000";
+				
+				mes "Paradize : ^0000C6"+(@d+32*16)+"^000000  - ^C60000"+(@d+32*17)+"^000000";
+				mes "Snow: ^0000C6"+(@d+32*17)+"^000000  - ^C60000"+(@d+32*18)+"^000000";
+				mes "Dark Neon : ^0000C6"+(@d+32*18)+"^000000  - ^C60000"+(@d+32*19)+"^000000";
+				mes "Black And White : ^0000C6"+(@d+32*19)+"^000000  - ^C60000"+(@d+32*20)+"^000000";
+				
+				mes "Random: ^0000C6"+(@d+32*20)+"^000000  - ^C60000"+(@d+690)+"^000000";
+				}
+				next;
+					goto browse1;					
+			}
+			
+			close;
+
+		case 2:
+
+			Lbrowsecolor:
+			mes .NombreNpc$;
+			mes "These are my hair color";
+			mes "They are between ^0000FF0 and "+.@maxColoresPeinadosDoram+"^000000.";
+			set @look, -1;
+			next;
+
+			Lbrowsecolorrep:
+				set @look,@look+1;
+				setlook 6,@look;
+				dispbottom "Hair color: #'"+@look+"'.";
+				if(@look == .@maxColoresPeinadosDoram) menu "^FF6500- Restart^000000",Lbrowsecolor,"^FF0000- I like this!^000000",Lstop;
+				if(@look == 0) menu "^FF6500-> Next^000000",Lbrowsecolorrep,"^FF0000- I like this!^000000",Lstop;
+				if(@look != .@maxColoresPeinadosDoram)menu "^FF6500-> N^000000",Lbrowsecolorrep,"^0404B4<- Back^000000",Lbrowsecolorrepback,"^FF0000- I like this!^000000",Lstop;
+
+
+			Lbrowsecolorrepback:
+				set @look,@look-1;
+				setlook 6,@look;
+				dispbottom "Hair color: #'"+@look+"'.";
+				if(@look == -1) menu "^FF6500-> Next^000000",Lbrowsecolorrep,"^FF0000- I like this!^000000",Lstop;
+				if(@look == 0) menu "^FF6500-> Next^000000",Lbrowsecolorrep,"^FF0000- I like this!^000000",Lstop;
+				if(@look == .@maxColoresPeinadosDoram) menu "^FF6500- Restart^000000",Lbrowsecolor,"^FF0000- I like this!^000000",Lstop;
+				if(@look != .@maxColoresPeinadosDoram)	menu "^FF6500-> Next^000000",Lbrowsecolorrep,"^0404B4<- Back^000000",Lbrowsecolorrepback,"^FF0000- I like this!^000000",Lstop;
+
+				Lstop:
+					next;
+					mes .NombreNpc$;
+					mes "Are you sure?";
+					next;
+					menu "- No, sorry",Lbrowsecolorrep,"- Is perfect!",terminar;
+
+
+
+		case 3:
+			Lbrowsesty:
+			mes .NombreNpc$;
+			mes "Select the Hair style","They are between ^0000FF0 and "+.@maxPeinadosDoram+"^000000.";
+			set @look, -1;
+			next;
+
+			Lbrowserep:
+				set @look,@look+1;
+				setlook 1,@look;
+				dispbottom "Hair style: #'"+@look+"'.";
+				if(@look == .@maxPeinadosDoram) menu "^FF6500- Restart^000000",Lbrowsesty,"^FF0000- I like this!^000000",Lstop2;
+				if(@look == 0)	menu "^FF6500-> Next^000000",Lbrowserep,"^FF0000- I like this!^000000",Lstop2;
+				if(@look != .@maxPeinadosDoram)	menu "^FF6500-> Next^000000",Lbrowserep,"^0404B4<- Back^000000",Lback,"^FF0000- I like this!^000000",Lstop2;
+			Lback:
+				set @look,@look-1;
+				setlook 1,@look;
+				dispbottom "Hair style: #"+@look+"'.";
+				if(@look == -1)	menu "^FF6500-> Next^000000",Lbrowserep,"^FF0000- I like this!^000000",Lstop2;
+				if(@look == 0)	menu "^FF6500-> Next^000000",Lbrowserep,"^FF0000- I like this!^000000",Lstop2;
+				if(@look == .@maxPeinadosDoram)	menu "^FF6500- Restart^000000",Lbrowsesty,"^FF0000- I like this!^000000",Lstop2;
+				if(@look != .@maxPeinadosDoram)	menu "^FF6500-> Next^000000",Lbrowserep,"^0404B4<- Back^000000",Lback,"^FF0000- I like this!^000000",Lstop2;		
+
+			Lstop2:
+				next;
+				mes .NombreNpc$;
+				mes "Are you sure?";
+				next;
+				menu "- No, sorry",Lbrowserep,"-  Is Perfect",terminar;
+
+	}
+}
+// --------- NPC Clones ---------
+
+morocc,146,87,7	duplicate(Estilista_Doram)	Stylist Doram#h2-1	546
+

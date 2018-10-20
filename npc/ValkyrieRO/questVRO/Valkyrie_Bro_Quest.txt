@@ -1,0 +1,308 @@
+//===== eAthena Script ======================================= 
+//= Valkyrie's Brothers
+//===== By: ================================================== 
+//= Katazui or WanMan or Kaji
+//===== Current Version: ===================================== 
+//= 1.0
+//===== Compatible With: ===================================== 
+//= eAthena 7.15 +
+//===== Description: ========================================= 
+//= #quest. Valkyrie's Brothers
+//===== Additional Comments: ================================= 
+//= 1.0 First Release Contact me if Errored
+//============================================================
+prontera,155,285,6	script	Valkyrie	811,{
+	if (#quest == 2) goto what;
+	if (#quest == 3) goto brosecond;
+	if (#quest == 4) goto brothird;
+	if (#quest == 5) goto hey;
+	if (#quest >= 6) goto yourdone;
+	mes "[Valkyrie]";
+	mes "*Crys, Sniffs, mira para arriba*";
+	mes "...Si?";
+	menu "Nothing",dead,"¿Qué tienes?",yes;
+
+	dead:
+		mes "[Valkyrie]";
+		mes "*Keeps Crying...*";
+		close;
+
+	yes:
+		mes "[Valkyrie]";
+		mes "¡Oh! Mis tres hermanos...";
+		mes "Se llevaron a todos nuestros familiares Únicos!";
+		mes "Son de gran alcance los elementos así son mis hermanos ... Uno de ellos mató a nuestra Madre ..";
+		mes "Sólo tenemos a nuestro Padre!";
+		mes "...";
+		next;
+		mes "[Valkyrie]";
+		mes "¿Me ayudarías?";
+		mes "¿Quieres ayudarme a conseguir los items de vuelta!";
+		menu "Yo no quiero que me pase algo malo gritó!",dead2,"Seguro",yes1;
+		
+	yes1:
+			mes "[Valkyrie]";
+			mes "Gracias";
+			mes "Uno de ellos vive en su propia guarida ...";
+			mes "Te envio allí ... Tenga cuidado ... Es poderoso..";
+			set #quest,1;
+			next;
+			warp "sec_pri",20,17;
+			end;
+
+	what:
+		mes "[Valkyrie]";
+		mes "¿Qué fue eso?";
+		mes "Tienes suerte que combado sobre vosotros!";
+		set #quest,0;
+		close;
+	dead2:
+		mes "[Valkyrie]";
+		mes "* Sigue llorando ...*";
+		close;
+
+		end;
+//Next Part2
+		brosecond:
+		mes "[Valkyrie]";
+		mes "Hola!";
+		mes "¿Estás listo para electrónica?";
+		next;
+		menu "¡Sip!",yes4,"Ahora no ...",tapos;
+	tapos:
+		mes "[Valkyrie]";
+		mes "Muy bien. Por favor, ven pronto.";
+		close;
+	yes4:
+		mes "[Valkyrie]";
+		mes "Bueno ... He aquí algunos consejos...";
+		next;
+		mes "Mi segundo hermano es más inteligente de todos...";
+		next;
+		mes "Él sabe cómo hacer hologramas de él mismo...";
+		next;
+		mes "Sólo en el caso, que hizo este interruptor que elimina todos sus hologramas";
+		next;
+		mes "Está en la espalda a la derecha...";
+		next;
+		mes "¿Está listo?";
+		menu "Estoy más que listo!",yes5,"No ... Tengo miedo ...",tapos;
+
+	yes5:
+		warp "job_prist",24,55;
+		end;
+
+	tapos2:		
+	mes "[Valkyrie]";
+	mes "Muy bien. Por favor, ven pronto.";
+		close;
+		end;
+//Next Part3
+	brothird:
+	mes "[Valkyrie]";
+	mes "Zeburh...";
+	mes "¡Oh! Hola! ¿Estás listo para Zeburh?";
+	menu "Tengo mi Buffes y mi Wepons!",yup1,"Zeburh?! Infierno ¡NO!",sarado;
+	
+	sarado:
+		mes "Gallina";
+		close;
+
+	yup1:
+		mes "[Valkyrie]";
+		mes "Okay...";
+		mes "También inteligente ...";
+		mes "Hace hologramas también ... Electrón dio su sistema le";
+		next;
+		mes "Hace sólo dos hologramas ... Gracias a Dios.";
+		next;
+		mes "Pero, él hace, Rangris y electrones ...";
+		next;
+		mes "No los de verdad ... un holograma";
+		next;
+		mes "Te llevaré a él ahora.";
+		next;
+		warp "mag_dun02",148,188;
+		end;
+hey:
+	mes "[Valkyrie]";
+	mes "Gracias por salvarnos! Aquí están nuestros familiares únicas, como en un recuerdo de su honor.";
+			mes "[Valkyrie]";
+			mes "Usted lo hizo!";
+			mes "Tienes los 3 item";
+			mes "Yo y mi Padre el que os gracias ..";
+			mes "¿Sabes qué? Mantenga los items!";
+			mes "Realmente no los necesitamos!";
+			mes "¡Aquí!";
+			getitem 2410,1;
+			getitem 2383,1;
+			getitem 2554,1;
+			getitem 28027,1;
+			getitem 19337,1;
+			set #quest,100;
+	close;
+	end;
+			
+yourdone:
+	mes "[Valkyrie]";
+	mes "Gracias por salvarnos! Aquí están nuestros familiares únicas, como en un recuerdo de su honor.";
+	close;
+	end;		
+
+}
+
+sec_pri,19,17,1	script	Rangris	1765,{
+	if (#quest == 1) goto play;
+	if (#quest == 5) close;
+	mes "[Rangris]";
+	mes "¿Qué estás haciendo en mi guarida!";
+	mes "Usted tiene 3 maldición en su cuerpo!";
+	next;
+	close2;
+	warp "prontera",150,150;
+	sleep2 10000;
+	warp "prontera",0,0;
+	sleep2 100000;
+	warp "prontera",0,0;
+	end;
+		play:
+		mes "[Rangris]";
+		mes "¿Qué estás haciendo en mi guarida!";
+		mes "Yo te enviare la cárcel en mi guarida nadie entra!";
+		next;
+		mes "Encarcelamiento de 5!";
+		next;
+		mes "4!";
+		next;
+		mes "3!";
+		next;
+		mes "2!";
+		next;
+		mes "AAAAHHH! CONOZCA A SU";
+		menu "Su hermana me tientas!",yes2,"Cárcel de mí! NO ME IMPORTA!",curse;
+			curse:
+			warp "sec_pri",49,76;
+			OnMinute1:
+			warp "prontera",150,151;
+			set #quest,2;
+			end;
+			yes2:
+			mes "[Rangris]";
+			mes "¿Es así ...";
+			mes "¿Qué estás haciendo aquí?!";
+			menu "Necesito los artículos ...",yes3,"Para que se molesta!",curse;
+				yes3:
+				mes "[Rangris]";
+				mes "¡Ja! Me río de mi culo!";
+				mes "Debes enfrentarte a mí ya mi Minons!";
+				next;
+				warp "sec_pri",50,75;
+				monster "sec_pri",50,75,"Rangris",1751,1,"Rangris::OnEvent";
+				end;
+
+		OnEvent:
+			killmonsterall "sec_pri";
+			announce "Rangris: Nooo! Déjennos en paz! Puede esta prenda",bc_self;
+			getitem 2524,1;
+			set #quest,3;
+			warp "prontera",150,150;
+			sleep2 10000;
+			mes "[Valkyrie]";
+			mes "¡Gracias!";
+			mes "Usted tiene 1 de cada 3 artículos de nuestra Familia!";
+			delitem 2524,1;
+			mes "* Se entregó la ropa a Valkyrie *";
+			mes "Ahora para mi segundo hermano ... Electrón";
+			mes "Él es mucho más potente que la primera ...";
+			set #quest,3;
+			mes "Yo entiendo que usted necesita un descanso ...";
+			mes "Vuelve pronto!";
+			close;
+
+				
+}	
+		
+job_prist,24,48,1	script	Electron	1921,{
+	if (#quest == 3) goto play2;
+	mes "[Electron]";
+	mes "Bueno ... Utilice el 'if (#quest == 1)'...";
+	mes ".... ¿Qué?";
+	mes "¿Quién eres tú!? Y ¿Qué estás haciendo aquí?!";
+	menu "Sólo para que toque con H20! Nerd ...",byebye;
+		byebye:
+		next;
+		mes "[Electron]";
+		mes "Usted es un desperdicio de mi tiempo!";
+		mes "Vete pedazo de $%&*!";
+		next;
+		warp "prontera",150,150;
+		end;
+	play2:
+	mes "[Electron]";
+	mes "Okay... Use the 'if (#quest == 1)'...";
+	mes "¿Quién eres tú!? Y ¿Qué estás haciendo aquí?!";	
+	menu "Su hermana me tantes para conseguir los artículos de nuevo",yes6,"Sólo para que toque con H20! Nerd ...",byebye;
+		yes6:
+		next;
+		mes "[Electron]";
+		mes "Ahh ... Usted mató a mi hermano ... Rangris";
+		next;
+		mes "Le doy las gracias por eso, porque su un idiota";
+		next;
+		mes "Pero, matando a mi hermano para conseguir el Únicos! ¡NO!";
+		next;
+		mes "Enfrentar el miedo de mi hologramas!";
+		monster "job_prist",24,48,"Hologramas Electron",1921,1,"Electron::OnEvent2";
+		close;
+		end;
+		
+OnEvent2:
+			announce "Valkyrie: Ha derrotado electrón! Usted necesitará a su vez que la palanca para obtener los últimos Uniques",bc_self;
+			sleep2 10000;
+			warp "jupe_ele",43,55;
+			end;
+}
+
+jupe_ele,43,55,1	script	Master Lever	111,{
+	getitem 2421,1;
+	warp "prontera",150,150;
+	sleep2 10000;
+	mes "[Valkyrie]";
+	mes "¡Sí! Usted tiene 2 de cada 3 de los artículos de mi familia!";
+	mes "* Se entregó el Sleipnir*";
+	delitem 2421,1;
+	mes "Bueno ... Mi hermano más antiguo y pasado ...";
+	mes "Él es el más grande y más gordo de todos ...";
+	mes "Zeburh...";
+	mes "Bueno ... Su Quiebre .. Me olvidé de ...";
+	set #quest,4;
+	close;
+	end;
+
+}
+
+mag_dun02,150,194,5	script	Zeburh	1885,{
+	if (#quest == 4) goto play3;
+	warp "prontera",150,150;
+	end;
+
+	play3:
+		warp "mag_dun02",146,179;
+		mapannounce "mag_dun02","Zeburh: Muaha! Yo sé lo que estado haciendo ...",0;
+		sleep2 1000;
+		mapannounce "mag_dun02","Zeburh: necesito que me matan!",0;
+		goto simot;
+		end;
+
+	simot:
+		monster "mag_dun02",0,0,"Zeburh",1885,1,"Zeburh::OnEvent3";
+		end;
+
+	OnEvent3:
+			mapannounce "mag_dun02","Zeburh: Noo! Pensé que esto nunca va a pasar! Tómalo!",0;
+			warp "prontera",100,185;
+			set #quest,5;
+			close;
+			end;
+
+}

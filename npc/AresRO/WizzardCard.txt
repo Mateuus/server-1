@@ -1,0 +1,109 @@
+//===== Script eAthena ======================================= 
+//= Master Magos Quest
+//===== por: ================================================== 
+//= Creador de Quests Ragnarok World
+//= v1.0
+//===== Compatible Con: ===================================== 
+//= eAthena SVN
+//===== Descripción: ========================================= 
+//  Quest Creada por el Script Creador de Quests Online de
+//  http://www.ragnarokworld.net
+//============================================================ 
+
+poring_w02,46,78,5	script	Master Magos	737,{
+ 	set @NPCName$, "[^66cc99Master Magos^000000]";
+	set @cost, 200000000;
+	mes @NPCName$;
+	mes "Hola te gustaría odtener esta card dicen que un Wizzard y un Saga está su alma dentro.";
+	mes "Solo su Effectos son para magos no otro job.";
+	next;
+	mes @NPCName$;
+	mes "^009900[Mage Class solamente]^000000";
+	mes "Effects";
+	mes "-Inflict 25% more damage with ^009900Thunder Storm^000000, ^009900Jupitel Thunder^000000 and ^009900Lord of Vermilion^000000";
+	mes "-Inflict 35% more damage with ^009900Fire Bolt^000000";
+	mes "-Inflict 35% more damage with ^880000Cold Bolt^000000";
+	mes "Peso : ^7777771^000000";
+	next;
+	mes @NPCName$;
+	mes "Quieres Obtener este Item?";
+	next;
+	switch(select("Si:No:Cancelar")) {
+ 	case 1:
+	mes @NPCName$;
+	mes "Estos son Los Items Necesarios.";
+	mes "  ^99cc66Staff of Destruction^000000 [1]";
+	mes "  ^99cc66Baphomet Doll^000000 [300]";
+	mes "  ^99cc66Bent Spoon^000000 [1]";
+	mes "  ^99cc66Black Dyestuff^000000 [100]";
+	mes "  ^99cc66Gemstone^000000 [5]";
+	mes "  ^99cc66Alarm Mask^000000 [1]";
+	mes "  ^99cc66200000000 Zeny^000000";
+	next;
+	if (countitem(2000) < 1) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(750) < 300) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(7016) < 1) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(983) < 100) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(7300) < 5) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(5086) < 1) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (Zeny < @cost) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	mes @NPCName$;
+	mes "Bien! Tienes todos los Items! Felicidades !";
+	mes "el Objeto es Tuyo";
+	delitem 2000,1;
+	delitem 750,300;
+	delitem 7016,1;
+	delitem 983,100;
+	delitem 7300,5;
+	delitem 5086,1;
+	set Zeny,Zeny-@cost;
+	getitem 30004,1;
+	close;
+	case 2:
+	mes @NPCName$;
+	mes "de acuerdo, vuelve pronto !";
+	close;
+	case 3:
+	close;
+	}
+
+}
+
+//============================================================
+//===== Creador de Quests Ragnarok World ===========================
+//============================================================

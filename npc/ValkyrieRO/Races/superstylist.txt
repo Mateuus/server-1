@@ -1,0 +1,105 @@
+//===== 3CeAM Script =========================================
+//= 3CeAM Custom Stylist NPC
+//===== By: ==================================================
+//= Rytech
+//===== Updated for rAthena by: =====================================
+//= Zycron
+//============================================================
+prontera,146,197,5	script	Super Stylist	10209,{
+Lintro:
+if (
+	Class == Job_Rune_Knight || 
+	Class == Job_Warlock || 
+	Class == Job_Ranger || 
+	Class == Job_Arch_Bishop || 
+	Class == Job_Mechanic || 
+	Class == Job_Guillotine_Cross || 
+	Class == Job_Royal_Guard || 
+	Class == Job_Sorcerer || 
+	Class == Job_Minstrel || 
+	Class == Job_Wanderer || 
+	Class == Job_Sura || 
+	Class == Job_Genetic || 
+	Class == Job_Shadow_Chaser
+	)
+	{
+	mes "[Super Stylist]";
+	mes "Hey there. Im a super stylist. Want to try out my services?";
+	mes "I can customize your character's appearance in a hand full of ways.";
+	next;
+	menu "Sure.",Laccessroom,"No Thanks.",Lbye;
+	}
+	else {
+	mes "I do not support your class. Come back when you are Third Job.";
+	close;
+	}
+
+Laccessroom:
+	// Open the dressing room and sets the dye/style max's depending on the job.
+	opendressroom(0);
+	set @hairdyemax,MaxHairDye;
+	set @bodydyemax,MaxBodyDye;
+
+	// Summoner's only have 6 hair styles.
+	if (BaseClass != Job_Summoner)
+		set @hairstylemax,MaxHairStyle;
+	else
+		set @hairstylemax,6;
+
+	// Only 3rd job's have access to a 2nd body style.
+	// Note: Not all of the new body styles are out. Best to limit only to jobs that do have them.
+	
+		set @bodystylemax,1;
+
+Lmain:
+	mes "[Super Stylist]";
+	mes "Ok step this way. A dressing room window should open. Use this to decide what you want and then select in the menu what your interested in.";
+	next;
+	menu "HairDye",Lhairdye,"HairStyle",Lhairstyle,"ClothingStyle",Lbodydye,"BodyStyle",Lbodystyle,"Im done.",Lbye;
+
+Lhairdye:
+	mes "[Super Stylist]";
+	mes "Enter the dye you want.";
+	mes "Max Hair Dyes = "+@hairdyemax+"";
+	input @hairdye;
+	if (@hairdye < 0 || @hairdye > @hairdyemax) set @hairdye,0;
+	setlook 6,@hairdye;
+	next;
+	goto Lmain;
+
+Lhairstyle:
+	mes "[Super Stylist]";
+	mes "Enter the style you want.";
+	mes "Max Hair Styles = "+@hairstylemax+"";
+	input @hairstyle;
+	if (@hairstyle < 0 || @hairstyle > @hairstylemax) set @hairstyle,0;
+	setlook 1,@hairstyle;
+	next;
+	goto Lmain;
+
+Lbodydye:
+	mes "[Super Stylist]";
+	mes "Enter the dye you want.";
+	mes "Max Body Dyes = "+@bodydyemax+"";
+	input @bodydye;
+	if (@bodydye < 0 || @bodydye > @bodydyemax) set @bodydye,0;
+	setlook 7,@bodydye;
+	next;
+	goto Lmain;
+
+Lbodystyle:
+	mes "[Super Stylist]";
+	mes "Enter the style you want.";
+	mes "Max Body Styles = "+@bodystylemax+"";
+	input @bodystyle;
+	if (@bodystyle < 0 || @bodystyle > @bodystylemax) set @bodystyle,0;
+	setlook 13,@bodystyle;
+	next;
+	goto Lmain;
+
+Lbye:
+	mes "[Super Stylist]";
+	mes "Ok then. Ill be here whenever you need to change your look.";
+	close;
+
+}

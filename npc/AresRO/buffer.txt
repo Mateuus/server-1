@@ -1,0 +1,403 @@
+prontera,155,187,5	script	Healer&Buffer#h1-1::Healer&Buffer	791,{
+set @amount1,0;			// Normal Buff
+set @amount2,5000000;		// Full Buff
+set @amount3,5000000;		// Full Chemical Protection
+set @amount4,9000000;		// Full Buff + Full Chemical Protection
+set @amount5,5000000;		// Enchant Weapon
+set @amount6,0;			// Remove ALL Effects
+set @time,1200000;		// Time Duration 	- Default 1200000 (20 Minutes)	(1200000/1000/60) = 20 Minutes
+set @bufflevel,10;		// Obvious isnt it?	- for dummies its the Buff Level
+set @foodlevel,10;		// Obvious isnt it?	- for dummies its the Food Level
+
+set @jobbuff,1;			// 1 Yes 0 No
+				// if job buffs are on every class will get their own buffs(skill buffs)
+				// (not based on @bufflevel but their max skill lvl)
+				// in options: "1" "3" "5"		EDP for "2 and 4"(sinx only)
+
+menu "1. Normal Buff ( "+@amount1+" Zeny )",-,"2. Full Buff ( "+@amount2+" Zeny )",LQ_2,"3. Full Chemical Protection ( "+@amount3+" Zeny )",LQ_3,"4. Complete Buff (2.+3.) ( "+@amount4+" Zeny )",LQ_4,"5. Enchant Weapon ( "+@amount5+" Zeny )",LQ_5,"6. Remove ALL Effects ( "+@amount6+" Zeny )",LQ_6;
+
+        if(Zeny < @amount1) { mes "You don´t have enough Zeny"; percentheal 0,0; close; }
+	percentheal 100,100;
+	set Zeny,Zeny - @amount1;
+if(@jobbuff == 1 ) {
+	if (BaseClass==Job_Swordman) { sc_start SC_ENDURE, @time, 10; }
+	if((Class ==Job_Knight) || (Class ==Job_Lord_Knight) || (Class ==Job_Baby_Knight)) { sc_start sc_ONEHAND, @time, 1; sc_start sc_TWOHANDQUICKEN, @time, 10; sc_start sc_AURABLADE, @time, 5; sc_start sc_PARRYING, @time, 10; sc_start sc_CONCENTRATION, @time, 5; }
+	if((Class ==Job_Crusader) || (Class ==Job_Paladin) || (Class ==Job_Job_Baby_Crusader)) { sc_start sc_ONEHAND, @time, 1; sc_start sc_SHRINK, @time, 1; sc_start sc_AUTOGUARD, @time, 10; sc_start sc_REFLECTSHIELD, @time, 10; sc_start sc_DEFENDER, @time, 5; sc_start sc_SPEARQUICKEN, @time, 10; }
+	if (BaseClass==Job_Mage) { sc_start SC_ENERGYCOAT, @time, 1; }
+	if((Class ==Job_Wizard) || (Class ==Job_High_Wizard) || (Class ==Job_Job_Baby_Wizard)) { sc_start sc_SIGHTBLASTER, @time, 1; sc_start sc_MAGICPOWER, @time, 10; }
+	if((Class ==Job_Sage) || (Class ==Job_Professor) || (Class ==Job_Baby_Sage)) { sc_start sc_MEMORIZE, @time, 5; sc_start sc_DOUBLECAST, @time, 5; }
+	if (BaseClass==Job_Archer) { sc_start SC_CONCENTRATE, @time, 10; }
+	if((Class ==Job_Hunter) || (Class ==Job_Sniper) || (Class ==Job_Baby_Hunter)) { sc_start sc_TRUESIGHT, @time, 10; sc_start sc_WINDWALK, @time, 10; }
+	if (BaseClass==Job_Acolyte) { sc_start SC_SIGNUMCRUCIS, @time, 10; }
+	if((Class ==Job_Priest) || (Class ==Job_High_Priest) || (Class ==Job_Baby_Priest)) { sc_start sc_SLOWPOISON, @time, 4; sc_start sc_IMPOSITIO, @time, @bufflevel; sc_start sc_KYRIE, @time, 10; sc_start sc_MAGNIFICAT, @time, @bufflevel; sc_start sc_GLORIA, @time, @bufflevel; }
+	if((Class ==Job_Monk) || (Class ==Job_Champion) || (Class ==Job_Baby_Monk)) { sc_start sc_FURY, @time, 5; }
+	if (BaseClass==Job_Merchant) { sc_start SC_LOUD, @time, 1; }
+	if((Class ==Job_Blacksmith) || (Class ==Job_Whitesmith) || (Class ==Job_Baby_Blacksmith)) { sc_start sc_ADRENALINE, @time, 5; sc_start sc_WEAPONPERFECTION, @time, 5; sc_start sc_OVERTHRUST, @time, 5; sc_start sc_MAXIMIZEPOWER, @time, 5; sc_start sc_ADRENALINE2, @time, 1; sc_start sc_MELTDOWN, @time, 10; sc_start sc_CARTBOOST, @time, 1; sc_start sc_MAXOVERTHRUST, @time, 5; }
+	if((Class ==Job_Alchem) || (Class ==Job_Alchemist) || (Class ==Job_Creator) || (Class ==Job_Baby_Alchem) || (Class ==Job_Baby_Alchemist)) { sc_start sc_CP_WEAPON, @time, 5; sc_start sc_CP_SHIELD, @time, 5; sc_start sc_CP_ARMOR, @time, 5; sc_start sc_CP_HELM, @time, 5; }
+	if(Class ==Job_Assassin_Cross) { sc_start SC_EDP, @time, 5; }
+	if((Class ==Job_Assassin) || (Class ==Job_Assassin_Cross) || (Class ==Job_Baby_Assassin)) { sc_start sc_POISONREACT, @time, 10; }
+	if((Class ==Job_Rogue) || (Class ==Job_Stalker) || (Class ==Job_Baby_Rogue)) { sc_start sc_REJECTSWORD, @time, 5; ; sc_start sc_PRESERVE, @time, 1; }
+}
+	sc_start SC_STRFood, @time, @foodlevel;
+	sc_start SC_AGIFood, @time, @foodlevel;
+	sc_start SC_VITFood, @time, @foodlevel;
+	sc_start SC_INTFood, @time, @foodlevel;
+	sc_start SC_DEXFood, @time, @foodlevel;
+	sc_start SC_LUKFood, @time, @foodlevel;
+	sc_start SC_BLESSING, @time, @bufflevel;
+	sc_start SC_INCREASEAGI, @time, @bufflevel;
+	sc_start SC_MATKPOTION, @time, @bufflevel;
+	sc_start SC_ATKPOTION, @time, @bufflevel;
+	percentheal 100,100;
+	close;
+
+LQ_2:
+        if(Zeny < @amount2) { mes "You don´t have enough Zeny"; percentheal 0,0; close; }
+	percentheal 100,100;
+	set Zeny,Zeny - @amount2;
+if(@jobbuff == 1 ) {
+	if(Class ==Job_Assassin_Cross) { sc_start SC_EDP, @time, 5; }
+}
+	sc_start SC_WINDWALK, @time, @bufflevel;
+	sc_start SC_ENDURE, @time, @bufflevel;
+	sc_start SC_CONCENTRATE, @time, @bufflevel;
+	sc_start SC_POISONREACT, @time, @bufflevel;
+	sc_start SC_SIGNUMCRUCIS, @time, @bufflevel;
+	sc_start SC_IMPOSITIO, @time, @bufflevel;
+	sc_start SC_SUFFRAGIUM, @time, @bufflevel;
+	sc_start SC_KYRIE, @time, @bufflevel;
+	sc_start SC_MAGNIFICAT, @time, @bufflevel;
+	sc_start SC_GLORIA, @time, @bufflevel;
+	sc_start SC_ADRENALINE, @time, @bufflevel;
+	sc_start SC_WEAPONPERFECTION, @time, @bufflevel;
+	sc_start SC_OVERTHRUST, @time, @bufflevel;
+	sc_start SC_MAXIMIZEPOWER, @time, @bufflevel;
+	sc_start SC_LOUD, @time, @bufflevel;
+	sc_start SC_ENERGYCOAT, @time, @bufflevel;
+	sc_start SC_ASPDPOTION2, @time, @bufflevel;
+	sc_start SC_ATKPOTION, @time, @bufflevel;
+	sc_start SC_MATKPOTION, @time, @bufflevel;
+	sc_start SC_AUTOGUARD, @time, @bufflevel;
+	sc_start SC_REFLECTSHIELD, @time, @bufflevel;
+	sc_start SC_PROVIDENCE, @time, @bufflevel;
+	sc_start SC_SPEARQUICKEN, @time, @bufflevel;
+	sc_start SC_AURABLADE, @time, @bufflevel;
+	sc_start SC_PARRYING, @time, @bufflevel;
+	sc_start SC_CONCENTRATION, @time, @bufflevel;
+	sc_start SC_MAGICPOWER, @time, @bufflevel;
+	sc_start SC_TRUESIGHT, @time, @bufflevel;
+	sc_start SC_MELTDOWN, @time, @bufflevel;
+	sc_start SC_CARTBOOST, @time, 1;
+	sc_start SC_DOUBLECAST, @time, @bufflevel;
+	sc_start SC_STRFood, @time, @foodlevel;
+	sc_start SC_AGIFood, @time, @foodlevel;
+	sc_start SC_VITFood, @time, @foodlevel;
+	sc_start SC_INTFood, @time, @foodlevel;
+	sc_start SC_DEXFood, @time, @foodlevel;
+	sc_start SC_LUKFood, @time, @foodlevel;
+	sc_start SC_HITFood, @time, @foodlevel;
+	sc_start SC_FLEEFood, @time, @foodlevel;
+	sc_start SC_BATKFood, @time, @foodlevel;
+	sc_start SC_WATKFood, @time, @foodlevel;
+	sc_start SC_MATKFood, @time, @foodlevel;
+	sc_start SC_BLESSING, @time, @bufflevel;
+	sc_start SC_INCREASEAGI, @time, @bufflevel;
+	percentheal 100,100;
+	close;
+
+LQ_3:
+        if(Zeny < @amount3) { mes "You don´t have enough Zeny"; percentheal 0,0; close; }
+	percentheal 100,100;
+	set Zeny,Zeny - @amount3;
+if(@jobbuff == 1 ) {
+	if (BaseClass==Job_Swordman) { sc_start SC_ENDURE, @time, 10; }
+	if((Class ==Job_Knight) || (Class ==Job_Lord_Knight) || (Class ==Job_Baby_Knight)) { sc_start sc_ONEHAND, @time, 1; sc_start sc_TWOHANDQUICKEN, @time, 10; sc_start sc_AURABLADE, @time, 5; sc_start sc_PARRYING, @time, 10; sc_start sc_CONCENTRATION, @time, 5; }
+	if((Class ==Job_Crusader) || (Class ==Job_Paladin) || (Class ==Job_Job_Baby_Crusader)) { sc_start sc_ONEHAND, @time, 1; sc_start sc_SHRINK, @time, 1; sc_start sc_AUTOGUARD, @time, 10; sc_start sc_REFLECTSHIELD, @time, 10; sc_start sc_DEFENDER, @time, 5; sc_start sc_SPEARQUICKEN, @time, 10; }
+	if (BaseClass==Job_Mage) { sc_start SC_ENERGYCOAT, @time, 1; }
+	if((Class ==Job_Wizard) || (Class ==Job_High_Wizard) || (Class ==Job_Job_Baby_Wizard)) { sc_start sc_SIGHTBLASTER, @time, 1; sc_start sc_MAGICPOWER, @time, 10; }
+	if((Class ==Job_Sage) || (Class ==Job_Professor) || (Class ==Job_Baby_Sage)) { sc_start sc_MEMORIZE, @time, 5; sc_start sc_DOUBLECAST, @time, 5; }
+	if (BaseClass==Job_Archer) { sc_start SC_CONCENTRATE, @time, 10; }
+	if((Class ==Job_Hunter) || (Class ==Job_Sniper) || (Class ==Job_Baby_Hunter)) { sc_start sc_TRUESIGHT, @time, 10; sc_start sc_WINDWALK, @time, 10; }
+	if (BaseClass==Job_Acolyte) { sc_start SC_SIGNUMCRUCIS, @time, 10; }
+	if((Class ==Job_Priest) || (Class ==Job_High_Priest) || (Class ==Job_Baby_Priest)) { sc_start sc_SLOWPOISON, @time, 4; sc_start sc_IMPOSITIO, @time, @bufflevel; sc_start sc_KYRIE, @time, 10; sc_start sc_MAGNIFICAT, @time, @bufflevel; sc_start sc_GLORIA, @time, @bufflevel; }
+	if((Class ==Job_Monk) || (Class ==Job_Champion) || (Class ==Job_Baby_Monk)) { sc_start sc_FURY, @time, 5; }
+	if (BaseClass==Job_Merchant) { sc_start SC_LOUD, @time, 1; }
+	if((Class ==Job_Blacksmith) || (Class ==Job_Whitesmith) || (Class ==Job_Baby_Blacksmith)) { sc_start sc_ADRENALINE, @time, 5; sc_start sc_WEAPONPERFECTION, @time, 5; sc_start sc_OVERTHRUST, @time, 5; sc_start sc_MAXIMIZEPOWER, @time, 5; sc_start sc_ADRENALINE2, @time, 1; sc_start sc_MELTDOWN, @time, 10; sc_start sc_CARTBOOST, @time, 1; sc_start sc_MAXOVERTHRUST, @time, 5; }
+	if(Class ==Job_Assassin_Cross) { sc_start SC_EDP, @time, 5; }
+	if((Class ==Job_Assassin) || (Class ==Job_Assassin_Cross) || (Class ==Job_Baby_Assassin)) { sc_start sc_POISONREACT, @time, 10; }
+	if((Class ==Job_Rogue) || (Class ==Job_Stalker) || (Class ==Job_Baby_Rogue)) { sc_start sc_REJECTSWORD, @time, 5; ; sc_start sc_PRESERVE, @time, 1; }
+}
+	sc_start SC_CP_WEAPON, @time, @bufflevel;
+	sc_start SC_CP_SHIELD, @time, @bufflevel;
+	sc_start SC_CP_ARMOR, @time, @bufflevel;
+	sc_start SC_CP_HELM, @time, @bufflevel;
+	percentheal 100,100;
+	close;
+
+LQ_4:
+        if(Zeny < @amount4) { mes "You don´t have enough Zeny"; percentheal 0,0; close; }
+	percentheal 100,100;
+	set Zeny,Zeny - @amount4;
+if(@jobbuff == 1 ) {
+	if(Class ==Job_Assassin_Cross) { sc_start SC_EDP, @time, 5; }
+}
+	sc_start SC_WINDWALK, @time, @bufflevel;
+	sc_start SC_ENDURE, @time, @bufflevel;
+	sc_start SC_CONCENTRATE, @time, @bufflevel;
+	sc_start SC_POISONREACT, @time, @bufflevel;
+	sc_start SC_SIGNUMCRUCIS, @time, @bufflevel;
+	sc_start SC_IMPOSITIO, @time, @bufflevel;
+	sc_start SC_SUFFRAGIUM, @time, @bufflevel;
+	sc_start SC_KYRIE, @time, @bufflevel;
+	sc_start SC_MAGNIFICAT, @time, @bufflevel;
+	sc_start SC_GLORIA, @time, @bufflevel;
+	sc_start SC_ADRENALINE, @time, @bufflevel;
+	sc_start SC_WEAPONPERFECTION, @time, @bufflevel;
+	sc_start SC_OVERTHRUST, @time, @bufflevel;
+	sc_start SC_MAXIMIZEPOWER, @time, @bufflevel;
+	sc_start SC_LOUD, @time, @bufflevel;
+	sc_start SC_ENERGYCOAT, @time, @bufflevel;
+	sc_start SC_ASPDPOTION2, @time, @bufflevel;
+	sc_start SC_ATKPOTION, @time, @bufflevel;
+	sc_start SC_MATKPOTION, @time, @bufflevel;
+	sc_start SC_CP_WEAPON, @time, @bufflevel;
+	sc_start SC_CP_SHIELD, @time, @bufflevel;
+	sc_start SC_CP_ARMOR, @time, @bufflevel;
+	sc_start SC_CP_HELM, @time, @bufflevel;
+	sc_start SC_AUTOGUARD, @time, @bufflevel;
+	sc_start SC_REFLECTSHIELD, @time, @bufflevel;
+	sc_start SC_PROVIDENCE, @time, @bufflevel;
+	sc_start SC_SPEARQUICKEN, @time, @bufflevel;
+	sc_start SC_AURABLADE, @time, @bufflevel;
+	sc_start SC_PARRYING, @time, @bufflevel;
+	sc_start SC_CONCENTRATION, @time, @bufflevel;
+	sc_start SC_MAGICPOWER, @time, @bufflevel;
+	sc_start SC_TRUESIGHT, @time, @bufflevel;
+	sc_start SC_MELTDOWN, @time, @bufflevel;
+	sc_start SC_CARTBOOST, @time, 1;
+	sc_start SC_DOUBLECAST, @time, @bufflevel;
+	sc_start SC_STRFood, @time, @foodlevel;
+	sc_start SC_AGIFood, @time, @foodlevel;
+	sc_start SC_VITFood, @time, @foodlevel;
+	sc_start SC_INTFood, @time, @foodlevel;
+	sc_start SC_DEXFood, @time, @foodlevel;
+	sc_start SC_LUKFood, @time, @foodlevel;
+	sc_start SC_HITFood, @time, @foodlevel;
+	sc_start SC_FLEEFood, @time, @foodlevel;
+	sc_start SC_BATKFood, @time, @foodlevel;
+	sc_start SC_WATKFood, @time, @foodlevel;
+	sc_start SC_MATKFood, @time, @foodlevel;
+	sc_start SC_BLESSING, @time, @bufflevel;
+	sc_start SC_INCREASEAGI, @time, @bufflevel;
+	percentheal 100,100;
+	close;
+
+LQ_5:
+	menu "^FF0000Fire^000000",LQ_FI,"^0000FFWater^000000",LQ_WA,"^009900Wind^000000",LQ_WI,"^996600Earth^000000",LQ_EA,"^FFFF00Holy^000000",LQ_HO,"^333366Dark/Shadow^000000",LQ_SH,"^777777Ghost^000000",LQ_GH;
+	close;
+
+LQ_FI:	//fire
+        if(Zeny < @amount5) { mes "You don´t have enough Zeny"; percentheal 0,0; close; }
+	set Zeny,Zeny - @amount5;
+if(@jobbuff == 1 ) {
+	if (BaseClass==Job_Swordman) { sc_start SC_ENDURE, @time, 10; }
+	if((Class ==Job_Knight) || (Class ==Job_Lord_Knight) || (Class ==Job_Baby_Knight)) { sc_start sc_ONEHAND, @time, 1; sc_start sc_TWOHANDQUICKEN, @time, 10; sc_start sc_AURABLADE, @time, 5; sc_start sc_PARRYING, @time, 10; sc_start sc_CONCENTRATION, @time, 5; }
+	if((Class ==Job_Crusader) || (Class ==Job_Paladin) || (Class ==Job_Job_Baby_Crusader)) { sc_start sc_ONEHAND, @time, 1; sc_start sc_SHRINK, @time, 1; sc_start sc_AUTOGUARD, @time, 10; sc_start sc_REFLECTSHIELD, @time, 10; sc_start sc_DEFENDER, @time, 5; sc_start sc_SPEARQUICKEN, @time, 10; }
+	if (BaseClass==Job_Mage) { sc_start SC_ENERGYCOAT, @time, 1; }
+	if((Class ==Job_Wizard) || (Class ==Job_High_Wizard) || (Class ==Job_Job_Baby_Wizard)) { sc_start sc_SIGHTBLASTER, @time, 1; sc_start sc_MAGICPOWER, @time, 10; }
+	if((Class ==Job_Sage) || (Class ==Job_Professor) || (Class ==Job_Baby_Sage)) { sc_start sc_MEMORIZE, @time, 5; sc_start sc_DOUBLECAST, @time, 5; }
+	if (BaseClass==Job_Archer) { sc_start SC_CONCENTRATE, @time, 10; }
+	if((Class ==Job_Hunter) || (Class ==Job_Sniper) || (Class ==Job_Baby_Hunter)) { sc_start sc_TRUESIGHT, @time, 10; sc_start sc_WINDWALK, @time, 10; }
+	if (BaseClass==Job_Acolyte) { sc_start SC_SIGNUMCRUCIS, @time, 10; }
+	if((Class ==Job_Priest) || (Class ==Job_High_Priest) || (Class ==Job_Baby_Priest)) { sc_start sc_SLOWPOISON, @time, 4; sc_start sc_IMPOSITIO, @time, @bufflevel; sc_start sc_KYRIE, @time, 10; sc_start sc_MAGNIFICAT, @time, @bufflevel; sc_start sc_GLORIA, @time, @bufflevel; }
+	if((Class ==Job_Monk) || (Class ==Job_Champion) || (Class ==Job_Baby_Monk)) { sc_start sc_FURY, @time, 5; }
+	if (BaseClass==Job_Merchant) { sc_start SC_LOUD, @time, 1; }
+	if((Class ==Job_Blacksmith) || (Class ==Job_Whitesmith) || (Class ==Job_Baby_Blacksmith)) { sc_start sc_ADRENALINE, @time, 5; sc_start sc_WEAPONPERFECTION, @time, 5; sc_start sc_OVERTHRUST, @time, 5; sc_start sc_MAXIMIZEPOWER, @time, 5; sc_start sc_ADRENALINE2, @time, 1; sc_start sc_MELTDOWN, @time, 10; sc_start sc_CARTBOOST, @time, 1; sc_start sc_MAXOVERTHRUST, @time, 5; }
+	if((Class ==Job_Alchem) || (Class ==Job_Alchemist) || (Class ==Job_Creator) || (Class ==Job_Baby_Alchem) || (Class ==Job_Baby_Alchemist)) { sc_start sc_CP_WEAPON, @time, 5; sc_start sc_CP_SHIELD, @time, 5; sc_start sc_CP_ARMOR, @time, 5; sc_start sc_CP_HELM, @time, 5; }
+	if(Class ==Job_Assassin_Cross) { sc_start SC_EDP, @time, 5; }
+	if((Class ==Job_Assassin) || (Class ==Job_Assassin_Cross) || (Class ==Job_Baby_Assassin)) { sc_start sc_POISONREACT, @time, 10; }
+	if((Class ==Job_Rogue) || (Class ==Job_Stalker) || (Class ==Job_Baby_Rogue)) { sc_start sc_REJECTSWORD, @time, 5; ; sc_start sc_PRESERVE, @time, 1; }
+}
+	sc_start SC_FIREWEAPON, @time, @bufflevel;
+	close;
+
+LQ_WA:	//water
+        if(Zeny < @amount5) { mes "You don´t have enough Zeny"; percentheal 0,0; close; }
+	set Zeny,Zeny - @amount5;
+if(@jobbuff == 1 ) {
+	if (BaseClass==Job_Swordman) { sc_start SC_ENDURE, @time, 10; }
+	if((Class ==Job_Knight) || (Class ==Job_Lord_Knight) || (Class ==Job_Baby_Knight)) { sc_start sc_ONEHAND, @time, 1; sc_start sc_TWOHANDQUICKEN, @time, 10; sc_start sc_AURABLADE, @time, 5; sc_start sc_PARRYING, @time, 10; sc_start sc_CONCENTRATION, @time, 5; }
+	if((Class ==Job_Crusader) || (Class ==Job_Paladin) || (Class ==Job_Job_Baby_Crusader)) { sc_start sc_ONEHAND, @time, 1; sc_start sc_SHRINK, @time, 1; sc_start sc_AUTOGUARD, @time, 10; sc_start sc_REFLECTSHIELD, @time, 10; sc_start sc_DEFENDER, @time, 5; sc_start sc_SPEARQUICKEN, @time, 10; }
+	if (BaseClass==Job_Mage) { sc_start SC_ENERGYCOAT, @time, 1; }
+	if((Class ==Job_Wizard) || (Class ==Job_High_Wizard) || (Class ==Job_Job_Baby_Wizard)) { sc_start sc_SIGHTBLASTER, @time, 1; sc_start sc_MAGICPOWER, @time, 10; }
+	if((Class ==Job_Sage) || (Class ==Job_Professor) || (Class ==Job_Baby_Sage)) { sc_start sc_MEMORIZE, @time, 5; sc_start sc_DOUBLECAST, @time, 5; }
+	if (BaseClass==Job_Archer) { sc_start SC_CONCENTRATE, @time, 10; }
+	if((Class ==Job_Hunter) || (Class ==Job_Sniper) || (Class ==Job_Baby_Hunter)) { sc_start sc_TRUESIGHT, @time, 10; sc_start sc_WINDWALK, @time, 10; }
+	if (BaseClass==Job_Acolyte) { sc_start SC_SIGNUMCRUCIS, @time, 10; }
+	if((Class ==Job_Priest) || (Class ==Job_High_Priest) || (Class ==Job_Baby_Priest)) { sc_start sc_SLOWPOISON, @time, 4; sc_start sc_IMPOSITIO, @time, @bufflevel; sc_start sc_KYRIE, @time, 10; sc_start sc_MAGNIFICAT, @time, @bufflevel; sc_start sc_GLORIA, @time, @bufflevel; }
+	if((Class ==Job_Monk) || (Class ==Job_Champion) || (Class ==Job_Baby_Monk)) { sc_start sc_FURY, @time, 5; }
+	if (BaseClass==Job_Merchant) { sc_start SC_LOUD, @time, 1; }
+	if((Class ==Job_Blacksmith) || (Class ==Job_Whitesmith) || (Class ==Job_Baby_Blacksmith)) { sc_start sc_ADRENALINE, @time, 5; sc_start sc_WEAPONPERFECTION, @time, 5; sc_start sc_OVERTHRUST, @time, 5; sc_start sc_MAXIMIZEPOWER, @time, 5; sc_start sc_ADRENALINE2, @time, 1; sc_start sc_MELTDOWN, @time, 10; sc_start sc_CARTBOOST, @time, 1; sc_start sc_MAXOVERTHRUST, @time, 5; }
+	if((Class ==Job_Alchem) || (Class ==Job_Alchemist) || (Class ==Job_Creator) || (Class ==Job_Baby_Alchem) || (Class ==Job_Baby_Alchemist)) { sc_start sc_CP_WEAPON, @time, 5; sc_start sc_CP_SHIELD, @time, 5; sc_start sc_CP_ARMOR, @time, 5; sc_start sc_CP_HELM, @time, 5; }
+	if(Class ==Job_Assassin_Cross) { sc_start SC_EDP, @time, 5; }
+	if((Class ==Job_Assassin) || (Class ==Job_Assassin_Cross) || (Class ==Job_Baby_Assassin)) { sc_start sc_POISONREACT, @time, 10; }
+	if((Class ==Job_Rogue) || (Class ==Job_Stalker) || (Class ==Job_Baby_Rogue)) { sc_start sc_REJECTSWORD, @time, 5; ; sc_start sc_PRESERVE, @time, 1; }
+}
+	sc_start SC_WATERWEAPON, @time, @bufflevel;
+	close;
+
+LQ_WI:	//wind
+        if(Zeny < @amount5) { mes "You don´t have enough Zeny"; percentheal 0,0; close; }
+	set Zeny,Zeny - @amount5;
+if(@jobbuff == 1 ) {
+	if (BaseClass==Job_Swordman) { sc_start SC_ENDURE, @time, 10; }
+	if((Class ==Job_Knight) || (Class ==Job_Lord_Knight) || (Class ==Job_Baby_Knight)) { sc_start sc_ONEHAND, @time, 1; sc_start sc_TWOHANDQUICKEN, @time, 10; sc_start sc_AURABLADE, @time, 5; sc_start sc_PARRYING, @time, 10; sc_start sc_CONCENTRATION, @time, 5; }
+	if((Class ==Job_Crusader) || (Class ==Job_Paladin) || (Class ==Job_Job_Baby_Crusader)) { sc_start sc_ONEHAND, @time, 1; sc_start sc_SHRINK, @time, 1; sc_start sc_AUTOGUARD, @time, 10; sc_start sc_REFLECTSHIELD, @time, 10; sc_start sc_DEFENDER, @time, 5; sc_start sc_SPEARQUICKEN, @time, 10; }
+	if (BaseClass==Job_Mage) { sc_start SC_ENERGYCOAT, @time, 1; }
+	if((Class ==Job_Wizard) || (Class ==Job_High_Wizard) || (Class ==Job_Job_Baby_Wizard)) { sc_start sc_SIGHTBLASTER, @time, 1; sc_start sc_MAGICPOWER, @time, 10; }
+	if((Class ==Job_Sage) || (Class ==Job_Professor) || (Class ==Job_Baby_Sage)) { sc_start sc_MEMORIZE, @time, 5; sc_start sc_DOUBLECAST, @time, 5; }
+	if (BaseClass==Job_Archer) { sc_start SC_CONCENTRATE, @time, 10; }
+	if((Class ==Job_Hunter) || (Class ==Job_Sniper) || (Class ==Job_Baby_Hunter)) { sc_start sc_TRUESIGHT, @time, 10; sc_start sc_WINDWALK, @time, 10; }
+	if (BaseClass==Job_Acolyte) { sc_start SC_SIGNUMCRUCIS, @time, 10; }
+	if((Class ==Job_Priest) || (Class ==Job_High_Priest) || (Class ==Job_Baby_Priest)) { sc_start sc_SLOWPOISON, @time, 4; sc_start sc_IMPOSITIO, @time, @bufflevel; sc_start sc_KYRIE, @time, 10; sc_start sc_MAGNIFICAT, @time, @bufflevel; sc_start sc_GLORIA, @time, @bufflevel; }
+	if((Class ==Job_Monk) || (Class ==Job_Champion) || (Class ==Job_Baby_Monk)) { sc_start sc_FURY, @time, 5; }
+	if (BaseClass==Job_Merchant) { sc_start SC_LOUD, @time, 1; }
+	if((Class ==Job_Blacksmith) || (Class ==Job_Whitesmith) || (Class ==Job_Baby_Blacksmith)) { sc_start sc_ADRENALINE, @time, 5; sc_start sc_WEAPONPERFECTION, @time, 5; sc_start sc_OVERTHRUST, @time, 5; sc_start sc_MAXIMIZEPOWER, @time, 5; sc_start sc_ADRENALINE2, @time, 1; sc_start sc_MELTDOWN, @time, 10; sc_start sc_CARTBOOST, @time, 1; sc_start sc_MAXOVERTHRUST, @time, 5; }
+	if((Class ==Job_Alchem) || (Class ==Job_Alchemist) || (Class ==Job_Creator) || (Class ==Job_Baby_Alchem) || (Class ==Job_Baby_Alchemist)) { sc_start sc_CP_WEAPON, @time, 5; sc_start sc_CP_SHIELD, @time, 5; sc_start sc_CP_ARMOR, @time, 5; sc_start sc_CP_HELM, @time, 5; }
+	if(Class ==Job_Assassin_Cross) { sc_start SC_EDP, @time, 5; }
+	if((Class ==Job_Assassin) || (Class ==Job_Assassin_Cross) || (Class ==Job_Baby_Assassin)) { sc_start sc_POISONREACT, @time, 10; }
+	if((Class ==Job_Rogue) || (Class ==Job_Stalker) || (Class ==Job_Baby_Rogue)) { sc_start sc_REJECTSWORD, @time, 5; ; sc_start sc_PRESERVE, @time, 1; }
+}
+	sc_start SC_WINDWEAPON, @time, @bufflevel;
+	close;
+
+LQ_EA:	//earth
+        if(Zeny < @amount5) { mes "You don´t have enough Zeny"; percentheal 0,0; close; }
+	set Zeny,Zeny - @amount5;
+if(@jobbuff == 1 ) {
+	if (BaseClass==Job_Swordman) { sc_start SC_ENDURE, @time, 10; }
+	if((Class ==Job_Knight) || (Class ==Job_Lord_Knight) || (Class ==Job_Baby_Knight)) { sc_start sc_ONEHAND, @time, 1; sc_start sc_TWOHANDQUICKEN, @time, 10; sc_start sc_AURABLADE, @time, 5; sc_start sc_PARRYING, @time, 10; sc_start sc_CONCENTRATION, @time, 5; }
+	if((Class ==Job_Crusader) || (Class ==Job_Paladin) || (Class ==Job_Job_Baby_Crusader)) { sc_start sc_ONEHAND, @time, 1; sc_start sc_SHRINK, @time, 1; sc_start sc_AUTOGUARD, @time, 10; sc_start sc_REFLECTSHIELD, @time, 10; sc_start sc_DEFENDER, @time, 5; sc_start sc_SPEARQUICKEN, @time, 10; }
+	if (BaseClass==Job_Mage) { sc_start SC_ENERGYCOAT, @time, 1; }
+	if((Class ==Job_Wizard) || (Class ==Job_High_Wizard) || (Class ==Job_Job_Baby_Wizard)) { sc_start sc_SIGHTBLASTER, @time, 1; sc_start sc_MAGICPOWER, @time, 10; }
+	if((Class ==Job_Sage) || (Class ==Job_Professor) || (Class ==Job_Baby_Sage)) { sc_start sc_MEMORIZE, @time, 5; sc_start sc_DOUBLECAST, @time, 5; }
+	if (BaseClass==Job_Archer) { sc_start SC_CONCENTRATE, @time, 10; }
+	if((Class ==Job_Hunter) || (Class ==Job_Sniper) || (Class ==Job_Baby_Hunter)) { sc_start sc_TRUESIGHT, @time, 10; sc_start sc_WINDWALK, @time, 10; }
+	if (BaseClass==Job_Acolyte) { sc_start SC_SIGNUMCRUCIS, @time, 10; }
+	if((Class ==Job_Priest) || (Class ==Job_High_Priest) || (Class ==Job_Baby_Priest)) { sc_start sc_SLOWPOISON, @time, 4; sc_start sc_IMPOSITIO, @time, @bufflevel; sc_start sc_KYRIE, @time, 10; sc_start sc_MAGNIFICAT, @time, @bufflevel; sc_start sc_GLORIA, @time, @bufflevel; }
+	if((Class ==Job_Monk) || (Class ==Job_Champion) || (Class ==Job_Baby_Monk)) { sc_start sc_FURY, @time, 5; }
+	if (BaseClass==Job_Merchant) { sc_start SC_LOUD, @time, 1; }
+	if((Class ==Job_Blacksmith) || (Class ==Job_Whitesmith) || (Class ==Job_Baby_Blacksmith)) { sc_start sc_ADRENALINE, @time, 5; sc_start sc_WEAPONPERFECTION, @time, 5; sc_start sc_OVERTHRUST, @time, 5; sc_start sc_MAXIMIZEPOWER, @time, 5; sc_start sc_ADRENALINE2, @time, 1; sc_start sc_MELTDOWN, @time, 10; sc_start sc_CARTBOOST, @time, 1; sc_start sc_MAXOVERTHRUST, @time, 5; }
+	if((Class ==Job_Alchem) || (Class ==Job_Alchemist) || (Class ==Job_Creator) || (Class ==Job_Baby_Alchem) || (Class ==Job_Baby_Alchemist)) { sc_start sc_CP_WEAPON, @time, 5; sc_start sc_CP_SHIELD, @time, 5; sc_start sc_CP_ARMOR, @time, 5; sc_start sc_CP_HELM, @time, 5; }
+	if(Class ==Job_Assassin_Cross) { sc_start SC_EDP, @time, 5; }
+	if((Class ==Job_Assassin) || (Class ==Job_Assassin_Cross) || (Class ==Job_Baby_Assassin)) { sc_start sc_POISONREACT, @time, 10; }
+	if((Class ==Job_Rogue) || (Class ==Job_Stalker) || (Class ==Job_Baby_Rogue)) { sc_start sc_REJECTSWORD, @time, 5; ; sc_start sc_PRESERVE, @time, 1; }
+}
+	sc_start SC_EARTHWEAPON, @time, @bufflevel;
+	close;
+
+LQ_HO:	//holy
+        if(Zeny < @amount5) { mes "You don´t have enough Zeny"; percentheal 0,0; close; }
+	set Zeny,Zeny - @amount5;
+if(@jobbuff == 1 ) {
+	if (BaseClass==Job_Swordman) { sc_start SC_ENDURE, @time, 10; }
+	if((Class ==Job_Knight) || (Class ==Job_Lord_Knight) || (Class ==Job_Baby_Knight)) { sc_start sc_ONEHAND, @time, 1; sc_start sc_TWOHANDQUICKEN, @time, 10; sc_start sc_AURABLADE, @time, 5; sc_start sc_PARRYING, @time, 10; sc_start sc_CONCENTRATION, @time, 5; }
+	if((Class ==Job_Crusader) || (Class ==Job_Paladin) || (Class ==Job_Job_Baby_Crusader)) { sc_start sc_ONEHAND, @time, 1; sc_start sc_SHRINK, @time, 1; sc_start sc_AUTOGUARD, @time, 10; sc_start sc_REFLECTSHIELD, @time, 10; sc_start sc_DEFENDER, @time, 5; sc_start sc_SPEARQUICKEN, @time, 10; }
+	if (BaseClass==Job_Mage) { sc_start SC_ENERGYCOAT, @time, 1; }
+	if((Class ==Job_Wizard) || (Class ==Job_High_Wizard) || (Class ==Job_Job_Baby_Wizard)) { sc_start sc_SIGHTBLASTER, @time, 1; sc_start sc_MAGICPOWER, @time, 10; }
+	if((Class ==Job_Sage) || (Class ==Job_Professor) || (Class ==Job_Baby_Sage)) { sc_start sc_MEMORIZE, @time, 5; sc_start sc_DOUBLECAST, @time, 5; }
+	if (BaseClass==Job_Archer) { sc_start SC_CONCENTRATE, @time, 10; }
+	if((Class ==Job_Hunter) || (Class ==Job_Sniper) || (Class ==Job_Baby_Hunter)) { sc_start sc_TRUESIGHT, @time, 10; sc_start sc_WINDWALK, @time, 10; }
+	if (BaseClass==Job_Acolyte) { sc_start SC_SIGNUMCRUCIS, @time, 10; }
+	if((Class ==Job_Priest) || (Class ==Job_High_Priest) || (Class ==Job_Baby_Priest)) { sc_start sc_SLOWPOISON, @time, 4; sc_start sc_IMPOSITIO, @time, @bufflevel; sc_start sc_KYRIE, @time, 10; sc_start sc_MAGNIFICAT, @time, @bufflevel; sc_start sc_GLORIA, @time, @bufflevel; }
+	if((Class ==Job_Monk) || (Class ==Job_Champion) || (Class ==Job_Baby_Monk)) { sc_start sc_FURY, @time, 5; }
+	if (BaseClass==Job_Merchant) { sc_start SC_LOUD, @time, 1; }
+	if((Class ==Job_Blacksmith) || (Class ==Job_Whitesmith) || (Class ==Job_Baby_Blacksmith)) { sc_start sc_ADRENALINE, @time, 5; sc_start sc_WEAPONPERFECTION, @time, 5; sc_start sc_OVERTHRUST, @time, 5; sc_start sc_MAXIMIZEPOWER, @time, 5; sc_start sc_ADRENALINE2, @time, 1; sc_start sc_MELTDOWN, @time, 10; sc_start sc_CARTBOOST, @time, 1; sc_start sc_MAXOVERTHRUST, @time, 5; }
+	if((Class ==Job_Alchem) || (Class ==Job_Alchemist) || (Class ==Job_Creator) || (Class ==Job_Baby_Alchem) || (Class ==Job_Baby_Alchemist)) { sc_start sc_CP_WEAPON, @time, 5; sc_start sc_CP_SHIELD, @time, 5; sc_start sc_CP_ARMOR, @time, 5; sc_start sc_CP_HELM, @time, 5; }
+	if(Class ==Job_Assassin_Cross) { sc_start SC_EDP, @time, 5; }
+	if((Class ==Job_Assassin) || (Class ==Job_Assassin_Cross) || (Class ==Job_Baby_Assassin)) { sc_start sc_POISONREACT, @time, 10; }
+	if((Class ==Job_Rogue) || (Class ==Job_Stalker) || (Class ==Job_Baby_Rogue)) { sc_start sc_REJECTSWORD, @time, 5; ; sc_start sc_PRESERVE, @time, 1; }
+}
+	sc_start SC_ASPERSIO, @time, @bufflevel;
+	close;
+
+LQ_SH:	//shadow
+        if(Zeny < @amount5) { mes "You don´t have enough Zeny"; percentheal 0,0; close; }
+	set Zeny,Zeny - @amount5;
+if(@jobbuff == 1 ) {
+	if (BaseClass==Job_Swordman) { sc_start SC_ENDURE, @time, 10; }
+	if((Class ==Job_Knight) || (Class ==Job_Lord_Knight) || (Class ==Job_Baby_Knight)) { sc_start sc_ONEHAND, @time, 1; sc_start sc_TWOHANDQUICKEN, @time, 10; sc_start sc_AURABLADE, @time, 5; sc_start sc_PARRYING, @time, 10; sc_start sc_CONCENTRATION, @time, 5; }
+	if((Class ==Job_Crusader) || (Class ==Job_Paladin) || (Class ==Job_Job_Baby_Crusader)) { sc_start sc_ONEHAND, @time, 1; sc_start sc_SHRINK, @time, 1; sc_start sc_AUTOGUARD, @time, 10; sc_start sc_REFLECTSHIELD, @time, 10; sc_start sc_DEFENDER, @time, 5; sc_start sc_SPEARQUICKEN, @time, 10; }
+	if (BaseClass==Job_Mage) { sc_start SC_ENERGYCOAT, @time, 1; }
+	if((Class ==Job_Wizard) || (Class ==Job_High_Wizard) || (Class ==Job_Job_Baby_Wizard)) { sc_start sc_SIGHTBLASTER, @time, 1; sc_start sc_MAGICPOWER, @time, 10; }
+	if((Class ==Job_Sage) || (Class ==Job_Professor) || (Class ==Job_Baby_Sage)) { sc_start sc_MEMORIZE, @time, 5; sc_start sc_DOUBLECAST, @time, 5; }
+	if (BaseClass==Job_Archer) { sc_start SC_CONCENTRATE, @time, 10; }
+	if((Class ==Job_Hunter) || (Class ==Job_Sniper) || (Class ==Job_Baby_Hunter)) { sc_start sc_TRUESIGHT, @time, 10; sc_start sc_WINDWALK, @time, 10; }
+	if (BaseClass==Job_Acolyte) { sc_start SC_SIGNUMCRUCIS, @time, 10; }
+	if((Class ==Job_Priest) || (Class ==Job_High_Priest) || (Class ==Job_Baby_Priest)) { sc_start sc_SLOWPOISON, @time, 4; sc_start sc_IMPOSITIO, @time, @bufflevel; sc_start sc_KYRIE, @time, 10; sc_start sc_MAGNIFICAT, @time, @bufflevel; sc_start sc_GLORIA, @time, @bufflevel; }
+	if((Class ==Job_Monk) || (Class ==Job_Champion) || (Class ==Job_Baby_Monk)) { sc_start sc_FURY, @time, 5; }
+	if (BaseClass==Job_Merchant) { sc_start SC_LOUD, @time, 1; }
+	if((Class ==Job_Blacksmith) || (Class ==Job_Whitesmith) || (Class ==Job_Baby_Blacksmith)) { sc_start sc_ADRENALINE, @time, 5; sc_start sc_WEAPONPERFECTION, @time, 5; sc_start sc_OVERTHRUST, @time, 5; sc_start sc_MAXIMIZEPOWER, @time, 5; sc_start sc_ADRENALINE2, @time, 1; sc_start sc_MELTDOWN, @time, 10; sc_start sc_CARTBOOST, @time, 1; sc_start sc_MAXOVERTHRUST, @time, 5; }
+	if((Class ==Job_Alchem) || (Class ==Job_Alchemist) || (Class ==Job_Creator) || (Class ==Job_Baby_Alchem) || (Class ==Job_Baby_Alchemist)) { sc_start sc_CP_WEAPON, @time, 5; sc_start sc_CP_SHIELD, @time, 5; sc_start sc_CP_ARMOR, @time, 5; sc_start sc_CP_HELM, @time, 5; }
+	if(Class ==Job_Assassin_Cross) { sc_start SC_EDP, @time, 5; }
+	if((Class ==Job_Assassin) || (Class ==Job_Assassin_Cross) || (Class ==Job_Baby_Assassin)) { sc_start sc_POISONREACT, @time, 10; }
+	if((Class ==Job_Rogue) || (Class ==Job_Stalker) || (Class ==Job_Baby_Rogue)) { sc_start sc_REJECTSWORD, @time, 5; ; sc_start sc_PRESERVE, @time, 1; }
+}
+	sc_start SC_SHADOWWEAPON, @time, @bufflevel;
+	close;
+
+LQ_GH:	//ghost
+        if(Zeny < @amount5) { mes "You don´t have enough Zeny"; percentheal 0,0; close; }
+	set Zeny,Zeny - @amount5;
+if(@jobbuff == 1 ) {
+	if (BaseClass==Job_Swordman) { sc_start SC_ENDURE, @time, 10; }
+	if((Class ==Job_Knight) || (Class ==Job_Lord_Knight) || (Class ==Job_Baby_Knight)) { sc_start sc_ONEHAND, @time, 1; sc_start sc_TWOHANDQUICKEN, @time, 10; sc_start sc_AURABLADE, @time, 5; sc_start sc_PARRYING, @time, 10; sc_start sc_CONCENTRATION, @time, 5; }
+	if((Class ==Job_Crusader) || (Class ==Job_Paladin) || (Class ==Job_Job_Baby_Crusader)) { sc_start sc_ONEHAND, @time, 1; sc_start sc_SHRINK, @time, 1; sc_start sc_AUTOGUARD, @time, 10; sc_start sc_REFLECTSHIELD, @time, 10; sc_start sc_DEFENDER, @time, 5; sc_start sc_SPEARQUICKEN, @time, 10; }
+	if (BaseClass==Job_Mage) { sc_start SC_ENERGYCOAT, @time, 1; }
+	if((Class ==Job_Wizard) || (Class ==Job_High_Wizard) || (Class ==Job_Job_Baby_Wizard)) { sc_start sc_SIGHTBLASTER, @time, 1; sc_start sc_MAGICPOWER, @time, 10; }
+	if((Class ==Job_Sage) || (Class ==Job_Professor) || (Class ==Job_Baby_Sage)) { sc_start sc_MEMORIZE, @time, 5; sc_start sc_DOUBLECAST, @time, 5; }
+	if (BaseClass==Job_Archer) { sc_start SC_CONCENTRATE, @time, 10; }
+	if((Class ==Job_Hunter) || (Class ==Job_Sniper) || (Class ==Job_Baby_Hunter)) { sc_start sc_TRUESIGHT, @time, 10; sc_start sc_WINDWALK, @time, 10; }
+	if (BaseClass==Job_Acolyte) { sc_start SC_SIGNUMCRUCIS, @time, 10; }
+	if((Class ==Job_Priest) || (Class ==Job_High_Priest) || (Class ==Job_Baby_Priest)) { sc_start sc_SLOWPOISON, @time, 4; sc_start sc_IMPOSITIO, @time, @bufflevel; sc_start sc_KYRIE, @time, 10; sc_start sc_MAGNIFICAT, @time, @bufflevel; sc_start sc_GLORIA, @time, @bufflevel; }
+	if((Class ==Job_Monk) || (Class ==Job_Champion) || (Class ==Job_Baby_Monk)) { sc_start sc_FURY, @time, 5; }
+	if (BaseClass==Job_Merchant) { sc_start SC_LOUD, @time, 1; }
+	if((Class ==Job_Blacksmith) || (Class ==Job_Whitesmith) || (Class ==Job_Baby_Blacksmith)) { sc_start sc_ADRENALINE, @time, 5; sc_start sc_WEAPONPERFECTION, @time, 5; sc_start sc_OVERTHRUST, @time, 5; sc_start sc_MAXIMIZEPOWER, @time, 5; sc_start sc_ADRENALINE2, @time, 1; sc_start sc_MELTDOWN, @time, 10; sc_start sc_CARTBOOST, @time, 1; sc_start sc_MAXOVERTHRUST, @time, 5; }
+	if((Class ==Job_Alchem) || (Class ==Job_Alchemist) || (Class ==Job_Creator) || (Class ==Job_Baby_Alchem) || (Class ==Job_Baby_Alchemist)) { sc_start sc_CP_WEAPON, @time, 5; sc_start sc_CP_SHIELD, @time, 5; sc_start sc_CP_ARMOR, @time, 5; sc_start sc_CP_HELM, @time, 5; }
+	if(Class ==Job_Assassin_Cross) { sc_start SC_EDP, @time, 5; }
+	if((Class ==Job_Assassin) || (Class ==Job_Assassin_Cross) || (Class ==Job_Baby_Assassin)) { sc_start sc_POISONREACT, @time, 10; }
+	if((Class ==Job_Rogue) || (Class ==Job_Stalker) || (Class ==Job_Baby_Rogue)) { sc_start sc_REJECTSWORD, @time, 5; ; sc_start sc_PRESERVE, @time, 1; }
+}
+	sc_start SC_GHOSTWEAPON, @time, @bufflevel;
+	close;
+
+	
+LQ_6:
+        if(Zeny < @amount6) { mes "You don´t have enough Zeny"; percentheal 0,0; close; }
+	set Zeny,Zeny - @amount6;
+	sc_end SC_ALL;
+	percentheal 100,100;
+	close;
+}
+morocc.gat,159,96,5	duplicate(Healer&Buffer)	Healer&Buffer#h1-2	791
+ayothaya.gat,155,111,5	duplicate(Healer&Buffer)	Healer&Buffer#h1-3	791
+geffen.gat,121,61,5	duplicate(Healer&Buffer)	Healer&Buffer#h1-4	791
+umbala.gat,94,162,5	duplicate(Healer&Buffer)	Healer&Buffer#h1-5	791
+payon.gat,180,105,5	duplicate(Healer&Buffer)	Healer&Buffer#h1-6	791
+alberta.gat,185,144,5	duplicate(Healer&Buffer)	Healer&Buffer#h1-7	791
+aldebaran.gat,134,123,5	duplicate(Healer&Buffer)	Healer&Buffer#h1-8	791
+izlude.gat,125,118,5	duplicate(Healer&Buffer)	Healer&Buffer#h1-9	791
+xmas.gat,149,136,5	duplicate(Healer&Buffer)	Healer&Buffer#h1-10	791
+comodo.gat,190,162,5	duplicate(Healer&Buffer)	Healer&Buffer#h1-11	791
+amatsu.gat,200,80,5	duplicate(Healer&Buffer)	Healer&Buffer#h1-12	791
+gonryun.gat,164,130,5	duplicate(Healer&Buffer)	Healer&Buffer#h1-13	791
+yuno.gat,150,186,5	duplicate(Healer&Buffer)	Healer&Buffer#h1-14	791
+niflheim.gat,188,180,5	duplicate(Healer&Buffer)	Healer&Buffer#h1-15	791
+louyang.gat,225,103,5	duplicate(Healer&Buffer)	Healer&Buffer#h1-16	791
+einbroch.gat,57,203,5	duplicate(Healer&Buffer)	Healer&Buffer#h1-17	791
+lighthalzen.gat,163,102,5	duplicate(Healer&Buffer)	Healer&Buffer#h1-18	791
+einbech.gat,67,99,5	duplicate(Healer&Buffer)	Healer&Buffer#h1-19	791
+hugel.gat,89,151,5	duplicate(Healer&Buffer)	Healer&Buffer#h1-20	791
+rachel.gat,133,117,5	duplicate(Healer&Buffer)	Healer&Buffer#h1-21	791
+veins.gat,212,129,5	duplicate(Healer&Buffer)	Healer&Buffer#h1-22	791
+moscovia.gat,219,198,5	duplicate(Healer&Buffer)	Healer&Buffer#h1-23	791

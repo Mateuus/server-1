@@ -1,0 +1,114 @@
+//===== Global Chile ======
+//=== https://www.facebook.com/IntegralesGlobal ===
+
+prontera,139,174,5	script	Administrador de Guilds	806,{
+
+	set @GuildGM,getcharid(2);
+	if (@GuildGM == 0) goto noguild;
+	if (strcharinfo(0)==getguildmaster(@GuildGM)) goto lider;
+	goto noguild;
+
+
+	lider:
+	mes "[^CC0000Administrador de Guilds^000000]";
+	mes "¿Que es lo que quieres hacer?";
+	next;
+	menu "Cambio de Lider",cambiolider,"Almacén de Guild",almacen,"Cambiar contraseña almacen",contralmclan,"Cancelar",cancelar;
+
+	contralmclan:
+	mes "[^CC0000Administrador de Guilds^000000]";
+	mes "Con esto cambiarás la contraseña del almacén de guild.";
+	next;
+	mes "[^CC0000Administrador de Guilds^000000]";
+	mes "Introduce tu anterior contraseña, si no tenias ninguna contraseña escribe 0.";
+	input @PassClan;
+	if (@PassClan > 99999) goto maxdigitos;
+	if (@PassClan == PassClan) goto correcto1;
+	next;
+	mes "[^CC0000Administrador de Guilds^000000]";
+	mes "La contraseña introducida no coincide.";
+	close;
+
+	correcto1:
+	mes "[^CC0000Administrador de Guilds^000000]";
+	mes "Introduce la nueva contraseña.";
+	mes "(Solo con números)";
+	mes "^0000CCEvita que tu nueva contraseña empiece en 0.^000000";
+	input PassClan;
+	mes "[^CC0000Administrador de Guilds^000000]";
+	mes "Eliges ^0000CC"+PassClan+"^000000 como tu nueva contraseña.";
+	close;
+
+	maxdigitos:
+	next;
+	mes "[^CC0000Administrador de Guilds^000000]";
+	mes "El máximo de dígitos para una contraseña es de 5.";
+	close;
+
+
+	cambiolider:
+	mes "[^CC0000Administrador de Guilds^000000]";
+	mes "Con esto cambiarás el liderazgo de tu guild.";
+	mes "¿Seguro que quieres hacerlo?";
+	next;
+	menu "Aceptar",aceptacambio,"Cancelar",cancelar;
+
+	aceptacambio:
+	mes "[^CC0000Administrador de Guilds^000000]";
+	mes "¿Quien quieres que sea el nuevo dueño de la guild?";
+	mes "(El personaje ha de estar conectado)";
+	next;
+	input @LiderGuild$;
+	mes "[^CC0000Administrador de Guilds^000000]";
+	mes "Si estos datos son correctos realizaré el cambio que me pides.";
+      mes "Guild: ^FF0000"+getguildname(getcharid(2))+"^000000";
+      mes "Lider Actual: ^FF0000"+getguildmaster(getcharid(2))+"^000000";
+      mes "Nuevo Lider: ^FF0000"+@LiderGuild$+"^000000";
+	next;
+	menu "Aceptar",aceptacambio2,"Cancelar",cancelar;
+
+	aceptacambio2:
+	guildchangegm @GuildGM,"@LiderGuild$";
+	if(guildchangegm(getcharid(2),@LiderGuild$)) {announce "[Cambio de Lider] "+strcharinfo(2)+" ha cambiado de lider a "+@LiderGuild$+".",bc_all,0xFFE476; close;}
+	mes "[^CC0000Administrador de Guilds^000000]";
+	mes "No se ha podido cambiar de lider, asegurate de que esa persona está conectada.";
+	close;;
+
+	almacen:
+	mes "[^CC0000Administrador de Guilds^000000]";
+	mes "Introduce la contraseña.";
+	mes "(Si no has escogido ninguna será 0)";
+	input @PassClan;
+	if (@PassClan == PassClan) goto almacen2;
+	next;
+	mes "[^CC0000Administrador de Guilds^000000]";
+	mes "Contraseña incorrecta.";
+	close;
+
+	almacen2:
+	if (guildopenstorage() == 1)goto usandogstorage;
+	if (guildopenstorage() == 2)goto singuild;
+	mes "[^CC0000Administrador de Guilds^000000]";
+	mes "Abriendo almacen de "+strcharinfo(2)+"...";
+	close2;
+	guildopenstorage();
+	end;
+
+	cancelar:
+	close;
+
+	usandogstorage:
+	mes "[^CC0000Administrador de Guilds^000000]";
+	mes "Alguien ya está usando este almacén, deberás esperar a que acabe.";
+	close;
+
+	singuild:
+	mes "[^CC0000Administrador de Guilds^000000]";
+	mes "Para usar el almacén de guild, debes de tener una guild, obviamente.";
+	close;
+
+	noguild:
+	mes "[^CC0000Administrador de Guilds^000000]";
+	mes "No ofreceré este servicio a alguien como tú, pierdete.";
+	close;
+}

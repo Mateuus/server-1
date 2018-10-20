@@ -1,0 +1,207 @@
+//===== Global Chile ======
+//=== https://www.facebook.com/IntegralesGlobal 
+
+prontera,147,168,4	script	WoE Warper#01::wp	835,{
+
+switch(select("Castillos vRO"))
+{
+	case 1:
+	 	switch(select("Kriemhild 1.0:Vidblind 2.0"))
+	 	{
+	 		case 1:
+	 			warp	"prt_gld.gat",	142,	64;	end;
+	 		break;
+	 		//Llevame al castillo 2 de prontera
+	 		case 2:
+	 			warp	"sch_gld.gat", 97, 192;	end;
+	 		break;
+	 		//Llevame al castillo 3 de prontera
+	 		case 3:
+	 			warp	"sch_gld.gat", 99, 192;	end;
+	 		break;
+	 		//Llevame al castillo 4 de prontera
+	 		case 4:
+	 			warp	"prt_gld.gat",	127,	241;	end;
+	 		break;
+	 		//Llevame al castillo 5 de prontera
+	 		case 5:
+	 			warp	"prt_gld.gat",	194,	240;	end;
+	 		break;
+	 	}
+	  break;
+	  
+	 //Castillos de Aldebaran
+	case 2:
+		
+			switch(select("Aldebaran Guild Castle 1:Aldebaran Guild Castle 2:Aldebaran Guild Castle 3:Alderaban Guild Castle 4:Alderan Guild Castle 5"))
+			{
+				case 1:
+					warp	"alde_gld",	60,	91;	end;
+				break;
+				//Llevame al castillo 2 de Aldebaran
+				case 2:
+					warp	"alde_gld",	106,	248;	end;
+				break;
+				//Levame al castillo 3 de Aldebaran
+				case 3:
+					warp	"alde_gld",	140,	98;	end;
+				break;
+				//Llevame al castillo 4 de Aldebaran
+				case 4:
+					warp	"alde_gld",	255,	237;	end;
+				break;
+				//Llevame al castillo 5 de Aldebaran
+				case5:
+					warp	"alde_gld",	271,	101;	end;
+				break;
+			}
+		
+		break;
+	//Geffen Guild Castles
+	
+	case 3:
+		
+			switch(select("Geffen Guild Castle 1:Geffen Guild Castle 2:Geffen Guild Castle 3:Geffen Guild Castle 4:Geffen Guild Castle 5"))
+			{
+				//Te llevo al castillo 1 de Geffen
+				case 1:
+					warp	"gef_fild13",	168,	47;	end;
+				break;
+				//Te llevo al castillo 2 de Geffen
+				case 2:
+					warp	"gef_fild13",	308,	229;	end;
+				break;
+				//Te llevo al castillo 3 de Geffen
+				case 3:
+					warp	"ge_fild13",	156,	245;	end;	
+				break;
+				//Te llevo al castillo 4 de Geffen
+				case 4:
+					warp	"gef_fild13",	187,	273;	end;
+				break;
+				//Te llevo al castillo 5 de Geffen
+				case 5:
+					warp	"gef_fild13",	236,	49;	end;
+				break;
+				
+				
+			
+		}
+	break;
+	//Payon Guild Castles
+	case 4:
+	
+		
+			switch(select("Payon Guild Castle 1:Payon Guild Castle 2:Payon Guild Castle 3:Payon Guild Castle 4:Payon Guild Castle 5"))
+			{
+			
+				case 1:
+					warp	"pay_gld",	113,	226;	end;
+				break;
+				//Llevar al segundo castillo
+				case 2:
+					warp	"pay_gld",	305,	113;	end;
+				break;
+				//Llevar al tercer castillo de payon
+				case 3:
+					warp	"pay_gld",	302,	293;	end;
+				break;
+				//Llevar al cuarto castillo de payon
+				case 4:
+					warp	"pay_gld",	140,	172;	end;
+				break;
+				//Llevar al jugador al castillo cinco de payon
+				case 5:
+					warp	"pay_gld",	188,	267;	end;
+				break;
+				
+			}
+		
+		break;
+	case 5:
+	
+		
+			switch(select("Schwaltzvalt Guild Castle 1:Schwaltzvalt Guild Castle 2:Schwaltzvalt Guild Castle 3:Schwaltzvalt Guild Castle 4:Schwaltzvalt Guild Castle 5"))
+			{
+			//Llevame al castillo uno de woe 2
+			case 1:
+				warp "sch_gld",	293,	100;	end;
+			break;
+			
+			case 2:
+				warp	"sch_gld",	288,	234;	end;
+			break;
+			
+			case 3:
+				warp	"sch_gld",	96,	203;	end;
+			break;
+			
+			case 4:
+				warp	"sch_gld",	137,	80;	end;
+			break;
+			
+			case 5:
+				warp	"sch_gld",	82,	313;	end;
+			break;
+			
+			}
+		
+		break;
+	case 6:
+		
+			switch(select("Arunafeltz Guild Castle 1:Arunafeltz Guild Castle 2:Arunafeltz Guild Castle 3:Arunafeltz Guild Castle 4:Arunafeltz Guild Castle 5"))
+			{
+			
+				case 1:
+					warp	"aru_gld",	165,	259;	end;
+				break;
+				
+				case 2:
+					warp	"aru_gld",	98,	46;	end;
+				break;
+				
+				case 3:
+					warp	"aru_gld",	68,	172;	end;
+				break;
+				
+				case 4:
+					warp	"aru_gld",	305,	323;	end;
+				break;
+				
+				case 5:
+					warp	"aru_gld",	305,	90;	end;
+					break;
+			
+			}
+		
+	break;
+OnInit:
+	setarray .@m0$[0], "¡","W","a","r","p"," ","W","o","E","!";
+	do {
+		if (.@i == 2)
+			set .@i, 0;
+		// Efecto nº 1 - Añadir una palabra nueva a la anterior
+		for (set .@c, 0; .@c < getarraysize(getd(".@m" + .@i + "$")); set .@c, .@c + 1) {
+			set .@f$, .@f$ + getd(".@m" + .@i + "$[" + .@c + "]");
+			waitingroom .@f$,0;
+			sleep 350;
+			delwaitingroom;
+		} // End loop
+		// Efecto nº 2 - Hacer una animación de aparición y vacío
+		for (set .@c, 0; .@c < 6; set .@c, .@c + 1) {
+			waitingroom "",0;
+			sleep 250;
+			delwaitingroom;
+			waitingroom .@f$,0;
+			sleep 250;
+			delwaitingroom;
+		} // End loop
+		waitingroom .@f$,0;
+		sleep 3000; // 3 segundos cambio de mensaje
+		set .@f$, "";
+		delwaitingroom;
+		set .@i, .@i + 1;
+	} while(1); // End loop
+end;	 
+}
+}

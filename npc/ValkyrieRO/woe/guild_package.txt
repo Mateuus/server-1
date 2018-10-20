@@ -1,0 +1,268 @@
+// Copyrights Notice
+// ========================================================
+// This work is licensed under the Creative Commons Attribution-NonCommercial 4.0 International License.
+// To view a copy of this license, visit http://creativecommons.org/licenses/by-nc/4.0/.
+// ========================================================
+// Introduction
+// ========================================================
+// Copyrights 2015-2020 Jordan Lacandula All rights reserved
+// ========================================================
+// Script: Guild Package Giver/Redeemer NPC
+// ========================================================
+// Programmer: Jordan Lacandula
+// Website: For more info, visit http://jordanlacandula.tk/
+// ========================================================
+// Bug Report/Job Request
+// ========================================================
+// Email: jordanlacandula@hotmail.com
+// Skype: jordan.lacandula
+// ========================================================
+// Features/Includes
+// ========================================================
+// SQL Database Support
+// used table names `gpack_code` and `guild_package`
+// Duplicate IP Checking (also supports same IP, see below)
+// Account Checking
+// Online Status Checker
+// Easy to change Package items for guild master
+// Easy to change Package items for guild member
+// Minimum Guild members Checking (default: 8)
+// ========================================================
+// Multiple IP ( Use gpack code to bypass IP Checking )
+// ========================================================
+// End Introduction
+// ========================================================
+
+quiz_02,233,367,8	script	Guild Master	421,{
+
+
+	if( getgmlevel() == 99 ){
+		set .c_length,10;
+		setarray .g_code$[0],"A","B","C","D","E","F","G","H","I","J","K","L", 				"M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","0","1","2","3","4","5","6","7","8","9";
+		mes "What can i do for you Sire?";
+		switch(select("Nothing:View Code List:^FF0000 Add Package Code^000000")){
+		case 1:
+			break;
+		case 2:
+			query_sql("SELECT `guild_id`, `gcode`,`status` FROM `gpack_code` ORDER BY `status` DESC",.@glist,.@codeview$,.@stts);
+			dispbottom "Status | GPack Code";
+			for(set @ei,0; @ei < getarraysize(.@codeview$); set @ei,@ei + 1){
+				query_sql("`SELECT `name` FROM `guild` WHERE `guild_id` = '"+.@glist[@ei]+"'",.@gn$);
+				dispbottom ""+.@stts[@ei]+" | "+.@codeview$[@ei]+"  |  "+.@gn$+"";
+			}
+			close;
+			break;
+		case 3:
+			next;
+			mes "Creating New Code for Guild: ";
+			input .@rguild$;
+			set .@cr,query_sql("SELECT `guild_id` FROM `guild` WHERE `name` = '"+.@rguild$+"'",.@g);
+			if(.@cr <= 0){
+				mes "^FF0000 Guild Not Found!^000000";
+				close;
+			}
+
+			for(set @i, 0; @i< .c_length; set @i, @i+1)
+			{
+				set @random_char, rand(0,(getarraysize(.g_code$)-1));
+				set @new_code$, @new_code$ + .g_code$[@random_char];
+			}
+			query_sql "INSERT INTO `gpack_code` (`guild_id`, `gcode`, `status`) VALUES ('"+.@g+"', '"+@new_code$+"', '0')";
+			set @new_code$, "";
+			next;
+			mes "Added Code for Guild";
+			mes "^FF0000 "+.@rguild$+"^000000";
+			close;
+			break;
+		}
+		mes "Proceeding to Player View";
+		next;
+	}
+
+	set .@hascode,0;
+	set .@code$,"null";
+	setarray .@gmaster[0],607,1,504,1; //gmaster pack
+	setarray .@gmember[0],607,10,504,1;	//gmember pack
+	
+	if(getcharid(2) == 0){
+		mes "you're not member of a guild";
+		close;
+	}
+	query_sql("SELECT `master` FROM `guild` WHERE `guild_id` = '"+getcharid(2)+"'",.@gid$);
+
+	if(.@gid$ != strcharinfo(0)){
+		mes "Only Guild Masters can claim the packages";
+		close;
+	}
+
+	mes "^FF0000 Guild Package^000000";
+	mes "Greetings ^FF0000 "+strcharinfo(0)+"^000000";
+	mes "Master of the Guild^FF0000 "+strcharinfo(2)+"^000000.";
+	next;
+	mes "Do you have code?";
+	switch(select("No:Yes")){
+	case 1:
+		break;
+	case 2:
+		input .@code$;
+		mes "Verifying Code";
+		mes "Please Wait....";
+
+		set .@csr,query_sql("SELECT `gcode` FROM `gpack_code` WHERE `gcode` = '"+.@code$+"'");
+		if ( .@csr <= 0 ){
+			next;
+			mes "^FF0000 Invalid Code^000000";
+			mes "Codes are Case-Sensitive, Please make sure of it.";
+			close;
+		}
+
+		query_sql("SELECT `status` FROM `gpack_code` WHERE `gcode` = '"+.@code$+"'",.@used);
+		if( .@used != 0 ){
+			mes "Guild Package code has been used already";
+			close;
+		}
+
+		set .@hascode,1;
+		break;
+	}
+	next;
+		
+	mes "Do you wish to claim your ^FF0000 Guild Package^000000 ?";
+	switch(select("No:Yes")){
+	case 1:
+		close;
+		break;
+	case 2:
+		next;
+		mes "^FF0000 CLAIM GUILD PACKAGE^000000 ";
+		mes "Master will receive the following:";
+		for ( set .@i, 0; .@i < getarraysize(.@gmaster); set .@i, .@i + 2 )
+		mes .@gmaster[.@i+1] + " x " + getitemname(.@gmaster[.@i]);
+		next;
+		mes "^FF0000 CLAIM GUILD PACKAGE^000000 ";
+		mes "Members will receive the following:";
+		for ( set .@i, 0; .@i < getarraysize(.@gmember); set .@i, .@i + 2 )
+		mes .@gmember[.@i+1] + " x " + getitemname(.@gmember[.@i]);
+		next;
+		mes "[^FF0000 Warning^000000 ]"; 
+		mes "Every one in your Guild can only claim Once regarding of their IP.";
+		mes "Only Online characters can claim a Guld Package";
+		mes "No special treatments if characters go offline while in process of claiming";
+		next;
+		mes "^FF0000 NOTE:^000000 You can only claim once.";
+		mes "^FF0000 NOTE:^000000 All members should be online.";
+		mes "^FF0000 NOTE:^000000 Make sure everyone have lots of Space in their inventory.";
+		next;
+		mes "^FF0000 CLAIM GUILD PACKAGE^000000 ";
+		mes "Claim now?";
+		switch(select("No:Yes")){
+		case 1:
+			close;
+			break;
+		case 2:
+			next;
+			set .@mm,8;	//required minimum members
+			setarray .@claimerlist$[0],"null";
+			set .@resultcount,query_sql("SELECT `name` FROM `guild_member` WHERE `guild_id` = '"+getcharid(2)+"'",.@claimerlist$);
+			if( .@resultcount < .@mm ){
+				mes "Should have Total of "+.@mm +" members.";
+				close;
+				break;
+			}
+
+		// enforce IP check when code is not available
+		if( .@hascode == 0 ){
+			setarray .@iplist$[0],"null";
+			// same ip check
+			for( set .@i,0; .@i < .@resultcount; set .@i,.@i+1 ){
+				query_sql("SELECT `account_id` FROM `char` WHERE `name` = '"+.@claimerlist$[.@i]+"'",.@z);
+				query_sql("SELECT `last_ip` FROM `login` WHERE `account_id` = '"+.@z+"'",.@il$);
+				//check for duplicates
+				for( set .@j,0; .@j < .@i; set .@j,.@j+1 ){
+					if( .@il$ == .@iplist$[.@j] ){
+						mes "^FF0000 Duplicate IP Address^000000";
+						mes "^FF0000 NOTE:^000000 Each player should have different IP address";
+						mes "If you should not see this, Please report to admin";
+						close;
+					}
+				}
+				//add to list
+				setarray .@iplist$[.@i],.@il$;
+			}
+		}
+			for( set .@i,0; .@i < .@resultcount; set .@i,.@i+1 ){
+				//account check
+				query_sql("SELECT `account_id` FROM `char` WHERE `name` = '"+.@claimerlist$[.@i]+"'",.@x);
+				set .@haspack,query_sql("SELECT FROM `guild_package` WHERE `acc_id` = '"+.@x+"'");
+				//ip check
+				query_sql("SELECT `last_ip` FROM `login` WHERE `account_id` = '"+.@x+"'",.@xx);
+				set .@haspack,query_sql("SELECT FROM `guild_package` WHERE `claim_ip` = '"+.@xx+"'");
+				//character name check
+				set .@haspack3,query_sql("SELECT `char_name` FROM `guild_package` WHERE `char_name` = '"+.@claimerlist$[.@i]+"'");
+				if(.@haspack > 0 || .@haspack2 > 0 || .@haspack3 > 0){
+					mes "One or more in your member(s) has already received the package.";
+					close;
+					break;
+				}
+			}
+
+			// TODOs: check if master and all members are online
+			set .@onlinechk,query_sql("SELECT `name` FROM `guild_member` WHERE `guild_id` = '"+getcharid(2)+"' AND `online` = 0");
+			if( .@onlinechk > 0 ){
+				mes "Make sure all members are online";
+				close;
+				break;
+			}
+
+			for ( set .@j,0; .@j < .@resultcount; set .@j,.@j+1 ){
+				if( .@claimerlist$[.@j] == strcharinfo(0)){
+					for ( set .@i, 0; .@i < getarraysize(.@gmaster); set .@i, .@i + 2 )
+					getitem .@gmaster[.@i], .@gmaster[.@i+1];
+				}else{
+					for ( set .@i, 0; .@i < getarraysize(.@gmember); set .@i, .@i + 2 )
+					atcommand "#item "+.@claimerlist$[.@j]+" "+.@gmember[.@i]+" "+.@gmember[.@i+1]+"";
+				}
+				set .@acid,"null";
+				query_sql("SELECT `account_id` FROM `guild_member` WHERE `name` = '"+.@claimerlist$[.@j]+"'",.@acid);
+				query_sql("SELECT `last_ip` FROM `login` WHERE `account_id` = '"+.@acid+"'",.@c_ip$);
+				query_sql("SELECT `last_mac` FROM `login` WHERE `account_id` = '"+.@acid+"'",.@c_mac$);
+				query_sql("SELECT `last_cpu` FROM `login` WHERE `account_id` = '"+.@acid+"'",.@c_cpu$);
+				query_sql("SELECT `last_motherboard` FROM `login` WHERE `account_id` = '"+.@acid+"'",.@c_mb$);
+				query_sql("SELECT `char_id` FROM `char` WHERE `name` = '"+.@claimerlist$[.@j]+"'",.@mem_id);
+
+				query_sql "INSERT INTO `guild_package` (`acc_id`, `char_id`, `char_name`, `guild_id`, `guild_name`, `guild_master`, `claim_ip`, `claim_mac`, `claim_cpu`, `claim_motherboard`) VALUES ('"+.@acid+"','"+.@mem_id+"','"+.@claimerlist$[.@j]+"','"+getcharid(2)+"','"+strcharinfo(2)+"','"+strcharinfo(0)+"','"+.@c_ip$+"','"+.@c_mac$+"','"+.@c_cpu$+"','"+.@c_mb$+"')";
+			}
+			
+			next;
+			mes "Package has been Distributed.";
+			close2;
+			query_sql("UPDATE `gpack_code` SET `guild_id` = '"+getcharid(2)+"', `status` = '1' WHERE `gcode` = '"+.@code$+"'");
+			announce "The Guild "+strcharinfo(2)+" has Signed Up for war",BC_ALL,0xFF0000;
+			break;
+		}
+		break;
+	}
+	switch(rand(1,4)){
+	case 1:
+		npctalk "Hey you noob, your turn";
+		sleep 1000;
+		npctalk "Oh you're not noob? Then prove it in WOE";
+		break;
+	case 2:
+		npctalk "Next!";
+		break;
+	case 3:
+		npctalk "NEXT NEXT NEXT, Move Faster";
+		break;
+	case 4:
+		npctalk "No more? Good.";
+	}
+	
+	OnInit:
+		waitingroom "Claim Guild Package Here",0;
+
+		query_sql "CREATE TABLE IF NOT EXISTS `guild_package` ( `acc_id` INT NOT NULL UNIQUE, `char_id` INT NOT NULL, `char_name` TEXT NOT NULL, `guild_id` INT NOT NULL, `guild_name` TEXT NOT NULL, `guild_master` TEXT NOT NULL, `claim_ip` TEXT NOT NULL, `claim_mac` TEXT NOT NULL, `claim_cpu` TEXT NOT NULL, `claim_motherboard` TEXT NOT NULL ) ENGINE=MyISAM";
+
+		query_sql "CREATE TABLE IF NOT EXISTS `gpack_code` (`guild_id` INT NOT NULL, `gcode` VARCHAR(10) NOT NULL, `status` INT NOT NULL ) ENGINE=MyISAM";
+	end;
+}

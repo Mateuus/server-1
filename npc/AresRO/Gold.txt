@@ -1,0 +1,34 @@
+//============================================================
+//= Gold Room Script
+//===== By: ==================================================
+//= iHeart
+//===== Current Version: =====================================
+//= 1.01
+//===== Description: =========================================
+//= Literally creates a room...full of gold
+//= Note: depending on how much gold you add, you may or may
+//=       not develop a headache from the red item flashing
+//============================================================
+
+-	script	LiteralGoldRoom		-1,{
+    OnTimer100:
+		makeitem 969, 1, "poring_c01", rand(87, 119),rand(86,115);
+        	stopnpctimer;
+		initnpctimer;
+        end;
+
+    OnInit:
+        initnpctimer;
+        end;
+}
+
+prontera,164,163,5	script	Gold Room	813,{
+
+    mes "Quieres Ir Al Gold Room?";
+    if(select("Si, Quiero Ir", "No, Grasias") == 1) {
+        warp "poring_c01", 100, 100;
+    }
+    close;
+}
+
+

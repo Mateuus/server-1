@@ -1,0 +1,190 @@
+//======================================================================================
+// Map Index
+//======================================================================================
+//Contains the list of maps with their respective IDs for inter-server use.
+//IDs must never change, therefore any new maps need to be added at the end,
+//and old ones must not be removed, but may be replaced.
+//Format:
+//mapname<tab>index <- specifies index for this map
+//mapname <- map will use index of previous map +1
+//Note that map index 0 is special and reserved for "error" status. 
+
+//プロンテラ //////////////////////////////////////////////////
+//prt_vilg00.gat,100,176,5	warp	alphawarp9001	1,1,prt_vilg02.gat,100,28
+//prt_vilg02.gat,100,23,0	warp	alphawarp9002	1,1,prt_vilg00.gat,100,170
+//prt_vilg02.gat,100,176,0	warp	alphawarp9003	1,1,pro_fild01.gat,113,35
+//pro_fild01.gat,113,28,0	warp	alphawarp9004	1,1,prt_vilg02.gat,100,170
+//prt_vilg00.gat,176,100,0	warp	alphawarp9005	1,1,pro_fild04.gat,27,156
+//pro_fild04.gat,23,156,0	warp	alphawarp9006	1,1,prt_vilg00.gat,171,100
+//prt_vilg00.gat,24,99,0	warp	alphawarp9007	1,1,pro_fild05.gat,177,54
+//pro_fild05.gat,183,54,0	warp	alphawarp9008	1,1,prt_vilg00.gat,28,99
+//prt_vilg00.gat,99,122,0	warp	alphawarp9009	1,1,prt_vilg00.gat,100,135
+//prt_vilg00.gat,100,130,0	warp	alphawarp9010	1,1,prt_vilg00.gat,99,117
+//pro_fild00.gat,100,179,0	warp	alphawarp9011	1,1,prt_vilg01.gat,100,33
+//prt_vilg01.gat,100,22,0	warp	alphawarp9012	1,1,pro_fild00.gat,100,176
+//prt_vilg00.gat,100,26,0	warp	alphawarp9013	1,1,prt_vilg01.gat,100,170
+//prt_vilg01.gat,100,175,0	warp	alphawarp9014	1,1,prt_vilg00.gat,100,28
+
+//プロンテラ1 //////////////////////////////////////////////////
+//宿屋
+//prt_vilg01.gat,152,90,0	warp	alphawarp9101	1,1,prt_intr01.gat,40,14
+//prt_intr01.gat,40,11,0	warp	alphawarp9102	1,1,prt_vilg01.gat,152,88
+//prt_intr01.gat,20,25,0	warp	alphawarp9103	1,1,prt_intr01.gat,161,59
+//prt_intr01.gat,161,57,0	warp	alphawarp9104	1,1,prt_intr01.gat,20,23
+
+//酒場
+//prt_vilg01.gat,72,79,0	warp	alphawarp9111	1,1,prt_intr01.gat,184,22
+//prt_intr01.gat,188,22,0	warp	alphawarp9112	1,1,prt_vilg01.gat,76,83
+//prt_intr01.gat,160,28,0	warp	alphawarp9113	1,1,prt_intr01.gat,145,181
+//prt_intr01.gat,148,181,0	warp	alphawarp9114	1,1,prt_intr01.gat,162,28
+
+//魔法屋？
+//prt_vilg01.gat,122,124,0	warp	alphawarp9121	1,1,prt_intr01.gat,60,91
+//prt_intr01.gat,57,91,0	warp	alphawarp9122	1,1,prt_vilg01.gat,119,121
+
+//武器屋？
+//prt_vilg01.gat,133,115,0	warp	alphawarp9131	1,1,prt_intr01.gat,116,101
+//prt_intr01.gat,113,101,0	warp	alphawarp9132	1,1,prt_vilg01.gat,130,112
+
+//道具屋？
+//prt_vilg01.gat,165,99,0	warp	alphawarp9141	1,1,prt_intr01.gat,114,63
+//prt_intr01.gat,111,63,0	warp	alphawarp9142	1,1,prt_vilg01.gat,160,99
+
+//民家(中央上)
+//prt_vilg01.gat,108,138,0	warp	alphawarp9151	1,1,prt_intr01.gat,180,162
+//prt_intr01.gat,180,159,0	warp	alphawarp9152	1,1,prt_vilg01.gat,108,135
+
+//民家(中央右)
+//prt_vilg01.gat,127,80,0	warp	alphawarp9153	1,1,prt_intr01.gat,66,149
+//prt_intr01.gat,66,152,0	warp	alphawarp9154	1,1,prt_vilg01.gat,124,83
+
+//民家(中央左)
+//prt_vilg01.gat,86,64,0	warp	alphawarp9155	1,1,prt_intr01.gat,123,139
+//prt_intr01.gat,126,139,0	warp	alphawarp9156	1,1,prt_vilg01.gat,89,66
+
+//民家(右上)
+//prt_vilg01.gat,172,122,0	warp	alphawarp9161	1,1,prt_intr01.gat,80,175
+//prt_intr01.gat,77,175,0	warp	alphawarp9162	1,1,prt_vilg01.gat,172,119
+
+//民家(右下)
+//prt_vilg01.gat,153,68,0	warp	alphawarp9163	1,1,prt_intr01.gat,158,149
+//prt_intr01.gat,158,152,0	warp	alphawarp9164	1,1,prt_vilg01.gat,151,70
+
+//民家(左上)
+//prt_vilg01.gat,53,153,0	warp	alphawarp9165	1,1,prt_intr01.gat,14,151
+//prt_intr01.gat,11,151,0	warp	alphawarp9166	1,1,prt_vilg01.gat,51,150
+
+//民家(左下)
+//prt_vilg01.gat,57,55,0	warp	alphawarp9167	1,1,prt_intr01.gat,14,111
+//prt_intr01.gat,11,111,0	warp	alphawarp9168	1,1,prt_vilg01.gat,55,52
+
+//倉庫(右)
+//prt_vilg01.gat,107,159,0	warp	alphawarp9171	1,1,prt_intr01.gat,16,183
+//prt_intr01.gat,13,183,0	warp	alphawarp9172	1,1,prt_vilg01.gat,104,159
+
+//倉庫(左)
+//prt_vilg01.gat,90,159,0	warp	alphawarp9173	1,1,prt_intr01.gat,57,179
+//prt_intr01.gat,60,179,0	warp	alphawarp9174	1,1,prt_vilg01.gat,94,159
+
+//お屋敷
+//prt_vilg01.gat,39,112,0	warp	alphawarp9180	1,1,prt_intr01.gat,139,21
+//prt_intr01.gat,142,21,0	warp	alphawarp9181	1,1,prt_vilg01.gat,42,112
+//prt_intr01.gat,114,11,0	warp	alphawarp9182	1,1,prt_intr01.gat,22,79
+//prt_intr01.gat,22,82,0	warp	alphawarp9183	1,1,prt_intr01.gat,114,14
+//prt_vilg01.gat,30,100,0	warp	alphawarp9184	1,1,prt_intr01.gat,33,67
+//prt_intr01.gat,36,67,0	warp	alphawarp9185	1,1,prt_vilg01.gat,34,100
+//prt_intr01.gat,64,56,0	warp	alphawarp9186	1,1,prt_intr01.gat,22,56
+//prt_intr01.gat,22,53,0	warp	alphawarp9187	1,1,prt_intr01.gat,64,53
+//prt_vilg01.gat,39,87,0	warp	alphawarp9188	1,1,prt_intr01.gat,89,46
+//prt_intr01.gat,92,46,0	warp	alphawarp9189	1,1,prt_vilg01.gat,42,87
+
+//下水
+//prt_vilg02.gat,33,69,0	warp	alphawarp9191	1,1,prt_dugn00.gat,178,108
+//prt_dugn00.gat,181,108,0	warp	alphawarp9192	1,1,prt_vilg02.gat,36,69
+
+//プロンテラ2 //////////////////////////////////////////////////
+//協会
+
+//prt_vilg02,71,75,0	warp	alphawarp9201	1,1,npc_in,41,25
+//npc_in.gat,45,26,0	warp	alphawarp9203	1,1,prt_vilg02,74,78
+
+//prt_intr02.gat,11,125,0	warp	alphawarp9202	1,1,prt_vilg02.gat,75,80
+//prt_intr02.gat,37,117,0	warp	alphawarp9211	1,1,prt_intr02.gat,103,185
+//prt_intr02.gat,103,188,0	warp	alphawarp9212	1,1,prt_intr02.gat,37,120
+//prt_intr02.gat,107,176,0	warp	alphawarp9213	1,1,prt_intr02.gat,176,174
+//prt_intr02.gat,171,174,0	warp	alphawarp9214	1,1,prt_intr02.gat,102,176
+//prt_intr02.gat,37,134,0	warp	alphawarp9215	1,1,prt_intr02.gat,71,176
+//prt_intr02.gat,71,173,0	warp	alphawarp9216	1,1,prt_intr02.gat,37,131
+//prt_intr02.gat,75,185,0	warp	alphawarp9217	1,1,prt_intr02.gat,138,183
+//prt_intr02.gat,134,183,0	warp	alphawarp9218	1,1,prt_intr02.gat,70,185
+//prt_intr02.gat,43,125,0	warp	alphawarp9219	1,1,prt_intr02.gat,13,171
+//prt_intr02.gat,11,171,0	warp	alphawarp9220	1,1,prt_intr02.gat,38,125
+
+//npc_in.gat,45,26,0	warp	alphawarp9203	1,1,prt_vilg02,74,78
+//prt_intr02.gat,xx,yy,0	warp	alphawarp9204	1,1,prt_intr02.gat,27,120
+//prt_intr02.gat,27,134,0	warp	alphawarp9207	1,1,prt_intr02.gat,xx,yy
+//prt_intr02.gat,xx,yy,0	warp	alphawarp9208	1,1,prt_intr02.gat,27,131
+
+
+//お屋敷
+//prt_vilg02.gat,153,50,0	warp	alphawarp9230	1,1,prt_intr02.gat,79,149
+//prt_intr02.gat,79,152,0	warp	alphawarp9231	1,1,prt_vilg02.gat,148,55
+//prt_intr02.gat,79,127,0	warp	alphawarp9232	1,1,prt_intr02.gat,21,95
+//prt_intr02.gat,21,98,0	warp	alphawarp9233	1,1,prt_intr02.gat,79,130
+//prt_intr02.gat,92,139,0	warp	alphawarp9234	1,1,prt_intr02.gat,152,141
+//prt_intr02.gat,149,141,0	warp	alphawarp9235	1,1,prt_intr02.gat,89,139
+//prt_intr02.gat,155,125,0	warp	alphawarp9236	1,1,prt_intr02.gat,92,97
+//prt_intr02.gat,87,97,0	warp	alphawarp9237	1,1,prt_intr02.gat,155,130
+//prt_intr02.gat,67,139,0	warp	alphawarp9238	1,1,prt_intr02.gat,121,142
+//prt_intr02.gat,124,142,0	warp	alphawarp9239	1,1,prt_intr02.gat,70,139
+//prt_intr02.gat,119,126,0	warp	alphawarp9240	1,1,prt_intr02.gat,57,97
+//prt_intr02.gat,62,97,0	warp	alphawarp9241	1,1,prt_intr02.gat,119,131
+
+//学校？
+//prt_vilg02.gat,126,118,0	warp	alphawarp9250	1,1,prt_intr02.gat,50,71
+
+//prt_intr02.gat,47,71,0	warp	alphawarp9251	1,1,prt_vilg02.gat,124,116
+//prt_intr02.gat,63,65,0	warp	alphawarp9252	1,1,prt_intr02.gat,139,73
+//prt_intr02.gat,139,75,0	warp	alphawarp9253	1,1,prt_intr02.gat,63,68
+//prt_intr02.gat,63,78,0	warp	alphawarp9254	1,1,prt_intr02.gat,99,72
+//prt_intr02.gat,99,69,0	warp	alphawarp9255	1,1,prt_intr02.gat,63,75
+
+//酒場
+//prt_vilg02.gat,161,100,0	warp	alphawarp9261	1,1,prt_intr02.gat,166,19
+//prt_intr02.gat,163,19,0	warp	alphawarp9262	1,1,prt_vilg02.gat,157,100
+
+//武器屋
+//prt_vilg02.gat,134,87,0	warp	alphawarp9271	1,1,prt_intr02.gat,177,109
+//prt_intr02.gat,177,112,0	warp	alphawarp9272	1,1,prt_vilg02.gat,129,92
+
+//道具屋
+//prt_vilg02.gat,110,63,0	warp	alphawarp9273	1,1,prt_intr02.gat,118,97
+//prt_intr02.gat,115,97,0	warp	alphawarp9274	1,1,prt_vilg02.gat,106,63
+
+//民家(中央)
+//prt_vilg02.gat,69,115,0	warp	alphawarp9280	1,1,prt_intr02.gat,27,52
+//prt_intr02.gat,27,49,0	warp	alphawarp9281	1,1,prt_vilg02.gat,71,113
+
+//民家(右上)
+//prt_vilg02.gat,148,140,0	warp	alphawarp9282	1,1,prt_intr02.gat,104,19
+//prt_intr02.gat,101,19,0	warp	alphawarp9283	1,1,prt_vilg02.gat,146,138
+
+//民家(左上)
+//prt_vilg02.gat,86,142,0	warp	alphawarp9284	1,1,prt_intr02.gat,95,45
+//prt_intr02.gat,98,45,0	warp	alphawarp9285	1,1,prt_vilg02.gat,88,144
+
+//民家(左下)
+//prt_vilg02.gat,49,99,0	warp	alphawarp9286	1,1,prt_intr02.gat,61,29
+//prt_intr02.gat,64,29,0	warp	alphawarp9287	1,1,prt_vilg02.gat,52,102
+
+//倉庫(右上)
+//prt_vilg02.gat,143,151,0	warp	alphawarp9291	1,1,prt_intr02.gat,14,19
+//prt_intr02.gat,11,19,0	warp	alphawarp9292	1,1,prt_vilg02.gat,141,149
+
+//プロンテラダンジョン ////////////////////////////////////////
+//pro_fild05.gat,30,161,0	warp	alphawarp9301	1,1,prt_dugn01.gat,187,13
+//prt_dugn01.gat,190,10,0	warp	alphawarp9302	1,1,pro_fild05.gat,32,159
+//prt_dugn01.gat,166,185,0	warp	alphawarp9303	1,1,prt_dugn02.gat,178,187
+//prt_dugn02.gat,178,190,0	warp	alphawarp9304	1,1,prt_dugn01.gat,166,182
+//prt_dugn02.gat,97,116,0	warp	alphawarp9305	1,1,prt_dugn03.gat,102,89
+//prt_dugn03.gat,102,91,0	warp	alphawarp9306	1,1,prt_dugn02.gat,97,118

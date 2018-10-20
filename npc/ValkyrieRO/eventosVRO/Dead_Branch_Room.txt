@@ -1,0 +1,398 @@
+// DB ROOMS!
+// -------------
+
+darkmall,82,108,5	script	Dead Branch Room	849,{
+//--------------------
+//Aqui setea las salas
+//--------------------
+set .mapa1$, "region_9";
+set .mapa2$, "region_3";
+set .mapa3$, "region_6";
+set .mapa4$, "region_7";
+set .mapa5$, "region_4";
+//--------------------------------------------------
+//El precio y tiempo se setean solo desde el menu GM
+//--------------------------------------------------
+
+
+//--------------------------------------------
+//Aqui se limpian las salas si el tiempo acabo
+//--------------------------------------------
+if ((.salas&8) && ((.timer1 + (.tiempo*3600)) < gettimetick(2))) {
+	set .salas, .salas-8;
+	set .pass1$, "desocupada111222";
+	set .owner1$, "desocupada11222";
+	killmonsterall .mapa1$;
+	}
+if ((.salas&4) && ((.timer2 + (.tiempo*3600)) < gettimetick(2))) {
+	set .salas, .salas-4;
+	set .pass2$, "desocupada111222";
+	set .owner2$, "desocupada11222";
+	killmonsterall .mapa2$;
+	}
+if ((.salas&2) && ((.timer3 + (.tiempo*3600)) < gettimetick(2))) {
+	set .salas, .salas-2;
+	set .pass3$, "desocupada111222";
+	set .owner3$, "desocupada11222";
+	killmonsterall .mapa3$;
+	}
+if ((.salas&1) && ((.timer4 + (.tiempo*3600)) < gettimetick(2))) {
+	set .salas, .salas-1;
+	set .pass4$, "desocupada111222";
+	set .owner4$, "desocupada11222";
+	killmonsterall .mapa4$;
+	}
+//--------------------------------------------
+//Inicio del texto del npc
+//--------------------------------------------
+//Aqui se setea el nombre del npc
+//-------------------------------
+set .nombrenpc$, "[^0000FFSalas de Dead Branch^000000]";
+//-------------------------------
+
+mes .nombrenpc$;
+mes "Buenos dias, yo alquilo salas de Dead Branch a "+.precio+".000z por "+.tiempo+" hora(s)";
+mes "Que deseas hacer?";
+next;
+//------------------------------------
+//Si es GM lo manda a un menu especial
+//------------------------------------
+if (getgmlevel()>=40) goto L_menugm;
+
+//------------------------
+//Si no es GM, menu normal
+//------------------------
+menu "Sala Gratuita",L_Gratis,"Entrar",L_Entrar,"Contratar",L_Contratar,"Salir",L_Salir;
+close;
+
+L_menugm:
+	menu "Sala Gratuita",L_Gratis,"Entrar",L_Entrar,"Contratar",L_Contratar,"Desalojar",L_Desalojar,"Ver Estado",L_Estado,"Cambiar Variables",L_Cambiar,"Salir",L_Salir;
+	close;
+
+//-----------------------------------------------------------------------
+//Para entrar a la sala Gratuita
+//-----------------------------------------------------------------------
+L_Gratis:
+	mes .nombrenpc$;
+	mes "Bienvenido a la Sala Gratuita!";
+		warp .mapa5$,49,50;
+		close;
+
+//-----------------------------------------------------------------------
+//Para entrar solo pide la contrase?a y busca la sala segun la contrase?a
+//-----------------------------------------------------------------------
+L_Entrar:
+	mes .nombrenpc$;
+	mes "Ingresa la contraseña de la sala";
+	input .@entrarpass$;
+	if (.@entrarpass$ == .pass1$) {
+		warp .mapa1$,99,63;
+		end;
+	}
+	if (.@entrarpass$ == .pass2$) {
+		warp .mapa2$,49,50;
+		end;
+	}
+	if (.@entrarpass$ == .pass3$) {
+		warp .mapa3$,49,50;
+		end;
+	}
+	if (.@entrarpass$ == .pass4$) {
+		warp .mapa4$,49,51;
+		end;
+	}
+	else {
+		mes "Contraseña incorrecta";
+		close;
+	}
+	close;
+
+//-----------------------------------------------------------------------------------------------------
+//Para contratar, primero revisa varias cosas, si ya tiene una sala contratada no puede contratar otra,
+//si las salas estan llenas tampoco puede contratar y si no tiene zeny tampoco puede contratar
+//-----------------------------------------------------------------------------------------------------
+L_Contratar:
+	if (strcharinfo(0) == .owner1$ || strcharinfo(0) == .owner2$ || strcharinfo(0) == .owner3$ || strcharinfo(0) == .owner4$) goto L_Yatiene;
+	if (.salas==15) goto L_Salasllenas;
+	if (Zeny < (.precio*1000)) goto L_Nodinero;
+	set .@temporalchar$, strcharinfo(0);
+	mes .nombrenpc$;
+	mes "Ingresa el password para tu sala";
+	input .@temporalpass$;
+	next;
+	mes .nombrenpc$;
+	mes "Esta bien ese password?, son "+.precio+".000z";
+	next;
+	menu "Si",-,"Cancelar",L_Salir;
+	set Zeny, (Zeny-(.precio*1000));
+	mes "Entonces ya esta listo, puedes empezar a usarla";
+	if (!(.salas&8)) {
+		set .pass1$, .@temporalpass$;
+		set .owner1$, .@temporalchar$;
+		set .salas, .salas+8;
+		set .timer1, gettimetick(2);
+		close;
+	}
+	if (!(.salas&4)) {
+		set .pass2$, .@temporalpass$;
+		set .owner2$, .@temporalchar$;
+		set .salas, .salas+4;
+		set .timer2, gettimetick(2);
+		close;
+	}
+	if (!(.salas&2)) {
+		set .pass3$, .@temporalpass$;
+		set .owner3$, .@temporalchar$;
+		set .salas, .salas+2;
+		set .timer3, gettimetick(2);
+		close;
+	}
+	if (!(.salas&1)) {
+		set .pass4$, .@temporalpass$;
+		set .owner4$, .@temporalchar$;
+		set .salas, .salas+1;
+		set .timer4, gettimetick(2);
+		close;
+	}
+	close;
+
+//------------------------
+//Desalojar Salas, solo GM
+//------------------------
+L_Desalojar:
+	mes .nombrenpc$;
+	mes "Sr.GM, Que sala desea desalojar?";
+	next;
+	menu "Sala 1",L_Sala1,"Sala 2",L_Sala2,"Sala 3",L_Sala3,"Sala 4",L_Sala4;
+	close;
+
+L_Sala1:
+	mes .nombrenpc$;
+	mes "Ok, Sala 1 Desalojada";
+	if (.salas&8) {
+		set .salas, .salas-8;
+	}
+	set .pass1$, "desocupada111222";
+	set .owner1$, "desocupada11222";
+	close;
+
+L_Sala2:
+	mes .nombrenpc$;
+	mes "Ok, Sala 2 Desalojada";
+	if (.salas&4) {
+		set .salas, .salas-4;
+	}
+	set .pass2$, "desocupada111222";
+	set .owner2$, "desocupada11222";
+	close;
+
+L_Sala3:
+	mes .nombrenpc$;
+	mes "Ok, Sala 3 Desalojada";
+	if (.salas&2) {
+		set .salas, .salas-2;
+	}
+	set .pass3$, "desocupada111222";
+	set .owner3$, "desocupada11222";
+	close;
+
+L_Sala4:
+	mes .nombrenpc$;
+	mes "Ok, Sala 4 Desalojada";
+	if (.salas&1) {
+		set .salas, .salas-1;
+	}
+	set .pass4$, "desocupada111222";
+	set .owner4$, "desocupada11222";
+	close;
+
+//----------------------------
+//Estado de las Salas, solo GM
+//----------------------------
+L_Estado:
+	mes .nombrenpc$;
+	mes "Sala 1:";
+	if (.salas&8) {
+		mes "Due?o: "+.owner1$;
+		mes "Password: "+.pass1$;
+	}
+	else {
+		mes "Desocupada";
+	}
+	next;
+	mes .nombrenpc$;
+	mes "Sala 2:";
+	if (.salas&4) {
+		mes "Due?o: "+.owner2$;
+		mes "Password: "+.pass2$;
+	}
+	else {
+		mes "Desocupada";
+	}
+	next;
+	mes .nombrenpc$;
+	mes "Sala 3:";
+	if (.salas&2) {
+		mes "Due?o: "+.owner3$;
+		mes "Password: "+.pass3$;
+	}
+	else {
+		mes "Desocupada";
+	}
+	next;
+	mes .nombrenpc$;
+	mes "Sala 4:";
+	if (.salas&1) {
+		mes "Due?o: "+.owner4$;
+		mes "Password: "+.pass4$;
+	}
+	else {
+		mes "Desocupada";
+	}
+	next;
+	goto L_menugm;
+	end;
+
+//--------------------------------
+//Cambiar Tiempo o Dinero, solo GM
+//--------------------------------
+L_Cambiar:
+	mes .nombrenpc$;
+	mes "Que desea cambiar?";
+	next;
+	menu "Precio",-,"Tiempo",L_Tiempo,"Nada",L_menugm;
+	mes .nombrenpc$;
+	mes "Que precio desea?";
+	mes "Ingrese precio en miles (100 = 100k)";
+	input .@preciotemp;
+	next;
+	mes .nombrenpc$;
+	if (.@preciotemp < 1) {
+		mes "El precio debe ser positivo";
+		close;
+	}
+	mes "Esta seguro?";
+	next;
+	menu "Si",-,"Cancelar",L_menugm;
+	mes .nombrenpc$;
+	mes "Listo, precio cambiado";
+	set .precio, .@preciotemp;
+	close;
+
+L_Tiempo:
+	mes .nombrenpc$;
+	mes "Cuanto tiempo desea que dure el arriendo?";
+	mes "Ingrese tiempo en horas (1 = 1 hora)";
+	input .@tiempotemp;
+	next;
+	mes .nombrenpc$;
+		if (.@tiempotemp < 1) {
+		mes "El tiempo debe ser positivo";
+		close;
+	}
+	mes "Esta seguro?";
+	next;
+	menu "Si",-,"Cancelar",L_menugm;
+	mes .nombrenpc$;
+	mes "Listo, tiempo cambiado";
+	set .tiempo, .@tiempotemp;
+	close;
+
+//-----------------
+//Despedidas varias
+//-----------------
+L_Salir:
+	mes .nombrenpc$;
+	mes "Adios, que estes bien";
+	close;
+
+L_Yatiene:
+	mes .nombrenpc$;
+	mes "Ya tienes una sala contratada, no puedes contratar otra.";
+	close;
+
+L_Salasllenas:
+	mes .nombrenpc$;
+	mes "Lo siento, todas las salas para reservar estan llenas.";
+	close;
+
+L_Nodinero:
+	mes .nombrenpc$;
+	mes "No tienes suficiente zeny para contratar una sala.";
+	close;
+}
+
+region_4,48,54,4	shop	Dead Branch01	738,604:1000,14233:10000,12103:1000000
+region_3,58,60,4	shop	Dead Branch02	738,604:1000,14233:10000,12103:1000000
+region_6,48,54,4	shop	Dead Branch03	738,604:1000,14233:10000,12103:1000000
+region_7,118,70,4	shop	Dead Branch04	738,604:1000,14233:10000,12103:1000000
+region_9,100,102,4	shop	Dead Branch05	738,604:1000,14233:10000,12103:1000000
+
+
+
+//=======================================mapas blockins==============================
+
+region_4	mapflag	noreturn
+region_3	mapflag	noreturn
+region_6	mapflag	noreturn
+region_7	mapflag	noreturn
+region_9	mapflag	noreturn
+region_1	mapflag	noreturn
+region_2	mapflag	noreturn
+
+region_4	mapflag	nightenabled
+region_3	mapflag	nightenabled
+region_6	mapflag	nightenabled
+region_7	mapflag	nightenabled
+region_9	mapflag	nightenabled
+invek	mapflag	nightenabled
+
+region_4	mapflag	pvp
+region_3	mapflag	pvp
+region_6	mapflag	pvp
+region_7	mapflag	pvp
+region_9	mapflag	pvp
+region_2	mapflag	pvp
+region_1	mapflag	pvp
+
+
+region_4	mapflag	pvp_noguild
+region_3	mapflag	pvp_noguild
+region_6	mapflag	pvp_noguild
+region_7	mapflag	pvp_noguild
+region_9	mapflag	pvp_noguild
+region_1	mapflag	pvp_noguild
+region_2	mapflag	pvp_noguild
+
+region_4	mapflag	noteleport
+region_3	mapflag	noteleport
+region_6	mapflag	noteleport
+region_7	mapflag	noteleport
+region_9	mapflag	noteleport
+region_1	mapflag	noteleport
+region_2	mapflag	noteleport
+
+region_4	mapflag	nosave	SavePoint
+region_3	mapflag	nosave	SavePoint
+region_6	mapflag	nosave	SavePoint
+region_7	mapflag	nosave	SavePoint
+region_9	mapflag	nosave	SavePoint
+region_1	mapflag	nosave	SavePoint
+region_2	mapflag	nosave	SavePoint
+
+region_4	mapflag	nowarpto
+region_3	mapflag	nowarpto
+region_6	mapflag	nowarpto
+region_7	mapflag	nowarpto
+region_9	mapflag	nowarpto
+region_1	mapflag	nowarpto
+region_2	mapflag	nowarpto
+
+region_4	mapflag	nowarp
+region_3	mapflag	nowarp
+region_6	mapflag	nowarp
+region_7	mapflag	nowarp
+region_9	mapflag	nowarp
+region_1	mapflag	nowarp
+region_2	mapflag	nowarp
+

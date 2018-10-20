@@ -1,0 +1,76 @@
+poring_w02.gat,121,91,6	script	Disguiser	936,{
+	mes "[Disguiser]";
+        mes "Go on quest or pay 500 zeny, which one?";
+        menu "Pay Zeny",PZ,"Go on Quest",Quest,"Undisguise",undgse;
+PZ:
+        if (zeny>499){
+        set zeny, zeny-500;
+        goto m_menu;
+else: mes "I'm sorry you do not have enough zeny.";
+      goto cls;
+}
+Quest:
+     
+M_Menu:
+        mes "_______________________________________";
+        mes "What would you like to be disguised as?";
+	next;
+	menu "Moonlight",DgsePR,"Thanatos",dgseInSl,"Valkyrie Randgris",DgseBF,"Ifrit",DgseIS,"Vesper",DgseISS,"Bacsojin",DgseBK,"Gloom Under Night",DgseBM,"Garm",DgsePK,"Golden Thief Bug",DgseIsis,"Les",DgseGhl,"Mavka",DgseYY,"Undisguise",Undgse,"Cancel",Cls; 
+	DgsePR:
+	disguise 1150;
+	mes "you are disguised as a Moonlight!";
+	    goto cls;
+	dgseInSl:
+	disguise 1708;
+	mes "You are disguised as a Thanatos!";
+	   goto cls;
+	DgseBF:
+	    disguise 1751;
+	    mes "you are disguised as a Valkyrie Randgris!";
+		goto cls;
+	DgseIS:
+	disguise 1832;
+	    goto cls;
+	DgseISS:
+	disguise 1685;
+	mes "You are disguised as a Vesper!";
+	    goto cls;
+	DgseBK:
+	disguise 1630;
+	mes "You are disguised as a Bacsojin!";
+	    goto cls;
+	DgseBM:
+	disguise 1768;
+	mes "You are disguised as a Gloom Under Night!";
+        goto cls;
+    DgsePK:
+    disguise 1252;
+    mes "You are disguised a Garm!";
+        goto cls;
+    DgseIsis:
+    disguise 1086;
+    mes "You are disguised an Golden Thief Bug";
+        goto cls;
+    DgseGhl:
+    disguise 1881;
+    mes "You are disguised as a Les!";
+       goto cls;
+    DgseYY:
+    disguise 1884;
+    mes "You are disguised as a Mavka!";
+       goto cls;
+	Undgse:
+         mes "_______________________________________";
+         mes "did you enjoy your disguise or did you not like it?";
+         menu "Enjoy",Enjoy,"Dislike",Dslk;
+Enjoy:
+	undisguise;
+	    goto cls;
+Dslk:
+undisguise;
+//set Zeny, Zeny + 300;
+mes "I'm sorry you didnt like your disguise."; // here is a little refund.";
+	Cls:
+        mes "Come Again!";
+	close;
+};

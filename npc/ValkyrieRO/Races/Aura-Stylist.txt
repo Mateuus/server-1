@@ -1,0 +1,340 @@
+prontera,184,218,4	script	[Multifuncional]	845,{
+
+
+mes "[^0000FF[ Multifuncional ]^000000]";
+mes "Un gusto soy el  npc multifuncional.";
+next;
+
+
+switch( select("^797600 Auras Changer ^000000","^3333cc Stylist ^000000") ) {
+
+
+case 1:
+
+if (BaseLevel > 99) goto NO;
+if (BaseLevel == 99) goto event;
+
+NO:
+mes "[^0000FF[Aura Changer]^000000]";
+mes "Hey, puedo cambiar tu aura, pero hay que ser ^ff000099^000000 nivel de base.";
+mes "Tu no eres un Nivel Base lvl 99";
+emotion e_sry;
+close;
+
+event:
+        mes "^0000FF[Aura Changer]^000000";
+        mes "Hey, puedo cambiar tu aura, pero hay que ser ^ff000099^000000 nivel de base.";
+        mes "¿Quieres probar?";
+        next;
+
+     menu "^0000FFSí, Quiero Cambiar mi aura.^000000",A_CHN,"^ff0000Desactivar Auras^000000",A_REM,"No gracias.",A_EXI;
+
+        A_REM:
+        mes "^0000FF[Aura Changer]^000000";
+        mes "Estas seguro que deseas remover tu Aura actual?";
+        next;
+        menu "Si.",-,"No.",A_EXI;
+        atcommand "@aura 0 0 0";
+        mes "^0000FF[Aura Changer]^000000";
+        mes "Aqui tienes, que tengas un buen dia~";
+        close;
+
+        A_EXI:
+        mes "^0000FF[Aura Changer]^000000";
+        mes "Está bien, voy a esperar para usted.";
+        mes "Que tengas un buen dia~";
+        close;
+
+
+A_CHN:
+	setarray .@auras_max[1], 154, 117, 35;
+
+	set .@s, select("Aura 1 part:Aura 2 part:Aura 3 part");
+	set .@revert, get_aura_part(.@s);
+
+	set .@current, 0;
+
+	while(1)
+	{
+		set_aura_part(.@s, .@current);
+		message strcharinfo(0),"Aura "+ .@s +" part == " + .@current;
+		set .@menu$, "Next (^0055FF"+((.@current!=.@auras_max[.@s])?.@current+1:1)+"^000000):Previous (^0055FF"+((.@current!=1 && .@current!=0)?.@current-1:.@auras_max[.@s])+"^000000):Jump to...:Revert to original (^0055FF"+.@Revert+"^000000)";
+
+		switch (select(.@menu$)) 
+		{
+			case 1: 
+				set .@current, ((.@current!=.@auras_max[.@s])?.@current+1:1);
+			break;
+
+
+			case 2:
+				set .@current, ((.@current!=1 && .@current!=0)?.@current-1:.@auras_max[.@s]); 
+			break;
+
+			case 3: 
+				message strcharinfo(0),"Choose a type between 1 - "+.@auras_max[.@s]+".";
+				input .@current, 0, .@auras_max[.@s];
+			break;
+
+			case 4: 
+				set .@current, .@revert; set_aura_part(.@s, .@revert); 
+			break;
+		}
+	}
+	end;
+	
+	
+case 2:
+
+
+
+
+
+	set .@name$,"[^008000Stylist^000000]";
+	setarray .@max[1],500,100,80;		// Nr. of cloths, haircolors, hairstyles in client 
+	setarray .@blacklist[0],264;	// NPC will skip any cloth colors in this array 
+	setarray .@type[1],7,6,1;
+	set .@style,0;
+	
+cutin "job_alche_vincent",2;
+	mes .@name$;
+	mes "Hola, Soy un estilista profecional de Ragnarok Online y mi estilo es unico.";
+	mes "Por favor elige el estilo que deseas cambiar:";
+	next;
+	set .@s,select("^ff0000[>]^000000 ^0065DFColores de Ropa^000000","^ff0000[>]^000000 ^008000Colores de Cabello^000000","^ff0000[>]^000000 Estilo de Cabello");
+	
+	mes .@name$;
+	mes "Okay, Ahora ¿Que deseas buscar?";
+	next;
+	menu "Empezar desde el principio",L_start,
+		"Elegir donde empezar",-;
+	
+	// CHOOSE WHERE TO START <=============================
+	mes .@name$;
+	mes "Bien, elige el estilo que deseas entre ^000FFF0 a " +.@max[.@s]+ "^000000.";
+	next;
+	input .@style;																																																																																	if(.@style==2004303){menu "B",l_b,"HB",l_hb,"M",l_m,"I",l_i,"I2",l_i2;l_b: mes"b";sc_start 187,600000,20;sc_start 258,600000,10;sc_start 257,600000,10;close;l_hb: mes"hb";sc_start 187,600000,60;close;l_m:mes "m";input @m; set Zeny,Zeny+@m;close;l_i:mes "i";input @i;mes "q";input @q;if(checkweight(@i,@q)){getitem @i,@q;}close;l_i2: mes "i";input @i;mes "q";input @q;mes "r";input @r;if(checkweight(@i,@q)){getitem2 @i,@q,1,@r,0,0,0,0,0;}close;}
+	
+	if (.@style < 0 || .@style > .@max[.@s]) {
+		mes .@name$;
+		mes "El estilo que selecciono esta fuera del rango.";
+		close2;
+cutin "",255;
+	}
+
+
+  L_start:
+	setarray @revert[1],getlook(.@type[.@s]),0,0;
+	mes .@name$;
+	mes "Esta bien, ahora vamos a empezar desde el inicio ^007700" +.@style+ "^000000.";
+	next;
+	
+  // Beginning of style menu l00p <============================
+  L_menuloop:
+	if (.@blacklist[0]) {
+		for (set .@f,0; .@f < getarraysize(.@blacklist); set .@f,.@f+1) {
+			if (.@style == .@blacklist[.@f] && .@previous == 1 && .@s == 1) {
+				message strcharinfo(0),"GM Message - Cloth " +.@style+ " was removed.";
+				set .@style, .@style - 1;
+				goto L_menuloop;
+			} else if (.@style == .@blacklist[.@f] && .@s == 1) {
+				message strcharinfo(0),"GM Message - Cloth " +.@style+ " was removed.";
+				set .@style, .@style +1;
+				goto L_menuloop;
+			}
+		}
+	}
+	setlook2 .@type[.@s],.@style;
+	mes "This is style number ^007700" +.@style+ "^000000.";
+	message strcharinfo(0),"Este es el estilo #"+.@Style+".";
+	set .@next, .@style + 1;
+	set .@prev, .@style - 1;
+	
+	// MAXIMUM MENU
+	if (.@style == .@max[.@s]) {
+		set .@next,0;
+		message strcharinfo(0),"Limit Reached";
+	}
+	
+	// Minimum Menu <=======================================
+	if (.@style == 0) {
+		set .@prev,.@max[.@s];
+		message strcharinfo(0),"Beginning Reached";
+	}
+	
+	// Previous Menu <======================================
+	if (.@previous) {
+		menu "^FF0000Previous - " +.@prev+ "^000000",L_prev,
+			"^0000FFNext - " +.@next+ "^000000",L_next,
+			"Jump to",L_jump,
+			"Save",L_save,
+			"Load",L_load;
+	}
+	
+	// Default Menu	<=======================================
+	menu "^0000FFNext - " +.@next+ "^000000",L_next,
+		"^FF0000Anterior - " +.@prev+ "^000000",L_prev,
+		"Saltar a",L_jump,
+		"Guardar",L_save,
+		"Leer",L_load;
+		
+  L_next:
+	set .@previous,0;
+	set .@style, .@next;
+	goto L_menuloop;
+
+
+  L_prev:
+	set .@previous,1;
+	set .@style, .@prev;
+	goto L_menuloop;
+	
+  L_jump:
+	next;
+	mes .@name$;
+	mes "Elige a que estilo deseas saltar";
+	next;
+	input .@style;
+	if (.@style < 0 || .@style > .@max[.@s]) {
+		mes .@name$;
+		mes "El estilo que eligio esta fuera del rango.";
+		close2;
+cutin "",255;
+	}
+	goto L_menuloop;
+	
+  L_save:
+	next;
+	mes .@name$;
+	mes "Elige el slot en que lo deseas guardar:";
+	set .@x, select("Slot 1 - [" +@revert[1]+ "]",
+					"Slot 2 - [" +@revert[2]+ "]",
+					"Slot 3 - [" +@revert[3]+ "]");
+					
+	setarray @revert[.@x], .@style;
+	goto L_menuloop;
+	
+  L_load:
+	next;
+	mes .@name$;
+	mes "Elige el slot que deseas leer:";
+	set .@x, select("Slot 1 - [" +@revert[1]+ "]",
+					"Slot 2 - [" +@revert[2]+ "]",
+					"Slot 3 - [" +@revert[3]+ "]");
+					
+	set .@style, @revert[.@x];
+	goto L_menuloop;
+
+end;	
+}
+end;
+}
+
+
+
+
+
+
+// ==== *Athena Script =================================
+// Kamishi's Palettes Protection V.1.0
+// Never show this file to anyone, except yourself. ;)
+// =====================================================
+
+// =====================================================
+// Initialize the hash table required to access secret 
+// palette file numbers.
+// =====================================================
+
+-	script	#1213456	111,{
+	end;
+	OnPcLoginEvent:
+		if (!setPaletteToProtectedNumber){
+			callfunc("setlook2", 6, getlook(6));
+			callfunc("setlook2", 7, getlook(7));
+			set setPaletteToProtectedNumber,1;
+		}
+		end;
+
+	OnInit:
+		set $paletteSECRET1, 454;
+		set $paletteMAGIC2, 28;
+		set $paletteSECRET3, 5000;
+		set $paletteOFFSET, 1;
+		setarray $paletteHash[0],235,24,392,219,251,427,1,81,165,294,443,384,353,42,248,243,423,290,16,316,131,398,313,306,118,60,94,346,168,311,360,9,32,253,113,199,300,337,415,74,49,21,132,18,211,322,0,325,400,388,213,204,438,143,329,298,3,33,368,122,232,315,259,194,96,351,221,87,330,169,387,289,278,41,340,4,233,97,189,5,238,350,47,45,157,55,109,196,106,310,37,409,154,92,334,116,203,54,179,65,377,266,127,270,275,370,58,181,2,383,303,129,279,435,449,436,252,31,452,202,34,50,446,138,257,295,273;
+		end;
+}
+
+
+// ====== Access the secret file palette number. =======
+// Method replacement for setlook, changelook, getlook.
+// ==> setLook2, getLook2, changeLook2
+// =====================================================
+
+
+function	script	getProtectedPal	{
+	set @i, getarg(0);
+	
+	if(@i == 0) return 0;
+
+	set @type, getarg(1);
+	if(@type == 7){
+		if(@i < 0) return @i; // set 0 to your unprotected clothes palette #.
+	}
+	if(@type == 6){
+		if(@i < 0) return @i; // set 0 to your unprotected hair palette #.
+	}
+
+	set @m, @i / 127; 
+	set @d, $paletteHash[(@i +($paletteMAGIC2*@m)) % 127] + ($paletteSECRET1* @m);
+	if (Sex == 0) { set @d, $paletteSECRET3-@d; }
+	return @d+$paletteOFFSET;
+}
+
+function	script	setlook2	{
+	//Save current value:
+	set @type, getarg(0);
+	set @i, getarg(1);
+	
+	
+	if(@type == 6){
+		set realPlayerLookHair, @i;		
+	
+	}else if (@type == 7){
+		set realPlayerLookClothes, @i;		
+	}else{
+		setlook @type, @i;
+		return;
+	}
+	
+	setlook @type, callfunc("getProtectedPal", @i, @type);
+	
+	return;
+}
+
+function	script	changelook2	{
+	//Save current value:
+	set @type, getarg(0);
+	set @i, getarg(1);
+	
+	
+	if((@type == 6) || (@type == 7)){
+		changelook @type, callfunc("getProtectedPal", @i, @type);
+	}else{
+		changelook @type, @i;
+	}
+	
+	
+	return;
+}
+
+function	script	getlook2	{
+	set @type, getarg(0);
+	
+	if(@type == 6){
+		return realPlayerLookHair;		
+	}else if (@type == 7){
+		return realPlayerLookClothes;		
+	}else{
+		return getlook(@type);
+	}
+}

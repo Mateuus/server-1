@@ -1,0 +1,48 @@
+//===== Global Chile ======
+//=== https://www.facebook.com/IntegralesGlobal ===
+
+-	script	announcer-script	-1,{
+
+OnMinute30:
+OnMinute00:
+switch(rand(1,4)){
+
+	case 1:
+	announce "Recuerden no entregar sus USER y PASS a nadie!.",bc_all;
+	break;
+
+	case 2:
+	announce "Sistema BattleGround 3.0, diferentes Modalidades de Duelos.",bc_all;
+	break;
+
+	case 3:
+	announce "Recuerden Visitar Foro, así podrán estar actualizados en los cambios e incorporaciones del servidor",bc_all;
+	break;
+
+	case 4:
+	announce "Recuerden Votar por AresRO desde la Web o Path, para que esta linda comunidad siga creciendo.",bc_all;
+	break;
+
+	//case 5:
+	//announce "Warper-->Sitios especiales, Podrás encontrar Supervivencia(Party,Guild,Individual) y Torneo de Gladiadores.",bc_all;
+	//break;
+	}
+}
+
+
+
+
+//prontera,156,191,1	script	-	1,1,1,{
+	//if ((Class == Job_Novice) && (BaseLevel < 12)) {
+	//mes "[^5533ffAresRO Notice^000000]";
+	//mes "Usted puede encontrar el ^5533ff[Master Job]^000000.";
+	//mes "Si Buscar el ^5533ff[Master Job]^000000, presione <NAVI>[Master job]<INFO>prontera,133,187</INFO></NAVI> aquí";
+	//mes "(^ff0000/navi prontera 135/184^000000)";
+	//next;
+
+//OnTouch:
+	//navigateto("prontera", 136, 185, NAV_NONE, 1);
+	//end;
+	//}
+//}
+

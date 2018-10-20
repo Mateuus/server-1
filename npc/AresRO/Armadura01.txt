@@ -1,0 +1,1126 @@
+//
+// [========================================================]
+// [===========         Warper Evolution         ===========]
+// [========================================================]
+// [ Versión 26d                                            ]
+// [========================================================]
+// [ Script original: Ivion                                 ]
+// [========================================================]
+// [ Modificaciones: DanielArt ~ Alaude                     ]
+// [========================================================]
+// [ Descripción:                                           ]
+// [--------------------------------------------------------]
+// [                                                        ]
+// [ - Save.                                                ]
+// [ - Warp a Ciudades.                                     ]
+// [ - Warp a niveles de Mazmorras.                         ]
+// [ - Warp a Áreas de WoE.                                 ]
+// [ - Warp a otros Grupos de Destinos personalizados.      ]
+// [ - Modo Evolution / Quest Warper.                       ]
+// [ - Last Warp / Último Viaje. [Alaude]                   ]
+// [========================================================]
+// [ 5 últimas actualizaciones:                             ]
+// [--------------------------------------------------------]
+// [                                                        ]
+// [ v19: [Ivion]                                           ]
+// [ - Relocalizados destinos y npcs de las dungeons.       ]
+// [ - Bugfix: Somatology Laboratory.                       ]
+// [ - Bugfix: Los precios no se aplicaban.                 ]
+// [ - Los submenús se muestran desactivados si no          ]
+// [    tienes activado ninguno de sus destinos.            ]
+// [ - Se muestra la gente que hay en cada destino.         ]
+// [                                                        ]
+// [ v19d: [Ivion]                                          ]
+// [ - Bugfix: Amatsu Dungeon, Geffen Dungeon, Holy         ]
+// [    Ground, Ice Cave, Labyrinth Forest,                 ]
+// [    Somatology Laboratory, Thanatos Tower.              ]
+// [ - Añadido Hvergelmir's Fountain.                       ]
+// [                                                        ]
+// [ v20: [Ivion]                                           ]
+// [ - Bugfix: Submenus sin modo evolution.                 ]
+// [                                                        ]
+// [ v21: [Ivion]                                           ]
+// [ - Optimizando un poco el script.                       ]
+// [ - Los submenús no pueden agrupar otros submenús.       ]
+// [ - Nuevos destinos del Ep 13.2 .                        ]
+// [ - Añadida opción para configurar como se guardarán los ]
+// [   destinos del Modo Evolution.                         ]
+// [                                                        ]
+// [ v22: [Ivion]                                           ]
+// [ - Added missing Jawaii warp and npc.                   ]
+// [                                                        ]
+// [ v23: [Ivion]                                           ]
+// [ - Bugfix: La función de guardar punto de inicion no    ]
+// [   aparecía en los menús.                               ]
+// [                                                        ]
+// [ v24: [DanielArt]                                       ]
+// [ - Nuevos destinos del Ep 13.3 y 14.1.                  ]
+// [                                                        ]
+// [ v25: [DanielArt]                                       ]
+// [ - Añadida función de Last Warp (Último Viaje).         ]
+// [                                                        ]
+// [ v26: [DanielArt]                                       ]
+// [ - Añadido Fields de Manuk y Splendide.                 ]
+// [ - Añadida Sección 'Memorial Dungeon'.                  ]
+// [ - Añadido Endless Tower y Shrine Lake.                 ]
+// [========================================================]
+
+-	script	WEfunc	-1,{
+
+OnInit:
+
+// [--------------------------------------------------------]
+// [ Configuración:                                         ]
+// [========================================================]
+
+	set .@n$,"[Warper]";	// Nombre del NPC.
+	set $@WEm,2;			// Modo Evolution. (0 = off | 1 = Player | 2 = Account | 3 = Global)
+	set .@p,0;			// Guardar Punto de Inicio. (-1 = off | Precio)
+
+// [--------------------------------------------------------]
+// [ Final de la configuración.                             ]
+// [========================================================]
+
+	set .@a,1;
+	while(!setnpcdisplay("WE#"+.@a,.@n$+"#"+.@a)) set .@a,.@a + 1;
+	set $@WE$,"[ ^008888"+.@n$+"^000000] ";
+	if($@WEm == 2) set $@WEm$,"#";
+	if($@WEm == 3) set $@WEm$,"$";
+	if(.@p >= 0) {
+		set $@WE,1;
+		set $@WEb1$,"Guardar Punto de Inicio.";
+		set $@WEc1,.@p;
+		set $@WEd0[0],1;
+	}
+
+// [--------------------------------------------------------]
+// [ Configuración de destinos:                             ]
+// [========================================================]
+
+	// Declaración de Grupos de Destinos:
+	// callsub Onc0,{"Nombre"},{Precio};
+	// Crea un nuevo Grupo de Destinos dentro del menú principal del npc.
+	// Los Grupos de Destinos agrupan los diferentes Destinos con un mismo precio.
+	// Ejemplo: Ciudades / Mazmorras / Áreas de WoE
+
+	// Declaración de Destinos:
+	// callsub Onc1,{Id},{"Nombre"},{"Mapa"},{x},{y},{"Mapa Activación 1"},{"Mapa Activación 2"},{...},{"Mapa Activación #"};
+	// Crea un nuevo Destino dentro del último Grupo de Destinos declarado.
+	// {Id}: Identificador único del destino. Ponedlo a 0 si queréis desactivar el Modo Evolution.
+	// {"Mapa Activación #"}:
+	//   En Modo Evolution, cuando un jugador se situe en cualquiera de estos mapas, el destino le quedará desbloqueado.
+	//   Esta lista de mapas es también utilizada para hacer el recuento de personas en cada destino.
+
+	// Declaración de Submenús:
+	// callsub Onc2,{"Nombre"};
+	// Crea un nuevo Submenú dentro del último Grupo de Destinos declarado.
+	// Es útil para agrupar diferentes Destinos relacionados, por ejemplo para los niveles de una Dungeon.
+	// Para cerrar un submenú, debeis utilizar la misma función sin argumentos.
+	// callsub Onc2;
+
+	// Cities:
+	callsub Onc0,"Viajar a una Ciudad.",100;
+		callsub Onc1,0,"Alberta","alberta",51,241,"alberta";
+		callsub Onc1,0,"Al De Baran","aldebaran",139,121,"aldebaran";
+		callsub Onc1,0,"Amatsu","amatsu",93,254,"amatsu";
+		callsub Onc1,0,"Ayothaya","ayothaya",207,206,"ayothaya";
+		callsub Onc1,0,"Bifrost","mora",108,98,"mora";
+		callsub Onc1,0,"Brasilis","brasilis",196,163,"brasilis";
+		callsub Onc1,0,"Comodo","comodo",202,113,"comodo";
+		callsub Onc1,0,"Dicastes","dicastes01",198,186,"dicastes01";
+		callsub Onc1,0,"Einbech","einbech",70,90,"einbech";
+		callsub Onc1,0,"Einbroch","einbroch",69,196,"einbroch";
+		callsub Onc1,0,"Geffen","geffen",117,70,"geffen";
+		callsub Onc1,0,"Gonryun","gonryun",161,119,"gonryun";
+		callsub Onc1,0,"Hugel","hugel",96,127,"hugel";
+		callsub Onc1,0,"Izlude","izlude",128,92,"izlude";
+		callsub Onc1,0,"Jawaii","jawaii",129,264,"jawaii";
+		callsub Onc1,0,"Juno","yuno",158,84,"yuno";
+		callsub Onc1,0,"Lighthalzen","lighthalzen",214,93,"lighthalzen";
+		callsub Onc1,0,"Louyang","louyang",217,114,"louyang";
+		callsub Onc1,0,"Lutie","xmas",148,116,"xmas";
+		callsub Onc1,0,"Manuk","manuk",277,137,"manuk";
+		callsub Onc1,0,"Midgarts Expedition Camp","mid_camp",210,288,"mid_camp";
+		callsub Onc1,0,"Morroc","morocc",161,71,"morocc";
+		callsub Onc1,0,"Moscovia","moscovia",224,192,"moscovia";
+		callsub Onc1,0,"Niflheim","niflheim",194,185,"niflheim";
+		callsub Onc1,0,"Payon","payon",158,57,"payon";
+		callsub Onc1,0,"Prontera","prontera",156,161,"prontera";
+		callsub Onc1,0,"Prontlegend","prontlegend",230,207,"prontlegend";
+		callsub Onc1,0,"Rachel","rachel",142,139,"rachel";
+		callsub Onc1,0,"Splendide","splendide",190,144,"splendide";
+		callsub Onc1,0,"Umbala","umbala",122,135,"umbala";
+		callsub Onc1,0,"Veins","veins",198,232,"veins";
+
+	// Dungeons:
+	callsub Onc0,"Viajar a una Mazmorra.",500;
+		callsub Onc2,"Abyss Lake Underground Cave";
+			callsub Onc1,0,"Abyss Lake Underground Cave F1","abyss_01",263,271,"abyss_01";
+			callsub Onc1,91,"Abyss Lake Underground Cave F2","abyss_02",275,270,"abyss_02";
+			callsub Onc1,92,"Abyss Lake Underground Cave F3","abyss_03",116,27,"abyss_03";
+		callsub Onc2,"Amatsu Dungeon";
+			callsub Onc1,0,"Tatami Maze","ama_dun01",230,11,"ama_dun01";
+			callsub Onc1,93,"Battle Field in the Underground Forest","ama_dun02",34,41,"ama_dun02";
+			callsub Onc1,94,"Amatsu Underground Shrine","ama_dun03",119,14,"ama_dun03";
+		callsub Onc2,"Ant Hell";
+			callsub Onc1,0,"Ant Hell F1","anthell01",35,262,"anthell01";
+			callsub Onc1,95,"Ant Hell F2","anthell02",168,170,"anthell02";
+		callsub Onc2,"Ayothaya Ancient Shrine";
+			callsub Onc1,0,"Ancient Shrine Maze","ayo_dun01",275,19,"ayo_dun01";
+			callsub Onc1,96,"Inside Ancient Shrine","ayo_dun02",24,26,"ayo_dun02";
+		callsub Onc2,"Beach Dungeon";
+			callsub Onc1,0,"Karu, the West Cave","beach_dun",266,67,"beach_dun";
+			callsub Onc1,65,"Ruande, the North Cave","beach_dun2",255,244,"beach_dun2";
+			callsub Onc1,66,"Mao, the East Cave","beach_dun3",23,260,"beach_dun3";
+		callsub Onc2,"Brasilis Dungeon";
+			callsub Onc1,0,"After the Waterfall","bra_dun01",47,70,"bra_dun01";
+			callsub Onc1,201,"Cave of Sorrows","bra_dun02",262,260,"bra_dun02";
+		callsub Onc2,"Clock Tower";
+			callsub Onc1,0,"Clock Tower B1","alde_dun01",297,25,"alde_dun01";
+			callsub Onc1,98,"Clock Tower B2","alde_dun02",127,169,"alde_dun02";
+			callsub Onc1,99,"Clock Tower B3","alde_dun03",277,178,"alde_dun03";
+			callsub Onc1,100,"Clock Tower B4","alde_dun04",268,74,"alde_dun04";
+			callsub Onc1,0,"Clock Tower F1","c_tower1",199,159,"c_tower1";
+			callsub Onc1,101,"Clock Tower F2","c_tower2",148,283,"c_tower2";
+			callsub Onc1,102,"Clock Tower F3","c_tower3",65,147,"c_tower3";
+			callsub Onc1,103,"Clock Tower F4","c_tower4",56,155,"c_tower4";
+		callsub Onc2,"Cursed Abbey Dungeon";
+			callsub Onc1,0,"Cursed Abbey Dungeon F1","abbey01",51,14,"abbey01";
+			callsub Onc1,104,"Cursed Abbey Dungeon F2","abbey02",150,11,"abbey02";
+			callsub Onc1,105,"Cursed Abbey Dungeon F3","abbey03",120,10,"abbey03";
+		callsub Onc2,"Dicastes Dungeon";
+			callsub Onc1,0,"Manuk-Diel Mining Tunel","dic_dun01",34,212,"dic_dun01";
+			callsub Onc1,200,"Scaraba Hole","dic_dun02",102,143,"dic_dun02";
+		callsub Onc2,"Dimensional George";
+			callsub Onc1,0,"Dimensional George F1","moc_fild20",352,179,"moc_fild20";
+			callsub Onc1,281,"Dimensional George F2","moc_fild21",32,196,"moc_fild21";
+			callsub Onc1,282,"Dimensional George F3","moc_fild22",37,196,"moc_fild22";
+		callsub Onc2,"Geffen Dungeon";
+			callsub Onc1,0,"Geffen Dungeon F1","gef_dun00",104,97,"gef_dun00";
+			callsub Onc1,106,"Geffen Dungeon F2","gef_dun01",115,236,"gef_dun01";
+			callsub Onc1,107,"Geffen Dungeon F3","gef_dun02",106,132,"gef_dun02";
+			callsub Onc1,0,"Geffenia F1","gefenia01",58,169,"gefenia01";
+			callsub Onc1,109,"Geffenia F2","gefenia02",116,115,"gefenia02";
+			callsub Onc1,110,"Geffenia F3","gefenia03",130,206,"gefenia03";
+			callsub Onc1,111,"Geffenia F4","gefenia04",133,88,"gefenia04";
+		callsub Onc2,"Glast Heim";
+			callsub Onc1,0,"Glast Heim F1","gl_cas01",199,29,"gl_cas01";
+			callsub Onc1,113,"Glast Heim F2","gl_cas02",104,25,"gl_cas02";
+			callsub Onc1,114,"Glast Heim Churchyard","gl_chyard",147,15,"gl_chyard";
+			callsub Onc1,115,"Glast Heim Culvert F1","gl_sew01",258,255,"gl_sew01";
+			callsub Onc1,116,"Glast Heim Culvert F2","gl_sew02",108,291,"gl_sew02";
+			callsub Onc1,117,"Glast Heim Culvert F3","gl_sew03",171,283,"gl_sew03";
+			callsub Onc1,118,"Glast Heim Culvert F4","gl_sew04",68,277,"gl_sew04";
+			callsub Onc1,119,"Glast Heim St. Abbey","gl_church",156,7,"gl_church";
+			callsub Onc1,120,"Glast Heim Staircase","gl_step",12,7,"gl_step";
+			callsub Onc1,121,"Glast Heim Underprison F1","gl_prison",14,70,"gl_prison";
+			callsub Onc1,122,"Glast Heim Underprison F2","gl_prison1",150,14,"gl_prison1";
+			callsub Onc1,123,"Inside Glast Heim Chivalry F1","gl_knt01",150,15,"gl_knt01";
+			callsub Onc1,124,"Inside Glast Heim Chivalry F2","gl_knt02",157,287,"gl_knt02";
+			callsub Onc1,125,"The Lowest Cave in Glast Heim F1","gl_dun01",133,271,"gl_dun01";
+			callsub Onc1,126,"The Lowest Cave in Glast Heim F2","gl_dun02",224,274,"gl_dun02";
+		callsub Onc2,"Gonryun Ancient Shrine";
+			callsub Onc1,0,"Shrine of Gonryun Queen","gon_dun01",153,53,"gon_dun01";
+			callsub Onc1,127,"Hermit's Checkers","gon_dun02",28,113,"gon_dun02";
+			callsub Onc1,128,"Arcadia","gon_dun03",68,16,"gon_dun03";
+		callsub Onc2,"Holy Ground";
+			callsub Onc1,0,"Holy Ground F1","ra_san01",140,135,"ra_san01";
+			callsub Onc1,129,"Holy Ground F2","ra_san02",32,21,"ra_san02";
+			callsub Onc1,130,"Holy Ground F3","ra_san03",10,149,"ra_san03";
+			callsub Onc1,131,"Holy Ground F4","ra_san04",204,218,"ra_san04";
+			callsub Onc1,132,"Holy Ground F5","ra_san05",150,9,"ra_san05";
+		callsub Onc2,"Ice Cave";
+			callsub Onc1,0,"Ice Cave F1","ice_dun01",157,14,"ice_dun01";
+			callsub Onc1,133,"Ice Cave F2","ice_dun02",151,155,"ice_dun02";
+			callsub Onc1,134,"Ice Cave F3","ice_dun03",149,22,"ice_dun03";
+		callsub Onc2,"Labyrinth Forest";
+			callsub Onc1,0,"Labyrinth Forest F1","prt_maze01",176,7,"prt_maze01";
+			callsub Onc1,136,"Labyrinth Forest F2","prt_maze02",93,20,"prt_maze02";
+			callsub Onc1,137,"Labyrinth Forest F3","prt_maze03",23,8,"prt_maze03";
+		callsub Onc2,"Manuk Fields";
+			callsub Onc1,0,"Manuk Field 1","man_fild01",366,229,"man_fild01";
+			callsub Onc1,515,"Manuk Field 2","man_fild02",0,0,"man_fild02";
+			callsub Onc1,516,"Manuk Field 3","man_fild03",0,0,"man_fild03";
+		callsub Onc2,"Mine Dungeon";
+			callsub Onc1,0,"Mine Dungeon F1","ein_dun01",22,14,"ein_dun01";
+			callsub Onc1,138,"Mine Dungeon F2","ein_dun02",292,290,"ein_dun02";
+		callsub Onc2,"Mjolnir Dead Pit";
+			callsub Onc1,0,"Mjolnir Dead Pit F1","mjo_dun01",52,17,"mjo_dun01";
+			callsub Onc1,139,"Mjolnir Dead Pit F2","mjo_dun02",381,343,"mjo_dun02";
+			callsub Onc1,140,"Mjolnir Dead Pit F3","mjo_dun03",302,262,"mjo_dun03";
+		callsub Onc2,"Moscovia Forest";
+			callsub Onc1,0,"Forest","mosk_dun01",189,45,"mosk_dun01";
+			callsub Onc1,141,"Deep Forest","mosk_dun02",165,30,"mosk_dun02";
+			callsub Onc1,142,"Bottomless Forest","mosk_dun03",32,135,"mosk_dun03";
+		callsub Onc2,"Nidhoggr's Cave";
+			callsub Onc1,0,"Splendide Field (Entrada)","spl_fild01",375,65,"spl_fild01";
+			callsub Onc1,503,"Nydhogg F1","nyd_dun01",59,238,"nyd_dun01";
+			callsub Onc1,243,"Nydhogg F2","nyd_dun02",72,269,"nyd_dun02";
+			callsub Onc1,504,"Nidhogg Nest","1@nyd",0,0,"1@nyd";
+		callsub Onc2,"Nogg Road";
+			callsub Onc1,0,"Nogg Road F1","mag_dun01",126,68,"mag_dun01";
+			callsub Onc1,143,"Nogg Road F2","mag_dun02",47,30,"mag_dun02";
+		callsub Onc2,"Odin Shrine";
+			callsub Onc1,0,"Odin Shrine F1","odin_tem01",98,146,"odin_tem01";
+			callsub Onc1,144,"Odin Shrine F2","odin_tem02",28,180,"odin_tem02";
+			callsub Onc1,145,"Odin Shrine F3","odin_tem03",120,54,"odin_tem03";
+		callsub Onc2,"Orc Dungeon";
+			callsub Onc1,0,"Orc Dungeon F1","orcsdun01",32,170,"orcsdun01";
+			callsub Onc1,146,"Orc Dungeon F2","orcsdun02",21,185,"orcsdun02";
+		callsub Onc2,"Payon Cave";
+			callsub Onc1,0,"Payon Cave F1","pay_dun00",21,183,"pay_dun00";
+			callsub Onc1,147,"Payon Cave F2","pay_dun01",19,33,"pay_dun01";
+			callsub Onc1,148,"Payon Cave F3","pay_dun02",19,63,"pay_dun02";
+			callsub Onc1,149,"Payon Cave F4","pay_dun03",155,159,"pay_dun03";
+			callsub Onc1,150,"Payon Cave F5","pay_dun04",201,204,"pay_dun04";
+		callsub Onc2,"Prontera Culvert";
+			callsub Onc1,0,"Prontera Culvert F1","prt_sewb1",125,248,"prt_sewb1";
+			callsub Onc1,151,"Prontera Culvert F2","prt_sewb2",19,19,"prt_sewb2";
+			callsub Onc1,152,"Prontera Culvert F3","prt_sewb3",180,169,"prt_sewb3";
+			callsub Onc1,153,"Prontera Culvert F4","prt_sewb4",100,92,"prt_sewb4";
+		callsub Onc2,"Pyramid";
+			callsub Onc1,0,"Pyramid F1","moc_pryd01",192,9,"moc_pryd01";
+			callsub Onc1,154,"Pyramid F2","moc_pryd02",10,192,"moc_pryd02";
+			callsub Onc1,155,"Pyramid F3","moc_pryd03",100,92,"moc_pryd03";
+			callsub Onc1,156,"Pyramid F4","moc_pryd04",181,11,"moc_pryd04";
+			callsub Onc1,157,"Pyramid B1","moc_pryd05",94,96,"moc_pryd05";
+			callsub Onc1,158,"Pyramid B2","moc_pryd06",192,8,"moc_pryd06";
+		callsub Onc2,"Robot Factory";
+			callsub Onc1,0,"Robot Factory F1","kh_dun01",3,228,"kh_dun01";
+			callsub Onc1,159,"Robot Factory F2","kh_dun02",41,198,"kh_dun02";
+		callsub Onc2,"Royal Tomb";
+			callsub Onc1,0,"The Royal Tomb","lou_dun01",218,196,"lou_dun01";
+			callsub Onc1,160,"Inside the Royal Tomb","lou_dun02",282,20,"lou_dun02";
+			callsub Onc1,161,"Suei Long Gon","lou_dun03",165,38,"lou_dun03";
+		callsub Onc2,"Ruins of Juperos";
+			callsub Onc1,0,"Ruins of Juperos F1","juperos_01",53,247,"juperos_01";
+			callsub Onc1,162,"Ruins of Juperos F2","juperos_02",37,63,"juperos_02";
+			callsub Onc1,163,"Center of Juperos","jupe_core",150,285,"jupe_core";
+		callsub Onc2,"Somatology Laboratory";
+			callsub Onc1,0,"Somatology Laboratory F1","lhz_dun01",150,288,"lhz_dun01";
+			callsub Onc1,55,"Somatology Laboratory F2","lhz_dun02",150,18,"lhz_dun02";
+			callsub Onc1,165,"Somatology Laboratory F3","lhz_dun03",140,133,"lhz_dun03";
+		callsub Onc2,"Sphinx";
+			callsub Onc1,0,"Sphinx F1","in_sphinx1",288,9,"in_sphinx1";
+			callsub Onc1,166,"Sphinx F2","in_sphinx2",149,81,"in_sphinx2";
+			callsub Onc1,167,"Sphinx F3","in_sphinx3",210,54,"in_sphinx3";
+			callsub Onc1,168,"Sphinx F4","in_sphinx4",10,222,"in_sphinx4";
+			callsub Onc1,169,"Sphinx F5","in_sphinx5",100,99,"in_sphinx5";
+		callsub Onc2,"Splendide Fields";
+			callsub Onc1,0,"Splendide Field 2","spl_fild01",31,303,"spl_fild01";
+			callsub Onc1,537,"Splendide Field 2","spl_fild02",0,0,"spl_fild02";
+			callsub Onc1,537,"Splendide Field 3","spl_fild03",0,0,"spl_fild03";
+		callsub Onc2,"Sunken Ship";
+			callsub Onc1,0,"Sunken Ship F1","treasure01",69,24,"treasure01";
+			callsub Onc1,170,"Sunken Ship F2","treasure02",102,27,"treasure02";
+		callsub Onc2,"Thanatos Tower";
+			callsub Onc1,0,"Thanatos Tower F1","tha_t01",150,39,"tha_t01";
+			callsub Onc1,171,"Thanatos Tower F2","tha_t02",150,136,"tha_t02";
+			callsub Onc1,172,"Thanatos Tower F3","tha_t03",220,158,"tha_t03";
+			callsub Onc1,173,"Thanatos Tower F4","tha_t04",59,143,"tha_t04";
+			callsub Onc1,174,"Thanatos Tower F5","tha_t05",62,11,"tha_t05";
+			callsub Onc1,175,"Thanatos Tower F6","tha_t06",206,11,"tha_t06";
+			callsub Onc1,176,"Thanatos Tower F7","tha_t07",35,166,"tha_t07";
+			callsub Onc1,177,"Thanatos Tower F8","tha_t08",28,43,"tha_t08";
+			callsub Onc1,178,"Thanatos Tower F9","tha_t09",20,96,"tha_t09";
+			callsub Onc1,179,"Thanatos Tower F10","tha_t10",155,100,"tha_t10";
+			callsub Onc1,180,"Thanatos Tower F11","tha_t11",49,18,"tha_t11";
+			callsub Onc1,181,"Thanatos Tower F12","tha_t12",115,16,"tha_t12";
+			callsub Onc1,0,"Thanatos Boss","thana_boss",146,139,"thana_boss";
+		callsub Onc2,"Thor Volcano Dungeon";
+			callsub Onc1,0,"Thor Volcano Dungeon F1","thor_v01",21,228,"thor_v01";
+			callsub Onc1,182,"Thor Volcano Dungeon F2","thor_v02",75,205,"thor_v02";
+			callsub Onc1,183,"Thor Volcano Dungeon F3","thor_v03",35,262,"thor_v03";
+		callsub Onc2,"Toy Factory";
+			callsub Onc1,0,"Toy Factory Warehouse","xmas_dun01",205,15,"xmas_dun01";
+			callsub Onc1,184,"Toy Monitoring Room","xmas_dun02",129,133,"xmas_dun02";
+		callsub Onc2,"Turtle Island";
+			callsub Onc1,0,"Turtle Island","tur_dun01",154,49,"tur_dun01";
+			callsub Onc1,185,"Turtle Island Dungeon","tur_dun02",148,261,"tur_dun02";
+			callsub Onc1,186,"Good Turtles Village","tur_dun03",132,189,"tur_dun03";
+			callsub Onc1,187,"Turtle Palace","tur_dun04",100,192,"tur_dun04";
+		callsub Onc2,"Umbala Dungeon";
+			callsub Onc1,0,"Carpenter's Shop in the Tree","um_dun01",42,31,"um_dun01";
+			callsub Onc1,188,"Passage to a Foreign World","um_dun02",48,30,"um_dun02";
+			callsub Onc1,193,"Hvergelmir's Fountain","yggdrasil01",40,63,"yggdrasil01";
+		callsub Onc2,"Undersea Tunnel";
+			callsub Onc1,0,"Undersea Tunnel F1","iz_dun00",168,168,"iz_dun00";
+			callsub Onc1,189,"Undersea Tunnel F2","iz_dun01",253,252,"iz_dun01";
+			callsub Onc1,190,"Undersea Tunnel F3","iz_dun02",236,204,"iz_dun02";
+			callsub Onc1,191,"Undersea Tunnel F4","iz_dun03",32,63,"iz_dun03";
+			callsub Onc1,192,"Undersea Tunnel F5","iz_dun04",26,27,"iz_dun04";
+
+	// WoE Areas:
+	callsub Onc0,"Viajar a un Área de WoE.",1500;
+		callsub Onc1,0,"Britoniah","gef_fild13",186,242,"gef_fild13","gefg_cas01","gefg_cas02","gefg_cas03","gefg_cas04","gefg_cas05","gld_dun04";
+		callsub Onc1,0,"Greenwood Lake","pay_gld",196,165,"pay_gld","payg_cas01","payg_cas02","payg_cas03","payg_cas04","payg_cas05","gld_dun01";
+		callsub Onc1,0,"Luina","alde_gld",228,153,"alde_gld","aldeg_cas01","aldeg_cas02","aldeg_cas03","aldeg_cas04","aldeg_cas05","gld_dun02";
+		callsub Onc1,0,"Nidhoggur","sch_gld",287,123,"sch_gld","schg_cas01","schg_cas02","schg_cas03","schg_cas04","schg_cas05","schg_dun01";
+		callsub Onc1,0,"Valfreyja","aru_gld",187,325,"aru_gld","arug_cas01","arug_cas02","arug_cas03","arug_cas04","arug_cas05","arug_dun01";
+		callsub Onc1,0,"Valkyrie Realm","prt_gld",160,75,"prt_gld","prtg_cas01","prtg_cas02","prtg_cas03","prtg_cas04","prtg_cas05","gld_dun03";
+
+	//Memorial Dungeons: [DanielArt]
+	callsub Onc0,"Viajar a un Memorial Dungeon.",2000;
+		callsub Onc1,0,"Endless Tower","e_tower",81,104,"e_tower","1@tower","2@tower","3@tower","4@tower","5@tower","6@tower";
+		callsub Onc1,0,"Shrine Lake","monk_test",305,144,"monk_test","1@cata","2@cata";
+		callsub Onc1,0,"Forest Laberint of Mist","bif_fild01",158,338,"bif_fild01","1@mist";
+		callsub Onc1,0,"Nidhoggur's Nest","nyd_dun02",95,195,"nyd_dun02","1@nyd","2@nyd";
+
+// [--------------------------------------------------------]
+// [ Final de la configuración de destinos.                 ]
+// [========================================================]
+
+	set $@WE,0;
+	set $@WEm,0;
+	set $@WEd[0],0;
+	set $@WEd[1],0;
+	end;
+
+// Declaración del Grupos de Destinos:
+// getarg(0): Nombre.
+// getarg(1): Precio.
+Onc0:
+	set $@WE,$@WE + 1;
+	set getd("$@WEb"+$@WE+"$"),getarg(0);
+	set getd("$@WEc"+$@WE),getarg(1);
+	set .@a,getarraysize($@WEd0);
+	set $@WEd0[.@a],$@WE;
+	set $@WEd[0],$@WE;
+	set $@WEd[1],0;
+	return;
+
+// Declaración de Destinos:
+// getarg(0): Id.
+// getarg(1): Nombre.
+// getarg(2): Mapa.
+// getarg(3): x.
+// getarg(4): y.
+Onc1:
+	if($@WEd[0]) {
+		set $@WE,$@WE + 1;
+		if($@WEm) set .@a,getarg(0);
+		set getd("$@WEa"+$@WE),.@a;
+		set getd("$@WEb"+$@WE+"$"),getarg(1);
+		set getd("$@WEe"+$@WE+"$"),getarg(2);
+		set getd("$@WEf"+$@WE),getarg(3);
+		set getd("$@WEg"+$@WE),getarg(4);
+		set .@b,5;
+		while(getarg(.@b,"") != "") { // Mapas de activación:
+			set .@m$,getarg(.@b);
+			set getd("$@WEh"+$@WE+"$["+(.@b - 5)+"]"),.@m$;
+			if(.@a) {
+				setmapflag .@m$,42;
+				set getd("$@WE_"+.@m$+"["+getarraysize(getd("$@WE_"+.@m$))+"]"),$@WE;
+			}
+			set .@b,.@b + 1;
+		}
+		set .@a,$@WEd[getarraysize($@WEd) - 1];
+		set .@b,getarraysize(getd("$@WEd"+.@a));
+		set getd("$@WEd"+.@a+"["+.@b+"]"),$@WE;
+	}
+	return;
+
+// Declaración de Submenús:
+// getarg(0): Nombre.
+Onc2:
+	if($@WEd[0]) {
+		if(getarg(0,"") == "") set $@WEd[1],0;
+		else {
+			set $@WE,$@WE + 1;
+			set getd("$@WEb"+$@WE+"$"),getarg(0);
+			set .@a,$@WEd[0];
+			set .@b,getarraysize(getd("$@WEd"+.@a));
+			set getd("$@WEd"+.@a+"["+.@b+"]"),$@WE;
+			set $@WEd[1],$@WE;
+		}
+	}
+	return;
+
+// Activación de Destinos:
+OnPCLoadMapEvent:
+	getmapxy .@m$,.@x,.@y,0;
+	set .@a,getarraysize(getd("$@WE_"+.@m$));
+	while(.@a > 0) {
+		set .@a,.@a - 1;
+		set .@b,getd("$@WE_"+.@m$+"["+.@a+"]");
+		set .@c,getd("$@WEa"+.@b);
+		set .@d,getd($@WEm$+"WE_"+(.@c / 31));
+		if(!(.@d & pow(2,.@c % 31))) {
+			if($@WEm$ == "$") set .@e,0;
+			else set .@e,3;
+			announce .@n$+": El destino '"+getd("$@WEb"+.@b+"$")+"' ha sido desactivado.",.@e,0x00ccdd;
+			set getd($@WEm$+"WE_"+(.@c / 31)),.@d + pow(2,.@c % 31);
+		}
+	}
+	end;
+}
+
+// Npcs:
+-	script	WE#0::WE	-1,{
+	if ( getgmlevel() >= 99 ) {
+		menu "Ver como usuario.",-,"^5533ffCargar Variables^000000",LoadVar;
+	}
+	cutin "warper",2;
+	mes $@WE$;
+		switch(sex) {
+			case 0: mes "Bienvenida ^ff0000"+strcharinfo(0)+"^000000."; break;
+			case 1: mes "Bienvenido ^0000ff"+strcharinfo(0)+"^000000."; break;
+		}
+	mes "¿En que puedo ayudarte?";
+	next;
+	while(.@a < getarraysize($@WEd0)) {
+		set .@b,$@WEd0[.@a];
+		set .@a$[.@a],getd("$@WEb"+.@b+"$");
+		set .@b,getd("$@WEc"+.@b);
+		if(.@b) {
+			if(Zeny < .@b) set .@a$[.@a],"^bbbbbb"+.@a$[.@a]+" ^bb0000("+.@b+" z)^000000";
+			else set .@a$[.@a],.@a$[.@a]+" ^00bb00("+.@b+" z)^000000";
+		}
+		set .@a,.@a + 1;
+	}
+	set .@a,select("^ff0000Anterior viaje^000000.",.@a$[0],.@a$[1],.@a$[2],.@a$[3],.@a$[4],.@a$[5],.@a$[6],.@a$[7],.@a$[8],.@a$[9],.@a$[10],.@a$[11],.@a$[12],.@a$[13],.@a$[14],.@a$[15],.@a$[16],.@a$[17],.@a$[18],.@a$[19]);
+
+// Last Warp: [DanielArt]
+	if(.@a == 1) {
+		mes $@WE$;
+		if(#lastwarp$=="") {
+			mes "^ff0000Primero debes Transportarte a un destino mediante este Servicio.^000000";
+			close2;
+			emotion e_sry;cutin "",255;
+			end;
+		} else {
+			mes "Bien, espera un segundo mientras te abró un portal.";
+			close2;
+				cutin "",255;
+				specialeffect2 71;
+				specialeffect2 72;
+				//pcblockmove getcharid(3),1;
+				sleep2 500;
+				specialeffect2 402;
+				sleep2 500;
+				emotion 12;
+				specialeffect2 6;
+				sleep2 200;
+				specialeffect2 304;
+				emotion e_ok;
+				warp #lastwarp$,#lastx,#lasty;
+				//pcblockmove getcharid(3),0;
+			end;
+		}
+	}
+	set .@a,$@WEd0[.@a - 2];
+	set .@b,getd("$@WEc"+.@a);
+	callsub Ona0,.@b;
+	mes $@WE$;
+	if(.@a == 1) {
+		getmapxy .@m$,.@x,.@y,0;
+		set Zeny,Zeny - .@b;
+                mes "Muy bien.";
+		mes "A partir de ahora este lugar quedará guardado como tu Punto de Inicio.";
+		save .@m$,.@x,.@y;
+		specialeffect2 500;
+		close2;cutin "",255;
+		emotion 12;
+		end;
+	}
+	mes "Elige tu Destino.";
+	next;
+	do {
+		cleararray .@a$[0],"",getarraysize(.@a$);
+		set .@c,0;
+		while(.@c < getarraysize(getd("$@WEd"+.@a))) {
+			set .@d,getd("$@WEd"+.@a+"["+.@c+"]");
+			set .@e,getd("$@WEa"+.@d);
+			set .@b$,"bbbbbb";
+			set .@c$,"";
+			if(getd("$@WEe"+.@d+"$") == "") {
+				set .@g,getarraysize(getd("$@WEd"+.@d));
+				set .@f,0;
+				while(.@g && !.@f) {
+					set .@g,.@g - 1;
+					set .@e,getd("$@WEa"+getd("$@WEd"+.@d+"["+.@g+"]"));
+					if(!.@e || (getd($@WEm$+"WE_"+(.@e / 31)) & pow(2,.@e % 31))) set .@f,1;
+				}
+				if(.@f) set .@b$,"000000";
+			}
+			else if(!.@e || (getd($@WEm$+"WE_"+(.@e / 31)) & pow(2,.@e % 31))) {
+				set .@b$,"000000";
+				set .@g,0;
+				set .@f,getarraysize(getd("$@WEh"+.@d+"$"));
+				while(.@f > 0) {
+					set .@f,.@f - 1;
+					set .@g,.@g + getmapusers(getd("$@WEh"+.@d+"$["+.@f+"]"));
+				}
+				if(.@g) set .@c$,"00bb00";
+				else set .@c$,"aaaaaa";
+				set .@c$," [^"+.@c$+""+.@g+"^000000]";
+			}
+			set .@a$[.@c],"^"+.@b$+""+getd("$@WEb"+.@d+"$")+"^000000"+.@c$;
+			set .@c,.@c + 1;
+		}
+		if(.@h) set .@b$,"Atrás";
+		else set .@b$,"Salir";
+		set .@c,select("^880000"+.@b$+"^000000",.@a$[0],.@a$[1],.@a$[2],.@a$[3],.@a$[4],.@a$[5],.@a$[6],.@a$[7],.@a$[8],.@a$[9],.@a$[10],.@a$[11],.@a$[12],.@a$[13],.@a$[14],.@a$[15],.@a$[16],.@a$[17],.@a$[18],.@a$[19],.@a$[20],.@a$[21],.@a$[22],.@a$[23],.@a$[24],.@a$[25],.@a$[26],.@a$[27],.@a$[28],.@a$[29],.@a$[30],.@a$[31],.@a$[32],.@a$[33],.@a$[34],.@a$[35],.@a$[36],.@a$[37],.@a$[38],.@a$[39],.@a$[40],.@a$[41],.@a$[42],.@a$[43],.@a$[44],.@a$[45],.@a$[46],.@a$[47],.@a$[48],.@a$[49]);
+		if(.@c == 1) {
+			if(.@h) {
+				set .@a,.@h;
+				set .@h,0;
+			}
+			else {
+				mes $@WE$;
+				mes "Hasta pronto.";
+				emotion 12;
+				close2; cutin "",255; end;
+			}
+		}
+		else {
+			set .@c,.@c - 2;
+			if(compare(.@a$[.@c],"^bbbbbb")) {
+				mes $@WE$;
+				mes "Lo siento ^5533ff"+strcharinfo(0)+"^000000.";
+				mes "Este destino aún no se encuentra disponible.";
+				emotion 40;
+				close2;cutin "",255;end;
+			}
+			set .@h,.@a;
+			set .@a,getd("$@WEd"+.@a+"["+.@c+"]");
+		}
+	} while(getd("$@WEe"+.@a+"$") == "");
+	callsub Ona0,.@b;
+	set Zeny,Zeny - .@b;
+	mes $@WE$;
+	mes "Muy bien.";
+	mes "Espera un segundo mientras te abro un portal...";
+	close2;cutin "",255;	specialeffect2 71; specialeffect2 72;
+	//pcblockmove getcharid(3),1;
+	sleep2 500;
+	specialeffect2 402;
+	sleep2 500;
+	emotion 12;
+	specialeffect2 6;
+	sleep2 200;
+	specialeffect2 304;
+	warp getd("$@WEe"+.@a+"$"),getd("$@WEf"+.@a),getd("$@WEg"+.@a);
+	//pcblockmove getcharid(3),0;
+// Last Warp: [DanielArt]
+	getmapxy(.@mapa$,.@x,.@y,0);
+	set #lastwarp$,.@mapa$; set #lastx,.@x; set #lasty,.@y;
+	end;
+LoadVar:
+donpcevent "WEfunc::OnInit";
+
+Ona0:
+	set .@a,getarg(0);
+	if(Zeny < .@a) {
+		mes $@WE$;
+		mes "Lo siento.";
+		mes "Para utilizar este servicio deberás pagar ^880000"+.@a+" z^000000.";
+		emotion 40;
+		close2;cutin "",255;end;
+	}
+	set $impuestos,$impuestos+.@a;
+	return;
+}
+
+alberta,195,142,4	duplicate(WE)	WE#1	918
+alberta,47,250,5	duplicate(WE)	WE#2	918
+aldebaran,133,120,6	duplicate(WE)	WE#3	918
+aldebaran,133,240,6	duplicate(WE)	WE#4	918
+alde_gld,234,154,4	duplicate(WE)	WE#5	918
+amatsu,244,283,6	duplicate(WE)	WE#6	918
+amatsu,103,258,4	duplicate(WE)	WE#7	918
+amatsu,207,104,4	duplicate(WE)	WE#8	918
+ayothaya,212,208,4	duplicate(WE)	WE#9	918
+ayothaya,157,82,4	duplicate(WE)	WE#10	918
+comodo,180,333,4	duplicate(WE)	WE#11	918
+comodo,205,116,4	duplicate(WE)	WE#12	918
+comodo,320,179,4	duplicate(WE)	WE#13	918
+comodo,32,219,6	duplicate(WE)	WE#14	918
+einbech,67,96,6	duplicate(WE)	WE#15	918
+einbech,131,249,6	duplicate(WE)	WE#16	918
+einbech,38,201,8	duplicate(WE)	WE#17	918
+einbroch,78,187,2	duplicate(WE)	WE#18	918
+einbroch,153,317,6	duplicate(WE)	WE#19	918
+einbroch,152,53,4	duplicate(WE)	WE#20	918
+einbroch,245,239,2	duplicate(WE)	WE#21	918
+geffen,123,73,4	duplicate(WE)	WE#22	918
+geffen,41,111,6	duplicate(WE)	WE#23	918
+geffen,124,181,4	duplicate(WE)	WE#24	918
+geffen,167,123,6	duplicate(WE)	WE#25	918
+gef_fild13,191,248,4	duplicate(WE)	WE#26	918
+gonryun,152,114,6	duplicate(WE)	WE#27	918
+gonryun,172,182,2	duplicate(WE)	WE#28	918
+gonryun,157,18,6	duplicate(WE)	WE#29	918
+hugel,101,134,4	duplicate(WE)	WE#30	918
+hugel,176,174,4	duplicate(WE)	WE#31	918
+izlude,121,98,6	duplicate(WE)	WE#32	918
+jawaii,135,259,4	duplicate(WE)	WE#33	918
+yuno,175,93,4	duplicate(WE)	WE#34	918
+yuno,64,207,4	duplicate(WE)	WE#35	918
+sch_gld,291,127,4	duplicate(WE)	WE#36	918
+lighthalzen,209,99,6	duplicate(WE)	WE#37	918
+lighthalzen,218,326,4	duplicate(WE)	WE#38	918
+lighthalzen,311,303,4	duplicate(WE)	WE#39	918
+louyang,207,104,6	duplicate(WE)	WE#40	918
+louyang,57,250,4	duplicate(WE)	WE#41	918
+xmas,139,310,6	duplicate(WE)	WE#42	918
+xmas,157,110,4	duplicate(WE)	WE#43	918
+morocc,166,80,4	duplicate(WE)	WE#44	918
+morocc,43,174,4	duplicate(WE)	WE#45	918
+morocc,166,293,4	duplicate(WE)	WE#46	918
+morocc,275,197,8	duplicate(WE)	WE#47	918
+morocc,33,294,4	duplicate(WE)	WE#48	918
+moscovia,238,194,4	duplicate(WE)	WE#49	918
+moscovia,157,64,4	duplicate(WE)	WE#50	918
+niflheim,25,156,6	duplicate(WE)	WE#51	918
+niflheim,201,184,4	duplicate(WE)	WE#52	918
+payon,213,76,6	duplicate(WE)	WE#53	918
+payon,164,49,2	duplicate(WE)	WE#54	918
+payon,232,320,4	duplicate(WE)	WE#55	918
+payon,63,124,6	duplicate(WE)	WE#56	918
+pay_gld,201,161,4	duplicate(WE)	WE#57	918
+prontera,165,75,4	duplicate(WE)	WE#58	918
+prontera,36,212,6	duplicate(WE)	WE#59	918
+prontera,150,268,4	duplicate(WE)	WE#60	918
+prontera,263,213,4	duplicate(WE)	WE#61	918
+prontera,161,316,4	duplicate(WE)	WE#62	918
+prt_gld,166,79,4	duplicate(WE)	WE#63	918
+rachel,260,136,4	duplicate(WE)	WE#64	918
+rachel,150,140,4	duplicate(WE)	WE#65	918
+rachel,135,49,4	duplicate(WE)	WE#66	918
+rachel,35,131,6	duplicate(WE)	WE#67	918
+aru_gld,179,330,6	duplicate(WE)	WE#68	918
+umbala,117,130,8	duplicate(WE)	WE#69	918
+umbala,163,253,4	duplicate(WE)	WE#70	918
+veins,205,236,4	duplicate(WE)	WE#71	918
+veins,222,356,4	duplicate(WE)	WE#72	918
+veins,153,62,6	duplicate(WE)	WE#73	918
+mid_camp,215,287,4	duplicate(WE)	WE#74	918
+mid_camp,134,233,6	duplicate(WE)	WE#75	918
+mid_camp,256,230,8	duplicate(WE)	WE#76	918
+manuk,285,128,2	duplicate(WE)	WE#77	918
+manuk,183,181,6	duplicate(WE)	WE#78	918
+splendide,181,141,6	duplicate(WE)	WE#79	918
+hu_fild05,190,211,5	duplicate(WE)	WE#80	918
+ama_dun01,233,14,4	duplicate(WE)	WE#81	918
+anthell01,39,263,4	duplicate(WE)	WE#82	918
+anthell02,168,173,4	duplicate(WE)	WE#83	918
+ayo_fild02,279,153,4	duplicate(WE)	WE#84	918
+izlu2dun,103,96,6	duplicate(WE)	WE#85	918
+mjolnir_02,84,360,4	duplicate(WE)	WE#86	918
+nameless_n,158,179,8	duplicate(WE)	WE#87	918
+gef_dun00,107,99,4	duplicate(WE)	WE#88	918
+glast_01,371,295,2	duplicate(WE)	WE#89	918
+glast_01,191,120,6	duplicate(WE)	WE#90	918
+glast_01,65,110,6	duplicate(WE)	WE#91	918
+glast_01,195,292,6	duplicate(WE)	WE#92	918
+glast_01,65,197,8	duplicate(WE)	WE#93	918
+prt_fild01,140,366,4	duplicate(WE)	WE#94	918
+mjolnir_12,48,20,2	duplicate(WE)	WE#95	918
+ra_san01,143,131,2	duplicate(WE)	WE#96	918
+ra_fild01,237,332,4	duplicate(WE)	WE#97	918
+jupe_cave,47,55,6	duplicate(WE)	WE#98	918
+yuno_fild03,34,135,8	duplicate(WE)	WE#99	918
+kh_dun01,5,230,4	duplicate(WE)	WE#100	918
+mosk_fild02,194,252,4	duplicate(WE)	WE#101	918
+odin_tem01,96,143,8	duplicate(WE)	WE#102	918
+gef_fild10,61,334,6	duplicate(WE)	WE#103	918
+prt_fild10,219,199,6	duplicate(WE)	WE#104	918
+pay_arche,37,127,8	duplicate(WE)	WE#105	918
+prt_sewb1,127,252,4	duplicate(WE)	WE#106	918
+moc_ruins,55,157,6	duplicate(WE)	WE#107	918
+moc_fild19,106,97,8	duplicate(WE)	WE#108	918
+alb2trea,74,101,6	duplicate(WE)	WE#109	918
+tha_scene01,141,194,2	duplicate(WE)	WE#110	918
+ve_fild03,172,238,4	duplicate(WE)	WE#111	918
+tur_dun01,147,54,6	duplicate(WE)	WE#112	918
+cmd_fild01,31,320,6	duplicate(WE)	WE#113	918
+beach_dun2,254,248,4	duplicate(WE)	WE#114	918
+dic_dun02,105,145,4	duplicate(WE)	WE#115	918
+dicastes01,202,184,4	duplicate(WE)	WE#116	918
+brasilis,193,159,4	duplicate(WE)	WE#117	918
+prontera,157,185,4	duplicate(WE)	WE#118	971
+mora,103,96,4	duplicate(WE)	WE#119	918
+brasilis,199,215,4	duplicate(WE)	WE#120	918
+manuk,266,179,4	duplicate(WE)	WE#121	918
+morocc,162,95,4	duplicate(WE)	WE#122	918
+payon,161,226,4	duplicate(WE)	WE#123	918
+izlude,133,113,4	duplicate(WE)	WE#124	918
+comodo,192,158,4	duplicate(WE)	WE#125	918
+ayothaya,155,114,4	duplicate(WE)	WE#126	918
+lighthalzen,161,100,4	duplicate(WE)	WE#127	918
+prt_monk,161,184,4	duplicate(WE)	WE#128	918
+prontlegend,192,187,6	duplicate(WE)	WE#129	918
+
+
+
+
+
+
+
+
+
+
+
+
+
+//	~~~~~ show time left in days, hours, minutes and seconds ~~~~~
+function	script	timeleft__	{
+	set .@left, getarg(0);
+	if ( .@left <= 0 ) return getarg(0);
+	set .@day, .@left / 86400;
+	set .@hour, .@left % 86400 / 3600;
+	set .@min, .@left % 3600 / 60;
+	set .@sec, .@left % 60;
+	return ( ( .@day )?.@day +" day ":"" )+( ( .@day || .@hour )?.@hour +" hour ":"" )+( ( .@day == 0 && ( .@hour || .@min ) )?.@min +" min ":"" )+( ( .@day || .@hour )?"":.@sec +" sec" );
+}
+
+-	script	tombstone_dup	-1,{
+	getmapxy .@map$, .@x, .@y, 1;
+	if ( .@x == 0 && .@y == 0 ) end;
+	set .@id, atoi( strnpcinfo(2) );
+	mes "Tomb of "+ strmobinfo( 2, .mvpid[.@id] );
+	mes "it was killed by "+ .name$[.@id];
+	close;
+Onmvpdead:
+getmapxy .@map$, .@x, .@y, 0;
+	set .@id, atoi( strnpcinfo(2) );
+	set .@map$, strcharinfo(3);
+	set .name$[.@id], strcharinfo(0);
+	movenpc strnpcinfo(0), .@x, .@y;
+	set .@loop, rand(.respawn[0],.respawn[.@id]);
+	while ( .@loop ) {
+		delwaitingroom strnpcinfo(0);
+		waitingroom callfunc("timeleft__", .@loop ), 0;
+		set .@loop, .@loop -1;
+		sleep 1000;
+	}
+	delwaitingroom strnpcinfo(0);
+	monster .@map$, 0,0, "--ja--", .mvpid[.@id], 1, strnpcinfo(0) +"::Onmvpdead";
+	movenpc strnpcinfo(0), 0,0;
+	end;
+OnInit:
+	if ( strnpcinfo(2) == "" ) {
+		setarray .respawn[0], 600,7200,43200,10800,5460,7200,25200,18000,7200,7200,7200,7200,7500,3600,7200,3600,28800,28800,28800,28800,5650,3600,7200,7200,7200,7200,7000,3600,3600,7200,28800,3600,7200,3600,18000,39600,7200,3600,3600,7200,3600,7200,7200,7200,7200,43200,7200,10800,18000,10800,21600; // 10 seconds to respawn
+		setarray .mvpid[1], 1871,1872,1719,1492,1147,1688,1583,2068,2156,2087,2165,1623,1389,1046,1272,1115,1046,1147,1272,1418,1157,2202,1685,1734,1658,1630,1038,1511,1885,1751,1150,1039,1086,1768,1832,1112,1312,1251,2131,1087,1190,1252,1059,1159,1917,1115,1785,1785,1785,1785;
+	}
+	else {
+		sleep 1;
+		getmapxy .@map$, .@x, .@y, 1;
+		monster .@map$, 0,0, "--ja--", .mvpid[ atoi( strnpcinfo(2) ) ], 1, strnpcinfo(0) +"::Onmvpdead";
+	}
+	end;
+}
+
+
+abbey02,0,0,0	duplicate(tombstone_dup)	Tomb#1_mvp	565
+abbey03,0,0,0	duplicate(tombstone_dup)	Tomb#2_mvp	565
+abyss_03,0,0,0	duplicate(tombstone_dup)	Tomb#3_mvp	565
+ama_dun03,0,0,0	duplicate(tombstone_dup)	Tomb#4_mvp	565
+anthell02,0,0,0	duplicate(tombstone_dup)	Tomb#5_mvp	565
+ayo_dun02,0,0,0	duplicate(tombstone_dup)	Tomb#6_mvp	565
+beach_dun,0,0,0	duplicate(tombstone_dup)	Tomb#7_mvp	565
+bra_dun02,0,0,0	duplicate(tombstone_dup)	Tomb#8_mvp	565
+dew_dun01,0,0,0	duplicate(tombstone_dup)	Tomb#9_mvp	565
+dic_dun02,0,0,0	duplicate(tombstone_dup)	Tomb#10_mvp	565
+dic_dun03,0,0,0	duplicate(tombstone_dup)	Tomb#11_mvp	565
+ein_dun02,0,0,0	duplicate(tombstone_dup)	Tomb#12_mvp	565
+gef_dun01,0,0,0	duplicate(tombstone_dup)	Tomb#13_mvp	565
+gef_dun02,0,0,0	duplicate(tombstone_dup)	Tomb#14_mvp	565
+gl_chyard,0,0,0	duplicate(tombstone_dup)	Tomb#15_mvp	565
+gld_dun01,0,0,0	duplicate(tombstone_dup)	Tomb#16_mvp	565
+gld_dun02,0,0,0	duplicate(tombstone_dup)	Tomb#17_mvp	565
+gld_dun03,0,0,0	duplicate(tombstone_dup)	Tomb#18_mvp	565
+gld_dun04,0,0,0	duplicate(tombstone_dup)	Tomb#19_mvp	565
+gon_dun03,0,0,0	duplicate(tombstone_dup)	Tomb#20_mvp	565
+in_sphinx5,0,0,0	duplicate(tombstone_dup)	Tomb#21_mvp	565
+iz_dun05,0,0,0	duplicate(tombstone_dup)	Tomb#22_mvp	565
+jupe_core,0,0,0	duplicate(tombstone_dup)	Tomb#23_mvp	565
+kh_dun02,0,0,0	duplicate(tombstone_dup)	Tomb#24_mvp	565
+lhz_dun02,0,0,0	duplicate(tombstone_dup)	Tomb#25_mvp	565
+lou_dun03,0,0,0	duplicate(tombstone_dup)	Tomb#26_mvp	565
+moc_pryd04,0,0,0	duplicate(tombstone_dup)	Tomb#27_mvp	565
+moc_pryd06,0,0,0	duplicate(tombstone_dup)	Tomb#28_mvp	565
+mosk_dun03,0,0,0	duplicate(tombstone_dup)	Tomb#29_mvp	565
+odin_tem03,0,0,0	duplicate(tombstone_dup)	Tomb#30_mvp	565
+pay_dun04,0,0,0	duplicate(tombstone_dup)	Tomb#31_mvp	565
+prt_maze03,0,0,0	duplicate(tombstone_dup)	Tomb#32_mvp	565
+prt_sewb4,0,0,0	duplicate(tombstone_dup)	Tomb#33_mvp	565
+ra_san05,0,0,0	duplicate(tombstone_dup)	Tomb#34_mvp	565
+thor_v03,0,0,0	duplicate(tombstone_dup)	Tomb#35_mvp	565
+treasure02,0,0,0	duplicate(tombstone_dup)	Tomb#36_mvp	565
+tur_dun04,0,0,0	duplicate(tombstone_dup)	Tomb#37_mvp	565
+xmas_dun02,0,0,0	duplicate(tombstone_dup)	Tomb#38_mvp	565
+1@mist,0,0,0	duplicate(tombstone_dup)	Tomb#39_mvp	565
+gef_fild03,0,0,0	duplicate(tombstone_dup)	Tomb#40_mvp	565
+gef_fild10,0,0,0	duplicate(tombstone_dup)	Tomb#41_mvp	565
+xmas_fild01,0,0,0	duplicate(tombstone_dup)	Tomb#42_mvp	565
+mjolnir_04,0,0,0	duplicate(tombstone_dup)	Tomb#43_mvp	565
+moc_fild17,0,0,0	duplicate(tombstone_dup)	Tomb#44_mvp	565
+moc_fild22,0,0,0	duplicate(tombstone_dup)	Tomb#45_mvp	565
+pay_fild10,0,0,0	duplicate(tombstone_dup)	Tomb#46_mvp	565
+ra_fild03,0,0,0	duplicate(tombstone_dup)	Tomb#47_mvp	565
+ra_fild04,0,0,0	duplicate(tombstone_dup)	Tomb#48_mvp	565
+ve_fild01,0,0,0	duplicate(tombstone_dup)	Tomb#49_mvp	565
+ve_fild02,0,0,0	duplicate(tombstone_dup)	Tomb#50_mvp	565
+
+
+// Identificador
+
+izlude_in,59,114,3	script	Identificador	919,{
+	getinventorylist;
+	for( set .@i,0; .@i < @inventorylist_count; set .@i, .@i + 1 ) {
+	if ( @inventorylist_identify[.@i] == 1 ) continue;
+
+	// Merchant's Identify skill
+	if ( getskilllv(40) == 1 && sp >= 10 ) heal 0,-10;
+
+	// check if there is any Magnifier
+	else if ( countitem(611) ) delitem 611,1;
+
+	// base on Magnifier price, Rogue's Compulsion Discount skill
+	else if ( getskilllv(224) && zeny >= ( 100 - ( 5 + 4 * getskilllv(224) ) )* 2/5 )
+	set zeny, zeny - ( 100 - ( 5 + 4 * getskilllv(224) ) )* 2/5;
+
+	// base on Magnifier price, Merchants that not enough sp and learned Discount skill
+	else if ( getskilllv(37) && zeny >= ( 100 - ( 5 + 2 * getskilllv(37) ) )* 2/5 )
+	set zeny, zeny - ( 100 - ( 5 + 2 * getskilllv(37) ) )* 2/5;
+
+	// if none of the above, deduct the zeny
+	else if ( zeny >= 40 ) set zeny, zeny - 40;
+
+	// or stop the script if there the person not enough money
+	else break;
+	delitem2 @inventorylist_id[.@i],1,0,0,0,0,0,0,0;
+	getitem @inventorylist_id[.@i],1;
+	}
+}
+
+
+
+//NPC CAMBIADOR DE AURAS--
+
+prontera,141,181,5	script	Aura Master	922,{
+    set .@auramax, 95; // Máximo número de auras
+    set @acost, 1;
+
+    if(#CASHPOINTS < 1) {
+        mes "^0000FF[Aura Master]^000000";
+        mes "Hola, yo proporciono el servicio de cambio de ^0000FFAuras000000, pero cada cambio tiene un costo de ^0000FF50 Cash000000, regresa cuando tengas la cantidad requerida y con gusto te Atiendo.";
+        next;
+        mes "^0000FF[Aura Master]000000";
+        mes "Para mayor informacion de acuerdo a el tipo de ^0000FFAura000000 que puedes elegir, porfavor visita el ^0000FFforo000000 en la seccion de ^0000FFGuias000000 para mayor informacion.";
+        emotion e_sry;
+        close;
+        }
+
+
+    mes "^0000FF[Aura Master]^000000";
+    mes "Bienvenido al ^0000FFSistema de Cambio de Auras de Lexus Ro ^000000, me alegra poder Atenderte hoy.";
+    next;
+    mes "^0000FF[Aura Master]^000000";
+    mes "Antes de continuar con el servicio, te tengo que recordar que la Cuota del servicio son ^0000FF1 Cash^000000 para poder realizarte el cambio.";
+    next;
+     menu "^0000FFMe gustaria mas informacion.^000000",-,"^ff0000Deseo Cambiar mi Aura.^000000",A_CHN,"Deseo quitarme el Aura",A_REM,"No deseo nada por Ahora",A_EXI;
+        mes "^0000FF[Aura Master]^000000";
+        mes "El Sistema de Cambio de Auras es una forma de cambiar el 'efecto' de como se te ve el aura que te rodea, no reemplaza el Aura original, solo le agrega un efecto permanente alrrededor tuyo.";
+        next;
+        mes "^0000FF[Aura Master]^000000";
+        mes "Dicho efecto es permanente y no desaparecera, no proporciona ningun extra a tus stats, es solo un complemento estetico, si deseas mayor informacion acerca de cuantas y cuales...";
+        next;
+        mes "^0000FF[Aura Master]^000000";
+        mes "Auras tenemos disponibles para ofrecerte, te recomiendo visitar el ^0000FFforo000000 en la seccion de ^0000FFGuias^000000.";
+        close;
+
+    A_CHN:
+
+    mes "^0000FF[Aura Master]^000000";
+    mes "Muy bien has elegido ^ff0000Cambiar tu Aura^000000 lo cual tendra un costo de ^0000FF50 Cash^000000.";
+    next;
+    menu "Continuar.",-,"Cancelar.",A_EXI;
+    set #CASHPOINTS, #CASHPOINTS - @acost;
+    mes "^0000FF[Aura Master]^000000";
+    mes "Ingresa el numero de Aura que deseas, recuerda que para estilos e imagenes de las Auras que te ofrecemos puedes visitar el ^0000FFforo^000000";
+    next;
+    mes "^0000FF[Aura Master]^000000";
+    mes "Ingresa un numero entre el 1 y el 95, una vez ecojas alguna no podras cambiar de opinion asi que asegurate saver que quieres.";
+    input .@aura, -10000, 10000;
+    if (.@aura < 1 || .@aura > .@auramax) {
+        mes "Lo siento pero tiene que ser un valor entre ^FF00001 ~ " +.@auramax +"^000000 no valen ni mayor ni 0, ni negativo, por favor inténtelo de nuevo.";
+        close;
+    } // End if
+    close2;
+    mes "^0000FF[Aura Master]^000000";
+    mes "Muy bien ahora permiteme mientras preparo tu Aura";
+    sleep2 800;
+    specialeffect2 346;
+    sleep2 3000;
+    specialeffect2 650;
+    sleep2 6000;
+    npctalk "Solo tomara un momento no vayas a hacer nada!";
+    specialeffect2 500;
+    specialeffect2 221;
+    sleep2 2500;
+    atcommand "@aura " +.@aura +" " +strcharinfo(0);
+    close;
+
+        A_EXI:
+        mes "^0000FF[Aura Master]^000000";
+        mes " ";
+        mes "Que tengas un buen dia~";
+        close;
+
+        //A_OK:
+        //mes "^0000FF[Aura Master]^000000";
+        //mes "Me alegro que sea de tu agrado, recuerda que puedes remover el Aura sin ningun costo.";
+        //close;
+
+        A_REM:
+        mes "^0000FF[Aura Master]^000000";
+        mes "Estas seguro que deseas remover tu Aura actual?";
+        next;
+        menu "Si.",-,"No.",A_EXI;
+        atcommand "@aura 0";
+        mes "^0000FF[Aura Master]^000000";
+        mes "Aqui tienes, que tengas un buen dia~";
+        close;
+}
+
+//	
+//	{ 691, -1, 679 },
+//	{ 757, 203, -1 },
+//	{ 783, 242, 485 },
+//	{ 822, -1, 486 },
+//	{ 827,  -1,  -1 },
+//	{ 827, 239, 418 },
+//	{ 828,  -1,  -1 },
+//	{ 828, 239, -1 },
+//	{ 828, 397, -1 },
+//	{ 829, 239, 418 },
+//	{ 397, 881,  -1 },
+//	{ -1, 294, 828 },
+//	{ 398,  -1,  -1 },
+//	{ 404, 404,  -1 },
+//	{ 691,  -1,  -1 },
+//	{ 691, 829, 486 },
+//	{ 397, 881, 418 },
+//	{ 397, 881, 680 },
+//	{ -1, 881, 828 },
+//	{ 679, 881, 828 },
+//	{ 679, 881, -1 },
+//	{ 398, 679,  -1 },
+//	{ 398, 697, 828 },
+//	{ 398, -1, 418 },
+//	{ 398, 679, 485 },
+//	{ -1, 828, 397 },
+//	{ 690, 691, 679 },
+//	{ 690, 691, -1 },
+//	{ 239, 240, 241 },
+//	{ 240, 241, 242 },
+//	{ 240, 241, 294 },
+
+
+prontera,165,152,3	script	Guildname Changer	110,{
+
+	set .@name$,"[Guildname Changer]";
+	set .@GID,strcharinfo(2);
+	if (.@GID==0) goto L_NoGuild;
+
+	mes .@name$;
+	mes "Hi "+strcharinfo(0)+",";
+	mes "i can change the Name of your Guild if you're the Guildmaster!";
+	mes "It only costs you "+.@Kafra_Points+" to change it.";
+	mes "So would you like to change it?";
+	next;
+	menu "Yes, please!",L_Change,"No, thanks.",L_End;
+
+L_Change:
+	if(strcharinfo(0)!=getguildmaster(.@GID)) goto L_NotMaster;
+	if(#KAFRAPOINTS < .@Kafra_Points) goto L_NoPoints;
+	mes .@name$;
+	mes "Allright, then please insert now the new Name of your Guild!";
+	input .@guild_name$;
+	mes "Allright, i'll change your Guildname into "+.@guild_name$+" is that correct?";
+	next;
+	menu "Yes!",-,"No wait, i've got to change something!",L_Change;
+
+	mes "Allright, to change your Guildname i'll have to kick you from the Server now!";
+	set #KAFRAPOINTS, #KAFRAPOINTS - .@Kafra_Points;
+	atcommand "@kick "+strcharinfo(0);
+	query_sql "UPDATE `guild` SET `name` = '"+.@guild_name$+"' WHERE `guild_id` = "+.@GID;
+	close;
+
+L_NoGuild:
+	mes .@name$;
+	mes "Sorry but you're not in a Guild!";
+	close;
+
+L_NoPoints:
+	mes .@name$;
+	mes "Sorry but you do not have enough Kafra Points!";
+	close;
+
+L_NotMaster:
+	mes .@name$;
+	mes "Sorry but you're not the Guildmaster!";
+	close;
+
+L_End:
+	mes .@name$;
+	mes "Ok, bye.";
+	close;
+}
+
+//===== eAthena Script ======================================= 
+//= Custom Free Breeder aka Universal Renter (not reccomended)
+//===== By: ================================================== 
+//= eAthena Team
+//===== Current Version: ===================================== 
+//= 1.3a
+//===== Compatible With: ===================================== 
+//= eAthena 1.0 Final +
+//===== Description: ========================================= 
+//= A Free PecoPeco and Falcon Breeder
+//===== Additional Comments: ================================= 
+//= 1.1 FIXED checkriding/cart/falcon funcs [Lupus]
+//= 1.2 Added Rebirth/Advanced Class support [Mass Zero]
+//= 1.3 Simplified the checks of job [Silentdragon]
+//= 1.3a Fixed a Typo Error. [Samuray22]
+//	-Thanks to ~AnnieRuru~.
+//= 1.4 Optimized Script. No need for 50 million Labels. [Spre]
+//============================================================ 
+ 
+prontera,155,185,5	script	Universal Rental Npc	726,{
+	mes "[Universal Rental Npc]";
+	mes "Hi, here you can rent Carts, Falcons or Pecopecos.";
+	next;
+	switch(select("Cart:Falcon:Peco")) {
+		case 1:
+			if((BaseClass == Job_Merchant || BaseJob == Job_SuperNovice) && checkcart() == 0 && getskilllv("MC_PUSHCART")>0) {
+				setcart;
+				close;
+			}else{
+				mes "[Universal Rental Npc]";
+				mes "Sorry " + strcharinfo(0) + ", Please make sure you are the required job and have the required skill.";
+				close;
+			}
+		case 2:
+			if(BaseJob != Job_Archer && BaseClass == Job_Archer && checkfalcon() == 0 && getskilllv("HT_FALCON")>0) {
+				setfalcon;
+				close;
+			}else{
+				mes "[Universal Rental Npc]";
+				mes "Sorry " + strcharinfo(0) + ", Please make sure you are the required job and have the required skill.";
+				close;
+			}					
+		case 3:
+			if (BaseJob != Job_Swordman && BaseClass == Job_Swordman && checkriding() == 0 && getskilllv("KN_RIDING")>0) {
+				setriding;
+				close;
+			}else{
+				mes "[Universal Rental Npc]";
+				mes "Sorry " + strcharinfo(0) + ", Please make sure you are the required job and have the required skill.";
+				close;
+			}
+	}
+}

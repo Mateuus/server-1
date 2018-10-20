@@ -1,0 +1,107 @@
+//===== Script eAthena ======================================= 
+//= Assassin X Quest
+//===== por: ================================================== 
+//= Creador de Quests Ragnarok World
+//= v1.0
+//===== Compatible Con: ===================================== 
+//= eAthena SVN
+//===== Descripción: ========================================= 
+//  Quest Creada por el Script Creador de Quests Online de
+//  http://www.ragnarokworld.net
+//============================================================ 
+
+poring_w02,46,85,5	script	Assassin X	807,{
+ 	set @NPCName$, "[^Assassin X^000000]";
+	set @cost, 100000000;
+	mes @NPCName$;
+	mes "Hola..te gustaria tener esta card hay el alma de un assassin X.";
+	next;
+	mes @NPCName$;
+	mes "^009900[[Assasin Cross]^000000 ";
+	mes "• Soul Breaker + 25% de daño.";
+	mes "• Sonic Blow + 25% de daño.";
+	mes "• Activa Venom Splash Lv. 30.";
+	mes "• Grimtooth + 5%";
+	next;
+	mes @NPCName$;
+	mes "Quieres Obtener este Item?";
+	next;
+	switch(select("Si:No:Cancelar")) {
+ 	case 1:
+	mes @NPCName$;
+	mes "Estos son Los Items Necesarios.";
+	mes "  ^cc0099Gemstone^000000 [6]";
+	mes "  ^cc0099Assassin Cross Card^000000 [2]";
+	mes "  ^cc0099Gold Coin^000000 [1000]";
+	mes "  ^cc0099Zherlthsh Mask^000000 [1]";
+	mes "  ^cc0099Ifrit Card^000000 [3]";
+	mes "  ^cc0099Poison Bottle^000000 [200]";
+	mes "  ^cc0099100000000 Zeny^000000";
+	next;
+	if (countitem(7300) < 6) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(4359) < 2) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(671) < 1000) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(5121) < 1) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(4430) < 3) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(678) < 200) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (Zeny < @cost) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	mes @NPCName$;
+	mes "Bien! Tienes todos los Items! Felicidades !";
+	mes "el Objeto es Tuyo";
+	delitem 7300,6;
+	delitem 4359,2;
+	delitem 671,1000;
+	delitem 5121,1;
+	delitem 4430,3;
+	delitem 678,200;
+	set Zeny,Zeny-@cost;
+	getitem 30006,1;
+	close;
+	case 2:
+	mes @NPCName$;
+	mes "de acuerdo, vuelve pronto !";
+	close;
+	case 3:
+	close;
+	}
+
+}
+
+//============================================================
+//===== Creador de Quests Ragnarok World ===========================
+//============================================================

@@ -1,0 +1,48 @@
+//===== DivineRO Script ===========================================
+//= Cambio de Sexo
+//===== By: ======================================================
+//= Vladd
+//===== Versión =========================================
+//= 1.5
+//===== Compatible: =========================================
+//= Cualquier versión
+//===== Descripción: =============================================
+//= Cambia el sexo de las personas por un módico precio
+//= El server desconecta al personaje que realiza el cambio
+
+poring_w02.gat,124,88,4	script	Marinerito	100,{
+
+mes "[Marinerito]";
+mes "Quieres cambiar de Sexo?";
+menu "Claro",sip1,"No,Por quien me has tomado",nop;
+
+sip1:
+mes "[Marinerito]";
+mes "La operación será complida y por !";
+mes "Por 1.000.000 de zenys procederé!";
+menu "Estoy seguro",sip2,"No,tengo miedo",nop;
+
+sip2:
+if(Zeny<1000000) goto falta;
+set Zeny, Zeny-1000000;
+
+atcommand "@changesex"+@player$;;
+
+mes "[Marinerito]";
+mes "Ya has cambiado de sexo, enorabuena!";
+mes "Por cierto para calmar el dolor, toma una de estas cada dos Horas!";
+getitem 607,5;
+close;
+
+nop:
+mes "[Marinerito]";
+mes "Has sido tú el que ha venido a mi...!";
+close;
+
+falta:
+mes "[Marinerito]";
+mes "Pero si no tienes un zeny!!!";
+mes "Sabes cuanto cuestan solo los medicamentos???";
+mes "Vuelve cuando tengas dinero";
+
+}

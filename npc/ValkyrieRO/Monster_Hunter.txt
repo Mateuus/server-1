@@ -1,0 +1,328 @@
+//**********************************************************************************
+// ____                    _                                            _   _  ____ 
+//|  _ \ ___   ___   ____ | |  ___   ____   ___   ___   __  ___   _  _ | |_| |/ __ |
+//| |__// _ \ / _ \ |  _ \| | / _ \ |  _ \ / _ \ /  _| / _)/ _ \ | \| ||___  |\__  |
+//| |  |  __/ ||_|| | |__/| ||  __/ | |__/|  __/ | |  _\ \ ||_|| | \\ |    | |   | |
+//|_|___\___|_\___/_| |___|_|_\___|_| |____\___|_|_|_(___/ \___/_|_|\_|____|_|___|_|
+//------------------|_|-------------|_|---------------------------------------------
+//**********************************************************************************
+//===== rAthena Script =============================================================
+//= Monster Hunter
+//===== By: ========================================================================
+//= Peopleperson49 (Eddie)
+//===== Start Date: ================================================================
+//= 18OCT2012
+//===== Current Version: ===========================================================
+//= 2.7
+//===== Compatible With: ===========================================================
+//= rAthena SVN
+//===== Description: ===============================================================
+//= This script was written for vgrebirth on rAthena.org. It allows one party at a
+//=	time to do the Monster Hunter event. If any member is killed the entire
+//=	party looses and are warped out. If you kill all the mini-boss monsters the
+//=	boss monster is spawned.
+//===== Version Control: ===========================================================
+//= 1.0 First Version.
+//= 1.1 Combined the main and function script into one NPC in a similar format to
+//=	AnnieRuru's Monster Hunter event. However, all work and scripting was my own
+//=	and non of her actual work was copied!
+//= 1.2 Corrected the timer issue and now is working.
+//= 1.3 Replaced the mob spawn coordiantes I placed in the center of the map to make
+//=	testing easier.
+//= 1.4 Per vgrebirth request I added ability to disable MiniBoss and only spawn the
+//= 	Boss mob.
+//= 1.5 Changed the text color from 00FF00 to 0000FF which is much easier ot read!
+//= 1.6 Fixed the typos pointed out by nanakiwurtz on rAthena.org.
+//= 1.7 Added checks as pointed out by AnnieRuru of rAthena.org after the prompt
+//=	command to ensure that a party isn't changed before starting the event.
+//= 1.8 Added if(.@MHOnlineCount!=.@MHPartySize) to check if all members of the
+//=	party are online.
+//= 1.9 Combined two seperate getpartymember getcharid(1),1; into one (x2).
+//= 2.0 Fixed the error that would allow two parties to start the event at the same
+//=	time. Replaced the .MonsterHunterStart with the correct variable .MHStatus.
+//= 2.1 Merged seperate if(isloggedin($@partymemberaid[.@i],$@partymembercid[.@i]))
+//=	checks into one check.
+//= 2.2 Replaced $@partymembercount with .@MHPartySize in the loop.
+//= 2.3 Rewrote a large majority of the loops to make them actually work including
+//=	putting a getpartymember for each type of party array.
+//= 2.4 Added check at the start of script to prevent running script when anohter
+//=	event is already started.
+//= 2.5 Added .MHPartyMaxLimit and .MHPartyMinLimit to replace .MHPartyLimit. Allows
+//=	the user to set the minimum and maximum amount of party members allowed to
+//=	compete.
+//= 2.6 Fixed the mob name issue. Now works just fine.
+//= 2.7 Moved set MHCDTimer,gettimetick(2); after the Online Player check. Otherwise
+//=	it will lock a player out for cooldown even if they fail the check.
+//===== Additional Comments: =======================================================
+//= 
+//==================================================================================
+prt_in,136,27,3	script	Neilay	10213,{
+
+	mes "[Neilay]";
+	mes "¡Soy Neilay! Estoy a cargo de los terrenos de Monster Hunter, ¿cómo puedo ayudarle?";
+	next;
+	if(.MHStatus==1) {
+	mes "[Neilay]";
+	mes "Lo siento pero me acabo de dar cuenta de que otro grupo ha comenzado el evento ya!";
+	close;
+	}
+	goto MHMenu;
+	end;
+
+	MHMenu:
+	switch(prompt("Registrar grupo:Reglas")) {
+case 1:
+	if(getcharid(1)==0) { 
+	mes "[Neilay]";
+	mes "¡Solo en un grupo pueden competir en este evento!";
+	close;
+	}
+
+	if(getpartyleader(getcharid(1),2)!=getcharid(0)) {
+	 mes "[Neilay]";
+	mes "Usted no es el líder de su party!";
+	close;
+	}
+
+	if(BaseLevel<.MHBaseMinLimit) {
+	mes "[Neilay]";
+	mes "Debes estar al menos ^0000FFBase Level "+.MHBaseMinLimit+"^000000 Para registrar un grupo!";
+	close;
+	}
+
+	if(JobLevel<.MHJobMinLimit) {
+	mes "[Neilay]";
+	mes "Debes estar al menos ^0000FFJob Level "+.MHJobMinLimit+"^000000 Para registrar un grupo!";
+	close;
+	}
+	if(.MHPartyID!=0) {
+	mes "[Neilay]";
+	mes "Ya hay un grupo registrado.";
+	close;
+	}
+	set .@MHLeaderRID,getcharid(3);
+	getpartymember(getcharid(1),0);
+	getpartymember(getcharid(1),1);
+	getpartymember(getcharid(1),2);
+	set .@MHPartySize,$@partymembercount;
+	if(.@MHPartySize<.MHPartyMinLimit) {
+	next;
+	mes "[Neilay]";
+	mes "Los grupos deben consistir en ^FF0000"+.MHPartyMinLimit+"^000000 Jugadores para registrarse!";
+	close;
+	}
+	if(.@MHPartySize>.MHPartyMaxLimit) {
+	next;
+	mes "[Neilay]";
+	mes "Los grupos no pueden estar compuestas ^FF0000"+.MHPartyMaxLimit+"^000000 Jugadores para registrarse!";
+	close;
+	}
+	for(set .@i,0; .@i<.@MHPartySize; set .@i,.@i+1) {
+	if(isloggedin($@partymemberaid[.@i],$@partymembercid[.@i])==1) {
+	set .@MHOnlineCount,.@MHOnlineCount+1;
+	attachrid $@partymemberaid[.@i];
+	if(BaseLevel<.MHBaseMinLimit||JobLevel<.MHJobMinLimit) { attachrid .@MHLeaderRID;
+	mes "[Neilay]"; mes "Usted o uno de los miembros de su grupo no cumple con el requisito de nivel mínimo para registrar este grupo!";
+	close;
+	}
+
+	if(gettimetick(2)<(MHCDTimer+600)) { set .@MHName$,strcharinfo(0); attachrid .@MHLeaderRID;
+	mes "[Neilay]";
+	mes "Usted o uno de los miembros de su grupo necesita cooldown antes de poder registrar este grupo";
+	close;
+	}
+			attachrid .@MHLeaderRID;
+		}
+	}
+	if(.@MHOnlineCount!=.@MHPartySize) {
+	next; mes "[Neilay]";
+	mes "¡Todos los miembros de tu grupo deben estar en línea para registrarse!";
+	close;
+	}
+	next;
+	mes "[Neilay]";
+	mes "¿Quieres comenzar el evento ahora? Nota: ¡Esto Teletransporte a todos los miembros de tu grupo en el mapa!";
+	switch(prompt("Start Event")) {
+	case 1:
+		if(.MHStatus==1) { next; mes "[Neilay]"; mes "Lo siento pero otro grupo ya ha comenzado el evento!";
+	close;
+	}
+
+	getpartymember(getcharid(1),0);
+	getpartymember(getcharid(1),1);
+	getpartymember(getcharid(1),2);
+	set .@MHPartySize,$@partymembercount;
+	if(.@MHPartySize<.MHPartyMinLimit) {
+	next;
+	mes "[Neilay]";
+	mes "Las Party deben estar compuestas ^FF0000"+.MHPartyMinLimit+"^000000 jugadores para proceder!";
+	close;
+	}
+		if(.@MHPartySize>.MHPartyMaxLimit) {
+	next;
+	mes "[Neilay]";
+	mes "Las Party no pueden estar compuestas ^FF0000"+.MHPartyMaxLimit+"^000000 jugadores para proceder!";
+	close;
+	}
+
+	for(set .@i,0; .@i<.@MHPartySize; set .@i,.@i+1) {
+	if(isloggedin($@partymemberaid[.@i],$@partymembercid[.@i])==1) {
+	attachrid $@partymemberaid[.@i];
+	if(BaseLevel<.MHBaseMinLimit||JobLevel<.MHJobMinLimit) { attachrid .@MHLeaderRID;
+	mes "[Neilay]";
+	mes "Usted o uno de los miembros de su grupo no cumple con el requisito de nivel mínimo para proceder! ¿No estarías tratando de engañar?";
+	close;
+}
+	if(gettimetick(2)<(MHCDTimer+600)) { set .@MHName$,strcharinfo(0); attachrid .@MHLeaderRID;
+	mes "[Neilay]";
+	mes "¡Usted o uno de los miembros de su grupo necesita enfriarse antes de que pueda continuar! ¿No estarías tratando de engañar?";
+	close;
+}
+				attachrid .@MHLeaderRID;
+			}
+		}
+		if(.@MHOnlineCount!=.@MHPartySize) {
+	next; mes "[Neilay]";
+	mes "¡Todos los miembros de tu grupo deben estar en línea para continuar!";
+	close;
+}
+
+	getpartymember(getcharid(1),0);
+	getpartymember(getcharid(1),1);
+	getpartymember(getcharid(1),2);
+	set .@MHPartySize,$@partymembercount;
+	for(set .@i,0; .@i<.@MHPartySize; set .@i,.@i+1) {
+		if(isloggedin($@partymemberaid[.@i],$@partymembercid[.@i])==1) {
+		attachrid $@partymemberaid[.@i];
+		set MHCDTimer,gettimetick(2);
+		attachrid .@MHLeaderRID;
+			}
+		}
+
+		set .MHPartyID,getcharid(1);
+		warpparty "coliseum",149,149,.MHPartyID;
+		set .MHRandomArray,rand(0,9);
+		if(.MHRandomArray==0) { setarray .MHArray[0],1001,1002,1004,1005,1007,1008,1009,1010,1011,1012,1013,1014,1015,1016,1018,1019,1020,1023,1024,1025,1026,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1040,1041,1042,1044,1045,1047,1048; }
+		if(.MHRandomArray==1) { setarray .MHArray[0],1049,1050,1051,1052,1053,1054,1055,1056,1057,1058,1060,1061,1062,1063,1064,1065,1066,1067,1068,1069,1070,1071,1072,1073,1074,1076,1077,1088,1089,1090,1091,1092,1093,1094,1095,1096,1097,1099; }
+		if(.MHRandomArray==2) { setarray .MHArray[0],1100,1101,1102,1103,1104,1105,1106,1107,1108,1109,1110,1111,1113,1114,1116,1117,1118,1119,1121,1122,1123,1124,1125,1126,1127,1128,1129,1130,1131,1132,1133,1134,1135,1138,1139,1140,1141,1143; }
+		if(.MHRandomArray==3) { setarray .MHArray[0],1144,1145,1146,1148,1149,1151,1152,1153,1154,1155,1156,1158,1160,1161,1163,1164,1165,1166,1167,1169,1170,1174,1175,1176,1177,1178,1179,1180,1182,1185,1186,1188,1189,1191,1192,1193,1194,1195; }
+		if(.MHRandomArray==4) { setarray .MHArray[0],1196,1197,1199,1200,1201,1202,1203,1204,1205,1206,1207,1208,1209,1211,1212,1213,1214,1215,1216,1219,1242,1243,1245,1246,1248,1249,1250,1253,1254,1255,1256,1257,1258,1259,1260,1261,1262,1263; }
+		if(.MHRandomArray==5) { setarray .MHArray[0],1264,1265,1266,1267,1268,1269,1270,1271,1273,1274,1275,1276,1277,1278,1279,1280,1281,1282,1283,1289,1290,1291,1292,1293,1294,1295,1296,1297,1298,1299,1300,1301,1302,1303,1304,1305,1306,1307; }
+		if(.MHRandomArray==6) { setarray .MHArray[0],1308,1309,1310,1311,1313,1314,1315,1316,1317,1318,1319,1320,1321,1322,1323,1365,1366,1367,1368,1369,1370,1371,1372,1374,1375,1376,1377,1378,1379,1380,1381,1382,1383,1384,1385,1386,1387,1390; }
+		if(.MHRandomArray==7) { setarray .MHArray[0],1391,1392,1400,1401,1402,1403,1404,1405,1406,1408,1409,1410,1412,1413,1415,1416,1417,1493,1494,1495,1497,1498,1499,1500,1503,1504,1505,1506,1507,1508,1509,1510,1512,1513,1514,1515,1516,1517; }
+		if(.MHRandomArray==8) { setarray .MHArray[0],1519,1520,1582,1584,1586,1587,1613,1614,1615,1616,1617,1618,1619,1620,1621,1622,1627,1628,1629,1631,1632,1633,1664,1665,1666,1667,1668,1669,1670,1671,1672,1673,1675,1676,1677,1678,1679,1680; }
+		if(.MHRandomArray==9) { setarray .MHArray[0],1681,1682,1686,1687,1692,1693,1694,1695,1696,1699,1703,1713,1714,1715,1717,1718,1736,1737,1738,1752,1753,1754,1755,1769,1770,1772,1773,1774,1775,1776,1777,1778,1780,1781,1782,1783,1784,1789; }
+		set .MHMiniSpawn,.MHArray[rand(0,37)];	//If you want a specific mob replace the .MHArray[rand(0,37)] with the MobID.
+		set .MHStatus,1;
+		sleep2 1000;
+		if(.MHMiniCount<=0) {
+			announce "El evento Monster Hunter ha comenzado. los "+getmonsterinfo(.MHBossSpawn,0)+" Jefe ha sido engendrado!",bc_all;
+			setarray .@MHBossType$[0],getmonsterinfo(.MHBossSpawn,0);
+			monster "coliseum",0,0,.@MHBossType$[0],.MHBossSpawn,1,"Neilay::OnMonsterBossKill";
+			end;
+		}
+		announce "El evento cazador de monstruos  ha comenzado. los "+getmonsterinfo(.MHMiniSpawn,0)+" ha sido generado!",bc_map;
+		setarray .@MHMiniType$[0],getmonsterinfo(.MHMiniSpawn,0);
+		monster "coliseum",0,0,.@MHMiniType$[0],.MHMiniSpawn,.MHMiniCount,"Neilay::OnMonsterKill";
+		end;
+	case 255:
+		mes "[Neilay]";
+		mes "¡Que tengas un buen día!";
+		close;
+	}
+case 2:
+	mes "[Neilay]";
+	mes "Solamente el líder del party puede registrar a una party.";
+	mes "Todos los miembros deben ser ^0000FFBase Level "+.MHBaseMinLimit+"^000000, and ^0000FFJob Level "+.MHJobMinLimit+"^000000.";
+	mes "Las party consisten en al menos ^FF0000"+.MHPartyMinLimit+"^000000 jugadores.";
+	mes "Si cualquier miembro es asesinado, entonces todo el grupo pierde!";
+	close2;
+	goto MHMenu;
+	end;
+case 255:
+	mes "[Neilay]";
+	mes "¡Que tengas un buen día!";
+	close;
+}
+end;
+
+//==================================================================================
+//--------|Kill Script|-------------------------------------------------------------
+//==================================================================================
+OnMonsterKill:
+set .MHMiniCount,.MHMiniCount-1;
+if(.MHMiniCount<=0) {
+	announce "El jefe "+getmonsterinfo(.MHBossSpawn,0)+" ¡El jefe ha llegado!",bc_map;
+	setarray .@MHBossType$[0],getmonsterinfo(.MHBossSpawn,0);
+	monster "coliseum",0,0,.@MHBossType$[0],.MHBossSpawn,1,"Neilay::OnMonsterBossKill";
+	end;
+}
+announce "Todavía hay "+.MHMiniCount+" "+getmonsterinfo(.MHMiniSpawn,0)+"s restante!",bc_map;
+end;
+
+OnMonsterBossKill:
+killmonster "coliseum","Neilay::OnMonsterKill";
+killmonster "coliseum","Neilay::OnMonsterBossKill";
+if(playerattached()>0) { announce "El jefe "+getmonsterinfo(.MHBossSpawn,0)+" ha sido asesinado!",bc_map; }
+sleep2 1000;
+announce "Monster Hunter evento ha terminado",bc_all;
+if(playerattached()>0) {
+	sleep2 2000;
+	getpartymember .MHPartyID,2;
+	for(set .@i,0; .@i<$@partymembercount; set .@i,.@i+1)  { getitem .MHPrizeType,.MHPrizeAmount,$@partymemberaid[.@i]; }
+	announce ""+strcharinfo(0)+" has killed the Boss "+getmonsterinfo(.MHBossSpawn,0)+" for the "+getpartyname(.MHPartyID)+" party!",bc_all;
+}
+sleep2 2000;
+if(getmapusers("coliseum")>0) { MapRespawnGuildID "coliseum",.HereForGiggles,7; }
+set .MHStatus,0;
+set .MHPartyID,0;
+end;
+
+//==================================================================================
+//--------|OnPC Scripts|------------------------------------------------------------
+//==================================================================================
+
+OnPCDieEvent:
+OnPCLogoutEvent:
+if(strcharinfo(3)!="coliseum") { end; }
+announce "Un miembro del party ha sido asesinado! El evento ha terminado!",bc_map;
+killmonster "coliseum","Neilay::OnMonsterKill";
+killmonster "coliseum","Neilay::OnMonsterBossKill";
+if(getmapusers("coliseum")>0) { MapRespawnGuildID "coliseum",.HereForGiggles,7; }
+set .MHStatus,0;
+set .MHPartyID,0;
+end;
+
+//==================================================================================
+//--------|OnInit Scripts|----------------------------------------------------------
+//==================================================================================
+
+OnInit:
+set .MHMiniCount,0;		//Set how many MiniBoss's you want to spawn. (Set to 0 to disable MiniBoss.)
+set .MHBossSpawn,1785;		//Set which boss mob you want to use. Sniper Cecil=1650
+set .MHPartyMinLimit,1;		//Set the minimum party size allowed to compete.
+set .MHPartyMaxLimit,10;	//Set the maximum party size allowed to compete.
+set .MHBaseMinLimit,150;	//Set the minimum BaseLevel to compete.
+set .MHJobMinLimit,1;		//Set the minimum JobLevel to compete.
+set .MHPrizeType,7227;		//Set what item you want to give as as prize. TCG=7227
+set .MHPrizeAmount,10;		//Set the quanity of the item you want to give as a prize.
+set .MHStatus,0;		//Don't touch this!!!
+end;
+}
+
+//==================================================================================
+//--------|Map Flags|---------------------------------------------------------------
+//==================================================================================
+coliseum	mapflag	nobranch
+coliseum	mapflag	noexp
+coliseum	mapflag	noloot
+coliseum	mapflag	nomemo
+coliseum	mapflag	nopenalty
+coliseum	mapflag	noreturn
+coliseum	mapflag	nosave	SavePoint
+coliseum	mapflag	noteleport
+coliseum	mapflag	novending
+coliseum	mapflag	nowarp
+coliseum	mapflag	nowarpto
+
+

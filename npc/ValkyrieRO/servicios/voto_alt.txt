@@ -1,0 +1,80 @@
+//##########################################################################################
+//           __                          __           
+//  ________|  | __         ___  _______/  |_   ____  
+//  \___   /|  |/ /  ______ \  \/ /  _ \   __\_/ __ \ 
+//   /    / |    <  /_____/  \   (  <_> )  |  \  ___/ 
+//   _____ \|__|_ \           \_/ \____/|__|   \___  >
+//        \/     \/                                \/ 
+//
+//
+//###########################################################################################                                                                    
+//===== eAthena Script ======================================================================
+//= NPC Votos
+//===== By: =================================================================================
+//= Modificado por zerosk
+//=========================================================================================== 
+// Este NPC fue tomado del foro del EA y modificado para el zk-vote
+// Si eres el creador de este npc comunicate para darte el credito
+//###########################################################################################
+-	script	vote	-1,{
+OnInit:
+	set .zkvote$, "#CASHPOINTS";
+	set .variable_increase, 1;
+end;
+
+OnPCLoginEvent:
+	set .@i, query_sql("SELECT `ID` FROM `vote_table` WHERE `account_id` = '" + getcharid(3) + "' AND `collected` = 0 LIMIT 120", .@id);
+	for(set .@j, 0; .@j < .@i; set .@j, .@j+1){
+		query_sql("UPDATE `vote_table` SET `collected`='1' WHERE `ID`='" + .@id[.@j] + "'");
+		setd(.zkvote$, getd(.zkvote$) + .variable_increase);
+	}
+	dispbottom .zkvote$ + ":" + getd(.zkvote$);
+end;
+}
+
+
+prt_in,126,17,3	script	Voto	631,{
+
+	set .@npcname$,"[ Voto ]";
+	setarray .@point_item[0],2293; // array que contines los ID de ITEMS
+	setarray .@point_count[0],1; // Cantidad
+	setarray .@point_cost[0],30; // Cantidad de Puntos x ITEM
+	mes "Ojala que vengas a cambiar tus puntos por items de Votos y no me hagas perder mi tiempo.";
+	next;
+	mes .@npcname$;
+	mes "Tu tienes ^FF0000"+#CASHPOINTS+"^000000 puntos Voto. ¿Por que Item te gustaria cambiarlo?";
+	next;
+	mes "[ Listado ]";
+	mes "^0000ffItem^000000 = ^00aa00Costo^000000";
+	for(set .@i, 0; .@i < getarraysize(.@point_item); set .@i, .@i + 1) {
+	mes "^0000ff"+.@point_count[.@i]+"x "+getitemname(.@point_item[.@i])+"^000000 = ^00aa00"+.@point_cost[.@i]+"^000000";
+		if( .@i < 1 )
+			set .@menu$, getitemname(.@point_item[.@i]);
+		else
+			set .@menu$, .@menu$+":"+getitemname(.@point_item[.@i]);
+		}
+	next;
+	select(.@menu$);
+	set @choice, @menu - 1;
+	mes .@npcname$;
+	if(.@point_cost[@choice] > #CASHPOINTS) {
+		mes "^ff0000No tienes suficientes puntos voto para "+.@point_count[@choice]+"x '"+getitemname(.@point_item[@choice])+"' :/^000000";
+		close;
+	}
+	mes "Estas seguro que quieres tradear "+.@point_count[@choice]+"x '^ff0000"+getitemname(.@point_item[@choice])+"^000000' por ^00aa00"+.@point_cost[@choice]+"^000000 puntos voto?";
+	next;
+	if(select("No! Cancel!:Si, Tradeame!") == 1 ) {
+		mes .@npcname$;
+		mes "^ff0000Como quieras, el trade fue cancelado~^000000";
+		close;
+	}
+	set #CASHPOINTS,#CASHPOINTS - .@point_cost[@choice];
+	getitem .@point_item[@choice], .@point_count[@choice];
+	
+	mes .@npcname$;
+	mes "^00aa00Gracias. Espero verte de nuevo.^000000";
+	mes " ";
+	mes "^00aa00Disfruta el item :|^000000";
+	close;
+}
+//duplicas

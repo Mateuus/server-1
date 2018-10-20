@@ -1,0 +1,134 @@
+alberta,54,249,4	script	Sakura	4_EP16_SPICA,{
+
+	mes "["+ strnpcinfo(0) +"]";
+	
+		if (#IcarusW==1){
+				mes "Uh..?. Solo realizo armas a solo una persona en concreta.";
+						close;
+						}
+						
+if ((getequipid(EQI_HEAD_LOW ) == Icarus_Wings) && (icaruw==2 )) {
+
+
+			mes "Deseas obtener las fuerzas de Icarus eh.";
+			mes "Eres muy inteligente, no me esperaba menos.";
+			mes "Mi poder solo alcanza para una creación, debes seleccionar el arma adecuada.";
+			next;
+			mes "["+ strnpcinfo(0) +"]";
+			mes "¿Qué deseas hacer?";
+			next;
+				mes "["+ strnpcinfo(0) +"]";
+			switch(select("Información de Armas:Elegir Arma:Salir")){
+
+		case 1:
+
+			mes "Selecciona el arma que quieres obtener información:";
+			switch(select("Icarus Staff:Icarus Bow:Icarus Sword")){
+
+				case 1:
+					mes "<ITEM>"+getitemname(Icarus_Staff)+"<INFO>8112</INFO></ITEM>";
+					mes " ";
+					close;
+
+				case 2:
+					mes "<ITEM>"+getitemname(Icarus_Bow)+"<INFO>8110</INFO></ITEM>";
+					mes " ";
+					close;
+
+				case 3:
+					mes "<ITEM>"+getitemname(Icarus_Sword)+"<INFO>8111</INFO></ITEM>";
+					mes " ";
+					close;
+					}
+		case 2:
+				mes "¿Qué Arma Deseas?.";
+				switch(select("Icarus Staff:Icarus Bow:Icarus Sword")){
+
+	
+				case 1:
+					mes "Deberas entregarme:";
+					mes "1x <ITEM>"+getitemname(Angel_Wings)+"<INFO>32002</INFO></ITEM>";
+					mes "1x <ITEM>"+getitemname(Devil_Wings)+"<INFO>32001</INFO></ITEM>";
+					mes "1x <ITEM>"+getitemname(Staff_)+"<INFO>1608</INFO></ITEM> [3]";
+					mes "20,000,000 Zeny.";
+					next;
+					mes "["+ strnpcinfo(0) +"]";
+					if (select("Completar","Salir")==2){close;}
+
+						if ( (countitem(Angel_Wings) < 1) ||
+							(countitem(Devil_Wings) < 1) ||
+							(countitem(Staff_) < 1) ||
+							(Zeny < 20000000) ){
+							mes "No intentes engañarme...";
+								close;
+									}
+					#IcarusW=1;
+					delitem Angel_Wings,1;
+					delitem Devil_Wings,1;
+					delitem Staff_,1;
+					Zeny-= 20000000;
+					getitem 8112,1;
+					
+					close;
+							
+				case 2:
+					
+					mes "Deberas entregarme:";
+					mes "1x <ITEM>"+getitemname(Angel_Wings)+"<INFO>32002</INFO></ITEM>";
+					mes "1x <ITEM>"+getitemname(Devil_Wings)+"<INFO>32001</INFO></ITEM>";
+					mes "1x <ITEM>"+getitemname(CrossBow_)+"<INFO>1711</INFO></ITEM> [3]";
+					mes "20,000,000 Zeny.";
+					next;
+					mes "["+ strnpcinfo(0) +"]";
+					if (select("Completar","Salir")==2){close;}
+
+						if ( (countitem(Angel_Wings) < 1) ||
+						 (countitem(Devil_Wings) < 1) ||
+						 (countitem(CrossBow_) < 1) ||
+						 (Zeny < 20000000) ){
+							mes "No intentes engañarme...";
+								close;
+									}
+					#IcarusW=1;
+					delitem Angel_Wings,1;
+					delitem Devil_Wings,1;
+					delitem CrossBow_,1;
+					Zeny-= 20000000;
+					getitem 8110,1;
+					close;
+
+				case 3:
+
+					mes "Deberas entregarme:";
+					mes "1x <ITEM>"+getitemname(Angel_Wings)+"<INFO>32002</INFO></ITEM>";
+					mes "1x <ITEM>"+getitemname(Devil_Wings)+"<INFO>32001</INFO></ITEM>";
+					mes "1x <ITEM>"+getitemname(Ring_Pommel_Saber_)+"<INFO>1125</INFO></ITEM> [3]";
+					mes "20,000,000 Zeny.";
+					next;
+					mes "["+ strnpcinfo(0) +"]";
+					if (select("Completar","Salir")==2){close;}
+
+						if ( (countitem(Angel_Wings) < 1) ||
+						 (countitem(Devil_Wings) < 1) ||
+						 (countitem(Ring_Pommel_Saber_) < 1) ||
+						 (Zeny < 20000000) ){
+							mes "No intentes engañarme...";
+								close;
+									}
+					#IcarusW=1;
+					delitem Angel_Wings,1;
+					delitem Devil_Wings,1;
+					delitem Ring_Pommel_Saber_,1;
+					Zeny-= 20000000;
+					getitem 8111,1;
+					close;
+
+					}
+						}
+						
+
+			} else {
+													mes "¡ Debes tener equipadas unas Icarus Wings, deben ser tuyas !.";
+													close;
+										}
+								}

@@ -1,0 +1,380 @@
+//===== Athena Script =====================================
+//= Zombie Invasion v2.0
+//===== By Keale of VoidRO ================================
+//= http://voidro.com
+//===== Description =======================================
+//= A Zombie invasion that takes place in a chosen map. 
+//= There are 10 prizes that drop from certain mobs, 
+//= edit the script to fit your own needs. 
+//= NOTE: A LOT of mobs are summoned, (5197) it's
+//= recommended for mid to high rate servers.
+//===== Version ===========================================
+//= v2.0
+//=========================================================
+//= v1.0 - First release, seems to work ok.
+//= v1.1 - Fixed some bugs and changed the treasure amount 
+//=        to 10.
+//= v2.0 - Pretty much re-wrote the whole thing. I added
+//=        an option to choose which map the invasion will
+//=        take place on for more variation. (any mapname
+//=        you input will work. gef_fild04 Invasion ohno!)
+//= v2.1 - Fixed night effect in script conflicting with
+//=        server natural day/night cycle (Spunkie)
+//=========================================================
+
+niflheim,214,207,5	script	Undead Minion	737,{
+
+set .@npc$,"[^FF0000Undead Minion^000000]";
+
+	if ((getgmlevel() >= 40) && ($@MonstersAlive >=1)) goto L_GM2; 
+	if (getgmlevel() >= 40) goto L_GM;
+	
+		mes .@npc$;
+		mes "El inframundo está en reposo...";
+		next;
+		switch(select("Uh .. Nos vemos: ¿Qué estás hablando?")) {
+
+	case 1:
+		mes .@npc$;
+		mes "Farewell.... heh heh heh.";
+		emotion 29;
+		close;
+
+	case 2:
+		mes .@npc$;
+		mes "Llegará el tiempo, el mundo se levantará!";
+		mes "¿Qué ciudad será nuestro objetivo? ... je, je.";
+		mes "Esté preparado, " + strcharinfo(0) + "...";
+		emotion 29;
+		close;
+		}
+
+L_GM:
+	mes .@npc$;
+	mes "¿Quieres que llame a los muertos?";
+	next;
+	mes .@npc$;
+	mes "Tenga cuidado, la ciudad que elija será superada!";
+	emotion 29;
+	next;
+	switch(select("Convocar!:No esta vez...")) {
+	
+	case 1:
+		mes .@npc$;
+		mes "¡SÍ! Voy a pedir a los!!";
+		mes "Por favor, elija un área que se invadirá!!";
+		mes "Asegúrese de escribir el nombre del mapa correctamente.";
+		next;
+		
+		menu "Select Map",SELECT_TOWN,"Cambié de opinión..",EXIT_1;
+
+		SELECT_TOWN:
+			mes .@npc$;
+			mes "Qué mapa será? kekeke...";
+			emotion 29;
+			input $InvasionTown$;
+			next;
+			mes .@npc$;
+			mes "Así, se ha seleccionado ^008000"+ $InvasionTown$ +"^000000 que se hará cargo de los bajos fondos?";
+			mes "Are you, sure?";
+			next;
+			switch(select("Sí, ¡hazlo!:Elija nuevo")) {
+			
+				case 1:
+					mes .@npc$;
+					mes "Muy bien... he aquí la tragedia que ha puesto sobre esta tierra!";
+					emotion 29;
+					goto SUMMON_MOBS;
+					break;
+					
+				case 2:
+					goto SELECT_TOWN;
+					break;
+				}
+				
+		EXIT_1:
+			mes .@npc$;
+			mes "Me decepcionas!";
+			emotion 23;
+			close;
+		
+	case 2:
+		mes .@npc$;
+		mes "je je! Uno de estos días...";
+		emotion 29;
+		close;
+		}
+		
+L_GM2:
+	mes .@npc$;
+	mes "Je, je ... ¿Qué te había dicho?";
+	emotion 29;
+	next;
+	mes .@npc$;
+	mes "¿Le gustaría que yo recuerdo a los muertos vivientes?";
+	next;
+	switch(select("Stop at once!:No")) {
+
+	case 1:
+		mes .@npc$;
+		mes "Bah! muy bien, pero nuestro día vendrá!";
+		emotion 23;
+		next;
+		killmonster "" + $InvasionTown$ + ".gat","All";
+		set $@MonstersAlive,0;
+		announce "Alguna fuerza desconocida ha enviado a los muertos vivientes corriendo por sus tumbas, el ataque ha terminado.",0;
+		close;
+		
+	case 2:
+		mes .@npc$;
+		mes "Kekeke...";
+		emotion 29;
+		close;
+		}
+
+SUMMON_MOBS:
+close2;
+set $@Treasures,10;
+set $@MonstersAlive,5197;
+if(isday())	{
+night;
+set .@temp_night,1;	}
+monster "" + $InvasionTown$ + ".gat",0,0,"Ragged Zombie",1865,100,"zombielose::OnMobKilled";
+monster "" + $InvasionTown$ + ".gat",0,0,"Undead Knight",2473,100,"zombielose::OnMobKilled";
+monster "" + $InvasionTown$ + ".gat",0,0,"Undead Knight",2474,100,"zombielose::OnMobKilled";
+monster "" + $InvasionTown$ + ".gat",0,0,"Elusive Wraith Death",2733,100,"zombielose::OnMobKilled";
+monster "" + $InvasionTown$ + ".gat",0,0,"Evil Shadow",2939,100,"zombielose::OnMobKilled";
+monster "" + $InvasionTown$ + ".gat",0,0,"Evil Shadow",2940,100,"zombielose::OnMobKilled";
+monster "" + $InvasionTown$ + ".gat",0,0,"Evil Shadow",2941,100,"zombielose::OnMobKilled";
+
+
+monster "" + $InvasionTown$ + ".gat",0,0,"Zombie",1015,996,"zombielose::OnMobKilled";
+monster "" + $InvasionTown$ + ".gat",0,0,"Zombie Master",2605,100,"zombielose::OnMobKilled";
+monster "" + $InvasionTown$ + ".gat",0,0,"Zombie Prisoner",1197,100,"zombielose::OnMobKilled";
+monster "" + $InvasionTown$ + ".gat",0,0,"Zombie Slaughter",1864,200,"zombielose::OnMobKilled";
+monster "" + $InvasionTown$ + ".gat",0,0,"Ragged Zombie",1865,300,"zombielose::OnMobKilled";
+monster "" + $InvasionTown$ + ".gat",0,0,"Firelock Soldier",1403,200,"zombielose::OnMobKilled";
+monster "" + $InvasionTown$ + ".gat",0,0,"Ghoul",1036,1000,"zombielose::OnMobKilled";
+monster "" + $InvasionTown$ + ".gat",0,0,"Osiris",1038,1,"zombielose::OnMobKilled";
+monster "" + $InvasionTown$ + ".gat",0,0,"Drake",1112,1,"zombielose::OnMobKilled";
+monster "" + $InvasionTown$ + ".gat",0,0,"Dark Lord",1272,1,"zombielose::OnMobKilled";
+monster "" + $InvasionTown$ + ".gat",0,0,"Dracula",1389,1,"zombielose::OnMobKilled";
+monster "" + $InvasionTown$ + ".gat",0,0,"Incantation Samurai",1492,1,"zombielose::OnMobKilled";
+monster "" + $InvasionTown$ + ".gat",0,0,"Kiel D-01",1734,1,"zombielose::OnMobKilled";
+monster "" + $InvasionTown$ + ".gat",0,0,"Ghoul",1036,500,"zombielose::OnMobKilled";
+monster "" + $InvasionTown$ + ".gat",0,0,"Zombie",1015,500,"zombielose::OnMobKilled";
+monster "" + $InvasionTown$ + ".gat",0,0,"Zombie Slaughter",1864,100,"zombielose::OnMobKilled";
+monster "" + $InvasionTown$ + ".gat",0,0,"Ragged Zombie",1865,200,"zombielose::OnMobKilled";
+monster "" + $InvasionTown$ + ".gat",0,0,"Necromancer",1870,25,"zombielose::OnMobKilled";
+monster "" + $InvasionTown$ + ".gat",0,0,"Skeleton Worker",1169,150,"zombielose::OnMobKilled";
+monster "" + $InvasionTown$ + ".gat",0,0,"Assassin Cross Eremes",1647,2,"zombielose::OnMobKilled";
+monster "" + $InvasionTown$ + ".gat",0,0,"Fallen Bishop",1871,1,"zombielose::OnMobKilled";
+monster "" + $InvasionTown$ + ".gat",0,0,"Gloom Under Night",1768,1,"zombielose::OnMobKilled";
+monster "" + $InvasionTown$ + ".gat",0,0,"High Priest Margaretha",1649,1,"zombielose::OnMobKilled";
+monster "" + $InvasionTown$ + ".gat",0,0,"Thanatos",1708,1,"zombielose::OnMobKilled";
+
+monster "" + $InvasionTown$ + ".gat",0,0,"Evil Fanatics",2942,1,"zombielose::OnMobKilled";
+monster "" + $InvasionTown$ + ".gat",0,0,"Death Arthur",3599,1,"zombielose::OnMobKilled";
+monster "" + $InvasionTown$ + ".gat",0,0,"Amdarais",2476,1,"zombielose::OnMobKilled";
+monster "" + $InvasionTown$ + ".gat",0,0,"Nightmare Amon Ra",2362,1,"zombielose::OnMobKilled";
+
+//Winning Mobs Below
+monster "" + $InvasionTown$ + ".gat",0,0,"Zombie",1015,1,"zombiewin1::OnMobKilled";
+monster "" + $InvasionTown$ + ".gat",0,0,"Ragged Zombie",1865,1,"zombiewin2::OnMobKilled";
+monster "" + $InvasionTown$ + ".gat",0,0,"Ghoul",1036,1,"zombiewin3::OnMobKilled";
+monster "" + $InvasionTown$ + ".gat",0,0,"Zombie Slaughter",1864,1,"zombiewin4::OnMobKilled";
+monster "" + $InvasionTown$ + ".gat",0,0,"Zombie",1015,1,"zombiewin5::OnMobKilled";
+monster "" + $InvasionTown$ + ".gat",0,0,"High Wizard Kathryn",1651,1,"zombiewin6::OnMobKilled";
+monster "" + $InvasionTown$ + ".gat",0,0,"Lord Knight Seyren",1646,1,"zombiewin7::OnMobKilled";
+monster "" + $InvasionTown$ + ".gat",0,0,"Zombie",1015,1,"zombiewin8::OnMobKilled";
+monster "" + $InvasionTown$ + ".gat",0,0,"Zombie",1015,1,"zombiewin9::OnMobKilled";
+monster "" + $InvasionTown$ + ".gat",0,0,"Zombie",1015,1,"zombiewin10::OnMobKilled";
+
+announce "barrido de nubes el cielo de Midgard, la oscuridad ha surgido de las profundidades de Nifelhiem.",0;
+sleep2 5000;
+announce "Prontera Guardia:¡Oh, no! Es "+ $InvasionTown$ +"!Todos rápida, defender nuestro aliado!",0;
+sleep2 5000;
+announce "Ansiano: Por favor, héroes! Sálvanos! Porfavorrrrrr!",0;
+sleep2 15000;
+announce "Prontera Guardia: avanzar a todos! Defender "+ $InvasionTown$ +" now!",0;
+sleep2 15000;
+announce "Hombre rico: Ack! Esos malditos zombis cojieron diez de mis tesoros!!",0;
+end;
+}
+
+-	script	zombiewin1	-1,{
+
+OnMobKilled:
+	announce "" + strcharinfo(0) + " se ha recuperado uno de los tesoros de diez!",bc_blue;
+	set $@MonstersAlive,$@MonstersAlive - 1;
+	set $@Treasures,$@Treasures - 1;
+	set .attainitem,callfunc("F_RandMes",20,7711,2356,2377,2381,2382,2376,2372,2360,2379,5226,5132,5270,5174,5254,20798,19871,19910,20218,20247,18935,31120);
+	getitem .attainitem,1;
+	if ($@Treasures>0) end;
+	announce "Todo el tesoro se ha recuperado, pero la ciudad sigue necesitando?",0;
+	sleep2 25000;
+	announce "Señor de "+ $InvasionTown$ +": Por favor, sálvanos de los zombis, por favor! tener un corazón!",0;
+	end;
+	}
+
+-	script	zombiewin2	-1,{
+
+OnMobKilled:
+	announce "" + strcharinfo(0) + " se ha recuperado uno de los diez tesoros!",bc_blue;
+	set $@MonstersAlive,$@MonstersAlive - 1;
+	set $@Treasures,$@Treasures - 1;
+	set .attainitem,callfunc("F_RandMes",20,30077,30076,30074,30073,30194,30217,30232,30278,30281,30020,30021,30282,30284,30384,30390,30389,30388,30387,30386,30385,30399);
+	getitem .attainitem,1;
+	if ($@Treasures>0) end;
+	announce "Todo el tesoro se ha recuperado, pero la ciudad sigue necesitando?",0;
+	sleep2 25000;
+	announce "Señor de "+ $InvasionTown$ +": Por favor, sálvanos de los zombis, por favor! tener un corazón!",0;
+	end;
+	}
+
+-	script	zombiewin3	-1,{
+
+OnMobKilled:
+	announce "" + strcharinfo(0) + " se ha recuperado uno de los diez tesoros!",bc_blue;
+	set $@MonstersAlive,$@MonstersAlive - 1;
+	set $@Treasures,$@Treasures - 1;
+	set .attainitem,callfunc("F_RandMes",20,30077,30076,30074,30073,30194,30217,30232,30278,30281,30020,30021,30282,30284,30384,30390,30389,30388,30387,30386,30385,30399);
+	getitem .attainitem,1;
+	if ($@Treasures>0) end;
+	announce "Todo el tesoro se ha recuperado, pero la ciudad sigue necesitando?",0;
+	sleep2 25000;
+	announce "Señor de "+ $InvasionTown$ +": Por favor, sálvanos de los zombis, por favor! tener un corazón!",0;
+	end;
+	}
+
+-	script	zombiewin4	-1,{
+
+OnMobKilled:
+	announce "" + strcharinfo(0) + " se ha recuperado uno de los diez tesoros!",bc_blue;
+	set $@MonstersAlive,$@MonstersAlive - 1;
+	set $@Treasures,$@Treasures - 1;
+	set .attainitem,callfunc("F_RandMes",20,30077,30076,30074,30073,30194,30217,30232,30278,30281,30020,30021,30282,30284,30384,30390,30389,30388,30387,30386,30385,30399);
+	getitem .attainitem,1;
+	if ($@Treasures>0) end;
+	announce "Todo el tesoro se ha recuperado, pero la ciudad sigue necesitando?",0;
+	sleep2 25000;
+	announce "Señor de "+ $InvasionTown$ +": Por favor, sálvanos de los zombis, por favor! tener un corazón!",0;
+	end;
+	}
+
+-	script	zombiewin5	-1,{
+
+OnMobKilled:
+	announce "" + strcharinfo(0) + " has recovered one of the ten treasures!",bc_blue;
+	set $@MonstersAlive,$@MonstersAlive - 1;
+	set $@Treasures,$@Treasures - 1;
+	set .attainitem,callfunc("F_RandMes",20,30077,30076,30074,30073,30194,30217,30232,30278,30281,30020,30021,30282,30284,30384,30390,30389,30388,30387,30386,30385,30399);
+	getitem .attainitem,1;
+	if ($@Treasures>0) end;
+	announce "Todo el tesoro se ha recuperado, pero la ciudad sigue necesitando?",0;
+	sleep2 25000;
+	announce "Lord of "+ $InvasionTown$ +": Por favor, sálvanos de los zombis, por favor! tener un corazón!",0;
+	end;
+	}
+
+-	script	zombiewin6	-1,{
+
+OnMobKilled:
+	announce "" + strcharinfo(0) + " se ha recuperado uno de los diez tesoros!",bc_blue;
+	set $@MonstersAlive,$@MonstersAlive - 1;
+	set $@Treasures,$@Treasures - 1;
+	set .attainitem,callfunc("F_RandMes",20,30077,30076,30074,30073,30194,30217,30232,30278,30281,30020,30021,30282,30284,30384,30390,30389,30388,30387,30386,30385,30399);
+	getitem .attainitem,1;
+	if ($@Treasures>0) end;
+	announce "Todo el tesoro se ha recuperado, pero la ciudad sigue necesitando?",0;
+	sleep2 25000;
+	announce "Lord of "+ $InvasionTown$ +": Por favor, sálvanos de los zombis, por favor! tener un corazón!",0;
+	end;
+	}
+
+-	script	zombiewin7	-1,{
+
+OnMobKilled:
+	announce "" + strcharinfo(0) + " se ha recuperado uno de los diez tesoros!",bc_blue;
+	set $@MonstersAlive,$@MonstersAlive - 1;
+	set $@Treasures,$@Treasures - 1;
+	set .attainitem,callfunc("F_RandMes",20,30077,30076,30074,30073,30194,30217,30232,30278,30281,30020,30021,30282,30284,30384,30390,30389,30388,30387,30386,30385,30399);
+	getitem .attainitem,1;
+	if ($@Treasures>0) end;
+	announce "Todo el tesoro se ha recuperado, pero la ciudad sigue necesitando?",0;
+	sleep2 25000;
+	announce "Lord of "+ $InvasionTown$ +": Por favor, sálvanos de los zombis, por favor! tener un corazón!",0;
+	end;
+	}
+
+-	script	zombiewin8	-1,{
+
+OnMobKilled:
+	announce "" + strcharinfo(0) + " se ha recuperado uno de los diez tesoros!",bc_blue;
+	set $@MonstersAlive,$@MonstersAlive - 1;
+	set $@Treasures,$@Treasures - 1;
+	set .attainitem,callfunc("F_RandMes",20,30077,30076,30074,30073,30194,30217,30232,30278,30281,30020,30021,30282,30284,30384,30390,30389,30388,30387,30386,30385,30399);
+	getitem .attainitem,1;
+	if ($@Treasures>0) end;
+	announce "Todo el tesoro se ha recuperado, pero la ciudad sigue necesitando?",0;
+	sleep2 25000;
+	announce "Lord of "+ $InvasionTown$ +": Por favor, sálvanos de los zombis, por favor! tener un corazón!",0;
+	end;
+	}
+
+-	script	zombiewin9	-1,{
+
+OnMobKilled:
+	announce "" + strcharinfo(0) + " se ha recuperado uno de los diez tesoros!",bc_blue;
+	set $@MonstersAlive,$@MonstersAlive - 1;
+	set $@Treasures,$@Treasures - 1;
+	set .attainitem,callfunc("F_RandMes",20,30077,30076,30074,30073,30194,30217,30232,30278,30281,30020,30021,30282,30284,30384,30390,30389,30388,30387,30386,30385,30399);
+	getitem .attainitem,1;
+	if ($@Treasures>0) end;
+	announce "Todo el tesoro se ha recuperado, pero la ciudad sigue necesitando?",0;
+	sleep2 25000;
+	announce "Lord of "+ $InvasionTown$ +": Por favor, sálvanos de los zombis, por favor! tener un corazón!",0;
+	end;
+	}
+
+-	script	zombiewin10	-1,{
+
+OnMobKilled:
+	announce "" + strcharinfo(0) + " se ha recuperado uno de los diez tesoros!",bc_blue;
+	set $@MonstersAlive,$@MonstersAlive - 1;
+	set $@Treasures,$@Treasures - 1;
+	set .attainitem,callfunc("F_RandMes",20,30077,30076,30074,30073,30194,30217,30232,30278,30281,30020,30021,30282,30284,30384,30390,30389,30388,30387,30386,30385,30399);
+	getitem .attainitem,1;
+	if ($@Treasures>0) end;
+	announce "Todo el tesoro se ha recuperado, pero la ciudad sigue necesitando?",0;
+	sleep2 25000;
+	announce "Lord of "+ $InvasionTown$ +": Por favor, sálvanos de los zombis, por favor! tener un corazón!",0;
+	end;
+	}
+
+-	script	zombielose	-1,{
+
+OnMobKilled:
+	set $@MonstersAlive,$@MonstersAlive - 1;
+	if ($@MonstersAlive>150) end;
+	killmonster "" + $InvasionTown$ + ".gat","All";
+	set $@MonstersAlive,0;
+	if(isnight() && .@temp_night){
+	day;
+	set .@temp_night,0;	}
+	announce "Lord of "+ $InvasionTown$ +": Están en retirada! GRACIAS! Estamos salvos! Muchísimas gracias Heroes!",0;
+	end;
+	}
+
+
+//////////////////////////////////////////////////////////////////////////////////
+// *** Function "F_RandMes"
+//////////////////////////////////////////////////////////////////////////////////
+//returns random string
+// Example: check F_Bye or F_Hi functions
+// READ AND THINK: You can use it to pick a random number form list:
+// set @itemIDfromList, callfunc("F_RandMes",8,1129,1222,1163,1357,1360,1522,1811,1410);
+
+function	script	F_RandMes	{
+	return getarg(rand(1,getarg(0)));
+}

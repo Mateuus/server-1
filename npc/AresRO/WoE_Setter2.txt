@@ -1,0 +1,2578 @@
+//===== eAthena Script ======================================= 
+//= War of Emperium - Time Setter
+//===== By: ================================================== 
+//= Fredzilla
+//===== Current Version: ===================================== 
+//= 1.7c
+//===== Compatible With: ===================================== 
+//= eAthena 1.0 Final TXT
+//===== Description: ========================================= 
+//= Lets a GM set WoE times from inside the game
+//===== Additional Comments: ================================= 
+//= Loops used = 4 (I like loops ^_^)
+//= Only GM's of lvl 99 can use it
+//= If anyone else tries to use it they will just get a list of WoE times
+//= It give you the option, as a GM, to Add a new time, Reset all times, 
+//= or just view the current set times
+//= If a WoE is in Progress no time reset is possible
+//= A maximum of 200 WoE times can be set, if that is even possible ;)
+//= Added in v1.5
+//= Change day setting to a menu call, more GUI this way
+//= You can choose for the WoE to last between days
+//= IE, Sat 23 till Sun 01, is now possible
+//= Not even the normal WoE script can do this (by dafault)
+//= Removed the need for disabling the normal agit_event
+//= 1.5a Applied Playtester's fix. [Vicious]
+//= 1.6 Added individual city WoE times, disabling castles, disabling
+//= treasure spawns, and spawning treasure. [[GM]Xeon]
+//= 1.7a Added castle name detection and talk to guild manager. [[GM]Xeon]
+//= 1.7b Updated WoE enable/disable, no more warp portal disable/enable [[GM]Xeon]
+//= 1.7c Using agitcheck instead of variable checks [[GM]Xeon]
+//============================================================ 
+prontera.gat,162,194,5	script	WoE Setter	806,{
+L_Main:
+	mes "[Woe Setter]";
+	if(getgmlevel()<99) { set @num,0; mes "Current Global WoE times:"; goto L_LoopList0; }
+	mes "Welcome to possibly the most advanced WoE system EVER...";
+	mes "Please select what you want to do";
+	menu "Alter WoE Times",L_Settings,"Toggle Treasure Spawns",L_DisableT,"Toggle Castles",L_DisableC,"Spawn Treasure Chests",L_SpawnT,"Free Castle",L_FreeC,"Talk to a Guild Manager",L_CallGM,"Modify Investment Values",L_Invest,"Exit",L_End;
+	next;
+	mes "[Woe Setter]";
+	mes "Current Global WoE times:";
+	set @num,0;
+	goto L_LoopList0;
+L_WoEOn:
+	mes "[Woe Setter]";
+	mes "Sorry since there is a WoE in progress you cannot reset the WoE times";
+	next;
+	goto L_Main;
+L_Settings:
+	next;
+	mes "[Woe Setter]";
+	mes "Select a city to modify WoE times for.";
+	menu "Aldebaran",L_WoEAld,"Geffen",L_WoEGef,"Payon",L_WoEPay,"Prontera",L_WoEPro,"Novice",L_WoENov,"Global",L_WoEAll,"View WoE Times",-,"Back",-;
+	if(@menu == 7) { set @num,0; mes "Current Global WoE times:"; goto L_LoopList0; }
+	if(@menu == 8) { next; goto L_Main; }
+L_Invest:
+	next;
+	mes "[Woe Setter]";
+	mes "Sorry, but modifying investment values through this NPC is currently not implimented yet. To edit investment values, talk to the manager of each individual castle.";
+	next;
+	goto L_Main;
+L_End:
+	close;
+	end;
+
+L_LoopList0:
+	if($sday[@num] == 0 && $eday[@num] == 0 && $woetime[@num] == 0 && $woetime2[@num] == 0) { set @num,0; mes "Current Aldebaran WoE times:"; goto L_LoopList1; }
+	if($sday[@num]==0) set $@tempday$,"Sunday";
+	if($sday[@num]==1) set $@tempday$,"Monday";
+	if($sday[@num]==2) set $@tempday$,"Tuesday";
+	if($sday[@num]==3) set $@tempday$,"Wednesday";
+	if($sday[@num]==4) set $@tempday$,"Thursday";
+	if($sday[@num]==5) set $@tempday$,"Friday";
+	if($sday[@num]==6) set $@tempday$,"Saturday";
+	if($eday[@num]==0) set $@tempday2$,"Sunday";
+	if($eday[@num]==1) set $@tempday2$,"Monday";
+	if($eday[@num]==2) set $@tempday2$,"Tuesday";
+	if($eday[@num]==3) set $@tempday2$,"Wednesday";
+	if($eday[@num]==4) set $@tempday2$,"Thursday";
+	if($eday[@num]==5) set $@tempday2$,"Friday";
+	if($eday[@num]==6) set $@tempday2$,"Saturday";
+	if($eday[@num]==$sday[@num]) mes $@tempday$+" from "+$woetime[@num]+":00 till "+$woetime2[@num]+":00";
+	if($eday[@num]!=$sday[@num]) mes "From "+$@tempday$+" "+$woetime[@num]+":00 till "+$@tempday2$+" "+$woetime2[@num]+":00";
+	set @num,@num+1;
+	goto L_LoopList0;
+L_LoopList1:
+	if($sdayAld[@num] == 0 && $edayAld[@num] == 0 && $woetimeAld[@num] == 0 && $woetimeAld2[@num] == 0) { set @num,0; mes "Current Geffen WoE times:"; goto L_LoopList2; }
+	if($sdayAld[@num]==0) set $@tempday$,"Sunday";
+	if($sdayAld[@num]==1) set $@tempday$,"Monday";
+	if($sdayAld[@num]==2) set $@tempday$,"Tuesday";
+	if($sdayAld[@num]==3) set $@tempday$,"Wednesday";
+	if($sdayAld[@num]==4) set $@tempday$,"Thursday";
+	if($sdayAld[@num]==5) set $@tempday$,"Friday";
+	if($sdayAld[@num]==6) set $@tempday$,"Saturday";
+	if($edayAld[@num]==0) set $@tempday2$,"Sunday";
+	if($edayAld[@num]==1) set $@tempday2$,"Monday";
+	if($edayAld[@num]==2) set $@tempday2$,"Tuesday";
+	if($edayAld[@num]==3) set $@tempday2$,"Wednesday";
+	if($edayAld[@num]==4) set $@tempday2$,"Thursday";
+	if($edayAld[@num]==5) set $@tempday2$,"Friday";
+	if($edayAld[@num]==6) set $@tempday2$,"Saturday";
+	if($edayAld[@num]==$sdayAld[@num]) mes $@tempday$+" from "+$woetimeAld[@num]+":00 till "+$woetimeAld2[@num]+":00";
+	if($edayAld[@num]!=$sdayAld[@num]) mes "From "+$@tempday$+" "+$woetimeAld[@num]+":00 till "+$@tempday2$+" "+$woetimeAld2[@num]+":00";
+	set @num,@num+1;
+	goto L_LoopList1;
+L_LoopList2:
+	if($sdayGef[@num] == 0 && $edayGef[@num] == 0 && $woetimeGef[@num] == 0 && $woetimeGef2[@num] == 0) { set @num,0; mes "Current Payon WoE times:"; goto L_LoopList3; }
+	if($sdayGef[@num]==0) set $@tempday$,"Sunday";
+	if($sdayGef[@num]==1) set $@tempday$,"Monday";
+	if($sdayGef[@num]==2) set $@tempday$,"Tuesday";
+	if($sdayGef[@num]==3) set $@tempday$,"Wednesday";
+	if($sdayGef[@num]==4) set $@tempday$,"Thursday";
+	if($sdayGef[@num]==5) set $@tempday$,"Friday";
+	if($sdayGef[@num]==6) set $@tempday$,"Saturday";
+	if($edayGef[@num]==0) set $@tempday2$,"Sunday";
+	if($edayGef[@num]==1) set $@tempday2$,"Monday";
+	if($edayGef[@num]==2) set $@tempday2$,"Tuesday";
+	if($edayGef[@num]==3) set $@tempday2$,"Wednesday";
+	if($edayGef[@num]==4) set $@tempday2$,"Thursday";
+	if($edayGef[@num]==5) set $@tempday2$,"Friday";
+	if($edayGef[@num]==6) set $@tempday2$,"Saturday";
+	if($edayGef[@num]==$sdayGef[@num]) mes $@tempday$+" from "+$woetimeGef[@num]+":00 till "+$woetimeGef2[@num]+":00";
+	if($edayGef[@num]!=$sdayGef[@num]) mes "From "+$@tempday$+" "+$woetimeGef[@num]+":00 till "+$@tempday2$+" "+$woetimeGef2[@num]+":00";
+	set @num,@num+1;
+	goto L_LoopList2;
+L_LoopList3:
+	if($sdayPay[@num] == 0 && $edayPay[@num] == 0 && $woetimePay[@num] == 0 && $woetimePay2[@num] == 0) { set @num,0; mes "Current Prontera WoE times:"; goto L_LoopList4; }
+	if($sdayPay[@num]==0) set $@tempday$,"Sunday";
+	if($sdayPay[@num]==1) set $@tempday$,"Monday";
+	if($sdayPay[@num]==2) set $@tempday$,"Tuesday";
+	if($sdayPay[@num]==3) set $@tempday$,"Wednesday";
+	if($sdayPay[@num]==4) set $@tempday$,"Thursday";
+	if($sdayPay[@num]==5) set $@tempday$,"Friday";
+	if($sdayPay[@num]==6) set $@tempday$,"Saturday";
+	if($edayPay[@num]==0) set $@tempday2$,"Sunday";
+	if($edayPay[@num]==1) set $@tempday2$,"Monday";
+	if($edayPay[@num]==2) set $@tempday2$,"Tuesday";
+	if($edayPay[@num]==3) set $@tempday2$,"Wednesday";
+	if($edayPay[@num]==4) set $@tempday2$,"Thursday";
+	if($edayPay[@num]==5) set $@tempday2$,"Friday";
+	if($edayPay[@num]==6) set $@tempday2$,"Saturday";
+	if($edayPay[@num]==$sdayPay[@num]) mes $@tempday$+" from "+$woetimePay[@num]+":00 till "+$woetimePay2[@num]+":00";
+	if($edayPay[@num]!=$sdayPay[@num]) mes "From "+$@tempday$+" "+$woetimePay[@num]+":00 till "+$@tempday2$+" "+$woetimePay2[@num]+":00";
+	set @num,@num+1;
+	goto L_LoopList3;
+L_LoopList4:
+	if($sdayPro[@num] == 0 && $edayPro[@num] == 0 && $woetimePro[@num] == 0 && $woetimePro2[@num] == 0) { set @num,0; mes "Current Novice WoE times:"; goto L_LoopList5; }
+	if($sdayPro[@num]==0) set $@tempday$,"Sunday";
+	if($sdayPro[@num]==1) set $@tempday$,"Monday";
+	if($sdayPro[@num]==2) set $@tempday$,"Tuesday";
+	if($sdayPro[@num]==3) set $@tempday$,"Wednesday";
+	if($sdayPro[@num]==4) set $@tempday$,"Thursday";
+	if($sdayPro[@num]==5) set $@tempday$,"Friday";
+	if($sdayPro[@num]==6) set $@tempday$,"Saturday";
+	if($edayPro[@num]==0) set $@tempday2$,"Sunday";
+	if($edayPro[@num]==1) set $@tempday2$,"Monday";
+	if($edayPro[@num]==2) set $@tempday2$,"Tuesday";
+	if($edayPro[@num]==3) set $@tempday2$,"Wednesday";
+	if($edayPro[@num]==4) set $@tempday2$,"Thursday";
+	if($edayPro[@num]==5) set $@tempday2$,"Friday";
+	if($edayPro[@num]==6) set $@tempday2$,"Saturday";
+	if($edayPro[@num]==$sdayPro[@num]) mes $@tempday$+" from "+$woetimePro[@num]+":00 till "+$woetimePro2[@num]+":00";
+	if($edayPro[@num]!=$sdayPro[@num]) mes "From "+$@tempday$+" "+$woetimePro[@num]+":00 till "+$@tempday2$+" "+$woetimePro2[@num]+":00";
+	set @num,@num+1;
+	goto L_LoopList4;
+L_LoopList5:
+	if($sdayNov[@num] == 0 && $edayNov[@num] == 0 && $woetimeNov[@num] == 0 && $woetimeNov2[@num] == 0) { close; end; }
+	if($sdayNov[@num]==0) set $@tempday$,"Sunday";
+	if($sdayNov[@num]==1) set $@tempday$,"Monday";
+	if($sdayNov[@num]==2) set $@tempday$,"Tuesday";
+	if($sdayNov[@num]==3) set $@tempday$,"Wednesday";
+	if($sdayNov[@num]==4) set $@tempday$,"Thursday";
+	if($sdayNov[@num]==5) set $@tempday$,"Friday";
+	if($sdayNov[@num]==6) set $@tempday$,"Saturday";
+	if($edayNov[@num]==0) set $@tempday2$,"Sunday";
+	if($edayNov[@num]==1) set $@tempday2$,"Monday";
+	if($edayNov[@num]==2) set $@tempday2$,"Tuesday";
+	if($edayNov[@num]==3) set $@tempday2$,"Wednesday";
+	if($edayNov[@num]==4) set $@tempday2$,"Thursday";
+	if($edayNov[@num]==5) set $@tempday2$,"Friday";
+	if($edayNov[@num]==6) set $@tempday2$,"Saturday";
+	if($edayNov[@num]==$sdayNov[@num]) mes $@tempday$+" from "+$woetimeNov[@num]+":00 till "+$woetimeNov2[@num]+":00";
+	if($edayNov[@num]!=$sdayNov[@num]) mes "From "+$@tempday$+" "+$woetimeNov[@num]+":00 till "+$@tempday2$+" "+$woetimeNov2[@num]+":00";
+	set @num,@num+1;
+	goto L_LoopList5;
+
+
+
+////////////////
+// GLOBAL WOE //
+////////////////
+L_WoEAll:
+	next;
+	mes "[WoE Setter]";
+	mes "Select what you would like to do for all cities";
+	menu "Add a WoE time",L_Add,"Delete WoE times",L_Reset,"View WoE times",-,"Back",L_Settings;
+L_LoopList:
+	if($sday[@num] == 0 && $eday[@num] == 0 && $woetime[@num] == 0 && $woetime2[@num] == 0) goto L_LoopListEnd;
+	if($sday[@num]==0) set $@tempday$,"Sunday";
+	if($sday[@num]==1) set $@tempday$,"Monday";
+	if($sday[@num]==2) set $@tempday$,"Tuesday";
+	if($sday[@num]==3) set $@tempday$,"Wednesday";
+	if($sday[@num]==4) set $@tempday$,"Thursday";
+	if($sday[@num]==5) set $@tempday$,"Friday";
+	if($sday[@num]==6) set $@tempday$,"Saturday";
+	if($eday[@num]==0) set $@tempday2$,"Sunday";
+	if($eday[@num]==1) set $@tempday2$,"Monday";
+	if($eday[@num]==2) set $@tempday2$,"Tuesday";
+	if($eday[@num]==3) set $@tempday2$,"Wednesday";
+	if($eday[@num]==4) set $@tempday2$,"Thursday";
+	if($eday[@num]==5) set $@tempday2$,"Friday";
+	if($eday[@num]==6) set $@tempday2$,"Saturday";
+	if($eday[@num]==$sday[@num]) mes $@tempday$+" from "+$woetime[@num]+":00 till "+$woetime2[@num]+":00";
+	if($eday[@num]!=$sday[@num]) mes "From "+$@tempday$+" "+$woetime[@num]+":00 till "+$@tempday2$+" "+$woetime2[@num]+":00";
+	set @num,@num+1;
+	goto L_LoopList;
+L_LoopListEnd:
+	close;
+L_Add:
+	set @num,0;
+L_AddLoop:
+	if($sday[@num] == 0 && $eday[@num] == 0 && $woetime[@num] == 0 && $woetime2[@num] == 0) goto L_AddLoopEnd;
+	set @num,@num+1;
+	goto L_AddLoop;
+L_AddLoopEnd: 
+	mes "[Woe Setter]";
+	mes "What day do you want the WoE to start ^FF0000start^000000 in?";
+	next;
+	menu "Sunday",-,"Monday",-,"Tuesday",-,"Wednesday",-,"Thursday",-,"Friday",-,"Saturday",-;
+	if(@menu==1) set $sday[@num],0;
+	if(@menu==2) set $sday[@num],1;
+	if(@menu==3) set $sday[@num],2;
+	if(@menu==4) set $sday[@num],3;
+	if(@menu==5) set $sday[@num],4;
+	if(@menu==6) set $sday[@num],5;
+	if(@menu==7) set $sday[@num],6;
+	mes "[Woe Setter]";
+	mes "Ok, now please enter the hour you wish the WoE to ^FF0000start^000000 at";
+	mes "This is using a 24 hour clock";
+	mes "00 = Midnight";
+	mes "12 = Mid-day";
+	mes "23 = 11pm";
+	next;
+	input @input;
+	if (@input < 0 || @input > 24) goto L_BadNumber;
+	set $woetime[@num],@input;
+	mes "[Woe Setter]";
+	mes "What day do you want the WoE to start ^FF0000finish^000000 in?";
+	next;
+	menu "Same as start",-,"Sunday",-,"Monday",-,"Tuesday",-,"Wednesday",-,"Thursday",-,"Friday",-,"Saturday",-;
+	if(@menu==1) set $eday[@num],$sday[@num];
+	if(@menu==2) set $eday[@num],0;
+	if(@menu==3) set $eday[@num],1;
+	if(@menu==4) set $eday[@num],2;
+	if(@menu==5) set $eday[@num],3;
+	if(@menu==6) set $eday[@num],4;
+	if(@menu==7) set $eday[@num],5;
+	if(@menu==8) set $eday[@num],6;
+	mes "[Woe Setter]";
+	mes "Ok, now please enter the hour you wish the WoE to ^FF0000finish^000000 at";
+	mes "This also uses the 24 hour clock";
+	mes "00 = Midnight";
+	mes "12 = Mid-day";
+	mes "23 = 11pm";
+	next;
+	input @input;
+	if (@input < 0 || @input > 24) goto L_BadNumber;
+	set $woetime2[@num],@input;
+	mes "[Woe Setter]";
+	mes "You WoE time has now been set";
+	mes "To confirm this, ask me to show you the ^FF0000'View Current WoE times'^000000";
+	close;
+L_Reset:
+	mes "[Woe Setter]";
+	mes "You are about to reset all the set WoE times you have created";
+	mes "Are you sure?";
+	next;
+	menu "No, what was I thinking",L_No,"Yes I really want to do it",-;
+	if(agitcheck()) goto L_WoEOn;
+	deletearray $sday[0],200;
+	deletearray $eday[0],200;
+	deletearray $woetime[0],200;
+	deletearray $woetime2[0],200;
+	mes "[Woe Setter]";
+	mes "They are all gone now, please remember to set new ones";
+	close;
+L_No:
+	mes "[Woe Setter]";
+	mes "Oh, good, come back whenever";
+	close;
+L_NotGM:
+	mes "The current WoE times are :-";
+	set @num,0;
+	goto L_LoopList;
+	end;
+L_BadNumber:
+	mes "[Woe Setter]";
+	mes "Sorry that was an invalid number, please try again";
+	close;
+
+///////////////////
+// ALDEBARAN WOE //
+///////////////////
+L_WoEAld:
+	next;
+	mes "[WoE Setter]";
+	mes "Select what you would like to do for Aldebaran";
+	menu "Add a WoE time",L_AddAld,"Delete WoE times",L_ResetAld,"View WoE times",-,"Back",L_Settings;
+L_LoopListAld:
+	if($sdayAld[@num] == 0 && $edayAld[@num] == 0 && $woetimeAld[@num] == 0 && $woetimeAld2[@num] == 0) goto L_LoopListEndAld;
+	if($sdayAld[@num]==0) set $@tempday$,"Sunday";
+	if($sdayAld[@num]==1) set $@tempday$,"Monday";
+	if($sdayAld[@num]==2) set $@tempday$,"Tuesday";
+	if($sdayAld[@num]==3) set $@tempday$,"Wednesday";
+	if($sdayAld[@num]==4) set $@tempday$,"Thursday";
+	if($sdayAld[@num]==5) set $@tempday$,"Friday";
+	if($sdayAld[@num]==6) set $@tempday$,"Saturday";
+	if($edayAld[@num]==0) set $@tempday2$,"Sunday";
+	if($edayAld[@num]==1) set $@tempday2$,"Monday";
+	if($edayAld[@num]==2) set $@tempday2$,"Tuesday";
+	if($edayAld[@num]==3) set $@tempday2$,"Wednesday";
+	if($edayAld[@num]==4) set $@tempday2$,"Thursday";
+	if($edayAld[@num]==5) set $@tempday2$,"Friday";
+	if($edayAld[@num]==6) set $@tempday2$,"Saturday";
+	if($edayAld[@num]==$sdayAld[@num]) mes $@tempday$+" from "+$woetimeAld[@num]+":00 till "+$woetimeAld2[@num]+":00";
+	if($edayAld[@num]!=$sdayAld[@num]) mes "From "+$@tempday$+" "+$woetimeAld[@num]+":00 till "+$@tempday2$+" "+$woetimeAld2[@num]+":00";
+	set @num,@num+1;
+	goto L_LoopListAld;
+L_LoopListEndAld:
+	next;
+	goto L_WoEAld;
+L_AddAld:
+	set @num,0;
+L_AddLoopAld:
+	if($sdayAld[@num] == 0 && $edayAld[@num] == 0 && $woetimeAld[@num] == 0 && $woetimeAld2[@num] == 0) goto L_AddLoopEndAld;
+	set @num,@num+1;
+	goto L_AddLoopAld;
+L_AddLoopEndAld: 
+	mes "[Woe Setter]";
+	mes "What day do you want the WoE to start ^FF0000start^000000 in?";
+	next;
+	menu "Sunday",-,"Monday",-,"Tuesday",-,"Wednesday",-,"Thursday",-,"Friday",-,"Saturday",-;
+	if(@menu==1) set $sdayAld[@num],0;
+	if(@menu==2) set $sdayAld[@num],1;
+	if(@menu==3) set $sdayAld[@num],2;
+	if(@menu==4) set $sdayAld[@num],3;
+	if(@menu==5) set $sdayAld[@num],4;
+	if(@menu==6) set $sdayAld[@num],5;
+	if(@menu==7) set $sdayAld[@num],6;
+	mes "[Woe Setter]";
+	mes "Ok, now please enter the hour you wish the WoE to ^FF0000start^000000 at";
+	mes "This is using a 24 hour clock";
+	mes "00 = Midnight";
+	mes "12 = Mid-day";
+	mes "23 = 11pm";
+	next;
+	input @input;
+	if (@input < 0 || @input > 24) goto L_BadNumberAld;
+	set $woetimeAld[@num],@input;
+	mes "[Woe Setter]";
+	mes "What day do you want the WoE to start ^FF0000finish^000000 in?";
+	next;
+	menu "Same as start",-,"Sunday",-,"Monday",-,"Tuesday",-,"Wednesday",-,"Thursday",-,"Friday",-,"Saturday",-;
+	if(@menu==1) set $edayAld[@num],$sdayAld[@num];
+	if(@menu==2) set $edayAld[@num],0;
+	if(@menu==3) set $edayAld[@num],1;
+	if(@menu==4) set $edayAld[@num],2;
+	if(@menu==5) set $edayAld[@num],3;
+	if(@menu==6) set $edayAld[@num],4;
+	if(@menu==7) set $edayAld[@num],5;
+	if(@menu==8) set $edayAld[@num],6;
+	mes "[Woe Setter]";
+	mes "Ok, now please enter the hour you wish the WoE to ^FF0000finish^000000 at";
+	mes "This also uses the 24 hour clock";
+	mes "00 = Midnight";
+	mes "12 = Mid-day";
+	mes "23 = 11pm";
+	next;
+	input @input;
+	if (@input < 0 || @input > 24) goto L_BadNumberAld;
+	set $woetimeAld2[@num],@input;
+	mes "[Woe Setter]";
+	mes "You WoE time has now been set";
+	mes "To confirm this, ask me to show you the ^FF0000'View Current WoE times'^000000";
+	next;
+	goto L_WoEAld;
+L_ResetAld:
+	mes "[Woe Setter]";
+	mes "You are about to reset all the set WoE times you have created";
+	mes "Are you sure?";
+	next;
+	menu "No, what was I thinking",L_NoAld,"Yes I really want to do it",-;
+	set $AldWoE,0;
+	disablenpc "aldg01";
+	disablenpc "aldg02";
+	disablenpc "aldg03";
+	disablenpc "aldg04";
+	disablenpc "aldg05";
+	deletearray $sdayAld[0],200;
+	deletearray $edayAld[0],200;
+	deletearray $woetimeAld[0],200;
+	deletearray $woetimeAld2[0],200;	
+	mes "[Woe Setter]";
+	mes "They are all gone now, please remember to set new ones";
+	next;
+	goto L_WoEAld;
+
+L_NoAld:
+	mes "[Woe Setter]";
+	mes "Oh, good, come back whenever";
+	next;
+	goto L_WoEAld;
+L_BadNumberAld:
+	mes "[Woe Setter]";
+	mes "Sorry that was an invalid number, please try again";
+	next;
+	goto L_WoEAld;
+
+
+
+////////////////
+// GEFFEN WOE //
+////////////////
+L_WoEGef:
+	next;
+	mes "[WoE Setter]";
+	mes "Select what you would like to do for Geffen";
+	menu "Add a WoE time",L_AddGef,"Delete WoE times",L_ResetGef,"View WoE times",-,"Back",L_Settings;
+L_LoopListGef:
+	if($sdayGef[@num] == 0 && $edayGef[@num] == 0 && $woetimeGef[@num] == 0 && $woetimeGef2[@num] == 0) goto L_LoopListEndGef;
+	if($sdayGef[@num]==0) set $@tempday$,"Sunday";
+	if($sdayGef[@num]==1) set $@tempday$,"Monday";
+	if($sdayGef[@num]==2) set $@tempday$,"Tuesday";
+	if($sdayGef[@num]==3) set $@tempday$,"Wednesday";
+	if($sdayGef[@num]==4) set $@tempday$,"Thursday";
+	if($sdayGef[@num]==5) set $@tempday$,"Friday";
+	if($sdayGef[@num]==6) set $@tempday$,"Saturday";
+	if($edayGef[@num]==0) set $@tempday2$,"Sunday";
+	if($edayGef[@num]==1) set $@tempday2$,"Monday";
+	if($edayGef[@num]==2) set $@tempday2$,"Tuesday";
+	if($edayGef[@num]==3) set $@tempday2$,"Wednesday";
+	if($edayGef[@num]==4) set $@tempday2$,"Thursday";
+	if($edayGef[@num]==5) set $@tempday2$,"Friday";
+	if($edayGef[@num]==6) set $@tempday2$,"Saturday";
+	if($edayGef[@num]==$sdayGef[@num]) mes $@tempday$+" from "+$woetimeGef[@num]+":00 till "+$woetimeGef2[@num]+":00";
+	if($edayGef[@num]!=$sdayGef[@num]) mes "From "+$@tempday$+" "+$woetimeGef[@num]+":00 till "+$@tempday2$+" "+$woetimeGef2[@num]+":00";
+	set @num,@num+1;
+	goto L_LoopListGef;
+L_LoopListEndGef:
+	next;
+	goto L_WoEGef;
+L_AddGef:
+	set @num,0;
+L_AddLoopGef:
+	if($sdayGef[@num] == 0 && $edayGef[@num] == 0 && $woetimeGef[@num] == 0 && $woetimeGef2[@num] == 0) goto L_AddLoopEndGef;
+	set @num,@num+1;
+	goto L_AddLoopGef;
+L_AddLoopEndGef: 
+	mes "[Woe Setter]";
+	mes "What day do you want the WoE to start ^FF0000start^000000 in?";
+	next;
+	menu "Sunday",-,"Monday",-,"Tuesday",-,"Wednesday",-,"Thursday",-,"Friday",-,"Saturday",-;
+	if(@menu==1) set $sdayGef[@num],0;
+	if(@menu==2) set $sdayGef[@num],1;
+	if(@menu==3) set $sdayGef[@num],2;
+	if(@menu==4) set $sdayGef[@num],3;
+	if(@menu==5) set $sdayGef[@num],4;
+	if(@menu==6) set $sdayGef[@num],5;
+	if(@menu==7) set $sdayGef[@num],6;
+	mes "[Woe Setter]";
+	mes "Ok, now please enter the hour you wish the WoE to ^FF0000start^000000 at";
+	mes "This is using a 24 hour clock";
+	mes "00 = Midnight";
+	mes "12 = Mid-day";
+	mes "23 = 11pm";
+	next;
+	input @input;
+	if (@input < 0 || @input > 24) goto L_BadNumberGef;
+	set $woetimeGef[@num],@input;
+	mes "[Woe Setter]";
+	mes "What day do you want the WoE to start ^FF0000finish^000000 in?";
+	next;
+	menu "Same as start",-,"Sunday",-,"Monday",-,"Tuesday",-,"Wednesday",-,"Thursday",-,"Friday",-,"Saturday",-;
+	if(@menu==1) set $edayGef[@num],$sdayGef[@num];
+	if(@menu==2) set $edayGef[@num],0;
+	if(@menu==3) set $edayGef[@num],1;
+	if(@menu==4) set $edayGef[@num],2;
+	if(@menu==5) set $edayGef[@num],3;
+	if(@menu==6) set $edayGef[@num],4;
+	if(@menu==7) set $edayGef[@num],5;
+	if(@menu==8) set $edayGef[@num],6;
+	mes "[Woe Setter]";
+	mes "Ok, now please enter the hour you wish the WoE to ^FF0000finish^000000 at";
+	mes "This also uses the 24 hour clock";
+	mes "00 = Midnight";
+	mes "12 = Mid-day";
+	mes "23 = 11pm";
+	next;
+	input @input;
+	if (@input < 0 || @input > 24) goto L_BadNumberGef;
+	set $woetimeGef2[@num],@input;
+	mes "[Woe Setter]";
+	mes "You WoE time has now been set";
+	mes "To confirm this, ask me to show you the ^FF0000'View Current WoE times'^000000";
+	next;
+	goto L_WoEGef;
+L_ResetGef:
+	mes "[Woe Setter]";
+	mes "You are about to reset all the set WoE times you have created";
+	mes "Are you sure?";
+	next;
+	menu "No, what was I thinking",L_NoGef,"Yes I really want to do it",-;
+	set $GefWoE,0;
+	disablenpc "gefg01";
+	disablenpc "gefg02";
+	disablenpc "gefg03";
+	disablenpc "gefg04";
+	disablenpc "gefg05";
+	disablenpc "gefg06";
+	disablenpc "gefg07";
+	disablenpc "gefg08";
+	disablenpc "gefg09";
+	disablenpc "gefg09-1";
+	deletearray $sdayGef[0],200;
+	deletearray $edayGef[0],200;
+	deletearray $woetimeGef[0],200;
+	deletearray $woetimeGef2[0],200;	
+	mes "[Woe Setter]";
+	mes "They are all gone now, please remember to set new ones";
+	next;
+	goto L_WoEGef;
+
+L_NoGef:
+	mes "[Woe Setter]";
+	mes "Oh, good, come back whenever";
+	next;
+	goto L_WoEGef;
+L_BadNumberGef:
+	mes "[Woe Setter]";
+	mes "Sorry that was an invalid number, please try again";
+	next;
+	goto L_WoEGef;
+
+///////////////
+// PAYON WOE //
+///////////////
+L_WoEPay:
+	next;
+	mes "[WoE Setter]";
+	mes "Select what you would like to do for Payon";
+	menu "Add a WoE time",L_AddPay,"Delete WoE times",L_ResetPay,"View WoE times",-,"Back",L_Settings;
+L_LoopListPay:
+	if($sdayPay[@num] == 0 && $edayPay[@num] == 0 && $woetimePay[@num] == 0 && $woetimePay2[@num] == 0) goto L_LoopListEndPay;
+	if($sdayPay[@num]==0) set $@tempday$,"Sunday";
+	if($sdayPay[@num]==1) set $@tempday$,"Monday";
+	if($sdayPay[@num]==2) set $@tempday$,"Tuesday";
+	if($sdayPay[@num]==3) set $@tempday$,"Wednesday";
+	if($sdayPay[@num]==4) set $@tempday$,"Thursday";
+	if($sdayPay[@num]==5) set $@tempday$,"Friday";
+	if($sdayPay[@num]==6) set $@tempday$,"Saturday";
+	if($edayPay[@num]==0) set $@tempday2$,"Sunday";
+	if($edayPay[@num]==1) set $@tempday2$,"Monday";
+	if($edayPay[@num]==2) set $@tempday2$,"Tuesday";
+	if($edayPay[@num]==3) set $@tempday2$,"Wednesday";
+	if($edayPay[@num]==4) set $@tempday2$,"Thursday";
+	if($edayPay[@num]==5) set $@tempday2$,"Friday";
+	if($edayPay[@num]==6) set $@tempday2$,"Saturday";
+	if($edayPay[@num]==$sdayPay[@num]) mes $@tempday$+" from "+$woetimePay[@num]+":00 till "+$woetimePay2[@num]+":00";
+	if($edayPay[@num]!=$sdayPay[@num]) mes "From "+$@tempday$+" "+$woetimePay[@num]+":00 till "+$@tempday2$+" "+$woetimePay2[@num]+":00";
+	set @num,@num+1;
+	goto L_LoopListPay;
+L_LoopListEndPay:
+	next;
+	goto L_WoEPay;
+L_AddPay:
+	set @num,0;
+L_AddLoopPay:
+	if($sdayPay[@num] == 0 && $edayPay[@num] == 0 && $woetimePay[@num] == 0 && $woetimePay2[@num] == 0) goto L_AddLoopEndPay;
+	set @num,@num+1;
+	goto L_AddLoopPay;
+L_AddLoopEndPay: 
+	mes "[Woe Setter]";
+	mes "What day do you want the WoE to start ^FF0000start^000000 in?";
+	next;
+	menu "Sunday",-,"Monday",-,"Tuesday",-,"Wednesday",-,"Thursday",-,"Friday",-,"Saturday",-;
+	if(@menu==1) set $sdayPay[@num],0;
+	if(@menu==2) set $sdayPay[@num],1;
+	if(@menu==3) set $sdayPay[@num],2;
+	if(@menu==4) set $sdayPay[@num],3;
+	if(@menu==5) set $sdayPay[@num],4;
+	if(@menu==6) set $sdayPay[@num],5;
+	if(@menu==7) set $sdayPay[@num],6;
+	mes "[Woe Setter]";
+	mes "Ok, now please enter the hour you wish the WoE to ^FF0000start^000000 at";
+	mes "This is using a 24 hour clock";
+	mes "00 = Midnight";
+	mes "12 = Mid-day";
+	mes "23 = 11pm";
+	next;
+	input @input;
+	if (@input < 0 || @input > 24) goto L_BadNumberPay;
+	set $woetimePay[@num],@input;
+	mes "[Woe Setter]";
+	mes "What day do you want the WoE to start ^FF0000finish^000000 in?";
+	next;
+	menu "Same as start",-,"Sunday",-,"Monday",-,"Tuesday",-,"Wednesday",-,"Thursday",-,"Friday",-,"Saturday",-;
+	if(@menu==1) set $edayPay[@num],$sdayPay[@num];
+	if(@menu==2) set $edayPay[@num],0;
+	if(@menu==3) set $edayPay[@num],1;
+	if(@menu==4) set $edayPay[@num],2;
+	if(@menu==5) set $edayPay[@num],3;
+	if(@menu==6) set $edayPay[@num],4;
+	if(@menu==7) set $edayPay[@num],5;
+	if(@menu==8) set $edayPay[@num],6;
+	mes "[Woe Setter]";
+	mes "Ok, now please enter the hour you wish the WoE to ^FF0000finish^000000 at";
+	mes "This also uses the 24 hour clock";
+	mes "00 = Midnight";
+	mes "12 = Mid-day";
+	mes "23 = 11pm";
+	next;
+	input @input;
+	if (@input < 0 || @input > 24) goto L_BadNumberPay;
+	set $woetimePay2[@num],@input;
+	mes "[Woe Setter]";
+	mes "You WoE time has now been set";
+	mes "To confirm this, ask me to show you the ^FF0000'View Current WoE times'^000000";
+	next;
+	goto L_WoEPay;
+L_ResetPay:
+	mes "[Woe Setter]";
+	mes "You are about to reset all the set WoE times you have created";
+	mes "Are you sure?";
+	next;
+	menu "No, what was I thinking",L_NoPay,"Yes I really want to do it",-;
+	set $PayWoE,0;
+	disablenpc "Payg01";
+	disablenpc "Payg02";
+	disablenpc "Payg03";
+	disablenpc "Payg04";
+	disablenpc "Payg05";
+	disablenpc "Payg06";
+	disablenpc "Payg07";
+	disablenpc "Payg08";
+	disablenpc "Payg09";
+	disablenpc "Payg09-1";
+	deletearray $sdayPay[0],200;
+	deletearray $edayPay[0],200;
+	deletearray $woetimePay[0],200;
+	deletearray $woetimePay2[0],200;	
+	mes "[Woe Setter]";
+	mes "They are all gone now, please remember to set new ones";
+	next;
+	goto L_WoEPay;
+
+L_NoPay:
+	mes "[Woe Setter]";
+	mes "Oh, good, come back whenever";
+	next;
+	goto L_WoEPay;
+L_BadNumberPay:
+	mes "[Woe Setter]";
+	mes "Sorry that was an invalid number, please try again";
+	next;
+	goto L_WoEPay;
+
+//////////////////
+// PRONTERA WOE //
+//////////////////
+L_WoEPro:
+	next;
+	mes "[WoE Setter]";
+	mes "Select what you would like to do for Prontera";
+	menu "Add a WoE time",L_AddPro,"Delete WoE times",L_ResetPro,"View WoE times",-,"Back",L_Settings;
+L_LoopListPro:
+	if($sdayPro[@num] == 0 && $edayPro[@num] == 0 && $woetimePro[@num] == 0 && $woetimePro2[@num] == 0) goto L_LoopListEndPro;
+	if($sdayPro[@num]==0) set $@tempday$,"Sunday";
+	if($sdayPro[@num]==1) set $@tempday$,"Monday";
+	if($sdayPro[@num]==2) set $@tempday$,"Tuesday";
+	if($sdayPro[@num]==3) set $@tempday$,"Wednesday";
+	if($sdayPro[@num]==4) set $@tempday$,"Thursday";
+	if($sdayPro[@num]==5) set $@tempday$,"Friday";
+	if($sdayPro[@num]==6) set $@tempday$,"Saturday";
+	if($edayPro[@num]==0) set $@tempday2$,"Sunday";
+	if($edayPro[@num]==1) set $@tempday2$,"Monday";
+	if($edayPro[@num]==2) set $@tempday2$,"Tuesday";
+	if($edayPro[@num]==3) set $@tempday2$,"Wednesday";
+	if($edayPro[@num]==4) set $@tempday2$,"Thursday";
+	if($edayPro[@num]==5) set $@tempday2$,"Friday";
+	if($edayPro[@num]==6) set $@tempday2$,"Saturday";
+	if($edayPro[@num]==$sdayPro[@num]) mes $@tempday$+" from "+$woetimePro[@num]+":00 till "+$woetimePro2[@num]+":00";
+	if($edayPro[@num]!=$sdayPro[@num]) mes "From "+$@tempday$+" "+$woetimePro[@num]+":00 till "+$@tempday2$+" "+$woetimePro2[@num]+":00";
+	set @num,@num+1;
+	goto L_LoopListPro;
+L_LoopListEndPro:
+	next;
+	goto L_WoEPro;
+L_AddPro:
+	set @num,0;
+L_AddLoopPro:
+	if($sdayPro[@num] == 0 && $edayPro[@num] == 0 && $woetimePro[@num] == 0 && $woetimePro2[@num] == 0) goto L_AddLoopEndPro;
+	set @num,@num+1;
+	goto L_AddLoopPro;
+L_AddLoopEndPro: 
+	mes "[Woe Setter]";
+	mes "What day do you want the WoE to start ^FF0000start^000000 in?";
+	next;
+	menu "Sunday",-,"Monday",-,"Tuesday",-,"Wednesday",-,"Thursday",-,"Friday",-,"Saturday",-;
+	if(@menu==1) set $sdayPro[@num],0;
+	if(@menu==2) set $sdayPro[@num],1;
+	if(@menu==3) set $sdayPro[@num],2;
+	if(@menu==4) set $sdayPro[@num],3;
+	if(@menu==5) set $sdayPro[@num],4;
+	if(@menu==6) set $sdayPro[@num],5;
+	if(@menu==7) set $sdayPro[@num],6;
+	mes "[Woe Setter]";
+	mes "Ok, now please enter the hour you wish the WoE to ^FF0000start^000000 at";
+	mes "This is using a 24 hour clock";
+	mes "00 = Midnight";
+	mes "12 = Mid-day";
+	mes "23 = 11pm";
+	next;
+	input @input;
+	if (@input < 0 || @input > 24) goto L_BadNumberPro;
+	set $woetimePro[@num],@input;
+	mes "[Woe Setter]";
+	mes "What day do you want the WoE to start ^FF0000finish^000000 in?";
+	next;
+	menu "Same as start",-,"Sunday",-,"Monday",-,"Tuesday",-,"Wednesday",-,"Thursday",-,"Friday",-,"Saturday",-;
+	if(@menu==1) set $edayPro[@num],$sdayPro[@num];
+	if(@menu==2) set $edayPro[@num],0;
+	if(@menu==3) set $edayPro[@num],1;
+	if(@menu==4) set $edayPro[@num],2;
+	if(@menu==5) set $edayPro[@num],3;
+	if(@menu==6) set $edayPro[@num],4;
+	if(@menu==7) set $edayPro[@num],5;
+	if(@menu==8) set $edayPro[@num],6;
+	mes "[Woe Setter]";
+	mes "Ok, now please enter the hour you wish the WoE to ^FF0000finish^000000 at";
+	mes "This also uses the 24 hour clock";
+	mes "00 = Midnight";
+	mes "12 = Mid-day";
+	mes "23 = 11pm";
+	next;
+	input @input;
+	if (@input < 0 || @input > 24) goto L_BadNumberPro;
+	set $woetimePro2[@num],@input;
+	mes "[Woe Setter]";
+	mes "You WoE time has now been set";
+	mes "To confirm this, ask me to show you the ^FF0000'View Current WoE times'^000000";
+	next;
+	goto L_WoEPro;
+L_ResetPro:
+	mes "[Woe Setter]";
+	mes "You are about to reset all the set WoE times you have created";
+	mes "Are you sure?";
+	next;
+	menu "No, what was I thinking",L_NoPro,"Yes I really want to do it",-;
+	set $ProWoE,0;
+	disablenpc "Prog01";
+	disablenpc "Prog02";
+	disablenpc "Prog03";
+	disablenpc "Prog04";
+	disablenpc "Prog05";
+	disablenpc "Prog06";
+	disablenpc "Prog07";
+	disablenpc "Prog08";
+	disablenpc "Prog09";
+	disablenpc "Prog09-1";
+	deletearray $sdayPro[0],200;
+	deletearray $edayPro[0],200;
+	deletearray $woetimePro[0],200;
+	deletearray $woetimePro2[0],200;	
+	mes "[Woe Setter]";
+	mes "They are all gone now, please remember to set new ones";
+	next;
+	goto L_WoEPro;
+
+L_NoPro:
+	mes "[Woe Setter]";
+	mes "Oh, good, come back whenever";
+	next;
+	goto L_WoEPro;
+L_BadNumberPro:
+	mes "[Woe Setter]";
+	mes "Sorry that was an invalid number, please try again";
+	next;
+	goto L_WoEPro;
+
+////////////////
+// NOVICE WOE //
+////////////////
+L_WoENov:
+	next;
+	mes "[WoE Setter]";
+	mes "Select what you would like to do for Novice Castles";
+	menu "Add a WoE time",L_AddNov,"Delete WoE times",L_ResetNov,"View WoE times",-,"Back",L_Settings;
+L_LoopListNov:
+	if($sdayNov[@num] == 0 && $edayNov[@num] == 0 && $woetimeNov[@num] == 0 && $woetimeNov2[@num] == 0) goto L_LoopListEndNov;
+	if($sdayNov[@num]==0) set $@tempday$,"Sunday";
+	if($sdayNov[@num]==1) set $@tempday$,"Monday";
+	if($sdayNov[@num]==2) set $@tempday$,"Tuesday";
+	if($sdayNov[@num]==3) set $@tempday$,"Wednesday";
+	if($sdayNov[@num]==4) set $@tempday$,"Thursday";
+	if($sdayNov[@num]==5) set $@tempday$,"Friday";
+	if($sdayNov[@num]==6) set $@tempday$,"Saturday";
+	if($edayNov[@num]==0) set $@tempday2$,"Sunday";
+	if($edayNov[@num]==1) set $@tempday2$,"Monday";
+	if($edayNov[@num]==2) set $@tempday2$,"Tuesday";
+	if($edayNov[@num]==3) set $@tempday2$,"Wednesday";
+	if($edayNov[@num]==4) set $@tempday2$,"Thursday";
+	if($edayNov[@num]==5) set $@tempday2$,"Friday";
+	if($edayNov[@num]==6) set $@tempday2$,"Saturday";
+	if($edayNov[@num]==$sdayNov[@num]) mes $@tempday$+" from "+$woetimeNov[@num]+":00 till "+$woetimeNov2[@num]+":00";
+	if($edayNov[@num]!=$sdayNov[@num]) mes "From "+$@tempday$+" "+$woetimeNov[@num]+":00 till "+$@tempday2$+" "+$woetimeNov2[@num]+":00";
+	set @num,@num+1;
+	goto L_LoopListNov;
+L_LoopListEndNov:
+	next;
+	goto L_WoENov;
+L_AddNov:
+	set @num,0;
+L_AddLoopNov:
+	if($sdayNov[@num] == 0 && $edayNov[@num] == 0 && $woetimeNov[@num] == 0 && $woetimeNov2[@num] == 0) goto L_AddLoopEndNov;
+	set @num,@num+1;
+	goto L_AddLoopNov;
+L_AddLoopEndNov: 
+	mes "[Woe Setter]";
+	mes "What day do you want the WoE to start ^FF0000start^000000 in?";
+	next;
+	menu "Sunday",-,"Monday",-,"Tuesday",-,"Wednesday",-,"Thursday",-,"Friday",-,"Saturday",-;
+	if(@menu==1) set $sdayNov[@num],0;
+	if(@menu==2) set $sdayNov[@num],1;
+	if(@menu==3) set $sdayNov[@num],2;
+	if(@menu==4) set $sdayNov[@num],3;
+	if(@menu==5) set $sdayNov[@num],4;
+	if(@menu==6) set $sdayNov[@num],5;
+	if(@menu==7) set $sdayNov[@num],6;
+	mes "[Woe Setter]";
+	mes "Ok, now please enter the hour you wish the WoE to ^FF0000start^000000 at";
+	mes "This is using a 24 hour clock";
+	mes "00 = Midnight";
+	mes "12 = Mid-day";
+	mes "23 = 11pm";
+	next;
+	input @input;
+	if (@input < 0 || @input > 24) goto L_BadNumberNov;
+	set $woetimeNov[@num],@input;
+	mes "[Woe Setter]";
+	mes "What day do you want the WoE to start ^FF0000finish^000000 in?";
+	next;
+	menu "Same as start",-,"Sunday",-,"Monday",-,"Tuesday",-,"Wednesday",-,"Thursday",-,"Friday",-,"Saturday",-;
+	if(@menu==1) set $edayNov[@num],$sdayNov[@num];
+	if(@menu==2) set $edayNov[@num],0;
+	if(@menu==3) set $edayNov[@num],1;
+	if(@menu==4) set $edayNov[@num],2;
+	if(@menu==5) set $edayNov[@num],3;
+	if(@menu==6) set $edayNov[@num],4;
+	if(@menu==7) set $edayNov[@num],5;
+	if(@menu==8) set $edayNov[@num],6;
+	mes "[Woe Setter]";
+	mes "Ok, now please enter the hour you wish the WoE to ^FF0000finish^000000 at";
+	mes "This also uses the 24 hour clock";
+	mes "00 = Midnight";
+	mes "12 = Mid-day";
+	mes "23 = 11pm";
+	next;
+	input @input;
+	if (@input < 0 || @input > 24) goto L_BadNumberNov;
+	set $woetimeNov2[@num],@input;
+	mes "[Woe Setter]";
+	mes "You WoE time has now been set";
+	mes "To confirm this, ask me to show you the ^FF0000'View Current WoE times'^000000";
+	next;
+	goto L_WoENov;
+L_ResetNov:
+	mes "[Woe Setter]";
+	mes "You are about to reset all the set WoE times you have created";
+	mes "Are you sure?";
+	next;
+	menu "No, what was I thinking",L_NoNov,"Yes I really want to do it",-;
+	set $NovWoE,0;
+	disablenpc "Novg01";
+	disablenpc "Novg02";
+	disablenpc "Novg03";
+	disablenpc "Novg04";
+	disablenpc "Novg05";
+	disablenpc "Novg06";
+	disablenpc "Novg07";
+	disablenpc "Novg08";
+	disablenpc "Novg09";
+	disablenpc "Novg09-1";
+	deletearray $sdayNov[0],200;
+	deletearray $edayNov[0],200;
+	deletearray $woetimeNov[0],200;
+	deletearray $woetimeNov2[0],200;	
+	mes "[Woe Setter]";
+	mes "They are all gone now, please remember to set new ones";
+	next;
+	goto L_WoENov;
+
+L_NoNov:
+	mes "[Woe Setter]";
+	mes "Oh, good, come back whenever";
+	next;
+	goto L_WoENov;
+L_BadNumberNov:
+	mes "[Woe Setter]";
+	mes "Sorry that was an invalid number, please try again";
+	next;
+	goto L_WoENov;
+
+//////////////////////////////////////////
+//////////////////////////////////////////
+//// Disable Treasure Chest Functions ////
+//////////////////////////////////////////
+//////////////////////////////////////////
+L_DisableT:
+	next;
+	mes "[Woe Setter]";
+	mes "Select a city you would like to toggle treasure spawns in.";
+	menu "Aldebaran",L_DisableTAld,"Geffen",L_DisableTGef,"Payon",L_DisableTPay,
+		"Prontera",L_DisableTPro,"Novice",L_DisableTNov,"Global",L_DisableTGlobal,"Back",-;
+	next;
+	goto L_Main;
+
+L_DisableTAld:
+	next;
+	mes "[Woe Setter]";
+	mes "Select a castle you would like to toggle treasure spawns in.";
+	if($AldT1Disabled == 0) { mes "Castle "+GetCastleName("aldeg_cas01.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("aldeg_cas01.gat")+" is ^FF0000Disabled^000000"; }
+	if($AldT2Disabled == 0) { mes "Castle "+GetCastleName("aldeg_cas02.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("aldeg_cas02.gat")+" is ^FF0000Disabled^000000"; }
+	if($AldT3Disabled == 0) { mes "Castle "+GetCastleName("aldeg_cas03.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("aldeg_cas03.gat")+" is ^FF0000Disabled^000000"; }
+	if($AldT4Disabled == 0) { mes "Castle "+GetCastleName("aldeg_cas04.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("aldeg_cas04.gat")+" is ^FF0000Disabled^000000"; }
+	if($AldT5Disabled == 0) { mes "Castle "+GetCastleName("aldeg_cas05.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("aldeg_cas05.gat")+" is ^FF0000Disabled^000000"; }
+	menu "Aldebaran Castle "+GetCastleName("aldeg_cas01.gat"),-,"Aldebaran Castle "+GetCastleName("aldeg_cas02.gat"),-,
+		"Aldebaran Castle "+GetCastleName("aldeg_cas03.gat"),-,"Aldebaran Castle "+GetCastleName("aldeg_cas04.gat"),-,
+		"Aldebaran Castle "+GetCastleName("aldeg_cas05.gat"),-,"All",-,"Back",L_DisableT;
+	mes "--";
+	if(@menu == 1) {
+		if($AldT1Disabled == 0) { set $AldT1Disabled,1; mes "Castle "+GetCastleName("aldeg_cas01.gat")+" is ^FF0000Disabled^000000"; } else { set $AldT1Disabled,0; mes "Castle "+GetCastleName("aldeg_cas01.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 2) {
+		if($AldT2Disabled == 0) { set $AldT2Disabled,1; mes "Castle "+GetCastleName("aldeg_cas02.gat")+" is ^FF0000Disabled^000000"; } else { set $AldT2Disabled,0; mes "Castle "+GetCastleName("aldeg_cas02.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 3) {
+		if($AldT3Disabled == 0) { set $AldT3Disabled,1; mes "Castle "+GetCastleName("aldeg_cas03.gat")+" is ^FF0000Disabled^000000"; } else { set $AldT3Disabled,0; mes "Castle "+GetCastleName("aldeg_cas03.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 4) {
+		if($AldT4Disabled == 0) { set $AldT4Disabled,1; mes "Castle "+GetCastleName("aldeg_cas04.gat")+" is ^FF0000Disabled^000000"; } else { set $AldT4Disabled,0; mes "Castle "+GetCastleName("aldeg_cas04.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 5) {
+		if($AldT5Disabled == 0) { set $AldT5Disabled,1; mes "Castle "+GetCastleName("aldeg_cas05.gat")+" is ^FF0000Disabled^000000"; } else { set $AldT5Disabled,0; mes "Castle "+GetCastleName("aldeg_cas05.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 6) {
+		if($AldT1Disabled == 0) { set $AldT1Disabled,1; mes "Castle "+GetCastleName("aldeg_cas01.gat")+" is ^FF0000Disabled^000000"; } else { set $AldT1Disabled,0; mes "Castle "+GetCastleName("aldeg_cas01.gat")+" is ^339900Enabled^000000"; }
+		if($AldT2Disabled == 0) { set $AldT2Disabled,1; mes "Castle "+GetCastleName("aldeg_cas02.gat")+" is ^FF0000Disabled^000000"; } else { set $AldT2Disabled,0; mes "Castle "+GetCastleName("aldeg_cas02.gat")+" is ^339900Enabled^000000"; }
+		if($AldT3Disabled == 0) { set $AldT3Disabled,1; mes "Castle "+GetCastleName("aldeg_cas03.gat")+" is ^FF0000Disabled^000000"; } else { set $AldT3Disabled,0; mes "Castle "+GetCastleName("aldeg_cas03.gat")+" is ^339900Enabled^000000"; }
+		if($AldT4Disabled == 0) { set $AldT4Disabled,1; mes "Castle "+GetCastleName("aldeg_cas04.gat")+" is ^FF0000Disabled^000000"; } else { set $AldT4Disabled,0; mes "Castle "+GetCastleName("aldeg_cas04.gat")+" is ^339900Enabled^000000"; }
+		if($AldT5Disabled == 0) { set $AldT5Disabled,1; mes "Castle "+GetCastleName("aldeg_cas05.gat")+" is ^FF0000Disabled^000000"; } else { set $AldT5Disabled,0; mes "Castle "+GetCastleName("aldeg_cas05.gat")+" is ^339900Enabled^000000"; }
+		}
+	mes "Requested action complete";
+	goto L_DisableTAld;
+
+L_DisableTGef:
+	next;
+	mes "[Woe Setter]";
+	mes "Select a castle you would like to toggle treasure spawns in.";
+	if($GefT1Disabled == 0) { mes "Castle "+GetCastleName("gefg_cas01.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("gefg_cas01.gat")+" is ^FF0000Disabled^000000"; }
+	if($GefT2Disabled == 0) { mes "Castle "+GetCastleName("gefg_cas02.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("gefg_cas02.gat")+" is ^FF0000Disabled^000000"; }
+	if($GefT3Disabled == 0) { mes "Castle "+GetCastleName("gefg_cas03.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("gefg_cas03.gat")+" is ^FF0000Disabled^000000"; }
+	if($GefT4Disabled == 0) { mes "Castle "+GetCastleName("gefg_cas04.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("gefg_cas04.gat")+" is ^FF0000Disabled^000000"; }
+	if($GefT5Disabled == 0) { mes "Castle "+GetCastleName("gefg_cas05.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("gefg_cas05.gat")+" is ^FF0000Disabled^000000"; }
+	menu "Geffen Castle "+GetCastleName("gefg_cas01.gat"),-,"Geffen Castle "+GetCastleName("gefg_cas02.gat"),-,
+		"Geffen Castle "+GetCastleName("gefg_cas03.gat"),-,"Geffen Castle "+GetCastleName("gefg_cas04.gat"),-,
+		"Geffen Castle "+GetCastleName("gefg_cas05.gat"),-,"All",-,"Back",L_DisableT;
+	mes "--";
+	if(@menu == 1) {
+		if($GefT1Disabled == 0) { set $GefT1Disabled,1; mes "Castle "+GetCastleName("gefg_cas01.gat")+" is ^FF0000Disabled^000000"; } else { set $GefT1Disabled,0; mes "Castle "+GetCastleName("gefg_cas01.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 2) {
+		if($GefT2Disabled == 0) { set $GefT2Disabled,1; mes "Castle "+GetCastleName("gefg_cas02.gat")+" is ^FF0000Disabled^000000"; } else { set $GefT2Disabled,0; mes "Castle "+GetCastleName("gefg_cas02.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 3) {
+		if($GefT3Disabled == 0) { set $GefT3Disabled,1; mes "Castle "+GetCastleName("gefg_cas03.gat")+" is ^FF0000Disabled^000000"; } else { set $GefT3Disabled,0; mes "Castle "+GetCastleName("gefg_cas03.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 4) {
+		if($GefT4Disabled == 0) { set $GefT4Disabled,1; mes "Castle "+GetCastleName("gefg_cas04.gat")+" is ^FF0000Disabled^000000"; } else { set $GefT4Disabled,0; mes "Castle "+GetCastleName("gefg_cas04.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 5) {
+		if($GefT5Disabled == 0) { set $GefT5Disabled,1; mes "Castle "+GetCastleName("gefg_cas05.gat")+" is ^FF0000Disabled^000000"; } else { set $GefT5Disabled,0; mes "Castle "+GetCastleName("gefg_cas05.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 6) {
+		if($GefT1Disabled == 0) { set $GefT1Disabled,1; mes "Castle "+GetCastleName("gefg_cas01.gat")+" is ^FF0000Disabled^000000"; } else { set $GefT1Disabled,0; mes "Castle "+GetCastleName("gefg_cas01.gat")+" is ^339900Enabled^000000"; }
+		if($GefT2Disabled == 0) { set $GefT2Disabled,1; mes "Castle "+GetCastleName("gefg_cas02.gat")+" is ^FF0000Disabled^000000"; } else { set $GefT2Disabled,0; mes "Castle "+GetCastleName("gefg_cas02.gat")+" is ^339900Enabled^000000"; }
+		if($GefT3Disabled == 0) { set $GefT3Disabled,1; mes "Castle "+GetCastleName("gefg_cas03.gat")+" is ^FF0000Disabled^000000"; } else { set $GefT3Disabled,0; mes "Castle "+GetCastleName("gefg_cas03.gat")+" is ^339900Enabled^000000"; }
+		if($GefT4Disabled == 0) { set $GefT4Disabled,1; mes "Castle "+GetCastleName("gefg_cas04.gat")+" is ^FF0000Disabled^000000"; } else { set $GefT4Disabled,0; mes "Castle "+GetCastleName("gefg_cas04.gat")+" is ^339900Enabled^000000"; }
+		if($GefT5Disabled == 0) { set $GefT5Disabled,1; mes "Castle "+GetCastleName("gefg_cas05.gat")+" is ^FF0000Disabled^000000"; } else { set $GefT5Disabled,0; mes "Castle "+GetCastleName("gefg_cas05.gat")+" is ^339900Enabled^000000"; }
+		}
+	mes "Requested action complete";
+	goto L_DisableTGef;
+
+L_DisableTPay:
+	next;
+	mes "[Woe Setter]";
+	mes "Select a castle you would like to toggle treasure spawns in.";
+	if($PayT1Disabled == 0) { mes "Castle "+GetCastleName("payg_cas01.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("payg_cas01.gat")+" is ^FF0000Disabled^000000"; }
+	if($PayT2Disabled == 0) { mes "Castle "+GetCastleName("payg_cas02.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("payg_cas02.gat")+" is ^FF0000Disabled^000000"; }
+	if($PayT3Disabled == 0) { mes "Castle "+GetCastleName("payg_cas03.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("payg_cas03.gat")+" is ^FF0000Disabled^000000"; }
+	if($PayT4Disabled == 0) { mes "Castle "+GetCastleName("payg_cas04.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("payg_cas04.gat")+" is ^FF0000Disabled^000000"; }
+	if($PayT5Disabled == 0) { mes "Castle "+GetCastleName("payg_cas05.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("payg_cas05.gat")+" is ^FF0000Disabled^000000"; }
+	menu "Payon Castle "+GetCastleName("payg_cas01.gat"),-,"Payon Castle "+GetCastleName("payg_cas02.gat"),-,
+		"Payon Castle "+GetCastleName("payg_cas03.gat"),-,"Payon Castle "+GetCastleName("payg_cas04.gat"),-,
+		"Payon Castle "+GetCastleName("payg_cas05.gat"),-,"All",-,"Back",L_DisableT;
+	mes "--";
+	if(@menu == 1) {
+		if($PayT1Disabled == 0) { set $PayT1Disabled,1; mes "Castle "+GetCastleName("payg_cas01.gat")+" is ^FF0000Disabled^000000"; } else { set $PayT1Disabled,0; mes "Castle "+GetCastleName("payg_cas01.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 2) {
+		if($PayT2Disabled == 0) { set $PayT2Disabled,1; mes "Castle "+GetCastleName("payg_cas02.gat")+" is ^FF0000Disabled^000000"; } else { set $PayT2Disabled,0; mes "Castle "+GetCastleName("payg_cas02.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 3) {
+		if($PayT3Disabled == 0) { set $PayT3Disabled,1; mes "Castle "+GetCastleName("payg_cas03.gat")+" is ^FF0000Disabled^000000"; } else { set $PayT3Disabled,0; mes "Castle "+GetCastleName("payg_cas03.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 4) {
+		if($PayT4Disabled == 0) { set $PayT4Disabled,1; mes "Castle "+GetCastleName("payg_cas04.gat")+" is ^FF0000Disabled^000000"; } else { set $PayT4Disabled,0; mes "Castle "+GetCastleName("payg_cas04.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 5) {
+		if($PayT5Disabled == 0) { set $PayT5Disabled,1; mes "Castle "+GetCastleName("payg_cas05.gat")+" is ^FF0000Disabled^000000"; } else { set $PayT5Disabled,0; mes "Castle "+GetCastleName("payg_cas05.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 6) {
+		if($PayT1Disabled == 0) { set $PayT1Disabled,1; mes "Castle "+GetCastleName("payg_cas01.gat")+" is ^FF0000Disabled^000000"; } else { set $PayT1Disabled,0; mes "Castle "+GetCastleName("payg_cas01.gat")+" is ^339900Enabled^000000"; }
+		if($PayT2Disabled == 0) { set $PayT2Disabled,1; mes "Castle "+GetCastleName("payg_cas02.gat")+" is ^FF0000Disabled^000000"; } else { set $PayT2Disabled,0; mes "Castle "+GetCastleName("payg_cas02.gat")+" is ^339900Enabled^000000"; }
+		if($PayT3Disabled == 0) { set $PayT3Disabled,1; mes "Castle "+GetCastleName("payg_cas03.gat")+" is ^FF0000Disabled^000000"; } else { set $PayT3Disabled,0; mes "Castle "+GetCastleName("payg_cas03.gat")+" is ^339900Enabled^000000"; }
+		if($PayT4Disabled == 0) { set $PayT4Disabled,1; mes "Castle "+GetCastleName("payg_cas04.gat")+" is ^FF0000Disabled^000000"; } else { set $PayT4Disabled,0; mes "Castle "+GetCastleName("payg_cas04.gat")+" is ^339900Enabled^000000"; }
+		if($PayT5Disabled == 0) { set $PayT5Disabled,1; mes "Castle "+GetCastleName("payg_cas05.gat")+" is ^FF0000Disabled^000000"; } else { set $PayT5Disabled,0; mes "Castle "+GetCastleName("payg_cas05.gat")+" is ^339900Enabled^000000"; }
+		}
+	mes "Requested action complete";
+	goto L_DisableTPay;
+
+L_DisableTPro:
+	next;
+	mes "[Woe Setter]";
+	mes "Select a castle you would like to toggle treasure spawns in.";
+	if($ProT1Disabled == 0) { mes "Castle "+GetCastleName("prtg_cas01.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("prtg_cas01.gat")+" is ^FF0000Disabled^000000"; }
+	if($ProT2Disabled == 0) { mes "Castle "+GetCastleName("prtg_cas02.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("prtg_cas02.gat")+" is ^FF0000Disabled^000000"; }
+	if($ProT3Disabled == 0) { mes "Castle "+GetCastleName("prtg_cas03.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("prtg_cas03.gat")+" is ^FF0000Disabled^000000"; }
+	if($ProT4Disabled == 0) { mes "Castle "+GetCastleName("prtg_cas04.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("prtg_cas04.gat")+" is ^FF0000Disabled^000000"; }
+	if($ProT5Disabled == 0) { mes "Castle "+GetCastleName("prtg_cas05.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("prtg_cas05.gat")+" is ^FF0000Disabled^000000"; }
+	menu "Prontera Castle "+GetCastleName("prtg_cas01.gat"),-,"Prontera Castle "+GetCastleName("prtg_cas02.gat"),-,
+		"Prontera Castle "+GetCastleName("prtg_cas03.gat"),-,"Prontera Castle "+GetCastleName("prtg_cas04.gat"),-,
+		"Prontera Castle "+GetCastleName("prtg_cas05.gat"),-,"All",-,"Back",L_DisableT;
+	mes "--";
+	if(@menu == 1) {
+		if($ProT1Disabled == 0) { set $ProT1Disabled,1; mes "Castle "+GetCastleName("prtg_cas01.gat")+" is ^FF0000Disabled^000000"; } else { set $ProT1Disabled,0; mes "Castle "+GetCastleName("prtg_cas01.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 2) {
+		if($ProT2Disabled == 0) { set $ProT2Disabled,1; mes "Castle "+GetCastleName("prtg_cas02.gat")+" is ^FF0000Disabled^000000"; } else { set $ProT2Disabled,0; mes "Castle "+GetCastleName("prtg_cas02.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 3) {
+		if($ProT3Disabled == 0) { set $ProT3Disabled,1; mes "Castle "+GetCastleName("prtg_cas03.gat")+" is ^FF0000Disabled^000000"; } else { set $ProT3Disabled,0; mes "Castle "+GetCastleName("prtg_cas03.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 4) {
+		if($ProT4Disabled == 0) { set $ProT4Disabled,1; mes "Castle "+GetCastleName("prtg_cas04.gat")+" is ^FF0000Disabled^000000"; } else { set $ProT4Disabled,0; mes "Castle "+GetCastleName("prtg_cas04.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 5) {
+		if($ProT5Disabled == 0) { set $ProT5Disabled,1; mes "Castle "+GetCastleName("prtg_cas05.gat")+" is ^FF0000Disabled^000000"; } else { set $ProT5Disabled,0; mes "Castle "+GetCastleName("prtg_cas05.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 6) {
+		if($ProT1Disabled == 0) { set $ProT1Disabled,1; mes "Castle "+GetCastleName("prtg_cas01.gat")+" is ^FF0000Disabled^000000"; } else { set $ProT1Disabled,0; mes "Castle "+GetCastleName("prtg_cas01.gat")+" is ^339900Enabled^000000"; }
+		if($ProT2Disabled == 0) { set $ProT2Disabled,1; mes "Castle "+GetCastleName("prtg_cas02.gat")+" is ^FF0000Disabled^000000"; } else { set $ProT2Disabled,0; mes "Castle "+GetCastleName("prtg_cas02.gat")+" is ^339900Enabled^000000"; }
+		if($ProT3Disabled == 0) { set $ProT3Disabled,1; mes "Castle "+GetCastleName("prtg_cas03.gat")+" is ^FF0000Disabled^000000"; } else { set $ProT3Disabled,0; mes "Castle "+GetCastleName("prtg_cas03.gat")+" is ^339900Enabled^000000"; }
+		if($ProT4Disabled == 0) { set $ProT4Disabled,1; mes "Castle "+GetCastleName("prtg_cas04.gat")+" is ^FF0000Disabled^000000"; } else { set $ProT4Disabled,0; mes "Castle "+GetCastleName("prtg_cas04.gat")+" is ^339900Enabled^000000"; }
+		if($ProT5Disabled == 0) { set $ProT5Disabled,1; mes "Castle "+GetCastleName("prtg_cas05.gat")+" is ^FF0000Disabled^000000"; } else { set $ProT5Disabled,0; mes "Castle "+GetCastleName("prtg_cas05.gat")+" is ^339900Enabled^000000"; }
+		}
+	mes "Requested action complete";
+	goto L_DisableTPro;
+
+L_DisableTNov:
+	next;
+	mes "[Woe Setter]";
+	mes "Select a castle you would like to toggle WoE in.";
+	if($NovT1Disabled == 0) { mes "Castle "+GetCastleName("nguild_alde.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("nguild_alde.gat")+" is ^FF0000Disabled^000000"; }
+	if($NovT2Disabled == 0) { mes "Castle "+GetCastleName("nguild_gef.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("nguild_gef.gat")+" is ^FF0000Disabled^000000"; }
+	if($NovT3Disabled == 0) { mes "Castle "+GetCastleName("nguild_pay.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("nguild_pay.gat")+" is ^FF0000Disabled^000000"; }
+	if($NovT4Disabled == 0) { mes "Castle "+GetCastleName("nguild_prt.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("nguild_prt.gat")+" is ^FF0000Disabled^000000"; }
+	menu "Novice Castle "+GetCastleName("nguild_alde.gat"),-,"Novice Castle "+GetCastleName("nguild_gef.gat"),-,
+		"Novice Castle "+GetCastleName("nguild_pay.gat"),-,"Novice Castle "+GetCastleName("nguild_prt.gat"),-,
+		"All",-,"Back",L_DisableT;
+	mes "--";
+	if(@menu == 1) {
+		if($NovT1Disabled == 0) { set $NovT1Disabled,1; mes "Castle "+GetCastleName("nguild_alde.gat")+" is ^FF0000Disabled^000000"; } else { set $NovT1Disabled,0; mes "Castle "+GetCastleName("nguild_alde.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 2) {
+		if($NovT2Disabled == 0) { set $NovT2Disabled,1; mes "Castle "+GetCastleName("nguild_gef.gat")+" is ^FF0000Disabled^000000"; } else { set $NovT2Disabled,0; mes "Castle "+GetCastleName("nguild_gef.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 3) {
+		if($NovT3Disabled == 0) { set $NovT3Disabled,1; mes "Castle "+GetCastleName("nguild_pay.gat")+" is ^FF0000Disabled^000000"; } else { set $NovT3Disabled,0; mes "Castle "+GetCastleName("nguild_pay.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 4) {
+		if($NovT4Disabled == 0) { set $NovT4Disabled,1; mes "Castle "+GetCastleName("nguild_prt.gat")+" is ^FF0000Disabled^000000"; } else { set $NovT4Disabled,0; mes "Castle "+GetCastleName("nguild_prt.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 5) {
+		if($NovT1Disabled == 0) { set $NovT1Disabled,1; mes "Castle "+GetCastleName("nguild_alde.gat")+" is ^FF0000Disabled^000000"; } else { set $NovT1Disabled,0; mes "Castle "+GetCastleName("nguild_alde.gat")+" is ^339900Enabled^000000"; }
+		if($NovT2Disabled == 0) { set $NovT2Disabled,1; mes "Castle "+GetCastleName("nguild_gef.gat")+" is ^FF0000Disabled^000000"; } else { set $NovT2Disabled,0; mes "Castle "+GetCastleName("nguild_gef.gat")+" is ^339900Enabled^000000"; }
+		if($NovT3Disabled == 0) { set $NovT3Disabled,1; mes "Castle "+GetCastleName("nguild_pay.gat")+" is ^FF0000Disabled^000000"; } else { set $NovT3Disabled,0; mes "Castle "+GetCastleName("nguild_pay.gat")+" is ^339900Enabled^000000"; }
+		if($NovT4Disabled == 0) { set $NovT4Disabled,1; mes "Castle "+GetCastleName("nguild_prt.gat")+" is ^FF0000Disabled^000000"; } else { set $NovT4Disabled,0; mes "Castle "+GetCastleName("nguild_prt.gat")+" is ^339900Enabled^000000"; }
+		}
+	mes "Requested action complete";
+	goto L_DisableTNov;
+
+L_DisableTGlobal:
+	mes "[Woe Setter]";
+	mes "Are you ABSOLUTELY sure you wish to toggle treasure spawns for EVERY castle?";
+	menu "No",L_DisableT,"Yes",-;
+		if($AldT1Disabled == 0) { set $AldT1Disabled,1; mes "Castle "+GetCastleName("aldeg_cas01.gat")+" is ^FF0000Disabled^000000"; } else { set $AldT1Disabled,0; mes "Castle "+GetCastleName("aldeg_cas01.gat")+" is ^339900Enabled^000000"; }
+		if($AldT2Disabled == 0) { set $AldT2Disabled,1; mes "Castle "+GetCastleName("aldeg_cas02.gat")+" is ^FF0000Disabled^000000"; } else { set $AldT2Disabled,0; mes "Castle "+GetCastleName("aldeg_cas02.gat")+" is ^339900Enabled^000000"; }
+		if($AldT3Disabled == 0) { set $AldT3Disabled,1; mes "Castle "+GetCastleName("aldeg_cas03.gat")+" is ^FF0000Disabled^000000"; } else { set $AldT3Disabled,0; mes "Castle "+GetCastleName("aldeg_cas03.gat")+" is ^339900Enabled^000000"; }
+		if($AldT4Disabled == 0) { set $AldT4Disabled,1; mes "Castle "+GetCastleName("aldeg_cas04.gat")+" is ^FF0000Disabled^000000"; } else { set $AldT4Disabled,0; mes "Castle "+GetCastleName("aldeg_cas04.gat")+" is ^339900Enabled^000000"; }
+		if($AldT5Disabled == 0) { set $AldT5Disabled,1; mes "Castle "+GetCastleName("aldeg_cas05.gat")+" is ^FF0000Disabled^000000"; } else { set $AldT5Disabled,0; mes "Castle "+GetCastleName("aldeg_cas05.gat")+" is ^339900Enabled^000000"; }
+		if($GefT1Disabled == 0) { set $GefT1Disabled,1; mes "Castle "+GetCastleName("gefg_cas01.gat")+" is ^FF0000Disabled^000000"; } else { set $GefT1Disabled,0; mes "Castle "+GetCastleName("gefg_cas01.gat")+" is ^339900Enabled^000000"; }
+		if($GefT2Disabled == 0) { set $GefT2Disabled,1; mes "Castle "+GetCastleName("gefg_cas02.gat")+" is ^FF0000Disabled^000000"; } else { set $GefT2Disabled,0; mes "Castle "+GetCastleName("gefg_cas02.gat")+" is ^339900Enabled^000000"; }
+		if($GefT3Disabled == 0) { set $GefT3Disabled,1; mes "Castle "+GetCastleName("gefg_cas03.gat")+" is ^FF0000Disabled^000000"; } else { set $GefT3Disabled,0; mes "Castle "+GetCastleName("gefg_cas03.gat")+" is ^339900Enabled^000000"; }
+		if($GefT4Disabled == 0) { set $GefT4Disabled,1; mes "Castle "+GetCastleName("gefg_cas04.gat")+" is ^FF0000Disabled^000000"; } else { set $GefT4Disabled,0; mes "Castle "+GetCastleName("gefg_cas04.gat")+" is ^339900Enabled^000000"; }
+		if($GefT5Disabled == 0) { set $GefT5Disabled,1; mes "Castle "+GetCastleName("gefg_cas05.gat")+" is ^FF0000Disabled^000000"; } else { set $GefT5Disabled,0; mes "Castle "+GetCastleName("gefg_cas05.gat")+" is ^339900Enabled^000000"; }
+		if($PayT1Disabled == 0) { set $PayT1Disabled,1; mes "Castle "+GetCastleName("payg_cas01.gat")+" is ^FF0000Disabled^000000"; } else { set $PayT1Disabled,0; mes "Castle "+GetCastleName("payg_cas01.gat")+" is ^339900Enabled^000000"; }
+		if($PayT2Disabled == 0) { set $PayT2Disabled,1; mes "Castle "+GetCastleName("payg_cas02.gat")+" is ^FF0000Disabled^000000"; } else { set $PayT2Disabled,0; mes "Castle "+GetCastleName("payg_cas02.gat")+" is ^339900Enabled^000000"; }
+		if($PayT3Disabled == 0) { set $PayT3Disabled,1; mes "Castle "+GetCastleName("payg_cas03.gat")+" is ^FF0000Disabled^000000"; } else { set $PayT3Disabled,0; mes "Castle "+GetCastleName("payg_cas03.gat")+" is ^339900Enabled^000000"; }
+		if($PayT4Disabled == 0) { set $PayT4Disabled,1; mes "Castle "+GetCastleName("payg_cas04.gat")+" is ^FF0000Disabled^000000"; } else { set $PayT4Disabled,0; mes "Castle "+GetCastleName("payg_cas04.gat")+" is ^339900Enabled^000000"; }
+		if($PayT5Disabled == 0) { set $PayT5Disabled,1; mes "Castle "+GetCastleName("payg_cas05.gat")+" is ^FF0000Disabled^000000"; } else { set $PayT5Disabled,0; mes "Castle "+GetCastleName("payg_cas05.gat")+" is ^339900Enabled^000000"; }
+		if($ProT1Disabled == 0) { set $ProT1Disabled,1; mes "Castle "+GetCastleName("prtg_cas01.gat")+" is ^FF0000Disabled^000000"; } else { set $ProT1Disabled,0; mes "Castle "+GetCastleName("prtg_cas01.gat")+" is ^339900Enabled^000000"; }
+		if($ProT2Disabled == 0) { set $ProT2Disabled,1; mes "Castle "+GetCastleName("prtg_cas02.gat")+" is ^FF0000Disabled^000000"; } else { set $ProT2Disabled,0; mes "Castle "+GetCastleName("prtg_cas02.gat")+" is ^339900Enabled^000000"; }
+		if($ProT3Disabled == 0) { set $ProT3Disabled,1; mes "Castle "+GetCastleName("prtg_cas03.gat")+" is ^FF0000Disabled^000000"; } else { set $ProT3Disabled,0; mes "Castle "+GetCastleName("prtg_cas03.gat")+" is ^339900Enabled^000000"; }
+		if($ProT4Disabled == 0) { set $ProT4Disabled,1; mes "Castle "+GetCastleName("prtg_cas04.gat")+" is ^FF0000Disabled^000000"; } else { set $ProT4Disabled,0; mes "Castle "+GetCastleName("prtg_cas04.gat")+" is ^339900Enabled^000000"; }
+		if($ProT5Disabled == 0) { set $ProT5Disabled,1; mes "Castle "+GetCastleName("prtg_cas05.gat")+" is ^FF0000Disabled^000000"; } else { set $ProT5Disabled,0; mes "Castle "+GetCastleName("prtg_cas05.gat")+" is ^339900Enabled^000000"; }
+		if($NovT1Disabled == 0) { set $NovT1Disabled,1; mes "Castle "+GetCastleName("nguild_alde.gat")+" is ^FF0000Disabled^000000"; } else { set $NovT1Disabled,0; mes "Castle "+GetCastleName("nguild_alde.gat")+" is ^339900Enabled^000000"; }
+		if($NovT2Disabled == 0) { set $NovT2Disabled,1; mes "Castle "+GetCastleName("nguild_gef.gat")+" is ^FF0000Disabled^000000"; } else { set $NovT2Disabled,0; mes "Castle "+GetCastleName("nguild_gef.gat")+" is ^339900Enabled^000000"; }
+		if($NovT3Disabled == 0) { set $NovT3Disabled,1; mes "Castle "+GetCastleName("nguild_pay.gat")+" is ^FF0000Disabled^000000"; } else { set $NovT3Disabled,0; mes "Castle "+GetCastleName("nguild_pay.gat")+" is ^339900Enabled^000000"; }
+		if($NovT4Disabled == 0) { set $NovT4Disabled,1; mes "Castle "+GetCastleName("nguild_prt.gat")+" is ^FF0000Disabled^000000"; } else { set $NovT4Disabled,0; mes "Castle "+GetCastleName("nguild_prt.gat")+" is ^339900Enabled^000000"; }
+	mes "Requested action complete";
+	goto L_DisableT;
+
+//////////////////////////////////
+//////////////////////////////////
+//// Disable Castle Functions ////
+//////////////////////////////////
+//////////////////////////////////
+
+L_DisableC:
+	next;
+	mes "[Woe Setter]";
+	mes "Select a city you would like to toggle WoE in.";
+	menu "Aldebaran",L_DisableCAld,"Geffen",L_DisableCGef,"Payon",L_DisableCPay,
+		"Prontera",L_DisableCPro,"Novice",L_DisableCNov,"Global",L_DisableCGlobal,"Back",-;
+	next;
+	goto L_Main;
+
+L_DisableCAld:
+	next;
+	mes "[Woe Setter]";
+	mes "Select a castle you would like to toggle WoE in.";
+	if($AldCas1Disabled == 0) { mes "Castle "+GetCastleName("aldeg_cas01.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("aldeg_cas01.gat")+" is ^FF0000Disabled^000000"; }
+	if($AldCas2Disabled == 0) { mes "Castle "+GetCastleName("aldeg_cas02.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("aldeg_cas02.gat")+" is ^FF0000Disabled^000000"; }
+	if($AldCas3Disabled == 0) { mes "Castle "+GetCastleName("aldeg_cas03.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("aldeg_cas03.gat")+" is ^FF0000Disabled^000000"; }
+	if($AldCas4Disabled == 0) { mes "Castle "+GetCastleName("aldeg_cas04.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("aldeg_cas04.gat")+" is ^FF0000Disabled^000000"; }
+	if($AldCas5Disabled == 0) { mes "Castle "+GetCastleName("aldeg_cas05.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("aldeg_cas05.gat")+" is ^FF0000Disabled^000000"; }
+	menu "Aldebaran Castle "+GetCastleName("aldeg_cas01.gat"),-,"Aldebaran Castle "+GetCastleName("aldeg_cas02.gat"),-,
+		"Aldebaran Castle "+GetCastleName("aldeg_cas03.gat"),-,"Aldebaran Castle "+GetCastleName("aldeg_cas04.gat"),-,
+		"Aldebaran Castle "+GetCastleName("aldeg_cas05.gat"),-,"All",-,"Back",L_DisableC;
+	mes "--";
+	if(@menu == 1) {
+		if($AldCas1Disabled == 0) { set $AldCas1Disabled,1; mes "Castle "+GetCastleName("aldeg_cas01.gat")+" is ^FF0000Disabled^000000"; } else { set $AldCas1Disabled,0; mes "Castle "+GetCastleName("aldeg_cas01.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 2) {
+		if($AldCas2Disabled == 0) { set $AldCas2Disabled,1; mes "Castle "+GetCastleName("aldeg_cas02.gat")+" is ^FF0000Disabled^000000"; } else { set $AldCas2Disabled,0; mes "Castle "+GetCastleName("aldeg_cas02.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 3) {
+		if($AldCas3Disabled == 0) { set $AldCas3Disabled,1; mes "Castle "+GetCastleName("aldeg_cas03.gat")+" is ^FF0000Disabled^000000"; } else { set $AldCas3Disabled,0; mes "Castle "+GetCastleName("aldeg_cas03.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 4) {
+		if($AldCas4Disabled == 0) { set $AldCas4Disabled,1; mes "Castle "+GetCastleName("aldeg_cas04.gat")+" is ^FF0000Disabled^000000"; } else { set $AldCas4Disabled,0; mes "Castle "+GetCastleName("aldeg_cas04.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 5) {
+		if($AldCas5Disabled == 0) { set $AldCas5Disabled,1; mes "Castle "+GetCastleName("aldeg_cas05.gat")+" is ^FF0000Disabled^000000"; } else { set $AldCas5Disabled,0; mes "Castle "+GetCastleName("aldeg_cas05.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 6) {
+		if($AldCas1Disabled == 0) { set $AldCas1Disabled,1; mes "Castle "+GetCastleName("aldeg_cas01.gat")+" is ^FF0000Disabled^000000"; } else { set $AldCas1Disabled,0; mes "Castle "+GetCastleName("aldeg_cas01.gat")+" is ^339900Enabled^000000"; }
+		if($AldCas2Disabled == 0) { set $AldCas2Disabled,1; mes "Castle "+GetCastleName("aldeg_cas02.gat")+" is ^FF0000Disabled^000000"; } else { set $AldCas2Disabled,0; mes "Castle "+GetCastleName("aldeg_cas02.gat")+" is ^339900Enabled^000000"; }
+		if($AldCas3Disabled == 0) { set $AldCas3Disabled,1; mes "Castle "+GetCastleName("aldeg_cas03.gat")+" is ^FF0000Disabled^000000"; } else { set $AldCas3Disabled,0; mes "Castle "+GetCastleName("aldeg_cas03.gat")+" is ^339900Enabled^000000"; }
+		if($AldCas4Disabled == 0) { set $AldCas4Disabled,1; mes "Castle "+GetCastleName("aldeg_cas04.gat")+" is ^FF0000Disabled^000000"; } else { set $AldCas4Disabled,0; mes "Castle "+GetCastleName("aldeg_cas04.gat")+" is ^339900Enabled^000000"; }
+		if($AldCas5Disabled == 0) { set $AldCas5Disabled,1; mes "Castle "+GetCastleName("aldeg_cas05.gat")+" is ^FF0000Disabled^000000"; } else { set $AldCas5Disabled,0; mes "Castle "+GetCastleName("aldeg_cas05.gat")+" is ^339900Enabled^000000"; }
+		}
+	mes "Requested action complete";
+	goto L_DisableCAld;
+
+L_DisableCGef:
+	next;
+	mes "[Woe Setter]";
+	mes "Select a castle you would like to toggle WoE in.";
+	if($GefCas1Disabled == 0) { mes "Castle "+GetCastleName("gefg_cas01.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("gefg_cas01.gat")+" is ^FF0000Disabled^000000"; }
+	if($GefCas2Disabled == 0) { mes "Castle "+GetCastleName("gefg_cas02.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("gefg_cas02.gat")+" is ^FF0000Disabled^000000"; }
+	if($GefCas3Disabled == 0) { mes "Castle "+GetCastleName("gefg_cas03.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("gefg_cas03.gat")+" is ^FF0000Disabled^000000"; }
+	if($GefCas4Disabled == 0) { mes "Castle "+GetCastleName("gefg_cas04.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("gefg_cas04.gat")+" is ^FF0000Disabled^000000"; }
+	if($GefCas5Disabled == 0) { mes "Castle "+GetCastleName("gefg_cas05.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("gefg_cas05.gat")+" is ^FF0000Disabled^000000"; }
+	menu "Geffen Castle "+GetCastleName("gefg_cas01.gat"),-,"Geffen Castle "+GetCastleName("gefg_cas02.gat"),-,
+		"Geffen Castle "+GetCastleName("gefg_cas03.gat"),-,"Geffen Castle "+GetCastleName("gefg_cas04.gat"),-,
+		"Geffen Castle "+GetCastleName("gefg_cas05.gat"),-,"All",-,"Back",L_DisableC;
+	mes "--";
+	if(@menu == 1) {
+		if($GefCas1Disabled == 0) { set $GefCas1Disabled,1; mes "Castle "+GetCastleName("gefg_cas01.gat")+" is ^FF0000Disabled^000000"; } else { set $GefCas1Disabled,0; mes "Castle "+GetCastleName("gefg_cas01.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 2) {
+		if($GefCas2Disabled == 0) { set $GefCas2Disabled,1; mes "Castle "+GetCastleName("gefg_cas02.gat")+" is ^FF0000Disabled^000000"; } else { set $GefCas2Disabled,0; mes "Castle "+GetCastleName("gefg_cas02.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 3) {
+		if($GefCas3Disabled == 0) { set $GefCas3Disabled,1; mes "Castle "+GetCastleName("gefg_cas03.gat")+" is ^FF0000Disabled^000000"; } else { set $GefCas3Disabled,0; mes "Castle "+GetCastleName("gefg_cas03.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 4) {
+		if($GefCas4Disabled == 0) { set $GefCas4Disabled,1; mes "Castle "+GetCastleName("gefg_cas04.gat")+" is ^FF0000Disabled^000000"; } else { set $GefCas4Disabled,0; mes "Castle "+GetCastleName("gefg_cas04.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 5) {
+		if($GefCas5Disabled == 0) { set $GefCas5Disabled,1; mes "Castle "+GetCastleName("gefg_cas05.gat")+" is ^FF0000Disabled^000000"; } else { set $GefCas5Disabled,0; mes "Castle "+GetCastleName("gefg_cas05.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 6) {
+		if($GefCas1Disabled == 0) { set $GefCas1Disabled,1; mes "Castle "+GetCastleName("gefg_cas01.gat")+" is ^FF0000Disabled^000000"; } else { set $GefCas1Disabled,0; mes "Castle "+GetCastleName("gefg_cas01.gat")+" is ^339900Enabled^000000"; }
+		if($GefCas2Disabled == 0) { set $GefCas2Disabled,1; mes "Castle "+GetCastleName("gefg_cas02.gat")+" is ^FF0000Disabled^000000"; } else { set $GefCas2Disabled,0; mes "Castle "+GetCastleName("gefg_cas02.gat")+" is ^339900Enabled^000000"; }
+		if($GefCas3Disabled == 0) { set $GefCas3Disabled,1; mes "Castle "+GetCastleName("gefg_cas03.gat")+" is ^FF0000Disabled^000000"; } else { set $GefCas3Disabled,0; mes "Castle "+GetCastleName("gefg_cas03.gat")+" is ^339900Enabled^000000"; }
+		if($GefCas4Disabled == 0) { set $GefCas4Disabled,1; mes "Castle "+GetCastleName("gefg_cas04.gat")+" is ^FF0000Disabled^000000"; } else { set $GefCas4Disabled,0; mes "Castle "+GetCastleName("gefg_cas04.gat")+" is ^339900Enabled^000000"; }
+		if($GefCas5Disabled == 0) { set $GefCas5Disabled,1; mes "Castle "+GetCastleName("gefg_cas05.gat")+" is ^FF0000Disabled^000000"; } else { set $GefCas5Disabled,0; mes "Castle "+GetCastleName("gefg_cas05.gat")+" is ^339900Enabled^000000"; }
+		}
+	mes "Requested action complete";
+	goto L_DisableCGef;
+
+L_DisableCPay:
+	next;
+	mes "[Woe Setter]";
+	mes "Select a castle you would like to toggle WoE in.";
+	if($PayCas1Disabled == 0) { mes "Castle "+GetCastleName("payg_cas01.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("payg_cas01.gat")+" is ^FF0000Disabled^000000"; }
+	if($PayCas2Disabled == 0) { mes "Castle "+GetCastleName("payg_cas02.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("payg_cas02.gat")+" is ^FF0000Disabled^000000"; }
+	if($PayCas3Disabled == 0) { mes "Castle "+GetCastleName("payg_cas03.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("payg_cas03.gat")+" is ^FF0000Disabled^000000"; }
+	if($PayCas4Disabled == 0) { mes "Castle "+GetCastleName("payg_cas04.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("payg_cas04.gat")+" is ^FF0000Disabled^000000"; }
+	if($PayCas5Disabled == 0) { mes "Castle "+GetCastleName("payg_cas05.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("payg_cas05.gat")+" is ^FF0000Disabled^000000"; }
+	menu "Payon Castle "+GetCastleName("payg_cas01.gat"),-,"Payon Castle "+GetCastleName("payg_cas02.gat"),-,
+		"Payon Castle "+GetCastleName("payg_cas03.gat"),-,"Payon Castle "+GetCastleName("payg_cas04.gat"),-,
+		"Payon Castle "+GetCastleName("payg_cas05.gat"),-,"All",-,"Back",L_DisableC;
+	mes "--";
+	if(@menu == 1) {
+		if($PayCas1Disabled == 0) { set $PayCas1Disabled,1; mes "Castle "+GetCastleName("payg_cas01.gat")+" is ^FF0000Disabled^000000"; } else { set $PayCas1Disabled,0; mes "Castle "+GetCastleName("payg_cas01.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 2) {
+		if($PayCas2Disabled == 0) { set $PayCas2Disabled,1; mes "Castle "+GetCastleName("payg_cas02.gat")+" is ^FF0000Disabled^000000"; } else { set $PayCas2Disabled,0; mes "Castle "+GetCastleName("payg_cas02.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 3) {
+		if($PayCas3Disabled == 0) { set $PayCas3Disabled,1; mes "Castle "+GetCastleName("payg_cas03.gat")+" is ^FF0000Disabled^000000"; } else { set $PayCas3Disabled,0; mes "Castle "+GetCastleName("payg_cas03.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 4) {
+		if($PayCas4Disabled == 0) { set $PayCas4Disabled,1; mes "Castle "+GetCastleName("payg_cas04.gat")+" is ^FF0000Disabled^000000"; } else { set $PayCas4Disabled,0; mes "Castle "+GetCastleName("payg_cas04.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 5) {
+		if($PayCas5Disabled == 0) { set $PayCas5Disabled,1; mes "Castle "+GetCastleName("payg_cas05.gat")+" is ^FF0000Disabled^000000"; } else { set $PayCas5Disabled,0; mes "Castle "+GetCastleName("payg_cas05.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 6) {
+		if($PayCas1Disabled == 0) { set $PayCas1Disabled,1; mes "Castle "+GetCastleName("payg_cas01.gat")+" is ^FF0000Disabled^000000"; } else { set $PayCas1Disabled,0; mes "Castle "+GetCastleName("payg_cas01.gat")+" is ^339900Enabled^000000"; }
+		if($PayCas2Disabled == 0) { set $PayCas2Disabled,1; mes "Castle "+GetCastleName("payg_cas02.gat")+" is ^FF0000Disabled^000000"; } else { set $PayCas2Disabled,0; mes "Castle "+GetCastleName("payg_cas02.gat")+" is ^339900Enabled^000000"; }
+		if($PayCas3Disabled == 0) { set $PayCas3Disabled,1; mes "Castle "+GetCastleName("payg_cas03.gat")+" is ^FF0000Disabled^000000"; } else { set $PayCas3Disabled,0; mes "Castle "+GetCastleName("payg_cas03.gat")+" is ^339900Enabled^000000"; }
+		if($PayCas4Disabled == 0) { set $PayCas4Disabled,1; mes "Castle "+GetCastleName("payg_cas04.gat")+" is ^FF0000Disabled^000000"; } else { set $PayCas4Disabled,0; mes "Castle "+GetCastleName("payg_cas04.gat")+" is ^339900Enabled^000000"; }
+		if($PayCas5Disabled == 0) { set $PayCas5Disabled,1; mes "Castle "+GetCastleName("payg_cas05.gat")+" is ^FF0000Disabled^000000"; } else { set $PayCas5Disabled,0; mes "Castle "+GetCastleName("payg_cas05.gat")+" is ^339900Enabled^000000"; }
+		}
+	mes "Requested action complete";
+	goto L_DisableCPay;
+
+L_DisableCPro:
+	next;
+	mes "[Woe Setter]";
+	mes "Select a castle you would like to toggle WoE in.";
+	if($ProCas1Disabled == 0) { mes "Castle "+GetCastleName("prtg_cas01.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("prtg_cas01.gat")+" is ^FF0000Disabled^000000"; }
+	if($ProCas2Disabled == 0) { mes "Castle "+GetCastleName("prtg_cas02.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("prtg_cas02.gat")+" is ^FF0000Disabled^000000"; }
+	if($ProCas3Disabled == 0) { mes "Castle "+GetCastleName("prtg_cas03.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("prtg_cas03.gat")+" is ^FF0000Disabled^000000"; }
+	if($ProCas4Disabled == 0) { mes "Castle "+GetCastleName("prtg_cas04.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("prtg_cas04.gat")+" is ^FF0000Disabled^000000"; }
+	if($ProCas5Disabled == 0) { mes "Castle "+GetCastleName("prtg_cas05.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("prtg_cas05.gat")+" is ^FF0000Disabled^000000"; }
+	menu "Prontera Castle "+GetCastleName("prtg_cas01.gat"),-,"Prontera Castle "+GetCastleName("prtg_cas02.gat"),-,
+		"Prontera Castle "+GetCastleName("prtg_cas03.gat"),-,"Prontera Castle "+GetCastleName("prtg_cas04.gat"),-,
+		"Prontera Castle "+GetCastleName("prtg_cas05.gat"),-,"All",-,"Back",L_DisableC;
+	mes "--";
+	if(@menu == 1) {
+		if($ProCas1Disabled == 0) { set $ProCas1Disabled,1; mes "Castle "+GetCastleName("prtg_cas01.gat")+" is ^FF0000Disabled^000000"; } else { set $ProCas1Disabled,0; mes "Castle "+GetCastleName("prtg_cas01.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 2) {
+		if($ProCas2Disabled == 0) { set $ProCas2Disabled,1; mes "Castle "+GetCastleName("prtg_cas02.gat")+" is ^FF0000Disabled^000000"; } else { set $ProCas2Disabled,0; mes "Castle "+GetCastleName("prtg_cas02.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 3) {
+		if($ProCas3Disabled == 0) { set $ProCas3Disabled,1; mes "Castle "+GetCastleName("prtg_cas03.gat")+" is ^FF0000Disabled^000000"; } else { set $ProCas3Disabled,0; mes "Castle "+GetCastleName("prtg_cas03.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 4) {
+		if($ProCas4Disabled == 0) { set $ProCas4Disabled,1; mes "Castle "+GetCastleName("prtg_cas04.gat")+" is ^FF0000Disabled^000000"; } else { set $ProCas4Disabled,0; mes "Castle "+GetCastleName("prtg_cas04.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 5) {
+		if($ProCas5Disabled == 0) { set $ProCas5Disabled,1; mes "Castle "+GetCastleName("prtg_cas05.gat")+" is ^FF0000Disabled^000000"; } else { set $ProCas5Disabled,0; mes "Castle "+GetCastleName("prtg_cas05.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 6) {
+		if($ProCas1Disabled == 0) { set $ProCas1Disabled,1; mes "Castle "+GetCastleName("prtg_cas01.gat")+" is ^FF0000Disabled^000000"; } else { set $ProCas1Disabled,0; mes "Castle "+GetCastleName("prtg_cas01.gat")+" is ^339900Enabled^000000"; }
+		if($ProCas2Disabled == 0) { set $ProCas2Disabled,1; mes "Castle "+GetCastleName("prtg_cas02.gat")+" is ^FF0000Disabled^000000"; } else { set $ProCas2Disabled,0; mes "Castle "+GetCastleName("prtg_cas02.gat")+" is ^339900Enabled^000000"; }
+		if($ProCas3Disabled == 0) { set $ProCas3Disabled,1; mes "Castle "+GetCastleName("prtg_cas03.gat")+" is ^FF0000Disabled^000000"; } else { set $ProCas3Disabled,0; mes "Castle "+GetCastleName("prtg_cas03.gat")+" is ^339900Enabled^000000"; }
+		if($ProCas4Disabled == 0) { set $ProCas4Disabled,1; mes "Castle "+GetCastleName("prtg_cas04.gat")+" is ^FF0000Disabled^000000"; } else { set $ProCas4Disabled,0; mes "Castle "+GetCastleName("prtg_cas04.gat")+" is ^339900Enabled^000000"; }
+		if($ProCas5Disabled == 0) { set $ProCas5Disabled,1; mes "Castle "+GetCastleName("prtg_cas05.gat")+" is ^FF0000Disabled^000000"; } else { set $ProCas5Disabled,0; mes "Castle "+GetCastleName("prtg_cas05.gat")+" is ^339900Enabled^000000"; }
+		}
+	mes "Requested action complete";
+	goto L_DisableCPro;
+
+L_DisableCNov:
+	next;
+	mes "[Woe Setter]";
+	mes "Select a castle you would like to toggle WoE in.";
+	if($NovCas1Disabled == 0) { mes "Castle "+GetCastleName("nguild_alde.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("nguild_alde.gat")+" is ^FF0000Disabled^000000"; }
+	if($NovCas2Disabled == 0) { mes "Castle "+GetCastleName("nguild_gef.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("nguild_gef.gat")+" is ^FF0000Disabled^000000"; }
+	if($NovCas3Disabled == 0) { mes "Castle "+GetCastleName("nguild_pay.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("nguild_pay.gat")+" is ^FF0000Disabled^000000"; }
+	if($NovCas4Disabled == 0) { mes "Castle "+GetCastleName("nguild_prt.gat")+" is ^339900Enabled^000000"; } else { mes "Castle "+GetCastleName("nguild_prt.gat")+" is ^FF0000Disabled^000000"; }
+	menu "Novice Castle "+GetCastleName("nguild_alde.gat"),-,"Novice Castle "+GetCastleName("nguild_gef.gat"),-,
+		"Novice Castle "+GetCastleName("nguild_pay.gat"),-,"Novice Castle "+GetCastleName("nguild_prt.gat"),-,
+		"All",-,"Back",L_DisableC;
+	mes "--";
+	if(@menu == 1) {
+		if($NovCas1Disabled == 0) { set $NovCas1Disabled,1; mes "Castle "+GetCastleName("nguild_alde.gat")+" is ^FF0000Disabled^000000"; } else { set $NovCas1Disabled,0; mes "Castle "+GetCastleName("nguild_alde.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 2) {
+		if($NovCas2Disabled == 0) { set $NovCas2Disabled,1; mes "Castle "+GetCastleName("nguild_gef.gat")+" is ^FF0000Disabled^000000"; } else { set $NovCas2Disabled,0; mes "Castle "+GetCastleName("nguild_gef.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 3) {
+		if($NovCas3Disabled == 0) { set $NovCas3Disabled,1; mes "Castle "+GetCastleName("nguild_pay.gat")+" is ^FF0000Disabled^000000"; } else { set $NovCas3Disabled,0; mes "Castle "+GetCastleName("nguild_pay.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 4) {
+		if($NovCas4Disabled == 0) { set $NovCas4Disabled,1; mes "Castle "+GetCastleName("nguild_prt.gat")+" is ^FF0000Disabled^000000"; } else { set $NovCas4Disabled,0; mes "Castle "+GetCastleName("nguild_prt.gat")+" is ^339900Enabled^000000"; }
+		}
+	if(@menu == 5) {
+		if($NovCas1Disabled == 0) { set $NovCas1Disabled,1; mes "Castle "+GetCastleName("nguild_alde.gat")+" is ^FF0000Disabled^000000"; } else { set $NovCas1Disabled,0; mes "Castle "+GetCastleName("nguild_alde.gat")+" is ^339900Enabled^000000"; }
+		if($NovCas2Disabled == 0) { set $NovCas2Disabled,1; mes "Castle "+GetCastleName("nguild_gef.gat")+" is ^FF0000Disabled^000000"; } else { set $NovCas2Disabled,0; mes "Castle "+GetCastleName("nguild_gef.gat")+" is ^339900Enabled^000000"; }
+		if($NovCas3Disabled == 0) { set $NovCas3Disabled,1; mes "Castle "+GetCastleName("nguild_pay.gat")+" is ^FF0000Disabled^000000"; } else { set $NovCas3Disabled,0; mes "Castle "+GetCastleName("nguild_pay.gat")+" is ^339900Enabled^000000"; }
+		if($NovCas4Disabled == 0) { set $NovCas4Disabled,1; mes "Castle "+GetCastleName("nguild_prt.gat")+" is ^FF0000Disabled^000000"; } else { set $NovCas4Disabled,0; mes "Castle "+GetCastleName("nguild_prt.gat")+" is ^339900Enabled^000000"; }
+		}
+	mes "Requested action complete";
+	goto L_DisableCNov;
+
+L_DisableCGlobal:
+	mes "[Woe Setter]";
+	mes "Are you ABSOLUTELY sure you wish to toggle WoE for EVERY castle?";
+	menu "No",L_DisableC,"Yes",-;
+		if($AldCas1Disabled == 0) { set $AldCas1Disabled,1; mes "Castle "+GetCastleName("aldeg_cas01.gat")+" is ^FF0000Disabled^000000"; } else { set $AldCas1Disabled,0; mes "Castle "+GetCastleName("aldeg_cas01.gat")+" is ^339900Enabled^000000"; }
+		if($AldCas2Disabled == 0) { set $AldCas2Disabled,1; mes "Castle "+GetCastleName("aldeg_cas02.gat")+" is ^FF0000Disabled^000000"; } else { set $AldCas2Disabled,0; mes "Castle "+GetCastleName("aldeg_cas02.gat")+" is ^339900Enabled^000000"; }
+		if($AldCas3Disabled == 0) { set $AldCas3Disabled,1; mes "Castle "+GetCastleName("aldeg_cas03.gat")+" is ^FF0000Disabled^000000"; } else { set $AldCas3Disabled,0; mes "Castle "+GetCastleName("aldeg_cas03.gat")+" is ^339900Enabled^000000"; }
+		if($AldCas4Disabled == 0) { set $AldCas4Disabled,1; mes "Castle "+GetCastleName("aldeg_cas04.gat")+" is ^FF0000Disabled^000000"; } else { set $AldCas4Disabled,0; mes "Castle "+GetCastleName("aldeg_cas04.gat")+" is ^339900Enabled^000000"; }
+		if($AldCas5Disabled == 0) { set $AldCas5Disabled,1; mes "Castle "+GetCastleName("aldeg_cas05.gat")+" is ^FF0000Disabled^000000"; } else { set $AldCas5Disabled,0; mes "Castle "+GetCastleName("aldeg_cas05.gat")+" is ^339900Enabled^000000"; }
+		if($GefCas1Disabled == 0) { set $GefCas1Disabled,1; mes "Castle "+GetCastleName("gefg_cas01.gat")+" is ^FF0000Disabled^000000"; } else { set $GefCas1Disabled,0; mes "Castle "+GetCastleName("gefg_cas01.gat")+" is ^339900Enabled^000000"; }
+		if($GefCas2Disabled == 0) { set $GefCas2Disabled,1; mes "Castle "+GetCastleName("gefg_cas02.gat")+" is ^FF0000Disabled^000000"; } else { set $GefCas2Disabled,0; mes "Castle "+GetCastleName("gefg_cas02.gat")+" is ^339900Enabled^000000"; }
+		if($GefCas3Disabled == 0) { set $GefCas3Disabled,1; mes "Castle "+GetCastleName("gefg_cas03.gat")+" is ^FF0000Disabled^000000"; } else { set $GefCas3Disabled,0; mes "Castle "+GetCastleName("gefg_cas03.gat")+" is ^339900Enabled^000000"; }
+		if($GefCas4Disabled == 0) { set $GefCas4Disabled,1; mes "Castle "+GetCastleName("gefg_cas04.gat")+" is ^FF0000Disabled^000000"; } else { set $GefCas4Disabled,0; mes "Castle "+GetCastleName("gefg_cas04.gat")+" is ^339900Enabled^000000"; }
+		if($GefCas5Disabled == 0) { set $GefCas5Disabled,1; mes "Castle "+GetCastleName("gefg_cas05.gat")+" is ^FF0000Disabled^000000"; } else { set $GefCas5Disabled,0; mes "Castle "+GetCastleName("gefg_cas05.gat")+" is ^339900Enabled^000000"; }
+		if($PayCas1Disabled == 0) { set $PayCas1Disabled,1; mes "Castle "+GetCastleName("payg_cas01.gat")+" is ^FF0000Disabled^000000"; } else { set $PayCas1Disabled,0; mes "Castle "+GetCastleName("payg_cas01.gat")+" is ^339900Enabled^000000"; }
+		if($PayCas2Disabled == 0) { set $PayCas2Disabled,1; mes "Castle "+GetCastleName("payg_cas02.gat")+" is ^FF0000Disabled^000000"; } else { set $PayCas2Disabled,0; mes "Castle "+GetCastleName("payg_cas02.gat")+" is ^339900Enabled^000000"; }
+		if($PayCas3Disabled == 0) { set $PayCas3Disabled,1; mes "Castle "+GetCastleName("payg_cas03.gat")+" is ^FF0000Disabled^000000"; } else { set $PayCas3Disabled,0; mes "Castle "+GetCastleName("payg_cas03.gat")+" is ^339900Enabled^000000"; }
+		if($PayCas4Disabled == 0) { set $PayCas4Disabled,1; mes "Castle "+GetCastleName("payg_cas04.gat")+" is ^FF0000Disabled^000000"; } else { set $PayCas4Disabled,0; mes "Castle "+GetCastleName("payg_cas04.gat")+" is ^339900Enabled^000000"; }
+		if($PayCas5Disabled == 0) { set $PayCas5Disabled,1; mes "Castle "+GetCastleName("payg_cas05.gat")+" is ^FF0000Disabled^000000"; } else { set $PayCas5Disabled,0; mes "Castle "+GetCastleName("payg_cas05.gat")+" is ^339900Enabled^000000"; }
+		if($ProCas1Disabled == 0) { set $ProCas1Disabled,1; mes "Castle "+GetCastleName("prtg_cas01.gat")+" is ^FF0000Disabled^000000"; } else { set $ProCas1Disabled,0; mes "Castle "+GetCastleName("prtg_cas01.gat")+" is ^339900Enabled^000000"; }
+		if($ProCas2Disabled == 0) { set $ProCas2Disabled,1; mes "Castle "+GetCastleName("prtg_cas02.gat")+" is ^FF0000Disabled^000000"; } else { set $ProCas2Disabled,0; mes "Castle "+GetCastleName("prtg_cas02.gat")+" is ^339900Enabled^000000"; }
+		if($ProCas3Disabled == 0) { set $ProCas3Disabled,1; mes "Castle "+GetCastleName("prtg_cas03.gat")+" is ^FF0000Disabled^000000"; } else { set $ProCas3Disabled,0; mes "Castle "+GetCastleName("prtg_cas03.gat")+" is ^339900Enabled^000000"; }
+		if($ProCas4Disabled == 0) { set $ProCas4Disabled,1; mes "Castle "+GetCastleName("prtg_cas04.gat")+" is ^FF0000Disabled^000000"; } else { set $ProCas4Disabled,0; mes "Castle "+GetCastleName("prtg_cas04.gat")+" is ^339900Enabled^000000"; }
+		if($ProCas5Disabled == 0) { set $ProCas5Disabled,1; mes "Castle "+GetCastleName("prtg_cas05.gat")+" is ^FF0000Disabled^000000"; } else { set $ProCas5Disabled,0; mes "Castle "+GetCastleName("prtg_cas05.gat")+" is ^339900Enabled^000000"; }
+		if($NovCas1Disabled == 0) { set $NovCas1Disabled,1; mes "Castle "+GetCastleName("nguild_alde.gat")+" is ^FF0000Disabled^000000"; } else { set $NovCas1Disabled,0; mes "Castle "+GetCastleName("nguild_alde.gat")+" is ^339900Enabled^000000"; }
+		if($NovCas2Disabled == 0) { set $NovCas2Disabled,1; mes "Castle "+GetCastleName("nguild_gef.gat")+" is ^FF0000Disabled^000000"; } else { set $NovCas2Disabled,0; mes "Castle "+GetCastleName("nguild_gef.gat")+" is ^339900Enabled^000000"; }
+		if($NovCas3Disabled == 0) { set $NovCas3Disabled,1; mes "Castle "+GetCastleName("nguild_pay.gat")+" is ^FF0000Disabled^000000"; } else { set $NovCas3Disabled,0; mes "Castle "+GetCastleName("nguild_pay.gat")+" is ^339900Enabled^000000"; }
+		if($NovCas4Disabled == 0) { set $NovCas4Disabled,1; mes "Castle "+GetCastleName("nguild_prt.gat")+" is ^FF0000Disabled^000000"; } else { set $NovCas4Disabled,0; mes "Castle "+GetCastleName("nguild_prt.gat")+" is ^339900Enabled^000000"; }
+	mes "Requested action complete";
+	goto L_DisableC;
+
+////////////////////////////////////////
+////////////////////////////////////////
+//// Spawn Treasure Chest Functions ////
+////////////////////////////////////////
+////////////////////////////////////////
+
+L_SpawnT:
+	next;
+	mes "[Woe Setter]";
+	mes "Select a city you would like to spawn trasure chests for!";
+	menu "Aldebaran",L_SpawnAld,"Geffen",L_SpawnGef,"Payon",L_SpawnPay,
+		"Prontera",L_SpawnPro,"Novice",L_SpawnNov,"Global",L_SpawnGlobal,"Back",-;
+	next;
+	goto L_Main;
+
+L_SpawnAld:
+	next;
+	mes "[Woe Setter]";
+	mes "Now select a castle you would like to spawn them in.";
+	menu "Aldebaran Castle "+GetCastleName("aldeg_cas01.gat"),-,"Aldebaran Castle "+GetCastleName("aldeg_cas02.gat"),-,
+		"Aldebaran Castle "+GetCastleName("aldeg_cas03.gat"),-,"Aldebaran Castle "+GetCastleName("aldeg_cas04.gat"),-,
+		"Aldebaran Castle "+GetCastleName("aldeg_cas05.gat"),-,"All",-,"Back",L_SpawnT;
+	if(@menu == 1) {
+		set @GID, GetCastleData("aldeg_cas01.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("aldeg_cas01.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","aldeg_cas01","A01",$boxNumA01,$@bxA01,$@boxIdA01,1324,114,218,123,227,0; }
+		}
+	if(@menu == 2) {
+		set @GID, GetCastleData("aldeg_cas02.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("aldeg_cas02.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","aldeg_cas02","A02",$boxNumA02,$@bxA02,$@boxIdA02,1326,130,226,138,235,0; }
+		}
+	if(@menu == 3) {
+		set @GID, GetCastleData("aldeg_cas03.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("aldeg_cas03.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","aldeg_cas03","A03",$boxNumA03,$@bxA03,$@boxIdA03,1328,220,264,229,273,0; }
+		}
+	if(@menu == 4) {
+		set @GID, GetCastleData("aldeg_cas04.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("aldeg_cas04.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","aldeg_cas04","A04",$boxNumA04,$@bxA04,$@boxIdA04,1330,80,8,89,17,0; }
+		}
+	if(@menu == 5) {
+		set @GID, GetCastleData("aldeg_cas05.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("aldeg_cas05.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","aldeg_cas05","A05",$boxNumA05,$@bxA05,$@boxIdA05,1332,58,8,65,15,0; }
+		}
+	if(@menu == 6) {
+		set @GID, GetCastleData("aldeg_cas01.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("aldeg_cas01.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","aldeg_cas01","A01",$boxNumA01,$@bxA01,$@boxIdA01,1324,114,218,123,227,0; }
+		set @GID, GetCastleData("aldeg_cas02.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("aldeg_cas02.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","aldeg_cas02","A02",$boxNumA02,$@bxA02,$@boxIdA02,1326,130,226,138,235,0; }
+		set @GID, GetCastleData("aldeg_cas03.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("aldeg_cas03.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","aldeg_cas03","A03",$boxNumA03,$@bxA03,$@boxIdA03,1328,220,264,229,273,0; }
+		set @GID, GetCastleData("aldeg_cas04.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("aldeg_cas04.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","aldeg_cas04","A04",$boxNumA04,$@bxA04,$@boxIdA04,1330,80,8,89,17,0; }
+		set @GID, GetCastleData("aldeg_cas05.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("aldeg_cas05.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","aldeg_cas05","A05",$boxNumA05,$@bxA05,$@boxIdA05,1332,58,8,65,15,0; }
+		}
+	mes "Requested action complete";
+	goto L_SpawnAld;
+
+L_SpawnGef:
+	next;
+	mes "[Woe Setter]";
+	mes "Now select a castle you would like to spawn them in.";
+	menu "Geffen Castle "+GetCastleName("gefg_cas01.gat"),-,"Geffen Castle "+GetCastleName("gefg_cas02.gat"),-,
+		"Geffen Castle "+GetCastleName("gefg_cas03.gat"),-,"Geffen Castle "+GetCastleName("gefg_cas04.gat"),-,
+		"Geffen Castle "+GetCastleName("gefg_cas05.gat"),-,"All",-,"Back",L_SpawnT;
+	if(@menu == 1) {
+		set @GID, GetCastleData("gefg_cas01.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("gefg_cas01.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","gefg_cas01","G01",$boxNumG01,$@bxG01,$@boxIdG01,1334,150,108,158,114,0; }
+		}
+	if(@menu == 2) {
+		set @GID, GetCastleData("gefg_cas02.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("gefg_cas02.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","gefg_cas02","G02",$boxNumG02,$@bxG02,$@boxIdG02,1336,136,112,145,118,0; }
+		}
+	if(@menu == 3) {
+		set @GID, GetCastleData("gefg_cas03.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("gefg_cas03.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","gefg_cas03","G03",$boxNumG03,$@bxG03,$@boxIdG03,1338,266,286,275,293,0; }
+		}
+	if(@menu == 4) {
+		set @GID, GetCastleData("gefg_cas04.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("gefg_cas04.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","gefg_cas04","G04",$boxNumG04,$@bxG04,$@boxIdG04,1340,112,114,119,123,0; }
+		}
+	if(@menu == 5) {
+		set @GID, GetCastleData("gefg_cas05.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("gefg_cas05.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","gefg_cas05","G05",$boxNumG05,$@bxG05,$@boxIdG05,1342,140,106,147,113,0; }
+		}
+	if(@menu == 6) {
+		set @GID, GetCastleData("gefg_cas01.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("gefg_cas01.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","gefg_cas01","G01",$boxNumG01,$@bxG01,$@boxIdG01,1334,150,108,158,114,0; }
+		set @GID, GetCastleData("gefg_cas02.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("gefg_cas02.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","gefg_cas02","G02",$boxNumG02,$@bxG02,$@boxIdG02,1336,136,112,145,118,0; }
+		set @GID, GetCastleData("gefg_cas03.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("gefg_cas03.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","gefg_cas03","G03",$boxNumG03,$@bxG03,$@boxIdG03,1338,266,286,275,293,0; }
+		set @GID, GetCastleData("gefg_cas04.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("gefg_cas04.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","gefg_cas04","G04",$boxNumG04,$@bxG04,$@boxIdG04,1340,112,114,119,123,0; }
+		set @GID, GetCastleData("gefg_cas05.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("gefg_cas05.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","gefg_cas05","G05",$boxNumG05,$@bxG05,$@boxIdG05,1342,140,106,147,113,0; }
+		}
+	mes "Requested action complete";
+	goto L_SpawnGef;
+
+L_SpawnPay:
+	next;
+	mes "[Woe Setter]";
+	mes "Now select a castle you would like to spawn them in.";
+	menu "Payon Castle "+GetCastleName("payg_cas01.gat"),-,"Payon Castle "+GetCastleName("payg_cas02.gat"),-,
+		"Payon Castle "+GetCastleName("payg_cas03.gat"),-,"Payon Castle "+GetCastleName("payg_cas04.gat"),-,
+		"Payon Castle "+GetCastleName("payg_cas05.gat"),-,"All",-,"Back",L_SpawnT;
+	if(@menu == 1) {
+		set @GID, GetCastleData("payg_cas01.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("payg_cas01.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","payg_cas01","Py01",$boxNumPy01,$@bxPy01,$@boxIdPy01,1344,286,4,295,13,0; }
+		}
+	if(@menu == 2) {
+		set @GID, GetCastleData("payg_cas02.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("payg_cas02.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","payg_cas02","Py02",$boxNumPy02,$@bxPy02,$@boxIdPy02,1346,140,140,148,149,0; }
+		}
+	if(@menu == 3) {
+		set @GID, GetCastleData("payg_cas03.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("payg_cas03.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","payg_cas03","Py03",$boxNumPy03,$@bxPy03,$@boxIdPy03,1348,154,164,162,173,0; }
+		}
+	if(@menu == 4) {
+		set @GID, GetCastleData("payg_cas04.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("payg_cas04.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","payg_cas04","Py04",$boxNumPy04,$@bxPy04,$@boxIdPy04,1350,142,44,151,51,0; }
+		}
+	if(@menu == 5) {
+		set @GID, GetCastleData("payg_cas05.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("payg_cas05.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","payg_cas05","Py05",$boxNumPy05,$@bxPy05,$@boxIdPy05,1352,152,128,160,135,0; }
+		}
+	if(@menu == 6) {
+		set @GID, GetCastleData("payg_cas01.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("payg_cas01.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","payg_cas01","Py01",$boxNumPy01,$@bxPy01,$@boxIdPy01,1344,286,4,295,13,0; }
+		set @GID, GetCastleData("payg_cas02.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("payg_cas02.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","payg_cas02","Py02",$boxNumPy02,$@bxPy02,$@boxIdPy02,1346,140,140,148,149,0; }
+		set @GID, GetCastleData("payg_cas03.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("payg_cas03.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","payg_cas03","Py03",$boxNumPy03,$@bxPy03,$@boxIdPy03,1348,154,164,162,173,0; }
+		set @GID, GetCastleData("payg_cas04.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("payg_cas04.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","payg_cas04","Py04",$boxNumPy04,$@bxPy04,$@boxIdPy04,1350,142,44,151,51,0; }
+		set @GID, GetCastleData("payg_cas05.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("payg_cas05.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","payg_cas05","Py05",$boxNumPy05,$@bxPy05,$@boxIdPy05,1352,152,128,160,135,0; }
+		}
+	mes "Requested action complete";
+	goto L_SpawnPay;
+
+L_SpawnPro:
+	next;
+	mes "[Woe Setter]";
+	mes "Now select a castle you would like to spawn them in.";
+	menu "Prontera Castle "+GetCastleName("prtg_cas01.gat"),-,"Prontera Castle "+GetCastleName("prtg_cas02.gat"),-,
+		"Prontera Castle "+GetCastleName("prtg_cas03.gat"),-,"Prontera Castle "+GetCastleName("prtg_cas04.gat"),-,
+		"Prontera Castle "+GetCastleName("prtg_cas05.gat"),-,"All",-,"Back",L_SpawnT;
+	if(@menu == 1) {
+		set @GID, GetCastleData("prtg_cas01.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("prtg_cas01.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","prtg_cas01","Pt01",$boxNumPt01,$@bxPt01,$@boxIdPt01,1354,6,204,15,213,0; }
+		}
+	if(@menu == 2) {
+		set @GID, GetCastleData("prtg_cas02.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("prtg_cas02.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","prtg_cas02","Pt02",$boxNumPt02,$@bxPt02,$@boxIdPt02,1356,198,224,207,233,0; }
+		}
+	if(@menu == 3) {
+		set @GID, GetCastleData("prtg_cas03.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("prtg_cas03.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","prtg_cas03","Pt03",$boxNumPt03,$@bxPt03,$@boxIdPt03,1358,184,128,193,135,0; }
+		}
+	if(@menu == 4) {
+		set @GID, GetCastleData("prtg_cas04.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("prtg_cas04.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","prtg_cas04","Pt04",$boxNumPt04,$@bxPt04,$@boxIdPt04,1360,266,158,275,167,0; }
+		}
+	if(@menu == 5) {
+		set @GID, GetCastleData("prtg_cas05.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("prtg_cas05.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","prtg_cas05","Pt05",$boxNumPt05,$@bxPt05,$@boxIdPt05,1362,272,174,279,181,0; }
+		}
+	if(@menu == 6) {
+		set @GID, GetCastleData("prtg_cas01.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("prtg_cas01.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","prtg_cas01","Pt01",$boxNumPt01,$@bxPt01,$@boxIdPt01,1354,6,204,15,213,0; }
+		set @GID, GetCastleData("prtg_cas02.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("prtg_cas02.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","prtg_cas02","Pt02",$boxNumPt02,$@bxPt02,$@boxIdPt02,1356,198,224,207,233,0; }
+		set @GID, GetCastleData("prtg_cas03.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("prtg_cas03.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","prtg_cas03","Pt03",$boxNumPt03,$@bxPt03,$@boxIdPt03,1358,184,128,193,135,0; }
+		set @GID, GetCastleData("prtg_cas04.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("prtg_cas04.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","prtg_cas04","Pt04",$boxNumPt04,$@bxPt04,$@boxIdPt04,1360,266,158,275,167,0; }
+		set @GID, GetCastleData("prtg_cas05.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("prtg_cas05.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","prtg_cas05","Pt05",$boxNumPt05,$@bxPt05,$@boxIdPt05,1362,272,174,279,181,0; }
+		}
+	mes "Requested action complete";
+	goto L_SpawnPro;
+
+L_SpawnNov:
+	next;
+	mes "[Woe Setter]";
+	mes "Now select a castle you would like to spawn them in.";
+	menu "Novice Castle "+GetCastleName("nguild_alde.gat"),-,"Novice Castle "+GetCastleName("nguild_gef.gat"),-,
+		"Novice Castle "+GetCastleName("nguild_pay.gat"),-,"Novice Castle "+GetCastleName("nguild_prt.gat"),-,
+		"All",-,"Back",L_SpawnT;
+	if(@menu == 1) {
+		set @GID, GetCastleData("nguild_alde.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("nguild_alde.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","nguild_alde","N01",$boxNumN01,$@bxN01,$@boxIdN01,1324,114,218,123,227,0; }
+		}
+	if(@menu == 2) {
+		set @GID, GetCastleData("nguild_gef.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("nguild_gef.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","nguild_gef","N02",$boxNumN02,$@bxN02,$@boxIdN02,1334,150,108,158,114,0; }
+		}
+	if(@menu == 3) {
+		set @GID, GetCastleData("nguild_pay.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("nguild_pay.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","nguild_pay","N03",$boxNumN03,$@bxN03,$@boxIdN03,1344,286,4,295,13,0; }
+		}
+	if(@menu == 4) {
+		set @GID, GetCastleData("nguild_prt.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("nguild_prt.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","nguild_prt","N04",$boxNumN04,$@bxN04,$@boxIdN04,1354,6,204,15,213,0; }
+		}
+	if(@menu == 5) {
+		set @GID, GetCastleData("nguild_alde.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("nguild_alde.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","nguild_alde","N01",$boxNumN01,$@bxN01,$@boxIdN01,1324,114,218,123,227,0; }
+		set @GID, GetCastleData("nguild_gef.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("nguild_gef.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","nguild_gef","N02",$boxNumN02,$@bxN02,$@boxIdN02,1334,150,108,158,114,0; }
+		set @GID, GetCastleData("nguild_pay.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("nguild_pay.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","nguild_pay","N03",$boxNumN03,$@bxN03,$@boxIdN03,1344,286,4,295,13,0; }
+		set @GID, GetCastleData("nguild_prt.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("nguild_prt.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","nguild_prt","N04",$boxNumN04,$@bxN04,$@boxIdN04,1354,6,204,15,213,0; }
+		}
+	mes "Requested action complete";
+	goto L_SpawnNov;
+
+L_SpawnGlobal:
+	mes "[Woe Setter]";
+	mes "Are you ABSOLUTELY sure you wish to spawn treasure chests for EVERY castle?";
+	menu "No",L_SpawnT,"Yes",-;
+		set @GID, GetCastleData("aldeg_cas01.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("aldeg_cas01.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","aldeg_cas01","A01",$boxNumA01,$@bxA01,$@boxIdA01,1324,114,218,123,227,0; }
+		set @GID, GetCastleData("aldeg_cas02.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("aldeg_cas02.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","aldeg_cas02","A02",$boxNumA02,$@bxA02,$@boxIdA02,1326,130,226,138,235,0; }
+		set @GID, GetCastleData("aldeg_cas03.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("aldeg_cas03.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","aldeg_cas03","A03",$boxNumA03,$@bxA03,$@boxIdA03,1328,220,264,229,273,0; }
+		set @GID, GetCastleData("aldeg_cas04.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("aldeg_cas04.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","aldeg_cas04","A04",$boxNumA04,$@bxA04,$@boxIdA04,1330,80,8,89,17,0; }
+		set @GID, GetCastleData("aldeg_cas05.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("aldeg_cas05.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","aldeg_cas05","A05",$boxNumA05,$@bxA05,$@boxIdA05,1332,58,8,65,15,0; }
+		set @GID, GetCastleData("gefg_cas01.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("gefg_cas01.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","gefg_cas01","G01",$boxNumG01,$@bxG01,$@boxIdG01,1334,150,108,158,114,0; }
+		set @GID, GetCastleData("gefg_cas02.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("gefg_cas02.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","gefg_cas02","G02",$boxNumG02,$@bxG02,$@boxIdG02,1336,136,112,145,118,0; }
+		set @GID, GetCastleData("gefg_cas03.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("gefg_cas03.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","gefg_cas03","G03",$boxNumG03,$@bxG03,$@boxIdG03,1338,266,286,275,293,0; }
+		set @GID, GetCastleData("gefg_cas04.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("gefg_cas04.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","gefg_cas04","G04",$boxNumG04,$@bxG04,$@boxIdG04,1340,112,114,119,123,0; }
+		set @GID, GetCastleData("gefg_cas05.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("gefg_cas05.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","gefg_cas05","G05",$boxNumG05,$@bxG05,$@boxIdG05,1342,140,106,147,113,0; }
+		set @GID, GetCastleData("payg_cas01.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("payg_cas01.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","payg_cas01","Py01",$boxNumPy01,$@bxPy01,$@boxIdPy01,1344,286,4,295,13,0; }
+		set @GID, GetCastleData("payg_cas02.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("payg_cas02.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","payg_cas02","Py02",$boxNumPy02,$@bxPy02,$@boxIdPy02,1346,140,140,148,149,0; }
+		set @GID, GetCastleData("payg_cas03.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("payg_cas03.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","payg_cas03","Py03",$boxNumPy03,$@bxPy03,$@boxIdPy03,1348,154,164,162,173,0; }
+		set @GID, GetCastleData("payg_cas04.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("payg_cas04.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","payg_cas04","Py04",$boxNumPy04,$@bxPy04,$@boxIdPy04,1350,142,44,151,51,0; }
+		set @GID, GetCastleData("payg_cas05.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("payg_cas05.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","payg_cas05","Py05",$boxNumPy05,$@bxPy05,$@boxIdPy05,1352,152,128,160,135,0; }
+		set @GID, GetCastleData("prtg_cas01.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("prtg_cas01.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","prtg_cas01","Pt01",$boxNumPt01,$@bxPt01,$@boxIdPt01,1354,6,204,15,213,0; }
+		set @GID, GetCastleData("prtg_cas02.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("prtg_cas02.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","prtg_cas02","Pt02",$boxNumPt02,$@bxPt02,$@boxIdPt02,1356,198,224,207,233,0; }
+		set @GID, GetCastleData("prtg_cas03.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("prtg_cas03.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","prtg_cas03","Pt03",$boxNumPt03,$@bxPt03,$@boxIdPt03,1358,184,128,193,135,0; }
+		set @GID, GetCastleData("prtg_cas04.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("prtg_cas04.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","prtg_cas04","Pt04",$boxNumPt04,$@bxPt04,$@boxIdPt04,1360,266,158,275,167,0; }
+		set @GID, GetCastleData("prtg_cas05.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("prtg_cas05.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","prtg_cas05","Pt05",$boxNumPt05,$@bxPt05,$@boxIdPt05,1362,272,174,279,181,0; }
+		set @GID, GetCastleData("nguild_alde.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("nguild_alde.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","nguild_alde","N01",$boxNumN01,$@bxN01,$@boxIdN01,1324,114,218,123,227,0; }
+		set @GID, GetCastleData("nguild_gef.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("nguild_gef.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","nguild_gef","N02",$boxNumN02,$@bxN02,$@boxIdN02,1334,150,108,158,114,0; }
+		set @GID, GetCastleData("nguild_pay.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("nguild_pay.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","nguild_pay","N03",$boxNumN03,$@bxN03,$@boxIdN03,1344,286,4,295,13,0; }
+		set @GID, GetCastleData("nguild_prt.gat",1);
+		if(@GID == 0) { mes "^FF0000Unable to spawn chests for "+GetCastleName("nguild_prt.gat")+", no castle owner detected.^000000"; }
+		if(@GID != 0) { callfunc "F_GldTreas","nguild_prt","N04",$boxNumN04,$@bxN04,$@boxIdN04,1354,6,204,15,213,0; }
+	mes "Requested action complete";
+	goto L_SpawnT;
+
+///////////////////////////////
+///////////////////////////////
+//// Free Castle Functions ////
+///////////////////////////////
+///////////////////////////////
+L_FreeC:
+	next;
+	mes "[WoE Setter]";
+	mes "Select a city to free a castle in";
+	menu "Aldebaran",L_FreeAld,"Geffen",L_FreeGef,"Payon",L_FreePay,
+		"Prontera",L_FreePro,"Novice",L_SpawnNov,"Global",L_FreeGlobal,"Back",-;
+	next;
+	goto L_Main;
+L_FreeAld:
+	next;
+	mes "[WoE Setter]";
+	mes "Select a castle to free.";
+	menu "Aldebaran Castle "+GetCastleName("aldeg_cas01.gat"),-,"Aldebaran Castle "+GetCastleName("aldeg_cas02.gat"),-,
+		"Aldebaran Castle "+GetCastleName("aldeg_cas03.gat"),-,"Aldebaran Castle "+GetCastleName("aldeg_cas04.gat"),-,
+		"Aldebaran Castle "+GetCastleName("aldeg_cas05.gat"),-,"All",-,"Back",L_FreeC;
+	if(@menu == 1) {
+		killmonsterall "aldeg_cas01.gat";
+		Announce "Guild Base [" + GetCastleName("aldeg_cas01.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#A01";
+		SetCastleData "aldeg_cas01.gat",0,0;
+		}
+	if(@menu == 2) {
+		killmonsterall "aldeg_cas02.gat";
+		Announce "Guild Base [" + GetCastleName("aldeg_cas02.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#A02";
+		SetCastleData "aldeg_cas02.gat",0,0;
+		}
+	if(@menu == 3) {
+		killmonsterall "aldeg_cas03.gat";
+		Announce "Guild Base [" + GetCastleName("aldeg_cas03.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#A03";
+		SetCastleData "aldeg_cas03.gat",0,0;
+		}
+	if(@menu == 4) {
+		killmonsterall "aldeg_cas04.gat";
+		Announce "Guild Base [" + GetCastleName("aldeg_cas04.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#A04";
+		SetCastleData "aldeg_cas04.gat",0,0;
+		}
+	if(@menu == 5) {
+		killmonsterall "aldeg_cas05.gat";
+		Announce "Guild Base [" + GetCastleName("aldeg_cas05.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#A05";
+		SetCastleData "aldeg_cas05.gat",0,0;
+		}
+	if(@menu == 6) {
+		killmonsterall "aldeg_cas01.gat";
+		Announce "Guild Base [" + GetCastleName("aldeg_cas01.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#A01";
+		SetCastleData "aldeg_cas01.gat",0,0;
+		killmonsterall "aldeg_cas02.gat";
+		Announce "Guild Base [" + GetCastleName("aldeg_cas02.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#A02";
+		SetCastleData "aldeg_cas02.gat",0,0;
+		killmonsterall "aldeg_cas03.gat";
+		Announce "Guild Base [" + GetCastleName("aldeg_cas03.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#A03";
+		SetCastleData "aldeg_cas03.gat",0,0;
+		killmonsterall "aldeg_cas04.gat";
+		Announce "Guild Base [" + GetCastleName("aldeg_cas04.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#A04";
+		SetCastleData "aldeg_cas04.gat",0,0;
+		killmonsterall "aldeg_cas05.gat";
+		Announce "Guild Base [" + GetCastleName("aldeg_cas05.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#A05";
+		SetCastleData "aldeg_cas05.gat",0,0;
+		}
+	mes "Requested action complete";
+	goto L_FreeAld;
+L_FreeGef:
+	next;
+	mes "[WoE Setter]";
+	mes "Select a castle to free.";
+	menu "Geffen Castle "+GetCastleName("gefg_cas01.gat"),-,"Geffen Castle "+GetCastleName("gefg_cas02.gat"),-,
+		"Geffen Castle "+GetCastleName("gefg_cas03.gat"),-,"Geffen Castle "+GetCastleName("gefg_cas04.gat"),-,
+		"Geffen Castle "+GetCastleName("gefg_cas05.gat"),-,"All",-,"Back",L_FreeC;
+	if(@menu == 1) {
+		killmonsterall "gefg_cas01.gat";
+		Announce "Guild Base [" + GetCastleName("gefg_cas01.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#A01";
+		SetCastleData "gefg_cas01.gat",0,0;
+		}
+	if(@menu == 2) {
+		killmonsterall "gefg_cas02.gat";
+		Announce "Guild Base [" + GetCastleName("gefg_cas02.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#G02";
+		SetCastleData "gefg_cas02.gat",0,0;
+		}
+	if(@menu == 3) {
+		killmonsterall "gefg_cas03.gat";
+		Announce "Guild Base [" + GetCastleName("gefg_cas03.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#G03";
+		SetCastleData "gefg_cas03.gat",0,0;
+		}
+	if(@menu == 4) {
+		killmonsterall "gefg_cas04.gat";
+		Announce "Guild Base [" + GetCastleName("gefg_cas04.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#G04";
+		SetCastleData "gefg_cas04.gat",0,0;
+		}
+	if(@menu == 5) {
+		killmonsterall "gefg_cas05.gat";
+		Announce "Guild Base [" + GetCastleName("gefg_cas05.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#G05";
+		SetCastleData "gefg_cas05.gat",0,0;
+		}
+	if(@menu == 6) {
+		killmonsterall "gefg_cas01.gat";
+		Announce "Guild Base [" + GetCastleName("gefg_cas01.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#A01";
+		SetCastleData "gefg_cas01.gat",0,0;
+		killmonsterall "gefg_cas02.gat";
+		Announce "Guild Base [" + GetCastleName("gefg_cas02.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#G02";
+		SetCastleData "gefg_cas02.gat",0,0;
+		killmonsterall "gefg_cas03.gat";
+		Announce "Guild Base [" + GetCastleName("gefg_cas03.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#G03";
+		SetCastleData "gefg_cas03.gat",0,0;
+		killmonsterall "gefg_cas04.gat";
+		Announce "Guild Base [" + GetCastleName("gefg_cas04.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#G04";
+		SetCastleData "gefg_cas04.gat",0,0;
+		killmonsterall "gefg_cas05.gat";
+		Announce "Guild Base [" + GetCastleName("gefg_cas05.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#G05";
+		SetCastleData "gefg_cas05.gat",0,0;
+		}
+	mes "Requested action complete";
+	goto L_FreeGef;
+L_FreePay:
+	next;
+	mes "[WoE Setter]";
+	mes "Select a castle to free.";
+	menu "Payon Castle "+GetCastleName("payg_cas01.gat"),-,"Payon Castle "+GetCastleName("payg_cas02.gat"),-,
+		"Payon Castle "+GetCastleName("payg_cas03.gat"),-,"Payon Castle "+GetCastleName("payg_cas04.gat"),-,
+		"Payon Castle "+GetCastleName("payg_cas05.gat"),-,"All",-,"Back",L_FreeC;
+	if(@menu == 1) {
+		killmonsterall "payg_cas01.gat";
+		Announce "Guild Base [" + GetCastleName("payg_cas01.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#Py01";
+		SetCastleData "payg_cas01.gat",0,0;
+		}
+	if(@menu == 2) {
+		killmonsterall "payg_cas02.gat";
+		Announce "Guild Base [" + GetCastleName("payg_cas02.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#Py02";
+		SetCastleData "payg_cas02.gat",0,0;
+		}
+	if(@menu == 3) {
+		killmonsterall "payg_cas03.gat";
+		Announce "Guild Base [" + GetCastleName("payg_cas03.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#Py03";
+		SetCastleData "payg_cas03.gat",0,0;
+		}
+	if(@menu == 4) {
+		killmonsterall "payg_cas04.gat";
+		Announce "Guild Base [" + GetCastleName("payg_cas04.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#Py04";
+		SetCastleData "payg_cas04.gat",0,0;
+		}
+	if(@menu == 5) {
+		killmonsterall "payg_cas05.gat";
+		Announce "Guild Base [" + GetCastleName("payg_cas05.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#Py05";
+		SetCastleData "payg_cas05.gat",0,0;
+		}
+	if(@menu == 6) {
+		killmonsterall "payg_cas01.gat";
+		Announce "Guild Base [" + GetCastleName("payg_cas01.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#Py01";
+		SetCastleData "payg_cas01.gat",0,0;
+		killmonsterall "payg_cas02.gat";
+		Announce "Guild Base [" + GetCastleName("payg_cas02.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#Py02";
+		SetCastleData "payg_cas02.gat",0,0;
+		killmonsterall "payg_cas03.gat";
+		Announce "Guild Base [" + GetCastleName("payg_cas03.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#Py03";
+		SetCastleData "payg_cas03.gat",0,0;
+		killmonsterall "payg_cas04.gat";
+		Announce "Guild Base [" + GetCastleName("payg_cas04.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#Py04";
+		SetCastleData "payg_cas04.gat",0,0;
+		killmonsterall "payg_cas05.gat";
+		Announce "Guild Base [" + GetCastleName("payg_cas05.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#Py05";
+		SetCastleData "payg_cas05.gat",0,0;
+		}
+	mes "Requested action complete";
+	goto L_FreePay;
+L_FreePro:
+	next;
+	mes "[WoE Setter]";
+	mes "Select a castle to free.";
+	menu "Prontera Castle "+GetCastleName("prtg_cas01.gat"),-,"Prontera Castle "+GetCastleName("prtg_cas02.gat"),-,
+		"Prontera Castle "+GetCastleName("prtg_cas03.gat"),-,"Prontera Castle "+GetCastleName("prtg_cas04.gat"),-,
+		"Prontera Castle "+GetCastleName("prtg_cas05.gat"),-,"All",-,"Back",L_FreeC;
+	if(@menu == 1) {
+		killmonsterall "prtg_cas01.gat";
+		Announce "Guild Base [" + GetCastleName("prtg_cas01.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#Pt01";
+		SetCastleData "prtg_cas01.gat",0,0;
+		}
+	if(@menu == 2) {
+		killmonsterall "prtg_cas02.gat";
+		Announce "Guild Base [" + GetCastleName("prtg_cas02.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#Pt02";
+		SetCastleData "prtg_cas02.gat",0,0;
+		}
+	if(@menu == 3) {
+		killmonsterall "prtg_cas03.gat";
+		Announce "Guild Base [" + GetCastleName("prtg_cas03.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#Pt03";
+		SetCastleData "prtg_cas03.gat",0,0;
+		}
+	if(@menu == 4) {
+		killmonsterall "prtg_cas04.gat";
+		Announce "Guild Base [" + GetCastleName("prtg_cas04.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#Pt04";
+		SetCastleData "prtg_cas04.gat",0,0;
+		}
+	if(@menu == 5) {
+		killmonsterall "prtg_cas05.gat";
+		Announce "Guild Base [" + GetCastleName("prtg_cas05.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#Pt05";
+		SetCastleData "prtg_cas05.gat",0,0;
+		}
+	if(@menu == 6) {
+		killmonsterall "prtg_cas01.gat";
+		Announce "Guild Base [" + GetCastleName("prtg_cas01.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#Pt01";
+		SetCastleData "prtg_cas01.gat",0,0;
+		killmonsterall "prtg_cas02.gat";
+		Announce "Guild Base [" + GetCastleName("prtg_cas02.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#Pt02";
+		SetCastleData "prtg_cas02.gat",0,0;
+		killmonsterall "prtg_cas03.gat";
+		Announce "Guild Base [" + GetCastleName("prtg_cas03.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#Pt03";
+		SetCastleData "prtg_cas03.gat",0,0;
+		killmonsterall "prtg_cas04.gat";
+		Announce "Guild Base [" + GetCastleName("prtg_cas04.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#Pt04";
+		SetCastleData "prtg_cas04.gat",0,0;
+		killmonsterall "prtg_cas05.gat";
+		Announce "Guild Base [" + GetCastleName("prtg_cas05.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#Pt05";
+		SetCastleData "prtg_cas05.gat",0,0;
+		}
+	mes "Requested action complete";
+	goto L_FreePro;
+L_FreeNov:
+	next;
+	mes "[WoE Setter]";
+	mes "Select a castle to free.";
+	menu "Novice Castle "+GetCastleName("nguild_alde.gat"),-,"Novice Castle "+GetCastleName("nguild_gef.gat"),-,
+		"Novice Castle "+GetCastleName("nguild_pay.gat"),-,"Novice Castle "+GetCastleName("nguild_prt.gat"),-,
+		"All",-,"Back",L_FreeC;
+	if(@menu == 1) {
+		killmonsterall "nguild_alde.gat";
+		Announce "Guild Base [" + GetCastleName("nguild_alde.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#N01";
+		SetCastleData "nguild_alde.gat",0,0;
+		}
+	if(@menu == 2) {
+		killmonsterall "nguild_gef.gat";
+		Announce "Guild Base [" + GetCastleName("nguild_gef.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#N02";
+		SetCastleData "nguild_gef.gat",0,0;
+		}
+	if(@menu == 3) {
+		killmonsterall "nguild_pay.gat";
+		Announce "Guild Base [" + GetCastleName("nguild_pay.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#N03";
+		SetCastleData "nguild_pay.gat",0,0;
+		}
+	if(@menu == 4) {
+		killmonsterall "nguild_prt.gat";
+		Announce "Guild Base [" + GetCastleName("nguild_prt.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#N04";
+		SetCastleData "nguild_prt.gat",0,0;
+		}
+
+	if(@menu == 5) {
+		killmonsterall "nguild_alde.gat";
+		Announce "Guild Base [" + GetCastleName("nguild_alde.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#N01";
+		SetCastleData "nguild_alde.gat",0,0;
+		killmonsterall "nguild_gef.gat";
+		Announce "Guild Base [" + GetCastleName("nguild_gef.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#N02";
+		SetCastleData "nguild_gef.gat",0,0;
+		killmonsterall "nguild_pay.gat";
+		Announce "Guild Base [" + GetCastleName("nguild_pay.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#N03";
+		SetCastleData "nguild_pay.gat",0,0;
+		killmonsterall "nguild_prt.gat";
+		Announce "Guild Base [" + GetCastleName("nguild_prt.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#N04";
+		SetCastleData "nguild_prt.gat",0,0;
+		}
+	mes "Requested action complete";
+	goto L_FreeNov;
+L_FreeGlobal:
+	mes "[Woe Setter]";
+	mes "Are you ABSOLUTELY sure you wish to free EVERY castle?";
+	menu "No",L_FreeC,"Yes",-;
+		killmonsterall "aldeg_cas01.gat";
+		Announce "Guild Base [" + GetCastleName("aldeg_cas01.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#A01";
+		SetCastleData "aldeg_cas01.gat",0,0;
+		killmonsterall "aldeg_cas02.gat";
+		Announce "Guild Base [" + GetCastleName("aldeg_cas02.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#A02";
+		SetCastleData "aldeg_cas02.gat",0,0;
+		killmonsterall "aldeg_cas03.gat";
+		Announce "Guild Base [" + GetCastleName("aldeg_cas03.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#A03";
+		SetCastleData "aldeg_cas03.gat",0,0;
+		killmonsterall "aldeg_cas04.gat";
+		Announce "Guild Base [" + GetCastleName("aldeg_cas04.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#A04";
+		SetCastleData "aldeg_cas04.gat",0,0;
+		killmonsterall "aldeg_cas05.gat";
+		Announce "Guild Base [" + GetCastleName("aldeg_cas05.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#A05";
+		SetCastleData "aldeg_cas05.gat",0,0;
+		killmonsterall "gefg_cas01.gat";
+		Announce "Guild Base [" + GetCastleName("gefg_cas01.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#A01";
+		SetCastleData "gefg_cas01.gat",0,0;
+		killmonsterall "gefg_cas02.gat";
+		Announce "Guild Base [" + GetCastleName("gefg_cas02.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#G02";
+		SetCastleData "gefg_cas02.gat",0,0;
+		killmonsterall "gefg_cas03.gat";
+		Announce "Guild Base [" + GetCastleName("gefg_cas03.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#G03";
+		SetCastleData "gefg_cas03.gat",0,0;
+		killmonsterall "gefg_cas04.gat";
+		Announce "Guild Base [" + GetCastleName("gefg_cas04.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#G04";
+		SetCastleData "gefg_cas04.gat",0,0;
+		killmonsterall "gefg_cas05.gat";
+		Announce "Guild Base [" + GetCastleName("gefg_cas05.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#G05";
+		SetCastleData "gefg_cas05.gat",0,0;
+		killmonsterall "payg_cas01.gat";
+		Announce "Guild Base [" + GetCastleName("payg_cas01.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#Py01";
+		SetCastleData "payg_cas01.gat",0,0;
+		killmonsterall "payg_cas02.gat";
+		Announce "Guild Base [" + GetCastleName("payg_cas02.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#Py02";
+		SetCastleData "payg_cas02.gat",0,0;
+		killmonsterall "payg_cas03.gat";
+		Announce "Guild Base [" + GetCastleName("payg_cas03.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#Py03";
+		SetCastleData "payg_cas03.gat",0,0;
+		killmonsterall "payg_cas04.gat";
+		Announce "Guild Base [" + GetCastleName("payg_cas04.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#Py04";
+		SetCastleData "payg_cas04.gat",0,0;
+		killmonsterall "payg_cas05.gat";
+		Announce "Guild Base [" + GetCastleName("payg_cas05.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#Py05";
+		SetCastleData "payg_cas05.gat",0,0;
+		killmonsterall "prtg_cas01.gat";
+		Announce "Guild Base [" + GetCastleName("prtg_cas01.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#Pt01";
+		SetCastleData "prtg_cas01.gat",0,0;
+		killmonsterall "prtg_cas02.gat";
+		Announce "Guild Base [" + GetCastleName("prtg_cas02.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#Pt02";
+		SetCastleData "prtg_cas02.gat",0,0;
+		killmonsterall "prtg_cas03.gat";
+		Announce "Guild Base [" + GetCastleName("prtg_cas03.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#Pt03";
+		SetCastleData "prtg_cas03.gat",0,0;
+		killmonsterall "prtg_cas04.gat";
+		Announce "Guild Base [" + GetCastleName("prtg_cas04.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#Pt04";
+		SetCastleData "prtg_cas04.gat",0,0;
+		killmonsterall "prtg_cas05.gat";
+		Announce "Guild Base [" + GetCastleName("prtg_cas05.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#Pt05";
+		SetCastleData "prtg_cas05.gat",0,0;
+		killmonsterall "nguild_alde.gat";
+		Announce "Guild Base [" + GetCastleName("nguild_alde.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#N01";
+		SetCastleData "nguild_alde.gat",0,0;
+		killmonsterall "nguild_gef.gat";
+		Announce "Guild Base [" + GetCastleName("nguild_gef.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#N02";
+		SetCastleData "nguild_gef.gat",0,0;
+		killmonsterall "nguild_pay.gat";
+		Announce "Guild Base [" + GetCastleName("nguild_pay.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#N03";
+		SetCastleData "nguild_pay.gat",0,0;
+		killmonsterall "nguild_prt.gat";
+		Announce "Guild Base [" + GetCastleName("nguild_prt.gat") + "] has been abandoned.",0;
+		disablenpc "Kafra Service#N04";
+		SetCastleData "nguild_prt.gat",0,0;
+	mes "Requested action complete";
+	next;
+	goto L_Main;
+
+/////////////////////////////////
+/////////////////////////////////
+//// Guild Manager Functions ////
+/////////////////////////////////
+/////////////////////////////////
+
+L_CallGM:
+	next;
+	mes "[WoE Setter]";
+	mes "Select a city to call the guild manager in";
+	menu "Aldebaran",L_CallGMAld,"Geffen",L_CallGMGef,"Payon",L_CallGMPay,
+		"Prontera",L_CallGMPro,"Novice",L_CallGMNov,"Back",-;
+	next;
+	goto L_Main;
+L_CallGMAld:
+	next;
+	mes "[WoE Setter]";
+	mes "Select a castle to call the guild manager in";
+	menu "Aldebaran Castle "+GetCastleName("aldeg_cas01.gat"),-,"Aldebaran Castle "+GetCastleName("aldeg_cas02.gat"),-,
+		"Aldebaran Castle "+GetCastleName("aldeg_cas03.gat"),-,"Aldebaran Castle "+GetCastleName("aldeg_cas04.gat"),-,
+		"Aldebaran Castle "+GetCastleName("aldeg_cas05.gat"),-,"Back",L_CallGM;
+	if(@menu == 1) callfunc("F_GldManager","Arl Fredo","aldeg_cas01",119,223,"A01");
+	if(@menu == 2) callfunc("F_GldManager","Chen Lee","aldeg_cas02",135,231,"A02");
+	if(@menu == 3) callfunc("F_GldManager","Chen Lee","aldeg_cas03",225,269,"A03");
+	if(@menu == 4) callfunc("F_GldManager","Brimhemsen","aldeg_cas04",85,12,"A04");
+	if(@menu == 5) callfunc("F_GldManager","Brimhemsen","aldeg_cas05",66,11,"A05");
+	end;
+L_CallGMGef:
+	next;
+	mes "[WoE Setter]";
+	mes "Select a castle to call the guild manager in";
+	menu "Geffen Castle "+GetCastleName("gefg_cas01.gat"),-,"Geffen Castle "+GetCastleName("gefg_cas02.gat"),-,
+		"Geffen Castle "+GetCastleName("gefg_cas03.gat"),-,"Geffen Castle "+GetCastleName("gefg_cas04.gat"),-,
+		"Geffen Castle "+GetCastleName("gefg_cas05.gat"),-,"Back",L_CallGM;
+	if(@menu == 1) callfunc("F_GldManager","Gnaucher","gefg_cas01",155,112,"G01");
+	if(@menu == 2) callfunc("F_GldManager","Esmark","gefg_cas02",141,115,"G02");
+	if(@menu == 3) callfunc("F_GldManager","Jyang","gefg_cas03",270,290,"G03");
+	if(@menu == 4) callfunc("F_GldManager","Kelbany","gefg_cas04",116,118,"G04");
+	if(@menu == 5) callfunc("F_GldManager","Beeor","gefg_cas05",144,110,"G05");
+	end;
+L_CallGMPay:
+	next;
+	mes "[WoE Setter]";
+	mes "Select a castle to call the guild manager in";
+	menu "Payon Castle "+GetCastleName("payg_cas01.gat"),-,"Payon Castle "+GetCastleName("payg_cas02.gat"),-,
+		"Payon Castle "+GetCastleName("payg_cas03.gat"),-,"Payon Castle "+GetCastleName("payg_cas04.gat"),-,
+		"Payon Castle "+GetCastleName("payg_cas05.gat"),-,"Back",L_CallGM;
+	if(@menu == 1) callfunc("F_GldManager","Grunday","payg_cas01",290,7,"Py01");
+	if(@menu == 2) callfunc("F_GldManager","Cherrios","payg_cas02",145,143,"Py02");
+	if(@menu == 3) callfunc("F_GldManager","Garriet","payg_cas03",158,168,"Py03");
+	if(@menu == 4) callfunc("F_GldManager","DJ","payg_cas04",146,48,"Py04");
+	if(@menu == 5) callfunc("F_GldManager","Najarf","payg_cas05",156,131,"Py05");
+	end;
+L_CallGMPro:
+	next;
+	mes "[WoE Setter]";
+	mes "Select a castle to call the guild manager in";
+	menu "Prontera Castle "+GetCastleName("prtg_cas01.gat"),-,"Prontera Castle "+GetCastleName("prtg_cas02.gat"),-,
+		"Prontera Castle "+GetCastleName("prtg_cas03.gat"),-,"Prontera Castle "+GetCastleName("prtg_cas04.gat"),-,
+		"Prontera Castle "+GetCastleName("prtg_cas05.gat"),-,"Back",L_FreeC;
+	if(@menu == 1) callfunc("F_GldManager","Abrai","prtg_cas01",15,209,"Pt01");
+	if(@menu == 2) callfunc("F_GldManager","Rhay","prtg_cas02",201,229,"Pt02");
+	if(@menu == 3) callfunc("F_GldManager","Stick","prtg_cas03",189,132,"Pt03");
+	if(@menu == 4) callfunc("F_GldManager","Bandred","prtg_cas04",271,162,"Pt04");
+	if(@menu == 5) callfunc("F_GldManager","Reiner","prtg_cas05",273,179,"Pt05");
+	end;
+L_CallGMNov:
+	next;
+	mes "[WoE Setter]";
+	mes "Select a castle to call the guild manager in";
+	menu "Novice Castle "+GetCastleName("nguild_alde.gat"),-,"Novice Castle "+GetCastleName("nguild_gef.gat"),-,
+		"Novice Castle "+GetCastleName("nguild_pay.gat"),-,"Novice Castle "+GetCastleName("nguild_prt.gat"),-,
+		"Back",L_CallGM;
+	if(@menu == 1) callfunc("F_GldManager","Frolo","nguild_alde",119,223,"N01");
+	if(@menu == 2) callfunc("F_GldManager","Leiber","nguild_gef",155,112,"N02");
+	if(@menu == 3) callfunc("F_GldManager","Dundar","nguild_pay",290,7,"N03");
+	if(@menu == 4) callfunc("F_GldManager","Thefton","nguild_prt",15,209,"N04");
+	end;
+}
+
+-	script	Agit_Event_Global	-1,{
+	end;
+OnInit:
+disablenpc "Agit_Event";
+OnMinute00:
+
+// starting time check
+	set $@num,0;
+L_StartLoop:
+	if($sday[$@num] == 0 && $eday[$@num] == 0 && $woetime[$@num] == 0 && $woetime2[$@num] == 0) goto L_StartLoopEnd;
+	if(gettime(4)==$sday[$@num] && gettime(3)>=$woetime[$@num] && (gettime(3)<$woetime2[$@num] || $sday[$@num]!=$eday[$@num])) goto L_Start;
+	set $@num,$@num+1;
+	goto L_StartLoop;
+
+// end time checks
+	L_StartLoopEnd:
+	set $@num,0;
+	L_EndLoop:
+	if($eday[$@num] == 0 && $woetime[$@num] == 0 && $woetime2[$@num] == 0) end;
+	if((gettime(4)==$eday[$@num]) && (gettime(3)==$woetime2[$@num])) goto L_End;
+	set $@num,$@num+1;
+	goto L_EndLoop;
+	end;
+
+// Stop WoE
+L_End:
+	if(!agitcheck()) end;
+	Announce "The War Of Emperium for all castles is over!",8;
+	set $AllWoE,0;
+	AgitEnd;
+	disablenpc "Agit_A01";
+	disablenpc "Agit_A02";
+	disablenpc "Agit_A03";
+	disablenpc "Agit_A04";
+	disablenpc "Agit_A05";
+	disablenpc "Agit_G01";
+	disablenpc "Agit_G02";
+	disablenpc "Agit_G03";
+	disablenpc "Agit_G04";
+	disablenpc "Agit_G05";
+	disablenpc "Agit_Py01";
+	disablenpc "Agit_Py02";
+	disablenpc "Agit_Py03";
+	disablenpc "Agit_Py04";
+	disablenpc "Agit_Py05";
+	disablenpc "Agit_Pt01";
+	disablenpc "Agit_Pt02";
+	disablenpc "Agit_Pt03";
+	disablenpc "Agit_Pt04";
+	disablenpc "Agit_Pt05";
+	disablenpc "Agit_N01";
+	disablenpc "Agit_N02";
+	disablenpc "Agit_N03";
+	disablenpc "Agit_N04";
+	end;
+
+// Start WoE
+L_Start:
+	if(agitcheck()) end;
+	Announce "The War Of Emperium for all castles has begun!",8;
+	if($AldCas1Disabled == 0) enablenpc "Agit_A01";
+	if($AldCas2Disabled == 0) enablenpc "Agit_A02";
+	if($AldCas3Disabled == 0) enablenpc "Agit_A03";
+	if($AldCas4Disabled == 0) enablenpc "Agit_A04";
+	if($AldCas5Disabled == 0) enablenpc "Agit_A05";
+	if($GefCas1Disabled == 0) enablenpc "Agit_G01";
+	if($GefCas2Disabled == 0) enablenpc "Agit_G02";
+	if($GefCas3Disabled == 0) enablenpc "Agit_G03";
+	if($GefCas4Disabled == 0) enablenpc "Agit_G04";
+	if($GefCas5Disabled == 0) enablenpc "Agit_G05";
+	if($PayCas1Disabled == 0) enablenpc "Agit_Py01";
+	if($PayCas2Disabled == 0) enablenpc "Agit_Py02";
+	if($PayCas3Disabled == 0) enablenpc "Agit_Py03";
+	if($PayCas4Disabled == 0) enablenpc "Agit_Py04";
+	if($PayCas5Disabled == 0) enablenpc "Agit_Py05";
+	if($ProCas1Disabled == 0) enablenpc "Agit_Pt01";
+	if($ProCas2Disabled == 0) enablenpc "Agit_Pt02";
+	if($ProCas3Disabled == 0) enablenpc "Agit_Pt03";
+	if($ProCas4Disabled == 0) enablenpc "Agit_Pt04";
+	if($ProCas5Disabled == 0) enablenpc "Agit_Pt05";
+	if($NovCas1Disabled == 0) enablenpc "Agit_N01";
+	if($NovCas2Disabled == 0) enablenpc "Agit_N02";
+	if($NovCas3Disabled == 0) enablenpc "Agit_N03";
+	if($NovCas4Disabled == 0) enablenpc "Agit_N04";
+	set $AllWoE,1;
+	AgitStart;
+	end;
+
+}
+
+-	script	Agit_Event_Aldebaran	-1,{
+	end;
+OnInit:
+	disablenpc "Agit_A01";
+	disablenpc "Agit_A02";
+	disablenpc "Agit_A03";
+	disablenpc "Agit_A04";
+	disablenpc "Agit_A05";
+	set $NovAld,0;
+OnMinute00:
+
+// starting time check
+	set $@num,0;
+L_StartLoop:
+	if($sdayAld[$@num] == 0 && $edayAld[$@num] == 0 && $woetimeAld[$@num] == 0 && $woetimeAld2[$@num] == 0) goto L_StartLoopEnd;
+	if(gettime(4)==$sdayAld[$@num] && gettime(3)>=$woetimeAld[$@num] && (gettime(3)<$woetimeAld2[$@num] || $sdayAld[$@num]!=$edayAld[$@num])) goto L_Start;
+	set $@num,$@num+1;
+	goto L_StartLoop;
+
+// end time checks
+	L_StartLoopEnd:
+	set $@num,0;
+	L_EndLoop:
+	if($edayAld[$@num] == 0 && $woetimeAld[$@num] == 0 && $woetimeAld2[$@num] == 0) end;
+	if((gettime(4)==$edayAld[$@num]) && (gettime(3)==$woetimeAld2[$@num])) goto L_End;
+	set $@num,$@num+1;
+	goto L_EndLoop;
+	end;
+
+// Stop WoE
+L_End:
+	if(!agitcheck()) end;
+	Announce "The War Of Emperium for Aldebaran is over!",8;
+	set $AldWoE,0;
+	AgitEnd;
+	disablenpc "Agit_A01";
+	disablenpc "Agit_A02";
+	disablenpc "Agit_A03";
+	disablenpc "Agit_A04";
+	disablenpc "Agit_A05";
+	end;
+
+// Start WoE
+L_Start:
+	if(agitcheck()) end;
+	Announce "The War Of Emperium for Aldebaran has begun!",8;
+	set $AldWoE,1;
+	if($AldCas1Disabled == 0) enablenpc "Agit_A01";
+	if($AldCas2Disabled == 0) enablenpc "Agit_A02";
+	if($AldCas3Disabled == 0) enablenpc "Agit_A03";
+	if($AldCas4Disabled == 0) enablenpc "Agit_A04";
+	if($AldCas5Disabled == 0) enablenpc "Agit_A05";
+	AgitStart;
+	end;
+}
+
+-	script	Agit_Event_Geffen	-1,{
+	end;
+OnInit:
+	disablenpc "Agit_G01";
+	disablenpc "Agit_G02";
+	disablenpc "Agit_G03";
+	disablenpc "Agit_G04";
+	disablenpc "Agit_G05";
+	set $NovGef,0;
+OnMinute00:
+
+// starting time check
+	set $@num,0;
+L_StartLoop:
+	if($sdayGef[$@num] == 0 && $edayGef[$@num] == 0 && $woetimeGef[$@num] == 0 && $woetimeGef2[$@num] == 0) goto L_StartLoopEnd;
+	if(gettime(4)==$sdayGef[$@num] && gettime(3)>=$woetimeGef[$@num] && (gettime(3)<$woetimeGef2[$@num] || $sdayGef[$@num]!=$edayGef[$@num])) goto L_Start;
+	set $@num,$@num+1;
+	goto L_StartLoop;
+
+// end time checks
+	L_StartLoopEnd:
+	set $@num,0;
+	L_EndLoop:
+	if($edayGef[$@num] == 0 && $woetimeGef[$@num] == 0 && $woetimeGef2[$@num] == 0) end;
+	if((gettime(4)==$edayGef[$@num]) && (gettime(3)==$woetimeGef2[$@num])) goto L_End;
+	set $@num,$@num+1;
+	goto L_EndLoop;
+	end;
+
+// Stop WoE
+L_End:
+	if(!agitcheck()) end;
+	Announce "The War Of Emperium for Geffen is over!",8;
+	set $GefWoE,0;
+	AgitEnd;
+	disablenpc "Agit_G01";
+	disablenpc "Agit_G02";
+	disablenpc "Agit_G03";
+	disablenpc "Agit_G04";
+	disablenpc "Agit_G05";
+	end;
+
+// Start WoE
+L_Start:
+	if(agitcheck()) end;
+	Announce "The War Of Emperium for Geffen has begun!",8;
+	set $GefWoE,1;
+	if($GefCas1Disabled == 0) enablenpc "Agit_G01";
+	if($GefCas2Disabled == 0) enablenpc "Agit_G02";
+	if($GefCas3Disabled == 0) enablenpc "Agit_G03";
+	if($GefCas4Disabled == 0) enablenpc "Agit_G04";
+	if($GefCas5Disabled == 0) enablenpc "Agit_G05";
+	AgitStart;
+	end;
+}
+
+-	script	Agit_Event_Payon	-1,{
+	end;
+OnInit:
+	disablenpc "Agit_Py01";
+	disablenpc "Agit_Py02";
+	disablenpc "Agit_Py03";
+	disablenpc "Agit_Py04";
+	disablenpc "Agit_Py05";
+	set $PayWoE,0;
+OnMinute00:
+
+// starting time check
+	set $@num,0;
+L_StartLoop:
+	if($sdayPay[$@num] == 0 && $edayPay[$@num] == 0 && $woetimePay[$@num] == 0 && $woetimePay2[$@num] == 0) goto L_StartLoopEnd;
+	if(gettime(4)==$sdayPay[$@num] && gettime(3)>=$woetimePay[$@num] && (gettime(3)<$woetimePay2[$@num] || $sdayPay[$@num]!=$edayPay[$@num])) goto L_Start;
+	set $@num,$@num+1;
+	goto L_StartLoop;
+
+// end time checks
+	L_StartLoopEnd:
+	set $@num,0;
+	L_EndLoop:
+	if($edayPay[$@num] == 0 && $woetimePay[$@num] == 0 && $woetimePay2[$@num] == 0) end;
+	if((gettime(4)==$edayPay[$@num]) && (gettime(3)==$woetimePay2[$@num])) goto L_End;
+	set $@num,$@num+1;
+	goto L_EndLoop;
+	end;
+
+// Stop WoE
+L_End:
+	if(!agitcheck()) end;
+	Announce "The War Of Emperium for Payon is over!",8;
+	set $PayWoE,0;
+	AgitEnd;
+	disablenpc "Agit_Py01";
+	disablenpc "Agit_Py02";
+	disablenpc "Agit_Py03";
+	disablenpc "Agit_Py04";
+	disablenpc "Agit_Py05";
+	end;
+
+// Start WoE
+L_Start:
+	if(agitcheck()) end;
+	Announce "The War Of Emperium for Payon has begun!",8;
+	set $PayWoE,1;
+	if($PayCas1Disabled == 0) enablenpc "Agit_Py01";
+	if($PayCas2Disabled == 0) enablenpc "Agit_Py02";
+	if($PayCas3Disabled == 0) enablenpc "Agit_Py03";
+	if($PayCas4Disabled == 0) enablenpc "Agit_Py04";
+	if($PayCas5Disabled == 0) enablenpc "Agit_Py05";
+	AgitStart;
+	end;
+}
+
+-	script	Agit_Event_Prontera	-1,{
+	end;
+OnInit:
+	disablenpc "Agit_Pt01";
+	disablenpc "Agit_Pt02";
+	disablenpc "Agit_Pt03";
+	disablenpc "Agit_Pt04";
+	disablenpc "Agit_Pt05";
+	set $ProWoE,0;
+OnMinute00:
+
+// starting time check
+	set $@num,0;
+L_StartLoop:
+	if($sdayPro[$@num] == 0 && $edayPro[$@num] == 0 && $woetimePro[$@num] == 0 && $woetimePro2[$@num] == 0) goto L_StartLoopEnd;
+	if(gettime(4)==$sdayPro[$@num] && gettime(3)>=$woetimePro[$@num] && (gettime(3)<$woetimePro2[$@num] || $sdayPro[$@num]!=$edayPro[$@num])) goto L_Start;
+	set $@num,$@num+1;
+	goto L_StartLoop;
+
+// end time checks
+	L_StartLoopEnd:
+	set $@num,0;
+	L_EndLoop:
+	if($edayPro[$@num] == 0 && $woetimePro[$@num] == 0 && $woetimePro2[$@num] == 0) end;
+	if((gettime(4)==$edayPro[$@num]) && (gettime(3)==$woetimePro2[$@num])) goto L_End;
+	set $@num,$@num+1;
+	goto L_EndLoop;
+	end;
+
+// Stop WoE
+L_End:
+	if(!agitcheck()) end;
+	Announce "The War Of Emperium for Prontera is over!",8;
+	set $ProWoE,0;
+	AgitEnd;
+	disablenpc "Agit_Pt01";
+	disablenpc "Agit_Pt02";
+	disablenpc "Agit_Pt03";
+	disablenpc "Agit_Pt04";
+	disablenpc "Agit_Pt05";
+	end;
+
+// Start WoE
+L_Start:
+	if(agitcheck()) end;
+	Announce "The War Of Emperium for Prontera has begun!",8;
+	set $ProWoE,1;
+	if($ProCas1Disabled == 0) enablenpc "Agit_Pt01";
+	if($ProCas2Disabled == 0) enablenpc "Agit_Pt02";
+	if($ProCas3Disabled == 0) enablenpc "Agit_Pt03";
+	if($ProCas4Disabled == 0) enablenpc "Agit_Pt04";
+	if($ProCas5Disabled == 0) enablenpc "Agit_Pt05";
+	AgitStart;
+	end;
+}
+
+-	script	Agit_Event_Novice	-1,{
+	end;
+OnInit:
+OnMinute00:
+	disablenpc "Agit_N01";
+	disablenpc "Agit_N02";
+	disablenpc "Agit_N03";
+	disablenpc "Agit_N04";
+	set $NovWoE,0;
+
+// starting time check
+	set $@num,0;
+L_StartLoop:
+	if($sdayNov[$@num] == 0 && $edayNov[$@num] == 0 && $woetimeNov[$@num] == 0 && $woetimeNov2[$@num] == 0) goto L_StartLoopEnd;
+	if(gettime(4)==$sdayNov[$@num] && gettime(3)>=$woetimeNov[$@num] && (gettime(3)<$woetimeNov2[$@num] || $sdayNov[$@num]!=$edayNov[$@num])) goto L_Start;
+	set $@num,$@num+1;
+	goto L_StartLoop;
+
+// end time checks
+	L_StartLoopEnd:
+	set $@num,0;
+	L_EndLoop:
+	if($edayNov[$@num] == 0 && $woetimeNov[$@num] == 0 && $woetimeNov2[$@num] == 0) end;
+	if((gettime(4)==$edayNov[$@num]) && (gettime(3)==$woetimeNov2[$@num])) goto L_End;
+	set $@num,$@num+1;
+	goto L_EndLoop;
+	end;
+
+// Stop WoE
+L_End:
+	if(!agitcheck()) end;
+	Announce "The War Of Emperium for Novice Castles is over!",8;
+	set $NovWoE,0;
+	AgitEnd;
+	disablenpc "Agit_N01";
+	disablenpc "Agit_N02";
+	disablenpc "Agit_N03";
+	disablenpc "Agit_N04";
+	end;
+
+// Start WoE
+L_Start:
+	if(agitcheck()) end;
+	Announce "The War Of Emperium for Novice Castles has begun!",8;
+	set $NovWoE,1;
+	if($NovCas1Disabled == 0) enablenpc "Agit_N01";
+	if($NovCas2Disabled == 0) enablenpc "Agit_N02";
+	if($NovCas3Disabled == 0) enablenpc "Agit_N03";
+	if($NovCas4Disabled == 0) enablenpc "Agit_N04";
+	AgitStart;
+	end;
+}

@@ -1,0 +1,46 @@
+// Monster Chat Database
+//
+// Structure of Database:
+// Line_ID#Color_Code#Dialog
+
+1#0xFF0000#Cobarde! ¡Desafíame si tienes valor!
+2#0xFF0000#Impresionante! Me pregunto cuánto te llevará tu imprudencia.
+3#0xFF0000#Casi me compadezco de lo desfasado que eres en mi contra. ¡Ahora prepárate para mi ataque!
+4#0xFF0000#Mis fieles sirvientes! ¡Déles la bienvenida con una muerte dolorosa!
+5#0xFF0000#No te escapes!
+6#0xFF0000#Ustedes humanos sin valor. ¡Tus así llamados poderes sagrados no tienen ningún efecto sobre mí!
+7#0xFF0000#Subalternos inútiles!... Bueno, está bien, tengo más armas para usar y eliminar.
+8#0xFF0000#Ora a tus dioses!
+9#0xFF0000#¿Todavía crees que eres una igual para mí?
+10#0xFF0000#Desaparecer!
+11#0xFF0000#Veamos cuánto tiempo puedes soportar mi poder!
+12#0xFF0000#¿Es esto todo lo que tienes?
+13#0xFF0000#Me estás haciendo cosquillas!
+14#0xFF0000#Así es como atacas? ¡Mira y aprende, debiluchos!
+15#0xFF0000#Es hora de terminar el juego!
+16#0xFF0000#Oh, eres más fuerte de lo que pensaba!
+17#0xFF0000#No, esto no puede estar pasando! ¡Soy Satan Morroc, Rey Demonio de la Destrucción!
+18#0xFF0000#No puedo morir! ¡Volveré por ti!
+19#0xFF0000#Yo nací para conquistar este mundo! ¡Ninguno me detendrá!
+20#0xFF0000#Tus días están contados!
+21#0xFF0000#Pulse Strike! ¡Mis dedos rasgan acero!
+22#0xFF0000#Jajaja, dime quien soy! ¡Soy Baphomet, el Heredero del Infierno!
+23#0xFF0000#Disfruta tu tiempo en el plano mortal mientras puedas, ¡tu esperanza pronto se convertirá en desesperación!
+24#0xFF0000#Cuándo vas a aprender tu lección? ¿En la muerte?
+25#0xFF0000#No... No puedo perder! ¡No voy a suplicar por mi vida! No estoy huyendo! ¡No acepto esto como una derrota!
+26#0xFF0000#Argh... yo... me estoy debilitando...
+27#0xFF0000#¿Que quieres de mi?
+28#0xFF0000#No! ¡No hice esto! ¡Él es quien planeó todo esto!
+29#0xFF0000#Solo quería encontrar la paz...! ¡Es por eso que he estado huyendo!
+30#0xFF0000#Ahhhh!!! Ahora, solo tengo que matarlos a todos!
+31#0xFF0000#¡Moscas molestas! ¡Aléjate de mí!
+32#0xFF0000#Sufrir en el infierno!
+33#0xFF0000#Mwahahaha! ¡Prueba la ira de la tierra!
+34#0xFF0000#No... I won't accept this as defeat!
+35#0xFF0000#¿Aliviará tu soledad al golpearme? ¿Por qué no te quedas aquí conmigo para siempre, humano?
+36#0xFF0000#Olvidaste el significado del tiempo. Me pregunto cuánto tiempo puedes durar aquí...
+37#0xFF0000#¿Hay alguien esperándote fuera de aquí? Tíralos a todos, eres mío ahora...
+38#0xFF0000#Descarta tu vida y mantente confinado aquí. Anhelarás la libertad en cautiverio !!
+39#0xFF0000#¿Cuánto cambiará el mundo exterior si te quedas aquí en la soledad durante mil años?
+40#0xFF0000#¡Sí! Anhela tu libertad de este lugar confinado, tu cautiverio aquí será permanente !!
+

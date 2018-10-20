@@ -1,0 +1,522 @@
+// Captura de Bandera
+
+pvp_n_1-1	mapflag	pvp
+pvp_n_1-1	mapflag	pvp_noguild
+pvp_n_1-1	mapflag	noreturn
+pvp_n_1-1	mapflag	nomemo
+pvp_n_1-1	mapflag	loadevent
+
+pvp_n_1-1,0,0,0	script	ctf_sys	HIDDEN_NPC,{
+	end;
+
+OnRedScore:
+	// Anuncios
+	if (.team[1] == .team[2])
+		mapannounce "pvp_n_1-1","[EQUIPO ROJO TOMA LA DELANTERA]",0,0x0000FF;
+	else if (.team[1] > .team[2])
+		mapannounce "pvp_n_1-1","[EQUIPO ROJO INCREMENTA EL MARCADOR]",0,0x0000FF;
+	else
+		mapannounce "pvp_n_1-1","[EQUIPO ROJO ANOTA]",0,0x0000FF;
+	// Actualizacion del Marcador
+	set .team[1], .team[1] + 1;
+	goto OnStart;
+	
+OnBlueScore:
+	// Anuncios
+	if (.team[2] == .team[1])
+		mapannounce "pvp_n_1-1","[EQUIPO AZUL TOMA LA DELANTERA]",0,0x0000FF;
+	else if (.team[2] > .team[1])
+		mapannounce "pvp_n_1-1","[EQUIPO AZUL INCREMENTA EL MARCADOR]",0,0x0000FF;
+	else
+		mapannounce "pvp_n_1-1","[EQUIPO AZUL ANOTA]",0,0x0000FF;
+	// Actualizacion del Marcador
+	set .team[2], .team[2] + 1;
+	goto OnStart;
+
+OnStart:
+	if ($@ctfevent_start >= $@ctf_rnd && .team[2] != .team[1])
+		goto L_Stop; // Superadas las 10 Rondas y no hay empate
+	set $@ctfevent_start, $@ctfevent_start + 1;
+	// Por investigar...
+	set $@ctf_fb, 0;
+	// Banderas regresan a su posición original
+	set $@ctf_rtaken, 0; 
+	set $@ctf_btaken, 0;
+	enablenpc "Bandera Roja";
+	enablenpc "Bandera Azul";
+	movenpc "Bandera Roja",100,182; // Arriba
+	movenpc "Bandera Azul", 93, 15; // Abajo
+	// Llamado de la Party 1:
+	set .@total, getarraysize($@ctf_db_1);
+	for (set .@i, 0; .@i < .@total; set .@i, .@i + 1) {
+		attachrid getelementofarray($@ctf_db_1, .@i);
+		pcblockmove 0,1;
+		dispbottom "Captura de Bandera comenzará pronto. Eres parte del Equipo Rojo";
+		dispbottom "Intenta robar la bandera Azul y traerla a tu base.";
+		set .@j, rand(1,2); // Cuatro puntos de respawn posibles
+		switch (.@j) {
+			case 1: savepoint "pvp_n_1-1",123,181; warp "pvp_n_1-1",123,181; break;
+			case 2: savepoint "pvp_n_1-1", 72,181; warp "pvp_n_1-1", 72,181; break;
+		}
+		detachrid;
+	}
+	set .@total, getarraysize($@ctf_db_2);
+	for (set .@i, 0; .@i < .@total; set .@i, .@i + 1) {
+		attachrid getelementofarray($@ctf_db_2, .@i);
+		pcblockmove 0,1;
+		dispbottom "Captura de Bandera comenzará pronto. Eres parte del Equipo Azul";
+		dispbottom "Intenta robar la bandera Roja y traerla a tu base.";
+		set .@j, rand(1,2); // Cuatro puntos de respawn posibles
+		switch (.@j) {
+			case 1: savepoint "pvp_n_1-1",119,18; warp "pvp_n_1-1",119,18; break;
+			case 2: savepoint "pvp_n_1-1", 69,22; warp "pvp_n_1-1", 69,22; break;
+		}
+		detachrid;
+	}
+	sleep 5000;
+	mapannounce "pvp_n_1-1","[Round " + $@ctfevent_start + "] Empezando en ...",0,0xFFFFFF;
+	initnpctimer;
+	end;
+
+L_Stop:
+	if (.team[1] > .team[2]) {
+		// Equipo Rojo Gana el Torneo
+		mapannounce "pvp_n_1-1","[FIN DEL JUEGO - EQUIPO ROJO GANA EL TORNEO]",0,0xFF0000;
+		set .@total, getarraysize($@ctf_db_1);
+		for (set .@i, 0; .@i < .@total; set .@i, .@i + 1) {
+			// Ganadores
+			if (attachrid(getelementofarray($@ctf_db_1, .@i))) {
+				// Jugador Online
+				dispbottom "Has ganado el Torneo!";
+				set Zeny, Zeny + $@ctf_rew;
+				set @ctf,       0;
+				set @ctf_com,   0;
+				set @ctf_kill,  0;
+				set @ctf_time,  0;
+				set @ctf_taker, 0;
+				savepoint "prontera",180,200;
+				detachrid;
+			}
+		}
+		set .@total, getarraysize($@ctf_db_2);
+		for (set .@i, 0; .@i < .@total; set .@i, .@i + 1) {
+			// Perdedores
+			if (attachrid(getelementofarray($@ctf_db_2, .@i))) {
+				// Jugador Online
+				dispbottom "Has perdido el Torneo!";
+				set @ctf,       0;
+				set @ctf_com,   0;
+				set @ctf_kill,  0;
+				set @ctf_time,  0;
+				set @ctf_taker, 0;
+				savepoint "prontera",180,200;
+				detachrid;
+			}
+		}
+	} else {
+		// Equipo Azul Gana el Torneo
+		mapannounce "pvp_n_1-1","[FIN DEL JUEGO - EQUIPO AZUL GANA EL TORNEO]",0,0x0000FF;
+		set .@total, getarraysize($@ctf_db_1);
+		for (set .@i, 0; .@i < .@total; set .@i, .@i + 1) {
+			// Perdedores
+			if (attachrid(getelementofarray($@ctf_db_1, .@i))) {
+				// Jugador Online
+				dispbottom "Has perdido el Torneo!";
+				set @ctf,       0;
+				set @ctf_com,   0;
+				set @ctf_kill,  0;
+				set @ctf_time,  0;
+				set @ctf_taker, 0;
+				savepoint "prontera",180,200;
+				detachrid;
+			}
+		}
+		set .@total, getarraysize($@ctf_db_2);
+		for (set .@i, 0; .@i < .@total; set .@i, .@i + 1) {
+			// Ganadores
+			if (attachrid(getelementofarray($@ctf_db_2, .@i))) {
+				// Jugador Online
+				dispbottom "Has ganado el Torneo!";
+				set Zeny, Zeny + $@ctf_rew;
+				set @ctf,       0;
+				set @ctf_com,   0;
+				set @ctf_kill,  0;
+				set @ctf_time,  0;
+				set @ctf_taker, 0;
+				savepoint "prontera",180,200;
+				detachrid;
+			}
+		}
+	}
+
+L_Clean:
+	set $@ctfevent_start, 0;
+	deletearray $@ctf_db_1, getarraysize($@ctf_db_1);
+	deletearray $@ctf_db_2, getarraysize($@ctf_db_2);
+	deletearray .team, getarraysize(.team);
+	set $@ctf_fb, 0;
+	sleep 5000;
+	mapwarp "pvp_n_1-1", "prontera", 180, 200;
+	end;
+
+OnInit:
+	// Variables por Defecto
+	set $@ctf_max, 5; // Maximo de Jugadores por Equipo
+	set $@ctf_rnd, 3; // Rondas a jugar en total
+	set $@ctf_rew, 10000; // Premio para los Ganadores
+	end;
+
+OnTimer4000:
+	mapannounce "pvp_n_1-1", "5!",16;
+	soundeffectall "5.wav",0;
+	end;
+
+OnTimer5000:
+	mapannounce "pvp_n_1-1", "4!",16;
+	soundeffectall "4.wav",0;
+	end;
+
+OnTimer6000:
+	mapannounce "pvp_n_1-1", "3!",16;
+	soundeffectall "3.wav",0;
+	end;
+
+OnTimer7000:
+	mapannounce "pvp_n_1-1", "2!",16;
+	soundeffectall "2.wav",0;
+	end;
+
+OnTimer8000:
+	mapannounce "pvp_n_1-1", "1!",16;
+	soundeffectall "1.wav",0;
+	end;
+
+OnTimer9000:
+	set .@total, getarraysize($@ctf_db_1);
+	for (set .@i, 0; .@i < .@total; set .@i, .@i + 1) {
+		pcblockmove getelementofarray($@ctf_db_1, .@i), 0;
+	}
+	set .@total, getarraysize($@ctf_db_2);
+	for (set .@i, 0; .@i < .@total; set .@i, .@i + 1) {
+		pcblockmove getelementofarray($@ctf_db_2, .@i), 0;
+	}
+	soundeffectall "play.wav", 0;
+	end;
+
+OnPCKillEvent:
+	// Jugador Asesino
+	if (@ctf && $@ctfevent_start) {
+		if ($@ctf_fb == 0) {
+			// Primero asesino en la ronda
+			set $@ctf_fb, 1;
+			mapannounce "pvp_n_1-1", "[" + strcharinfo(0) + " toma la primera víctima]",0,0xFFFFFF;
+		}
+		set @ctf_kill, @ctf_kill + 1;
+		if (gettimetick(2) - @ctf_time < 10) {
+			// Una nueva víctima en menos de 10 segundos
+			set @ctf_time, gettimetick(2);
+			set @ctf_com, @ctf_com + 1; // Consecutivos
+			switch (@ctf_com) {
+				case 1: dispbottom "[Doble Víctima]"; break;
+				case 2: dispbottom "[Triple Víctima]"; break;
+				case 3: dispbottom "[Muerte Múltiple]"; break;
+				case 4: dispbottom "[Ultra Asesinato]"; break;
+				case 5: dispbottom "[Mega Asesinato]"; break;
+				default: dispbottom "[Asesinato Moustruoso]"; break;
+			}
+		} else {
+			// No alcanzó consecutivos
+			set @ctf_time, gettimetick(2);
+			set @ctf_com, 0;
+		}
+		mapannounce "pvp_n_1-1", "[" + strcharinfo(0) + " ha eliminado a " + rid2name(killedrid) + "]",0,0xFFFFFF;
+	}
+	end;
+
+OnPCDieEvent:
+	// Jugador Asesinado
+	if (@ctf && $@ctfevent_start) {
+		set @ctf_com, 0;
+		set @ctf_time, 0;
+		set @ctf_kill, 0;
+		set @ctf_muerto, 1;
+		if (@ctf_taker) {
+			// Portador de Bandera
+			if (getmapxy(.@m$,.@x,.@y,0) != 0)
+				end;
+			if (@ctf == 1) {
+				// Portador de Bandera Azul
+				enablenpc "Bandera Azul";
+				movenpc "Bandera Azul",.@x,.@y;
+				mapannounce "pvp_n_1-1","La Bandera Azul ha caido!",0,0x0000FF;
+			} else {
+				// Portador de Bandera Roja
+				enablenpc "Bandera Roja";				
+				movenpc "Bandera Roja",.@x,.@y;
+				mapannounce "pvp_n_1-1","La Bandera Roja ha caido!",0,0xFF0000;
+			}
+			set @ctf_taker, 0;
+		}
+	}
+	end;
+
+OnPCLogoutEvent:
+	// Deslogeo de un jugador
+	if (@ctf) {
+		set ctf_li, 1;
+		savepoint "prontera",180,200;
+		callfunc "ctf_rem", getd("$@ctf_db_" + @ctf), playerattached();
+		if (@ctf_taker) {
+			// Portador de Bandera
+			if (getmapxy(.@m$,.@x,.@y,0) != 0)
+				end;
+			if (@ctf == 1) {
+				// Portador de Bandera Azul
+				enablenpc "Bandera Azul";
+				movenpc "Bandera Azul",.@x,.@y;
+				mapannounce "pvp_n_1-1","La Bandera Azul ha caido!",0,0x0000FF;
+			} else {
+				// Portador de Bandera Roja
+				enablenpc "Bandera Roja";				
+				movenpc "Bandera Roja",.@x,.@y;
+				mapannounce "pvp_n_1-1","La Bandera Roja ha caido!",0,0xFF0000;
+			}
+		}
+		if (getarraysize($@ctf_db_1) == 0 && getarraysize($@ctf_db_2) == 0) goto L_Clean; // Todos abandonaron el torneo
+	}
+	end;
+
+OnPCLoadMapEvent:
+	if (ctf_li) {
+		set ctf_li, 0;
+		warp "prontera",180,200;
+	}
+	end;
+
+}
+
+function	script	ctf_rem	{
+	// Quita a un personaje registrado de la party
+	set .@total, getarraysize(getarg(0));
+	for (set .@i, 0; .@i < .@total; set .@i, .@i + 1) {
+		if (getelementofarray(getarg(0), .@i) == getarg(1))
+			break;
+	}
+	if(.@i < .@total)
+		deletearray getelementofarray(getarg(0), .@i), 1;
+	return;
+}
+
+// BANDERAS ***************************************************************************************
+
+pvp_n_1-1,100,182,4	script	Bandera Roja	GUILD_FLAG,2,2,{
+	end;
+
+OnTouch:
+	if (@ctf && $@ctfevent_start) {
+		if (@ctf == 1) {
+			// Mismo equipo de Bandera
+			if ($@ctf_rtaken == 1) {
+				// Retorno de Bandera
+				mapannounce "pvp_n_1-1","Bandera Roja Retornada!",0,0xFF0000;
+				set $@ctf_rtaken, 0;
+				movenpc "Bandera Roja",100,182;
+			} else if (@ctf_taker == 1) {
+				// Portador de Bandera
+				set @ctf_taker, 0;				
+				donpcevent "ctf_sys::OnRedScore";
+			}
+		} else {
+			// Enemigo de Equipo
+			set $@ctf_rtaken, 1; // Capturada
+			set @ctf_taker, 1; // Portador
+			mapannounce "pvp_n_1-1","" + strcharinfo(0) + " ha capturado la Bandera Roja!",0,0xFF0000;
+			disablenpc "Bandera Roja";
+		}
+	}
+	end;
+}
+
+pvp_n_1-1,93,15,0	script	Bandera Azul	GUILD_FLAG,2,2,{
+	end;
+
+OnTouch:
+	if (@ctf && $@ctfevent_start) {
+		if (@ctf == 2) {
+			// Mismo equipo de Bandera
+			if ($@ctf_btaken == 1) {
+				// Retorno de Bandera
+				mapannounce "pvp_n_1-1","Bandera Azul Retornada!",0,0x0000FF;
+				set $@ctf_btaken, 0;
+				movenpc "Bandera Azul",93,15;
+			} else if (@ctf_taker == 1) {
+				// Portador de Bandera
+				set @ctf_taker, 0;				
+				donpcevent "ctf_sys::OnBlueScore";
+			}
+		} else {
+			// Enemigo de Equipo
+			set $@ctf_btaken, 1; // Capturada
+			set @ctf_taker, 1; // Portador
+			mapannounce "pvp_n_1-1","" + strcharinfo(0) + " ha capturado la Bandera Azul!",0,0x0000FF;
+			disablenpc "Bandera Azul";
+		}
+	}
+	end;
+}
+
+// BASES ******************************************************************************************
+
+pvp_n_1-1,123,181,5	script	Base Roja::ctf_Br1	HIDDEN_NPC,2,2,{
+	end;
+OnTouch:
+	if (@ctf == 1 && @ctf_muerto && $@ctfevent_start) {
+		set @ctf_muerto, 0;
+		percentheal 100,100;
+	}
+	end;
+}
+
+pvp_n_1-1,72,181,3	script	Base Roja::ctf_Br2	HIDDEN_NPC,2,2,{
+	end;
+OnTouch:
+	if (@ctf == 1 && @ctf_muerto && $@ctfevent_start) {
+		set @ctf_muerto, 0;
+		percentheal 100,100;
+	}
+	end;
+}
+
+pvp_n_1-1,69,22,7	script	Base Azul::ctf_Bb1	HIDDEN_NPC,2,2,{
+	end;
+OnTouch:
+	if (@ctf == 2 && @ctf_muerto && $@ctfevent_start) {
+		set @ctf_muerto, 0;
+		percentheal 100,100;
+	}
+	end;
+}
+
+pvp_n_1-1,119,18,1	script	Base Azul::ctf_Bb2	HIDDEN_NPC,2,2,{
+	end;
+OnTouch:
+	if (@ctf == 2 && @ctf_muerto && $@ctfevent_start) {
+		set @ctf_muerto, 0;
+		percentheal 100,100;
+	}
+	end;
+}
+
+// REGISTRO AL EVENTO *****************************************************************************
+
+invek,139,152,5	script	Captura de Bandera	1_M_PAY_ELDER,{
+	mes "[^0000FFCaptura^000000 de ^FF0000Bandera^000000]";
+	mes "Estado Actual:";
+	mes "^FF0000Equipo Rojo^000000 - " + getarraysize($@ctf_db_1) + " / " + $@ctf_max;
+	mes "^0000FFEquipo Azul^000000 - " + getarraysize($@ctf_db_2) + " / " + $@ctf_max;
+	mes "Que deseas hacer?";
+	next;
+	if (getgmlevel() > 1)
+		set @opcion, select ("Unirse al Evento","Ver Participantes","Más Información","Configurar Parametros");
+	else
+		set @opcion, select ("Unirse al Evento","Ver Participantes","Más Información");
+	mes "[^0000FFCaptura^000000 de ^FF0000Bandera^000000]";
+	switch (@opcion) {
+		case 1:
+			// Unirse al Evento
+			if (Zeny < ($@ctf_rew / 2)) {
+				mes "No tienes suficiente dinero para jugar.";
+				set @precio, $@ctf_rew / 2;
+				mes "El valor para inscribirse es de " + @precio + " zeny.";
+				close;
+			}
+			if (@ctf) {
+				mes "No te puedes registrar 2 veces en el mismo juego";
+				close;
+			}
+			mes "A que equipo deseas unirte?";
+			next;
+			switch (select ("Equipo Rojo","Equpo Azul")) {
+				case 1:
+					set @total, getarraysize($@ctf_db_1);
+					if (@total < $@ctf_max) {
+						set Zeny, Zeny - ($@ctf_rew / 2);
+						set getd("$@ctf_db_1[" + @total + "]"), playerattached(); // ID del Personaje
+						set @ctf, 1;
+						mes "[^0000FFCaptura^000000 de ^FF0000Bandera^000000]";
+						mes "Eres parte del Equipo Rojo";
+						close2;
+						goto L_Iniciar;
+					} else {
+						mes "[^0000FFCaptura^000000 de ^FF0000Bandera^000000]";
+						mes "No quedan espacios sufientes en este equipo.";
+						close;
+					}
+				break;
+				case 2:
+					set @total, getarraysize($@ctf_db_2);
+					if (@total < $@ctf_max) {
+						set Zeny, Zeny - ($@ctf_rew / 2);
+						set getd("$@ctf_db_2[" + @total + "]"), playerattached(); // ID del Personaje
+						set @ctf, 2;
+						mes "[^0000FFCaptura^000000 de ^FF0000Bandera^000000]";
+						mes "Eres parte del Equipo Azul";
+						close2;
+						goto L_Iniciar;
+					} else {
+						mes "[^0000FFCaptura^000000 de ^FF0000Bandera^000000]";
+						mes "No quedan espacios sufientes en este equipo.";
+						close;
+					}
+				break;
+			}
+		break;
+		case 2:
+			// Ver Participantes
+			mes "^FF0000Equipo Rojo:^000000";
+            		set .@total, getarraysize(getd("$@ctf_db_1"));
+			for (set .@i, 0; .@i < .@total; set .@i, .@i + 1) {
+				mes rid2name(getelementofarray(getd("$@ctf_db_1"), .@i));
+			}
+			mes "^0000FFEquipo Azul:^000000";
+            		set .@total, getarraysize(getd("$@ctf_db_2"));
+			for (set .@i, 0; .@i < .@total; set .@i, .@i + 1) {
+				mes rid2name(getelementofarray(getd("$@ctf_db_2"), .@i));
+			}
+			close;
+		break;
+		case 3:
+			// Mas Información
+			mes "El objetivo de cada equipo es capturar la bandera del equipo contrario, y llevarla de regreso a la bandera de tu equipo";			
+			next;
+			mes "[^0000FFCaptura^000000 de ^FF0000Bandera^000000]";
+			mes "Si tu bandera fue capturada no podrás anotar punto hasta que alguien la recupere matando al portador y tomandola del suelo.";
+			next;
+			mes "[^0000FFCaptura^000000 de ^FF0000Bandera^000000]";
+			mes "En el momento en que alguien anote, se iniciará otra Ronda de Juego.";
+			mes "En total se juegan " + $@ctf_rnd + " rondas por juego";
+			mes "El Premio a los ganadores es de " + $@ctf_rew + ", el doble del costo por registrarse.";
+			next;
+			mes "[^0000FFCaptura^000000 de ^FF0000Bandera^000000]";
+			mes "Por último, el máximo de jugadores a participar es de " + $@ctf_max + " por equipo.";
+			close;
+		break;
+		case 4:
+			// Configurar
+			mes "Máximo de Personajes por Party?";
+			input $@ctf_max;
+			mes "Máximo de Rondas a jugar?";
+			input $@ctf_rnd;
+			mes "Premio para el equipo ganador (El registro vale la mitad del premio)";
+			input $@ctf_rew;
+			close;
+		break;
+	}
+
+L_Iniciar:
+	set .@size, getarraysize($@ctf_db_1);
+	if (.@size == getarraysize($@ctf_db_2) && .@size == $@ctf_max && $@ctfevent_start == 0)
+		donpcevent "ctf_sys::OnStart";
+	end;
+}
+

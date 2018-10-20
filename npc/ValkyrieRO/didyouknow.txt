@@ -1,0 +1,43 @@
+//======== 2=========
+npc_in,15,17,6	script	Bibliotecario	833,8,8,{
+end;
+OnTouch:
+	if ( .size_message == 0 || .message_delay > gettimetick(2) ) end;
+	set .@r, rand( .size_message );
+	npctalk .message$[.@r];
+	set .message_delay, gettimetick(2) + 15;// 15 secs delay
+	end;
+
+OnWhisperGlobal:
+	if ( getgmlevel() < 60 ) end;
+OnInit:
+	setarray .message$[0], "¿Sabías que Fallen Obispo Hibram no sólo trabaja con el daño mágico, sino también con el daño físico?",
+								"¿Sabía usted que la Golden Thief Bug Card anula efecto coma?",
+								"¿Sabía usted que en thor es donde mayormente Kasa respawn?",
+								"¿Sabía usted que la Thanatos Card no funciona en ataques críticos?",
+								"¿Sabías que Magnum Break puede desactivar trampas?",
+								"¿Sabías que mezclando 2 Doppelganger Cards te da inmunidad a favor no se olvide de mí Skill por Gypsies?",
+								"¿Sabía usted que 3 Skel Worker Card y 1 Turtle General Card es la mejores cartas para combo Asura Strike?",
+								"¿Sabía usted que hay un portal en Nuenberg y Swanhild que se llama atajos para llegar al Emperium?",
+								"¿Sabías que provocan en realidad puede cancelar una llamada de emergencia?",
+								"¿Sabía usted que el más bajo es el nivel de Ankle Snare la más larga es la duración?",
+								"¿Sabías que Rompe Mente no sólo aumenta la MATK sino que también elimina MDEF?",
+								"¿Sabías que Emperium es considerado como un MVP?",
+								"¿Sabía usted que el efecto Poema de Bragi se basa en del lanzador (Clown) Intellegence?",
+								"¿Sabía también que por favor no se olvide de mí habilidad está basado en STR?",
+								"¿Sabías que Super novato puede equipar a los engranajes de la cabeza y las armas de los diferentes puestos de trabajo, excepto cuando Arcos Soul linked?",
+								"¿Sabías que 99 VIT ya es inmune a la maldición y Stun?",
+								"¿Sabía usted que cada 10 LUK = 1PD y cada 3 LUK = 1 Crit?",
+								"¿Sabía usted que 148-149 DEX es mejor que 150 DEX cuando se utiliza la card de Tarot del Destino?",
+								"¿Sabías que Apple of Idun skill se basa en la caster's VIT?",
+								"¿Sabía usted que la habilidad Sightrasher puede desactivar trampas?",
+								"¿Sabía usted que la habilidad rotura Magnum puede golpear alta Huid enemigos, incluso si usted no tiene alta HIT?",
+								"¿Sabía usted que Waghnak tiene mucho más ASPD que Mace?",
+								"¿Sabía usted que tener 99 LUK evitar ser congelado?",
+								"¿Sabía usted que la habilidad Ganbantein también puede desactivar trampas y Web de araña?",
+								"¿Sabías que comando @gstorage ayuda a guarda los item de la guild?",
+								"¿Sabías que comando @alootid ayuda a recojer solo un item?",
+								"¿Sabía  que comando @autotrade ayuda a dejar vendiendo sus items aún estás ocupado jugando con su otra cuenta?";
+	set .size_message, getarraysize( .message$ );
+	end;
+}

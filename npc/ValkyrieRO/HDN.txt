@@ -1,0 +1,48 @@
+//===== Script ===========================================
+//= Hombre de nieve
+//===== Creado Por: ======================================================
+//= SoDa
+//===== Versión ===================================================
+//= 2.0
+//===== Compatible: ===============================================
+//= Cualquier versión
+//===== Descripción: ==============================================
+//= Remueve tus puntos "extra" de skill
+//===== Novedades ===============================================
+//= Trae su respectiva imagen de NPC
+//= Incluye sonidos al clickear
+//=================================================================
+
+npc_in.gat,30,42,5	script	Hombre de Nieve	710,{
+	cutin "rutie_snownow03",2;
+	soundeffect "siroma_move.wav",0;
+	mes "^0000FF[^000000^FF0000Hombre de Nieve^000000^0000FF]^000000";
+	mes "Hola, vengo Lutie para ayudarlos con los SkillPoints.";
+	mes "Aunque haga un calor horrible Snif* Snif*";
+	next;
+	soundeffect "siroma_move.wav",0;
+	mes "^0000FF[^000000^FF0000Hombre de Nieve^000000^0000FF]^000000";
+	mes "¿Deseas que remueva tus puntos?";
+	next;
+	menu "Si, seria de mucha ayuda.",si,"No gracias.",no;
+
+si:
+	soundeffect "siroma_move.wav",0;
+	set SkillPoint,0;
+	mes "^0000FF[^000000^FF0000Hombre de Nieve^000000^0000FF]^000000";
+	mes "Muy bien, tus puntos extras fueron removidos.";
+	mes "¡ Suerte !";
+	emotion ET_CONGRATULATION;
+	cutin "",255;
+	close;
+
+no:
+	soundeffect "siroma_move.wav",0;
+	mes "^0000FF[^000000^FF0000Hombre de Nieve^000000^0000FF]^000000";
+	mes "Como lo desees ^^";
+	emotion ET_SWEAT;
+	cutin "",255;
+close;
+
+}
+

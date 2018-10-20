@@ -1,0 +1,860 @@
+//
+// [========================================================]
+// [===========         Warper Evolution         ===========]
+// [========================================================]
+// [ Versión 26d                                            ]
+// [========================================================]
+// [ Script original: Ivion                                 ]
+// [========================================================]
+// [ Modificaciones: DanielArt ~ Alaude                     ]
+// [========================================================]
+// [ Descripción:                                           ]
+// [--------------------------------------------------------]
+// [                                                        ]
+// [ - Save.                                                ]
+// [ - Warp a Ciudades.                                     ]
+// [ - Warp a niveles de Mazmorras.                         ]
+// [ - Warp a Áreas de WoE.                                 ]
+// [ - Warp a otros Grupos de Destinos personalizados.      ]
+// [ - Modo Evolution / Quest Warper.                       ]
+// [ - Last Warp / Último Viaje. [Alaude]                   ]
+// [========================================================]
+// [ 5 últimas actualizaciones:                             ]
+// [--------------------------------------------------------]
+// [                                                        ]
+// [ v19: [Ivion]                                           ]
+// [ - Relocalizados destinos y npcs de las dungeons.       ]
+// [ - Bugfix: Somatology Laboratory.                       ]
+// [ - Bugfix: Los precios no se aplicaban.                 ]
+// [ - Los submenús se muestran desactivados si no          ]
+// [    tienes activado ninguno de sus destinos.            ]
+// [ - Se muestra la gente que hay en cada destino.         ]
+// [                                                        ]
+// [ v19d: [Ivion]                                          ]
+// [ - Bugfix: Amatsu Dungeon, Geffen Dungeon, Holy         ]
+// [    Ground, Ice Cave, Labyrinth Forest,                 ]
+// [    Somatology Laboratory, Thanatos Tower.              ]
+// [ - Añadido Hvergelmir's Fountain.                       ]
+// [                                                        ]
+// [ v20: [Ivion]                                           ]
+// [ - Bugfix: Submenus sin modo evolution.                 ]
+// [                                                        ]
+// [ v21: [Ivion]                                           ]
+// [ - Optimizando un poco el script.                       ]
+// [ - Los submenús no pueden agrupar otros submenús.       ]
+// [ - Nuevos destinos del Ep 13.2 .                        ]
+// [ - Añadida opción para configurar como se guardarán los ]
+// [   destinos del Modo Evolution.                         ]
+// [                                                        ]
+// [ v22: [Ivion]                                           ]
+// [ - Added missing Jawaii warp and npc.                   ]
+// [                                                        ]
+// [ v23: [Ivion]                                           ]
+// [ - Bugfix: La función de guardar punto de inicion no    ]
+// [   aparecía en los menús.                               ]
+// [                                                        ]
+// [ v24: [DanielArt]                                       ]
+// [ - Nuevos destinos del Ep 13.3 y 14.1.                  ]
+// [                                                        ]
+// [ v25: [DanielArt]                                       ]
+// [ - Añadida función de Last Warp (Último Viaje).         ]
+// [                                                        ]
+// [ v26: [DanielArt]                                       ]
+// [ - Añadido Fields de Manuk y Splendide.                 ]
+// [ - Añadida Sección 'Memorial Dungeon'.                  ]
+// [ - Añadido Endless Tower y Shrine Lake.                 ]
+// [========================================================]
+
+-	script	WEfunc	-1,{
+
+OnInit:
+
+// [--------------------------------------------------------]
+// [ Configuración:                                         ]
+// [========================================================]
+
+	set .@n$,"Warper";	// Nombre del NPC.
+	set $@WEm,2;			// Modo Evolution. (0 = off | 1 = Player | 2 = Account | 3 = Global)
+	set .@p,0;			// Guardar Punto de Inicio. (-1 = off | Precio)
+
+// [--------------------------------------------------------]
+// [ Final de la configuración.                             ]
+// [========================================================]
+
+	set .@a,1;
+	while(!setnpcdisplay("WE#"+.@a,.@n$+"#"+.@a)) set .@a,.@a + 1;
+	set $@WE$,"[ ^008888"+.@n$+"^000000] ";
+	if($@WEm == 2) set $@WEm$,"#";
+	if($@WEm == 3) set $@WEm$,"$";
+	if(.@p >= 0) {
+		set $@WE,1;
+		//set $@WEb1$,"Guardar.";
+		set $@WEc1,.@p;
+		set $@WEd0[0],1;
+	}
+
+function Go {
+	set lastwarp$, getarg(0);
+	set lastwarpx, getarg(1,0);
+	set lastwarpy, getarg(2,0);
+	warp getarg(0),getarg(1,0),getarg(2,0);
+	end;
+}
+
+// [--------------------------------------------------------]
+// [ Configuración de destinos:                             ]
+// [========================================================]
+
+	// Declaración de Grupos de Destinos:
+	// callsub Onc0,{"Nombre"},{Precio};
+	// Crea un nuevo Grupo de Destinos dentro del menú principal del npc.
+	// Los Grupos de Destinos agrupan los diferentes Destinos con un mismo precio.
+	// Ejemplo: Ciudades / Mazmorras / Áreas de WoE
+
+	// Declaración de Destinos:
+	// callsub Onc1,{Id},{"Nombre"},{"Mapa"},{x},{y},{"Mapa Activación 1"},{"Mapa Activación 2"},{...},{"Mapa Activación #"};
+	// Crea un nuevo Destino dentro del último Grupo de Destinos declarado.
+	// {Id}: Identificador único del destino. Ponedlo a 0 si queréis desactivar el Modo Evolution.
+	// {"Mapa Activación #"}:
+	//   En Modo Evolution, cuando un jugador se situe en cualquiera de estos mapas, el destino le quedará desbloqueado.
+	//   Esta lista de mapas es también utilizada para hacer el recuento de personas en cada destino.
+
+	// Declaración de Submenús:
+	// callsub Onc2,{"Nombre"};
+	// Crea un nuevo Submenú dentro del último Grupo de Destinos declarado.
+	// Es útil para agrupar diferentes Destinos relacionados, por ejemplo para los niveles de una Dungeon.
+	// Para cerrar un submenú, debeis utilizar la misma función sin argumentos.
+	// callsub Onc2;
+
+	// Memorial Dungeons:
+	callsub Onc0," ^ff0000~^000000 Instances",0;
+
+
+		callsub Onc1,0,"^ff0000~^000000 Air Fortress [145+]","prt_q",240,80,"prt_q";
+		callsub Onc1,0,"^ff0000~^000000 Airship Assault [125+]","dali02",132,82,"dali02";
+		callsub Onc1,0,"^ff0000~^000000 Bakonawa Lake [140+]","ma_scene01",172,175,"ma_scene01";
+		callsub Onc1,0,"^ff0000~^000000 Bangungot Hospital [100+]","ma_dun01",151,8,"ma_dun01";
+		callsub Onc1,0,"^ff0000~^000000 Buwaya Cave [130+]","ma_fild02",316,317,"ma_fild02";
+
+
+
+
+		callsub Onc1,0,"^ff0000~^000000 Central Laboratory [100+]","verus01",152,152,"verus01";
+		callsub Onc1,0,"^ff0000~^000000 Charleston Crisis [140+]","verus04",78,118,"verus04";
+		callsub Onc1,0,"^ff0000~^000000 Devil Tower [100+]","dali02",135,114,"dali02";
+		callsub Onc1,0,"^ff0000~^000000 Endless Tower and Celler [50+]","e_tower",72,112,"e_tower";
+		callsub Onc1,0,"^ff0000~^000000 Faceworms Nest [140+]","dali",90,63,"dali";
+		callsub Onc1,0,"^ff0000~^000000 Ghost Palace [120+]","dali02",47,126,"dali02";
+		callsub Onc1,0,"^ff0000~^000000 Geffen Magic Tournament [90+]","dali",92,142,"dali";
+
+		callsub Onc1,0,"^ff0000~^000000 Nightmarish Jitterbug","moc_para01",29,92,"moc_para01";
+
+		callsub Onc1,0,"^ff0000~^000000 Horror Toy Factory [140+]","xmas",235,299,"xmas";
+		callsub Onc1,0,"^ff0000~^000000 Hazy Forest [99+]","bif_fild01",161,334,"bif_fild01";
+		callsub Onc1,0,"^ff0000~^000000 Infinite Space [100+]","cmd_fild07",63,270,"cmd_fild07";
+		callsub Onc1,0,"^ff0000~^000000 Isle Of Bios [160+]","moro_cav",45,54,"moro_cav";
+		callsub Onc1,0,"^ff0000~^000000 Malangdo Culvert [140+]","mal_in01",164,21,"mal_in01";
+
+		callsub Onc1,0,"^ff0000~^000000 Nidhoggur's Nest [70+]","nyd_dun02",95,195,"nyd_dun02","1@nyd","2@nyd";
+		callsub Onc1,0,"^ff0000~^000000 Old Glast Heim [130]","glast_01",204,268,"glast_01";
+
+		callsub Onc1,0,"^ff0000~^000000 Orc's Memory [30+]","gef_fild10",240,198,"gef_fild10";
+		callsub Onc1,0,"^ff0000~^000000 Poring Village [30+]","prt_fild05",144,241,"prt_fild05";
+		callsub Onc1,0,"^ff0000~^000000 Sealed Shrine [75+]","monk_test",305,144,"monk_test","1@cata","2@cata";
+		callsub Onc1,0,"^ff0000~^000000 Sara Memory [99+]","dali02",92,141,"dali02";
+		callsub Onc1,0,"^ff0000~^000000 Sarah and Fenrir [145+]","dali",130,102,"dali";
+		callsub Onc1,0,"^ff0000~^000000 Wave Mode Memorial","payon",193,108,"payon";
+
+		callsub Onc1,0,"^ff0000~^000000 Wolfchev's Laboratory [150+]","lhz_dun04",148,269,"lhz_dun04";
+
+
+
+	// Cities:
+	callsub Onc0," ^ff0000~^000000 Towns",0;
+		callsub Onc1,0,"Prontera","prontera",155,184,"prontera";
+		callsub Onc1,0,"Alberta","alberta",31,235,"alberta";
+		callsub Onc1,0,"Al De Baran","aldebaran",139,121,"aldebaran";
+		callsub Onc1,0,"Amatsu","amatsu",93,254,"amatsu";
+		callsub Onc1,0,"Ayothaya","ayothaya",207,206,"ayothaya";
+		callsub Onc1,0,"Bifrost","mora",108,98,"mora";
+		callsub Onc1,0,"Brasilis","brasilis",196,163,"brasilis";
+		callsub Onc1,0,"Comodo","comodo",202,113,"comodo";
+		callsub Onc1,0,"Dicastes","dicastes01",198,186,"dicastes01";
+		callsub Onc1,0,"Dewata","dewata",200,180,"dewata";
+		callsub Onc1,0,"Einbech","einbech",70,90,"einbech";
+		callsub Onc1,0,"Einbroch","einbroch",69,196,"einbroch";
+		callsub Onc1,0,"Eclage","eclage",110,39,"eclage";
+		callsub Onc1,0,"Geffen","geffen",117,70,"geffen";
+		callsub Onc1,0,"Gonryun","gonryun",161,119,"gonryun";
+		callsub Onc1,0,"Hugel","hugel",96,127,"hugel";
+		callsub Onc1,0,"Izlude","izlude",127,142,"izlude";
+		callsub Onc1,0,"Jawaii","jawaii",129,264,"jawaii";
+		callsub Onc1,0,"lasagna","lasagna",169,152,"lasagna";
+		callsub Onc1,0,"Lighthalzen","lighthalzen",214,93,"lighthalzen";
+		callsub Onc1,0,"Louyang","louyang",217,114,"louyang";
+		callsub Onc1,0,"Lutie","xmas",148,116,"xmas";
+		callsub Onc1,0,"Manuk","manuk",277,137,"manuk";
+		callsub Onc1,0,"Malangdo","malangdo",140,114,"malangdo";
+		callsub Onc1,0,"Malaya","malaya",198,232,"malaya";
+		callsub Onc1,0,"Midgarts Expedition Camp","mid_camp",210,288,"mid_camp";
+		callsub Onc1,0,"Morroc","morocc",161,71,"morocc";
+		callsub Onc1,0,"Moscovia","moscovia",224,192,"moscovia";
+		callsub Onc1,0,"Mora","mora",46,146,"mora";
+		callsub Onc1,0,"Niflheim","niflheim",194,185,"niflheim";
+		callsub Onc1,0,"Payon","payon",158,57,"payon";
+		callsub Onc1,0,"Poring Market","poring_w02",98,72,"poring_w02";
+		callsub Onc1,0,"Rachel","rachel",142,139,"rachel";
+		callsub Onc1,0,"Rock Rigge","harboro1",297,206,"harboro1";
+		callsub Onc1,0,"Splendide","splendide",190,144,"splendide";
+		callsub Onc1,0,"Umbala","umbala",122,135,"umbala";
+		callsub Onc1,0,"Veins","veins",198,232,"veins";
+		callsub Onc1,0,"Yuno","yuno",158,84,"yuno";
+
+	// Dungeons:
+	callsub Onc0," ^ff0000~^000000 Dungeons",0;
+		callsub Onc2,"Abyss Lake Underground Cave";
+			callsub Onc1,0,"Abyss Lake Entrada Caverna","hu_fild05",184,205,"hu_fild05";
+			callsub Onc1,240,"Abyss Lake Underground Cave F1","abyss_01",263,271,"abyss_01";
+			callsub Onc1,91,"Abyss Lake Underground Cave F2","abyss_02",275,270,"abyss_02";
+			callsub Onc1,92,"Abyss Lake Underground Cave F3","abyss_03",116,27,"abyss_03";
+		callsub Onc2,"Amatsu Dungeon";
+			callsub Onc1,0,"Tatami Maze","ama_dun01",230,11,"ama_dun01";
+			callsub Onc1,93,"Battle Field in the Underground Forest","ama_dun02",34,41,"ama_dun02";
+			callsub Onc1,94,"Amatsu Underground Shrine","ama_dun03",119,14,"ama_dun03";
+		callsub Onc2,"Ant Hell";
+			callsub Onc1,0,"Entrada Ant Hell","cmd_fild08",324,354,"cmd_fild08";
+			callsub Onc1,95,"Ant Hell F2","anthell02",168,170,"anthell02";
+		callsub Onc2,"Ayothaya Ancient Shrine";
+			callsub Onc1,0,"Ancient Shrine Maze","ayo_dun01",275,19,"ayo_dun01";
+			callsub Onc1,96,"Inside Ancient Shrine","ayo_dun02",24,26,"ayo_dun02";
+		callsub Onc2,"Beach Dungeon";
+			callsub Onc1,0,"Karu, the West Cave","beach_dun",266,67,"beach_dun";
+			callsub Onc1,65,"Ruande, the North Cave","beach_dun2",255,244,"beach_dun2";
+			callsub Onc1,66,"Mao, the East Cave","beach_dun3",23,260,"beach_dun3";
+		callsub Onc2,"Brasilis Dungeon";
+			callsub Onc1,0,"After the Waterfall","bra_dun01",47,70,"bra_dun01";
+			callsub Onc1,201,"Cave of Sorrows","bra_dun02",262,260,"bra_dun02";
+		callsub Onc2,"Basilisk Dungeon";
+			callsub Onc1,0,"Basilisk Nest B1","lasa_dun01",22,143,"lasa_dun01";
+			callsub Onc1,241,"Basilisk Nest B2","lasa_dun02",22,171,"lasa_dun02";
+			callsub Onc1,242,"Basilisk Nest B3","lasa_dun03",184,23,"lasa_dun03";
+		callsub Onc2,"Clock Tower";
+			callsub Onc1,0,"Clock Tower F1","c_tower1",199,159,"c_tower1";
+			callsub Onc1,101,"Clock Tower F2","c_tower2",148,283,"c_tower2";
+			callsub Onc1,102,"Clock Tower F3","c_tower3",65,147,"c_tower3";
+			callsub Onc1,103,"Clock Tower F4","c_tower4",56,155,"c_tower4";
+			callsub Onc1,378,"Clock Tower B1","alde_dun01",297,25,"alde_dun01";
+			callsub Onc1,98,"Clock Tower B2","alde_dun02",127,169,"alde_dun02";
+			callsub Onc1,99,"Clock Tower B3","alde_dun03",277,178,"alde_dun03";
+			callsub Onc1,100,"Clock Tower B4","alde_dun04",268,74,"alde_dun04";
+
+		callsub Onc2,"Cursed Abbey Dungeon";
+			callsub Onc1,0,"Cursed Abbey Dungeon F1","abbey01",51,14,"abbey01";
+			callsub Onc1,104,"Cursed Abbey Dungeon F2","abbey02",150,11,"abbey02";
+			callsub Onc1,105,"Cursed Abbey Dungeon F3","abbey03",120,10,"abbey03";
+		callsub Onc2,"Dicastes Dungeon";
+			callsub Onc1,0,"Manuk-Diel Mining Tunel","dic_dun01",34,212,"dic_dun01";
+			callsub Onc1,200,"Scaraba Hole","dic_dun02",102,143,"dic_dun02";
+		callsub Onc2,"Dimensional George";
+			callsub Onc1,0,"Dimensional George F1","moc_fild20",352,179,"moc_fild20";
+			callsub Onc1,281,"Dimensional George F2","moc_fild21",32,196,"moc_fild21";
+			callsub Onc1,282,"Dimensional George F3","moc_fild22",37,196,"moc_fild22";
+		callsub Onc2,"Geffen Dungeon";
+			callsub Onc1,0,"Geffen Dungeon F1","gef_dun00",104,97,"gef_dun00";
+			callsub Onc1,106,"Geffen Dungeon F2","gef_dun01",115,236,"gef_dun01";
+			callsub Onc1,107,"Geffen Dungeon F3","gef_dun02",106,132,"gef_dun02";
+			callsub Onc1,0,"Geffenia F1","gefenia01",58,169,"gefenia01";
+			callsub Onc1,109,"Geffenia F2","gefenia02",116,115,"gefenia02";
+			callsub Onc1,110,"Geffenia F3","gefenia03",130,206,"gefenia03";
+			callsub Onc1,111,"Geffenia F4","gefenia04",133,88,"gefenia04";
+		callsub Onc2,"Glast Heim";
+			callsub Onc1,0,"Glast Heim F1","gl_cas01",199,29,"gl_cas01";
+			callsub Onc1,113,"Glast Heim F2","gl_cas02",104,25,"gl_cas02";
+			callsub Onc1,0,"Glast Heim Churchyard","gl_chyard",147,149,"gl_chyard";
+			callsub Onc1,115,"Glast Heim Culvert F1","gl_sew01",258,255,"gl_sew01";
+			callsub Onc1,116,"Glast Heim Culvert F2","gl_sew02",108,291,"gl_sew02";
+			callsub Onc1,117,"Glast Heim Culvert F3","gl_sew03",171,283,"gl_sew03";
+			callsub Onc1,118,"Glast Heim Culvert F4","gl_sew04",68,277,"gl_sew04";
+			callsub Onc1,119,"Glast Heim St. Abbey","gl_church",156,7,"gl_church";
+			callsub Onc1,120,"Glast Heim Staircase","gl_step",12,7,"gl_step";
+			callsub Onc1,0,"Glast Heim Underprison F1","gl_prison",80,184,"gl_prison";
+			callsub Onc1,122,"Glast Heim Underprison F2","gl_prison1",150,14,"gl_prison1";
+			callsub Onc1,123,"Inside Glast Heim Chivalry F1","gl_knt01",150,15,"gl_knt01";
+			callsub Onc1,124,"Inside Glast Heim Chivalry F2","gl_knt02",157,287,"gl_knt02";
+			callsub Onc1,125,"The Lowest Cave in Glast Heim F1","gl_dun01",133,271,"gl_dun01";
+			callsub Onc1,126,"The Lowest Cave in Glast Heim F2","gl_dun02",224,274,"gl_dun02";
+		callsub Onc2,"Gonryun Ancient Shrine";
+			callsub Onc1,0,"Shrine of Gonryun Queen","gon_dun01",153,53,"gon_dun01";
+			callsub Onc1,127,"Hermit's Checkers","gon_dun02",28,113,"gon_dun02";
+			callsub Onc1,128,"Arcadia","gon_dun03",68,16,"gon_dun03";
+		callsub Onc2,"Ice Cave";
+			callsub Onc1,0,"Ice Cave F1","ice_dun01",157,14,"ice_dun01";
+			callsub Onc1,133,"Ice Cave F2","ice_dun02",151,155,"ice_dun02";
+			callsub Onc1,134,"Ice Cave F3","ice_dun03",149,22,"ice_dun03";
+		callsub Onc2,"Labyrinth Forest";
+			callsub Onc1,0,"Labyrinth Forest F1","prt_maze01",176,7,"prt_maze01";
+			callsub Onc1,136,"Labyrinth Forest F2","prt_maze02",93,20,"prt_maze02";
+			callsub Onc1,137,"Labyrinth Forest F3","prt_maze03",23,8,"prt_maze03";
+		callsub Onc2,"Manuk Fields";
+			callsub Onc1,0,"Manuk Field 1","man_fild01",366,229,"man_fild01";
+			callsub Onc1,515,"Manuk Field 2","man_fild02",0,0,"man_fild02";
+			callsub Onc1,516,"Manuk Field 3","man_fild03",0,0,"man_fild03";
+		callsub Onc2,"Mine Dungeon";
+			callsub Onc1,0,"Mine Dungeon F1","ein_dun01",22,14,"ein_dun01";
+			callsub Onc1,138,"Mine Dungeon F2","ein_dun02",292,290,"ein_dun02";
+		callsub Onc2,"Mjolnir Dead Pit";
+			callsub Onc1,0,"Mjolnir Dead Pit F1","mjo_dun01",52,17,"mjo_dun01";
+			callsub Onc1,139,"Mjolnir Dead Pit F2","mjo_dun02",381,343,"mjo_dun02";
+			callsub Onc1,140,"Mjolnir Dead Pit F3","mjo_dun03",302,262,"mjo_dun03";
+		callsub Onc2,"Moscovia Forest";
+			callsub Onc1,0,"Forest","mosk_dun01",189,45,"mosk_dun01";
+			callsub Onc1,141,"Deep Forest","mosk_dun02",165,30,"mosk_dun02";
+			callsub Onc1,142,"Bottomless Forest","mosk_dun03",32,135,"mosk_dun03";
+		callsub Onc2,"Nidhoggr's Cave";
+			callsub Onc1,0,"Splendide Field (Entrada)","spl_fild01",375,65,"spl_fild01";
+			callsub Onc1,503,"Nydhogg F1","nyd_dun01",59,238,"nyd_dun01";
+			callsub Onc1,243,"Nydhogg F2","nyd_dun02",72,269,"nyd_dun02";
+			callsub Onc1,504,"Nidhogg Nest","1@nyd",0,0,"1@nyd";
+		callsub Onc2,"Nogg Road";
+			callsub Onc1,0,"Nogg Road F1","mag_dun01",126,68,"mag_dun01";
+			callsub Onc1,143,"Nogg Road F2","mag_dun02",47,30,"mag_dun02";
+		callsub Onc2,"Odin Shrine";
+			callsub Onc1,0,"Odin Shrine F1","odin_tem01",98,146,"odin_tem01";
+			callsub Onc1,144,"Odin Shrine F2","odin_tem02",28,180,"odin_tem02";
+			callsub Onc1,145,"Odin Shrine F3","odin_tem03",120,54,"odin_tem03";
+		callsub Onc2,"Orc Dungeon";
+			callsub Onc1,0,"Orc Dungeon F1","orcsdun01",32,170,"orcsdun01";
+			callsub Onc1,146,"Orc Dungeon F2","orcsdun02",21,185,"orcsdun02";
+		callsub Onc2,"Payon Cave";
+			callsub Onc1,0,"Payon Cave F1","pay_dun00",21,183,"pay_dun00";
+			callsub Onc1,147,"Payon Cave F2","pay_dun01",19,33,"pay_dun01";
+			callsub Onc1,148,"Payon Cave F3","pay_dun02",19,63,"pay_dun02";
+			callsub Onc1,149,"Payon Cave F4","pay_dun03",155,159,"pay_dun03";
+			callsub Onc1,150,"Payon Cave F5","pay_dun04",201,204,"pay_dun04";
+		callsub Onc2,"Prontera Culvert";
+			callsub Onc1,0,"Prontera Culvert F1","prt_fild05",276,212,"prt_fild05";
+			callsub Onc1,151,"Prontera Culvert F2","prt_sewb2",19,19,"prt_sewb2";
+			callsub Onc1,152,"Prontera Culvert F3","prt_sewb3",180,169,"prt_sewb3";
+			callsub Onc1,153,"Prontera Culvert F4","prt_sewb4",100,92,"prt_sewb4";
+		callsub Onc2,"Pyramid";
+			callsub Onc1,0,"Pyramid F1","moc_pryd01",192,9,"moc_pryd01";
+			callsub Onc1,154,"Pyramid F2","moc_pryd02",10,192,"moc_pryd02";
+			callsub Onc1,155,"Pyramid F3","moc_pryd03",100,92,"moc_pryd03";
+			callsub Onc1,156,"Pyramid F4","moc_pryd04",181,11,"moc_pryd04";
+			callsub Onc1,157,"Pyramid B1","moc_pryd05",94,96,"moc_pryd05";
+			callsub Onc1,158,"Pyramid B2","moc_pryd06",192,8,"moc_pryd06";
+		callsub Onc2,"Robot Factory";
+			callsub Onc1,0,"Robot Factory F1","kh_dun01",3,228,"kh_dun01";
+			callsub Onc1,159,"Robot Factory F2","kh_dun02",41,198,"kh_dun02";
+		callsub Onc2,"Royal Tomb";
+			callsub Onc1,0,"The Royal Tomb","lou_dun01",218,196,"lou_dun01";
+			callsub Onc1,160,"Inside the Royal Tomb","lou_dun02",282,20,"lou_dun02";
+			callsub Onc1,161,"Suei Long Gon","lou_dun03",165,38,"lou_dun03";
+		callsub Onc2,"Ruins of Juperos";
+			callsub Onc1,0,"Ruins of Juperos F1","juperos_01",53,247,"juperos_01";
+			callsub Onc1,162,"Ruins of Juperos F2","juperos_02",37,63,"juperos_02";
+			callsub Onc1,163,"Center of Juperos","jupe_core",150,285,"jupe_core";
+
+		callsub Onc2,"Rachel Santuary";
+			callsub Onc1,0,"Freya's Sacred Precinct F1","ra_san01",140,135,"ra_san01";
+			callsub Onc1,129,"Freya's Sacred Precinct F2","ra_san02",32,21,"ra_san02";
+			callsub Onc1,130,"Freya's Sacred Precinct F3","ra_san03",10,149,"ra_san03";
+			callsub Onc1,131,"Freya's Sacred Precinct F4","ra_san04",204,218,"ra_san04";
+			callsub Onc1,132,"Freya's Sacred Precinct F5","ra_san05",150,9,"ra_san05";
+
+
+		callsub Onc2,"Rock Rigge Mine";
+			callsub Onc1,0,"Rock Ridge Mine","rockmi1",247,21,"rockmi1";
+
+		callsub Onc2,"Somatology Laboratory";
+			callsub Onc1,0,"Somatology Laboratory F1","lhz_dun01",150,288,"lhz_dun01";
+			callsub Onc1,55,"Somatology Laboratory F2","lhz_dun02",150,18,"lhz_dun02";
+			callsub Onc1,165,"Somatology Laboratory F3","lhz_dun03",140,133,"lhz_dun03";
+			//callsub Onc1,40,"Somatology Laboratory F4","lhz_dun04",244,55,"lhz_dun04";
+
+		callsub Onc2,"Sphinx";
+			callsub Onc1,0,"Sphinx F1","in_sphinx1",288,9,"in_sphinx1";
+			callsub Onc1,166,"Sphinx F2","in_sphinx2",149,81,"in_sphinx2";
+			callsub Onc1,167,"Sphinx F3","in_sphinx3",210,54,"in_sphinx3";
+			callsub Onc1,168,"Sphinx F4","in_sphinx4",10,222,"in_sphinx4";
+			callsub Onc1,169,"Sphinx F5","in_sphinx5",100,99,"in_sphinx5";
+		callsub Onc2,"Splendide Fields";
+			callsub Onc1,0,"Splendide Field 2","spl_fild01",31,303,"spl_fild01";
+			callsub Onc1,537,"Splendide Field 2","spl_fild02",0,0,"spl_fild02";
+			callsub Onc1,537,"Splendide Field 3","spl_fild03",0,0,"spl_fild03";
+		callsub Onc2,"Sunken Ship";
+			callsub Onc1,0,"Sunken Ship F1","treasure01",69,24,"treasure01";
+			callsub Onc1,170,"Sunken Ship F2","treasure02",102,27,"treasure02";
+		callsub Onc2,"Thanatos Tower";
+			callsub Onc1,0,"Entrada Thanatos Tower","hu_fild01",139,156,"tha_t01";
+			callsub Onc1,171,"Thanatos Tower F2","tha_t02",150,136,"tha_t02";
+			callsub Onc1,172,"Thanatos Tower F3","tha_t03",220,158,"tha_t03";
+			callsub Onc1,173,"Thanatos Tower F4","tha_t04",59,143,"tha_t04";
+			callsub Onc1,174,"Thanatos Tower F5","tha_t05",62,11,"tha_t05";
+			callsub Onc1,175,"Thanatos Tower F6","tha_t06",206,11,"tha_t06";
+			callsub Onc1,176,"Thanatos Tower F7","tha_t07",35,166,"tha_t07";
+			callsub Onc1,177,"Thanatos Tower F8","tha_t08",28,43,"tha_t08";
+			callsub Onc1,178,"Thanatos Tower F9","tha_t09",20,96,"tha_t09";
+			callsub Onc1,179,"Thanatos Tower F10","tha_t10",155,100,"tha_t10";
+			callsub Onc1,180,"Thanatos Tower F11","tha_t11",49,18,"tha_t11";
+			callsub Onc1,181,"Thanatos Tower F12","tha_t12",115,16,"tha_t12";
+			//callsub Onc1,0,"Thanatos Boss","thana_boss",146,139,"thana_boss";
+		callsub Onc2,"Thor Volcano Dungeon";
+			callsub Onc1,0,"Entrada Thor Volcano","ve_fild03",169,235,"ve_fild03";
+			callsub Onc1,182,"Thor Volcano Dungeon F2","thor_v02",75,205,"thor_v02";
+			callsub Onc1,183,"Thor Volcano Dungeon F3","thor_v03",35,262,"thor_v03";
+		callsub Onc2,"Toy Factory";
+			callsub Onc1,0,"Toy Factory Warehouse","xmas_dun01",205,15,"xmas_dun01";
+			callsub Onc1,184,"Toy Monitoring Room","xmas_dun02",129,133,"xmas_dun02";
+		callsub Onc2,"Turtle Island";
+			callsub Onc1,0,"Turtle Island","tur_dun01",154,49,"tur_dun01";
+			callsub Onc1,185,"Turtle Island Dungeon","tur_dun02",148,261,"tur_dun02";
+			callsub Onc1,186,"Good Turtles Village","tur_dun03",132,189,"tur_dun03";
+			callsub Onc1,187,"Turtle Palace","tur_dun04",100,192,"tur_dun04";
+		callsub Onc2,"Umbala Dungeon";
+			callsub Onc1,0,"Carpenter's Shop in the Tree","um_dun01",42,31,"um_dun01";
+			callsub Onc1,188,"Passage to a Foreign World","um_dun02",48,30,"um_dun02";
+			callsub Onc1,193,"Hvergelmir's Fountain","yggdrasil01",40,63,"yggdrasil01";
+		callsub Onc2,"Undersea Tunnel";
+			callsub Onc1,0,"Undersea Tunnel F1","iz_dun00",168,168,"iz_dun00";
+			callsub Onc1,189,"Undersea Tunnel F2","iz_dun01",253,252,"iz_dun01";
+			callsub Onc1,190,"Undersea Tunnel F3","iz_dun02",236,204,"iz_dun02";
+			callsub Onc1,191,"Undersea Tunnel F4","iz_dun03",32,63,"iz_dun03";
+			callsub Onc1,192,"Undersea Tunnel F5","iz_dun04",26,27,"iz_dun04";
+
+
+
+	// WoE Areas:
+	callsub Onc0,"^ff0000~^000000 Guild Castles",1500;
+		callsub Onc1,0,"Britoniah","gef_fild13",186,242,"gef_fild13","gefg_cas01","gefg_cas02","gefg_cas03","gefg_cas04","gefg_cas05","gld_dun04";
+		callsub Onc1,0,"Greenwood Lake","pay_gld",196,165,"pay_gld","payg_cas01","payg_cas02","payg_cas03","payg_cas04","payg_cas05","gld_dun01";
+		callsub Onc1,0,"Luina","alde_gld",228,153,"alde_gld","aldeg_cas01","aldeg_cas02","aldeg_cas03","aldeg_cas04","aldeg_cas05","gld_dun02";
+		callsub Onc1,0,"Nidhoggur","sch_gld",287,123,"sch_gld","schg_cas01","schg_cas02","schg_cas03","schg_cas04","schg_cas05","schg_dun01";
+		callsub Onc1,0,"Valfreyja","aru_gld",187,325,"aru_gld","arug_cas01","arug_cas02","arug_cas03","arug_cas04","arug_cas05","arug_dun01";
+		callsub Onc1,0,"Valkyrie Realm","prt_gld",160,75,"prt_gld","prtg_cas01","prtg_cas02","prtg_cas03","prtg_cas04","prtg_cas05","gld_dun03";
+
+
+	//Special: [AresRO]
+	callsub Onc0,"^ff0000~^000000 Special Areas",0;
+		//callsub Onc1,0,"^ff0000Instances Costum^000000 [175+]","yowi_town",201,174,"yowi_town";
+		callsub Onc1,0,"Eden Group Headquarters","moc_para01",31,14,"moc_para01";
+		callsub Onc1,0,"Casino","cmd_in02",179,129,"cmd_in02";
+		callsub Onc1,0,"Auction Hall","auction_01",22,68,"auction_01";
+		callsub Onc1,0,"Gonryun Arena","gon_test",48,10,"gon_test";
+		callsub Onc1,0,"Izlude Arena","arena_room",100,88,"arena_room";
+		callsub Onc1,0,"Monster Race Arena","p_track01",62,41,"p_track01";
+		callsub Onc1,0,"Turbo Track","turbo_room",99,114,"turbo_room";
+
+// [--------------------------------------------------------]
+// [ Final de la configuración de destinos.                 ]
+// [========================================================]
+
+	set $@WE,0;
+	set $@WEm,0;
+	set $@WEd[0],0;
+	set $@WEd[1],0;
+	end;
+
+// Declaración del Grupos de Destinos:
+// getarg(0): Nombre.
+// getarg(1): Precio.
+Onc0:
+	set $@WE,$@WE + 1;
+	set getd("$@WEb"+$@WE+"$"),getarg(0);
+	set getd("$@WEc"+$@WE),getarg(1);
+	set .@a,getarraysize($@WEd0);
+	set $@WEd0[.@a],$@WE;
+	set $@WEd[0],$@WE;
+	set $@WEd[1],0;
+	return;
+
+// Declaración de Destinos:
+// getarg(0): Id.
+// getarg(1): Nombre.
+// getarg(2): Mapa.
+// getarg(3): x.
+// getarg(4): y.
+Onc1:
+	if($@WEd[0]) {
+		set $@WE,$@WE + 1;
+		if($@WEm) set .@a,getarg(0);
+		set getd("$@WEa"+$@WE),.@a;
+		set getd("$@WEb"+$@WE+"$"),getarg(1);
+		set getd("$@WEe"+$@WE+"$"),getarg(2);
+		set getd("$@WEf"+$@WE),getarg(3);
+		set getd("$@WEg"+$@WE),getarg(4);
+		set .@b,5;
+		while(getarg(.@b,"") != "") { // Mapas de activación:
+			set .@m$,getarg(.@b);
+			set getd("$@WEh"+$@WE+"$["+(.@b - 5)+"]"),.@m$;
+			if(.@a) {
+				setmapflag .@m$,42;
+				set getd("$@WE_"+.@m$+"["+getarraysize(getd("$@WE_"+.@m$))+"]"),$@WE;
+			}
+			set .@b,.@b + 1;
+		}
+		set .@a,$@WEd[getarraysize($@WEd) - 1];
+		set .@b,getarraysize(getd("$@WEd"+.@a));
+		set getd("$@WEd"+.@a+"["+.@b+"]"),$@WE;
+	}
+	return;
+
+// Declaración de Submenús:
+// getarg(0): Nombre.
+Onc2:
+	if($@WEd[0]) {
+		if(getarg(0,"") == "") set $@WEd[1],0;
+		else {
+			set $@WE,$@WE + 1;
+			set getd("$@WEb"+$@WE+"$"),getarg(0);
+			set .@a,$@WEd[0];
+			set .@b,getarraysize(getd("$@WEd"+.@a));
+			set getd("$@WEd"+.@a+"["+.@b+"]"),$@WE;
+			set $@WEd[1],$@WE;
+		}
+	}
+	return;
+
+// Activación de Destinos:
+OnPCLoadMapEvent:
+	getmapxy .@m$,.@x,.@y,0;
+	set .@a,getarraysize(getd("$@WE_"+.@m$));
+	while(.@a > 0) {
+		set .@a,.@a - 1;
+		set .@b,getd("$@WE_"+.@m$+"["+.@a+"]");
+		set .@c,getd("$@WEa"+.@b);
+		set .@d,getd($@WEm$+"WE_"+(.@c / 31));
+		if(!(.@d & pow(2,.@c % 31))) {
+			if($@WEm$ == "$") set .@e,0;
+			else set .@e,3;
+			announce .@n$+": El destino '"+getd("$@WEb"+.@b+"$")+"' ha sido desactivado.",.@e,0x00ccdd;
+			set getd($@WEm$+"WE_"+(.@c / 31)),.@d + pow(2,.@c % 31);
+		}
+	}
+	end;
+}
+
+// Npcs:
+-	script	WE#0::WE	-1,{
+	if ( getgmlevel() >= 99 ) {
+		menu "Ver como usuario.",-,"^5533ffCargar Variables^000000",LoadVar;
+	}
+	//cutin "dalle01",2;
+	mes $@WE$;
+		switch(sex) {
+			case 0: mes "Bienvenida ^ff0000"+strcharinfo(0)+"^000000."; break;
+			case 1: mes "Bienvenido ^0000ff"+strcharinfo(0)+"^000000."; break;
+		}
+	mes "¿En que puedo ayudarte?";
+	next;
+	while(.@a < getarraysize($@WEd0)) {
+		set .@b,$@WEd0[.@a];
+		set .@a$[.@a],getd("$@WEb"+.@b+"$");
+		set .@b,getd("$@WEc"+.@b);
+		if(.@b) {
+			if(Zeny < .@b) set .@a$[.@a],"^bbbbbb"+.@a$[.@a]+" ^bb0000("+.@b+" z)^000000";
+			else set .@a$[.@a],.@a$[.@a]+" ^00bb00("+.@b+" z)^000000";
+		}
+		set .@a,.@a + 1;
+	}
+	set .@a,select("^ff0000Last Warp^000000.",.@a$[0],.@a$[1],.@a$[2],.@a$[3],.@a$[4],.@a$[5],.@a$[6],.@a$[7],.@a$[8],.@a$[9],.@a$[10],.@a$[11],.@a$[12],.@a$[13],.@a$[14],.@a$[15],.@a$[16],.@a$[17],.@a$[18],.@a$[19]);
+
+// Last Warp: [DanielArt]
+	if(.@a == 1) {
+		mes $@WE$;
+		if(#lastwarp$=="") {
+			mes "^ff0000Primero debes Transportarte a un destino mediante este Servicio.^000000";
+			close2;
+			emotion ET_SORRY;			
+			end;
+		} else {
+			mes "Bien, espera un segundo mientras te abró un portal.";
+			close2;
+				specialeffect2 71;
+				specialeffect2 72;
+				pcblockmove getcharid(3),1;
+				sleep2 500;
+				specialeffect2 402;
+				sleep2 500;
+				emotion 12;
+				specialeffect2 6;
+				sleep2 200;
+				specialeffect2 304;
+				emotion ET_OK;
+				warp #lastwarp$,#lastx,#lasty;
+				pcblockmove getcharid(3),0;
+			end;
+		}
+	}
+	set .@a,$@WEd0[.@a - 2];
+	set .@b,getd("$@WEc"+.@a);
+	callsub Ona0,.@b;
+	mes $@WE$;
+	if(.@a == 1) {
+		getmapxy .@m$,.@x,.@y,0;
+		set Zeny,Zeny - .@b;
+                mes "Muy bien.";
+		mes "A partir de ahora este lugar quedará guardado como tu Punto de Inicio.";
+		save .@m$,.@x,.@y;
+		specialeffect2 500;
+		close2;
+		emotion 12;
+		end;
+	}
+	mes "Elige tu Destino.";
+	next;
+	do {
+		cleararray .@a$[0],"",getarraysize(.@a$);
+		set .@c,0;
+		while(.@c < getarraysize(getd("$@WEd"+.@a))) {
+			set .@d,getd("$@WEd"+.@a+"["+.@c+"]");
+			set .@e,getd("$@WEa"+.@d);
+			set .@b$,"bbbbbb";
+			set .@c$,"";
+			if(getd("$@WEe"+.@d+"$") == "") {
+				set .@g,getarraysize(getd("$@WEd"+.@d));
+				set .@f,0;
+				while(.@g && !.@f) {
+					set .@g,.@g - 1;
+					set .@e,getd("$@WEa"+getd("$@WEd"+.@d+"["+.@g+"]"));
+					if(!.@e || (getd($@WEm$+"WE_"+(.@e / 31)) & pow(2,.@e % 31))) set .@f,1;
+				}
+				if(.@f) set .@b$,"000000";
+			}
+			else if(!.@e || (getd($@WEm$+"WE_"+(.@e / 31)) & pow(2,.@e % 31))) {
+				set .@b$,"000000";
+				set .@g,0;
+				set .@f,getarraysize(getd("$@WEh"+.@d+"$"));
+				while(.@f > 0) {
+					set .@f,.@f - 1;
+					set .@g,.@g + getmapusers(getd("$@WEh"+.@d+"$["+.@f+"]"));
+				}
+				if(.@g) set .@c$,"00bb00";
+				else set .@c$,"aaaaaa";
+				set .@c$," [^"+.@c$+""+.@g+"^000000]";
+			}
+			set .@a$[.@c],"^"+.@b$+""+getd("$@WEb"+.@d+"$")+"^000000"+.@c$;
+			set .@c,.@c + 1;
+		}
+		if(.@h) set .@b$,"Atrás";
+		else set .@b$,"Salir";
+		set .@c,select("^880000"+.@b$+"^000000",.@a$[0],.@a$[1],.@a$[2],.@a$[3],.@a$[4],.@a$[5],.@a$[6],.@a$[7],.@a$[8],.@a$[9],.@a$[10],.@a$[11],.@a$[12],.@a$[13],.@a$[14],.@a$[15],.@a$[16],.@a$[17],.@a$[18],.@a$[19],.@a$[20],.@a$[21],.@a$[22],.@a$[23],.@a$[24],.@a$[25],.@a$[26],.@a$[27],.@a$[28],.@a$[29],.@a$[30],.@a$[31],.@a$[32],.@a$[33],.@a$[34],.@a$[35],.@a$[36],.@a$[37],.@a$[38],.@a$[39],.@a$[40],.@a$[41],.@a$[42],.@a$[43],.@a$[44],.@a$[45],.@a$[46],.@a$[47],.@a$[48],.@a$[49]);
+		if(.@c == 1) {
+			if(.@h) {
+				set .@a,.@h;
+				set .@h,0;
+			}
+			else {
+				mes $@WE$;
+				mes "Hasta pronto.";
+				emotion 12;
+				close2;
+				end;
+			}
+		}
+		else {
+			set .@c,.@c - 2;
+			if(compare(.@a$[.@c],"^bbbbbb")) {
+				mes $@WE$;
+				mes "Lo siento ^5533ff"+strcharinfo(0)+"^000000.";
+				mes "Este destino aún no se encuentra disponible.";
+				emotion 40;
+				close2;
+				end;
+			}
+			set .@h,.@a;
+			set .@a,getd("$@WEd"+.@a+"["+.@c+"]");
+		}
+	} while(getd("$@WEe"+.@a+"$") == "");
+	callsub Ona0,.@b;
+	set Zeny,Zeny - .@b;
+	mes $@WE$;
+	mes "Muy bien.";
+	mes "Espera un segundo mientras te abro un portal...";
+	close2;
+	specialeffect2 71; specialeffect2 72;
+	pcblockmove getcharid(3),1;
+	sleep2 500;
+	specialeffect2 402;
+	sleep2 500;
+	emotion 12;
+	specialeffect2 6;
+	sleep2 200;
+	specialeffect2 304;
+	warp getd("$@WEe"+.@a+"$"),getd("$@WEf"+.@a),getd("$@WEg"+.@a);
+	pcblockmove getcharid(3),0;
+// Last Warp: [DanielArt]
+	getmapxy(.@mapa$,.@x,.@y,0);
+	set #lastwarp$,.@mapa$; set #lastx,.@x; set #lasty,.@y;
+	end;
+LoadVar:
+donpcevent "WEfunc::OnInit";
+
+Ona0:
+	set .@a,getarg(0);
+	if(Zeny < .@a) {
+		mes $@WE$;
+		mes "Lo siento.";
+		mes "Para utilizar este servicio deberás pagar ^880000"+.@a+" z^000000.";
+		emotion 40;
+		close2;
+		end;
+	}
+	set $impuestos,$impuestos+.@a;
+	return;
+}
+
+alberta,195,142,4	duplicate(WE)	Warper#1	10410
+alberta,31,240,5	duplicate(WE)	Warper#2	10410
+aldebaran,146,116,6	duplicate(WE)	Warper#3	10410
+aldebaran,133,240,6	duplicate(WE)	Warper#4	10410
+alde_gld,234,154,4	duplicate(WE)	Warper#5	10410
+amatsu,244,283,6	duplicate(WE)	Warper#6	10410
+amatsu,103,258,4	duplicate(WE)	Warper#7	10410
+amatsu,207,104,4	duplicate(WE)	Warper#8	10410
+ayothaya,212,208,4	duplicate(WE)	Warper#9	10410
+ayothaya,157,82,4	duplicate(WE)	Warper#10	10410
+comodo,180,333,4	duplicate(WE)	Warper#11	10410
+comodo,205,116,4	duplicate(WE)	Warper#12	10410
+comodo,320,179,4	duplicate(WE)	Warper#13	10410
+comodo,32,219,6	duplicate(WE)	Warper#14	10410
+einbech,67,96,6	duplicate(WE)	Warper#15	10410
+einbech,131,249,6	duplicate(WE)	Warper#16	10410
+einbech,38,201,8	duplicate(WE)	Warper#17	10410
+einbroch,78,187,2	duplicate(WE)	Warper#18	10410
+einbroch,153,317,6	duplicate(WE)	Warper#19	10410
+einbroch,152,53,4	duplicate(WE)	Warper#20	10410
+einbroch,245,239,2	duplicate(WE)	Warper#21	10410
+geffen,123,73,4	duplicate(WE)	Warper#22	10410
+geffen,41,111,6	duplicate(WE)	Warper#23	10410
+geffen,124,181,4	duplicate(WE)	Warper#24	10410
+geffen,167,123,6	duplicate(WE)	Warper#25	10410
+gef_fild13,191,248,4	duplicate(WE)	Warper#26	10410
+gonryun,152,114,6	duplicate(WE)	Warper#27	10410
+gonryun,172,182,2	duplicate(WE)	Warper#28	10410
+gonryun,157,18,6	duplicate(WE)	Warper#29	10410
+hugel,101,134,4	duplicate(WE)	Warper#30	10410
+hugel,176,174,4	duplicate(WE)	Warper#31	10410
+
+izlude,134,150,5	duplicate(WE)	Warper#32	10410
+
+jawaii,135,259,4	duplicate(WE)	Warper#33	10410
+yuno,175,93,4	duplicate(WE)	Warper#34	10410
+yuno,64,207,4	duplicate(WE)	Warper#35	10410
+sch_gld,291,127,4	duplicate(WE)	Warper#36	10410
+lighthalzen,209,99,6	duplicate(WE)	Warper#37	10410
+lighthalzen,218,326,4	duplicate(WE)	Warper#38	10410
+lighthalzen,311,303,4	duplicate(WE)	Warper#39	10410
+louyang,207,104,6	duplicate(WE)	Warper#40	10410
+louyang,57,250,4	duplicate(WE)	Warper#41	10410
+xmas,139,310,6	duplicate(WE)	Warper#42	10410
+xmas,155,138,4	duplicate(WE)	Warper#43	10410
+malaya,271,49,4	duplicate(WE)	Warper#44	10410
+morocc,43,174,4	duplicate(WE)	Warper#45	10410
+morocc,166,293,4	duplicate(WE)	Warper#46	10410
+morocc,275,197,8	duplicate(WE)	Warper#47	10410
+morocc,33,294,4	duplicate(WE)	WE#48	10410
+moscovia,238,194,4	duplicate(WE)	Warper#49	10410
+moscovia,157,64,4	duplicate(WE)	Warper#50	10410
+niflheim,25,156,6	duplicate(WE)	Warper#51	10410
+niflheim,201,184,4	duplicate(WE)	Warper#52	10410
+payon,213,76,6	duplicate(WE)	Warper#53	10410
+payon,185,103,2	duplicate(WE)	Warper#54	10410
+payon,232,320,4	duplicate(WE)	Warper#55	10410
+payon,63,124,6	duplicate(WE)	Warper#56	10410
+pay_gld,201,161,4	duplicate(WE)	Warper#57	10410
+
+prt_fild08,163,373,4	duplicate(WE)	Warper#58	10410
+
+prontera,36,212,6	duplicate(WE)	Warper#59	10410
+prontera,150,268,4	duplicate(WE)	Warper#60	10410
+prontera,263,213,4	duplicate(WE)	Warper#61	10410
+prt_fild05,141,246,4	duplicate(WE)	Warper#62	10410
+prt_gld,166,79,4	duplicate(WE)	Warper#63	10410
+
+//Principal
+prontera,151,195,5	duplicate(WE)	Warper#118	10410
+
+prt_fild05,275,217,4	duplicate(WE)	Warper#106	10410
+
+prt_fild10,219,199,6	duplicate(WE)	Warper#104	10410
+
+rachel,260,136,4	duplicate(WE)	Warper#64	10410
+rachel,150,140,4	duplicate(WE)	Warper#65	10410
+rachel,135,49,4	duplicate(WE)	Warper#66	10410
+rachel,35,131,6	duplicate(WE)	Warper#67	10410
+aru_gld,179,330,6	duplicate(WE)	Warper#68	10410
+umbala,117,130,8	duplicate(WE)	Warper#69	10410
+umbala,163,253,4	duplicate(WE)	Warper#70	10410
+veins,205,236,4	duplicate(WE)	Warper#71	10410
+veins,222,356,4	duplicate(WE)	Warper#72	10410
+veins,153,62,6	duplicate(WE)	Warper#73	10410
+mid_camp,215,287,4	duplicate(WE)	Warper#74	10410
+mid_camp,134,233,6	duplicate(WE)	Warper#75	10410
+mid_camp,256,230,8	duplicate(WE)	Warper#76	10410
+manuk,285,128,2	duplicate(WE)	Warper#77	10410
+manuk,183,181,6	duplicate(WE)	Warper#78	10410
+splendide,181,141,6	duplicate(WE)	Warper#79	10410
+hu_fild05,177,220,5	duplicate(WE)	Warper#80	10410
+ama_dun01,233,9,4	duplicate(WE)	Warper#81	10410
+cmd_fild08,329,344,4	duplicate(WE)	Warper#82	10410
+lasa_fild02,343,246,4	duplicate(WE)	Warper#83	10410
+ayo_fild02,279,153,4	duplicate(WE)	Warper#84	10410
+izlu2dun,103,96,6	duplicate(WE)	Warper#85	10410
+mjolnir_02,84,360,4	duplicate(WE)	Warper#86	10410
+nameless_n,158,179,8	duplicate(WE)	Warper#87	10410
+gef_dun00,107,99,4	duplicate(WE)	Warper#88	10410
+glast_01,371,295,2	duplicate(WE)	Warper#89	10410
+glast_01,191,120,6	duplicate(WE)	Warper#90	10410
+glast_01,65,110,6	duplicate(WE)	Warper#91	10410
+glast_01,195,292,6	duplicate(WE)	Warper#92	10410
+glast_01,65,197,8	duplicate(WE)	Warper#93	10410
+prt_fild01,140,366,4	duplicate(WE)	Warper#94	10410
+mjolnir_12,48,20,2	duplicate(WE)	Warper#95	10410
+ra_san01,143,131,2	duplicate(WE)	Warper#96	10410
+ra_fild01,237,332,4	duplicate(WE)	Warper#97	10410
+jupe_cave,47,55,6	duplicate(WE)	Warper#98	10410
+yuno_fild03,34,135,8	duplicate(WE)	Warper#99	10410
+kh_dun01,5,230,4	duplicate(WE)	Warper#100	10410
+mosk_fild02,194,252,4	duplicate(WE)	Warper#101	10410
+odin_tem01,96,143,8	duplicate(WE)	Warper#102	10410
+gef_fild10,61,334,6	duplicate(WE)	Warper#103	10410
+pay_arche,37,127,8	duplicate(WE)	Warper#105	10410
+moc_ruins,55,157,6	duplicate(WE)	Warper#107	10410
+moc_fild19,106,97,8	duplicate(WE)	Warper#108	10410
+alb2trea,74,101,6	duplicate(WE)	Warper#109	10410
+hu_fild01,143,159,2	duplicate(WE)	Warper#110	10410
+ve_fild03,175,239,4	duplicate(WE)	Warper#111	10410
+tur_dun01,147,54,6	duplicate(WE)	Warper#112	10410
+cmd_fild01,31,320,6	duplicate(WE)	Warper#113	10410
+beach_dun2,254,248,4	duplicate(WE)	Warper#114	10410
+dic_dun02,105,145,4	duplicate(WE)	Warper#115	10410
+dicastes01,202,184,4	duplicate(WE)	Warper#116	10410
+brasilis,193,159,4	duplicate(WE)	Warper#117	10410
+mora,103,96,4	duplicate(WE)	WE#119	10410
+brasilis,199,215,4	duplicate(WE)	Warper#120	10410
+manuk,266,179,4	duplicate(WE)	Warper#121	10410
+morocc,169,97,4	duplicate(WE)	Warper#122	10410
+payon,152,241,4	duplicate(WE)	Warper#123	10410
+prt_fild08,350,206,5	duplicate(WE)	Warper#124	10410
+comodo,192,158,4	duplicate(WE)	Warper#125	10410
+ayothaya,155,114,4	duplicate(WE)	Warper#126	10410
+lighthalzen,161,100,4	duplicate(WE)	Warper#127	10410
+prt_monk,161,184,4	duplicate(WE)	Warper#128	10410
+dewata,194,184,5	duplicate(WE)	Warper#129	10410
+//market,104,116,6	duplicate(WE)	Warper#130	10410
+mora,41,146,5	duplicate(WE)	Warper#131	10410
+malangdo,142,135,5	duplicate(WE)	Warper#132	10410
+malaya,237,222,5	duplicate(WE)	Warper#133	10410
+brasilis,190,241,5	duplicate(WE)	Warper#134	10410
+splendide,204,153,5	duplicate(WE)	Warper#135	10410
+mid_camp,181,256,5	duplicate(WE)	Warper#136	10410
+moscovia,219,192,5	duplicate(WE)	Warper#137	10410
+eclage,106,33,5	duplicate(WE)	Warper#138	10410
+paramk,145,51,3	duplicate(WE)	Warper#139	10410
+poring_w02,112,88,4	duplicate(WE)	Warper#140	10410
+lasagna,173,159,5	duplicate(WE)	Warper#141	10410
+harboro1,291,203,5	duplicate(WE)	Warper#142	10410
+
+
+

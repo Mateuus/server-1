@@ -1,0 +1,105 @@
+invek,162,147,3	script	Organizador	4_HUMAN_GERUTOO,{
+function ManageBuild;
+
+.n3$ = "[ ^0101DFOrganizador^000000 ]"; // NPC Name
+
+mes .n3$;
+mes "Hola, soy el organizador de habilidades.";
+mes "Aqui podrás guardas tus puntos de habilidad para poder usar cuando tu quieras.";
+next;
+mes .n3$;
+mes "Tienes 4 ranuras disponibles para guardar tus builds convenientes.";
+next;
+switch( select( ( .BMMode & 1 )?"^FF0000Guardar & Cambiar Builds^000000":"",
+				( .BMMode & 2 )?"^0000FFReset Status^000000":"",	
+				( .BMMode & 4 )?"^0000FFReset Skills^000000":"")){
+	case 1:
+		for( set .@i,1; .@i <= .MaxSlots; set .@i,.@i + 1 )
+			set .@Menu$,.@Menu$ + (( getd( "Slot_"+.@i+"$" ) == "" )?"^FF0000Ranura Vacia^000000":getd( "Slot_"+.@i+"$" ) )+":";
+		set .@Slot,select( .@Menu$ );
+		do{
+			next;
+			mes "Build : ^FF0000"+(( getd( "Slot_"+.@Slot+"$" ) == "" )?"Slot "+.@Slot:getd( "Slot_"+.@Slot+"$" ) )+"^000000";
+			mes "STR - ^0000FF"+getd( "STR_"+.@Slot )+"^000000      INT - ^0000FF"+getd( "INT_"+.@Slot )+"^000000";
+			mes "AGI - ^0000FF"+getd( "AGI_"+.@Slot )+"^000000      DEX - ^0000FF"+getd( "DEX_"+.@Slot )+"^000000";
+			mes "VIT - ^0000FF"+getd( "VIT_"+.@Slot )+"^000000      LUK - ^0000FF"+getd( "LUK_"+.@Slot )+"^000000";
+			mes " ";
+			mes "Puntos Restantes : ^0000FF"+getd( "STATS_"+.@Slot )+"^000000";
+			set .@Option,select(( getd( "Slot_"+.@Slot+"$" ) == "" )?"":"^0000FFCambiar",
+								( getd( "Slot_"+.@Slot+"$" ) == "" )?"Guardar":"",
+								( getd( "Slot_"+.@Slot+"$" ) == "" )?"":"^FF0000Limpiar" );
+			ManageBuild( .@Slot,.@Option);
+		}while( .@Option != 1 );
+		break;
+	case 2:
+		resetstatus;
+		mes "Status has been Reseted.";
+		break;
+	case 3:
+		resetskill;
+		mes "Skills has been Reseted.";
+		break;
+}
+close;
+
+function	ManageBuild	{
+switch( getarg(1) ){
+	case 1:	//	Switch Build
+		message strcharinfo(0),"La Build ha sido ^FF0000Cambiada^000000.";
+			resetstatus;
+			set StatusPoint,getd( "STATS_"+getarg(0) );
+			statusup2 bStr,getd( "STR_"+getarg(0) ) - 1;
+			statusup2 bAgi,getd( "AGI_"+getarg(0) ) - 1;
+			statusup2 bVit,getd( "VIT_"+getarg(0) ) - 1;
+			statusup2 bInt,getd( "INT_"+getarg(0) ) - 1;
+			statusup2 bDex,getd( "DEX_"+getarg(0) ) - 1;
+			statusup2 bLuk,getd( "LUK_"+getarg(0) ) - 1;
+		break;
+	case 2:	//	Save Build
+			setd( "STR_"+getarg(0) ),readparam(bStr);
+			setd( "AGI_"+getarg(0) ),readparam(bAgi);
+			setd( "VIT_"+getarg(0) ),readparam(bVit);
+			setd( "INT_"+getarg(0) ),readparam(bInt);
+			setd( "DEX_"+getarg(0) ),readparam(bDex);
+			setd( "LUK_"+getarg(0) ),readparam(bLuk);
+			setd( "STATS_"+getarg(0) ),StatusPoint;
+		if( .Length[0] < .Length[1] && .Length[0] ){
+			mes "Ingresa un ^FF0000Nombre^000000 para esta ranura.";
+			mes "Tamaño del nombre : "+.Length[0]+" ~ "+.Length[1]+" Caracteres";
+			do{
+				input getd( "Slot_"+getarg(0)+"$" );
+			}while( getstrlen( getd( "Slot_"+getarg(0)+"$" ) ) < .Length[0] || getstrlen( getd( "Slot_"+getarg(0)+"$" ) ) > .Length[1] );
+		}else{
+			setd( "Slot_"+getarg(0)+"$" ),"Build "+getarg(0);
+		}
+		message strcharinfo(0),"La build ha sido Grabada";
+		break;
+	case 3:	//	Remove Build
+		message strcharinfo(0),"La build ha sido Limpiada.";
+			setd( "STR_"+getarg(0) ),0;
+			setd( "AGI_"+getarg(0) ),0;
+			setd( "VIT_"+getarg(0) ),0;
+			setd( "INT_"+getarg(0) ),0;
+			setd( "DEX_"+getarg(0) ),0;
+			setd( "LUK_"+getarg(0) ),0;
+			setd( "STATS_"+getarg(0) ),0;
+			setd( "Slot_"+getarg(0)+"$" ),"";
+		break;
+}
+return;
+}	
+	
+OnInit:
+// Mode of NPC
+// 1 = Save & Switch 
+// 2 = Reset Status
+// 4 = Reset Skills
+// 7 = All of Above [ 1+2+4 = 7 ]
+set .BMMode,1;
+// How Many Slots available to Save Status Builds.
+set .MaxSlots,4;
+// Enable Stats Slot Rename + Max Name Length ( 0 = Disable )
+setarray .Length,4,26; // Min. ~ Max. Words.
+end;
+
+}

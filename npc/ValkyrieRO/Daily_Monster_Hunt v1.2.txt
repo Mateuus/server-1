@@ -1,0 +1,98 @@
+//======Name========================================
+// Daily Monster Hunt
+//======Version=====================================
+// 1.2
+//======Author(s)===================================
+// Sandbox
+//======Comments====================================
+// This NPC allows your player to hunt a random amount
+// of a random monster, within a random time
+// *randomception!*
+// If the player successfully hunts the monster
+// within the time limit, he'll receive a reward!
+//======Credits=====================================
+// KeyWorld, nanakiwurtz, NeoMind, Kido
+// Thanks for helping me out guize!
+//==================================================
+ 
+prt_in,136,35,3	script	[Desafíos de caza]	10181,{
+ 
+	mes .Npc_Name$;
+	if(Hunter) {
+	mes "Has matado ^880000"+HuntCount+"^000000/^0000FF"+Amt
+ 
+	+"^000000 "+getmonsterinfo(Hunt,0)+"s, ¡Seguid así!";
+	close;
+	}
+	if(gettimetick(2) < HuntDelay) {
+		mes "¡Solo puedes hacer esta misión una vez al día!";
+		close;
+	}
+
+	mes "Hola, ¿quieres enfrentarte al Monster Hunting Challenge?","Te daré un límite de tiempo aleatorio para matar una cantidad aleatoria de un monstruo, si logras matarlos dentro del tiempo dado, ¡recibirás una recompensa!"; 
+	if(select("¡Adelante!:¿Qué tal, no?")==2) {
+	mes .Npc_Name$;
+	mes "Bueno!";
+	close;
+}
+ 
+	next;
+	mes .Npc_Name$;
+	Hunt = .Mob_List[rand(getarraysize(.Mob_List))];
+	Time = rand(600,99); //Timer
+	Amt = rand (10,1); //Amount of mob to hunt
+	Hunter++;
+ 
+	mes "Tienes que cazar ^0000FF"+Amt+" "+getmonsterinfo(Hunt,0)+"^000000 in ^AA0000"+Time+"^000000 seconds!";
+	next;
+	mes .Npc_Name$;
+	mes "Go go go!";
+	close2;
+	showdigit Time,3;
+	HuntDelay = gettimetick(2)+86400; //Once a day only.
+	HuntStart = gettimetick(2)+Time;
+sleep2 1000*Time;
+	if(Hunter) dispbottom strnpcinfo(1)+": Lo siento, ¡no lo lograste!";
+	HuntStart = 0; //Reset all variables
+	Hunt = 0;
+	Hunter = 0;
+	HuntCount = 0;
+	Time = 0;
+	Amt = 0;
+end;
+
+ 
+//----------Config----------
+ 
+OnInit:
+	.Npc_Name$ = "[^0000FF Cazador ^000000]";
+	setarray .Mob_List[0],1002,1007,1063,1836,1138; //Mobs to hunt. Default: Poring, Fabre, Lunatic
+	.Reward = 671; //Reward ID
+	.RewAmt = 30; //Reward Amount
+	end;
+ 
+OnNPCKillEvent:
+	if(Hunter > 0) {
+		if(gettimetick(2) < HuntStart) {
+			if(killedrid == Hunt) {
+				HuntCount++;
+				dispbottom "Has matado "+HuntCount+"/"+Amt+" "+getmonsterinfo(Hunt,0)+"s, ¡Seguid así!";
+				if(HuntCount >= Amt) {
+					emotion ET_BEST;
+					specialeffect2 EF_ANGEL;
+					specialeffect2 EF_TRUESIGHT;
+					dispbottom strnpcinfo(1)+": ¡Felicitaciones! ¡Lo hiciste!";
+					getitem .Reward,.RewAmt;
+					HuntStart = 0;
+					Hunt = 0;
+					Hunter = 0;
+					HuntCount = 0;
+					Time = 0;
+					Amt = 0;
+					showdigit 1,3;
+				}
+			}
+		}
+	}
+end;
+}

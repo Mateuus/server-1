@@ -1,0 +1,73 @@
+//===== Script eAthena ======================================= 
+//= Travelet Black Hat Quest
+//===== por: ================================================== 
+//= Creador de Quests Ragnarok World
+//= v1.0
+//===== Compatible Con: ===================================== 
+//= eAthena SVN
+//===== Descripción: ========================================= 
+//  Quest Creada por el Script Creador de Quests Online de
+//  http://www.ragnarokworld.net
+//============================================================ 
+
+poring_w02,70,121,3	script	Travelet Black Hat	75,{
+ 	set @NPCName$, "[^Travelet Black Hat^000000]";
+	set @cost, 5000000;
+	mes @NPCName$;
+	mes "Quieres Obtener este Item? bonus Stat: +30 all stats..!!";
+	next;
+	switch(select("Si:No:No, Grasias.")) {
+ 	case 1:
+	mes @NPCName$;
+	mes "Estos son Los Items Necesarios.";
+	mes "  ^Jellopy^000000 [200]";
+	mes "  ^Bill of Birds^000000 [200]";
+	mes "  ^Feather^000000 [150]";
+	mes "  ^5000000 Zeny^000000";
+	next;
+	if (countitem(909) < 200) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(925) < 200) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (countitem(949) < 150) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	if (Zeny < @cost) {
+	mes @NPCName$;
+	mes "Lo siento, no tienes todos los Items.";
+	mes "intenta de Nuevo.";
+	close;
+	}
+	mes @NPCName$;
+	mes "Bien! Tienes todos los Items! Felicidades !";
+	mes "el Objeto es Tuyo";
+	delitem 909,200;
+	delitem 925,200;
+	delitem 949,150;
+	set Zeny,Zeny-@cost;
+	getitem 20131,1;
+	close;
+	case 2:
+	mes @NPCName$;
+	mes "de acuerdo, vuelve pronto !";
+	close;
+	case 3:
+	close;
+	}
+
+}
+
+//============================================================
+//===== Creador de Quests Ragnarok World ===========================
+//============================================================

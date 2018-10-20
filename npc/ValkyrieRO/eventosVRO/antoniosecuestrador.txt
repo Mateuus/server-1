@@ -1,0 +1,125 @@
+//===== Global Chile ======
+//=== https://www.facebook.com/IntegralesGlobal ===
+
+-	script	antoniosecuestrador	-1,{
+
+OnInit:
+inicio:
+sleep2 rand(43200000,259200000);
+	monster "quiz_02",314,57,"Antonio Secuestrador",2260,1;
+announce "[Guardias]: ¡¡Alerta!! ¡¡Se ha detectado la presencia de Antonio el malvado secuestrador de niños!!",bc_all,0xFD8585;
+sleep2 10000;
+announce "[Guardias]: La persona que logre expulsarlo recibirá una pequeña recompensa.",bc_all,0xFD8585;
+set .EVAUTANTONIOC,rand(1,7);
+sleep2 10000;
+if (.EVAUTANTONIOC == 1){
+announce "[Guardias]: ¡¡Antonio ha sido localizado en algún lugar de Abyss Dungeon!!",bc_all,0xFD8585;
+set .EVAUTANTONIO,rand(1,3);
+if (.EVAUTANTONIO == 1) {monster "abyss_01",0,0,"Antonio",1247,1,"antoniosecuestrador::OnThisMobDeath";}
+if (.EVAUTANTONIO == 2) {monster "abyss_02",0,0,"Antonio",1247,1,"antoniosecuestrador::OnThisMobDeath";}
+if (.EVAUTANTONIO == 3) {monster "abyss_03",0,0,"Antonio",1247,1,"antoniosecuestrador::OnThisMobDeath";}
+}
+
+if (.EVAUTANTONIOC == 2){
+announce "[Guardias]: ¡¡Antonio ha sido localizado en algún lugar de Amatsu Dungeon!!",bc_all,0xFD8585;
+set .EVAUTANTONIO,rand(1,3);
+if (.EVAUTANTONIO == 1) {monster "ama_dun01",0,0,"Antonio",1247,1,"antoniosecuestrador::OnThisMobDeath";}
+if (.EVAUTANTONIO == 2) {monster "ama_dun02",0,0,"Antonio",1247,1,"antoniosecuestrador::OnThisMobDeath";}
+if (.EVAUTANTONIO == 3) {monster "ama_dun03",0,0,"Antonio",1247,1,"antoniosecuestrador::OnThisMobDeath";}
+}
+
+if (.EVAUTANTONIOC == 3){
+announce "[Guardias]: ¡¡Antonio ha sido localizado en algún lugar de Anthell Dungeon!!",bc_all,0xFD8585;
+set .EVAUTANTONIO,rand(1,2);
+if (.EVAUTANTONIO == 1) {monster "anthell01",0,0,"Antonio",1247,1,"antoniosecuestrador::OnThisMobDeath";}
+if (.EVAUTANTONIO == 2) {monster "anthell02",0,0,"Antonio",1247,1,"antoniosecuestrador::OnThisMobDeath";}
+}
+
+if (.EVAUTANTONIOC == 4){
+announce "[Guardias]: ¡¡Antonio ha sido localizado en algún lugar de Ayothaya Dungeon!!",bc_all,0xFD8585;
+set .EVAUTANTONIO,rand(1,2);
+if (.EVAUTANTONIO == 1) {monster "ayo_dun01",0,0,"Antonio",1247,1,"antoniosecuestrador::OnThisMobDeath";}
+if (.EVAUTANTONIO == 2) {monster "ayo_dun02",0,0,"Antonio",1247,1,"antoniosecuestrador::OnThisMobDeath";}
+}
+
+if (.EVAUTANTONIOC == 5){
+announce "[Guardias]: ¡¡Antonio ha sido localizado en algún lugar de Bibilan Dungeon!!",bc_all,0xFD8585;
+set .EVAUTANTONIO,rand(1,5);
+if (.EVAUTANTONIO == 1) {monster "iz_dun01",0,0,"Antonio",1247,1,"antoniosecuestrador::OnThisMobDeath";}
+if (.EVAUTANTONIO == 2) {monster "iz_dun02",0,0,"Antonio",1247,1,"antoniosecuestrador::OnThisMobDeath";}
+if (.EVAUTANTONIO == 3) {monster "iz_dun03",0,0,"Antonio",1247,1,"antoniosecuestrador::OnThisMobDeath";}
+if (.EVAUTANTONIO == 4) {monster "iz_dun04",0,0,"Antonio",1247,1,"antoniosecuestrador::OnThisMobDeath";}
+if (.EVAUTANTONIO == 5) {monster "iz_dun05",0,0,"Antonio",1247,1,"antoniosecuestrador::OnThisMobDeath";}
+}
+
+if (.EVAUTANTONIOC == 6){
+announce "[Guardias]: ¡¡Antonio ha sido localizado en algún lugar de Brasilis Dungeon!!",bc_all,0xFD8585;
+set .EVAUTANTONIO,rand(1,2);
+if (.EVAUTANTONIO == 1) {monster "bra_dun01",0,0,"Antonio",1247,1,"antoniosecuestrador::OnThisMobDeath";}
+if (.EVAUTANTONIO == 2) {monster "bra_dun02",0,0,"Antonio",1247,1,"antoniosecuestrador::OnThisMobDeath";}
+}
+
+if (.EVAUTANTONIOC == 7){
+announce "[Guardias]: ¡¡Antonio ha sido localizado en algún lugar de Coal Mine!!",bc_all,0xFD8585;
+set .EVAUTANTONIO,rand(1,3);
+if (.EVAUTANTONIO == 1) {monster "mjo_dun01",0,0,"Antonio",1247,1,"antoniosecuestrador::OnThisMobDeath";}
+if (.EVAUTANTONIO == 2) {monster "mjo_dun02",0,0,"Antonio",1247,1,"antoniosecuestrador::OnThisMobDeath";}
+if (.EVAUTANTONIO == 3) {monster "mjo_dun03",0,0,"Antonio",1247,1,"antoniosecuestrador::OnThisMobDeath";}
+}
+
+if (.EVAUTANTONIOC == 8){
+announce "[Guardias]: ¡¡Antonio ha sido localizado en algún lugar de Culvert!!",bc_all,0xFD8585;
+set .EVAUTANTONIO,rand(1,4);
+if (.EVAUTANTONIO == 1) {monster "prt_sewb1",0,0,"Antonio",1247,1,"antoniosecuestrador::OnThisMobDeath";}
+if (.EVAUTANTONIO == 2) {monster "prt_sewb2",0,0,"Antonio",1247,1,"antoniosecuestrador::OnThisMobDeath";}
+if (.EVAUTANTONIO == 3) {monster "prt_sewb3",0,0,"Antonio",1247,1,"antoniosecuestrador::OnThisMobDeath";}
+if (.EVAUTANTONIO == 4) {monster "prt_sewb4",0,0,"Antonio",1247,1,"antoniosecuestrador::OnThisMobDeath";}
+}
+
+if (.EVAUTANTONIOC == 9){
+announce "[Guardias]: ¡¡Antonio ha sido localizado en algún lugar de Cursed Abbey!!",bc_all,0xFD8585;
+set .EVAUTANTONIO,rand(1,4);
+if (.EVAUTANTONIO == 1) {monster "nameless_n",0,0,"Antonio",1247,1,"antoniosecuestrador::OnThisMobDeath";}
+if (.EVAUTANTONIO == 2) {monster "abbey01",0,0,"Antonio",1247,1,"antoniosecuestrador::OnThisMobDeath";}
+if (.EVAUTANTONIO == 3) {monster "abbey02",0,0,"Antonio",1247,1,"antoniosecuestrador::OnThisMobDeath";}
+if (.EVAUTANTONIO == 4) {monster "abbey03",0,0,"Antonio",1247,1,"antoniosecuestrador::OnThisMobDeath";}
+}
+
+if (.EVAUTANTONIOC == 10){
+announce "[Guardias]: ¡¡Antonio ha sido localizado en algún lugar de Einbech Mine!!",bc_all,0xFD8585;
+set .EVAUTANTONIO,rand(1,2);
+if (.EVAUTANTONIO == 1) {monster "ein_dun01",0,0,"Antonio",1247,1,"antoniosecuestrador::OnThisMobDeath";}
+if (.EVAUTANTONIO == 2) {monster "ein_dun02",0,0,"Antonio",1247,1,"antoniosecuestrador::OnThisMobDeath";}
+}
+
+if (.EVAUTANTONIOC == 11){
+announce "[Guardias]: ¡¡Antonio ha sido localizado en algún lugar de Geffen Dungeon!!",bc_all,0xFD8585;
+set .EVAUTANTONIO,rand(1,3);
+if (.EVAUTANTONIO == 1) {monster "gef_dun00",0,0,"Antonio",1247,1,"antoniosecuestrador::OnThisMobDeath";}
+if (.EVAUTANTONIO == 2) {monster "gef_dun01",0,0,"Antonio",1247,1,"antoniosecuestrador::OnThisMobDeath";}
+if (.EVAUTANTONIO == 3) {monster "gef_dun02",0,0,"Antonio",1247,1,"antoniosecuestrador::OnThisMobDeath";}
+}
+
+if (.EVAUTANTONIOC == 12){
+announce "[Guardias]: ¡¡Antonio ha sido localizado en algún lugar de Gefenia!!",bc_all,0xFD8585;
+set .EVAUTANTONIO,rand(1,4);
+if (.EVAUTANTONIO == 1) {monster "gefenia01",0,0,"Antonio",1247,1,"antoniosecuestrador::OnThisMobDeath";}
+if (.EVAUTANTONIO == 2) {monster "gefenia02",0,0,"Antonio",1247,1,"antoniosecuestrador::OnThisMobDeath";}
+if (.EVAUTANTONIO == 3) {monster "gefenia03",0,0,"Antonio",1247,1,"antoniosecuestrador::OnThisMobDeath";}
+if (.EVAUTANTONIO == 4) {monster "gefenia04",0,0,"Antonio",1247,1,"antoniosecuestrador::OnThisMobDeath";}
+}
+
+
+end;
+
+
+OnThisMobDeath:
+announce "[Guardias]: ¡¡"+strcharinfo(0)+" ha conseguido expulsar a Antonio!!",bc_all,0xFD8585;
+set @EVATANTONIOP,rand(2,2);
+if (@EVATANTONIOP == 1) {getitem 7711,1; dispbottom "Tu premio por expulsar a Antonio: Event Ticket.";}
+if (@EVATANTONIOP == 2) {sc_start SC_BLESSING,1800000,10; sc_start SC_INCREASEAGI,1800000,10; sc_start SC_ASSUMPTIO,1800000,5; sc_start SC_STRFOOD,1800000,5; sc_start SC_AGIFOOD,1800000,5; sc_start SC_VITFOOD,1800000,5; sc_start SC_INTFOOD,1800000,5; sc_start SC_DEXFOOD,1800000,5; sc_start SC_LUKFOOD,1800000,5; dispbottom "Tu premio por expulsar a Antonio: Gran Bendición.";}
+if (@EVATANTONIOP == 3) {sc_start SC_EXPBOOST,1800000,50; dispbottom "Tu premio por expulsar a Antonio: Aumento de EXP temporal.";}
+if (@EVATANTONIOP == 4) {getitem 12075,rand(1,3); getitem 12080,rand(1,3); getitem 12095,rand(1,3); getitem 12090,rand(1,3); getitem 12085,rand(1,3); getitem 12100,rand(1,3); dispbottom "Tu premio por expulsar a Antonio: Set de Comidas.";}
+goto inicio;
+end;
+}

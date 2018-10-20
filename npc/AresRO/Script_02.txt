@@ -1,0 +1,381 @@
+//===== eAthena Script =======================================================================
+//= NPC 
+//===== By: =================================================================================
+//= 
+//===== Current Version: ======================================================================
+//= 1.3.1
+//==========================================================================================
+
+poring_w02,81,92,5	script	Refined Headgers	860,{
+
+set @npcname$,"^0000FF[^000000^FF0000Emedy^000000^0000FF]^000000";
+mes @npcname$;
+mes "Hola! ^5555FF" + strcharinfo(0) + "^000000!";
+mes "Mi Nombre es ^5555FF" + @npcname$ + "^000000!";
+mes "Estoy aqui para poder brindarte";
+mes "Algunos Headgers que te podran dar algunos beneficios";
+next;
+
+mes "[^0065DFEmedy^000000]";
+mes "¿Que Headger te gustaria refinar?,";
+menu "Blue Valkyrie Helm",Blue_V,"Brown Valkyrie Helm",Brown_V,"Black Valkyrie Helm",Black_V,"Golden Valkyire Helm",Golden_V,"Green Valkyrie Helm",Green_V,"Pink Valkyrie Helm",Pink_V,"Red Valkyrie Helm",red_v,"White Valkyrie Helm",white_v,"Ying Y. Valkyrie Helm",yy_V,"Ninguno",ref8;
+
+Blue_V:
+mes "[^0065DFEmedy^000000]";
+mes "Necesitas traerme los siguientes items...";
+next;
+mes "1 Blue Valkyrie Helm";
+mes "500 Feather";
+mes "500 Soft Feather";
+mes "1 Kiel-01 Card";
+mes "1 Angeling Hat";
+mes "3 Aron Cheques";
+next;
+
+mes "Ya tienes todos los items?";
+menu "Si.",ref1,"No tengo nada.",ref2;
+
+ref1:
+mes "Ok,Dejame revisar tu Inventario";
+if((countitem(949)<500))goto falta;
+if((countitem(7063)<500))goto falta;
+if((countitem(4403)<1))goto falta;
+if((countitem(20149)<1))goto falta;
+if((countitem(5132)<1))goto falta;
+if((countitem(7160)<3))goto falta;
+mes "Bien, si tienes todo lo necesario...";
+next;
+
+mes "[^0065DFEmedy^000000]";
+mes "Procedere a refinar tu Headger";
+delitem 949,500;
+delitem 7063,500;
+delitem 4403,1;
+delitem 20149,1;
+delitem 5132,1;
+delitem 7160,3;
+getitem 20093,1;
+mes "Muy bien!! Ahi tienes tu Headger";
+close;
+
+Brown_V:
+mes "[^0065DFEmedy^000000]";
+mes "Necesitas traerme los siguientes items...";
+next;
+mes "1 Brown Valkyrie Helm";
+mes "500 Live Coal";
+mes "500 Horn";
+mes "1 Kiel-01 Card";
+mes "1 Angeling Hat";
+mes "3 Aron Cheques";
+next;
+
+mes "Ya tienes todos los items?";
+menu "Si.",ref3,"No tengo nada.",ref2;
+
+ref3:
+mes "Ok,Dejame revisar tu Inventario";
+if((countitem(7098)<500))goto falta;
+if((countitem(947)<500))goto falta;
+if((countitem(4403)<1))goto falta;
+if((countitem(20150)<1))goto falta;
+if((countitem(5132)<1))goto falta;
+if((countitem(7160)<3))goto falta;
+mes "Bien, si tienes todo lo necesario...";
+next;
+
+mes "[^0065DFEmedy^000000]";
+mes "Procedere a refinar tu Headger";
+delitem 7098,500;
+delitem 947,500;
+delitem 4403,1;
+delitem 20150,1;
+delitem 5132,1;
+delitem 7160,3;
+getitem 20094,1;
+mes "Muy bien!! Ahi tienes tu Headger";
+close;
+
+Black_V:
+mes "[^0065DFEmedy^000000]";
+mes "Necesitas traerme los siguientes items...";
+next;
+mes "1 Black Valkyrie Helm";
+mes "500 Evil Horn";
+mes "500 Black Hair";
+mes "1 Kiel-01 Card";
+mes "1 Angeling Hat";
+mes "3 Aron Cheques";
+next;
+
+mes "Ya tienes todos los items?";
+menu "Si.",ref4,"No tengo nada.",ref2;
+
+ref4:
+mes "Ok,Dejame revisar tu Inventario";
+if((countitem(923)<500))goto falta;
+if((countitem(1020)<500))goto falta;
+if((countitem(4403)<1))goto falta;
+if((countitem(20148)<1))goto falta;
+if((countitem(5132)<1))goto falta;
+if((countitem(7160)<3))goto falta;
+mes "Bien, si tienes todo lo necesario...";
+next;
+
+mes "[^0065DFEmedy^000000]";
+mes "Procedere a refinar tu Headger";
+delitem 923,500;
+delitem 1020,500;
+delitem 4403,1;
+delitem 20148,1;
+delitem 5132,1;
+delitem 7160,3;
+getitem 20092,1;
+mes "Muy bien!! Ahi tienes tu Headger";
+close;
+
+Golden_V:
+mes "[^0065DFEmedy^000000]";
+mes "Necesitas traerme los siguientes items...";
+next;
+mes "1 Golden Valkyrie Helm";
+mes "500 Treasure Box";
+mes "500 Topaz";
+mes "1 Kiel-01 Card";
+mes "1 angeling Hat";
+mes "3 Aron Cheques";
+next;
+
+mes "Ya tienes todos los items?";
+menu "Si.",ref5,"No tengo nada.",ref2;
+
+ref5:
+mes "Ok,Dejame revisar tu Inventario";
+if((countitem(7444)<500))goto falta;
+if((countitem(728)<500))goto falta;
+if((countitem(4403)<1))goto falta;
+if((countitem(20152)<1))goto falta;
+if((countitem(5132)<1))goto falta;
+if((countitem(7160)<3))goto falta;
+mes "Bien, si tienes todo lo necesario...";
+next;
+
+mes "[^0065DFEmedy^000000]";
+mes "Procedere a refinar tu Headger";
+delitem 7444,500;
+delitem 728,500;
+delitem 4403,1;
+delitem 20152,1;
+delitem 5132,1;
+delitem 7160,3;
+getitem 20096,1;
+mes "Muy bien!! Ahi tienes tu Headger";
+close;
+
+Green_V:
+mes "[^0065DFEmedy^000000]";
+mes "Necesitas traerme los siguientes items...";
+next;
+mes "1 Green Valkyrie Helm";
+mes "500 Green Herb";
+mes "500 Zircon";
+mes "1 Kiel-01 Card";
+mes "1 Angeling Hat";
+mes "3 Aron Cheques";
+next;
+
+mes "Ya tienes todos los items?";
+menu "Si.",ref6,"No tengo nada.",ref2;
+
+ref6:
+mes "Ok,Dejame revisar tu Inventario";
+if((countitem(511)<500))goto falta;
+if((countitem(729)<500))goto falta;
+if((countitem(4403)<1))goto falta;
+if((countitem(20153)<1))goto falta;
+if((countitem(5132)<1))goto falta;
+if((countitem(7160)<3))goto falta;
+mes "Bien, si tienes todo lo necesario...";
+next;
+
+mes "[^0065DFEmedy^000000]";
+mes "Procedere a refinar tu Headger";
+delitem 511,500;
+delitem 729,500;
+delitem 4403,1;
+delitem 20153,1;
+delitem 5132,1;
+delitem 7160,3;
+getitem 20097,1;
+mes "Muy bien!! Ahi tienes tu Headger";
+close;
+
+Pink_V:
+mes "[^0065DFEmedy^000000]";
+mes "Necesitas traerme los siguientes items...";
+next;
+mes "1 Pink Valkyrie Helm";
+mes "500 Flame Heart";
+mes "500 Red Bijou";
+mes "1 Kiel-01 Card";
+mes "1 Angeling Hat";
+mes "3 Aron cheques";
+next;
+
+mes "Ya tienes todos los items?";
+menu "Si.",ref7,"No tengo nada.",ref2;
+
+ref7:
+mes "Ok,Dejame revisar tu Inventario";
+if((countitem(994)<500))goto falta;
+if((countitem(7447)<500))goto falta;
+if((countitem(4403)<1))goto falta;
+if((countitem(20155)<1))goto falta;
+if((countitem(5132)<1))goto falta;
+if((countitem(7160)<3))goto falta;
+mes "Bien, si tienes todo lo necesario...";
+next;
+
+mes "[^0065DFEmedy^000000]";
+mes "Procedere a refinar tu Headger";
+delitem 994,500;
+delitem 7447,500;
+delitem 4403,1;
+delitem 20155,1;
+delitem 5132,1;
+delitem 7160,3;
+getitem 20099,1;
+mes "Muy bien!! Ahi tienes tu Headger";
+close;
+
+yy_V:
+mes "[^0065DFEmedy^000000]";
+mes "Necesitas traerme los siguientes items...";
+next;
+mes "50 Black Dyestuffs";
+mes "500 White Herb";
+mes "50 White Dyestuffs";
+mes "1 Kiel-01 Card";
+mes "1 Angeling Hat";
+mes "3 Aron Cheques";
+next;
+
+mes "Ya tienes todos los items?";
+menu "Si.",ref9,"No tengo nada.",ref2;
+
+ref9:
+mes "Ok,Dejame revisar tu Inventario";
+if((countitem(509)<500))goto falta;
+if((countitem(982)<50))goto falta;
+if((countitem(4403)<1))goto falta;
+if((countitem(983)<50))goto falta;
+if((countitem(5132)<1))goto falta;
+if((countitem(7160)<3))goto falta;
+mes "Bien, si tienes todo lo necesario...";
+next;
+
+mes "[^0065DFEmedy^000000]";
+mes "Procedere a refinar tu Headger";
+delitem 509,500;
+delitem 982,50;
+delitem 4403,1;
+delitem 983,50;
+delitem 5132,1;
+delitem 7160,3;
+getitem 15125,1;
+mes "Muy bien!! Ahi tienes tu Headger";
+close;
+
+red_v:
+mes "[^0065DFEmedy^000000]";
+mes "Necesitas traerme los siguientes items...";
+next;
+mes "1 Red Valkyrie Helm";
+mes "500 Red Herb";
+mes "50 Scarlet Dyestuff";
+mes "1 Kiel-01 Card";
+mes "1 Angeling Hat";
+mes "3 Aron Cheques";
+next;
+
+mes "Ya tienes todos los items?";
+menu "Si.",ref10,"No tengo nada.",ref2;
+
+ref10:
+mes "Ok,Dejame revisar tu Inventario";
+if((countitem(507)<500))goto falta;
+if((countitem(975)<50))goto falta;
+if((countitem(4403)<1))goto falta;
+if((countitem(20157)<1))goto falta;
+if((countitem(5132)<1))goto falta;
+if((countitem(7160)<3))goto falta;
+mes "Bien, si tienes todo lo necesario...";
+next;
+
+mes "[^0065DFEmedy^000000]";
+mes "Procedere a refinar tu Headger";
+delitem 507,500;
+delitem 975,50;
+delitem 4403,1;
+delitem 20157,1;
+delitem 5132,1;
+delitem 7160,3;
+getitem 20101,1;
+mes "Muy bien!! Ahi tienes tu Headger";
+close;
+
+white_v:
+mes "[^0065DFEmedy^000000]";
+mes "Necesitas traerme los siguientes items...";
+next;
+mes "1 White Valkyrie Helm";
+mes "300 White Mask";
+mes "50 White Dyestuff";
+mes "1 Kiel-01 Card";
+mes "1 Angeling Hat";
+mes "3 Aron Cheques";
+next;
+
+mes "Ya tienes todos los items?";
+menu "Si.",ref11,"No tengo nada.",ref2;
+
+ref11:
+mes "Ok,Dejame revisar tu Inventario";
+if((countitem(7568)<300))goto falta;
+if((countitem(982)<50))goto falta;
+if((countitem(4403)<1))goto falta;
+if((countitem(20159)<1))goto falta;
+if((countitem(5132)<1))goto falta;
+if((countitem(7160)<3))goto falta;
+mes "Bien, si tienes todo lo necesario...";
+next;
+
+mes "[^0065DFEmedy^000000]";
+mes "Procedere a refinar tu Headger";
+delitem 7568,300;
+delitem 982,50;
+delitem 4403,1;
+delitem 20159,1;
+delitem 5132,1;
+delitem 7160,3;
+getitem 20103,1;
+mes "Muy bien!! Ahi tienes tu Headger";
+close;
+
+ref2:
+mes "[^0065DFEmedy^000000]";
+mes "Pues si quieres refinar tus headgers tienes que conseguirlos";
+close;
+
+ref8:
+mes "[^0065DFEmedy^000000]";
+mes "Vuelve cuando Quieras!";
+close;
+
+
+falta:
+mes "[V^0065DFEmedy^000000]";
+mes "Te faltan conseguir items...";
+mes "Dedicate a conseguirlos y lo haras rapido";
+close;
+}

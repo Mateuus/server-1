@@ -1,0 +1,189 @@
+
+
+/*
+
+CREATE TABLE IF NOT EXISTS `ero_daily_rewards` (
+	`id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`aid` INT(11) UNSIGNED NOT NULL,
+	`status` TINYINT(11) UNSIGNED NOT NULL DEFAULT '1',
+	`time` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+	PRIMARY KEY (`id`),
+	KEY (`aid`)
+) ENGINE=MyISAM;
+
+*/
+
+npc_in,30,30,5	script	Daily rewards#npc	553,{
+	doevent "daily_login_reward::OnTalk";
+}
+
+
+-	script	daily_login_reward	-1,{
+	function reward_list;
+	
+	function	reward_list	{
+		.@give_reward = getarg( 0,0 );
+		.@argcount = getargcount() - 2;
+		
+		mes "Hoy recompensas:";
+		if ( .@argcount >= 1 ) {
+			for ( .@i = 1; .@i <= .@argcount; .@i += 2 ) {
+				.@item_id = getarg( .@i,0 );
+				.@amount = getarg( .@i+1,0 );
+				
+				mes .@amount +"x "+getitemname( .@item_id );
+				if ( .@give_reward )
+					getitem getarg( .@i ),getarg( .@i + 1 );
+			}
+			if ( .@give_reward )
+				#online_reward_dayofyear = .dayofyear;
+				
+				
+			.@give_reward = ( #online_reward_dayofyear != .dayofyear && .dayofyear > 0 && #online_minute >= .minute );
+				
+			if ( !.@give_reward && #online_minute && #online_minute < .minute ) {
+				mes " ";
+				mes "Aún es necesario acumular otro total de "+( .minute - #online_minute )+" minutos antes de que pueda obtener las recompensas.";
+			}
+		}
+		else {
+			mes "> ninguna";
+		}
+		return;
+	}
+	
+	OnInit:
+		// duration to count as completed daily login.
+		.minute = 10;
+		// check interval
+		.interval_check_sec = 60;
+		// idle stop reward
+		.idle_sec = 300;
+		// cutin name format.
+		.cutin_name_format$ = "Dia%02d";
+		.npc_name$ = strnpcinfo(0);
+		bindatcmd "dailies",.npc_name$+"::OnTalk";
+		
+	OnHour00:
+		.today = atoi( gettimestr( "%Y%m%d",10 ) );
+		.dayofyear = gettime(8);
+		.@is_reset = ( gettime(5) == 1 );
+		if ( .@is_reset ) {
+			query_sql( "UPDATE `ero_daily_rewards` SET `status` = 2 WHERE `status` = 1" );
+		}
+		callsub( L_restart, .@is_reset );
+		end;
+		
+	OnTalk:
+		query_sql( "SELECT COUNT(`aid`) FROM `ero_daily_rewards` WHERE `aid` = "+getcharid(3)+" AND `status` <> 2",.@size );
+		
+		if ( .cutin_name_format$ != "" )
+			cutin sprintf( .cutin_name_format$,.@size ),4;
+			
+		mes "[Recompensas diarias]";
+		mes "Total de entradas diarias = "+.@size+" Días";
+		mes " ";
+		next;
+		if ( select( "Reclamar premios","Cancelar" ) == 1 ) {
+
+				.@give_reward = ( #online_reward_dayofyear != .dayofyear && .dayofyear > 0 && #online_minute >= .minute );
+				
+				mes "[Recompensas diarias]";
+				switch( .@size ) {
+					case 0:
+						mes "Usted tiene que alcanzar el tiempo mínimo de juego en línea para completar el ciclo diario.";
+						mes " ";
+					// case X: reward_list( <itemid>,<amount>,...,<item>,<amount> ); break;
+					case 1: reward_list( .@give_reward, 12208,1 ); break;	// Battle Manual
+					case 2: reward_list( .@give_reward, 12211,5 ); break;	// 5 Kafra Card
+					case 3: reward_list( .@give_reward, 671,10 ); break;	// 10 Gold Coin
+					case 4: reward_list( .@give_reward, 12522,10 ); break;	// 10 Blessing Scroll Lv 10
+					case 5: reward_list( .@give_reward, 12210,1 ); break;	// 1 Bubble Gum
+					case 6: reward_list( .@give_reward, 7621,2 ); break;	// 2 Token Of Siegfried
+					case 7: reward_list( .@give_reward, 12263,1 ); break;	// 1 Field Manual 50%
+					case 8: reward_list( .@give_reward, 12103,1 ); break;	// 1 Bloody Branch
+					case 9: reward_list( .@give_reward, 12214,2 ); break;	// 2 Convex Mirror
+					case 10: reward_list( .@give_reward, 671,10 ); break;	// +5&6 Armor Refine Ticket 1x
+					case 11: reward_list( .@give_reward, 12522,10 ); break;	// 10 Blessing Scroll Lv 10
+					case 12: reward_list( .@give_reward, 12216,10 ); break;	// 10 Agi Scroll Lv 10
+					case 13: reward_list( .@give_reward, 14533,1 ); break;	// 1 Field Manual 100%
+					case 14: reward_list( .@give_reward, 12214,3 ); break;	// 3 Convex Mirror
+					case 15: reward_list( .@give_reward, 616,3 ); break;	// 3 Old Card Album
+					case 16: reward_list( .@give_reward, 12522,10 ); break;	// 10 Blessing Scroll Lv 10
+					case 17: reward_list( .@give_reward, 12211,10 ); break;	// 10 Kafra Card
+					case 18: reward_list( .@give_reward, 12103,2 ); break;	// 2 Bloody Branch
+					case 19: reward_list( .@give_reward, 671,20 ); break;	// 20 Gold Coin
+					case 20: reward_list( .@give_reward, 14533,1 ); break;	// 1 Field Manual 100%
+					case 21: reward_list( .@give_reward, 7621,5 ); break;	// Token of Siegfried 5x
+					case 22: reward_list( .@give_reward, 12210,2 ); break;	// Bubble Gum 10x
+					case 23: reward_list( .@give_reward, 7621,5 ); break;	// 5 Token Of Siegfried
+					case 24: reward_list( .@give_reward, 12103,3 ); break;	// +9 Armor&Weapon Refine 1x
+					case 25: reward_list( .@give_reward, 14545,1 ); break;		// Field Manual 300%
+					case 26: reward_list( .@give_reward, 671,50 ); break;		// 50 Gold Coin
+					case 27: reward_list( .@give_reward, 30560,1 ); break;		// Payon Flag
+					case 28: reward_list( .@give_reward, 30097,1 ); break;		// Saiyan God Aura
+					case 29: reward_list( .@give_reward, 7829,500 ); break;		// Valor Badge x500
+					case 30: reward_list( .@give_reward, 30098,1 ); break;		//  1 Saiyan God Hair
+					case 31: reward_list( .@give_reward, 12246,1 ); break;		// 2 Mystical Card Album
+					default:
+						mes "No hay recompensas disponibles para este día.";
+						cutin "",255;
+						close;
+				}
+				
+				if ( .@size && #online_reward_dayofyear == .dayofyear ) {
+					next;
+					mes "[Recompensas diarias]";
+					mes "Has reclamado las recompensas por "+.@size+" días, Trata de nuevo mañana.";
+				}
+		}
+cutin "",255;
+		close;
+		
+	OnUpdate:
+		if ( checkidle() < .idle_sec ) {
+			#online_minute++;
+			
+			if ( #online_minute >= .minute && #online_reward_dayofyear != .today ) {
+				query_sql( "INSERT INTO `ero_daily_rewards` ( `aid`,`time` ) VALUES ( "+getcharid(3)+",NOW() )" );
+				dispbottom "Ha completado el inicio de sesión diaria para hoy.";
+			}
+			else {
+				dispbottom "Recuento diario de recompensas # currently "+#online_minute+"/"+.minute+" minutes.";
+			}
+		}
+		
+	OnPCLoginEvent:
+		if ( #online_reward_dayofyear != .dayofyear && .dayofyear > 0 ) {
+			if ( #online_reward_dayofyear ) {
+				#online_reward_dayofyear = 0;
+				#online_minute = 0;
+			}
+			if ( #online_minute < .minute ) {
+				deltimer .npc_name$+"::OnUpdate";
+				addtimer ( .interval_check_sec * 1000 ),.npc_name$+"::OnUpdate";
+			}
+			
+			// if ( .cutin_name_format$ != "" ) {
+			// 	query_sql( "SELECT COUNT(`aid`) FROM `ero_daily_rewards` WHERE `aid` = "+getcharid(3)+" AND `status` <> 2",.@size );
+			// 	cutin sprintf( .cutin_name_format$,.@size ),4;
+			// }
+		}
+		end;
+		
+	L_restart:
+		.@value = getarg( 0,0 );
+		
+		query_sql( "SELECT `account_id` FROM `char` WHERE `online` = 1",.@aid );
+		.@aid_size = getarraysize( .@aid );
+		for ( .@i = 0; .@i < .@aid_size; .@i++ )
+			if ( attachrid( .@aid[.@i] ) ) {
+				#online_minute = 0;
+				doevent .npc_name$+"::OnPCLoginEvent";
+			}
+		end;
+}
+
+
+
+

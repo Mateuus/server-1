@@ -1,0 +1,92 @@
+//===== rAthena Script =======================================
+//= Healer
+//===== By: ==================================================
+//= Euphy
+//===== Current Version: =====================================
+//= 1.1
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= Basic healer script.
+//===== Additional Comments: =================================
+//= 1.0 Initial script.
+//= 1.1 Aligned coordinates with @go.
+//============================================================
+
+
+prontera.gat,182,215,5	script	Super Priest	10060,{
+
+set @paket,350000000;
+
+menu "Buffer", L_PAKET;
+
+L_PAKET:
+        mes "[Holy Priest]";
+        mes "¿Quieres algunos Buffeo? El precio es "+@paket+"z. Valen la pena = D";
+        menu "Yes", L_yes, "No", CANCEL;
+
+L_yes:
+
+next;
+        if (Zeny >= @paket) goto L_PAKET2;
+        if (Zeny < @paket) goto NO_ZENYS;
+
+L_PAKET2:
+        set Zeny,Zeny-@paket;
+skilleffect 384,0; sc_start SC_MELTDOWN,360000,5;
+skilleffect 383,0; sc_start SC_WINDWALK,360000,5;
+skilleffect 465,0; sc_start SC_KAITE,360000,7;
+skilleffect 464,0; sc_start SC_KAUPE,360000,3;
+skilleffect 463,0; sc_start SC_KAAHI,360000,7;
+skilleffect 462,0; sc_start SC_KAIZEL,360000,7;
+skilleffect 8,0; sc_start SC_ENDURE,360000,10;
+skilleffect 33,0; sc_start SC_ANGELUS,360000,10;
+skilleffect 45,0; sc_start SC_CONCENTRATE,360000,10;
+skilleffect 74,0; sc_start SC_MAGNIFICAT,360000,5;
+skilleffect 75,0; sc_start SC_GLORIA,360000,5;
+skilleffect 459,0; sc_start SC_ADRENALINE2,360000,1;
+skilleffect 66,0; sc_start SC_IMPOSITIO,360000,5;
+skilleffect 67,0; sc_start SC_SUFFRAGIUM,360000,3;
+skilleffect 34,0; sc_start SC_BLESSING,360000,10;
+skilleffect 29,0; sc_start SC_INCREASEAGI,360000,10;
+skilleffect 112,0; sc_start SC_WEAPONPERFECTION,360000,10;
+skilleffect 113,0; sc_start SC_OVERTHRUST,360000,5;
+skilleffect 114,0; sc_start SC_MAXIMIZEPOWER,360000,5;
+skilleffect 357,0; sc_start SC_CONCENTRATION,360000,5;
+skilleffect 355,0; sc_start SC_AURABLADE,360000,5;
+skilleffect 155,0; sc_start SC_LOUD,360000,1;
+skilleffect 157,0; sc_start SC_ENERGYCOAT,360000,1;
+skilleffect 380,0; sc_start SC_TRUESIGHT,360000,5;
+skilleffect 361,0; sc_start SC_ASSUMPTIO,360000,5;
+close;
+	CANCEL:
+		mes "[Holy Priest]";
+		mes "Está bien. Por favor, venga de nuevo, si necesitas algo";
+		end;
+
+	NO_ZENYS:
+                mes "[Super Priest]";
+                mes "¡Dios mío, que no se parecen tener suficiente zeny.";
+                mes "Lo siento, no puedo ayudarte.";
+		emotion 40;
+                end;
+}
+
+prontera,172,172,6	script	Main Office	857,{
+OnInit:
+	waitingroom "Oficina principal",0;
+	end;
+}
+
+prontera,140,150,6	script	darkmall	857,{
+OnInit:
+	waitingroom "Salón Gradiadores",0;
+	end;
+}
+
+
+
+//============== Warp New maps
+
+prontera,140,153,0	warp	Aresawarp01	1,1,darkmall.gat,100,70
+darkmall,99,60,0	warp	Aresawarp02	1,2,prontera.gat,143,153

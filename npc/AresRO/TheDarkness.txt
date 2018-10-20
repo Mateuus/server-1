@@ -1,0 +1,71 @@
+// The Darkness Script
+// A basic day/night PK system created by ShishioMakoto (a.k.a. Idola The Witty)
+
+
+-	script	The Darkness	-1,{
+	
+	// You can configure this to your likings
+	set $@bxp,10000; //Current Base Exp rate of your server
+	set $@jxp,10000; //Current Job Exp rate of your server
+	set $@irate,5000; //Current Item Drop rate of your server
+	set $@bbxp,20000; //The bonus Base Exp people get at night
+	set $@bjxp,20000; //The bonus Job Exp people get at night
+	set $@birate,10000; //The bonus Item Drop rate of your server
+
+OnInit:
+	initnpctimer;
+	day;
+	set $@PKD,0;
+	setbattleflag("base_exp_rate",$@bxp);
+	setbattleflag("pk_mode",0);
+	setbattleflag("job_exp_rate",$@jxp);
+	setbattleflag("item_rate_common",$@irate);
+	setbattleflag("item_rate_heal",$@irate);
+	setbattleflag("item_rate_use",$@irate);
+	setbattleflag("item_rate_equip",$@irate);
+	end;
+
+OnTimer3600000:
+	night;
+	announce "Night has fallen... PK Mode enabled...Bonus EXP/Drop rates enabled...",0;
+	set $@PKD,1;
+	setbattleflag("base_exp_rate",$@bbxp);
+	setbattleflag("pk_mode",1);
+	setbattleflag("job_exp_rate",$@bjxp);
+	setbattleflag("item_rate_common",$@birate);
+	setbattleflag("item_rate_heal",$@birate);
+	setbattleflag("item_rate_use",$@birate);
+	setbattleflag("item_rate_equip",$@birate);
+	end;
+
+OnTimer7200000:
+	day;
+	announce "It is now day. PK Mode disabled...Bonus EXP/Drop rates canceled.",0;
+	set $@PKD,0;
+	setbattleflag("base_exp_rate",$@bxp);
+	setbattleflag("pk_mode",0);
+	setbattleflag("job_exp_rate",$@jxp);
+	setbattleflag("item_rate_common",$@irate);
+	setbattleflag("item_rate_heal",$@irate);
+	setbattleflag("item_rate_use",$@irate);
+	setbattleflag("item_rate_equip",$@irate);
+	initnpctimer;
+	end;
+
+OnPCKillEvent:
+	if ($@PKD==1) {
+		attachrid(killedrid);
+			// You can change 10 to whatever number you want, but at the moment it's set so you lose 10% of your base exp and job exp.
+			if (BaseExp>10 && JobExp>10){
+				set $@stolenbexp,BaseExp/10;
+				set $@stolenjexp,JobExp/10;
+				set BaseExp,BaseExp-$@stolenbexp;
+				set BaseExp,BaseExp-$@stolenjexp;
+				announce "Idola: You lost " + $@stolenbexp + " Base Exp and " + $@stolenjexp + " Job Exp.",bc_self;
+				attachrid(killerrid);
+				getexp $@stolenbexp,$@stolenjexp;
+				announce "Idola: You gained " + $@stolenbexp + " Base Exp and " + $@stolenjexp + " Job Exp.",bc_self;
+			}
+		end;
+	}
+}

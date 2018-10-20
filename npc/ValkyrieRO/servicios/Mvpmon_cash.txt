@@ -1,0 +1,129 @@
+//===== NPC ==================================================
+//= Regalador de Cash = Creado para Ares Ragnarok Online
+//===== By: ================================================== 
+//= SrLuis - Scripting Services Ragnarok Online
+//===== email: ===============================================
+//= luis_beltran250@hotmail.com
+//============================================================ 
+//===== Descripcion: ========================================= 
+//= Un simple scrip que te regala cash al matar.
+//= una cierta cantidad de mvp o mini boss. 
+//============================================================
+// Script de MVP
+//============================================================
+-	script	CashFree	-1,{
+OnInit:
+// Lista de mvp
+setarray .MvPid[0],2244,1511,1647,1785,1630,1039,1874,2068,2238,2240,2236,1272,1719,1046,1389,1112,1115,1418,1871,1252,1768,1086,1885,2241,1649,1651,1832,1492,1734,1251,1779,1980,1688,2156,1646,1373,1147,1059,1150,2022,1087,1190,1038,2235,1157,1159,1502,2237,2087,2165,1623,1650,2239,
+	1583,1708,1312,1751,1685,1648,1917,1658;
+end;
+
+
+OnNPCKillEvent:
+
+	for (set .@c, 0; .@c < getarraysize(.MvPid); set .@c, .@c + 1)
+ 					if (killedrid == .MvPid[.@c])
+ 					set .@s, 1; //
+					if (!.@s) end;
+					if (cantimobdead >= 1 ) goto sumarmob;
+					set cantimobdead,1;
+					end;
+					
+					
+sumarmob:
+set cantimobdead,cantimobdead+1;
+if (cantimobdead >= 1 ) goto Conteomob;
+end;
+
+Conteomob:
+if (cantimobdead >= 5 ) goto anonceini;
+end;
+
+anonceini:
+sc_start SC_ASSUMPTIO,600000,5;
+sc_start SC_IMPOSITIO,600000,5;
+sc_start SC_MAGNIFICAT,600000,5;
+sc_start SC_GLORIA,600000,5;
+sc_start SC_INCREASEAGI,600000,10;
+sc_start SC_BLESSING,600000,10;
+sc_start SC_ANGELUS,600000,10;
+sc_start SC_CONCENTRATION,600000,10;
+sc_start SC_TRUESIGHT,600000,5;
+sc_start SC_WINDWALK,600000,10;
+sc_start SC_CP_ARMOR,600000,5;
+sc_start SC_CP_WEAPON,600000,5;
+sc_start SC_CP_SHIELD,600000,5;     
+sc_start SC_CP_HELM,600000,5;
+percentheal 100,100;
+specialeffect2 501;
+set #CASHPOINTS,#CASHPOINTS+10;
+set cantimobdead,1;
+mes "^FF0000Caceria Ares Ragnarok Online^000000";
+mes "Felicidades!!!" +strcharinfo(0) +" recibes 10 Puntos de Cash Point como premio por parte del Staff de AresRO. Sigue disfrutando del servidor y ve a cazar más MVP para que puedas obtener más Cash Point";
+close;
+
+}//end script
+
+//=======================================================
+// Script de Mini Boss
+//=======================================================
+-	script	CashFree2	-1,{
+OnInit:
+// Lista de Mini Boss
+setarray .Mibossid[0],1096,1388,1641,1873,1307,2231,1283,2233,2229,1582,1091,1093,1120,1259,2234,1643,1645,1720,2198,1640,2131,1090,1289,1262,2140,2143,2138,2228,2230,1644,2232,1991,1092,1765,1642;
+end;
+
+OnNPCKillEvent:
+
+	for (set .@c, 0; .@c < getarraysize(.Mibossid); set .@c, .@c + 1)
+ 					if (killedrid == .Mibossid[.@c])
+ 					set .@s, 1; //
+					if (!.@s) end;
+					if (cantimobdead2 >= 1 ) goto sumarmob2;
+					set cantimobdead2,1;
+					end;
+					
+					
+sumarmob2:
+set cantimobdead2,cantimobdead2+1;
+if (cantimobdead2 >= 1 ) goto Conteomob2;
+end;
+
+Conteomob2:
+if (cantimobdead2 >= 3 ) goto anonceini2;
+end;
+
+anonceini2:
+sc_start SC_ASSUMPTIO,600000,5;
+sc_start SC_IMPOSITIO,600000,5;
+sc_start SC_MAGNIFICAT,600000,5;
+sc_start SC_GLORIA,600000,5;
+sc_start SC_INCREASEAGI,600000,10;
+sc_start SC_BLESSING,600000,10;
+sc_start SC_ANGELUS,600000,10;
+sc_start SC_CONCENTRATION,600000,10;
+sc_start SC_TRUESIGHT,600000,5;
+sc_start SC_WINDWALK,600000,10;
+sc_start SC_CP_ARMOR,600000,5;
+sc_start SC_CP_WEAPON,600000,5;
+sc_start SC_CP_SHIELD,600000,5;     
+sc_start SC_CP_HELM,600000,5;
+percentheal 100,100;
+specialeffect2 501;
+set #CASHPOINTS,#CASHPOINTS+5;
+set cantimobdead2,1;
+mes "^FF0000Caceria Ares Ragnarok Online^000000";
+
+
+mes "Felicidades!!!" +strcharinfo(0) +" recibes 5 Puntos de Cash Point como premio por parte del Staff de AresRO. Sigue disfrutando del servidor y ve a cazar más Mini Boss para que puedas obtener más Cash Point";
+close;
+
+}//end script
+
+
+
+
+
+
+
+

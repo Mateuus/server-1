@@ -1,0 +1,201 @@
+// [==================================================]
+// [===========          AntiBot           ===========]
+// [==================================================]
+// [ Versión 12                                       ]
+// [==================================================]
+// [ Script original: Ivion                           ]
+// [==================================================]
+// [ Descripción:                                     ]
+// [                                                  ]
+// [ - Script antibot basado en NPCKillEvent.         ]
+// [ - Números en casteo de skill.                    ]
+// [==================================================]
+// [ 5 últimas actualizaciones:                       ]
+// [                                                  ]
+// [ v8: [Ivion]                                      ]
+// [ - Corregidos unos pequeños detalles.             ]
+// [ - Complicado un poco más el script.              ]
+// [                                                  ]
+// [ v9: [Ivion]                                      ]
+// [ - Números en casteo de skill.                    ]
+// [ - Bugfix para evitar varios antibots simultaneos.]
+// [ - Configuración de oportunidades.                ]
+// [                                                  ]
+// [ v10: [Ivion]                                     ]
+// [ - Reparado bug de variables de la v9.            ]
+// [                                                  ]
+// [ v11: [Ivion]                                     ]
+// [ - Añadido npc y lista de sancionados.            ]
+// [                                                  ]
+// [ v12: [Ivion]                                     ]
+// [ - BugFix: Para evitar mal uso de perfect hide.   ]
+// [ - BugFix: deltimer en jail.                      ]
+// [ - Añadido save en jail.                          ]
+// [==================================================]
+// [ ¡Importante!:                                    ]
+// [                                                  ]
+// [ - Configurar en ./conf/script_athena.txt:        ]
+// [   event_script_type: 1                           ]
+// [                                                  ]
+// [ - Revisar las opciones de configuración.         ]
+// [                                                  ]
+// [ - Activar este npc en ./npc/scripts_athena.txt   ]
+// [==================================================]
+// [==================================================]
+
+-	script	Anti Bot	-1,{
+
+OnInit:
+
+// [==================================================]
+// [ Configuración:                                   ]
+// [                                                  ]
+
+	set $@ABname$,"Anti-Bot";	// Nombre del npc en las conversaciones.
+	set $@ABrate,5;			// Posibilidades de que aparezca el AntiBot al matar un monstruo. (x/10000)
+	set $@ABtime,1;			// Tiempo disponible para responder. (minutos)
+	set $@ABtry,3;			// Número de oportunidades para responder.
+	set $@ABgmlv,60;		// Nivel de gm necesario para evitar el AntiBot.
+	set $@ABJmax,10;		// Número máximo de datos que serán mostrados en la lista de sancionados.
+
+
+// [                                                  ]
+// [==================================================]
+// [==================================================]
+
+	end;
+
+OnNPCKillEvent:
+	if (getmapxy(.@map$,.@x,.@y,0)) {}
+	if ((rand(0,10000) >= $@ABrate) || (compare(.@map$,"g_cas0"))) end;
+	if ((getcharid(1) > 0) && ($@ABp == 0)) {
+		set $@ABmap$,.@map$;
+		getpartymember getcharid(1),2;
+		copyarray $@ABq[0],$@partymemberaid[0],$@partymembercount;
+		cleararray $@partymemberaid[0],0,@partymembercount;
+		while ($@ABp < getarraysize($@ABq)) {
+			if (attachrid($@ABq[$@ABp])) {
+				if (getmapxy(.@map$,.@x,.@y,0)) {}
+				if (.@map$ == $@ABmap$) addtimer 0,"Anti Bot::OnIni";
+			}
+			set $@ABp,($@ABp + 1);
+		}
+		set $@ABp,0;
+		cleararray $@ABq[0],0,getarraysize($@ABq);
+	} else addtimer 0,"Anti Bot::OnIni";
+	end;
+
+OnIni:
+	if ((AB > 0) || (getgmlevel() >= $@ABgmlv)) end;
+	set AB,1;
+	pcblockmove getcharid(3),1;
+	setoption 0x40;
+	addtimer ($@ABtime * 60000),"Anti Bot::OnJail";
+	if (getmapxy(.@map$,.@x,.@y,0)) {}
+	monster .@map$,.@x,.@y,"--ja--",1002,1;
+	sleep2 rand(500,1000);
+	mes "^008888"+$@ABname$+"^000000";
+	mes "mmm...";
+	mes "Hola, "+strcharinfo(0)+".";
+	mes "No te asustes al leer este mensaje. Este es el Sistema AntiBot del servidor. Sigue mis instrucciones y no te pasará nada.";
+	sleep2 rand(1000,2000);
+	next;
+	mes "^008888"+$@ABname$+"^000000";
+	mes "A partir de ahora, NO TE DESCONECTES.";
+	mes "Tienes "+$@ABtime+" MIN para convencerme de que no eres un bot.";
+	mes "Si no sigues estas indicaciones, serás enviado directamente a jail.";
+	pcblockmove getcharid(3),0;
+	sleep2 rand(1000,2000);
+
+OnNum:
+	next;
+	mes "^008888"+$@ABname$+"^000000";
+	mes "Cuando pulses a continuación el botón NEXT, aparecerá un número al lado del puntero de tu ratón.";
+	mes "Fíjate bien en ese número y escribeló en el recuadro INPUT NUMBER.";
+	sleep2 rand(1000,2000);
+	next;
+	set .@n,rand(1,999);
+	itemskill 434,.@n;
+	input .@a;
+	mes "^008888"+$@ABname$+"^000000";
+	if (.@a != .@n) {
+		set AB,(AB + 1);
+		mes "Me temo que te has equivocado.";
+		if (AB < $@ABtry) mes "No te preocupes. Te daré otra oportunidad.";
+		if (AB == $@ABtry) mes "Esto me huele a bot... Aun así te daré una última oportunidad.";
+		if (AB > $@ABtry) {
+			mes "Con lo divertido que es el juego sin trampas...";
+			mes "En fin, tu te lo pierdes. Espero que disfrutes de una larga y aburrida estancia en la cárcel.";
+			close2;
+			goto OnJail;
+		}
+		mes "Atiende a mis indicaciones y no te pasará nada.";
+		sleep2 rand(1000,2000);
+		goto OnNum;
+	}
+	deltimer "Anti Bot::OnJail";
+	set AB,0;
+	mes "Bien, puedes continuar jugando.";
+	mes "¿Donde quieres que te deje?";
+	next;
+	addtimer 20000,"Anti Bot::OnEnd";
+	pcblockmove getcharid(3),1;
+	set .@b,select("Aquí mismo.","En un lugar aleatorio del mapa.","En mi Punto de Inicio");
+	mes "^008888"+$@ABname$+"^000000";
+	mes "Muy bien.";
+	mes "Y recuerda, el juego legal es mucho más divertido.";
+	close2;
+	if (.@b == 2) warp "Random",0,0;
+	if (.@b == 3) warp "SavePoint",0,0;
+OnEnd:
+	deltimer "Anti Bot::OnEnd";
+	pcblockmove getcharid(3),0;
+	skilleffect 350,0;
+	skilleffect 8,0;
+	skilleffect 73,0;
+	sc_start 60,20000,0;
+	sc_start 21,20000,10;
+	sc_start 39,20000,10;
+	setoption 0x40,0;
+	end;
+
+OnPCLoginEvent:
+	if (AB == 0) end;
+
+OnJail:
+	set AB,0;
+	deltimer "Anti Bot::OnJail";
+	atcommand "@jail "+strcharinfo(0);
+	setoption 0x40,0;
+	save "sec_pri",49,74;
+	announce strcharinfo(0)+" ha sido enviado a jail por uso de bot.",bc_all,0xAA5500;
+	set #ABJ,(#ABJ + 1);
+	setd "$ABJ"+$ABJ+"$[0]",strcharinfo(0);
+	setd "$ABJ"+$ABJ+"$[1]",#ABJ;
+	setd "$ABJ"+$ABJ+"$[2]",gettime(5);
+	setd "$ABJ"+$ABJ+"$[3]",gettime(6);
+	setd "$ABJ"+$ABJ+"$[4]",gettime(7);
+	setd "$ABJ"+$ABJ+"$[5]",gettime(3);
+	setd "$ABJ"+$ABJ+"$[6]",gettime(2);
+	setd "$ABJ"+$ABJ+"$[7]",gettime(1);
+	set $ABJ,($ABJ + 1);
+	end;
+}
+
+prontera,164,166,4	script	Antibot	852,{
+
+	mes "^008888"+$@ABname$+"^000000";
+	mes "Juega limpio.";
+	mes "¡¡En este servidor los bots están prohibidos!!";
+	mes "Si no, preguntaselo a cualquiera de los usuarios que aparecen en esta lista de sancionados...";
+	close2;
+	if ($ABJ > $@ABJmax) set .@f,($ABJ - $@ABJmax);
+	announce "[FECHA - HORA]        NOMBRE        JAILS",bc_self,0xCC8800;
+	while (.@f < $ABJ) {
+		announce "["+getd("$ABJ"+.@f+"$[2]")+"/"+getd("$ABJ"+.@f+"$[3]")+"/"+getd("$ABJ"+.@f+"$[4]")+" - "+getd("$ABJ"+.@f+"$[5]")+":"+getd("$ABJ"+.@f+"$[6]")+":"+getd("$ABJ"+.@f+"$[7]")+"]      "+getd("$ABJ"+.@f+"$[0]")+"      "+getd("$ABJ"+.@f+"$[1]"),bc_self,0xAA5500;
+		set .@f,(.@f + 1);
+	}
+	end;
+}
+// [==================================================]
+// [==================================================]

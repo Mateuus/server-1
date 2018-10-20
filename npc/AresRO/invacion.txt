@@ -1,0 +1,433 @@
+// [========================================================]
+// [===========           The Invasor            ===========]
+// [========================================================]
+// [ Version 6                                              ]
+// [========================================================]
+// [ Original script by: Ivion                              ]
+// [========================================================]
+// [ Description:                                           ]
+// [--------------------------------------------------------]
+// [                                                        ]
+// [ - Automatic invasion events.                           ]
+// [ - 24 randomly selected cities.                         ]
+// [ - 15 different types of invasion.                      ]
+// [ - Invasion events are divided into 3 difficulty stages.]
+// [ - GM Control Panel whispering to NPC:invasor.          ]
+// [========================================================]
+// [ Changelog: (5 last updates)                            ]
+// [--------------------------------------------------------]
+// [                                                        ]
+// [ v2: [Ivion]                                            ]
+// [ - Totalmente remodelado.                               ]
+// [                                                        ]
+// [ v3: [Ivion]                                            ]
+// [ - Añadida Moscovia.                                    ]
+// [                                                        ]
+// [ v4: [Ivion]                                            ]
+// [ - Nuevos mobs balanceados, añadidos a la db.           ]
+// [ - 2 nuevos tipos de invasiones.                        ]
+// [ - Ahora los mobs dropean items.                        ]
+// [ - Recompensas y penalizaciones globales.               ]
+// [ - Acceso ingame mediante OnWhisperGlobal.              ]
+// [ - Nuevas opciones de configuración.                    ]
+// [ - Reescrito casi todo el código.                       ]
+// [                                                        ]
+// [ v5: [Ivion]                                            ]
+// [ - Varios bugfixes.                                     ]
+// [ - Optimización del script.                             ]
+// [ - Añadido mid_camp.                                    ]
+// [ - Nuevos mobs sin tanta db.                            ]
+// [ - Nuevos bosses.                                       ]
+// [ - Nuevas invasiones: Ice, Nature, Dragon, Kaos y       ]
+// [   Takeshi.                                             ]
+// [ - Incremento de rates del servidor a +20%.             ]
+// [ - Retirado el sistema de penalizaciones.               ]
+// [ - Los spawns no disminuirán al matar los bosses.       ]
+// [ - Sistema para Save Point alternativo.                 ]
+// [                                                        ]
+// [ v5.1: [Ivion]                                          ]
+// [ - Bugfix: Corregido un pequeño error en mob_db2 que    ]
+// [   producía errores en el map-server.                   ]
+// [                                                        ]
+// [ v6: [Ivion]                                            ]
+// [ - Translated into english.                             ]
+// [ - Added new 13.2 episode cities.                       ]
+// [ - Global delayed announcements system.                 ]
+// [ - Rates increment won't affect other possible bonnuses ]
+// [   from other scripts.                                  ]
+// [ - Bugfix: Mapflags used while the invasion event will  ]
+// [   be cleared according to their inicial state.         ]
+// [ - Some mobs has been replaced.                         ]
+// [ - Bugfix: Removed Ghoul and Angeling mobs from the 3rd ]
+// [   stage of the Undead invasion.                        ]
+// [ - Some bosses has been replaced.                       ]
+// [ - Some balance adjustments to the stats of the bosses. ]
+// [ - Bugfix: Some bosses had range2 = 0.                  ]
+// [ - The control panel won't be displayed to              ]
+// [   multiple gms at once.                                ]
+// [ - Mobs and bosses will drop Poring Coins.              ]
+// [========================================================]
+
+-	script	invasor	-1,{
+
+OnInit:
+
+// [========================================================]
+// [ Configuration:                                         ]
+// [--------------------------------------------------------]
+
+	set .t1,3*24;		// Minimum time to activate a new invasion event. (h)
+	set .t2,15*24;		// Maximum time to activate a new invasion event. (h)
+	set .t3,24*60;		// Maximum duration of the invasion event. (min)
+
+	set .r1,100;		// Mob rate. (%)
+	set .pci,7539;		// Item reward dropped by mobs and bosses. (Default = Poring Coin)
+	set .pcr1,100;		// Rate of item rewards dropped by mobs. (0 = off | %)
+	set .pcr2,100;		// Rate of item rewards dropped by bosses. (0 = off | %)
+
+				// After successfully completing the invasion, the experience rates will be increased for a time.
+	set .t4,60;		// Duration of the experience event. (0 = off | min)
+	set .r2,20;		// Experience rates increment. (0 = off | %)
+
+	set .gm,60;		// GM level required to access the Control Panel whispering to NPC:invasor.
+
+	// Alternative Save Point:
+	// If a player had saved in the map of the current invasion event, his respawn point will be changed to this one.
+
+	set .s$,"prontera";	// Map.
+	set .sx,156;		// x.
+	set .sy,161;		// y.
+
+	// Cities:
+	// getarg(0): Name.
+	// getarg(1): Map.
+	// getarg(2): Intensity. (0 = off | Intensity)
+
+	callsub Onc0,"Alberta","alberta",11;
+	callsub Onc0,"Al De Baran","aldebaran",14;
+	callsub Onc0,"Amatsu","amatsu",18;
+	callsub Onc0,"Ayothaya","ayothaya",8;
+	callsub Onc0,"Comodo","comodo",22;
+	callsub Onc0,"Einbech","einbech",11;
+	callsub Onc0,"Einbroch","einbroch",22;
+	callsub Onc0,"Geffen","geffen",10;
+	callsub Onc0,"Gonryun","gonryun",14;
+	callsub Onc0,"Hugel","hugel",9;
+	callsub Onc0,"Izlude","izlude",5;
+	callsub Onc0,"Jawaii","jawaii",0; // 7
+	callsub Onc0,"Juno","yuno",30;
+	callsub Onc0,"Lighthalzen","lighthalzen",24;
+	callsub Onc0,"Louyang","louyang",27;
+	callsub Onc0,"Lutie","xmas",20;
+	callsub Onc0,"Manuk","manuk",8;
+	callsub Onc0,"Midgarts Expedition Camp","mid_camp",13;
+	callsub Onc0,"Morroc","morocc",25;
+	callsub Onc0,"Moscovia","moscovia",6;
+	callsub Onc0,"Niflheim","niflheim",0; // 20
+	callsub Onc0,"Payon","payon",19;
+	callsub Onc0,"Prontera","prontera",0; // 30
+	callsub Onc0,"Rachel","rachel",18;
+	callsub Onc0,"Splendide","splendide",29;
+	callsub Onc0,"Umbala","umbala",4;
+	callsub Onc0,"Veins","veins",20;
+
+	// Invasion types:
+	// getarg(0): Name.
+	// getarg(1 .. 9): Mobs.
+	// getarg(10 .. 12): Bosses.
+
+	callsub Onc1,"Aqua",1068,1071,1228,1069,1044,1144,1045,1065,1264,2503,2504,2505;
+	callsub Onc1,"Demon",1146,1109,1101,1149,1632,1773,1382,1292,1208,2536,2537,2538;
+	callsub Onc1,"Dragon",1715,1718,1155,1380,1206,1385,1717,1714,1716,2524,2525,2526;
+	callsub Onc1,"Earth",1784,1782,1165,1517,1615,1516,1378,1386,1602,2512,2513,2514;
+	callsub Onc1,"Fire",1836,1367,1383,1072,1384,1381,1318,1837,1366,2500,2501,2502;
+	callsub Onc1,"Ghost",1509,1179,1186,1143,1510,1192,1506,1375,1291,2527,2528,2529;
+	callsub Onc1,"Ice",1243,1789,1776,1778,1323,1317,1775,1515,1319,2506,2507,2508;
+	callsub Onc1,"Insect",1054,1100,1139,1279,1099,1625,1304,1194,1305,2518,2519,2520;
+	callsub Onc1,"Kaos",1140,1508,1163,1276,1504,1132,1698,1505,1507,2539,2540,2541;
+	callsub Onc1,"Machina",1151,1616,1745,1682,1270,1622,1202,1678,1673,2515,2516,2517;
+	callsub Onc1,"Nature",1162,1118,1880,1500,1497,1410,1780,1884,1314,2509,2510,2511;
+	callsub Onc1,"Takeshi",1026,1188,1404,1584,1609,1512,1416,1405,1401,2542,2543,2544;
+	callsub Onc1,"Undead",1403,1169,1041,1196,1197,1117,1297,1866,1098,2533,2534,2535;
+	callsub Onc1,"Venom",1621,1256,1037,1402,1209,1216,1207,1883,1148,2521,2522,2523;
+	callsub Onc1,"Wind",1627,1156,1253,1263,1633,1692,1412,1774,1259,2530,2531,2532;
+
+// [--------------------------------------------------------]
+// [ End of configuration.                                  ]
+// [========================================================]
+
+	set .br,getbattleflag("base_exp_rate");
+	set .jr,getbattleflag("job_exp_rate");
+	donpcevent "invasor::On0";
+	end;
+
+Onc0:
+	if(getarg(2) > 0) {
+		set .c1$[.c],getarg(0);
+		set .c2$[.c],getarg(1);
+		set .i[.c],getarg(2);
+		set .c,.c + 1;
+	}
+	return;
+
+Onc1:
+	set .@a,getarraysize(.n$);
+	set .n$[.@a],getarg(0);
+	while(.@b < 12) {
+		set getd(".m"+((.@a * 12) + .@b)),getarg(.@b + 1);
+		set .@b,.@b + 1;
+	}
+	return;
+
+On0:
+	while(1) {
+		set .a,0;
+		set .b,0;
+		set .c,0;
+		sleep rand(.t1 * 60,.t2 * 60) * 60 * 1000;
+		set .a,1;
+		donpcevent "invasor::OnTimer";
+		if(!.b) set .b,rand(1,getarraysize(.i));
+		set .b,.b - 1;
+		if(!.c) set .c,rand(1,getarraysize(.n$));
+		set .c,.c - 1;
+		set .mf1,getmapflag(.c2$[.b],1);
+		set .mf4,getmapflag(.c2$[.b],4);
+		setmapflag .c2$[.b],1;	// noteleport
+		setmapflag .c2$[.b],4;	// nopenalty
+		callsub Clrmsg;
+		announce "S.O.S.!! "+.c1$[.b]+" is suffering from a terrible invasion.",bc_all,0xffaa00;
+		while(.a > 0) {
+			if(!.d) {
+				set .d,4 - .a;
+				killmonster .c2$[.b],"invasor::Onm9";
+				if(.a > 1) callsub Addmsg,"New invader armies comes into the city.","ffaa00",.c2$[.b];
+				monster .c2$[.b],0,0,"--ja--",getd(".m"+((.c * 12) + .a + 8)),4 - .a,"invasor::Onm9";
+			}
+			if(mobcount(.c2$[.b],"invasor::Onm"+((.a * 3) - 3)) < (.i[.b] * .r1 / 20)) monster .c2$[.b],0,0,"--ja--",getd(".m"+((.c * 12) + (.a * 3) - 3)),.i[.b],"invasor::Onm"+((.a * 3) - 3);
+			if(mobcount(.c2$[.b],"invasor::Onm"+((.a * 3) - 2)) < (.i[.b] * .r1 / 20)) monster .c2$[.b],0,0,"--ja--",getd(".m"+((.c * 12) + (.a * 3) - 2)),.i[.b],"invasor::Onm"+((.a * 3) - 2);
+			if(mobcount(.c2$[.b],"invasor::Onm"+((.a * 3) - 1)) < (.i[.b] * .r1 / 20)) monster .c2$[.b],0,0,"--ja--",getd(".m"+((.c * 12) + (.a * 3) - 1)),.i[.b],"invasor::Onm"+((.a * 3) - 1);
+			if(.a > 0) sleep 20000;
+		}
+		set .d,0;
+		set .@a,12;
+		while(.@a > 0) {
+			set .@a,.@a - 1;
+			killmonster .c2$[.b],"invasor::Onm"+.@a;
+		}
+		if(!.mf1) removemapflag .c2$[.b],1;
+		if(!.mf4) removemapflag .c2$[.b],4;
+		set .mf1,0;
+		set .mf4,0;
+		if(.a == -1) {
+			callsub Addmsg,"Reward: Experience rates increased by "+.r2+"%. ("+.t4+" min)","ffaa00";
+			setBattleFlag "base_exp_rate",getbattleflag("base_exp_rate") + (.br * .r2 / 100);
+			setBattleFlag "job_exp_rate",getbattleflag("job_exp_rate") + (.jr * .r2 / 100);
+			sleep .t4 * 60 * 1000;
+			setBattleFlag "base_exp_rate",getbattleflag("base_exp_rate") - (.br * .r2 / 100);
+			setBattleFlag "job_exp_rate",getbattleflag("job_exp_rate") - (.jr * .r2 / 100);
+			announce "The experience rates has been restored.",bc_all,0xffaa00;
+		}
+	}
+	end;
+
+Onm0:
+Onm1:
+Onm2:
+	if(playerattached() && .pcr1) if(!rand(100 * 100 / .pcr1)) getitem .pci,1;
+	end;
+
+Onm3:
+Onm4:
+Onm5:
+	if(playerattached() && .pcr1) if(!rand(75 * 100 / .pcr1)) getitem .pci,1;
+	end;
+
+Onm6:
+Onm7:
+Onm8:
+	if(playerattached() && .pcr1) if(!rand(50 * 100 / .pcr1)) getitem .pci,1;
+	end;
+
+Onm9:
+	if(.a < 1) end;
+	set .d,.d - 1;
+	if(.a != 3) {
+		if(.a == 1) set .@a$,"Sbirro";
+		if(.a == 2) set .@a$,"Hero";
+		if(	compare("_init_"+.n$[.c],"_init_A") ||
+			compare("_init_"+.n$[.c],"_init_E") ||
+			compare("_init_"+.n$[.c],"_init_I") ||
+			compare("_init_"+.n$[.c],"_init_O") ||
+			compare("_init_"+.n$[.c],"_init_U")
+		) set .@b$,"an";
+		else set .@b$,"a";
+		if(playerattached()) {
+			set .@a$,strcharinfo(0)+" has killed "+.@b$+" "+.n$[.c]+" "+.@a$+".";
+			if(.a == 1) getitem .pci,10 * .pcr2 / 100;
+			if(.a == 2) getitem .pci,30 * .pcr2 / 100;
+		}
+		else set .@a$,.@b$+" "+.n$[.c]+" "+.@a$+" has been killed.";
+		callsub Addmsg,.@a$+" ("+(4 - .a - .d)+"/"+(4 - .a)+")","ffaa00",.c2$[.b];
+		if(!.d) set .a,.a + 1;
+	}
+	else {
+		if(playerattached()) {
+			set .@a$,strcharinfo(0)+" has killed the "+.n$[.c]+" Deux.";
+			getitem .pci,60 * .pcr2 / 100;
+		}
+		else set .@a$,"The "+.n$[.c]+" Deux has been killed.";
+		callsub Addmsg,.@a$,"ffaa00",.c2$[.b];
+		callsub Addmsg,"The invader armies in "+.c1$[.b]+" has been defeated.","ffaa00";
+		if(.t4 && .r2) set .a,-1;
+		else set .a,0;
+		awake "invasor";
+	}
+	end;
+
+OnTimer:
+	sleep .t3 * 60 * 1000;
+	if(.a < 1) end;
+	set .a,0;
+	awake "invasor";
+	callsub Clrmsg;
+	callsub Addmsg,"The defences in "+.c1$[.b]+" have been defeated by the invader armies.","ffaa00";
+	callsub Addmsg,"Today will be remembered as a black day for the server.","ffaa00";
+	end;
+
+OnPCLoginEvent:
+	if(.a > 0) {
+		sleep2 3000;
+		if(.a > 0) announce "¡¡S.O.S.!! "+.c1$[.b]+" is suffering from a terrible invasion.",bc_self,0xffaa00;
+	}
+	else if(.a == -1) {
+		sleep2 3000;
+		if(.a == -1) announce "Experience rates increased by "+.r2+"%.",bc_self,0xffaa00;
+	}
+	end;
+
+OnPCDieEvent:
+	if((.a > 0) && (getsavepoint(0) == .c2$[.b])) save .s$,.sx,.sy;
+	end;
+
+OnWhisperGlobal:
+	if(getgmlevel() < .gm) end;
+	set .@n$,"^008888The Invasor^000000";
+	mes .@n$;
+	if(.e) {
+		mes "Sorry.";
+		mes "Currently there is another gm using the Control Panel of The Invasor system.";
+		mes "Come back in a while.";
+		close;
+	}
+	set .e,1;
+	mes "This is the Control Panel of The Invasor system.";
+	mes "Select the function you want to execute.";
+	next;
+	setarray .@a$,"Start an invasion.","Cancel the current invasion.","Restore the experience rates.";
+	if(!.a) set .@a,0;
+	if(.a > 0) set .@a,1;
+	if(.a == -1) set .@a,2;
+	set .@b,prompt("^880000Exit^000000",.@a$[.@a]);
+	mes .@n$;
+	if(.@b == 2) {
+		switch(.@a) {
+			case 0:
+				mes "Select a city.";
+				next;
+				set .@a,prompt("^880000Random^000000",.c1$[0],.c1$[1],.c1$[2],.c1$[3],.c1$[4],.c1$[5],.c1$[6],.c1$[7],.c1$[8],.c1$[9],.c1$[10],.c1$[11],.c1$[12],.c1$[13],.c1$[14],.c1$[15],.c1$[16],.c1$[17],.c1$[18],.c1$[19],.c1$[20],.c1$[21],.c1$[22],.c1$[23],.c1$[24],.c1$[25],.c1$[26],.c1$[27],.c1$[28],.c1$[29],.c1$[30],.c1$[31],.c1$[32],.c1$[33],.c1$[34],.c1$[35],.c1$[36],.c1$[37],.c1$[38],.c1$[39]);
+				mes .@n$;
+				if(.@a != 255) {
+					set .@a,.@a - 1;
+					mes "Select a class for the invasion.";
+					next;
+					set .@b,prompt("^880000Random^000000",.n$[0],.n$[1],.n$[2],.n$[3],.n$[4],.n$[5],.n$[6],.n$[7],.n$[8],.n$[9],.n$[10],.n$[11],.n$[12],.n$[13],.n$[14],.n$[15],.n$[16],.n$[17],.n$[18],.n$[19],.n$[20],.n$[21],.n$[22],.n$[23],.n$[24]);
+					mes .@n$;
+					if(.@b != 255) {
+						set .@b,.@b - 1;
+						if(.a) {
+							mes "Right now, you can't start a new invasion.";
+							mes "Come back in a while.";
+							set .e,0;
+							close;
+						}
+						set .b,.@a;
+						set .c,.@b;
+						awake "invasor";
+						mes "A new invasion has been started.";
+						set .e,0;
+						close;
+					}
+				}
+				break;
+			case 1:
+				if(.a < 1) {
+					mes "Currently there isn't any invasion in progress.";
+					set .e,0;
+					close;
+				}
+				set .a,0;
+				announce "The invasion in "+.c1$[.b]+" has been canceled.",bc_all,0xffaa00;
+				awake "invasor";
+				mes "The invasion in "+.c1$[.b]+" has been canceled.";
+				set .e,0;
+				close;
+				break;
+			case 2:
+				if(.a != -1) {
+					mes "Currently the experience rates aren't modified by The Invasor system.";
+					set .e,0;
+					close;
+				}
+				awake "invasor";
+				mes "The experience rates has been restored.";
+				set .e,0;
+				close;
+				break;
+		}
+	}
+	mes "See you soon.";
+	set .e,0;
+	close;
+
+// Adds a new message to the announcement list:
+// getarg(0): Message.
+// getarg(1): Color.
+// getarg(2): Map. (optional)
+Addmsg:
+	set .@a,getarraysize($@inv_msg0$);
+	if(.@a >= 10) {
+		deletearray $@inv_msg0$[0],.@a - 9;
+		set .@a,9;
+	}
+	set $@inv_msg0$[.@a],getarg(0);
+	set $@inv_msg1$[.@a],getarg(1);
+	set $@inv_msg2$[.@a],getarg(2,"");
+	if(!.@a) donpcevent "inv_msg::On0";
+	return;
+
+// Clear the announcement list:
+Clrmsg:
+	set .@a,getarraysize($@inv_msg0$);
+	cleararray $@inv_msg0$[0],"",.@a;
+	cleararray $@inv_msg1$[0],"",.@a;
+	cleararray $@inv_msg2$[0],"",.@a;
+	awake "inv_msg";
+	return;
+}
+
+// Delayed announcements:
+// Announces a message from the announcement list every 3 seconds.
+-	script	inv_msg	-1,{
+
+On0:
+	while(getarraysize($@inv_msg0$)) {
+		if($@inv_msg2$[0] == "") announce $@inv_msg0$[0],bc_all,"0x"+$@inv_msg1$[0];
+		else mapannounce $@inv_msg2$[0],$@inv_msg0$[0],bc_all,"0x"+$@inv_msg1$[0];
+		if(getarraysize($@inv_msg0$)) sleep 300;
+		deletearray $@inv_msg0$[0],1;
+		deletearray $@inv_msg1$[0],1;
+		deletearray $@inv_msg2$[0],1;
+	}
+	end;
+}

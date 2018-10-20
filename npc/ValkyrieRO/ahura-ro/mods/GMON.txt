@@ -1,0 +1,74 @@
+invek,149,153,5	script	GM List	4_F_VALKYRIE,{
+	function get_GM_Title;
+	function get_GM_State;
+	
+	cutin "3rd_ab_valkyrie",2;
+	
+	.@size = query_sql( "SELECT `char`.`account_id`,`char`.`char_id`,`char`.`name`,`login`.`lastlogin`,TIMEDIFF( NOW(),`login`.`lastlogin` ),`login`.`group_id` FROM `char` INNER JOIN `login` ON `char`.`account_id` = `login`.`account_id` WHERE `group_id` > "+.min_group_id+" ORDER BY `char`.`online` DESC, `login`.`group_id` DESC LIMIT 10",.@aid,.@cid,.@name$,.@lastlogin$,.@lastlogin_duration$,.@group_id );
+
+	mes "[GM On-Online]";
+	mes "Hay un total de ^FF0000"+.@size+"^000000 GM(s)";
+	mes " ";
+	while ( .@i < .@size ) {
+		mes get_GM_Title( .@name$[.@i],.@group_id[.@i] )+" - "+get_GM_State( .@aid[.@i],.@cid[.@i],.@name$[.@i] );
+		mes "Ultima vez Visto: ^777777"+.@lastlogin_duration$[.@i]+" horas^000000";
+		mes "Ultimo Login: ^777777"+.@lastlogin$[.@i]+"^000000";
+			mes "^00FF00____________________________^000000";
+		.@i++;
+	}
+	close2;
+	cutin "",255;
+	end;
+	
+	OnInit:
+		.min_group_id = 1;
+		.afk_second = 300;
+		.@interval = 5;		
+		.@step = 5;		
+		while (1) {			
+		sleep .@interval * 1000;			
+		getmapxy .@map$, .@x, .@y, 1;		
+			while ( checkcell( .@map$, .@npc_x = .@x + rand( -.@step, .@step ), .@npc_y = .@y + rand( -.@step, .@step ), cell_chknopass ) );		
+			npcwalkto .@npc_x, .@npc_y;		}
+
+
+		end;
+
+	function	get_GM_Title	{
+		switch ( getarg( 1,0 ) ) {
+			default: .@title$ = "";
+			case 1: .@title$ = "(Super Player)";
+			case 2: .@title$ = "(Support)";
+			case 3: .@title$ = "(Script Manager)";
+			case 4: .@title$ = "(Event Manager)";
+			case 10: .@title$ = "(Law Enforcement)";
+			case 99: .@title$ = "(Admin)";
+		}
+		
+		return .@title$ + " " +  getarg( 0,"NULL" );
+	}
+	
+	function	get_GM_State	{
+		.@aid = getarg( 0,0 );
+		.@cid = getarg( 1,0 );
+		.@name$ = getarg( 2,"NULL" );
+		
+		if ( isloggedin( .@aid,.@cid ) ) {
+		
+			.@idle = checkidle( .@name$ );
+			
+			if ( .@idle >= .afk_second && .afk_second ) {
+				.@state$ = "^00FF00647f92AFK/No disponible^000000";
+			}
+			else {
+				.@state$ = "^00FF00Online^000000";
+			}
+		}
+		else {
+			.@state$ = "^ff5151Offline^000000";
+		}
+		
+		return .@state$;
+	}
+
+}

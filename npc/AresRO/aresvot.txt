@@ -1,0 +1,742 @@
+//////////////////////////////////////////////////
+//           - eAthena Script -
+//             Donaciones SMS
+//================================================
+// Creado por Karmic para DivineRO.net
+// Editado por Darkness para Valhallen Legend
+// Creditos de algunos códigos: Racing
+//================================================
+// Changelog:
+// 1.0 Creado por Karmic con recompenza en CASHPOINT
+// 1.1 -Adaptado a las necesidades de VLRO
+//     -Agregados menú y diseñado el script para ser simple y útil
+//    
+///////////////////////////////////////////////////
+
+prontera,164,175,5	script	Donation SMS	510,{
+set .@n$,"^008888[Donaciones SMS Lexus Ragnarok]^000000"; //Nombre del NPC
+//set #cash,1000; //ID del item por default "Poring Coin"
+set @pxe,1500; //Cantidad de Item que recibirá por cada SMS.
+
+setarray @paisN$[0],"DE","AR","AU","AT","BE","BO","CL","CO","EC","ES","FR","GB","NL","IE","MX","NO","PE","PT","SE","CH","VE","RD";
+setarray @paisE[0],1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1;
+
+
+mes .@n$;
+npctalk "¡Greetings and welcome "+ strcharinfo(0) +" SMS donation system!";
+mes "Saludos, Bienvenido al sistema de Donaciones SMS";
+mes " de Lexus Ragnarok Online.";
+mes "¿En que puedo  ayudarte?";
+	menu "^5533ff¡Validar mi Código SMS!^000000",vali,"¿Cómo Donar vía SMS?",como,"Salir",salir;
+	
+vali:
+next;
+mes .@n$;
+mes "Por favor, Introduce el código que has recibido por SMS:";
+input @codigo$;
+set @codigomd5$,md5(@codigo$);
+next;
+
+query_sql("SELECT COUNT(*) FROM sms WHERE CodigoMD5 = '" + @codigomd5$ + "' AND Estado = '0'", @producto);
+if (@producto == 0) {
+    query_sql("SELECT COUNT(*) FROM sms WHERE CodigoMD5 = '" + @codigomd5$+ "' AND Estado = '1'", @producto);
+    if (@producto == 0) {
+        mes .@n$;
+        mes "El código de donación sms: ^ff0000"+@codigo$+"^000000";
+        mes "No es válido.";
+        close;
+    }
+
+query_sql("SELECT Pais FROM sms WHERE CodigoMD5 = '" + @codigomd5$ + "' AND Estado = '0'", @paisR$);
+
+for(set .@i, 0; .@i < getarraysize(@paisN$); set .@i, .@i + 1) {
+   if(@paisN$[.@i] == @paisR$) {
+      set @paisRE,@paisE[.@i];
+   }
+}
+    mes .@n$;
+    mes "El código de donación SMS: ^ff0000"+@codigo$+"^000000";
+    mes "Ya ha sido utilizado y ya no es válido.";
+    close;
+}
+query_sql("UPDATE sms SET estado = '1', CuentaAdquisicion = '" + getcharid(3) + "', FechaAdquisicion = '" + gettimestr("%d-%m-%Y %H:%M:%S",21) + "' WHERE CodigoMD5 = '" + @codigomd5$ + "'");
+atcommand "@cash 1500"+strcharinfo(o);
+	announce "~ ["+ strcharinfo(0) +"] acaba de donar vía SMS. Muchas Gracias por su Donación  ~",bc_all,0xFF6633;
+mes .@n$;
+mes "El código de donación SMS: ^ff0000"+@codigo$+"^000000";
+mes "Es correcto, Lexus Ragnarok Online agradece su donación.";
+next;
+mes .@n$;
+mes "Se han añadido: ^ff0000["+@pxe+"]^000000 SmS Cash a tu Personaje.";
+mes "Actualmente dispones de :";
+mes "--->^0000FF["+ #CASHPOINTS +"]  ^000000SmS Cash <---";
+close;
+
+como:
+next;
+mes .@n$;
+mes "Para donar ^ff0000vía SMS^000000 deberás dirigirte a nuestro sitio Web, en el a sección de Donaciones.";
+mes "Web:";
+mes "^0000FFwww.lexus-ro.com^000000";
+mes " ";
+mes "Allí encontrara un Botón que indica [Donación SMS], al darle Clic un ventana identificara su País";
+next;
+mes .@n$;
+mes "Ahí el sistema le Indicara los datos que debe colocar en su Teléfono Móvil, ya sea la palabra en MAYÚSCULAS con números y el numero de destino";
+mes "Además de las Compañías telefónicas disponibles y el costo de el Mensaje de Texto.";
+next;
+mes .@n$;
+mes "Una ves enviado el Mensaje de Texto, recibirá automáticamente un SMS a su teléfono Móvil indicando el Código de donación y será además";
+mes "Redirigido a una pagina web de nuestro servidor que le Recordara como Activar el Código recibido Conmigo.";
+mes "Espero a verle ayudado, ante cualquier duda los miembros del Staff están para ayudarle.";
+close;
+
+salir:
+close;
+
+OnInit:
+	waitingroom "¡Donatión SMS!",0;
+}
+
+
+
+
+//=============================================
+//	Sistema de Votos Dreksoft NPC
+//	Version: 1
+//=============================================
+// Descripcion:
+//	NPC que cambia cada punto de Voto en
+//	Punto de Cash. 5 Puntos - 5 de Cash.
+//=============================================
+
+prontera.gat,164,172,5	script	Points Vote	864,{
+
+if (getwaitingroomstate(4)) waitingroom " [ POINT VOTE ]",0;
+	mes "[Votos]";
+	mes "Hola. "+strcharinfo(0);
+	mes "Que deseas Hacer?";
+	next;
+	menu "Canjear mis Puntos",puntos,"Ver Mis Puntos",verpuntos,"^004080Cambiar Cash X Item^000000",L_TELEPORT,"No, Gracias",salir;
+
+puntos:
+	query_sql("SELECT puntos FROM icp_users WHERE account = '" + getcharid(3) + "'", @punto);
+	if (@punto == 0) goto no_puntos;
+	query_sql("UPDATE icp_users SET puntos='0' WHERE account = '" + getcharid(3) + "'");
+	set #CASHPOINTS,#CASHPOINTS+@punto;
+	goto finish;
+
+finish:
+	mes "[Votos]";
+	mes "En horabuena!!!";
+	mes "Se Agregaron: "+ @punto + " Punto(s)";
+	mes "Ahora tienes: "+ #CASHPOINTS + " Puntos(s)";
+	close;
+
+no_puntos:
+	mes "[Votos]";
+	mes "No Tienes Puntos por Canjear";
+	close;
+
+verpuntos:
+	mes "[Votos]";
+	mes "Tus Puntos Actuales Son";
+	mes "Total de Puntos: "+ #CASHPOINTS;
+	close;
+
+L_TELEPORT:
+mes "Okay Espera ahora mismo te envio al Cashshop ^^";
+next;
+warp "ra_temsky",52,139;
+end;
+
+salir:
+	mes "[Votos]";
+	mes "Ok Mucha Suerte.";
+	close;
+
+}
+
+//===== Hourly Points Script =========================================
+//===== By: ==========================================================
+//= GorthexTiger modified by Nibi
+//===== Current Version: =============================================
+//= 1.0
+//===== Compatible With: =============================================
+//= Any eAthena Version
+//===== Description: =================================================
+//= Get Points every successful hours of gameplay, you cannot get
+//= the points even if you miss a second or a minute. A player will
+//= get a very big bonus if they played 12 hours consecutively
+//= or without logging out of the game. If the player is vending
+//= the script will then stop.
+//===== Additional Comments: =========================================
+//= You can modify the script to your liking.
+//= The default points is Kafrapoints change it anyway if you like.
+//= 1.1 = Check Chatting too
+//= 1.2 = 5 Minute Idle Check & @at/@autotrade check.
+//= 1.3 = Corrected the current balance line on 12 Hours Consecutive
+//====================================================================
+
+-	script	hourlypoints	-1,{
+
+//--Start of the Script
+OnPCLoginEvent:
+attachnpctimer ""+strcharinfo(0)+"";
+initnpctimer;
+end;
+	
+OnTimer30000:
+//Check if Vending (normal or @at)
+if(checkvending() >= 1 || checkchatting() == 1) {
+	dispbottom "El evento dejó puntos por hora, ya que se expendedoras / chat. Por favor, relog si desea empezar de nuevo.";
+	stopnpctimer;
+	end;
+}
+//Check if Idle
+getmapxy( .@map$, .@x, .@y, 0 );
+if(@map$ == .@map$ && @x == .@x && @y == .@y) {
+	set @afk, @afk + 1;
+}
+//If move timer resets
+else {
+	set @afk, 0;
+}
+	set @map$, .@map$; set @x, .@x; set @y, .@y;
+//Idle Check for 5 Minutes
+if(@afk == 5) {
+	dispbottom "El evento puntos por hora se detuvo debido a que estuviste inactivo durante 5 minutos. Por favor, relog si desea empezar de nuevo.";
+	stopnpctimer;
+	end;
+}
+end;
+
+OnTimer60000:
+set @minute, @minute + 1;
+//Check for 1 Minute
+if(@minute == 60){
+	set @minute,0;
+	set .@point_amt, 10; //Points to get every hour (default: 10)
+	set #KAFRAPOINTS, #KAFRAPOINTS + .@point_amt;
+	dispbottom "You received "+.@point_amt+" Kafrapoints by staying ingame for 1 hour";
+	dispbottom "Current Balance = "+#KAFRAPOINTS+" Kafrapoints";
+	set @consecutive_hour, @consecutive_hour + 1;
+	}
+//Check for 12 hours consecutive
+	if(@consecutive_hour == 12) {
+	set @consecutive_hour,0;
+	set .@cpoint_amt, 50; //Points to get for 12 Consecutive hours (default: 50)
+	set #KAFRAPOINTS, #KAFRAPOINTS + .@cpoint_amt;
+	dispbottom "You receive "+.@cpoint_amt+" Kafrapoints in playing for 12 consecutive hours";
+	dispbottom "Current Balance = "+#KAFRAPOINTS+" Kafrapoints";
+	}
+stopnpctimer;
+initnpctimer;
+end;
+
+}
+//--End of the Script
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//===== eAthena Script =======================================================================
+//= NPC 
+//===== By: =================================================================================
+//= 
+//===== Current Version: ======================================================================
+//= 1.3.1
+//==========================================================================================
+
+prontera.gat,186,177,6	script	Custom Hats	403,{
+cutin "wish_maiden11",2;
+set @npcname$,"^0000FF[^000000^FF0000Wish Maiden^000000^0000FF]^000000";
+mes @npcname$;
+mes "Hola! ^5555FF" + strcharinfo(0) + "^000000!";
+mes "Mi Nombre es ^5555FF" + @npcname$ + "^000000!";
+mes "Estoy aqui para poder brindarte";
+mes "Algunos Custom item que te podran dar algunos beneficios";
+next;
+
+mes "[^0065DFWish Maiden^000000]";
+mes "¿Que Custom item te gustaria Crear?,";
+menu "Catoninetails Hat",Cat_V,"Moonlight Hat",Moon_V,"Zero Wings",Zero_V,"Golden Wing",Golden_V,"tiamatwings",tiama_V,"Ninguno",ref8;
+
+Cat_V:
+mes "[^0065DFWish Maiden^000000]";
+mes "Necesitas traerme los siguientes items...";
+next;
+mes "100 Blue Hair";
+mes "100 Animal Skin";
+mes "50 Nine Tails";
+mes "1 Cat O' Nine Tails Card";
+next;
+
+mes "Ya tienes todos los items?";
+menu "Si.",ref1,"No tengo nada.",ref2;
+
+ref1:
+mes "Ok,Dejame revisar tu Inventario";
+if((countitem(1034)<100))goto falta;
+if((countitem(919)<100))goto falta;
+if((countitem(1022)<50))goto falta;
+if((countitem(4290)<1))goto falta;
+mes "Bien, si tienes todo lo necesario...";
+next;
+
+mes "[^0065DFWish Maiden^000000]";
+mes "Procedere a crear tu Headger";
+delitem 1034,100;
+delitem 919,100;
+delitem 1022,50;
+delitem 4290,1;
+getitem 19161,1;
+mes "Muy bien!! Ahi tienes tu Nuevo Item.";
+cutin "",255;
+close;
+
+Moon_V:
+mes "[^0065DFWish Maiden^000000]";
+mes "Necesitas traerme los siguientes items...";
+next;
+mes "1 Cresent Hairpin";
+mes "500 Nine Tails";
+mes "1 Moonlight Flower Hat";
+next;
+
+mes "Ya tienes todos los items?";
+menu "Si.",ref3,"No tengo nada.",ref2;
+
+ref3:
+mes "Ok,Dejame revisar tu Inventario";
+if((countitem(5048)<1))goto falta;
+if((countitem(1022)<500))goto falta;
+if((countitem(5214)<1))goto falta;
+mes "Bien, si tienes todo lo necesario...";
+next;
+
+mes "[^0065DFWish Maiden^000000]";
+mes "Procedere a crear tu Headger";
+delitem 5048,1;
+delitem 1022,500;
+delitem 5214,1;
+getitem 19162,1;
+mes "Muy bien!! Ahi tienes tu Headger";
+cutin "",255;
+close;
+
+Zero_V:
+mes "[^0065DFWish Maiden^000000]";
+mes "Necesitas traerme los siguientes items...";
+next;
+mes "1 Angel Wing";
+mes "500 Feather";
+mes "1 Angeling Hat";
+next;
+
+mes "Ya tienes todos los items?";
+menu "Si.",ref4,"No tengo nada.",ref2;
+
+ref4:
+mes "Ok,Dejame revisar tu Inventario";
+if((countitem(2254)<1))goto falta;
+if((countitem(949)<500))goto falta;
+if((countitem(5132)<1))goto falta;
+mes "Bien, si tienes todo lo necesario...";
+next;
+
+mes "[^0065DFWish Maiden^000000]";
+mes "Procedere a crear tus Wings";
+delitem 2254,1;
+delitem 949,500;
+delitem 5132,1;
+getitem 19156,1;
+mes "Muy bien!! Ahi tienes tus Alas ^^";
+cutin "",255;
+close;
+
+Golden_V:
+mes "[^0065DFWish Maiden^000000]";
+mes "Necesitas traerme los siguientes items...";
+next;
+mes "10 Gold";
+mes "500 Topaz";
+mes "1 Gold Acidus Card";
+next;
+
+mes "Ya tienes todos los items?";
+menu "Si.",ref5,"No tengo nada.",ref2;
+
+ref5:
+mes "Ok,Dejame revisar tu Inventario";
+if((countitem(969)<10))goto falta;
+if((countitem(728)<500))goto falta;
+if((countitem(4378)<1))goto falta;
+mes "Bien, si tienes todo lo necesario...";
+next;
+
+mes "[^0065DFWish Maiden^000000]";
+mes "Procedere a crear tu Alas";
+delitem 969,10;
+delitem 728,500;
+delitem 4378,1;
+getitem 19249,1;
+mes "Muy bien!! Ahi tienes tu Nuevas Wings";
+cutin "",255;
+close;
+
+tiama_V:
+mes "[^0065DFWish Maiden^000000]";
+mes "Necesitas traerme los siguientes items...";
+next;
+mes "1 Mischievous Fairy";
+mes "500 Scorpion Tail";
+mes "300 Garlet";
+next;
+
+mes "Ya tienes todos los items?";
+menu "Si.",ref6,"No tengo nada.",ref2;
+
+ref6:
+mes "Ok,Dejame revisar tu Inventario";
+if((countitem(5402)<1))goto falta;
+if((countitem(904)<500))goto falta;
+if((countitem(910)<300))goto falta;
+mes "Bien, si tienes todo lo necesario...";
+next;
+
+mes "[^0065DFWish Maiden^000000]";
+mes "Procedere a crear tus Alas";
+delitem 5402,1;
+delitem 904,500;
+delitem 910,300;
+getitem 19092,1;
+mes "Muy bien!! Ahi tienes tu Nuevas Wings";
+cutin "",255;
+close;
+
+
+
+ref2:
+mes "[^0065DFWish Maiden^000000]";
+mes "Pues si quieres crear tus Item Custom tienes que conseguirlos";
+cutin "",255;
+close;
+
+ref8:
+mes "[^0065DFWish Maiden^000000]";
+mes "Vuelve cuando Quieras!";
+cutin "",255;
+close;
+
+
+falta:
+mes "[V^0065DFWish Maiden^000000]";
+mes "Te faltan conseguir items...";
+mes "Dedicate a conseguirlos y lo haras rapido";
+cutin "",255;
+close;
+}
+
+
+//prontera,147,173,5	shop	Usablems	749,7142:250000,611:40,601:60,602:300,645:800,656:1500,657:3000,506:40,505:5000,503:550,502:200,504:1200,605:2000,606:1500,662:1450,12018:2,1771:50,610:4000
+
+
+-	script	mob_reward	-1,{
+
+
+OnInit:
+	//Configuracion
+	setarray $mobsreward[0],	1917; //IDs de los mobs a los que al matar se ganara Cash o Kafra Points
+	set $mr_point, 5; //Puntos por mob
+	set $mr_type, 0; //Tipo de puntos (0 = cash / 1 = kafra)
+	end;
+
+OnNPCKillEvent:
+	for (set .@i, 0; .@i < getarraysize($mobsreward); set .@i, .@i + 1) {
+
+		if(killedrid == $mobsreward[.@i]) {
+			if($mr_type == 0) {
+				atcommand strcharinfo(0) + "@cash "+$mr_point;
+			} else {
+				atcommand strcharinfo(0) + "@points "+$mr_point;
+			}
+		}
+	}
+
+	end;
+}
+
+//===== eAthena Script =======================================================================
+//= NPC 
+//===== By: =================================================================================
+//= 
+//===== Current Version: ======================================================================
+//= 1.3.1
+//==========================================================================================
+
+izlude_in,73,118,5	script	Cards Quest	501,{
+
+set @npcname$,"^0000FF[^000000^FF0000Eleny^000000^0000FF]^000000";
+mes @npcname$;
+mes "Hola! ^5555FF" + strcharinfo(0) + "^000000!";
+mes "Mi Nombre es ^5555FF" + @npcname$ + "^000000!";
+mes "Estoy aqui para poder brindarte";
+mes "algunas cartas que seran de gran utilidad en este servidor";
+next;
+
+mes "[^0065DFEleny^000000]";
+mes "¿Que cartas te gustaria crear?,";
+menu "Thanatos Card",Thanatos_Card,"Kiel D-01 Card",Kiel_Card,"Ninguna",ref5;
+
+Thanatos_Card:
+mes "[^0065DFEleny^000000]";
+mes "Ok, si quieres esta carta tendras que traerme lo siguente,";
+next;
+mes "200	Cursed Water";
+mes "200	Live Coal";
+mes "100 Red Herb";
+mes "1 Fang of Garm";
+mes "250 False Angel Wings";
+next;
+mes "Ya tienes todos los items?";
+menu "Si.",ref1,"No tengo nada.",ref2;
+
+ref1:
+mes "Ok,Dejame revisar tu Inventario";
+if((countitem(12020)<200))goto falta;
+if((countitem(7098)<200))goto falta;
+if((countitem(507)<100))goto falta;
+if((countitem(7036)<1))goto falta;
+if((countitem(7104)<250))goto falta;
+next;
+
+mes "[^0065DFEleny^000000]";
+mes "Procedere a fabricarte la Carta";
+delitem 12020,200;
+delitem 7098,200;
+delitem 507,100;
+delitem 7036,1;
+delitem 7104,250;
+getitem 4399,1;
+mes "Muy bien!! Ahi tienes tu carta";
+close;
+
+Kiel_Card:
+mes "[^0065DFEleny^000000]";
+mes "Ok, si quieres esta carta tendras que traerme lo siguente,";
+next;
+mes "200	Cursed Water";
+mes "200	Live Coal";
+mes "100 Red Herb";
+mes "1 Fang of Garm";
+mes "250 False Angel Wings";
+next;
+mes "Ya tienes todos los items?";
+menu "Si.",ref3,"No tengo nada.",ref2;
+
+ref3:
+mes "Ok,Dejame revisar tu Inventario";
+if((countitem(12020)<200))goto falta;
+if((countitem(7098)<200))goto falta;
+if((countitem(507)<100))goto falta;
+if((countitem(7036)<1))goto falta;
+if((countitem(7104)<250))goto falta;
+next;
+
+mes "[^0065DFEleny^000000]";
+mes "Procedere a fabricarte la Carta";
+delitem 12020,200;
+delitem 7098,200;
+delitem 507,100;
+delitem 7036,1;
+delitem 7104,250;
+getitem 4403,1;
+mes "Muy bien!! Ahi tienes tu carta";
+close;
+
+ref2:
+mes "[^0065DFEleny^000000]";
+mes "Pues si quieres esta carta tienes que conseguirlos";
+close;
+
+ref5:
+mes "[^0065DFEleny^000000]";
+mes "Vuelve cunado Quieras!";
+close;
+
+
+falta:
+mes "[V^0065DFEleny^000000]";
+mes "Te faltan conseguir items";
+mes "Dedicate a consegurlo y lo haras rapido";
+close;
+}
+
+
+//==============================================================================//
+//= Script Release : Refiner Ticket  [ Version 1.5 ]
+//==================================By==========================================//
+//= Idea : ManiacSociety
+//==============================================================================//
+//= Helper : E M I S T R Y
+//==============================================================================//
+//= D E S C R I P T I O N S
+//==============================================================================//
+// -- 1. Character can choose what equipments they want to be refined.
+// -- 2. This NPC only have 1 Time Usage.
+//		 If it is set to Account Based then that account can use 1 times.
+//		 If it is set to Character Based then all new character can use 1 times.
+// -- 3. Complete skills / Skill Points will be given if it is set to be.
+// -- 4. Base Level and Job Level will be given upon Job Change.
+// -- 5. Allow players to click an items to call out the NPC.
+//==============================================================================//
+//= V E R S I O N S
+//==============================================================================//
+// -- [ 1.5 ] : Added 2 Refine Mode + Refinable check before Refine
+//			[ Mode 0 - Refine the Equipments +1 everytime. ] 
+//			[ Mode 1 - Refine the Equipments to Max Refine Limits. ]
+// -- [ 1.4 ] : Simplify Refine Commands .							
+// -- [ 1.3 ] : Added Easy Configuratuin Settings .			
+// -- [ 1.2 ] : Equipments can be refined to Max in 1 time .							
+// -- [ 1.1 ] : Changed to Ticket Type Refiner .									
+// -- [ 1.0 ] : Simple Refiner NPC.						
+//==============================================================================//
+//= R U L E S
+//==============================================================================//
+// -- 1. Do not use for exchanging purpose.										
+// -- 2. Do not claim it as yours.												
+// -- 3. Do not change or remove the credits.
+// -- 4. Do not sell the script in order to get paid.
+// -- 5. Do not re-sharing upon modified without permission.
+//==============================================================================//
+
+// -- Sample Item DB [ Refiner Ticket ] 
+// -- Set Item Type to 11 
+//501,Red_Potion,Red Potion,11,50,,10,,,,,0xFFFFFFFF,7,2,,,,,,{doevent "TicketRefiner::OnUsed"; },{},{}
+
+
+-	script	TicketRefiner	-1,{
+OnUsed:
+set .Mode,1;			// Refine mode [ 0 = Refine +1 Each time  / 1 = Refine to Max Limit ]
+set .EquipCheck,1;		// Check Equips is refineable or not. [ 0 = Disable / 1 = Enable ]
+set .MaxRefine,10;		// Max Refine Limit
+set .TicketID,30059;		// Ticket ID
+
+
+switch(select( ( getequiprefinerycnt(1) >= .MaxRefine || getequipisequiped(1) == 0 )?"":"Headgear [ ^4EEE94"+getequipname(1)+"^000000 ]",
+			( getequiprefinerycnt(2) >= .MaxRefine || getequipisequiped(2) == 0 )?"":"Armor [ ^4EEE94"+getequipname(2)+"^000000 ]",
+			( getequiprefinerycnt(3) >= .MaxRefine || getequipisequiped(3) == 0 )?"":"Left Hand [ ^4EEE94"+getequipname(3)+"^000000 ]",
+			( getequiprefinerycnt(4) >= .MaxRefine || getequipisequiped(4) == 0 )?"":"Right Hand [ ^4EEE94"+getequipname(4)+"^000000 ]",
+			( getequiprefinerycnt(5) >= .MaxRefine || getequipisequiped(5) == 0 )?"":"Garment [ ^4EEE94"+getequipname(5)+"^000000 ]",
+			( getequiprefinerycnt(6) >= .MaxRefine || getequipisequiped(6) == 0 )?"":"Shoes [ ^4EEE94"+getequipname(6)+"^000000 ]",
+				"^FF0000Close^000000")) {
+		Case 1:	
+			if ( .Mode == 0 ) { callsub RefineSystem,1; }
+			if ( .Mode == 1 ) { callsub MaxRefineSystem,1; }		
+		Case 2:
+			if ( .Mode == 0 ) { callsub RefineSystem,2; }
+			if ( .Mode == 1 ) { callsub MaxRefineSystem,2; }	
+		Case 3:
+			if ( .Mode == 0 ) { callsub RefineSystem,3; }
+			if ( .Mode == 1 ) { callsub MaxRefineSystem,3; }	
+		Case 4:
+			if ( .Mode == 0 ) { callsub RefineSystem,4; }
+			if ( .Mode == 1 ) { callsub MaxRefineSystem,4; }	
+		Case 5:
+			if ( .Mode == 0 ) { callsub RefineSystem,5; }
+			if ( .Mode == 1 ) { callsub MaxRefineSystem,5; }	
+		Case 6:
+			if ( .Mode == 0 ) { callsub RefineSystem,6; }
+			if ( .Mode == 1 ) { callsub MaxRefineSystem,6; }	
+		Case 7:	close;
+	}
+
+RefineSystem:
+if ( .EquipCheck == 1 && getequipisenableref(getarg(0)) == 0 ){
+mes "I cant refine this items. Because it is unrefinable.";
+close;
+}
+	successrefitem (getarg(0));
+	message strcharinfo(0),"The Equipments has been refined, Ticket will also removed from your inventory.";
+	delitem .TicketID,1;
+	close;
+
+MaxRefineSystem:
+if ( .EquipCheck == 1 && getequipisenableref(getarg(0)) == 0 ){
+mes "I cant refine this items. Because it is unrefinable.";
+close;
+}
+	for ( set .@i,getequiprefinerycnt(getarg(0)); getequiprefinerycnt(getarg(0)) < .MaxRefine; set .@i,getequiprefinerycnt(getarg(0)) ){
+	successrefitem (getarg(0));
+	}
+	message strcharinfo(0),"The Equipments has been refined, Ticket will also removed from your inventory.";
+	delitem .TicketID,1;
+	close;
+
+}
+
+//===== Script ===========================================
+//= Hombre de nieve
+//===== Creado Por: ======================================================
+//= SoDa
+//===== Versión ===================================================
+//= 2.0
+//===== Compatible: ===============================================
+//= Cualquier versión
+//===== Descripción: ==============================================
+//= Remueve tus puntos "extra" de skill
+//===== Novedades ===============================================
+//= Trae su respectiva imagen de NPC
+//= Incluye sonidos al clickear
+//=================================================================
+
+prontera.gat,146,187,3	script	Hombre de Nieve	710,{
+	cutin "rutie_snownow03",2;
+	soundeffect "siroma_move.wav",0;
+	mes "^0000FF[^000000^FF0000Hombre de Nieve^000000^0000FF]^000000";
+	mes "Hola, vengo Lutie para ayudarlos con los SkillPoints.";
+	mes "Aunque haga un calor horrible Snif* Snif*";
+	next;
+	soundeffect "siroma_move.wav",0;
+	mes "^0000FF[^000000^FF0000Hombre de Nieve^000000^0000FF]^000000";
+	mes "¿Deseas que remueva tus puntos?";
+	next;
+	menu "Si, seria de mucha ayuda.",si,"No gracias.",no;
+
+si:
+	soundeffect "siroma_move.wav",0;
+	set SkillPoint,0;
+	mes "^0000FF[^000000^FF0000Hombre de Nieve^000000^0000FF]^000000";
+	mes "Muy bien, tus puntos extras fueron removidos.";
+	mes "¡ Suerte !";
+	emotion e_grat;
+	cutin "",255;
+	close;
+
+no:
+	soundeffect "siroma_move.wav",0;
+	mes "^0000FF[^000000^FF0000Hombre de Nieve^000000^0000FF]^000000";
+	mes "Como lo desees ^^";
+	emotion e_swt;
+	cutin "",255;
+close;
+
+}
+
+
+
+

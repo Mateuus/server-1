@@ -1,0 +1,64 @@
+invek,119,163,2	script	Mr.Satan	4_M_MINSTREL1,{
+
+set .esp$,"[^FF8000 Mr.Satan^000000]";
+
+mes .esp$;
+mes "Saludos, "+strcharinfo(0)+".";
+mes "Aquellos que logren conquistar la gloria y la cima,";
+mes "tienen el derecho a visitar mi tienda.";
+mes "La calidad de mis articulos son catalogados como S+.";
+next;
+mes .esp$;
+mes "Luchando vencerás, combatiendo dominarás, pero aquellos que logren conquistar un reino son verdaderos Heroes.";
+mes "Mi metodo de venta es por ^FF8000WoE Guild Coin^000000 y no aceptaré ningun otro tipo de cambio.";
+close2;
+			openshop "GuildCoin";
+			end;
+
+	}
+
+
+-	script	GuildCoin	4_TREASURE_BOX,{
+
+OnInit:
+	.WoeCoin = 25250;
+	tradertype(NST_CUSTOM);
+
+		sellitem RWC_Scroll_2012,15;
+		sellitem RWC_Super_Scroll,15;
+		sellitem Golden_Necklace,25;
+		sellitem Siege_Greave,30;
+		sellitem Siege_Manteau,30;
+		sellitem Siege_Plate,30;
+		sellitem Siege_Suits,30;
+		sellitem Siege_Boots,30;
+		sellitem Siege_Shoes,30;
+		sellitem Siege_Muffler,30;
+		sellitem Siege_Robe,30;
+		sellitem dragon_wings,550;
+		sellitem B_Shecil_Card,700;
+		sellitem B_Seyren_Card,700;
+		sellitem B_Katrinn_Card,700;
+		sellitem B_Magaleta_Card,700;
+		sellitem B_Harword_Card,700;
+		sellitem B_Eremes_Card,700;
+
+
+	end;
+
+OnCountFunds:
+
+	dispbottom "Sistema de Compras: "+getitemname( .WoeCoin )+".";
+	setcurrency( countitem( .WoeCoin ) );
+	end;
+
+OnPayFunds:
+	//dispbottom "Hi: price="+@price+" and points="+@points;
+	if( countitem(.WoeCoin ) < @points )
+		end;
+	delitem .WoeCoin ,@points;
+	delitem .WoeCoin ,( @price - @points );
+	purchaseok();
+end;
+
+		}

@@ -1,0 +1,69 @@
+//////////////////////////////////////////////////////////////////////////
+//rAthena : https://rathena.org/board/user/4252-pachupappy/ 	//
+/////////////////////////////////////////////////////////////////////////
+//Hero Quest v1                                                                          //
+////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+pvp_valk,106,104,5	script	Hero	470,{
+	cutin "3rd_rune_knight",2;
+	mes "[Blast]";
+ 	if(#DoneQuest == 1)
+	{
+	mes "I am sorry it seems that you used me once.";
+	mes "you can only done hero quest once per account.";
+	end;
+	}
+	
+	
+	mes "[Blast]";
+	mes "Hi! I'm ^ff0000The Hero^000000.";
+	mes	"If you fullfill your quest,";
+	mes	"I can give you more ^ff0000Power!!^000000";
+	mes "Are you interested?";
+	menu "Yes!",L_Explain,"No.",L_Exit;
+	end;
+
+
+L_Explain:
+	next;
+	mes "[Blast]";
+	mes "OK, I'll explain.";
+	next;
+	mes "[Blast]";
+	mes "I need 2000 pieces of player ^ff0000 Skulls.^000000";
+	next;
+	mes "[Blast]";
+	mes "So you need to kill many of your fellow players to fullfill your Hero Quest.";
+	next;
+	mes "[Blast]";
+	mes "Once you've finished the quest, you will be given ^ff0000500^000000 status points.";
+	menu "Yes!",L_BuySP,"I'll think about it.",L_Exit;
+	end;
+
+L_BuySP:
+	next;
+	mes "[Blast]";
+	mes "Shall we continue?";
+	menu "Yes.",-,"No, my mistake.",L_Exit;
+	if(countitem(7420) > 1999){
+	delitem 7420,2000;
+	set StatusPoint,StatusPoint+500;
+	set #DoneQuest, 1;
+	announce "Congratulations! "+strcharinfo(0)+" has fullfilled his quest from The Hero, Blast!!",0;
+	}
+	else {
+	next;
+	mes "[Blast]";
+	mes "Sorry, but you do not have enough Skull to fullfill your quest";
+	}
+	close;
+
+L_Exit:
+	close;
+}

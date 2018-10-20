@@ -1,0 +1,46 @@
+
+
+npc_in,18,17,2	script	Channel Settings	833,{
+
+   .@npcname$ = "["+ strnpcinfo(1) +"]";
+//    dispbottom atcommand_login +""; // debugging
+   mes .@npcname$;
+   mes "Hola, "+strcharinfo(0);
+   mes "Seleccione los canales en los que desea estar.";
+   next;
+   for ( .@i = 0; .@i < .total; .@i++ )
+       .@menu$ = .@menu$ + .atname$[.@i] +"["+( ( atcommand_login & 1 << .@i )? "^00BB22On^000000" : "^FF2200Off^000000" )+"]:";
+   .@s = select( .@menu$ ) -1;
+   mes .@npcname$;
+   mes "Status: "+( ( atcommand_login & 1 << .@s )? "^00BB22On^000000" : "^FF2200Off^000000");
+   next;
+   mes .@npcname$;
+   if ( select( "I want to "+( ( atcommand_login & 1 << .@s )? "^FF2200disable^000000": "^00BB22enable^000000"  )+" it", "Nothing" ) == 2 ) {
+       mes "See ya.";
+       close;
+   }
+   if ( atcommand_login & 1 << .@s ) {
+       mes .atname$[.@s] +" is now ^FF2200Off^000000.";
+       atcommand "@"+ .atcommand$[.@s] +" off";
+   }
+   else {
+       mes .atname$[.@s] +" is now ^00BB22On^000000.";
+       atcommand "@"+ .atcommand$[.@s] +( ( .@s == 1 )? " on": "" );
+   }
+   atcommand_login = atcommand_login ^ 1 << .@s;
+   close;
+OnPCLoginEvent:
+   if ( !atcommand_login ) end;
+   for ( .@i = 0; .@i < .total; .@i++ ) {
+       if ( atcommand_login & 1 << .@i ) {
+           atcommand "@"+ .atcommand$[.@i] +( ( .@i == 1 )? " on": "" );
+           dispbottom .atname$[.@i] +" is now On";
+       }
+   }
+   end;
+OnInit:
+   setarray .atname$, "Global","russian","German","indonasian","French", "trade", "Support";
+   setarray .atcommand$, "join #globel","join #rus","join #german","join #indo","join #french", "join #trade", "join #support";
+   .total = 7;
+   end;
+}

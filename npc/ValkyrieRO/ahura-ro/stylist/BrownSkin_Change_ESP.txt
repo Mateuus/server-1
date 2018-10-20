@@ -1,0 +1,77 @@
+//===== *Athena Script =======================================
+//= Brown Skin Change
+//===== By: ==================================================
+//= Darkness
+//===== Current Version: =====================================
+//= 1.0
+//===== Compatible With: =====================================
+//= *Athena
+//===== Description: =========================================
+//= NPC change the skin colour in humans.
+//= EXCLUSIVE FOR KAMISHI PREMIUM PALETTS
+//= Script exclusive for Darkness
+//
+
+invek,162,105,4	script	Cambiador de Piel	4_M_DEWOLDMAN,{
+	//callsub RaceDye,$RacePals[race_id*4],$RacePals[race_id*4+1],$RacePals[race_id*4+2],$RacePals[race_id*4+3];
+	// Nombre NPC
+	set .NombreNpc$,"[^FF8000 Cambiador de Piel^000000]";
+	
+	// Check Doram class
+	if(Class == 4218){
+	mes .NombreNpc$;
+	mes "Lo siento gatito, la clase doram no puede usar este servicio.";
+	close;
+	}
+	// Check other races
+	if(race_id >= 1 && race_id <= 20){
+	mes .NombreNpc$;
+	mes "Lo siento, este servicio es solo para humanos.";
+	close;
+	}
+	if(race_id == 21){
+			mes .NombreNpc$;
+			mes "¿Quieres tener la piel blanca?";
+			next;
+			switch(select("No:Si")){
+			case 1:
+				next;
+				mes .NombreNpc$;
+				mes "Esta bien, nos vemos más tarde";
+				close;
+
+			case 2:
+				next;
+				mes .NombreNpc$;
+				mes "¡Listo!";
+				set race_id,0;
+				callfunc("resetSavedSets");
+				callfunc("setlook2", 6, 1);
+				callfunc("setlook2", 7, 1);
+				dispbottom "Ahora tienes la piel blanca.";
+				close;
+				end;
+		}
+	}
+	mes .NombreNpc$;
+	mes "¿Quieres tener la piel morena?";
+	switch(select("- No:- Si")){
+			case 1:
+				next;
+				mes .NombreNpc$;
+				mes "Esta bien, nos vemos más tarde";
+				close;
+
+			case 2:
+				next;
+				mes .NombreNpc$;
+				mes "¡Listo!";
+				set race_id,21;
+				callfunc("resetSavedSets");
+				callfunc("setlook2", 6, $RacePals[race_id*4+2]);// clothes
+				callfunc("setlook2", 7, $RacePals[race_id*4]);// hair
+				dispbottom "Ahora tienes la piel morena.";
+				close;
+				end;
+		}
+}

@@ -1,0 +1,215 @@
+// Last Update : 8:50PM  18/11/2012
+
+// Credits to AnnieRuru
+
+// ==== TO-DO ====
+// - NPC Dialog Lists
+// - Add Block User Features ?
+// - Add Password Protected Features ?
+// - Add Auto Reject Invitation ?
+// - Clean the Scripts .....
+
+
+-	script	IRC	-1,{
+function IRC_Create;
+function IRC_Join;
+function IRC_Broadcast;
+function IRC_Add;
+function IRC_Remove;
+function IRC_List;
+
+OnInit:
+// Max IRC Room
+.MaxRoom = 10;
+// Max Users in IRC
+.MaxUser = 100;
+// Display Time
+.DisplayTime = 1;
+
+// IRC Message Colour
+.CHAT$ = "0xFFBBFF";
+.SYSTEM$ = "0x00EE55";
+
+// IRC Commands
+.irc_create$ = "create";
+.irc_join$ = "join";
+.irc_leave$ = "leave";
+.irc_list$ = "list";
+.irc_kick$ = "kick";
+.irc_invite$ = "invite";
+
+// IRC Messages ( will add on future )
+// .message$[0] = "IRC Room reach limit.";
+// .message$[1] = "Please leave your current IRC Room.";
+// .message$[2] = "Didnt have any available IRC Room.";
+// .message$[3] = "You didnt join any IRC Room";
+
+// Delete Data during Test Mode
+for ( .@i = 2000000; .@i < 2000003; .@i++ )
+	if ( attachrid(.@i) )
+		set @IRC, 0;
+end;
+
+
+OnWhisperGlobal:
+if( @whispervar0$ == .irc_create$ ){
+	if( getarraysize( .IRC_Room$ ) >= .MaxRoom ){
+		dispbottom "Max IRC Room Reach."; 
+	}else if( @IRC ){
+		dispbottom "Please leave your current IRC Room";
+	}else{
+		for( .@i = 0; .@i < .MaxRoom; .@i++ )
+			if( .IRC_Room$[.@i] == "" ){
+				.IRC_Room$[.@i] = IRC_Create();
+				@IRC = ( .@i + 1 );
+				IRC_Add( ( @IRC - 1 ),strcharinfo(0) );
+				end;
+			}
+	}
+	
+}else if( @whispervar0$ == .irc_join$ ){
+	if( getarraysize( .IRC_Room$ ) <= 0 ){
+		dispbottom "Didnt have any available IRC Room.";
+	}else if( @IRC ){
+		dispbottom "Please leave your current IRC Room";
+	}else{
+		@IRC = IRC_Join();
+		IRC_Add( ( @IRC - 1 ),strcharinfo(0) );
+	}
+	
+}else if( @whispervar0$ == .irc_leave$ ){
+	if( !@IRC ){
+		dispbottom "You didnt join any IRC Room.";  
+	}else{
+		IRC_Remove( ( @IRC - 1 ),strcharinfo(0) );
+		@IRC = 0;
+		dispbottom "You have left the IRC Channel";
+	}
+	
+}else if( @whispervar0$ == .irc_list$ ){
+	if( !@IRC ){
+		dispbottom "You didnt join any IRC Room.";  
+	}else{
+		IRC_List( ( @IRC - 1 ) );
+	}
+	
+}else if( @whispervar0$ == .irc_kick$ ){
+	if( getd( ".IRC_Room_"+( @IRC - 1 )+"$[0]" ) != strcharinfo(0) ){
+		dispbottom "Only a MOD of a channel can use this to kick player in this Channel.";  
+	}else{
+		.@OriAID = getcharid(3);
+		.@ExpelName$ = @whispervar1$;
+		if( attachrid( getcharid(3,.@ExpelName$) ) ){
+			IRC_Remove( ( @IRC - 1 ),.@ExpelName$ );
+			@IRC = 0;
+		}
+		attachrid( .@OriAID );
+	}
+	
+}else if( @whispervar0$ == .irc_invite$ ){
+	if( getd( ".IRC_Room_"+( @IRC - 1 )+"$[0]" ) != strcharinfo(0) ){
+		dispbottom "Only a MOD of a channel can invite another player into this Channel.";  
+	}else{
+		.@OriAID = getcharid(3);
+		.@Channel = @IRC;
+		.@Name$ = @whispervar1$;
+		if( attachrid( getcharid(3,.@Name$) ) ){
+			if( @IRC == 0 ){
+				.@i = IRC_Add( ( .@Channel - 1 ),.@Name$ );
+				if( .@i == 1 ) @IRC = .@Channel;
+			}else{
+				.@i = 0;
+			}
+		}
+		attachrid( .@OriAID );
+		if( .@i == 0 ) dispbottom "Failed to add this Player into this Channel.";
+	}
+	
+}else if( @IRC <= 0 ){
+	dispbottom "You didnt join any IRC Room.";  
+	
+}else{
+	set .@MSG$, strcharinfo(0) +" : "+ @whispervar0$;
+	IRC_Broadcast( ( @IRC - 1 ),.@MSG$,.CHAT$ );
+}
+close;
+
+OnPCLogoutEvent:
+if( @IRC )
+	IRC_Remove( ( @IRC - 1 ),strcharinfo(0) );
+end;
+
+// getarg(0) = Room
+// getarg(1) = Player Name
+function	IRC_Add	{
+	.@size = getarraysize( getd( ".IRC_Room_"+getarg(0)+"$" ) );
+	for( .@i = 0; .@i < .@size; .@i++ )
+		if( getd( ".IRC_Room_"+getarg(0)+"$["+.@i+"]" ) == getarg(1) )
+			return 0;
+	setd( ".IRC_Room_"+getarg(0)+"$["+.@size+"]" ),getarg(1);
+	IRC_Broadcast( getarg(0),"( IRC ) : '"+getarg(1)+"' joined this room",.SYSTEM$ );
+return attachrid( getcharid(3,getarg(1) ) );
+}
+
+// getarg(0) = Room
+// getarg(1) = Player Name
+function	IRC_Remove	{
+	.@size = getarraysize( getd( ".IRC_Room_"+getarg(0)+"$" ) );
+	// Check and Remove Users
+	for( .@i = 0; .@i < .@size; .@i++ )
+		if( getd( ".IRC_Room_"+getarg(0)+"$["+.@i+"]" ) == getarg(1) ){
+			IRC_Broadcast( getarg(0),"( IRC ) : '"+getarg(1)+"' left this room",.SYSTEM$ );
+			deletearray getd( ".IRC_Room_"+getarg(0)+"$["+.@i+"]" ),1;
+		}
+
+	// Delete Room from Room Lists if empty users
+	if( getarraysize( getd( ".IRC_Room_"+getarg(0)+"$" ) ) <= 0 )
+		.IRC_Room$[ getarg(0) ] = "";
+		
+return attachrid( getcharid(3,getarg(1) ) );
+}
+
+// getarg(0) = Room
+function	IRC_List	{
+	dispbottom "==== USER LIST ( IRC : "+.IRC_Room$[ getarg(0) ]+" ) ====";
+	.@size = getarraysize( getd( ".IRC_Room_"+getarg(0)+"$" ) );
+	for( .@i = 0; .@i < .@size; .@i++ )
+		dispbottom "   ->   "+getd( ".IRC_Room_"+getarg(0)+"$["+.@i+"]" ) + ( ( .@i == 0 )?"   [ MOD ]":"" );
+	dispbottom "==== USER LIST ( Total : "+.@size+" Users ) ====";
+return;
+}
+
+// getarg(0) = Room
+// getarg(1) = Message
+// getarg(2) = Color
+function	IRC_Broadcast	{
+freeloop(1);
+	for( .@i = 0; .@i < getarraysize( getd( ".IRC_Room_"+getarg(0)+"$" ) ); .@i++ )
+		if( attachrid( getcharid( 3,getd( ".IRC_Room_"+getarg(0)+"$["+.@i+"]" ) ) ) ){
+				announce ( ( .DisplayTime )?"[ "+gettime(3)+":"+gettime(2)+" ] ":"" ) + getarg(1),bc_self,getarg(2);
+		}
+freeloop(0);
+return;
+}
+
+// Input a Name during creating Channel
+function	IRC_Create	{
+	mes "Please enter a Name for this IRC Channel";
+	do{
+		input .@IRC_Name$;
+		mes "IRC Name : ^0055FF"+.@IRC_Name$+"^000000";
+		next;
+	}while( select("Confirm:Change") == 2 );
+	close2;
+	return .@IRC_Name$;
+	end;
+}
+
+// List Channel and Select
+function	IRC_Join	{
+	for( .@i = 0; .@i < getarraysize( .IRC_Room$ ); .@i++ )
+		set .@Menu$,.@Menu$ + ( ( .IRC_Room$[.@i] == "" )?"":"^0055FF"+.IRC_Room$[.@i]+" ^FF0000( "+getarraysize( getd( ".IRC_Room_"+.@i+"$") )+" / "+.MaxUser+" Users )^000000" ) +":";
+	 return select( .@Menu$ );
+}
+
+}

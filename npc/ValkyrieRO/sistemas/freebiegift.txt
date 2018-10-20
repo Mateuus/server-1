@@ -1,0 +1,139 @@
+-	script	gfreebie	-1,{
+
+OnPCLoginEvent:
+	if (getgmlevel() >= 2) end;
+	if(#gift2 > 0) end;
+	
+mes "[^000088 Freebies Giver ^000000]";
+mes "Hello "+strcharinfo(0)+", Welcome To OldschoolRO!";
+mes "I'm the freebies giver.";
+mes "I only give 1 freebies per character and can be use by this character only.";
+next;
+mes "[^000088 Freebies Giver ^000000]";
+mes "Character Type.";
+mes "Please Choose";
+
+switch(select("Strength Type:Intelligence Type:Dexterity Type")) {
+		case 1:	callsub S_Free1;
+		case 2:	callsub S_Free2;
+		case 3:	callsub S_Free3;
+		
+	}
+	end;
+	
+S_Free1:
+	
+	Switch (Select ("Please Bless me:I Change my mind")) {
+		Case 1:
+			if(#gift2 > 0) {
+			mes "You already have your freebies.";
+			close;
+			}
+
+			getitem2 30032,1,1,0,0,4302,0,0,0;     //Items Are costume you can change them 
+			getitem2 30033,1,1,0,0,4143,0,0,0;     //Items Are costume you can change them 
+			getitem2 30034,1,1,0,0,4133,0,0,0;     //Items Are costume you can change them 
+			getitem2 30035,1,1,0,0,4058,0,0,0;     //Items Are costume you can change them 
+			getitem2 30036,1,1,0,0,4107,0,0,0;     //Items Are costume you can change them 
+			getitem2 2614,2,1,0,0,4079,0,0,0;     //Items Are costume you can change them 
+			getitem2 30048,1,1,0,0,4112,0,0,0;     //Items Are costume you can change them 
+			getitem2 1108,1,1,10,0,0,0,0,0;     //Items Are costume you can change them 
+			getitem2 1208,1,1,10,0,0,0,0,0;     //Items Are costume you can change them 
+			getitem2 1505,1,1,10,0,0,0,0,0;     //Items Are costume you can change them 
+			getitem 14545,1;     //Items Are costume you can change them 
+			getitem 20008,1;     //Items Are costume you can change them 
+			dispbottom "Congratulations you're now received your Freebies!";
+			dispbottom "Check your Inventory to see all the freebies.";
+			dispbottom "Enjoy playing OldschoolRO!";
+			warp "prt_in",42,106;
+			set #gift2,1;
+			mes "Enjoy your Gifts.";
+			close;
+			
+		Case 2:
+			Mes "Come back for my Blessing";
+			Mes "Thank you";
+			Break;
+
+			}
+			Close;
+
+S_Free2:
+	
+	Switch (Select ("Please Bless me:I Change my mind")) {
+		Case 1:
+			if(#gift2 > 0) {
+			mes "You already have your freebies.";
+			close;
+			}
+
+			getitem2 30032,1,1,0,0,4302,0,0,0;     //Items Are costume you can change them 
+			getitem2 30033,1,1,0,0,4143,0,0,0;     //Items Are costume you can change them 
+			getitem2 30034,1,1,0,0,4133,0,0,0;     //Items Are costume you can change them 
+			getitem2 30035,1,1,0,0,4058,0,0,0;     //Items Are costume you can change them 
+			getitem2 30036,1,1,0,0,4107,0,0,0;     //Items Are costume you can change them 
+			getitem2 2614,1,1,0,0,4044,0,0,0;     //Items Are costume you can change them 
+			getitem2 2614,1,1,0,0,4349,0,0,0;     //Items Are costume you can change them 
+			getitem2 30048,1,1,0,0,4112,0,0,0;     //Items Are costume you can change them 
+			getitem2 1602,1,1,10,0,0,0,0,0;     //Items Are costume you can change them 
+			getitem2 1208,1,1,10,0,0,0,0,0;     //Items Are costume you can change them 
+			getitem2 1505,1,1,10,0,0,0,0,0;     //Items Are costume you can change them 
+			getitem 14545,1;     //Items Are costume you can change them 
+			getitem 20007,1;     //Items Are costume you can change them 
+			dispbottom "Congratulations you're now received your Freebies!";
+			dispbottom "Check your Inventory to see all the freebies.";
+			dispbottom "Enjoy playing OldschoolRO!";
+			warp "prt_in",42,106;
+			set #gift2,1;
+			mes "Enjoy your Gifts.";
+			close;
+			
+		Case 2:
+			Mes "Come back for my Blessing";
+			Mes "Thank you";
+			Break;
+
+			}
+			Close;
+
+S_Free3:
+	
+	Switch (Select ("Please Bless me:I Change my mind")) {
+		Case 1:
+			if(#gift2 > 0) {
+			mes "You already have your freebies.";
+			close;
+			}
+
+			getitem2 30032,1,1,0,0,4302,0,0,0;     //Items Are costume you can change them 
+			getitem2 30033,1,1,0,0,4143,0,0,0;     //Items Are costume you can change them 
+			getitem2 30034,1,1,0,0,4133,0,0,0;     //Items Are costume you can change them 
+			getitem2 30035,1,1,0,0,4058,0,0,0;     //Items Are costume you can change them 
+			getitem2 30036,1,1,0,0,4107,0,0,0;     //Items Are costume you can change them 
+			getitem2 2614,2,1,0,0,4064,0,0,0;     //Items Are costume you can change them 
+			getitem2 30048,1,1,0,0,4112,0,0,0;     //Items Are costume you can change them 
+			getitem2 1208,1,1,10,0,0,0,0,0;     //Items Are costume you can change them 
+			getitem2 1705,1,1,10,0,0,0,0,0;     //Items Are costume you can change them 
+			getitem2 1705,1,1,10,0,0,0,0,0;     //Items Are costume you can change them 
+			getitem 14545,1;     //Items Are costume you can change them 
+			getitem 20009,1;     //Items Are costume you can change them 
+			dispbottom "Congratulations you're now received your Freebies!";
+			dispbottom "Check your Inventory to see all the freebies.";
+			dispbottom "Enjoy playing OldschoolRO!";
+			warp "prt_in",42,106;
+			set #gift2,1;
+			mes "Enjoy your Gifts.";
+			close;
+		
+		Case 2:
+			Mes "Come back for my Blessing";
+			Mes "Thank you";
+			Break;
+
+			}
+			Close;
+			
+OnInit:
+waitingroom "New to OsRO? Click Here!",0;
+end;
+}

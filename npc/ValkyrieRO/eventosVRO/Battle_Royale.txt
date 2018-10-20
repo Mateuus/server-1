@@ -1,0 +1,1053 @@
+//===== rAthena Script ======================================= 
+//= Los Juegos Del Hambre (Hunger Games)
+//===== By: ================================================== 
+//= Ziu
+//===== Current Version: ===================================== 
+//=  (Spanish Scene)
+//===== Compatible With: ===================================== 
+//= rAthena TRUNK 17454 + data Rev 01 (Special Data Only Hunger Games).
+//===== Additional Comments: ================================= 
+//=
+//============================================================
+
+prontera,150,150,0	script	GMControl	60,{
+	mes "[Control";
+	mes "øVamos a ver que hacemos?";
+	switch(select("Desactivar Evento","Iniciar Evento","Empezar Gore"))
+	{
+		case 1:
+			disablenpc "Noah";
+			donpcevent "#waitplayers::OnDisable";
+			donpcevent "#controlcajas::OnDisable";
+			donpcevent "#Contadortotal::OnDisable";
+			donpcevent "#warpentrada::OnDisable";
+			donpcevent "#timefight::OnDisable";
+			donpcevent "#timefightfinal::OnDisable";
+			donpcevent "#chivatomapa::OnDisable";
+			mapwarp "job3_arch03","arena_4",148,101;
+			mapwarp "que_hugel","arena_4",148,101;
+			mapwarp "prt_intr02","arena_4",24,49;
+			mapwarp "prt_vilg02","arena_4",148,101;
+			mapwarp "prt_vilg01","arena_4",148,101;
+			mapwarp "pro_fild04","arena_4",148,101;
+			mapwarp "pro_fild01","arena_4",148,101;
+			mapwarp "prt_dugn01","arena_4",148,101;
+			mapwarp "prt_intr01","arena_4",148,101;
+			mapwarp "prt_vilg00","arena_4",148,101;
+			mapwarp "pro_fild05","arena_4",148,101;
+			mapwarp "pro_fild00","arena_4",148,101;
+			mapwarp "poring_w02","arena_4",148,101;
+			close;
+		case 2:
+			enablenpc "Noah";
+			donpcevent "#waitplayers::OnEnable";
+			close;
+		case 3:
+			donpcevent "#waitplayers::OnEmpezar";
+			end;
+	}
+}
+
+poring_w02,26,176,0	script	#salidadead	-1,10,10,{
+	end;
+OnTouch:
+	warp "poring_w02",0,0;
+	end;
+}
+poring_w02,100,198,0	script	#salidadead2	-1,10,10,{
+	end;
+OnTouch:
+	warp "poring_w02",0,0;
+	end;
+}
+poring_w02,170,175,0	script	#salidadead3	-1,10,10,{
+	end;
+OnTouch:
+	warp "poring_w02",0,0;
+	end;
+}
+poring_w02,48,82,0	script	#salidadead4	-1,5,5,{
+	end;
+OnTouch:
+	warp "poring_w02",0,0;
+	end;
+}
+poring_w02,150,82,0	script	#salidadead5	-1,5,5,{
+	end;
+OnTouch:
+	warp "poring_w02",0,0;
+	end;
+}
+
+guild_vs5,41,62,4	script	Cambio Radical	503,{
+	if (hungergames == 2) {
+		//cutin "jpn_chrome01",2;
+		mes "[Chrome]";
+		mes "Te brindo la posibilidad de cambiar de aspecto para dar m·s temor a tus adversarios";
+		next;
+		mes "[Chrome]";
+		mes "Solo est·n disponibles los jobs que son compatibles con los sprites de las armas, para evitar 'esconder' el arma";
+		next;
+		mes "øA quiÈn quieres parecerte?";
+		next;
+		switch(select("Cambiar De Forma","Estado Inicial","Nada"))
+		{
+			case 1:
+				switch(select("Lord Knight","Whitesmith","Assassin Cross","Paladin","Stalker","Creator","Rune Knight","Mechanic","Guillotine Cross","Royal Guard","Generic","Shadow Chaser","Cerrar"))
+				{
+					case 1:
+						mes "[Chrome]";
+						mes "Perfecto ya est·s listo";
+						specialeffect2 EF_POTION_BERSERK;
+						changebase Job_Lord_Knight;
+						close2;
+						cutin "jpn_chrome01",255;
+						end;
+					case 2:
+						mes "[Chrome]";
+						mes "Perfecto ya est·s listo";
+						specialeffect2 EF_POTION_BERSERK;
+						changebase Job_Whitesmith;
+						close2;
+						cutin "jpn_chrome01",255;
+						end;
+					case 3:
+						mes "[Chrome]";
+						mes "Perfecto ya est·s listo";
+						specialeffect2 EF_POTION_BERSERK;
+						changebase Job_Assassin_Cross;
+						close2;
+						cutin "jpn_chrome01",255;
+						end;
+					case 4:
+						mes "[Chrome]";
+						mes "Perfecto ya est·s listo";
+						specialeffect2 EF_POTION_BERSERK;
+						changebase Job_Paladin;
+						close2;
+						cutin "jpn_chrome01",255;
+						end;
+					case 5:
+						mes "[Chrome]";
+						mes "Perfecto ya est·s listo";
+						specialeffect2 EF_POTION_BERSERK;
+						changebase Job_Stalker;
+						close2;
+						cutin "jpn_chrome01",255;
+						end;
+					case 6:
+						mes "[Chrome]";
+						mes "Perfecto ya est·s listo";
+						specialeffect2 EF_POTION_BERSERK;
+						changebase Job_Creator;
+						close2;
+						cutin "jpn_chrome01",255;
+						end;
+					case 7:
+						mes "[Chrome]";
+						mes "Perfecto ya est·s listo";
+						specialeffect2 EF_POTION_BERSERK;
+						changebase Job_Rune_Knight;
+						close2;
+						cutin "jpn_chrome01",255;
+						end;
+					case 8:
+						mes "[Chrome]";
+						mes "Perfecto ya est·s listo";
+						specialeffect2 EF_POTION_BERSERK;
+						changebase Job_Mechanic;
+						close2;
+						cutin "jpn_chrome01",255;
+						end;
+					case 9:
+						mes "[Chrome]";
+						mes "Perfecto ya est·s listo";
+						specialeffect2 EF_POTION_BERSERK;
+						changebase Job_Guillotine_Cross;
+						close2;
+						cutin "jpn_chrome01",255;
+						end;
+					case 10:
+						mes "[Chrome]";
+						mes "Perfecto ya est·s listo";
+						specialeffect2 EF_POTION_BERSERK;
+						changebase Job_Royal_Guard;
+						close2;
+						cutin "jpn_chrome01",255;
+						end;
+					case 11:
+						mes "[Chrome]";
+						mes "Perfecto ya est·s listo";
+						specialeffect2 EF_POTION_BERSERK;
+						changebase Job_Genetic;
+						close2;
+						cutin "jpn_chrome01",255;
+						end;
+					case 12:
+						mes "[Chrome]";
+						mes "Perfecto ya est·s listo";
+						specialeffect2 EF_POTION_BERSERK;
+						changebase Job_Shadow_Chaser;
+						close2;
+						cutin "jpn_chrome01",255;
+						end;
+					case 13:
+						close2;
+						cutin "jpn_chrome01",255;
+						end;
+				}
+			case 2:
+				mes "[Chrome]";
+				mes "Perfecto ya est·s listo";
+				specialeffect2 EF_POTION_BERSERK;
+				changebase Class;
+				close2;
+				cutin "jpn_chrome01",255;
+				end;
+			case 3:
+				close2;
+				cutin "jpn_chrome01",255;
+				end;
+		}
+	} else {
+		cutin "jpn_chrome01",2;
+		mes "[Chrome]";
+		mes "Habla primero con noah y registrate para participar en los juegos luego vuelve conmigo";
+		close2;
+		cutin "jpn_chrome01",255;
+		end;
+	}
+}
+
+guild_vs5,45,62,5	script	Noah	501,{
+	if (hungergames == 0) {
+		if ((Class == Job_Novice) && (BaseLevel < 2) && (Weight < 1))  {
+			cutin "jpn_noah02.bmp",2;
+			mes "[Noah]";
+			mes "Voy a prepararte para poder jugar en los juegos del hambre";
+			next;
+			mes "[Noah]";
+			mes "Primero colocate nivel 6 de Basic Skill";
+			set JoBLevel,7;
+			set hungergames,1;
+			close2;
+			cutin "jpn_noah02.bmp",255;
+			end;
+		}
+	}
+	else if (hungergames == 1) {
+		if (getskilllv(1) == 6) {
+			cutin "jpn_noah02.bmp",2;
+			mes "[Noah]";
+			mes "Perfecto voy a subirte de clase";
+			next;
+			mes "[Noah]";
+			mes "Ya estas listo para participar en los juegos del hambre";
+			jobchange 4002;
+			set BaseLevel,11;
+			specialeffect2 EF_LORD;
+			set hungergames,2;
+			close2;
+			cutin "jpn_noah02.bmp",255;
+			end;
+		} else {
+			cutin "jpn_noah02.bmp",2;
+			mes "[Noah]";
+			mes "Primero colocate nivel 6 de Basic Skill";
+			close2;
+			cutin "jpn_noah02.bmp",255;
+			end;
+		}
+	}
+	else if (hungergames == 2) {
+		if ((Weight < 1) && (isequipped(2669,2739))) {
+			cutin "jpn_noah02.bmp",2;
+			mes "[Noah]";
+			mes "Perfecto cumples con todos los requisitos, ahora te llevarÈ a la sala de espera";
+			percentheal 100,100;
+			specialeffect2 EF_BENEDICTIO;
+			close2;
+			warp "job3_arch03",29,28;
+			specialeffect2 EF_WARP;
+			end;
+		} else {
+			cutin "jpn_noah03.bmp",2;
+			mes "[Noah]";
+			mes "No tienes que llevar ning˙n objeto que no sea los accesorios de RO Hunger Games si quieres acceder";
+			close2;
+			cutin "jpn_noah03.bmp",255;
+			end;
+		}
+	}
+OnPCLoadMapEvent:
+	if(strcharinfo(3)=="guild_vs5") showevent 0,2;
+	end;
+}
+job3_arch03,27,34,5	script	Noah#copy	501,{
+	if (hungergames == 2) {
+		if ((Weight < 1) && (isequipped(2669,2739))) {
+			cutin "jpn_noah02.bmp",2;
+			mes "[Noah]";
+			mes "°°Empieza en con plenas facultades!!";
+			percentheal 100,100;
+			specialeffect2 EF_BENEDICTIO;
+			close2;
+			cutin "jpn_noah02.bmp",255;
+			end;
+		}
+	}
+OnPCLoadMapEvent:
+	if(strcharinfo(3)=="job3_arch03") showevent 0,2;
+	end;
+}
+
+job3_arch03,29,28,0	script	#waitplayers	-1,{
+	end;
+OnInit:
+	initnpctimer;
+	end;
+OnEnable:
+	enablenpc "#waitplayers";
+	initnpctimer;
+	end;
+OnDisable:
+	disablenpc "#waitplayers";
+	stopnpctimer;
+	end;
+OnReplay:
+	initnpctimer;
+	end;
+OnTimer60000:
+	if (getmapusers("job3_arch03") > 19) {
+		announce "°°Vamos a comenzar!! en 20 segundos",bc_yellow|bc_all;
+		sleep2 20000;
+		mapwarp "job3_arch03","que_hugel",165,24;
+		stopnpctimer;
+		donpcevent "#warpentrada::OnEnable";
+		disablenpc "#waitplayers";
+		end;
+	} else {
+		stopnpctimer;
+		donpcevent "#waitplayers::OnReplay";
+		end;
+	}
+OnEmpezar:
+		announce "°°Vamos a comenzar!! en 20 segundos",bc_yellow|bc_all;
+		sleep2 20000;
+		mapwarp "job3_arch03","que_hugel",165,24;
+		mapwarp "prontera","que_hugel",0,0;
+		stopnpctimer;
+		donpcevent "#warpentrada::OnEnable";
+		disablenpc "#waitplayers";
+		end;
+}
+que_hugel,163,178,0	script	#warpentrada	45,1,2,{
+	end;
+OnInit:
+	disablenpc "#warpentrada";
+	end;
+OnTouch:
+	warp "prt_vilg00",0,0;
+	end;
+OnEnable:
+	enablenpc "#warpentrada";
+	initnpctimer;
+	end;
+OnDisable:
+	disablenpc "#warpentrada";
+	stopnpctimer;
+	end;
+OnTimer5000:
+	announce "°°Comienzan los juegos del hambre!!",bc_yellow|bc_all;
+	donpcevent "#controlcajas::OnEnable";
+	donpcevent "#Contadortotal::OnEnable";
+	donpcevent "#timefight::OnEnable";
+	donpcevent "#chivatomapa::OnEnable";
+	disablenpc "Noah";
+	end;
+OnTimer8000:
+	announce "Ir hasta el final del mapa donde encontrareis el warp de entrada",bc_yellow|bc_all;
+	end;
+OnTimer11000:
+	announce "Teneis 80 segundos para salir de aquÌ, todo aquel que se quede en este mapa ser· eliminado",bc_yellow|bc_all;
+	end;
+OnTimer91000:
+	mapwarp "que_hugel","job3_arch03",29,28;
+	stopnpctimer;
+	disablenpc "#warpentrada";
+	end;
+}
+
+-	script	#timefight	-1,{
+	end;
+	
+OnDisable:
+	stopnpctimer;
+	disablenpc "#timefight";
+	end;
+OnEnable:
+	enablenpc "#timefight";
+	initnpctimer;
+	end;
+	
+OnTimer300000:
+	announce "Han pasado 5 minutos, todas las cajas vuelven a estar llenas",bc_yellow|bc_all;
+	donpcevent "#controlcajas::OnRespawn";
+	donpcevent "#controlcajas::OnRespawn2";
+	end;
+OnTimer600000:
+	announce "Han pasado 10 minutos, todas las cajas vuelven a estar llenas",bc_yellow|bc_all;
+	donpcevent "#controlcajas::OnRespawn";
+	donpcevent "#controlcajas::OnRespawn2";
+	end;
+OnTimer900000:
+	announce "Han pasado 15 minutos, las cajas del centro est·n llenas de nuevo",bc_yellow|bc_all;
+	donpcevent "#controlcajas::OnRespawn2";
+	end;
+OnTimer1200000:
+	announce "Han pasado 20 minutos, prepararse para ser teletrasportados a un nuevo mapa para luchar a muerte",bc_yellow|bc_all;
+	end;
+OnTimer1201000:
+	announce "10",bc_yellow|bc_all;
+	end;
+OnTimer1202000:
+	announce "9",bc_yellow|bc_all;
+	end;
+OnTimer1203000:
+	announce "8",bc_yellow|bc_all;
+	end;
+OnTimer1204000:
+	announce "7",bc_yellow|bc_all;
+	end;
+OnTimer1205000:
+	announce "6",bc_yellow|bc_all;
+	end;
+OnTimer1206000:
+	announce "5",bc_yellow|bc_all;
+	end;
+OnTimer1207000:
+	announce "4",bc_yellow|bc_all;
+	end;
+OnTimer1208000:
+	announce "3",bc_yellow|bc_all;
+	end;
+OnTimer1209000:
+	announce "2",bc_yellow|bc_all;
+	end;
+OnTimer1210000:
+	announce "1",bc_yellow|bc_all;
+	end;
+OnTimer1211000:		
+		mapwarp "pro_fild01","poring_w02",0,0;
+		mapwarp "prt_intr02","poring_w02",0,0;
+		mapwarp "prt_vilg02","poring_w02",0,0;
+		mapwarp "prt_vilg01","poring_w02",0,0;
+		mapwarp "pro_fild04","poring_w02",0,0;
+		mapwarp "prt_dugn01","poring_w02",0,0;
+		mapwarp "prt_intr01","poring_w02",0,0;
+		mapwarp "prt_vilg00","poring_w02",0,0;
+		mapwarp "pro_fild05","poring_w02",0,0;
+		mapwarp "pro_fild00","poring_w02",0,0;
+		donpcevent "#chivatomapa::OnDisable";
+		donpcevent "#timefight::OnDisable";
+		donpcevent "#timefightfinal::OnEnable";
+		end;
+}
+
+-	script	#timefightfinal	-1,{
+	end;
+OnInit:
+	disablenpc "#timefightfinal";
+	end;
+OnDisable:
+	disablenpc "#timefightfinal";
+	stopnpctimer;
+	end;
+OnEnable:
+	enablenpc "#timefightfinal";
+	initnpctimer;
+	end;
+OnTimer5000:
+	announce "Teneis 5 Minutos para vencer a todos vuestros enemigos o no ganar· nadie.",bc_yellow|bc_all;
+	end;
+OnTimer10000:
+	set .pparcial,getmapusers("poring_w02");
+	set .pdeadm,.pparcial-1;
+	announce "En este deathmatch hay <"+.pdeadm+"> enemigos sin contarte a ti mismo, °°suerte!!.",bc_yellow|bc_all;
+	end;
+OnTimer290000:
+	announce "10",bc_yellow|bc_all;
+	end;
+OnTimer291000:
+	announce "9",bc_yellow|bc_all;
+	end;
+OnTimer292000:
+	announce "8",bc_yellow|bc_all;
+	end;
+OnTimer293000:
+	announce "7",bc_yellow|bc_all;
+	end;
+OnTimer294000:
+	announce "6",bc_yellow|bc_all;
+	end;
+OnTimer295000:
+	announce "5",bc_yellow|bc_all;
+	end;
+OnTimer296000:
+	announce "4",bc_yellow|bc_all;
+	end;
+OnTimer297000:
+	announce "3",bc_yellow|bc_all;
+	end;
+OnTimer298000:
+	announce "2",bc_yellow|bc_all;
+	end;
+OnTimer299000:
+	announce "1",bc_yellow|bc_all;
+	end;
+OnTimer300000:
+	announce "°°Finalizo el tiempo....nadie gano!!",bc_yellow|bc_all;
+	mapwarp "poring_w02","arena_4",148,101;
+	donpcevent "#waitplayers::OnDisable";
+	donpcevent "#controlcajas::OnDisable";
+	donpcevent "#Contadortotal::OnDisable";
+	donpcevent "#warpentrada::OnDisable";
+	donpcevent "#timefightfinal::OnDisable";
+	enablenpc "Noah";
+	donpcevent "#waitplayers::OnEnable";
+	end;
+	
+}
+
+// Control respawn.
+
+-	script	#controlcajas	-1,{
+
+OnInit:
+	disablenpc "#controlcajas";
+	end;
+OnEnable:
+	enablenpc "#controlcajas";
+	donpcevent "#controlcajas::OnRespawn";
+	donpcevent "#controlcajas::OnRespawn2";
+	end;
+OnRespawn:
+	monster "prt_intr02",0,0,"Box",1324,2,"#controlcajas::OnMyMobDead";
+	monster "prt_intr02",0,0,"Box",1325,2,"#controlcajas::OnMyMobDead";
+	monster "prt_intr02",0,0,"Box",1326,2,"#controlcajas::OnMyMobDead";
+	monster "prt_intr02",0,0,"Box",1327,2,"#controlcajas::OnMyMobDead";
+	monster "prt_intr02",0,0,"Box",1328,2,"#controlcajas::OnMyMobDead";
+	monster "prt_intr02",0,0,"Box",1329,2,"#controlcajas::OnMyMobDead";
+	monster "prt_intr02",0,0,"Box",1330,2,"#controlcajas::OnMyMobDead";
+	monster "prt_intr02",0,0,"Box",1331,2,"#controlcajas::OnMyMobDead";
+	monster "prt_intr02",0,0,"Box",1332,2,"#controlcajas::OnMyMobDead";
+	monster "prt_intr02",0,0,"Box",1333,2,"#controlcajas::OnMyMobDead";
+	monster "prt_intr02",0,0,"Box",1334,2,"#controlcajas::OnMyMobDead";
+	
+	monster "prt_vilg02",0,0,"Box",1324,2,"#controlcajas::OnMyMobDead";
+	monster "prt_vilg02",0,0,"Box",1325,2,"#controlcajas::OnMyMobDead";
+	monster "prt_vilg02",0,0,"Box",1326,2,"#controlcajas::OnMyMobDead";
+	monster "prt_vilg02",0,0,"Box",1327,2,"#controlcajas::OnMyMobDead";
+	monster "prt_vilg02",0,0,"Box",1328,2,"#controlcajas::OnMyMobDead";
+	monster "prt_vilg02",0,0,"Box",1329,2,"#controlcajas::OnMyMobDead";
+	monster "prt_vilg02",0,0,"Box",1330,2,"#controlcajas::OnMyMobDead";
+	monster "prt_vilg02",0,0,"Box",1331,2,"#controlcajas::OnMyMobDead";
+	monster "prt_vilg02",0,0,"Box",1332,2,"#controlcajas::OnMyMobDead";
+	monster "prt_vilg02",0,0,"Box",1333,2,"#controlcajas::OnMyMobDead";
+	monster "prt_vilg02",0,0,"Box",1334,2,"#controlcajas::OnMyMobDead";
+
+	monster "prt_vilg01",0,0,"Box",1324,2,"#controlcajas::OnMyMobDead";
+	monster "prt_vilg01",0,0,"Box",1325,2,"#controlcajas::OnMyMobDead";
+	monster "prt_vilg01",0,0,"Box",1326,2,"#controlcajas::OnMyMobDead";
+	monster "prt_vilg01",0,0,"Box",1327,2,"#controlcajas::OnMyMobDead";
+	monster "prt_vilg01",0,0,"Box",1328,2,"#controlcajas::OnMyMobDead";
+	monster "prt_vilg01",0,0,"Box",1329,2,"#controlcajas::OnMyMobDead";
+	monster "prt_vilg01",0,0,"Box",1330,2,"#controlcajas::OnMyMobDead";
+	monster "prt_vilg01",0,0,"Box",1331,2,"#controlcajas::OnMyMobDead";
+	monster "prt_vilg01",0,0,"Box",1332,2,"#controlcajas::OnMyMobDead";
+	monster "prt_vilg01",0,0,"Box",1333,2,"#controlcajas::OnMyMobDead";
+	monster "prt_vilg01",0,0,"Box",1334,2,"#controlcajas::OnMyMobDead";
+
+	monster "pro_fild01",0,0,"Box",1324,2,"#controlcajas::OnMyMobDead";
+	monster "pro_fild01",0,0,"Box",1325,2,"#controlcajas::OnMyMobDead";
+	monster "pro_fild01",0,0,"Box",1326,2,"#controlcajas::OnMyMobDead";
+	monster "pro_fild01",0,0,"Box",1327,2,"#controlcajas::OnMyMobDead";
+	monster "pro_fild01",0,0,"Box",1328,2,"#controlcajas::OnMyMobDead";
+	monster "pro_fild01",0,0,"Box",1329,2,"#controlcajas::OnMyMobDead";
+	monster "pro_fild01",0,0,"Box",1330,2,"#controlcajas::OnMyMobDead";
+	monster "pro_fild01",0,0,"Box",1331,2,"#controlcajas::OnMyMobDead";
+	monster "pro_fild01",0,0,"Box",1332,2,"#controlcajas::OnMyMobDead";
+	monster "pro_fild01",0,0,"Box",1333,2,"#controlcajas::OnMyMobDead";
+	monster "pro_fild01",0,0,"Box",1334,2,"#controlcajas::OnMyMobDead";
+	
+	monster "pro_fild04",0,0,"Box",1324,2,"#controlcajas::OnMyMobDead";
+	monster "pro_fild04",0,0,"Box",1325,2,"#controlcajas::OnMyMobDead";
+	monster "pro_fild04",0,0,"Box",1326,2,"#controlcajas::OnMyMobDead";
+	monster "pro_fild04",0,0,"Box",1327,2,"#controlcajas::OnMyMobDead";
+	monster "pro_fild04",0,0,"Box",1328,2,"#controlcajas::OnMyMobDead";
+	monster "pro_fild04",0,0,"Box",1329,2,"#controlcajas::OnMyMobDead";
+	monster "pro_fild04",0,0,"Box",1330,2,"#controlcajas::OnMyMobDead";
+	monster "pro_fild04",0,0,"Box",1331,2,"#controlcajas::OnMyMobDead";
+	monster "pro_fild04",0,0,"Box",1332,2,"#controlcajas::OnMyMobDead";
+	monster "pro_fild04",0,0,"Box",1333,2,"#controlcajas::OnMyMobDead";
+	monster "pro_fild04",0,0,"Box",1334,2,"#controlcajas::OnMyMobDead";
+	
+	monster "pro_fild05",0,0,"Box",1324,2,"#controlcajas::OnMyMobDead";
+	monster "pro_fild05",0,0,"Box",1325,2,"#controlcajas::OnMyMobDead";
+	monster "pro_fild05",0,0,"Box",1326,2,"#controlcajas::OnMyMobDead";
+	monster "pro_fild05",0,0,"Box",1327,2,"#controlcajas::OnMyMobDead";
+	monster "pro_fild05",0,0,"Box",1328,2,"#controlcajas::OnMyMobDead";
+	monster "pro_fild05",0,0,"Box",1329,2,"#controlcajas::OnMyMobDead";
+	monster "pro_fild05",0,0,"Box",1330,2,"#controlcajas::OnMyMobDead";
+	monster "pro_fild05",0,0,"Box",1331,2,"#controlcajas::OnMyMobDead";
+	monster "pro_fild05",0,0,"Box",1332,2,"#controlcajas::OnMyMobDead";
+	monster "pro_fild05",0,0,"Box",1333,2,"#controlcajas::OnMyMobDead";
+	monster "pro_fild05",0,0,"Box",1334,2,"#controlcajas::OnMyMobDead";
+	
+	monster "pro_fild00",0,0,"Box",1324,2,"#controlcajas::OnMyMobDead";
+	monster "pro_fild00",0,0,"Box",1325,2,"#controlcajas::OnMyMobDead";
+	monster "pro_fild00",0,0,"Box",1326,2,"#controlcajas::OnMyMobDead";
+	monster "pro_fild00",0,0,"Box",1327,2,"#controlcajas::OnMyMobDead";
+	monster "pro_fild00",0,0,"Box",1328,2,"#controlcajas::OnMyMobDead";
+	monster "pro_fild00",0,0,"Box",1329,2,"#controlcajas::OnMyMobDead";
+	monster "pro_fild00",0,0,"Box",1330,2,"#controlcajas::OnMyMobDead";
+	monster "pro_fild00",0,0,"Box",1331,2,"#controlcajas::OnMyMobDead";
+	monster "pro_fild00",0,0,"Box",1332,2,"#controlcajas::OnMyMobDead";
+	monster "pro_fild00",0,0,"Box",1333,2,"#controlcajas::OnMyMobDead";
+	monster "pro_fild00",0,0,"Box",1334,2,"#controlcajas::OnMyMobDead";
+	
+	monster "prt_dugn01",0,0,"Box",1324,2,"#controlcajas::OnMyMobDead";
+	monster "prt_dugn01",0,0,"Box",1325,2,"#controlcajas::OnMyMobDead";
+	monster "prt_dugn01",0,0,"Box",1326,2,"#controlcajas::OnMyMobDead";
+	monster "prt_dugn01",0,0,"Box",1327,2,"#controlcajas::OnMyMobDead";
+	monster "prt_dugn01",0,0,"Box",1328,2,"#controlcajas::OnMyMobDead";
+	monster "prt_dugn01",0,0,"Box",1329,2,"#controlcajas::OnMyMobDead";
+	monster "prt_dugn01",0,0,"Box",1330,2,"#controlcajas::OnMyMobDead";
+	monster "prt_dugn01",0,0,"Box",1331,2,"#controlcajas::OnMyMobDead";
+	monster "prt_dugn01",0,0,"Box",1332,2,"#controlcajas::OnMyMobDead";
+	monster "prt_dugn01",0,0,"Box",1333,2,"#controlcajas::OnMyMobDead";
+	monster "prt_dugn01",0,0,"Box",1334,2,"#controlcajas::OnMyMobDead";
+	
+	monster "prt_intr01",0,0,"Box",1324,2,"#controlcajas::OnMyMobDead";
+	monster "prt_intr01",0,0,"Box",1325,2,"#controlcajas::OnMyMobDead";
+	monster "prt_intr01",0,0,"Box",1326,2,"#controlcajas::OnMyMobDead";
+	monster "prt_intr01",0,0,"Box",1327,2,"#controlcajas::OnMyMobDead";
+	monster "prt_intr01",0,0,"Box",1328,2,"#controlcajas::OnMyMobDead";
+	monster "prt_intr01",0,0,"Box",1329,2,"#controlcajas::OnMyMobDead";
+	monster "prt_intr01",0,0,"Box",1330,2,"#controlcajas::OnMyMobDead";
+	monster "prt_intr01",0,0,"Box",1331,2,"#controlcajas::OnMyMobDead";
+	monster "prt_intr01",0,0,"Box",1332,2,"#controlcajas::OnMyMobDead";
+	monster "prt_intr01",0,0,"Box",1333,2,"#controlcajas::OnMyMobDead";
+	monster "prt_intr01",0,0,"Box",1334,2,"#controlcajas::OnMyMobDead";
+	end;
+OnMyMobDead:
+	end;
+OnRespawn2:
+	areamonster "prt_vilg00",83,112,114,83,"Box",1324,1,"#controlcajas::OnMyMobDead";
+	areamonster "prt_vilg00",83,112,114,83,"Box",1325,1,"#controlcajas::OnMyMobDead";
+	areamonster "prt_vilg00",83,112,114,83,"Box",1326,1,"#controlcajas::OnMyMobDead";
+	areamonster "prt_vilg00",83,112,114,83,"Box",1327,1,"#controlcajas::OnMyMobDead";
+	areamonster "prt_vilg00",83,112,114,83,"Box",1328,1,"#controlcajas::OnMyMobDead";
+	areamonster "prt_vilg00",83,112,114,83,"Box",1329,1,"#controlcajas::OnMyMobDead";
+	areamonster "prt_vilg00",83,112,114,83,"Box",1330,1,"#controlcajas::OnMyMobDead";
+	areamonster "prt_vilg00",83,112,114,83,"Box",1331,1,"#controlcajas::OnMyMobDead";
+	areamonster "prt_vilg00",83,112,114,83,"Box",1332,1,"#controlcajas::OnMyMobDead";
+	areamonster "prt_vilg00",83,112,114,83,"Box",1333,1,"#controlcajas::OnMyMobDead";
+	areamonster "prt_vilg00",83,112,114,83,"Box",1334,1,"#controlcajas::OnMyMobDead";
+	end;
+OnDisable:
+	killmonster "prt_vilg00","#controlcajas::OnMyMobDead";
+	killmonster "prt_intr01","#controlcajas::OnMyMobDead";
+	killmonster "prt_intr02","#controlcajas::OnMyMobDead";
+	killmonster "prt_dugn01","#controlcajas::OnMyMobDead";
+	killmonster "pro_fild05","#controlcajas::OnMyMobDead";
+	killmonster "pro_fild00","#controlcajas::OnMyMobDead";
+	killmonster "pro_fild04","#controlcajas::OnMyMobDead";
+	killmonster "pro_fild01","#controlcajas::OnMyMobDead";
+	killmonster "prt_vilg01","#controlcajas::OnMyMobDead";
+	killmonster "prt_vilg02","#controlcajas::OnMyMobDead";
+	
+	disablenpc "#controlcajas";
+	end;
+}
+
+-	script	#Contadortotal	-1,{
+	end;
+OnInit:
+	disablenpc "#Contadortotal";
+	end;
+OnEnable:
+	enablenpc "#Contadortotal";
+	initnpctimer;
+	end;
+OnTimer7000:
+	donpcevent "#Contadortotal::OnTotal";
+	stopnpctimer;
+	end;
+OnDisable:
+	disablenpc "#Contadortotal";
+	end;	
+OnTotal:
+	//query_sql ("SELECT `account_id` FROM `char` WHERE `online`=1",.@onlinecount);
+	set .final,getmapusers("que_hugel");
+	end;
+OnSuma:
+	set .parcial,.final;
+	set .final,.parcial-1;
+	announce "°°Todavia quedan <"+.final+"> usuarios con vida!!",bc_yellow|bc_all;
+	end;
+OnVerifi:
+	set .p1final,getmapusers("prt_intr02");
+	set .p2final,getmapusers("prt_vilg02");
+	set .p3final,getmapusers("prt_vilg01");
+	set .p4final,getmapusers("pro_fild01");
+	set .p5final,getmapusers("pro_fild04");
+	set .p6final,getmapusers("pro_fild05");
+	set .p7final,getmapusers("prt_dugn01");
+	set .p8final,getmapusers("prt_intr01");
+	set .p9final,getmapusers("prt_vilg00");
+	set .p10final,getmapusers("que_hugel");
+	set .p11final,getmapusers("pro_fild00");
+	set .p12final,getmapusers("poring_w02");
+	set .final,.p1final+.p2final+.p3final+.p4final+.p5final+.p6final+.p7final+.p8final+.p9final+.p10final+.p11final+.p12final-1;
+	announce "°°Alguien abandono la partida ahora quedan ["+.final+"] usuarios jugando!!.",bc_yellow|bc_all;
+	end;
+OnPCLogoutEvent:
+	 if ((strcharinfo(3) == "que_hugel") || (strcharinfo(3) == "poring_w02") || (strcharinfo(3) == "prt_intr02") || (strcharinfo(3) == "prt_vilg00") || (strcharinfo(3) == "prt_vilg02") || (strcharinfo(3) == "prt_vilg01") || (strcharinfo(3) == "pro_fild01") || (strcharinfo(3) == "pro_fild04") || (strcharinfo(3) == "pro_fild05") || (strcharinfo(3) == "pro_fild00") || (strcharinfo(3) == "prt_dugn01") || (strcharinfo(3) == "prt_intr01")) {
+		donpcevent "#Contadortotal::OnVerifi";
+	}
+	end;
+}
+
+-	script	#chivatomapa	-1,{
+	end;
+OnInit:
+	donpcevent "#chivatomapa::OnDisable";
+	end;
+OnDisable:
+	disablenpc "#chivatomapa";
+	stopnpctimer;
+	end;
+OnEnable:
+	enablenpc "#chivatomapa";
+	initnpctimer;
+	end;
+OnReplay:
+	initnpctimer;
+	end;
+OnTimer100000:
+	set .p1chivato,getmapusers("prt_intr02");
+	set .p2chivato,getmapusers("prt_vilg02");
+	set .p3chivato,getmapusers("prt_vilg01");
+	set .p4chivato,getmapusers("pro_fild01");
+	set .p5chivato,getmapusers("pro_fild04");
+	set .p6chivato,getmapusers("pro_fild05");
+	set .p7chivato,getmapusers("prt_dugn01");
+	set .p8chivato,getmapusers("prt_intr01");
+	set .p9chivato,getmapusers("prt_vilg00");
+	set .p10chivato,getmapusers("pro_fild00");
+	announce "°°En el mapa [prt_intr02] hay ["+.p1chivato+"] jugadores!!.",bc_yellow|bc_all;
+	sleep2 500;
+	announce "°°En el mapa [prt_vilg02] hay ["+.p2chivato+"] jugadores!!.",bc_yellow|bc_all;
+	sleep2 500;
+	announce "°°En el mapa [prt_vilg01] hay ["+.p3chivato+"] jugadores!!.",bc_yellow|bc_all;
+	sleep2 500;
+	announce "°°En el mapa [pro_fild01] hay ["+.p4chivato+"] jugadores!!.",bc_yellow|bc_all;
+	sleep2 500;
+	announce "°°En el mapa [pro_fild04] hay ["+.p5chivato+"] jugadores!!.",bc_yellow|bc_all;
+	sleep2 500;
+	announce "°°En el mapa [pro_fild05] hay ["+.p6chivato+"] jugadores!!.",bc_yellow|bc_all;
+	sleep2 500;
+	announce "°°En el mapa [prt_dugn01] hay ["+.p7chivato+"] jugadores!!.",bc_yellow|bc_all;
+	sleep2 500;
+	announce "°°En el mapa [prt_intr01] hay ["+.p8chivato+"] jugadores!!.",bc_yellow|bc_all;
+	sleep2 500;
+	announce "°°En el mapa [prt_vilg00] hay ["+.p9chivato+"] jugadores!!.",bc_yellow|bc_all;
+	sleep2 500;
+	announce "°°En el mapa [pro_fild00] hay ["+.p10chivato+"] jugadores!!.",bc_yellow|bc_all;
+	stopnpctimer;
+	donpcevent "#chivatomapa::OnReplay";
+	end;
+}
+
+-	script	#contadormuertes	-1,{
+OnPCKillEvent:
+	getmapxy(.@mapa$,.@x,.@y,0);
+	if ((.@mapa$ != "poring_w02") || (.@mapa$ != "que_hugel") || (.@mapa$ != "prt_intr01") || (.@mapa$ != "prt_intr02") || (.@mapa$ != "prt_vilg00") || (.@mapa$ != "prt_vilg01") || (.@mapa$ != "prt_vilg02") || (.@mapa$ != "pro_fild01") || (.@mapa$ != "pro_fild04") || (.@mapa$ != "pro_fild05") || (.@mapa$ != "prt_dugn01") || (.@mapa$ != "pro_fild00")) { 
+		if (getvariableofnpc(.final,"#Contadortotal") < 3) {
+			announce "°°El jugador <"+strcharinfo(0)+"> fue el ganador de estos juegos del hambre!!",bc_blue|bc_all;
+			getitem 7959,1; //Ancient Victory Hunger Games
+			specialeffect2 EF_GI_EXPLOSION;
+			//specialeffect2 EF_MAP_MAGICZONE2;
+			donpcevent "#timefight::OnDisable";
+			sleep2 10000;
+			donpcevent "#waitplayers::OnDisable";
+			donpcevent "#controlcajas::OnDisable";
+			donpcevent "#Contadortotal::OnDisable";
+			donpcevent "#warpentrada::OnDisable";
+			donpcevent "#timefightfinal::OnDisable";
+			donpcevent "#chivatomapa::OnDisable";
+			enablenpc "Noah";
+			donpcevent "#waitplayers::OnEnable";
+			mapwarp "job3_arch03","arena_4",148,101;
+			mapwarp "pro_fild01","arena_4",148,101;
+			mapwarp "que_hugel","arena_4",148,101;
+			mapwarp "prt_intr02","arena_4",148,101;
+			mapwarp "prt_vilg02","arena_4",148,101;
+			mapwarp "prt_vilg01","arena_4",148,101;
+			mapwarp "pro_fild04","arena_4",148,101;
+			mapwarp "prt_dugn01","arena_4",148,101;
+			mapwarp "prt_intr01","arena_4",148,101;
+			mapwarp "prt_vilg00","arena_4",148,101;
+			mapwarp "pro_fild05","arena_4",148,101;
+			mapwarp "pro_fild00","arena_4",148,101;
+			mapwarp "poring_w02","arena_4",148,101;
+			end;
+		} else {
+			announce "El jugador <"+strcharinfo(0)+"> termino con la vida de <"+Rid2Name(KilledRid)+"> en el mapa ["+.@mapa$+"]",bc_yellow|bc_all;
+			donpcevent "#Contadortotal::OnSuma";
+			end;
+	
+		}
+	}
+OnPCDieEvent:
+	getmapxy(.@mapa$,.@x,.@y,0);
+	if ((.@mapa$ != "poring_w02") || (.@mapa$ != "que_hugel") || (.@mapa$ != "prt_intr01") || (.@mapa$ != "prt_intr02") || (.@mapa$ != "prt_vilg00") || (.@mapa$ != "prt_vilg01") || (.@mapa$ != "prt_vilg02") || (.@mapa$ != "pro_fild01") || (.@mapa$ != "pro_fild04") || (.@mapa$ != "pro_fild05") || (.@mapa$ != "prt_dugn01") || (.@mapa$ != "pro_fild00")) {
+		atcommand "@dropall";
+		specialeffect2 EF_THUNDERSTORM2;
+		end;
+	} else {
+		end;
+	}
+}
+
+
+
+
+
+	
+//prt_intr02,40,171,0	duplicate(Crafting)	Crafting#01	406
+//prt_vilg02,99,88,0	duplicate(Crafting)	Crafting#02	406
+//prt_vilg01,99,85,0	duplicate(Crafting)	Crafting#03	406
+//pro_fild04,155,75,0	duplicate(Crafting)	Crafting#04	406
+//prt_dugn01,108,118,0	duplicate(Crafting)	Crafting#05	406
+//prt_intr01,20,68,0	duplicate(Crafting)	Crafting#06	406
+
+//ÉvÉçÉìÉeÉâ //////////////////////////////////////////////////
+prt_vilg00.gat,100,176,5	warp	alphawarp9001	1,1,prt_vilg02.gat,100,28
+prt_vilg02.gat,100,23,0	warp	alphawarp9002	1,1,prt_vilg00.gat,100,170
+prt_vilg02.gat,100,176,0	warp	alphawarp9003	1,1,pro_fild01.gat,113,35
+pro_fild01.gat,113,28,0	warp	alphawarp9004	1,1,prt_vilg02.gat,100,170
+prt_vilg00.gat,176,100,0	warp	alphawarp9005	1,1,pro_fild04.gat,27,156
+pro_fild04.gat,23,156,0	warp	alphawarp9006	1,1,prt_vilg00.gat,171,100
+prt_vilg00.gat,24,99,0	warp	alphawarp9007	1,1,pro_fild05.gat,177,54
+//pro_fild05.gat,183,54,0	warp	alphawarp9008	1,1,prt_vilg00.gat,28,99
+prt_vilg00.gat,99,122,0	warp	alphawarp9009	1,1,prt_vilg00.gat,100,135
+prt_vilg00.gat,100,130,0	warp	alphawarp9010	1,1,prt_vilg00.gat,99,117
+pro_fild00.gat,100,179,0	warp	alphawarp9011	1,1,prt_vilg01.gat,100,33
+prt_vilg01.gat,100,22,0	warp	alphawarp9012	1,1,pro_fild00.gat,100,176
+prt_vilg00.gat,100,26,0	warp	alphawarp9013	1,1,prt_vilg01.gat,100,170
+prt_vilg01.gat,100,175,0	warp	alphawarp9014	1,1,prt_vilg00.gat,100,28
+
+//ÉvÉçÉìÉeÉâ1 //////////////////////////////////////////////////
+//èhâÆ
+prt_vilg01.gat,152,90,0	warp	alphawarp9101	1,1,prt_intr01.gat,40,14
+prt_intr01.gat,40,11,0	warp	alphawarp9102	1,1,prt_vilg01.gat,152,88
+prt_intr01.gat,20,25,0	warp	alphawarp9103	1,1,prt_intr01.gat,161,59
+prt_intr01.gat,161,57,0	warp	alphawarp9104	1,1,prt_intr01.gat,20,23
+
+//éèÍ
+prt_vilg01.gat,72,79,0	warp	alphawarp9111	1,1,prt_intr01.gat,184,22
+prt_intr01.gat,188,22,0	warp	alphawarp9112	1,1,prt_vilg01.gat,76,83
+prt_intr01.gat,160,28,0	warp	alphawarp9113	1,1,prt_intr01.gat,145,181
+prt_intr01.gat,148,181,0	warp	alphawarp9114	1,1,prt_intr01.gat,162,28
+
+//ñÇñ@âÆÅH
+prt_vilg01.gat,122,124,0	warp	alphawarp9121	1,1,prt_intr01.gat,60,91
+prt_intr01.gat,57,91,0	warp	alphawarp9122	1,1,prt_vilg01.gat,119,121
+
+//ïêäÌâÆÅH
+prt_vilg01.gat,133,115,0	warp	alphawarp9131	1,1,prt_intr01.gat,116,101
+prt_intr01.gat,113,101,0	warp	alphawarp9132	1,1,prt_vilg01.gat,130,112
+
+//ìπãÔâÆÅH
+prt_vilg01.gat,165,99,0	warp	alphawarp9141	1,1,prt_intr01.gat,114,63
+prt_intr01.gat,111,63,0	warp	alphawarp9142	1,1,prt_vilg01.gat,160,99
+
+//ñØâ∆(íÜâõè„)
+prt_vilg01.gat,108,138,0	warp	alphawarp9151	1,1,prt_intr01.gat,180,162
+prt_intr01.gat,180,159,0	warp	alphawarp9152	1,1,prt_vilg01.gat,108,135
+
+//ñØâ∆(íÜâõâE)
+prt_vilg01.gat,127,80,0	warp	alphawarp9153	1,1,prt_intr01.gat,66,149
+prt_intr01.gat,66,152,0	warp	alphawarp9154	1,1,prt_vilg01.gat,124,83
+
+//ñØâ∆(íÜâõç∂)
+prt_vilg01.gat,86,64,0	warp	alphawarp9155	1,1,prt_intr01.gat,123,139
+prt_intr01.gat,126,139,0	warp	alphawarp9156	1,1,prt_vilg01.gat,89,66
+
+//ñØâ∆(âEè„)
+prt_vilg01.gat,172,122,0	warp	alphawarp9161	1,1,prt_intr01.gat,80,175
+prt_intr01.gat,77,175,0	warp	alphawarp9162	1,1,prt_vilg01.gat,172,119
+
+//ñØâ∆(âEâ∫)
+prt_vilg01.gat,153,68,0	warp	alphawarp9163	1,1,prt_intr01.gat,158,149
+prt_intr01.gat,158,152,0	warp	alphawarp9164	1,1,prt_vilg01.gat,151,70
+
+//ñØâ∆(ç∂è„)
+prt_vilg01.gat,53,153,0	warp	alphawarp9165	1,1,prt_intr01.gat,14,151
+prt_intr01.gat,11,151,0	warp	alphawarp9166	1,1,prt_vilg01.gat,51,150
+
+//ñØâ∆(ç∂â∫)
+prt_vilg01.gat,57,55,0	warp	alphawarp9167	1,1,prt_intr01.gat,14,111
+prt_intr01.gat,11,111,0	warp	alphawarp9168	1,1,prt_vilg01.gat,55,52
+
+//ëqå…(âE)
+prt_vilg01.gat,107,159,0	warp	alphawarp9171	1,1,prt_intr01.gat,16,183
+prt_intr01.gat,13,183,0	warp	alphawarp9172	1,1,prt_vilg01.gat,104,159
+
+//ëqå…(ç∂)
+prt_vilg01.gat,90,159,0	warp	alphawarp9173	1,1,prt_intr01.gat,57,179
+prt_intr01.gat,60,179,0	warp	alphawarp9174	1,1,prt_vilg01.gat,94,159
+
+//Ç®âÆï~
+prt_vilg01.gat,39,112,0	warp	alphawarp9180	1,1,prt_intr01.gat,139,21
+prt_intr01.gat,142,21,0	warp	alphawarp9181	1,1,prt_vilg01.gat,42,112
+prt_intr01.gat,114,11,0	warp	alphawarp9182	1,1,prt_intr01.gat,22,79
+prt_intr01.gat,22,82,0	warp	alphawarp9183	1,1,prt_intr01.gat,114,14
+prt_vilg01.gat,30,100,0	warp	alphawarp9184	1,1,prt_intr01.gat,33,67
+prt_intr01.gat,36,67,0	warp	alphawarp9185	1,1,prt_vilg01.gat,34,100
+prt_intr01.gat,64,56,0	warp	alphawarp9186	1,1,prt_intr01.gat,22,56
+prt_intr01.gat,22,53,0	warp	alphawarp9187	1,1,prt_intr01.gat,64,53
+prt_vilg01.gat,39,87,0	warp	alphawarp9188	1,1,prt_intr01.gat,89,46
+prt_intr01.gat,92,46,0	warp	alphawarp9189	1,1,prt_vilg01.gat,42,87
+
+//â∫êÖ
+//prt_vilg02.gat,33,69,0	warp	alphawarp9191	1,1,prt_dugn00.gat,178,108
+prt_dugn00.gat,181,108,0	warp	alphawarp9192	1,1,prt_vilg02.gat,36,69
+
+//ÉvÉçÉìÉeÉâ2 //////////////////////////////////////////////////
+//ã¶âÔ
+prt_vilg02.gat,72,76,0	warp	alphawarp9201	1,1,prt_intr02.gat,14,125
+prt_intr02.gat,11,125,0	warp	alphawarp9202	1,1,prt_vilg02.gat,75,80
+//prt_intr02.gat,27,117,0	warp	alphawarp9203	1,1,prt_intr02.gat,xx,yy
+//prt_intr02.gat,xx,yy,0	warp	alphawarp9204	1,1,prt_intr02.gat,27,120
+//prt_intr02.gat,27,134,0	warp	alphawarp9207	1,1,prt_intr02.gat,xx,yy
+//prt_intr02.gat,xx,yy,0	warp	alphawarp9208	1,1,prt_intr02.gat,27,131
+prt_intr02.gat,37,117,0	warp	alphawarp9211	1,1,prt_intr02.gat,103,185
+prt_intr02.gat,103,188,0	warp	alphawarp9212	1,1,prt_intr02.gat,37,120
+prt_intr02.gat,107,176,0	warp	alphawarp9213	1,1,prt_intr02.gat,176,174
+prt_intr02.gat,171,174,0	warp	alphawarp9214	1,1,prt_intr02.gat,102,176
+prt_intr02.gat,37,134,0	warp	alphawarp9215	1,1,prt_intr02.gat,71,176
+prt_intr02.gat,71,173,0	warp	alphawarp9216	1,1,prt_intr02.gat,37,131
+prt_intr02.gat,75,185,0	warp	alphawarp9217	1,1,prt_intr02.gat,138,183
+prt_intr02.gat,134,183,0	warp	alphawarp9218	1,1,prt_intr02.gat,70,185
+prt_intr02.gat,43,125,0	warp	alphawarp9219	1,1,prt_intr02.gat,13,171
+prt_intr02.gat,11,171,0	warp	alphawarp9220	1,1,prt_intr02.gat,38,125
+
+//Ç®âÆï~
+prt_vilg02.gat,153,50,0	warp	alphawarp9230	1,1,prt_intr02.gat,79,149
+prt_intr02.gat,79,152,0	warp	alphawarp9231	1,1,prt_vilg02.gat,148,55
+prt_intr02.gat,79,127,0	warp	alphawarp9232	1,1,prt_intr02.gat,21,95
+prt_intr02.gat,21,98,0	warp	alphawarp9233	1,1,prt_intr02.gat,79,130
+prt_intr02.gat,92,139,0	warp	alphawarp9234	1,1,prt_intr02.gat,152,141
+prt_intr02.gat,149,141,0	warp	alphawarp9235	1,1,prt_intr02.gat,89,139
+prt_intr02.gat,155,125,0	warp	alphawarp9236	1,1,prt_intr02.gat,92,97
+prt_intr02.gat,87,97,0	warp	alphawarp9237	1,1,prt_intr02.gat,155,130
+prt_intr02.gat,67,139,0	warp	alphawarp9238	1,1,prt_intr02.gat,121,142
+prt_intr02.gat,124,142,0	warp	alphawarp9239	1,1,prt_intr02.gat,70,139
+prt_intr02.gat,119,126,0	warp	alphawarp9240	1,1,prt_intr02.gat,57,97
+prt_intr02.gat,62,97,0	warp	alphawarp9241	1,1,prt_intr02.gat,119,131
+
+//äwçZÅH
+prt_vilg02.gat,126,118,0	warp	alphawarp9250	1,1,prt_intr02.gat,50,71
+prt_intr02.gat,47,71,0	warp	alphawarp9251	1,1,prt_vilg02.gat,124,116
+prt_intr02.gat,63,65,0	warp	alphawarp9252	1,1,prt_intr02.gat,139,73
+prt_intr02.gat,139,75,0	warp	alphawarp9253	1,1,prt_intr02.gat,63,68
+prt_intr02.gat,63,78,0	warp	alphawarp9254	1,1,prt_intr02.gat,99,72
+prt_intr02.gat,99,69,0	warp	alphawarp9255	1,1,prt_intr02.gat,63,75
+
+//éèÍ
+prt_vilg02.gat,161,100,0	warp	alphawarp9261	1,1,prt_intr02.gat,166,19
+prt_intr02.gat,163,19,0	warp	alphawarp9262	1,1,prt_vilg02.gat,157,100
+
+//ïêäÌâÆ
+prt_vilg02.gat,134,87,0	warp	alphawarp9271	1,1,prt_intr02.gat,177,109
+prt_intr02.gat,177,112,0	warp	alphawarp9272	1,1,prt_vilg02.gat,129,92
+
+//ìπãÔâÆ
+prt_vilg02.gat,110,63,0	warp	alphawarp9273	1,1,prt_intr02.gat,118,97
+prt_intr02.gat,115,97,0	warp	alphawarp9274	1,1,prt_vilg02.gat,106,63
+
+//ñØâ∆(íÜâõ)
+prt_vilg02.gat,69,115,0	warp	alphawarp9280	1,1,prt_intr02.gat,27,52
+prt_intr02.gat,27,49,0	warp	alphawarp9281	1,1,prt_vilg02.gat,71,113
+
+//ñØâ∆(âEè„)
+prt_vilg02.gat,148,140,0	warp	alphawarp9282	1,1,prt_intr02.gat,104,19
+prt_intr02.gat,101,19,0	warp	alphawarp9283	1,1,prt_vilg02.gat,146,138
+
+//ñØâ∆(ç∂è„)
+prt_vilg02.gat,86,142,0	warp	alphawarp9284	1,1,prt_intr02.gat,95,45
+prt_intr02.gat,98,45,0	warp	alphawarp9285	1,1,prt_vilg02.gat,88,144
+
+//ñØâ∆(ç∂â∫)
+prt_vilg02.gat,49,99,0	warp	alphawarp9286	1,1,prt_intr02.gat,61,29
+prt_intr02.gat,64,29,0	warp	alphawarp9287	1,1,prt_vilg02.gat,52,102
+
+//ëqå…(âEè„)
+prt_vilg02.gat,143,151,0	warp	alphawarp9291	1,1,prt_intr02.gat,14,19
+prt_intr02.gat,11,19,0	warp	alphawarp9292	1,1,prt_vilg02.gat,141,149
+
+//ÉvÉçÉìÉeÉâÉ_ÉìÉWÉáÉì ////////////////////////////////////////
+pro_fild05.gat,30,161,0	warp	alphawarp9301	1,1,prt_dugn01.gat,187,13
+prt_dugn01.gat,190,10,0	warp	alphawarp9302	1,1,pro_fild05.gat,32,159
+//prt_dugn01.gat,166,185,0	warp	alphawarp9303	1,1,prt_dugn02.gat,178,187
+prt_dugn02.gat,178,190,0	warp	alphawarp9304	1,1,prt_dugn01.gat,166,182
+prt_dugn02.gat,97,116,0	warp	alphawarp9305	1,1,prt_dugn03.gat,102,89
+prt_dugn03.gat,102,91,0	warp	alphawarp9306	1,1,prt_dugn02.gat,97,118
+
+//mapflags
+job3_arch03	mapflag	town
+job3_arch03	mapflag	pvp	off
+job3_arch03	mapflag	loadevent
+
+guild_vs5	mapflag	town
+guild_vs5	mapflag	pvp	off
+guild_vs5	mapflag	loadevent
+
+prt_vilg02	mapflag	nightenabled
+prt_vilg01	mapflag	nightenabled
+pro_fild04	mapflag	nightenabled
+prt_vilg00	mapflag	nightenabled
+pro_fild05	mapflag	nightenabled
+pro_fild00	mapflag	nightenabled
+pro_fild01	mapflag	nightenabled
+poring_w02	mapflag	nightenabled
+
+que_hugel	mapflag	nopenalty
+prt_intr02	mapflag	nopenalty
+prt_vilg02	mapflag	nopenalty
+prt_vilg01	mapflag	nopenalty
+pro_fild04	mapflag	nopenalty
+prt_dugn01	mapflag	nopenalty
+prt_intr01	mapflag	nopenalty
+prt_vilg00	mapflag	nopenalty
+pro_fild05	mapflag	nopenalty
+pro_fild00	mapflag	nopenalty
+pro_fild01	mapflag	nopenalty
+poring_w02	mapflag	nopenalty
+
+job3_arch03	mapflag	nosave	SavePoint
+que_hugel	mapflag	nosave	SavePoint
+prt_intr02	mapflag	nosave	SavePoint
+prt_vilg02	mapflag	nosave	SavePoint
+prt_vilg01	mapflag	nosave	SavePoint
+pro_fild04	mapflag	nosave	SavePoint
+prt_dugn01	mapflag	nosave	SavePoint
+prt_intr01	mapflag	nosave	SavePoint
+prt_vilg00	mapflag	nosave	SavePoint
+pro_fild05	mapflag	nosave	SavePoint
+pro_fild00	mapflag	nosave	SavePoint
+poring_w02	mapflag	nosave	SavePoint
+pro_fild01	mapflag	nosave	SavePoint

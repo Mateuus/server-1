@@ -1,0 +1,49 @@
+//made by DJ Dorky Mike toRO
+
+moc_fild22,215,182,5	script	Angel Wings	922,{
+
+	mes "Miguel";
+	mes "¡Oh alta ¿te importa ayudarme?";
+	next;
+	mes "Me fue desterrado del cielo por Dios. Arrancó mis alas y me envió a este lugar miserable. ¿Me ayudan a coger lo que necesitan para rehacer mis alas. Te voy a dar una serie de curso.";
+	next;
+mes	"Hmm cres que puedes hacerlo.";
+next;
+menu "Creo que si",Yes,"No",nada;
+
+Yes:
+
+	if ((countitem(7441) < 500) || (countitem(949) < 1000) || (countitem(916) < 250) || (countitem(7079) < 200)) {
+	mes "Miguel";
+	mes "Tráeme los mortales elementos y hacerlo rápido!";
+	mes "500 Blue Feather";
+	mes "1000 Feather";
+	mes "250 Feather of Birds";
+	mes "200 Feather of Angel Wing";
+	close;
+	}
+
+Get:
+	mes "Miguel";
+	mes "La próxima vez prisa hasta que no puedo soportar este plano terrenal.";
+	delitem 7441,500;
+	delitem 949,1000;
+	delitem 916,250;
+	delitem 7079,200;
+	getitem 30300,1; // Moved here so all items deleted, then immediately you get the hat.
+	next;
+	mes "Miguel";
+	mes "Ahora sal de mi cara antes de que os he cabeza en una pica !!!!!";
+	close;
+
+nada:	mes "Miguel";
+	mes "Bellas Mortal tienen a su manera te veré en el infierno !!!!!";
+	close;
+
+
+}
+
+
+
+
+
